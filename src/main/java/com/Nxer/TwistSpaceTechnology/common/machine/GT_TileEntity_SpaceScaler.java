@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Multiplier_ExtraOutputsPerFieldTier_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_BeyondTier2Block_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_Tier1Block_SpaceScaler;
@@ -27,7 +26,6 @@ import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -51,6 +49,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.recipe.BartWorksRecipeMaps;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -62,7 +61,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.metadata.CompressionTierKey;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
@@ -82,15 +80,51 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     // endregion
 
     // region Processing Logic
-    private byte mode = Mode_Default_SpaceScaler;
     private int fieldGeneratorTier = 0;
     private int multiplier = 1;
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Compressor
+         * 1 - Extractor
+         * 2 - Particle Collider
+         * 3 - Electric Implosion Compressor
+         * 4 - Neutronium Compressor
+         */
+        return 5;
+    }
+
+    @Override
+    public int nextMachineMode() {
+        if (fieldGeneratorTier >= 11) {
+            return super.nextMachineMode();
+        } else if (fieldGeneratorTier >= 3) {
+            return super.nextMachineMode() % 3;
+        } else {
+            return super.nextMachineMode() % 2;
+        }
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("SpaceScaler.modeMsg." + mode);
+    }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
         aNBT.setInteger("multiplier", multiplier);
     }
@@ -99,7 +133,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
         multiplier = aNBT.getInteger("multiplier");
     }
@@ -107,8 +141,8 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @NotNull
     @Override
     public CheckRecipeResult checkProcessing() {
-        if (fieldGeneratorTier < 3 && mode > 1) return CheckRecipeResultRegistry.INTERNAL_ERROR;
-        if (fieldGeneratorTier < 11 && mode > 2) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        if (fieldGeneratorTier < 3 && machineMode > 1) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        if (fieldGeneratorTier < 11 && machineMode > 2) return CheckRecipeResultRegistry.INTERNAL_ERROR;
 
         setupProcessingLogic(processingLogic);
 
@@ -133,7 +167,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         ItemStack[] outputItemStack = processingLogic.getOutputItems();
         FluidStack[] outputFluidStack = processingLogic.getOutputFluids();
 
-        if (mode != 2) {
+        if (machineMode != 2) {
             // compressor mode and extractor mode
             mOutputItems = outputItemStack;
             mOutputFluids = outputFluidStack;
@@ -204,7 +238,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             @Override
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
 
-                if (fieldGeneratorTier >= 11 || mode > 0) return super.validateRecipe(recipe);
+                if (fieldGeneratorTier >= 11 || machineMode > 0) return super.validateRecipe(recipe);
 
                 int recipeReq = 1 + recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0);
                 if (recipeReq > fieldGeneratorTier) {
@@ -214,11 +248,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             }
 
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
     }
 
     public int getMaxParallelRecipes() {
@@ -232,7 +261,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
+        switch (machineMode) {
             case 1:
                 return RecipeMaps.extractorRecipes;
             case 2:
@@ -255,22 +284,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             RecipeMaps.compressorRecipes,
             BartWorksRecipeMaps.electricImplosionCompressorRecipes,
             RecipeMaps.neutroniumCompressorRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            int modeAmount;
-            if (fieldGeneratorTier >= 11) {
-                modeAmount = 5;
-            } else if (fieldGeneratorTier >= 3) {
-                modeAmount = 3;
-            } else {
-                modeAmount = 2;
-            }
-            this.mode = (byte) ((this.mode + 1) % modeAmount);
-            GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("SpaceScaler.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -474,7 +487,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + this.mode;
+        ret[origin.length] = EnumChatFormatting.AQUA + "Mode: " + EnumChatFormatting.GOLD + machineMode;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "fieldGeneratorTier: "
             + EnumChatFormatting.GOLD
             + this.fieldGeneratorTier;

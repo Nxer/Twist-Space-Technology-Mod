@@ -4,7 +4,7 @@ import static gregtech.common.items.MetaGeneratedItem98.FluidCell.LIQUID_DNA;
 
 import net.minecraft.util.ResourceLocation;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
@@ -27,7 +27,9 @@ public class TCBasic {
             new Aspect[] { Aspect.LIFE, Aspect.EXCHANGE },
             new ResourceLocation(TST_ID, "textures/icons/TCAspects/evolutio.png"),
             771);
+    }
 
+    public static void setupItemAspects() {
         ThaumcraftApi.registerObjectTag(
             GTCMItemList.OffSpring.get(1),
             new AspectList().add(EVOLUTION, 2)

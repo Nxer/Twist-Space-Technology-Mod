@@ -1,22 +1,22 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AnnihilationConstrainer;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.Antimatter;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.AntimatterFuelRod;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ArtificialStar;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CoreElement;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.CriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DSPLauncher;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DSPReceiver;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.DysonSphereFrameComponent;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.EmptySmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.GravitationalLens;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.ParticleTrapTimeSpaceShield;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SmallLaunchVehicle;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SolarSail;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.SpaceWarper;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.StellarConstructionFrameMaterial;
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.StrangeAnnihilationFuelRod;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AnnihilationConstrainer;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Antimatter;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.AntimatterFuelRod;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ArtificialStar;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CoreElement;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPLauncher;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DSPReceiver;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.DysonSphereFrameComponent;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.EmptySmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SmallLaunchVehicle;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SolarSail;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StrangeAnnihilationFuelRod;
 import static com.Nxer.TwistSpaceTechnology.config.Config.EUEveryStrangeAnnihilationFuelRod;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatter;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUEveryAntimatterFuelRod;
@@ -55,7 +55,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
@@ -260,23 +260,14 @@ public class DSPRecipePool implements IRecipePool {
         // launcher
         GTValues.RA.stdBuilder()
             .itemInputs(SolarSail.get(1))
-
-            .itemOutputs(SolarSail.get(1))
-
             .eut(EUTOfLaunchingSolarSail)
             .duration(ticksOfLaunchingSolarSail)
             .addTo(DSPLauncherRecipe);
 
         GTValues.RA.stdBuilder()
             .itemInputs(SmallLaunchVehicle.get(1))
-
-            .itemOutputs(
-                SmallLaunchVehicle.get(1)
-                    .setStackDisplayName(
-                        // #tr NEI.EmptySmallLaunchVehicleRecipe.0
-                        // # 99%% Return an Empty Small Launch Vehicle.
-                        // #zh_CN 99%%返还一个空的小型运载火箭.
-                        TextEnums.tr("NEI.EmptySmallLaunchVehicleRecipe.0")))
+            .itemOutputs(EmptySmallLaunchVehicle.get(1))
+            .outputChances(9900)
             .eut(EUTOfLaunchingNode)
             .duration(ticksOfLaunchingNode)
             .addTo(DSPLauncherRecipe);

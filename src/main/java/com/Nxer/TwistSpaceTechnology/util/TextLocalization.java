@@ -44,6 +44,11 @@ public class TextLocalization {
     // #zh_CN  K
     public static final String Kelvin = TextEnums.tr("Kelvin");
 
+    // #tr AutoSeparation
+    // # Automatically separate inputs
+    // #zh_CN 自动隔离输入
+    public static final String AutoSeparation= TextEnums.tr("AutoSeparation");
+
     // #tr Text_SeparatingLine
     // # {\GOLD}-----------------------------------------
     // #zh_CN {\GOLD}-----------------------------------------
@@ -167,6 +172,22 @@ public class TextLocalization {
     // #zh_CN 用{\BLUE}蓝{\AQUA}图{\RESET}预览
     public static final String textUseBlueprint = TextEnums.tr("textUseBlueprint");
 
+    // #tr textColon
+    // # :{\SPACE}
+    // #zh_CN ：{\SPACE}
+    public static final String textColon = TextEnums.tr("textColon");
+    public static String getBlueprintWithDot(int dot){
+        // #tr textDot
+        // # Dot
+        // #zh_CN 提示方块
+        return textUseBlueprint + EnumChatFormatting.WHITE + " " + TextEnums.tr("textDot") + " : " + EnumChatFormatting.AQUA+dot;
+    }
+
+    // #tr textSpace
+    // # {\SPACE}
+    // #zh_CN {\SPACE}
+    public static final String textSpace = TextEnums.tr("textSpace");
+
     // #tr textAnyCasing
     // # Any Casing
     // #zh_CN 任意机械方块
@@ -196,6 +217,11 @@ public class TextLocalization {
     // # Center area of up and down side
     // #zh_CN 上下侧的中央区域
     public static final String textCenterOfUDSides = TextEnums.tr("textCenterOfUDSides");
+
+    // #tr textEndSides
+    // # Machine end
+    // #zh_CN 机器末端
+    public static final String textEndSides = TextEnums.tr("textEndSides");
 
     // #tr StructureTooComplex
     // # The structure is too complex!
@@ -621,7 +647,7 @@ public class TextLocalization {
     public static final String NamePhysicalFormSwitcher = TextEnums.tr("NamePhysicalFormSwitcher");
 
     // #tr Tooltip_PhysicalFormSwitcher_MachineType
-    // # Fluid Solidifier | Fluid Extractor | Forge Hammer
+    // # Fluid Solidifier | Fluid Extractor
     // #zh_CN 流体固化器 | 流体提取机
     public static final String Tooltip_PhysicalFormSwitcher_MachineType = TextEnums.tr("Tooltip_PhysicalFormSwitcher_MachineType");
 
@@ -2199,7 +2225,7 @@ public class TextLocalization {
 
     // #tr NameLaserSmartNode
     // # Laser Smart Node
-    // #zh_CN Laser Smart Node
+    // #zh_CN 激光智能节点
     public static final String NameLaserSmartNode = TextEnums.tr("NameLaserSmartNode");
 
     // region Vacuum Filter Extractor

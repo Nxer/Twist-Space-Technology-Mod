@@ -469,8 +469,12 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                                 .setMaxParallel(maxParallel)
                                 .build();
             maxParallel = Math.min(voidProtectionHelper.getMaxParallel(), maxParallel);
-            if (maxParallel <= 0) {
+            if (voidProtectionHelper.isItemFull()) {
                 result = CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
+                return;
+            }
+            if (voidProtectionHelper.isFluidFull()) {
+                result = CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
                 return;
             }
         }
@@ -734,12 +738,14 @@ public class GTCM_ParallelHelper extends ParallelHelper {
             Map<TST_ItemID, Long> itemCost = new HashMap<>();
             if (isNBTSensitive) {
                 for (ItemStack recipeItemCost : recipe.mInputs) {
+                    if (recipeItemCost == null) continue;
                     // for non-consumed input
                     if (recipeItemCost.stackSize == 0) continue;
                     itemCost.merge(TST_ItemID.create(recipeItemCost), (long) recipeItemCost.stackSize, Long::sum);
                 }
             } else {
                 for (ItemStack recipeItemCost : recipe.mInputs) {
+                    if (recipeItemCost == null) continue;
                     // for non-consumed input
                     if (recipeItemCost.stackSize == 0) continue;
                     itemCost.merge(TST_ItemID.createNoNBT(recipeItemCost), (long) recipeItemCost.stackSize, Long::sum);

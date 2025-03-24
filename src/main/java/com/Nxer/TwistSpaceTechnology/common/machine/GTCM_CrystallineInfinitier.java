@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
@@ -28,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -42,7 +40,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -52,6 +49,7 @@ import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -82,13 +80,40 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     // endregion
 
     // region Processing Logic
-    private byte mode = Mode_Default_CrystallineInfinitier;
     public byte glassTier = 0;
     private int fieldGeneratorTier = 0;
-    private float euModifier = 1;
-    private float speedBonus = 1;
-    private int maxParallel = 1;
-    private boolean enablePerfectOverclock = false;
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Autoclave
+         * 1 - Crystalline Infinitier
+         * 2 - Chemical Bath
+         */
+        return 3;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + mode);
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        this.speedBonus = switch (machineMode) {
+            case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+            case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
+            default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
+        };
+    }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -96,11 +121,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
         aNBT.setByte("glassTier", glassTier);
-        aNBT.setByte("mode", mode);
-        aNBT.setFloat("euModifier", euModifier);
-        aNBT.setFloat("speedBonus", speedBonus);
-        aNBT.setInteger("maxParallel", maxParallel);
-        aNBT.setBoolean("enablePerfectOverclock", enablePerfectOverclock);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
@@ -109,11 +130,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
         glassTier = aNBT.getByte("glassTier");
-        mode = aNBT.getByte("mode");
-        euModifier = aNBT.getFloat("euModifier");
-        speedBonus = aNBT.getFloat("speedBonus");
-        maxParallel = aNBT.getInteger("maxParallel");
-        enablePerfectOverclock = aNBT.getBoolean("enablePerfectOverclock");
+        machineMode = aNBT.getByte("mode");
     }
 
     @Override
@@ -143,25 +160,9 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
     }
 
-    protected float getEuModifier() {
-        return euModifier;
-    }
-
-    protected float getSpeedBonus() {
-        return speedBonus;
-    }
-
-    protected int getMaxParallelRecipes() {
-        return maxParallel;
-    }
-
-    protected boolean isEnablePerfectOverclock() {
-        return enablePerfectOverclock;
-    }
-
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return switch (mode) {
+        return switch (machineMode) {
             case 1 -> GTCMRecipe.CrystallineInfinitierRecipes;
             case 2 -> RecipeMaps.chemicalBathRecipes;
             default -> RecipeMaps.autoclaveRecipes;
@@ -175,21 +176,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
             RecipeMaps.autoclaveRecipes,
             RecipeMaps.chemicalBathRecipes,
             GTCMRecipe.CrystallineInfinitierRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 3);
-            this.speedBonus = switch (mode) {
-                case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
-                case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
-                default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
-            };
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -210,9 +196,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         euModifier = 1.0F / Math.max(fieldGeneratorTier, 1);
         maxParallel = (int) Math.min(
             Integer.MAX_VALUE,
-            (long) glassTier * fieldGeneratorTier
-                * TstUtils.calculateVoltageTier(getMaxInputEu())
-                * ParallelMultiplier_CrystallineInfinitier);
+            (long) glassTier * fieldGeneratorTier * getTotalPowerTier() * ParallelMultiplier_CrystallineInfinitier);
         enablePerfectOverclock = fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
 
         return sign;

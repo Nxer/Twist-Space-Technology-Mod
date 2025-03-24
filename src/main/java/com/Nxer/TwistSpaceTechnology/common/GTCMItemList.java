@@ -1,12 +1,15 @@
-package com.Nxer.TwistSpaceTechnology.common.init;
+package com.Nxer.TwistSpaceTechnology.common;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.GTUtility;
 
@@ -44,6 +47,7 @@ public enum GTCMItemList {
     CoreOfT800,
     ExoticCircuitBoard,
     Yamato,
+    ActualPattern,
 
     LightQuantumMatrix,
     StarCore,
@@ -212,8 +216,12 @@ public enum GTCMItemList {
     CompactCyclotronCoil,
     AsepticGreenhouseCasing,
     ReinforcedBedrockCasing,
+    SwelegfyrCasing,
     BloodyCasing1,
     BloodyCasing2,
+    ReinforcedIridiumAlloyCasing,
+    BoropheneBasedNanowireCompositeThermalConductiveCasing,
+    NeutroniumPipeCasing,
     // endregion
 
     // region Machines
@@ -276,6 +284,9 @@ public enum GTCMItemList {
     IndustrialAlchemyTower,
     GiantVacuumDryingFurnace,
     ProcessingArray,
+    AdvCircuitAssemblyLine,
+    SwelegfyrBlastFurnace,
+    HyperThermalConvector,
     // endregion
 
     // region Modularized Machines
@@ -369,6 +380,9 @@ public enum GTCMItemList {
     SeedsSpaceTime,
     MicroSpaceTimeFabricatorio,
     WhiteDwarfMold_Ingot,
+    SwelegfgrUpgradeChip,
+    BoropheneFoil,
+    BoropheneBasedNanowireCompositeThermalConductiveMedium,
 
     // endregion
 
@@ -433,9 +447,16 @@ public enum GTCMItemList {
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
     BloodOrbHatch,
-
+    PatternAccessHatch,
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
+    SolidifyHatch_IV,
+    SolidifyHatch_LuV,
+    SolidifyHatch_ZPM,
+    SolidifyHatch_UV,
+    SolidifyHatch_UHV,
+    CircuitImprintHatchT1,
+    CircuitImprintHatchT2,
 
     // endregion
 
@@ -571,6 +592,11 @@ public enum GTCMItemList {
         return this;
     }
 
+    public GTCMItemList set(IMetaTileEntity metaTileEntity) {
+        if (metaTileEntity == null) throw new IllegalArgumentException();
+        return set(metaTileEntity.getStackForm(1L));
+    }
+
     public boolean hasBeenSet() {
         return !mHasNotBeenSet;
     }
@@ -591,5 +617,12 @@ public enum GTCMItemList {
             // warn only once
             mWarned = true;
         }
+    }
+
+    public boolean equal(@Nullable ItemStack itemStack) {
+        if (itemStack == null) return false;
+        if (mHasNotBeenSet) return false;
+        if (this.mStack == itemStack) return true;
+        return this.mStack.isItemEqual(itemStack);
     }
 }

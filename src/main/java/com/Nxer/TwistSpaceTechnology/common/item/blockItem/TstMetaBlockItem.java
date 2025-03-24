@@ -9,6 +9,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.IHasMoreBlockInfo;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 
@@ -74,10 +75,10 @@ public class TstMetaBlockItem extends ItemBlock {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack aItemStack, EntityPlayer p_77624_2_, List<String> theTooltipsList,
-        boolean p_77624_4_) {
+        boolean advanced) {
         int meta = aItemStack.getItemDamage();
 
-        var tooltips = getMetaBlock().getTooltips(meta);
+        var tooltips = getMetaBlock().getTooltips(meta, IHasTooltips.isShiftKeyDown());
         if (tooltips != null) {
             theTooltipsList.addAll(Arrays.asList(tooltips));
         }

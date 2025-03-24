@@ -1,25 +1,23 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
+import static gregtech.api.util.GTUtility.copyAmount;
+
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.ApiStatus.Experimental;
@@ -32,20 +30,19 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
-import com.Nxer.TwistSpaceTechnology.common.api.IHasVariant;
+import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
-import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.AbstractTstMetaBlockCasing;
-import com.Nxer.TwistSpaceTechnology.common.item.AbstractTstMetaItem;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.render.TextureFactory;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.util.GTUtility;
 
 /**
@@ -64,7 +61,7 @@ import gregtech.api.util.GTUtility;
  * For example, {@code newVariantItemUnsafe} that accepts an {@code Item} but requires it to implement
  * {@code IHasVariant}.<br>
  * But since it is very unsafe to do so, we can add more functions with more exact types, like using
- * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasTooltips}.
+ * {@link AbstractTstMetaBlock} to make sure it implements {@link IHasVariantAndTooltips}.
  * </li>
  * <li>
  * <b>(Legacy Names)</b> Functions moved from other places are allowed to be named as before, like {@link #tr(String)}.
@@ -107,6 +104,8 @@ public class TstUtils {
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
 
+    // region Instance Creator
+
     /**
      * Create a new {@link ItemStack} of given Item with meta.
      *
@@ -129,268 +128,7 @@ public class TstUtils {
         return new ItemStack(block, 1, meta);
     }
 
-    /**
-     * Create a copy of given ItemStack, and set the meta.
-     *
-     * @param stack the ItemStack
-     * @param meta  the meta value
-     * @return a copy of ItemStack of given ItemStack with meta
-     */
-    public static ItemStack copyItemWithMeta(ItemStack stack, int meta) {
-        var copy = stack.copy();
-        copy.setItemDamage(meta);
-        return copy;
-    }
-
-    /**
-     * Make an {@link IllegalArgumentException} for the situation that an input argument (Item or Block) is expected to
-     * implement an interface but not.
-     *
-     * @param type            the type of the argument, "Item" or "Block"
-     * @param unlocalizedName the unlocalized name of the argument
-     * @param objectClass     the argument class
-     * @param interfaceClass  the interface class that expected to be implemented
-     * @return the exception instance with nice message built up by the arguments
-     */
-    private static IllegalArgumentException makeNotSupportInterfaceException(String type, String unlocalizedName,
-        Class<?> objectClass, Class<?> interfaceClass) {
-        return new IllegalArgumentException(
-            type + " "
-                + tr(unlocalizedName)
-                + " ("
-                + unlocalizedName
-                + ", class = "
-                + objectClass.getSimpleName()
-                + ") doesn't support "
-                + interfaceClass.getSimpleName()
-                + ".");
-    }
-
-    /**
-     * @see #makeNotSupportInterfaceException(String, String, Class, Class)
-     */
-    private static IllegalArgumentException makeItemNotSupportInterfaceException(Item item, Class<?> interfaceClass) {
-        return makeNotSupportInterfaceException("Item", item.unlocalizedName, item.getClass(), interfaceClass);
-    }
-
-    /**
-     * @see #makeNotSupportInterfaceException(String, String, Class, Class)
-     */
-    private static IllegalArgumentException makeBlockNotSupportInterfaceException(Block item, Class<?> interfaceClass) {
-        return makeNotSupportInterfaceException("Block", item.unlocalizedName, item.getClass(), interfaceClass);
-    }
-
-    /**
-     * Return a copy of the instance of the block with given meta.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values.
-     * <p>
-     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int)
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int, String[])
-     */
-    public static ItemStack newMetaBlockItemStackUnsafe(Block blockMeta, int meta) {
-        return newMetaBlockItemStackUnsafe(blockMeta, meta, null);
-    }
-
-    /**
-     * Register the tooltips of the {@link AbstractTstMetaBlock}, and return a copy of the instance of the block.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the block supports meta values and tooltips.
-     * <p>
-     * I'd recommend you to {@code extends} {@link AbstractTstMetaBlock} to mark it as meta block.
-     *
-     * @param blockMeta the meta block that must implement {@link IHasTooltips}
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     * @throws IllegalArgumentException if tooltips is provided, but the block doesn't implement {@link IHasTooltips}.
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int)
-     * @see #newMetaBlockItemStack(AbstractTstMetaBlock, int, String[])
-     */
-    public static ItemStack newMetaBlockItemStackUnsafe(Block blockMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        if (tooltips != null) if (blockMeta instanceof IHasTooltips hasTooltips) {
-            hasTooltips.setTooltips(meta, tooltips);
-        } else {
-            throw makeBlockNotSupportInterfaceException(blockMeta, IHasTooltips.class);
-        }
-        return newItemWithMeta(blockMeta, meta);
-    }
-
-    /**
-     * Return a copy of the instance of the block with given meta.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta) {
-        return newMetaBlockItemStackUnsafe(blockMeta, meta);
-    }
-
-    /**
-     * Register the tooltips of the {@link AbstractTstMetaBlock}, and return a copy of the instance of the block.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack newMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
-        return newMetaBlockItemStackUnsafe(blockMeta, meta, tooltips);
-    }
-
-    /**
-     * Register the {@link AbstractTstMetaBlock} with given meta.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta) {
-        return registerMetaBlockItemStack(blockMeta, meta, null);
-    }
-
-    /**
-     * Register the {@link AbstractTstMetaBlock} with given meta and tooltips.
-     *
-     * @param blockMeta the meta block
-     * @param meta      the meta
-     * @param tooltips  the tooltips (optional)
-     * @return the copy of the instance of the meta block.
-     */
-    public static ItemStack registerMetaBlockItemStack(AbstractTstMetaBlock blockMeta, int meta,
-        @Nullable String[] tooltips) {
-        var stack = blockMeta.registerVariant(meta);
-        blockMeta.setTooltips(meta, tooltips);
-        return stack;
-    }
-
-    /**
-     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and return a copy of the instance of the casing.
-     *
-     * @param blockCasing the casing block
-     * @param meta        the meta
-     * @return the copy of the instance of the casing.
-     */
-    public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta) {
-        return registerCasingBlockItemStack(blockCasing, meta, null);
-    }
-
-    /**
-     * Register the Texture of the {@link AbstractTstMetaBlockCasing}, and add the tooltips if present.
-     * Return a copy of the instance of the casing.
-     *
-     * @param blockCasing the casing block
-     * @param meta        the meta
-     * @param tooltips    the tooltips (optional)
-     * @return the copy of the instance of the casing
-     */
-    public static ItemStack registerCasingBlockItemStack(AbstractTstMetaBlockCasing blockCasing, int meta,
-        @Nullable String[] tooltips) {
-        Textures.BlockIcons
-            .setCasingTextureForId(blockCasing.getTextureIndex(meta), TextureFactory.of(blockCasing, meta));
-        return registerMetaBlockItemStack(blockCasing, meta, tooltips);
-    }
-
-    /**
-     * Register tooltips with both normal and advanced.
-     *
-     * @param hasTooltips      the object reference that has tooltips
-     * @param meta             the meta value
-     * @param normalTooltips   the normal tooltips
-     * @param advancedTooltips the advanced tooltips
-     */
-    public static void registerAdvancedTooltips(IHasTooltips hasTooltips, int meta, String[] normalTooltips,
-        String[] advancedTooltips) {
-        hasTooltips.setTooltips(meta, normalTooltips, false);
-        hasTooltips.setTooltips(meta, advancedTooltips, true);
-    }
-
-    public static ItemStack registerVariantMetaItemStackUnsafe(Item itemMeta, int meta) {
-        return registerVariantMetaItemStackUnsafe(itemMeta, meta, null);
-    }
-
-    public static ItemStack registerVariantMetaItemStackUnsafe(Item itemMeta, int meta, @Nullable String[] tooltips)
-        throws IllegalArgumentException {
-        ItemStack stack;
-        if (itemMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasVariant.class);
-        }
-
-        if (tooltips != null) {
-            if (itemMeta instanceof IHasTooltips hasTooltips) {
-                hasTooltips.setTooltips(meta, tooltips);
-            } else {
-                throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-            }
-        }
-
-        return stack;
-    }
-
-    public static ItemStack registerItemAdder(AbstractTstMetaItem itemAdder, int meta) {
-        return registerItemAdder(itemAdder, meta, null);
-    }
-
-    public static ItemStack registerItemAdder(AbstractTstMetaItem itemAdder, int meta, @Nullable String[] tooltips) {
-        return registerVariantMetaItemStackUnsafe(itemAdder, meta, tooltips);
-    }
-
-    /**
-     * Register a variant of a meta item with its tooltips, and return the instance of the variant item.
-     * <p>
-     * <b>UNSAFE</b>: It is caller's responsibility to check if the item supports variants and tooltips.
-     *
-     * @param itemMeta         the meta item
-     * @param meta             the meta value
-     * @param tooltips         the normal tooltips
-     * @param advancedTooltips the advanced tooltips
-     * @return the instance of the variant item.
-     * @throws IllegalArgumentException if the item doesn't implement either {@link IHasVariant} or
-     *                                  {@link IHasTooltips}.
-     */
-    public static ItemStack registerVariantMetaItemStackWithAdvancedTooltipsUnsafe(Item itemMeta, int meta,
-        String[] tooltips, String[] advancedTooltips) throws IllegalArgumentException {
-        ItemStack stack;
-        if (itemMeta instanceof IHasVariant hasVariant) {
-            stack = hasVariant.registerVariant(meta);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasVariant.class);
-        }
-
-        if (itemMeta instanceof IHasTooltips hasTooltips) {
-            registerAdvancedTooltips(hasTooltips, meta, tooltips, advancedTooltips);
-        } else {
-            throw makeItemNotSupportInterfaceException(itemMeta, IHasTooltips.class);
-        }
-
-        return stack;
-    }
-
-    /**
-     * Register all icons for variants.
-     *
-     * @param hasVariant the variant reference
-     * @param iconPath   the icon path transformer, taking a meta value and resulting an icon path.
-     * @param register   the icon register
-     * @return the icon map keyed by meta values
-     */
-    public static Map<Integer, IIcon> registerAllVariantIcons(IHasVariant hasVariant,
-        Function<Integer, String> iconPath, IIconRegister register) {
-        return hasVariant.getVariantIds()
-            .stream()
-            .map(meta -> Pair.of(meta, register.registerIcon(iconPath.apply(meta))))
-            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
-    }
+    // endregion
 
     /**
      * Localize by key and given formats.
@@ -425,7 +163,7 @@ public class TstUtils {
      * @param builder the builder that puts info into the list
      * @return the built array of info data
      */
-    public static String[] buildInfoData(Consumer<ArrayList<String>> builder) {
+    public static String[] buildInfoData(Consumer<ArrayList<@NotNull String>> builder) {
         return buildInfoData(null, builder);
     }
 
@@ -437,10 +175,43 @@ public class TstUtils {
      * @return the built array of info data
      * @see TST_BloodyHell#getInfoData() example
      */
-    public static String[] buildInfoData(@Nullable String[] superInfoData, Consumer<ArrayList<String>> builder) {
+    public static String[] buildInfoData(@NotNull String @Nullable [] superInfoData,
+        Consumer<ArrayList<@NotNull String>> builder) {
         ArrayList<String> ret = superInfoData != null ? Lists.newArrayList(superInfoData) : new ArrayList<>();
         builder.accept(ret);
         return ret.toArray(new String[0]);
+    }
+
+    /**
+     * To get the machine maximum EU/t can get from energy hatches.
+     *
+     * @param machine The machine to calculate.
+     * @return Total EU/t that all energy hatches supply.
+     */
+    public static long getMachineTotalPower(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
+        return machine.getMaxInputEu();
+    }
+
+    /**
+     * To get the voltage tier of the machine total EU/t , allow the voltage tier over MAX tier.
+     *
+     * @param machine The machine to calculate.
+     * @return Which voltage tier the machine's maximum EU/t from its energy hatches should be in.
+     */
+    public static int getMachineTotalPowerTier(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
+        return (int) Math.ceil(calculateVoltageTier(getMachineTotalPower(machine)));
+    }
+
+    /**
+     * 0 = ULV, 1 = LV, 13 = UXV, 14 = MAX, 15+ = MAX+.
+     *
+     * @param tier The tier of machine or voltage.
+     * @return The tier name.
+     */
+    public static String getPowerTierName(int tier) {
+        if (tier < 0) throw new IllegalArgumentException("Voltage tier should not be small than 0.");
+        if (tier > 14) return GTValues.VN[15];
+        return GTValues.VN[tier];
     }
 
     /**
@@ -522,21 +293,13 @@ public class TstUtils {
     }
 
     /**
-     * @deprecated use {@link GTUtility#copyAmountUnsafe(int, ItemStack)}
-     */
-    @Deprecated
-    public static ItemStack copyAmountUnlimited(int aAmount, ItemStack aStack) {
-        return GTUtility.copyAmountUnsafe(aAmount, aStack);
-    }
-
-    /**
      * Return a shallow copy list of the array where the {@code null} elements are removed.
      *
      * @param array the array
      * @param <T>   the type of elements
      * @return the array copy where the {@code null} elements are removed.
      */
-    public static <T> List<T> toNonNullList(T[] array) {
+    public static <T> List<T> toNonNullList(@Nullable T @NotNull [] array) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
@@ -552,7 +315,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[] toNonNullArray(T[] array, Class<T> tClass) {
+    public static <T> T[] toNonNullArray(@Nullable T @NotNull [] array, Class<T> tClass) {
         return Arrays.stream(array)
             .filter(Objects::nonNull)
             .toArray(size -> (T[]) Array.newInstance(tClass, size));
@@ -565,7 +328,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @Contract("null -> null; !null -> !null")
-    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack[] array) {
+    public static ItemStack[] toNonNullItemStackArray(@Nullable ItemStack @Nullable [] array) {
         return array != null ? toNonNullArray(array, ItemStack.class) : null;
     }
 
@@ -576,7 +339,7 @@ public class TstUtils {
      * @return the array copy where the {@code null} elements are removed.
      */
     @Contract("null -> null; !null -> !null")
-    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack[] array) {
+    public static FluidStack[] toNonNullFluidStackArray(@Nullable FluidStack @Nullable [] array) {
         return array != null ? toNonNullArray(array, FluidStack.class) : null;
     }
 
@@ -591,24 +354,220 @@ public class TstUtils {
         return 1 + Math.max(0, (Math.log(voltage) / LOG2) - 5) / 2;
     }
 
-    public static ItemStack setStackSize(ItemStack itemStack, int size) {
+    /**
+     * Set the stacksize of the given ItemStack, and return the given stack.
+     * The 64 limit is unchecked, be aware.
+     *
+     * @param itemStack the given stack
+     * @param size      the size to set
+     * @return the given stack
+     */
+    public static ItemStack setStackSize(@NotNull ItemStack itemStack, int size) {
         itemStack.stackSize = size;
         return itemStack;
     }
 
-    public static FluidStack setStackSize(FluidStack fluidStack, int size) {
+    /**
+     * Set the stacksize of the given FluidStack, and return the given stack.
+     *
+     * @param fluidStack the given stack
+     * @param size       the size to set
+     * @return the given stack
+     */
+    public static FluidStack setStackSize(@NotNull FluidStack fluidStack, int size) {
         fluidStack.amount = size;
         return fluidStack;
     }
 
-    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack[] aStack) {
-        if (aStack == null) return new ItemStack[0];
+    public static ItemStack copyAmount(int amount, ItemStack itemStack) {
+        return GTUtility.copyAmountUnsafe(amount, itemStack);
+    }
+
+    public static ItemStack copyAmount(ItemStack itemStack, int amount) {
+        return GTUtility.copyAmountUnsafe(amount, itemStack);
+    }
+
+    public static FluidStack copyAmount(int amount, FluidStack fluidStack) {
+        if (fluidStack == null) return null;
+        FluidStack rStack = fluidStack.copy();
+        rStack.amount = amount;
+        return rStack;
+    }
+
+    public static FluidStack copyAmount(FluidStack fluidStack, int amount) {
+        return copyAmount(amount, fluidStack);
+    }
+
+    /**
+     * To more conveniently add item stacks to a list.
+     * 
+     * @param list      The list to add.
+     * @param itemStack The item stack to be added.
+     * @param amount    The amount of items, it will be separated to multi item stacks when amount is larger than
+     *                  {@link Integer#MAX_VALUE}.
+     * @return True if processing is success.
+     * @throws IllegalArgumentException if amount is lower than zero.
+     */
+    public static boolean addStacksToList(@NotNull Collection<ItemStack> list, @NotNull ItemStack itemStack,
+        long amount) {
+        if (amount < 0) throw new IllegalArgumentException("Code is trying to set item stack size a negative number.");
+
+        // if amount is in int
+        if (amount <= Integer.MAX_VALUE) {
+            return list.add(copyAmount((int) amount, itemStack));
+        }
+
+        // if amount is larger than 2.1G, separate to multiple item stacks
+        long toAdd = amount;
+        for (;;) {
+            if (toAdd <= Integer.MAX_VALUE) {
+                return list.add(copyAmount((int) toAdd, itemStack));
+
+            } else {
+                list.add(copyAmount(Integer.MAX_VALUE, itemStack));
+                toAdd -= Integer.MAX_VALUE;
+            }
+        }
+    }
+
+    /**
+     * To more conveniently add fluid stacks to a list.
+     * 
+     * @param list            The list to add.
+     * @param fluidStackStack The fluid stack to be added.
+     * @param amount          The amount of fluid, it will be separated to multi fluid stacks when amount is larger than
+     *                        {@link Integer#MAX_VALUE}.
+     * @return True if processing is success.
+     * @throws IllegalArgumentException if amount is lower than zero.
+     */
+    public static boolean addStacksToList(@NotNull Collection<FluidStack> list, @NotNull FluidStack fluidStackStack,
+        long amount) {
+        if (amount < 0) throw new IllegalArgumentException("Code is trying to set item stack size a negative number.");
+
+        // if amount is in int
+        if (amount <= Integer.MAX_VALUE) {
+            return list.add(copyAmount((int) amount, fluidStackStack));
+        }
+
+        // if amount is larger than 2.1G, separate to multiple item stacks
+        long toAdd = amount;
+        for (;;) {
+            if (toAdd <= Integer.MAX_VALUE) {
+                return list.add(copyAmount((int) toAdd, fluidStackStack));
+
+            } else {
+                list.add(copyAmount(Integer.MAX_VALUE, fluidStackStack));
+                toAdd -= Integer.MAX_VALUE;
+            }
+        }
+    }
+
+    /**
+     * Copy the itemstack array and filter Integrated Circuits out.
+     *
+     * @param itemStacks the itemstack array
+     * @return the copy of the given array without Integrated Circuits.
+     */
+    public static ItemStack[] removeIntegratedCircuitFromStacks(ItemStack @Nullable [] itemStacks) {
+        if (itemStacks == null) return new ItemStack[0];
         ArrayList<ItemStack> newStack = new ArrayList<>();
-        for (ItemStack itemStack : aStack) {
-            if (itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
+        for (ItemStack itemStack : itemStacks) {
+            if (itemStack != null && itemStack.getItem() != ItemList.Circuit_Integrated.getItem()) {
                 newStack.add(itemStack);
             }
         }
         return newStack.toArray(new ItemStack[0]);
     }
+
+    /**
+     * Like structure definition, select a character from the structure definition string array as the target to place
+     * blocks in the world, with the machine facing the XZ direction.
+     *
+     * @param aBaseMetaTileEntity the machine
+     * @param OffSetX             horizontalOffSet of the machine structure definition
+     * @param OffSetY             verticalOffSet of the machine structure definition
+     * @param OffSetZ             depthOffSet of the machine structure definition
+     * @param StructureString     the machine structure definition string array
+     * @param isStructureFlipped  if the machine is flipped, use getFlip().isHorizontallyFlipped() to get it
+     * @param TargetString        target character
+     * @param TargetBlock         target block
+     * @param TargetMeta          target block meta
+     */
+    public static void setStringBlockXZ(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
+        String[][] StructureString, boolean isStructureFlipped, String TargetString, Block TargetBlock,
+        int TargetMeta) {
+        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
+        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
+        int xDir = 0;
+        int zDir = 0;
+        if (mDirectionX == 1) {
+            // EAST
+            xDir = 1;
+            zDir = 1;
+        } else if (mDirectionX == -1) {
+            // WEST
+            xDir = -1;
+            zDir = -1;
+        }
+        if (mDirectionZ == 1) {
+            // SOUTH
+            xDir = -1;
+            zDir = 1;
+        } else if (mDirectionZ == -1) {
+            // NORTH
+            xDir = 1;
+            zDir = -1;
+        }
+        int LengthX = StructureString[0][0].length();
+        int LengthY = StructureString.length;
+        int LengthZ = StructureString[0].length;
+        for (int x = 0; x < LengthX; x++) {
+            for (int z = 0; z < LengthZ; z++) {
+                for (int y = 0; y < LengthY; y++) {
+                    String ListStr = String.valueOf(StructureString[y][z].charAt(x));
+                    if (!Objects.equals(ListStr, TargetString)) continue;
+
+                    int aX = (OffSetX - x) * xDir;
+                    int aY = OffSetY - y;
+                    int aZ = (OffSetZ - z) * zDir;
+                    if (mDirectionX == 1 || mDirectionX == -1) {
+                        int temp = aX;
+                        aX = aZ;
+                        aZ = temp;
+                    }
+                    if (isStructureFlipped) {
+                        if (mDirectionX == 1 || mDirectionX == -1) {
+                            aZ = -aZ;
+                        } else {
+                            aX = -aX;
+                        }
+                    }
+
+                    aBaseMetaTileEntity.getWorld()
+                        .setBlock(
+                            aBaseMetaTileEntity.getXCoord() + aX,
+                            aBaseMetaTileEntity.getYCoord() + aY,
+                            aBaseMetaTileEntity.getZCoord() + aZ,
+                            TargetBlock,
+                            TargetMeta,
+                            3);
+                }
+            }
+        }
+    }
+
+    public static void setStringBlockXZ(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
+        String[][] StructureString, boolean isStructureFlipped, String TargetString, Block TargetBlock) {
+        setStringBlockXZ(
+            aBaseMetaTileEntity,
+            OffSetX,
+            OffSetY,
+            OffSetZ,
+            StructureString,
+            isStructureFlipped,
+            TargetString,
+            TargetBlock,
+            0);
+    }
+
 }

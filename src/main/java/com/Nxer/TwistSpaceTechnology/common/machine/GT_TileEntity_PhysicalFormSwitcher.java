@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Mode_Default_PhysicalFormSwitcher;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -21,7 +20,6 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -38,9 +36,11 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.BorosilicateGlass;
+import ggfab.api.GGFabRecipeMaps;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -70,18 +70,79 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     // region Processing Logic
     public byte glassTier;
-    // false = sFluidSolidficationRecipes;
-    // true = sFluidExtractionRecipes
-    public boolean mode = Mode_Default_PhysicalFormSwitcher;
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Fluid Solidifier
+         * 1 - Fluid Extractor
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + mode);
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+        this.glassTier = 0;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
+            return false;
+        }
+
+        speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, getTotalPowerTier());
+
+        return true;
+    }
+
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            RecipeMap<?> currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
+
+            @Override
+            protected RecipeMap<?> preProcess() {
+                if (machineMode != 0) return super.preProcess();
+
+                // add tool casting recipes to solidifier mode
+                if (lastRecipeMap != RecipeMaps.fluidSolidifierRecipes
+                    && lastRecipeMap != GGFabRecipeMaps.toolCastRecipes) {
+                    lastRecipe = null;
+                    lastRecipeMap = currentRecipeMap;
+                }
+
+                if (maxParallelSupplier != null) {
+                    maxParallel = maxParallelSupplier.get();
+                }
+
+                return currentRecipeMap;
+            }
+
             @NotNull
             @Override
             public CheckRecipeResult process() {
                 setSpeedBonus(getSpeedBonus());
+                if (machineMode != 0) return super.process();
+
+                currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
+                CheckRecipeResult result = super.process();
+                if (result.wasSuccessful()) return result;
+
+                currentRecipeMap = GGFabRecipeMaps.toolCastRecipes;
                 return super.process();
             }
 
@@ -96,23 +157,9 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    public float getSpeedBonus() {
-        return (float) Math
-            .pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, GTUtility.getTier(this.getAverageInputVoltage()));
-    }
-
-    @Override
     public RecipeMap<?> getRecipeMap() {
 
-        if (mode) return RecipeMaps.fluidExtractionRecipes;
+        if (machineMode == 1) return RecipeMaps.fluidExtractionRecipes;
 
         return RecipeMaps.fluidSolidifierRecipes;
     }
@@ -120,18 +167,10 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.fluidExtractionRecipes, RecipeMaps.fluidSolidifierRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = !this.mode;
-
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + (this.mode ? "0" : "1")));
-        }
+        return Arrays.asList(
+            RecipeMaps.fluidExtractionRecipes,
+            RecipeMaps.fluidSolidifierRecipes,
+            GGFabRecipeMaps.toolCastRecipes);
     }
 
     @Override
@@ -245,14 +284,14 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
-        aNBT.setBoolean("mode", mode);
+        aNBT.setBoolean("mode", machineMode == 1);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
 
-        mode = aNBT.getBoolean("mode");
+        machineMode = aNBT.getBoolean("mode") ? 1 : 0;
     }
 
     // Scanner Info
@@ -292,13 +331,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             .addEnergyHatch(TextLocalization.textAnyCasing, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
-    }
-
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        repairMachine();
-        this.glassTier = 0;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override

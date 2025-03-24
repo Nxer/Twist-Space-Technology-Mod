@@ -5,8 +5,8 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.ic2Crop.crops.PurpleMagnoliaCrop;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;

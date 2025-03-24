@@ -1,11 +1,16 @@
 package com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults;
 
+import static gregtech.api.util.GTUtility.formatNumbers;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +28,26 @@ public class SimpleResultWithText implements CheckRecipeResult {
     SimpleResultWithText(boolean success, String key, boolean persistsOnShutdown) {
         this.success = success;
         this.key = key;
+        this.persistsOnShutdown = persistsOnShutdown;
+    }
+
+    SimpleResultWithText(boolean success, FluidStack stack, boolean persistsOnShutdown) {
+        this.success = success;
+        this.key = Objects.requireNonNull(
+            StatCollector.translateToLocalFormatted(
+                "GT5U.gui.text.out_of_fluid",
+                stack.getLocalizedName(),
+                formatNumbers(stack.amount)));
+        this.persistsOnShutdown = persistsOnShutdown;
+    }
+
+    SimpleResultWithText(boolean success, ItemStack stack, boolean persistsOnShutdown) {
+        this.success = success;
+        this.key = Objects.requireNonNull(
+            StatCollector.translateToLocalFormatted(
+                "GT5U.gui.text.out_of_item",
+                stack.getDisplayName(),
+                formatNumbers(stack.stackSize)));
         this.persistsOnShutdown = persistsOnShutdown;
     }
 
@@ -119,4 +144,21 @@ public class SimpleResultWithText implements CheckRecipeResult {
     public static CheckRecipeResult ofFailurePersistOnShutdown(String key) {
         return new SimpleResultWithText(false, key, true);
     }
+
+    /**
+     * Fluid that needs to be constantly supplied are out.
+     */
+    @Nonnull
+    public static CheckRecipeResult outOfFluid(@Nonnull FluidStack requiredFluidStack) {
+        return new SimpleResultWithText(false, requiredFluidStack, true);
+    }
+
+    /**
+     * Item that needs to be constantly supplied are out.
+     */
+    @Nonnull
+    public static CheckRecipeResult outOfItem(@Nonnull ItemStack requiredItemStack) {
+        return new SimpleResultWithText(false, requiredItemStack, true);
+    }
+
 }

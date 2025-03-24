@@ -55,20 +55,6 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     }
 
     // region Process
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    protected int getMaxParallelRecipes() {
-        return 1;
-    }
 
     @Override
     public boolean supportsInputSeparation() {

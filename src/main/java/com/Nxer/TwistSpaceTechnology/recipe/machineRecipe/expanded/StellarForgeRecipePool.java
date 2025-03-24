@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
@@ -18,7 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -28,7 +27,6 @@ import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
@@ -435,15 +433,6 @@ public class StellarForgeRecipePool implements IRecipePool {
             20 * 112,
             GTCMRecipe.StellarForgeRecipes);
 
-        // Creon && Mellion
-        addToMiracleDoorRecipes(
-            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
-            new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
-            null,
-            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
-            (int) RECIPE_UXV,
-            399,
-            GTCMRecipe.StellarForgeRecipes);
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;

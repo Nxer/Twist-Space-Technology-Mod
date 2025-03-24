@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,10 +47,11 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
+import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.dreammaster.gthandler.CustomItemList;
@@ -168,6 +170,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     private boolean isWirelessMode = false;
 
     private BigInteger output = BigInteger.valueOf(0);
+    private BigInteger outEUt = BigInteger.valueOf(0);
 
     private int casingMultiplier;
 
@@ -204,6 +207,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         {"Cutter", "CuttingMachine"}, {"Assembler", "AssemblingMachine"}, {"CircuitAssembler", "CircuitAssembler"}
         // TODO: bartworks bio lab
     };
+
+    private static final DecimalFormat Out_Format = new DecimalFormat("#,###");
 
     // spotless:off
     private static final String[][] PATTERN_CORE = new String[][]{
@@ -1502,8 +1507,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                             long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
                             long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
                             output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
-                            mMaxProgresstime = output.divide(BigInteger.valueOf(machineEUt))
-                                .intValue();
+                            mMaxProgresstime = MathUtils.bigToInt(output.divide(BigInteger.valueOf(machineEUt)));
                             storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
                             result = CheckRecipeResultRegistry.SUCCESSFUL;
                             break;
@@ -1514,16 +1518,18 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                     result = CheckRecipeResultRegistry.NO_RECIPE;
                 }
             if (result == CheckRecipeResultRegistry.SUCCESSFUL) {
-                long lv = output.longValue();
-                lEUt = lv > 0 ? lv : Long.MAX_VALUE;
+                outEUt = output.divide(BigInteger.valueOf(mMaxProgresstime));
                 if (isWirelessMode) {
                     if (ownerUUID == null) {
                         result = CheckRecipeResultRegistry.INTERNAL_ERROR;
                     } else {
+                        lEUt = MathUtils.bigToLong(outEUt);
                         addEUToGlobalEnergyMap(ownerUUID, output);
                     }
                 } else {
-                    fillAllDynamos(lEUt);
+                    long out = MathUtils.bigToLong(output);
+                    lEUt = out / mMaxProgresstime;
+                    fillAllDynamos(out);
                 }
             }
         } else {
@@ -1538,17 +1544,13 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         super.drawTexts(screenElements, inventorySlot);
         screenElements
             .widget(
-                new TextWidget(
-                    String.format(
-                        "Generating: %sEU/t",
-                        output.divide(BigInteger.valueOf(mMaxProgresstime > 0 ? mMaxProgresstime : 1))))
-                            .setDefaultColor(COLOR_TEXT_WHITE.get())
-                            .setEnabled(
-                                widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0
-                                    && getBaseMetaTileEntity().isActive()
-                                    && MODE_GENERATOR.equals(mode)))
+                new TextWidget(String.format("Generating: %sEU/t", Out_Format.format(outEUt)))
+                    .setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .setEnabled(
+                        widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && getBaseMetaTileEntity().isActive()
+                            && MODE_GENERATOR.equals(mode)))
             .widget(new FakeSyncWidget.StringSyncer(() -> mode, (mode) -> TST_BigBroArray.this.mode = mode))
-            .widget(new FakeSyncWidget.StringSyncer(() -> output.toString(), (l) -> output = new BigInteger(l)))
+            .widget(new FakeSyncWidget.StringSyncer(() -> outEUt.toString(), (l) -> outEUt = new BigInteger(l)))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, (i) -> mMaxProgresstime = i));
 
         screenElements.widget(

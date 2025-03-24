@@ -1,10 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList.MoldSingularity;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoldSingularity;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
 
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -495,16 +496,18 @@ public class FluidSolidifierRecipePool implements IRecipePool {
             .duration(20)
             .addTo(fs);
 
-        // Aluminium
-        GTValues.RA.stdBuilder()
-            .itemInputs(MoldSingularity.get(0))
-            .fluidInputs(Materials.Aluminium.getMolten(144 * 9 * 1824))
-            .itemOutputs(
-                GTModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 0))
-
-            .eut(RECIPE_UV)
-            .duration(20)
-            .addTo(fs);
+        // Aluminium Brass
+        Fluid aluminiumBrass = FluidRegistry.getFluid("aluminumbrass.molten");
+        if (aluminiumBrass != null) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(MoldSingularity.get(0))
+                .fluidInputs(new FluidStack(aluminiumBrass, 144 * 9 * 1824))
+                .itemOutputs(
+                    GTModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 0))
+                .eut(RECIPE_UV)
+                .duration(20)
+                .addTo(fs);
+        }
 
         // Alumite
         GTValues.RA.stdBuilder()

@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.AutoSeparation;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
@@ -14,6 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -97,9 +100,29 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
             aNameRegional,
             aTier,
             ITEM_SLOT_AMOUNT,
-            new String[] { "Advanced input for Multiblocks", "Capacity: " + getCapacityPerTank(aTier) + " L",
-                "Can hold " + getSlots(aTier) + " types of item and " + getFluidSlotsAmount(aTier) + " types of fluid ",
-                "Automatically separate inputs", ModNameDesc });
+            // #tr ToolTip_DualInputHatch_1
+            // # Advanced input for Multiblocks
+            // #zh_CN 多方块的进阶输入
+            // #tr ToolTip_DualInputHatch_2
+            // # Can hold
+            // #zh_CN 能容纳
+            // #tr ToolTip_DualInputHatch_3
+            // # types of item and
+            // #zh_CN 种物品与
+            // #tr ToolTip_DualInputHatch_4
+            // # types of fluid
+            // #zh_CN 种流体
+            new String[] { TextEnums.tr("ToolTip_DualInputHatch_1"),
+                FluidCapacity + " " + getCapacityPerTank(aTier) + " L",
+                TextEnums.tr("ToolTip_DualInputHatch_2") + " "
+                    + getSlots(aTier)
+                    + " "
+                    + TextEnums.tr("ToolTip_DualInputHatch_3")
+                    + " "
+                    + getFluidSlotsAmount(aTier)
+                    + " "
+                    + TextEnums.tr("ToolTip_DualInputHatch_4"),
+                AutoSeparation, ModNameDesc });
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);

@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeDuration_HephaestusAtelier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEuPerSmelting_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutPerParallel_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -31,7 +31,6 @@ import java.util.UUID;
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -43,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.google.common.collect.ImmutableList;
@@ -51,6 +51,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -63,7 +64,6 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
-import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
@@ -90,8 +90,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     // region Processing Logic
     protected static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
-        .valueOf(ConsumeEuPerSmelting_HephaestusAtelier);
-    protected byte mode = 0;
+        .valueOf(Config.ConsumeEuPerSmelting_HephaestusAtelier);
     protected int coilTier = 0;
     protected int maxProcessNormalModeFurnace = 0;
     protected long maxEut = 0;
@@ -99,9 +98,29 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     protected boolean startRecipeProcessing = false;
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Furnace
+         * 1 - Alloy Smelter
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + mode);
+    }
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
         aNBT.setInteger("coilTier", coilTier);
         aNBT.setInteger("maxProcessNormalModeFurnace", maxProcessNormalModeFurnace);
         aNBT.setLong("maxEut", maxEut);
@@ -111,26 +130,11 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
         coilTier = aNBT.getInteger("coilTier");
         maxProcessNormalModeFurnace = aNBT.getInteger("maxProcessNormalModeFurnace");
         maxEut = aNBT.getLong("maxEut");
         startRecipeProcessing = aNBT.getBoolean("startRecipeProcessing");
-    }
-
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.mode = (byte) ((this.mode + 1) % 2);
-            // #tr HephaestusAtelier.modeMsg.0
-            // # Mode : Furnace
-            // #zh_CN 模式 : 熔炉
-            // #tr HephaestusAtelier.modeMsg.1
-            // # Mode : Alloy Smelter
-            // #zh_CN 模式 : 合金冶炼炉
-            GTUtility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + this.mode));
-        }
     }
 
     @Override
@@ -189,7 +193,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     @Override
     public CheckRecipeResult checkProcessing() {
         lEUt = 0;
-        return mode == 1 ? checkProcessingAlloySmelter() : checkProcessingFurnace();
+        return machineMode == 1 ? checkProcessingAlloySmelter() : checkProcessingFurnace();
     }
 
     public CheckRecipeResult checkProcessingAlloySmelter() {
@@ -293,6 +297,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         ArrayList<ItemStack> inputItems = getStoredInputsNoSeparation();
         if (inputItems.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
 
+        setupProcessingLogic(processingLogic);
         if (isWirelessMode()) {
             // wireless
             return wirelessFurnace(inputItems);
@@ -312,7 +317,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 outputs.add(items.copy());
                 items.stackSize = 0;
             } else {
-                outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
+                addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
                 smeltedAmount += items.stackSize;
                 items.stackSize = 0;
             }
@@ -359,11 +364,11 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                 items.stackSize = 0;
             } else {
                 if (canProcess >= items.stackSize) {
-                    outputs.add(GTUtility.copyAmountUnsafe(items.stackSize, smeltedOutput));
+                    addStacksToList(outputs, smeltedOutput, (long) items.stackSize * smeltedOutput.stackSize);
                     canProcess -= items.stackSize;
                     items.stackSize = 0;
                 } else {
-                    outputs.add(GTUtility.copyAmountUnsafe(canProcess, smeltedOutput));
+                    addStacksToList(outputs, smeltedOutput, (long) canProcess * smeltedOutput.stackSize);
                     items.stackSize -= canProcess;
                     canProcess = 0;
                     break;
@@ -385,7 +390,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             .setRecipeEUt((long) ConsumeEutPerParallel_HephaestusAtelier * (maxProcessNormalModeFurnace - canProcess))
             .setEUt(maxEut)
             .setDuration(ConsumeDuration_HephaestusAtelier)
-            .setDurationDecreasePerOC(1)
+            .setDurationDecreasePerOC(4)
             .calculate();
 
         lEUt = -calculator.getConsumption();
@@ -407,7 +412,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return mode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
+        return machineMode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
     }
 
     @NotNull

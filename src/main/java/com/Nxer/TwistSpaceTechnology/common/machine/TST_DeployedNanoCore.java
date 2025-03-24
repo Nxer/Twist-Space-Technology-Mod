@@ -110,11 +110,6 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
     protected int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }

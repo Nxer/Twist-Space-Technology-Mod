@@ -12,7 +12,6 @@ import static gregtech.api.enums.HatchElement.OutputBus;
 import java.util.Arrays;
 import java.util.Collection;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -31,6 +30,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -44,8 +44,6 @@ import vazkii.botania.common.block.ModBlocks;
 
 public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop> {
 
-    private byte mode = 1;
-
     // region Class Constructor
     public GTCM_ElvenWorkshop(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -57,21 +55,30 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 
     // endregion
     // region Processing Logic
-    protected float getSpeedBonus() {
-        return 1.0F;
-    };
 
-    protected int getMaxParallelRecipes() {
-        return 1;
-    };
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Rune Engraver
+         * 1 - Elven Workshop
+         */
+        return 2;
+    }
 
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    };
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + mode);
+    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (mode) {
+        switch (machineMode) {
             case 1:
                 return GTCMRecipe.ElvenWorkshopRecipes;
             default:
@@ -83,13 +90,6 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(GTCMRecipe.ElvenWorkshopRecipes, GTCMRecipe.RuneEngraverRecipes);
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        this.mode = (byte) ((this.mode + 1) % 2);
-        GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + this.mode));
-
     }
 
     @Override
@@ -170,13 +170,13 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
-        aNBT.setByte("mode", mode);
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        mode = aNBT.getByte("mode");
+        machineMode = aNBT.getByte("mode");
     }
 
     @Override
@@ -221,9 +221,5 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                 .build() };
     }
 
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
     // endregion
 }

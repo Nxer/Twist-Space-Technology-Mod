@@ -31,8 +31,6 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
     public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(
         TEXTURE_NAME_OVERLAY_INACTIVE);
 
-    // TODO: add Chinese localized text
-
     private static final String[] DESC = new String[] {
         // #tr Tooltip_BloodOrbHatch_1
         // # Life Essence Input for Multiblocks

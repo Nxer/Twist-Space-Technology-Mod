@@ -27,7 +27,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -50,13 +49,14 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
-import com.Nxer.TwistSpaceTechnology.common.init.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -71,6 +71,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -111,7 +112,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // region Structure
 
     private int controllerTier = 0;
-    byte mMode = 0;
     boolean checkWaterFinish = false;
     boolean checkAirFinish = false;
     boolean isFocusMode = false;
@@ -119,6 +119,54 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private static ItemStack Offspring;
     // public ESSFakePlayer ESSPlayer = null;
     // public final Random rand = new FastRandom();
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Tree Growth Simulator
+         * 1 - Aqua Zone Simulator
+         */
+        return 2;
+    }
+
+    @Override
+    public void setMachineModeIcons() {
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+    }
+
+    @Override
+    public String getMachineModeName(int mode) {
+        // #tr EcoSphereSimulator.modeMsg.0
+        // # Tree Growth Simulator
+        // #zh_CN 原木拟生模式
+
+        // #tr EcoSphereSimulator.modeMsg.1
+        // # Aqua Zone Simulator
+        // #zh_CN 水域模拟模式
+
+        // #tr EcoSphereSimulator.modeMsg.2
+        // # Artificial Green House
+        // #zh_CN 人工温室模式
+
+        // #tr EcoSphereSimulator.modeMsg.3
+        // # Directed Mob Cloner
+        // #zh_CN 定向克隆模式
+        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + mode);
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        SetRemoveWater();
+    }
+
+    @Override
+    public boolean canButtonSwitchMode() {
+        return checkStructure(true);
+    }
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
@@ -182,7 +230,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mTier", (byte) controllerTier);
-        aNBT.setByte("mMode", mMode);
+        aNBT.setByte("mMode", (byte) machineMode);
         aNBT.setBoolean("checkWater", checkWaterFinish);
         aNBT.setBoolean("checkAir", checkAirFinish);
     }
@@ -191,7 +239,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         controllerTier = aNBT.getByte("mTier");
-        mMode = aNBT.getByte("mMode");
+        machineMode = aNBT.getByte("mMode");
         checkWaterFinish = aNBT.getBoolean("checkWater");
         checkAirFinish = aNBT.getBoolean("checkAir");
     }
@@ -200,6 +248,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void setItemNBT(NBTTagCompound aNBT) {
         super.setItemNBT(aNBT);
         aNBT.setByte("mTier", (byte) controllerTier);
+    }
+
+    @Override
+    public void initDefaultModes(NBTTagCompound aNBT) {
+        super.initDefaultModes(aNBT);
+        if (aNBT == null || !aNBT.hasKey("mTier")) {
+            controllerTier = 0;
+        } else {
+            controllerTier = aNBT.getByte("mTier");
+        }
     }
 
     @Override
@@ -244,25 +302,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            this.mMode = (byte) ((this.mMode + 1) % 2);
-            SetRemoveWater();
-            GTUtility
-                .sendChatToPlayer(aPlayer, StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + this.mMode));
-            // #tr EcoSphereSimulator.modeMsg.0
-            // # Tree Growth Simulator
-            // #zh_CN 原木拟生模式
-
-            // #tr EcoSphereSimulator.modeMsg.1
-            // # Aqua Zone Simulator
-            // #zh_CN 水域模拟模式
-
-            // #tr EcoSphereSimulator.modeMsg.2
-            // # Artificial Green House
-            // #zh_CN 人工温室模式
-
-            // #tr EcoSphereSimulator.modeMsg.3
-            // # Directed Mob Cloner
-            // #zh_CN 定向克隆模式
+            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
         }
     }
 
@@ -567,86 +607,30 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private void SetRemoveWater() {
 
         // checkType = true, check Water
-        boolean checkType = mMode != 0;
+        boolean checkType = machineMode != 0;
         if (checkType && checkWaterFinish) return;
         if (!checkType && checkAirFinish) return;
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] StructureDef = StructureWater;
         Block Air = Blocks.air;
         Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
+        boolean isFlipped = this.getFlip()
+            .isHorizontallyFlipped();
         int OffSetX = 12;
         int OffSetY = 25;
         int OffSetZ = 3;
         if (checkType && !checkWaterFinish) {
             checkAirFinish = false;
-            setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Water);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
             checkWaterFinish = true;
         } else if (!checkType && !checkAirFinish) {
             checkWaterFinish = false;
-            setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, "P", Air);
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
             checkAirFinish = true;
         }
 
-    }
-
-    public void setStringBlock(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
-        String[][] StructureString, String TargetString, Block TargetBlock, int TargetMeta) {
-        int mDirectionX = aBaseMetaTileEntity.getFrontFacing().offsetX;
-        int mDirectionZ = aBaseMetaTileEntity.getFrontFacing().offsetZ;
-        int xDir = 0;
-        int zDir = 0;
-        if (mDirectionX == 1) {
-            // EAST
-            xDir = 1;
-            zDir = 1;
-        } else if (mDirectionX == -1) {
-            // WEST
-            xDir = -1;
-            zDir = -1;
-        }
-        if (mDirectionZ == 1) {
-            // SOUTH
-            xDir = -1;
-            zDir = 1;
-        } else if (mDirectionZ == -1) {
-            // NORTH
-            xDir = 1;
-            zDir = -1;
-        }
-        int LengthX = StructureString[0].length;
-        int LengthY = StructureString.length;
-        int LengthZ = StructureString[0][0].length();
-        for (int x = 0; x < LengthX; x++) {
-            for (int z = 0; z < LengthZ; z++) {
-                for (int y = 0; y < LengthY; y++) {
-                    String ListStr = String.valueOf(StructureString[y][x].charAt(z));
-                    if (!Objects.equals(ListStr, TargetString)) continue;
-
-                    int aX = (OffSetX - x) * xDir;
-                    int aY = OffSetY - y;
-                    int aZ = (OffSetZ - z) * zDir;
-                    if (mDirectionX == 1 || mDirectionX == -1) {
-                        int temp = aX;
-                        aX = aZ;
-                        aZ = temp;
-                    }
-
-                    aBaseMetaTileEntity.getWorld()
-                        .setBlock(
-                            aBaseMetaTileEntity.getXCoord() + aX,
-                            aBaseMetaTileEntity.getYCoord() + aY,
-                            aBaseMetaTileEntity.getZCoord() + aZ,
-                            TargetBlock,
-                            TargetMeta,
-                            3);
-                }
-            }
-        }
-    }
-
-    public void setStringBlock(IGregTechTileEntity aBaseMetaTileEntity, int OffSetX, int OffSetY, int OffSetZ,
-        String[][] StructureString, String TargetString, Block TargetBlock) {
-        setStringBlock(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureString, TargetString, TargetBlock, 0);
     }
 
     // region Processing Logic
@@ -819,7 +803,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
                 if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
                 tierMultiplier = getTierMultiplier(EuTier);
-                return switch (mMode) {
+                return switch (machineMode) {
                     case 1 -> AquaticZoneSimulator();
                     // case 2 -> MachineMode3();
                     default -> TreeGrowthSimulator();
