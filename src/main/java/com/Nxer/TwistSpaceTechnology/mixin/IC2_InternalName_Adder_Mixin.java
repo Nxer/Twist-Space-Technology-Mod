@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.mixin;
 
-import ic2.core.init.InternalName;
 import org.apache.commons.lang3.ArrayUtils;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -8,6 +7,8 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.gen.Invoker;
+
+import ic2.core.init.InternalName;
 
 @Mixin(value = InternalName.class, remap = false)
 public class IC2_InternalName_Adder_Mixin {

@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
-import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 
@@ -9,6 +8,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemProofOfHeroes;

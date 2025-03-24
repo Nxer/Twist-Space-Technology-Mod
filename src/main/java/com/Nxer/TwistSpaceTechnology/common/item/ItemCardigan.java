@@ -1,25 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
-import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import gregtech.api.GregTechAPI;
-import gregtech.api.damagesources.GTDamageSources;
-import gregtech.api.enums.GTValues;
-import gregtech.api.enums.VoltageIndex;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.metatileentity.BaseMetaTileEntity;
-import gregtech.api.metatileentity.implementations.MTEBasicMachine;
-import gregtech.api.metatileentity.implementations.MTEMultiBlockBase;
-import gregtech.api.util.GTModHandler;
-import gregtech.api.util.GTUtility;
-import ic2.api.item.IElectricItem;
-import ic2.core.init.InternalName;
-import ic2.core.item.armor.ItemArmorElectric;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,12 +27,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import gregtech.api.GregTechAPI;
+import gregtech.api.damagesources.GTDamageSources;
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.VoltageIndex;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.metatileentity.BaseMetaTileEntity;
+import gregtech.api.metatileentity.implementations.MTEBasicMachine;
+import gregtech.api.metatileentity.implementations.MTEMultiBlockBase;
+import gregtech.api.util.GTModHandler;
+import gregtech.api.util.GTUtility;
+import ic2.api.item.IElectricItem;
+import ic2.core.init.InternalName;
+import ic2.core.item.armor.ItemArmorElectric;
 
 @EventBusSubscriber
 public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
@@ -68,9 +70,11 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     private static boolean CARDIGAN_DEBUG_MODE = Boolean.getBoolean("cardigan_debug_mode");
 
     /**
-     * The {@link InternalName} instance for Cardigans, created by the mixin ({@link com.Nxer.TwistSpaceTechnology.mixin.IC2_InternalName_Adder_Mixin}).
+     * The {@link InternalName} instance for Cardigans, created by the mixin
+     * ({@link com.Nxer.TwistSpaceTechnology.mixin.IC2_InternalName_Adder_Mixin}).
      */
-    public static final InternalName Cardigan = Objects.requireNonNull(InternalName.valueOf("Cardigan"), "Failed to get InternalName instance for Cardigan!");
+    public static final InternalName Cardigan = Objects
+        .requireNonNull(InternalName.valueOf("Cardigan"), "Failed to get InternalName instance for Cardigan!");
 
     public static ItemStack CardiganULV, CardiganLV, CardiganMV, CardiganHV, CardiganHV_Charged;
 
@@ -174,7 +178,7 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @Override
     public void addInformation(ItemStack itemStack, EntityPlayer player, List info, boolean b) {
-        //noinspection unchecked
+        // noinspection unchecked
         this.addInformationTypeChecked(itemStack, (List<String>) info);
     }
 
@@ -190,8 +194,10 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             // #tr tst.cardigan.tooltip.power
             // # {\GRAY}Charged: {\GREEN}%s{\GRAY}/{\GREEN}%s
             // #zh_CN {\GRAY}充能: {\GREEN}%s{\GRAY}/{\GREEN}%s
-            String s = StatCollector.translateToLocalFormatted("tst.cardigan.tooltip.power",
-                GTUtility.formatNumbers(current), GTUtility.formatNumbers(max));
+            String s = StatCollector.translateToLocalFormatted(
+                "tst.cardigan.tooltip.power",
+                GTUtility.formatNumbers(current),
+                GTUtility.formatNumbers(max));
             tooltips.add(s);
         } else {
             // #tr tst.cardigan.tooltip.error
@@ -208,7 +214,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
         }
 
         // #tr tst.cardigan.tooltip.1
-        // # {\GRAY}Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other ways.
+        // # {\GRAY}Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other
+        // ways.
         // #zh_CN {\GRAY}羊毛衫会随着移动，摸方块，撸生物和其他方法缓慢充电。
         tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.1"));
 
@@ -243,7 +250,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @Override // to override IC2 special logic
     public String getItemStackDisplayName(ItemStack itemStack) {
-        return StatCollector.translateToLocal(getUnlocalizedName(itemStack) + ".name").trim();
+        return StatCollector.translateToLocal(getUnlocalizedName(itemStack) + ".name")
+            .trim();
     }
 
     @Override // to override IC2 special logic
@@ -261,8 +269,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     }
 
     public static int getChargeBase(ItemStack cardiganStack) {
-        if(!isCardigan(cardiganStack)) return -1;
-        return switch(getCardiganTier(cardiganStack)) {
+        if (!isCardigan(cardiganStack)) return -1;
+        return switch (getCardiganTier(cardiganStack)) {
             case 0 -> 2;
             case 1 -> 32;
             case 2 -> 256;
@@ -275,8 +283,10 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
     public static final int CHARGE_COOLDOWN_TICK = 10 * 20; // 10s
 
     private static boolean checkCooldown(EntityPlayer player) {
-        int tickNow = MinecraftServer.getServer().getTickCounter();
-        return !CHARGE_COOLDOWN_MAP.containsKey(player.getUniqueID()) || tickNow > CHARGE_COOLDOWN_MAP.get(player.getUniqueID());
+        int tickNow = MinecraftServer.getServer()
+            .getTickCounter();
+        return !CHARGE_COOLDOWN_MAP.containsKey(player.getUniqueID())
+            || tickNow > CHARGE_COOLDOWN_MAP.get(player.getUniqueID());
     }
 
     /**
@@ -287,7 +297,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
      * @param value         the eu to charge
      */
     private static void tryCharge(EntityPlayer player, ItemStack cardiganStack, int value) {
-        int tickNow = MinecraftServer.getServer().getTickCounter();
+        int tickNow = MinecraftServer.getServer()
+            .getTickCounter();
         int charged = GTModHandler.chargeElectricItem(cardiganStack, value, Integer.MAX_VALUE, true, false);
         if (charged > 0) {
             CHARGE_COOLDOWN_MAP.put(player.getUniqueID(), tickNow + CHARGE_COOLDOWN_TICK);
@@ -428,7 +439,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                                     // #tr tst.cardigan.damageMachine
                                     // # {\GRAY}{\ITALIC}The machine is making strange noises
                                     // #zh_CN {\GRAY}{\ITALIC}机器正在发出奇怪的声音
-                                    player.addChatComponentMessage(new ChatComponentTranslation("tst.cardigan.damageMachine"));
+                                    player.addChatComponentMessage(
+                                        new ChatComponentTranslation("tst.cardigan.damageMachine"));
                                 }
                             }
                         }
