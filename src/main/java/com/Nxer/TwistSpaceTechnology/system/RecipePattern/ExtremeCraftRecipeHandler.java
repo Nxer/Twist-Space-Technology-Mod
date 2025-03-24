@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
@@ -60,33 +62,42 @@ public class ExtremeCraftRecipeHandler {
             .toArray(new ItemStack[0]);
     }
 
-    protected ItemStack[] sortOutInputs(Object... in) {
+    protected Object[] sortOutInputs(Object... in) {
         Map<Object, Integer> inputsMap = new LinkedHashMap<>();
         for (Object o : in) {
             if (o == null) continue;
             inputsMap.merge(o, 1, Integer::sum);
         }
 
-        List<ItemStack> sorted = new ArrayList<>();
-        for (Map.Entry<Object, Integer> oe : inputsMap.entrySet()) {
-            Object o = oe.getKey();
-            if (o instanceof ItemStack i) {
-                sorted.add(GTUtility.copyAmountUnsafe(oe.getValue(), i));
-            } else if (o instanceof ArrayList) {
-                ArrayList<ItemStack> il = (ArrayList) o;
-                ItemStack first = il.get(0);
-                if (first == null || first.stackSize < 1) {
-                    LOG.info("ERROR ExtremeCraftRecipeHandler.sortOutInputs.first");
-                    continue;
+        List<Object> sorted = new ArrayList<>();
+        for (Map.Entry<Object, Integer> pair : inputsMap.entrySet()) {
+            Object ingredient = pair.getKey();
+            if (ingredient instanceof ItemStack i) {
+                sorted.add(GTUtility.copyAmountUnsafe(pair.getValue(), i));
+            } else if (ingredient instanceof ArrayList<?>list) {
+                @SuppressWarnings("unchecked")
+                ArrayList<ItemStack> itemList = (ArrayList<ItemStack>) list;
+
+                String oreName = TstUtils.getOreNameByOreList(itemList);
+                if (oreName != null) {
+                    // if we managed to get the ore name of the list, we use the ore name.
+                    sorted.add(new Object[] { oreName, pair.getValue() });
+                } else {
+                    // otherwise, just fallback to the first valid item in the list.
+                    ItemStack firstValidItem = itemList.stream()
+                        .filter(GTUtility::isStackValid)
+                        .findFirst()
+                        .orElse(null);
+                    if (firstValidItem == null) throw new IllegalArgumentException();
+                    ItemStack unifiedItem = GTOreDictUnificator.get(false, firstValidItem, true);
+                    sorted.add(GTUtility.copyAmountUnsafe(pair.getValue(), unifiedItem));
                 }
-                ItemStack target = GTOreDictUnificator.get(false, first, true);
-                sorted.add(GTUtility.copyAmountUnsafe(oe.getValue(), target));
             } else {
                 LOG.info("ERROR ExtremeCraftRecipeHandler.sortOutInputs catch unknown type");
             }
         }
 
-        return sorted.toArray(new ItemStack[0]);
+        return sorted.toArray(new Object[0]);
 
     }
 
@@ -113,9 +124,6 @@ public class ExtremeCraftRecipeHandler {
             }
 
             if (inputs != null && output != null) {
-                // LOG.info("insert into recipemap");
-                int pre = extremeCraftRecipes.getAllRecipes()
-                    .size();
                 GTValues.RA.stdBuilder()
                     .ignoreCollision()
                     .itemInputs(inputs)
@@ -123,16 +131,6 @@ public class ExtremeCraftRecipeHandler {
                     .eut(0)
                     .duration(128)
                     .addTo(extremeCraftRecipes);
-                if (pre == extremeCraftRecipes.getAllRecipes()
-                    .size()) {
-                    GTValues.RA.stdBuilder()
-                        .ignoreCollision()
-                        .itemInputs(inputs)
-                        .itemOutputs(output)
-                        .eut(0)
-                        .duration(128)
-                        .addTo(extremeCraftRecipes);
-                }
             } else {
                 LOG.info("ExtremeCraftRecipeHandler get a null recipe.");
             }
