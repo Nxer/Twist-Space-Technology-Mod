@@ -145,7 +145,7 @@ public class MaterialPool implements Runnable {
     public static final Werkstoff ConcentratedUUMatter = new Werkstoff(
         new short[] { 90, 0, 128 },
         "Concentrated UU-Matter",
-        "UU+",
+        subscriptNumbers("UU+"),
         new Werkstoff.Stats(),
         Werkstoff.Types.ELEMENT,
         new Werkstoff.GenerationFeatures().disable()

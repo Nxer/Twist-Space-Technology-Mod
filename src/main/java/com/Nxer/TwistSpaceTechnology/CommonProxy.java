@@ -31,6 +31,7 @@ import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
+import com.Nxer.TwistSpaceTechnology.util.LanguageManager;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
@@ -103,6 +104,12 @@ public class CommonProxy {
             false);
 
         new ModBlocksHandler().initStatics();
+
+        if (FMLCommonHandler.instance()
+            .getCurrentLanguage()
+            .equals("zh_CN")) {
+            LanguageManager.init();
+        }
     }
 
     public void postInit(FMLPostInitializationEvent event) {

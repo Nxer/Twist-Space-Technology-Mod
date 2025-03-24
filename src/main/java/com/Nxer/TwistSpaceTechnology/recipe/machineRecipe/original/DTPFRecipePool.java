@@ -51,7 +51,7 @@ public class DTPFRecipePool implements IRecipePool {
             .addTo(RecipeMaps.plasmaForgeRecipes);
 
         GTValues.RA.stdBuilder()
-            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .itemInputs(ItemList.NaquadriaSupersolid.get(2))
             .fluidInputs(
                 MaterialsTST.Dubnium.getPlasma(144 * 8 * 2),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2),
@@ -69,7 +69,7 @@ public class DTPFRecipePool implements IRecipePool {
             .addTo(RecipeMaps.plasmaForgeRecipes);
 
         GTValues.RA.stdBuilder()
-            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .itemInputs(ItemList.NaquadriaSupersolid.get(3))
             .fluidInputs(
                 MaterialsTST.Dubnium.getPlasma(144 * 8 * 2 * 3),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3),
@@ -87,7 +87,7 @@ public class DTPFRecipePool implements IRecipePool {
             .addTo(RecipeMaps.plasmaForgeRecipes);
 
         GTValues.RA.stdBuilder()
-            .itemInputs(ItemList.NaquadriaSupersolid.get(1))
+            .itemInputs(ItemList.NaquadriaSupersolid.get(4))
             .fluidInputs(
                 MaterialsTST.Dubnium.getPlasma(144 * 8 * 2 * 3 * 4),
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3 * 4),
