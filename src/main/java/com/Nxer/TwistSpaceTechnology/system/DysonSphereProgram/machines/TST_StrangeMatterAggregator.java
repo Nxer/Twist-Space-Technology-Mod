@@ -259,7 +259,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     /**
      * How many fuel rods one Annihilation Constrainer or one Core Element can produce.
      */
-    protected int constrainerFactor = Config.BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator;
+    protected long constrainerFactor = Config.BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator;
 
     /**
      * Fluid's multiplier of amount about inputFactor, for example inputFactor = 10, fluidConsumptionFactor = 1000 then
