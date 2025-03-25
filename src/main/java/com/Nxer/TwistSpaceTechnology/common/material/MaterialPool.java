@@ -155,7 +155,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff EntropicFlux = new Werkstoff(
         new short[] { 43, 18, 128 },
-        "Entropic Flux",
+        "Highly Energetic Dimensional Entropic Fluid",
         subscriptNumbers("Origin of Entropy"),
         new Werkstoff.Stats(),
         Werkstoff.Types.ELEMENT,
@@ -166,7 +166,7 @@ public class MaterialPool implements Runnable {
 
     public static final Werkstoff ChronoentropicFlux = new Werkstoff(
         new short[] { 43, 18, 55 },
-        "Chronoentropic Flux",
+        "Chrono-Dimensionally Annihilative Entropic Fluid",
         subscriptNumbers("Endless Entropy"),
         new Werkstoff.Stats(),
         Werkstoff.Types.ELEMENT,

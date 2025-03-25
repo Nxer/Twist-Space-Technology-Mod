@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.hook;
 
 import static org.objectweb.asm.Opcodes.DUP;
 import static org.objectweb.asm.Opcodes.INVOKESPECIAL;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.NEW;
 import static org.objectweb.asm.Opcodes.POP;
 
@@ -47,6 +48,15 @@ public class GregTechPreInitHook implements IClassTransformer {
                                         false));
                                 // Pop up the newly created object to ensure consistent stack state
                                 instructions.add(new InsnNode(POP));
+
+                                // LanguageManager.initGTMaterials()
+                                instructions.add(
+                                    new MethodInsnNode(
+                                        INVOKESTATIC,
+                                        "com/Nxer/TwistSpaceTechnology/util/LanguageManager",
+                                        "initGTMaterials",
+                                        "()V",
+                                        false));
 
                                 // Add code
                                 method.instructions.insertBefore(node, instructions);

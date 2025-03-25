@@ -61,6 +61,8 @@ public class CommonProxy {
         if (Config.activateCombatStats) {
             ItemRegister.registry();
         }
+
+        LanguageManager.init();
     }
 
     public void init(FMLInitializationEvent event) {
@@ -105,11 +107,6 @@ public class CommonProxy {
 
         new ModBlocksHandler().initStatics();
 
-        if (FMLCommonHandler.instance()
-            .getCurrentLanguage()
-            .equals("zh_CN")) {
-            LanguageManager.init();
-        }
     }
 
     public void postInit(FMLPostInitializationEvent event) {
