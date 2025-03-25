@@ -129,12 +129,12 @@ public class RecipeLoader {
         RapidHeatExchangeRecipePool.loadRecipes();
 
         SimpleFurnaceFuelPool.loadRecipes();
-        new TCResearches().register();
+        TCResearches.register();
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
-        new OP_NormalProcessing().enumOreProcessingRecipes();
+        OP_NormalProcessing.enumOreProcessingRecipes();
 
         if (Config.Enable_MegaCraftingCenter) {
             new ExtremeCraftRecipeHandler().initECRecipe();
@@ -143,7 +143,7 @@ public class RecipeLoader {
     }
 
     public static void loadRecipesPostInit() {
-        new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
+        IntensifyChemicalDistorterRecipePool.loadRecipePostInit();
     }
 
     public static boolean hasLoadedRecipesServerStarted = false;

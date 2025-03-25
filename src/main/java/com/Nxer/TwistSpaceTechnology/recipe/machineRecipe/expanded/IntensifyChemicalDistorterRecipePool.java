@@ -1018,7 +1018,7 @@ public class IntensifyChemicalDistorterRecipePool {
         // endregion
 
     }
-    public void loadRecipePostInit() {
+    public static void loadRecipePostInit() {
         // region H2O2
         GTValues.RA
             .stdBuilder()
