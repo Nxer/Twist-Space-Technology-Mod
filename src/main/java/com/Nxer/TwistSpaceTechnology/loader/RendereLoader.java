@@ -17,7 +17,7 @@ public class RendereLoader {
     public static IModelCustom PowerChairModel = null;
     public static IModelCustom YamatoModel = null;
 
-    public RendereLoader() {
+    public static void init() {
         PowerChairModel = AdvancedModelLoader.loadModel(new ResourceLocation("gtnhcommunitymod:model/PowerChair.obj"));
         YamatoModel = AdvancedModelLoader.loadModel(new ResourceLocation("gtnhcommunitymod:model/Yamato.obj"));
         RendereLoader.registerItemRenderers();
