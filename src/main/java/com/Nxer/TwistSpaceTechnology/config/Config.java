@@ -483,8 +483,8 @@ public class Config {
 
     // region Swelegfyr Blast Furnace
     public static boolean Enable_SwelegfyrBlastFurnace = true;
-    public static float SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = 3.8f;
-    public static float SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = 3.8f;
+    public static float SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = 3.9f;
+    public static float SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = 3.9f;
     public static int Parallel_NormalMode_SwelegfyrBlastFurnace = 4096;
     public static int Parallel_PassiveMode_SwelegfyrBlastFurnace = 256;
     // endregion
