@@ -481,14 +481,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected float getSpeedBonus() {
-        return isPassiveMode ? Config.SpeedBonus_PassiveMode_SwelegfyrBlastFurnace
-            : Config.SpeedBonus_NormalMode_SwelegfyrBlastFurnace;
+        return 1f / (isPassiveMode ? Config.SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace
+            : Config.SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace);
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return isPassiveMode ? Config.Parallel_NormalMode_SwelegfyrBlastFurnace
-            : Config.Parallel_PassiveMode_SwelegfyrBlastFurnace;
+        return isPassiveMode ? Config.Parallel_PassiveMode_SwelegfyrBlastFurnace
+            : Config.Parallel_NormalMode_SwelegfyrBlastFurnace;
     }
 
     @Override
