@@ -483,10 +483,8 @@ public class Config {
 
     // region Swelegfyr Blast Furnace
     public static boolean Enable_SwelegfyrBlastFurnace = true;
-    public static float SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = 4.8f;
-    public static float SpeedBonus_NormalMode_SwelegfyrBlastFurnace = 1f / 4.8f;
-    public static float SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = 4.8f;
-    public static float SpeedBonus_PassiveMode_SwelegfyrBlastFurnace = 1f / 4.8f;
+    public static float SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = 3.9f;
+    public static float SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = 3.9f;
     public static int Parallel_NormalMode_SwelegfyrBlastFurnace = 4096;
     public static int Parallel_PassiveMode_SwelegfyrBlastFurnace = 256;
     // endregion
@@ -521,9 +519,7 @@ public class Config {
         // region SwelegfyrBlastFurnace
         Enable_SwelegfyrBlastFurnace = configuration.getBoolean("Enable_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Enable_SwelegfyrBlastFurnace, "Enable Swelegfyr Blast Furnace.");
         SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = (float) configuration.get("SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace, "Speed Multiplier in Normal Mode of Swelegfyr Blast Furnace. Type: float").getDouble();
-        SpeedBonus_NormalMode_SwelegfyrBlastFurnace = 1f / SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace;
         SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace = (float) configuration.get("SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace, "Speed Multiplier in Passive Mode of Swelegfyr Blast Furnace. Type: float").getDouble();
-        SpeedBonus_PassiveMode_SwelegfyrBlastFurnace = 1f / SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace;
         Parallel_NormalMode_SwelegfyrBlastFurnace = configuration.getInt("Parallel_NormalMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Parallel_NormalMode_SwelegfyrBlastFurnace, 1, Integer.MAX_VALUE, "Max Parallel in Normal Mode of Swelegfyr Blast Furnace.");
         Parallel_PassiveMode_SwelegfyrBlastFurnace = configuration.getInt("Parallel_PassiveMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Parallel_PassiveMode_SwelegfyrBlastFurnace, 1, Integer.MAX_VALUE, "Max Parallel in Passive Mode of Swelegfyr Blast Furnace.");
         // endregion
