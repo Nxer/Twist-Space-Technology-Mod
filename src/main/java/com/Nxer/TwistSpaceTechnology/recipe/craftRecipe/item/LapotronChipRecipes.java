@@ -10,7 +10,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -24,10 +23,9 @@ import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class LapotronChipRecipes implements IRecipePool {
+public class LapotronChipRecipes {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         // Energy Chip
         TST_RecipeBuilder.builder()
             .itemInputs(

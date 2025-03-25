@@ -8,7 +8,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CardiganRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
-import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine.GTCMMachineRecipes;
@@ -24,7 +23,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemb
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
@@ -76,7 +74,7 @@ public class RecipeLoader {
         SingleItemRecipes.loadRecipes();
         SingleBlockRecipes.loadRecipes();
         CosmicProcessorCircuitRecipes.loadRecipes();
-        LapotronChipRecipes().loadRecipes();
+        LapotronChipRecipes.loadRecipes();
 
         // Machine Recipes
         SingleMachineRecipes.loadRecipes();
@@ -132,7 +130,7 @@ public class RecipeLoader {
         IndustrialAlchemyTowerRecipePool.loadRecipes();
         CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         RapidHeatExchangeRecipePool.loadRecipes();
-        DeployedNanoCoreRecipePool().loadRecipes();
+        DeployedNanoCoreRecipePool.loadRecipes();
         SimpleFurnaceFuelPool.loadRecipes();
         TCResearches.register();
 

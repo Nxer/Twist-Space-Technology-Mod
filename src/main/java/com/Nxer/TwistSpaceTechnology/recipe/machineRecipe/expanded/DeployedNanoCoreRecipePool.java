@@ -10,17 +10,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTRecipe;
 
-public class DeployedNanoCoreRecipePool implements IRecipePool {
+public class DeployedNanoCoreRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         for (GTRecipe aRecipe : RecipeMaps.nanoForgeRecipes.getAllRecipes()) {
             if (aRecipe != null) {
                 GTValues.RA.stdBuilder()

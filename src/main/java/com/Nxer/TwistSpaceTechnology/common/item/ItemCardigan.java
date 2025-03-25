@@ -213,9 +213,10 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.ulv"));
         }
 
+        // spotless:off
+
         // #tr tst.cardigan.tooltip.1
-        // # {\GRAY}Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other
-        // ways.
+        // # {\GRAY}Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other ways.
         // #zh_CN {\GRAY}羊毛衫会随着移动，摸方块，撸生物和其他方法缓慢充电。
         tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.1"));
 
@@ -233,6 +234,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
         // # {\RED}Multiblock Machines are more robust that they don't explode but still need repair.
         // #zh_CN {\RED}多方块机器更加结实，它们不会爆炸，但是还是需要维修。
         tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.4"));
+
+        // spotless:on
 
         tooltips.add(TextEnums.Author_Taskeren.toString());
         tooltips.add(TextEnums.AddByTwistSpaceTechnology.toString());
