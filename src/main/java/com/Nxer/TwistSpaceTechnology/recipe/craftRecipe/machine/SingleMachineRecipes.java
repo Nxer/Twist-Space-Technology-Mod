@@ -9,7 +9,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.ItemList;
@@ -19,11 +18,10 @@ import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import tectech.recipe.TTRecipeAdder;
 
-public class SingleMachineRecipes implements IRecipePool {
+public class SingleMachineRecipes {
 
     // spotless:off
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if(Config.Enable_HyperThermalConvector) {
             TTRecipeAdder.addResearchableAssemblylineRecipe(
                 ItemRefer.Extreme_Heat_Exchanger.get(1),

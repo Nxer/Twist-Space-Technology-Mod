@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import bartworks.util.BWUtil;
@@ -30,10 +29,9 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 
-public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool {
+public class CircuitAssemblyLineWithoutImprintRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TST_ItemID IC2_Circuit = TST_ItemID
             .create(GTModHandler.getModItem(Mods.IndustrialCraft2.ID, "itemPartCircuit", 1));
         TST_ItemID IC2_AdvCircuit = TST_ItemID
@@ -71,7 +69,7 @@ public class CircuitAssemblyLineWithoutImprintRecipePool implements IRecipePool 
     }
 
     // Modify the circuit part to warp, others turn 16 times.
-    public ItemStack[] ModifyInput(ItemStack[] input) {
+    public static ItemStack[] ModifyInput(ItemStack[] input) {
         if (!(input != null && input.length > 0)) return new ItemStack[0];
         ArrayList<ItemStack> inputItems = new ArrayList<>();
 

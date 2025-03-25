@@ -16,7 +16,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -35,13 +34,12 @@ import gtPlusPlus.core.item.chemistry.GenericChem;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
-public class IntensifyChemicalDistorterRecipePool implements IRecipePool {
+public class IntensifyChemicalDistorterRecipePool {
 
-    final RecipeMap<?> ICD = GTCMRecipe.IntensifyChemicalDistorterRecipes;
+    private static final RecipeMap<?> ICD = GTCMRecipe.IntensifyChemicalDistorterRecipes;
 
     // spotless:off
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         TwistSpaceTechnology.LOG.info("IntensifyChemicalDistorterRecipePool loading recipes.");
 

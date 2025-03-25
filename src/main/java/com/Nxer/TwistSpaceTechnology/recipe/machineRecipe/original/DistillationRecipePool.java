@@ -4,17 +4,14 @@ import static gregtech.api.enums.TierEU.RECIPE_IV;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 
-public class DistillationRecipePool implements IRecipePool {
+public class DistillationRecipePool {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         final IRecipeMap DT = RecipeMaps.distillationTowerRecipes;
 
         GTValues.RA.stdBuilder()

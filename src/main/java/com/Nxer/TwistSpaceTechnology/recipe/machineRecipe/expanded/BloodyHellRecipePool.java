@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
 
@@ -20,9 +19,9 @@ import WayofTime.alchemicalWizardry.api.bindingRegistry.BindingRegistry;
 import gregtech.api.enums.GTValues;
 import gregtech.api.util.GTUtility;
 
-public class BloodyHellRecipePool implements IRecipePool {
+public class BloodyHellRecipePool {
 
-    public void loadRecipes() {
+    public static void loadRecipes() {
         // total(Life Essence, L) / soakingSpeed(L/tick) = duration(tick)
         // for example, a recipe costs 1,000L of LE, it should take 10 ticks to craft
         var soakingSpeed = 10;

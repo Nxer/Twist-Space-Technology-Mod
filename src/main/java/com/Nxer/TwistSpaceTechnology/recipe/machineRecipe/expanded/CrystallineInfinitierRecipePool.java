@@ -18,7 +18,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -34,10 +33,9 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
-public class CrystallineInfinitierRecipePool implements IRecipePool {
+public class CrystallineInfinitierRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         final IRecipeMap AC = RecipeMaps.autoclaveRecipes;
         final IRecipeMap LE = RecipeMaps.laserEngraverRecipes;

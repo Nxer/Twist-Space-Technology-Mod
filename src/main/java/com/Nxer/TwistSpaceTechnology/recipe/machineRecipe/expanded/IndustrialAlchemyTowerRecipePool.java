@@ -10,7 +10,6 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
@@ -19,10 +18,9 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTUtility;
 import thaumcraft.common.items.ItemEssence;
 
-public class IndustrialAlchemyTowerRecipePool implements IRecipePool {
+public class IndustrialAlchemyTowerRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TCRecipeTools.getCrucibleCraftingRecipe();
         final IRecipeMap IIA = GTCMRecipe.IndustrialAlchemyTowerRecipes;
         for (Map.Entry<String, ArrayList<TCRecipeTools.CrucibleCraftingRecipe>> entry : TCRecipeTools.CCR.entrySet()) {

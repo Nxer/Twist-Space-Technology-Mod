@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -21,11 +20,10 @@ import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 
-public class SingleItemRecipes implements IRecipePool {
+public class SingleItemRecipes {
 
     // spotless:off
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         // Borophene Foil
         TST_RecipeBuilder.builder()
             .itemInputs(

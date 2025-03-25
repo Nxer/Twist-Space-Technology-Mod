@@ -3,14 +3,11 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.NeutronActivatorRecipesWithEU;
 import static goodgenerator.api.recipe.GoodGeneratorRecipeMaps.neutronActivatorRecipes;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.util.GTRecipe;
 
-public class NeutronActivatorWithEURecipePool implements IRecipePool {
+public class NeutronActivatorWithEURecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         for (GTRecipe recipeOrigin : neutronActivatorRecipes.getAllRecipes()) {
             GTRecipe recipeNew = recipeOrigin.copy();

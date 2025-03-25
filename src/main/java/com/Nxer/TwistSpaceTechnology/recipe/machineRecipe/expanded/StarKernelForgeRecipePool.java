@@ -5,7 +5,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -15,15 +14,14 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class StarKernelForgeRecipePool implements IRecipePool {
+public class StarKernelForgeRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         loadGeneralRecipes();
         loadManualRecipes();
     }
 
-    private void addRecipe(ItemStack[] itemInputs, FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut,
+    private static void addRecipe(ItemStack[] itemInputs, FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut,
         int duration) {
         TST_RecipeBuilder.builder()
             .itemInputs(itemInputs)
@@ -35,19 +33,19 @@ public class StarKernelForgeRecipePool implements IRecipePool {
             .addTo(GTCMRecipe.BallLightningRecipes);
     }
 
-    private void addRecipe(FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut, int duration) {
+    private static void addRecipe(FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut, int duration) {
         addRecipe(null, fluidInputs, fluidOutputs, eut, duration);
     }
 
-    private void addRecipe(FluidStack fluidInputs, FluidStack fluidOutputs, int eut) {
+    private static void addRecipe(FluidStack fluidInputs, FluidStack fluidOutputs, int eut) {
         addRecipe(new FluidStack[] { fluidInputs }, new FluidStack[] { fluidOutputs }, eut, 50);
     }
 
-    private void addRecipe(ItemStack itemInputs, FluidStack fluidOutputs, int eut) {
+    private static void addRecipe(ItemStack itemInputs, FluidStack fluidOutputs, int eut) {
         addRecipe(new ItemStack[] { itemInputs }, null, new FluidStack[] { fluidOutputs }, eut, 50);
     }
 
-    private void loadGeneralRecipes() {
+    private static void loadGeneralRecipes() {
         for (GTRecipe plasmaFuel : RecipeMaps.plasmaFuels.getAllRecipes()) {
             FluidStack plasma = GTUtility.getFluidForFilledItem(plasmaFuel.mInputs[0], true);
             if (plasma == null) {
@@ -77,7 +75,7 @@ public class StarKernelForgeRecipePool implements IRecipePool {
         }
     }
 
-    public void loadManualRecipes() {
+    public static void loadManualRecipes() {
 
         // Neon
         addRecipe(

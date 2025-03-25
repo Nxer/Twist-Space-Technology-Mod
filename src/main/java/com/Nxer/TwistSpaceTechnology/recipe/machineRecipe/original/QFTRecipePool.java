@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -15,10 +13,9 @@ import gtPlusPlus.core.item.chemistry.GenericChem;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
-public class QFTRecipePool implements IRecipePool {
+public class QFTRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         final IRecipeMap QFT = GTPPRecipeMaps.quantumForceTransformerRecipes;
 
         // Palladium

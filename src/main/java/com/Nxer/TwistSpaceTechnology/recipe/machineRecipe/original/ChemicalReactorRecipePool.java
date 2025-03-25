@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
@@ -14,11 +12,9 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTUtility;
 
-public class ChemicalReactorRecipePool implements IRecipePool {
+public class ChemicalReactorRecipePool {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         final IRecipeMap LCR = RecipeMaps.multiblockChemicalReactorRecipes;
 
         // Lithium Chloride

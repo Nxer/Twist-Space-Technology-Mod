@@ -18,23 +18,21 @@ import org.apache.logging.log4j.Logger;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
-public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
+public class AquaticZoneSimulatorFakeRecipe {
 
     private static final Logger LOGGER = LogManager.getLogger(AquaticZoneSimulatorFakeRecipe.class);
     static FluidStack WaterStack = Materials.Water.getFluid(10000);
-    ItemStack Offspring = GTCMItemList.OffSpring.get(1);
+    private static final ItemStack Offspring = GTCMItemList.OffSpring.get(1);
     public static ArrayList<ItemStack> WatersOutputs = new ArrayList<>();
     public static HashMap<String, Integer> WatersChances = new HashMap<>();
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         initStatics();
         loadAquaticZoneFakeRecipes();
         loadAquaticZoneTrueRecipes();
@@ -42,7 +40,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
 
     private static List<WeightedRandomFishable> cachedFishList = null;
 
-    void initStatics() {
+    static void initStatics() {
         // generate fishes
         List<WeightedRandomFishable> fishList = getFishList();
 
@@ -105,7 +103,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
         return cachedFishList;
     }
 
-    void loadAquaticZoneFakeRecipes() {
+    static void loadAquaticZoneFakeRecipes() {
         for (ItemStack aStack : WatersOutputs) {
             ItemStack Input = aStack.copy();
             Input.stackSize = 0;
@@ -114,7 +112,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
         }
     }
 
-    void loadAquaticZoneTrueRecipes() {
+    static void loadAquaticZoneTrueRecipes() {
         // generate recipe chance
         int TotalSize = 0;
         for (ItemStack aStack : WatersOutputs) TotalSize += aStack.stackSize;
@@ -127,7 +125,7 @@ public class AquaticZoneSimulatorFakeRecipe implements IRecipePool {
         WatersChances.put(getItemStackString(Offspring), 1);
     }
 
-    void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid) {
+    static void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid) {
         GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)

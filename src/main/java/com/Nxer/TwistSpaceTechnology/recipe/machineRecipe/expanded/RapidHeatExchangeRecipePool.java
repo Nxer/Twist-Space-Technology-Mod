@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
@@ -14,10 +13,9 @@ import gregtech.api.enums.Materials;
 import gregtech.api.util.GTRecipe;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
-public class RapidHeatExchangeRecipePool implements IRecipePool {
+public class RapidHeatExchangeRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         FluidStack DenseSupercriticalSteam = Materials.DenseSupercriticalSteam.getGas(1);
 
         for (GTRecipe aRecipe : GoodGeneratorRecipeMaps.extremeHeatExchangerFuels.getAllRecipes()) {

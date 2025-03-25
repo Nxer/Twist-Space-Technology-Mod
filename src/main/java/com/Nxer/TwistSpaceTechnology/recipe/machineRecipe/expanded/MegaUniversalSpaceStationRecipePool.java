@@ -11,7 +11,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
 
 import bartworks.system.material.Werkstoff;
@@ -25,7 +24,7 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 
-public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
+public class MegaUniversalSpaceStationRecipePool {
 
     final IRecipeMap stationRecipe = GTCMRecipe.megaUniversalSpaceStationRecipePool;
     static final IRecipeMap MT = GTCMRecipe.MiracleTopRecipes;
@@ -96,8 +95,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
     // endregion
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (Config.activateMegaSpaceStation) {
             spaceStationStructureBlock = new ItemStack[] { GTCMItemList.spaceStationStructureBlockLV.get(1),
                 GTCMItemList.spaceStationStructureBlockMV.get(1), GTCMItemList.spaceStationStructureBlockHV.get(1),
@@ -129,7 +127,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
     }
 
-    public void loadCircuitRecipe() {
+    public static void loadCircuitRecipe() {
 
         // region umv
         var processor = uevPlusCircuit[4].copy();
@@ -590,7 +588,7 @@ public class MegaUniversalSpaceStationRecipePool implements IRecipePool {
 
     // this method loads recipe for recipe that not use MUSS but related to MUSS, eg, structure blocks and controller
     // blocks recipes.
-    public void loadOriginalRecipeForConstruct() {
+    public static void loadOriginalRecipeForConstruct() {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Circuit_OpticalMainframe.get(64),

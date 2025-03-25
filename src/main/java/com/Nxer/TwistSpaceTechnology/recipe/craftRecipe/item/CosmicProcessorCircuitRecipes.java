@@ -29,7 +29,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -51,11 +50,9 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 
-public class CosmicProcessorCircuitRecipes implements IRecipePool {
+public class CosmicProcessorCircuitRecipes {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         final ItemStack eternal_singularity = GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1);
 
         // Silicon Neutron to UHV circuits
