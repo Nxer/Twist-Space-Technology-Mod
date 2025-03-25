@@ -178,7 +178,6 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
@@ -229,10 +228,9 @@ import tectech.thing.casing.TTCasingsContainer;
 
 @Deprecated
 @SuppressWarnings("SpellCheckingInspection")
-public class GTCMMachineRecipes implements IRecipePool {
+public class GTCMMachineRecipes {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TwistSpaceTechnology.LOG.info("GTCMMachineRecipePool loading recipes.");
 
         Fluid solderIndAlloy = FluidRegistry.getFluid("molten.indalloy140");

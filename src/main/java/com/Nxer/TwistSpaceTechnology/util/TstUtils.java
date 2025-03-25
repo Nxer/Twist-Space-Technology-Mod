@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
@@ -400,7 +401,7 @@ public class TstUtils {
 
     /**
      * To more conveniently add item stacks to a list.
-     * 
+     *
      * @param list      The list to add.
      * @param itemStack The item stack to be added.
      * @param amount    The amount of items, it will be separated to multi item stacks when amount is larger than
@@ -432,7 +433,7 @@ public class TstUtils {
 
     /**
      * To more conveniently add fluid stacks to a list.
-     * 
+     *
      * @param list            The list to add.
      * @param fluidStackStack The fluid stack to be added.
      * @param amount          The amount of fluid, it will be separated to multi fluid stacks when amount is larger than
@@ -570,4 +571,21 @@ public class TstUtils {
             0);
     }
 
+    /**
+     * Get the possible ore name by the ore list.
+     * <p>
+     * According to the implementation, there is only one list instance for each ore name,
+     * so we can simply iterate all the ore lists to find the matching one.
+     *
+     * @param oreList the ore list obtained from {@link OreDictionary#getOres(String)}.
+     * @return the ore name if found, otherwise {@code null}.
+     */
+    public static @Nullable String getOreNameByOreList(ArrayList<ItemStack> oreList) {
+        for (String oreName : OreDictionary.getOreNames()) {
+            if (OreDictionary.getOres(oreName) == oreList) {
+                return oreName;
+            }
+        }
+        return null;
+    }
 }

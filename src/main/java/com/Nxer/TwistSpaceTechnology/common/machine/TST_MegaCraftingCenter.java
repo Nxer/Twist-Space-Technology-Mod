@@ -315,7 +315,6 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     /**
-     *
      * @param r   The find recipe of this pattern.
      * @param in  The pattern input items.
      * @param out The pattern output item.
@@ -688,23 +687,26 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
         ArrayList<ItemStack> additionalOutput = checkPatternInput();
 
-        for (Map.Entry<ICraftingPatternDetails, Long> itemstack : cachedOutput.entrySet()) {
-            ItemStack stack = itemstack.getKey()
-                .getOutputs()[0].getItemStack()
-                    .copy();
-            long p = stack.stackSize * itemstack.getValue();
-            ItemStack newStack;
-            while (p > Integer.MAX_VALUE) {
-                newStack = stack.copy();
-                newStack.stackSize = Integer.MAX_VALUE;
-                additionalOutput.add(newStack.copy());
-                p -= Integer.MAX_VALUE;
-            }
+        for (Map.Entry<ICraftingPatternDetails, Long> pair : cachedOutput.entrySet()) {
+            ICraftingPatternDetails pattern = pair.getKey();
+            ItemStack outputStack = pattern.getOutputs()[0].getItemStack()
+                .copy();
+            long scale = pair.getValue();
+            TstUtils.addStacksToList(additionalOutput, outputStack, outputStack.stackSize * scale);
 
-            newStack = stack.copy();
-            if (p > 0) newStack.stackSize = (int) p;
-            else continue;
-            additionalOutput.add(newStack.copy());
+            // add container items (not consumed items, or items that will transform into others)
+            // e.g.: consuming the containing Lava and return the bucket.
+            Arrays.stream(pattern.getInputs())
+                .map(IAEItemStack::getItemStack)
+                // check and get the container item
+                .filter(
+                    stack -> stack.getItem() != null && stack.getItem()
+                        .hasContainerItem(stack))
+                .map(
+                    stack -> stack.getItem()
+                        .getContainerItem(stack))
+                // put them to output list
+                .forEach(stack -> TstUtils.addStacksToList(additionalOutput, stack, stack.stackSize * scale));
         }
         if (additionalOutput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
         mOutputItems = additionalOutput.toArray(new ItemStack[0]);
@@ -865,14 +867,14 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                     "MAIN",
                     transpose(
                         // spotless:off
-                        new String[][] {
-                            { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" },
-                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
-                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
-                            { "BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
-                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
-                            { "BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB" },
-                            { "BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB" } }))
+                        new String[][]{
+                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"}}))
                 // spotless:on
                 .addElement(
                     'B',
@@ -998,10 +1000,10 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
         builder.widget(
             // spotless:off
-                   // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
-                   // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
-                   // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
-                   // spotless:on
+                // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
+                // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
+                // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
+                // spotless:on
             TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
                 .setPos(20, 10)
                 .setSize(200, 14))

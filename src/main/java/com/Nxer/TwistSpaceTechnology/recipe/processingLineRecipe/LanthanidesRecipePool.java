@@ -3,19 +3,15 @@ package com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
 import gtnhlanth.api.recipe.LanthanidesRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
-public class LanthanidesRecipePool implements IRecipePool {
+public class LanthanidesRecipePool {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         IRecipeMap digester = LanthanidesRecipeMaps.digesterRecipes;
 
         // GT Rare Earth to Lanthanides process

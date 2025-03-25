@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaSton
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import gregtech.api.enums.Materials;
@@ -15,36 +14,35 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 
-public class MegaStoneBreakerRecipePool implements IRecipePool {
+public class MegaStoneBreakerRecipePool {
 
-    ItemStack CobbleStone = new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone1 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone = new ItemStack(Blocks.cobblestone);
+    private static final ItemStack CobbleStone1 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 0)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone2 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone2 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 1)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone3 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone3 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 2)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone4 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone4 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 3)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone5 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone5 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 4)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone6 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone6 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 5)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone7 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone7 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 6)
         : new ItemStack(Blocks.cobblestone);
-    ItemStack CobbleStone8 = Mods.ExtraUtilities.isModLoaded()
+    private static final ItemStack CobbleStone8 = Mods.ExtraUtilities.isModLoaded()
         ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7)
         : new ItemStack(Blocks.cobblestone);
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(1))
             .itemOutputs(CobbleStone)

@@ -5,6 +5,7 @@ import static gregtech.api.recipe.RecipeMaps.nanoForgeRecipes;
 import static gregtech.api.util.GTRecipeConstants.NANO_FORGE_TIER;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.dreammaster.gthandler.CustomItemList;
@@ -17,10 +18,10 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
-public class NanoForgeRecipePool implements IRecipePool {
+public class NanoForgeRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
+
         // Cosmic Neutronium
         GTValues.RA.stdBuilder()
             .itemInputs(

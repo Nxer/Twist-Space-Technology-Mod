@@ -8,7 +8,6 @@ import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.WerkstoffLoader;
@@ -19,10 +18,9 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsAlloy;
 
-public class TSTSolidifierHatchRecipes implements IRecipePool {
+public class TSTSolidifierHatchRecipes {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(18),

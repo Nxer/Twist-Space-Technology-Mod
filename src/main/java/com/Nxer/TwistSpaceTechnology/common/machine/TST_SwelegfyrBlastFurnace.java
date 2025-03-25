@@ -481,14 +481,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     @Override
     protected float getSpeedBonus() {
-        return isPassiveMode ? Config.SpeedBonus_PassiveMode_SwelegfyrBlastFurnace
-            : Config.SpeedBonus_NormalMode_SwelegfyrBlastFurnace;
+        return 1f / (isPassiveMode ? Config.SpeedMultiplier_PassiveMode_SwelegfyrBlastFurnace
+            : Config.SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace);
     }
 
     @Override
     protected int getMaxParallelRecipes() {
-        return isPassiveMode ? Config.Parallel_NormalMode_SwelegfyrBlastFurnace
-            : Config.Parallel_PassiveMode_SwelegfyrBlastFurnace;
+        return isPassiveMode ? Config.Parallel_PassiveMode_SwelegfyrBlastFurnace
+            : Config.Parallel_NormalMode_SwelegfyrBlastFurnace;
     }
 
     @Override
@@ -1094,22 +1094,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN 当处于被动模式时炉温会缓慢升高。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
             // #tr Tooltip_SwelegfyrBlastFurnace.04
-            // # Power consumption decreases by 10% per 1800K above recipe temperature threshold.
-            // #zh_CN 炉温每高出配方1800K， 耗电减少10% 。
+            // # Additional furnace heat will reset upon recipe change.
+            // #zh_CN 切换配方时，额外炉温会被清空。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
             // #tr Tooltip_SwelegfyrBlastFurnace.05
-            // # Glass tier restricts Energy Hatch tier.
-            // #zh_CN 玻璃等级限制能源仓等级。
+            // # Power consumption decreases by 10% per 1800K above recipe temperature threshold.
+            // #zh_CN 炉温每高出配方1800K， 耗电减少10% 。
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
+            // # Glass tier restricts Energy Hatch tier.
+            // #zh_CN 玻璃等级限制能源仓等级。
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.07
             // # Upgrade machine and build additional structure to unlock additional functions.
             // #zh_CN 升级机器并搭建附加结构以解锁更多功能。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
             .addInfo(textSpace)
-            // #tr Tooltip_SwelegfyrBlastFurnace.07
+            // #tr Tooltip_SwelegfyrBlastFurnace.08
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门！
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
             .addSeparator()
             .addInfo(MoreInfoCheckingInScanner.getText())
             .addInfo(StructureTooComplex)
@@ -1169,8 +1173,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
-            // # Attention: Pyrotheum input hatch location will be changed when upgrade machine.
-            // #zh_CN 注意：升级结构后炽焱输入仓位置会发生变化.
+            // # Attention: Pyrotheum's dedicated input hatch location will be changed when upgrade machine.
+            // #zh_CN 注意：升级结构后炽焱专用的输入仓位置会发生变化.
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
@@ -1180,8 +1184,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
             // #tr Tooltip_SwelegfyrBlastFurnace.31
-            // # Pyrotheum input hatch
-            // #zh_CN 炽焱输入仓
+            // # Pyrotheum's dedicated input hatch
+            // #zh_CN 炽焱专用的输入仓
             .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
             .toolTipFinisher(ModName);
         return tt;

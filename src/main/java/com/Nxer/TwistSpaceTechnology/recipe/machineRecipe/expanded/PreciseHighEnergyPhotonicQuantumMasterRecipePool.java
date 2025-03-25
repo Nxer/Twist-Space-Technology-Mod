@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -27,10 +26,9 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 
-public class PreciseHighEnergyPhotonicQuantumMasterRecipePool implements IRecipePool {
+public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         TwistSpaceTechnology.LOG.info("PreciseHighEnergyPhotonicQuantumMasterRecipePool loading recipes.");
 

@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
@@ -14,10 +12,9 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
-public class MixerRecipePool implements IRecipePool {
+public class MixerRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         // region Ta4HfC5
         GTValues.RA.stdBuilder()
             .itemInputs(

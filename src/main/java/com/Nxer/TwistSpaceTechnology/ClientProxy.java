@@ -34,8 +34,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-        new RendereLoader();
-        new SoundLoader();
+        RendereLoader.init();
+        SoundLoader.init();
     }
 
 }

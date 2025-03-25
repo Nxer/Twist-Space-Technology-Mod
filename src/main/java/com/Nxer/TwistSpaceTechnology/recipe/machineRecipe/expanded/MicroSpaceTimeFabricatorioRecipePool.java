@@ -8,7 +8,6 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Spe
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import gregtech.api.enums.ItemList;
@@ -20,10 +19,9 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.material.Particle;
 
-public class MicroSpaceTimeFabricatorioRecipePool implements IRecipePool {
+public class MicroSpaceTimeFabricatorioRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         // region Tesseract adv recipe
         TST_RecipeBuilder.builder()

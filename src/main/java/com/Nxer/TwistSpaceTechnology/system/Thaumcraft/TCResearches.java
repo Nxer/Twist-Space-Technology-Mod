@@ -30,14 +30,14 @@ import thaumcraft.api.research.ResearchPage;
 
 public class TCResearches {
 
-    String TST_Path = "gtnhcommunitymod";
+    private static final String TST_Path = "gtnhcommunitymod";
 
-    public void register() {
+    public static void register() {
         loadResearchTab();
         loadResearches();
     }
 
-    public void loadResearchTab() {
+    public static void loadResearchTab() {
         ResearchCategories.registerCategory(
             "TST",
             new ResourceLocation(TST_Path, "textures/items/MetaItem01/33.png"),
@@ -47,7 +47,7 @@ public class TCResearches {
         // #zh_CN 扭曲空间科技
     }
 
-    public void loadResearches() {
+    public static void loadResearches() {
         new ResearchItem(
             "TST_WELCOME",
             // #tr tc.research_name.TST_WELCOME

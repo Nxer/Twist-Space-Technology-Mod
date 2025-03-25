@@ -9,8 +9,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -22,10 +20,9 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
-public class FluidSolidifierRecipePool implements IRecipePool {
+public class FluidSolidifierRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         final IRecipeMap fs = RecipeMaps.fluidSolidifierRecipes;
         // Mold Singularity
         GTValues.RA.stdBuilder()

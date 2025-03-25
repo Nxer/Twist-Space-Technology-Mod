@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -21,11 +20,10 @@ import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 
-public class SingleItemRecipes implements IRecipePool {
+public class SingleItemRecipes {
 
     // spotless:off
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         // Borophene Foil
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -41,7 +39,7 @@ public class SingleItemRecipes implements IRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.nanite, Materials.Silver, 1),
-                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Dilithium, 0))
+                GTOreDictUnificator.get(OrePrefixes.lens, Materials.Dilithium, 0, false))
             .fluidInputs(Materials.Boron.getPlasma(144 * 2))
             .itemOutputs(GTCMItemList.BoropheneFoil.get(2))
             .eut(TierEU.RECIPE_UEV)

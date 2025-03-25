@@ -9,9 +9,7 @@ import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
-import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
@@ -20,7 +18,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
  *
  * @author Nxer
  */
-public class SimpleFurnaceFuelPool implements IRecipePool, IFuelHandler {
+public class SimpleFurnaceFuelPool {
 
     public static final Map<Pair<Item, Integer>, Integer> fuelMap = new HashMap<>();
 
@@ -37,18 +35,16 @@ public class SimpleFurnaceFuelPool implements IRecipePool, IFuelHandler {
     /**
      * Registry your item burnable here.
      */
-    public void registryFuels() {
+    public static void registryFuels() {
         setFuel(GTCMItemList.EnergyShard.get(1), 365 * 24 * 3600 * 20);
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         registryFuels();
-        GameRegistry.registerFuelHandler(this);
+        GameRegistry.registerFuelHandler(fuel -> getBurnTime(fuel));
     }
 
-    @Override
-    public int getBurnTime(ItemStack fuel) {
+    public static int getBurnTime(ItemStack fuel) {
         if (fuel == null || fuel.getItem() == null) return 0;
 
         return fuelMap.getOrDefault(Pair.of(fuel.getItem(), fuel.getItemDamage()), 0);

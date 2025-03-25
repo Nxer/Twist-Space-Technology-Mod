@@ -24,7 +24,7 @@ import gtPlusPlus.core.material.MaterialsOres;
 
 public class OP_GTPP_OreHandler {
 
-    public Set<Material> addSpecials(Set<Material> set) {
+    public static Set<Material> addSpecials(Set<Material> set) {
         set.add(RARE_EARTH_LOW);
         set.add(RARE_EARTH_MID);
         set.add(RARE_EARTH_HIGH);
@@ -32,7 +32,7 @@ public class OP_GTPP_OreHandler {
         return set;
     }
 
-    public Set<Material> getGTPPOreMaterials() {
+    public static Set<Material> getGTPPOreMaterials() {
         Set<Material> gtppOres = new HashSet<>(51);
         for (Field field : MaterialsOres.class.getFields()) {
             if (field.getType() != Material.class) continue;
@@ -49,7 +49,7 @@ public class OP_GTPP_OreHandler {
         return gtppOres;
     }
 
-    public void processGTPPOreRecipes() {
+    public static void processGTPPOreRecipes() {
         for (Material ore : addSpecials(getGTPPOreMaterials())) {
             TST_RecipeBuilder.builder()
                 .itemInputs(ore.getOre(1))

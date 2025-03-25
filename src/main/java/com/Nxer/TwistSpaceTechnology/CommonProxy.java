@@ -25,7 +25,6 @@ import com.Nxer.TwistSpaceTechnology.event.TickingEvent;
 import com.Nxer.TwistSpaceTechnology.loader.LazyStaticsInitLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
-import com.Nxer.TwistSpaceTechnology.loader.OreDictLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
@@ -62,6 +61,8 @@ public class CommonProxy {
             ItemRegister.registry();
         }
 
+        TCLoader.preInit();
+
         LanguageManager.init();
     }
 
@@ -93,7 +94,7 @@ public class CommonProxy {
             new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
                 .build());
 
-        new LazyStaticsInitLoader().initStaticsOnInit();
+        LazyStaticsInitLoader.initStaticsOnInit();
         MachineLoader.loadMachines();
         GT_Hatch_RackComputationMonitor.run();
         EntityRegistry.registerModEntity(
@@ -105,8 +106,7 @@ public class CommonProxy {
             20,
             false);
 
-        new ModBlocksHandler().initStatics();
-
+        ModBlocksHandler.initStatics();
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -127,18 +127,17 @@ public class CommonProxy {
         }
 
         MachineLoader.loadMachinePostInit();
-        OreDictLoader.loadOreDictionary();
         RecipeLoader.loadRecipesPostInit();
 
         CropInfo.registerAllCropInfo();
 
-        TCLoader.load();
+        TCLoader.postInit();
     }
 
-    public void complete(FMLLoadCompleteEvent event) {
+    public static void complete(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();
 
-        new LazyStaticsInitLoader().initStaticsOnCompleteInit();
+        LazyStaticsInitLoader.initStaticsOnCompleteInit();
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

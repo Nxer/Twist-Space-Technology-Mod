@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -39,7 +38,7 @@ import thaumcraft.common.config.ConfigItems;
 import vazkii.botania.common.block.ModBlocks;
 import vazkii.botania.common.item.ModItems;
 
-public class TCRecipePool implements IRecipePool {
+public class TCRecipePool {
 
     public static InfusionRecipe infusionRecipeElvenWorkshop;
     public static InfusionRecipe infusionRecipeIndustrialMagicMatrix;
@@ -53,8 +52,7 @@ public class TCRecipePool implements IRecipePool {
 
     public static CrucibleRecipe crucibleRecipeArcaneHole;
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         /* Elven Workshop */
         infusionRecipeElvenWorkshop = ThaumcraftApi.addInfusionCraftingRecipe(
             "BH_ELVEN_WORKSHOP",

@@ -58,7 +58,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
@@ -84,7 +83,7 @@ import gtPlusPlus.core.material.Particle;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
-public class DSPRecipePool implements IRecipePool {
+public class DSPRecipePool {
 
     private static ItemStack appendToItemStackDisplayName(ItemStack itemStack, String extra) {
         String originName = itemStack.getDisplayName();
@@ -94,8 +93,7 @@ public class DSPRecipePool implements IRecipePool {
         return itemStack;
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         final IRecipeMap DSPLauncherRecipe = GTCMRecipe.DSP_LauncherRecipes;
         final IRecipeMap SpaceAssembler = IGRecipeMaps.spaceAssemblerRecipes;

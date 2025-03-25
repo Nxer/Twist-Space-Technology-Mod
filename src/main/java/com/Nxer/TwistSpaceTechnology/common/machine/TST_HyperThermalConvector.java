@@ -221,7 +221,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private MTEHatchInput mHotFluidHatch;
     private MTEHatchOutput mColdFluidHatch;
     List<MTEHatchInput> dedicatedHatches = new ArrayList<>();
-    Fluid distilledWater;
+    static Fluid distilledWater;
 
     @Override
     public RecipeMap<?> getRecipeMap() {

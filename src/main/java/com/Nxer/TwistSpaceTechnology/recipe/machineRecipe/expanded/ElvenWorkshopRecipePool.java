@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -20,10 +19,9 @@ import vazkii.botania.common.block.ModFluffBlocks;
 import vazkii.botania.common.item.ModItems;
 
 // spotless:off
-public class ElvenWorkshopRecipePool implements IRecipePool {
+public class ElvenWorkshopRecipePool  {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         final IRecipeMap EW = GTCMRecipe.ElvenWorkshopRecipes;
         //terrastrial recipe

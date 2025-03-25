@@ -216,6 +216,12 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+
+                // check core tier
+                if (GTUtility.getTier(recipe.mEUt) > coreTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(GTUtility.getTier(recipe.mEUt));
+                }
+
                 if (recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0) > 0) {
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
@@ -225,11 +231,10 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
-    @Override
     protected void setProcessingLogicPower(ProcessingLogic logic) {
-        logic.setAvailableVoltage(
-            Math.min(getMaxVoltageTierAtCurrentMode(), GTUtility.roundUpVoltage(this.getMaxInputVoltage())));
-        logic.setAvailableAmperage(1);
+        logic.setAvailableVoltage(getAverageInputVoltage());
+        logic.setAvailableAmperage(getMaxInputAmps());
+        logic.setAmperageOC(mEnergyHatches.size() > 1);
         logic.setSpeedBonus(getSpeedBonusAtCurrentCore());
         logic.setEuModifier(getEuModifierAtCurrentCore());
     }
@@ -265,11 +270,11 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_2"))
             // #tr ManufacturingCenter_Tooltips_3
             // # Manufacturing Center cannot handle recipes over %s.
-            // #zh_CN 加工中心不能制作%s以上的配方。
+            // #zh_CN 加工中心不能制作%s及以上的配方。
             .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_3", TstSharedFormat.getTierName(VoltageIndex.UHV)))
             // #tr ManufacturingCenter_Tooltips_4
-            // # §b20%%§7 faster than single blocks.
-            // #zh_CN 比单方块机器快§b20%%§7。
+            // # §b20%§7 faster than single blocks.
+            // #zh_CN 比单方块机器快§b20%§7。
             .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_4"))
             // #tr ManufacturingCenter_Tooltips_5
             // # Each Core Tier over %s gains §b%s§7 Speed Bonus comparing to single block machines.
@@ -288,9 +293,9 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
                     TstSharedFormat.getTierName(LOWEST_CORE_TIER),
                     TstSharedFormat.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_7
-            // # Max parallel is §b%s§7 max voltage tier.
-            // #zh_CN 最大并行为§b%s§7最大电压等级。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7", TstSharedFormat.factor(MAX_PARALLEL_MODIFIER)))
+            // # Max parallel is §b%sx§7 max voltage tier.
+            // #zh_CN 最大并行为§b%sx§7最大电压等级。
+            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7", MAX_PARALLEL_MODIFIER))
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
             .addController("Front Center")
@@ -489,7 +494,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
                             HatchElement.OutputBus,
                             HatchElement.InputHatch,
                             HatchElement.OutputHatch,
-                            HatchElement.Energy.or(HatchElement.ExoticEnergy),
+                            HatchElement.Energy,
                             HatchElement.Maintenance,
                             HatchElement.Muffler)
                         .casingIndex(getTextureIndex())
@@ -521,7 +526,8 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         casingCount = 0;
-        return checkPiece("main", 1, 1, 0) && casingCount >= 6 && checkHatch();
+        if (!checkPiece("main", 1, 1, 0)) return false;
+        return mExoticEnergyHatches.isEmpty() && casingCount >= 6;
     }
 
     // endregion

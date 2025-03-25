@@ -19,7 +19,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.Sets;
 
@@ -37,7 +36,7 @@ import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
-public class StellarForgeRecipePool implements IRecipePool {
+public class StellarForgeRecipePool {
 
     public static final HashSet<String> IngotHotOreDictNames = new HashSet<>();
     public static final HashSet<String> IngotOreDictNames = new HashSet<>();
@@ -83,7 +82,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         return true;
     }
 
-    public void initData() {
+    public static void initData() {
 
         for (String name : OreDictionary.getOreNames()) {
             if (name.startsWith("ingotHot")) {
@@ -138,7 +137,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
     }
 
-    public void prepareEBFRecipes() {
+    public static void prepareEBFRecipes() {
         Set<Fluid> protectionGas = Sets.newHashSet(
             Materials.Hydrogen.mGas,
             Materials.Oxygen.mGas,
@@ -271,7 +270,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
     }
 
-    public void prepareABSRecipes() {
+    public static void prepareABSRecipes() {
 
         for (GTRecipe recipe : GTPPRecipeMaps.alloyBlastSmelterRecipes.getAllRecipes()) {
             int minOutputFluidAmount = 144;
@@ -401,7 +400,7 @@ public class StellarForgeRecipePool implements IRecipePool {
         return out;
     }
 
-    public void loadManualRecipes() {
+    public static void loadManualRecipes() {
 
         // Meteoric Iron
         addToMiracleDoorRecipes(
@@ -447,12 +446,11 @@ public class StellarForgeRecipePool implements IRecipePool {
         }
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         initData();
     }
 
-    public void loadOnServerStarted() {
+    public static void loadOnServerStarted() {
         prepareEBFRecipes();
         prepareABSRecipes();
         loadManualRecipes();

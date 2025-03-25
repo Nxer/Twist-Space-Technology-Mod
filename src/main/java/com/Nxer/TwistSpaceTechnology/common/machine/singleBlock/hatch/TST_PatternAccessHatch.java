@@ -253,7 +253,12 @@ public class TST_PatternAccessHatch extends MTEHatch
                 .setStackSize(1);
         }
         if (mode == Actionable.SIMULATE) {
-            return request;
+            for (ItemStack pattern : getController().getInternalPatterns()) {
+                if (request.isSameType(pattern)) {
+                    return (AEItemStack) request.copy();
+                }
+            }
+            return null;
         }
         return AEItemStack.create(getController().extractPattern(request));
     }

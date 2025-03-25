@@ -5,7 +5,6 @@ import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -18,11 +17,9 @@ import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import tectech.thing.CustomItemList;
 
-public class CircuitAssemblerRecipePool implements IRecipePool {
+public class CircuitAssemblerRecipePool {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         final IRecipeMap CA = RecipeMaps.circuitAssemblerRecipes;
 
         // CA recipes will be multiplied during the initialization of bartworks,

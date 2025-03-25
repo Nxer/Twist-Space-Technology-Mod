@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.enums.GTValues;
@@ -30,10 +29,9 @@ import gtPlusPlus.xmod.forestry.bees.handler.GTPPDropType;
 import gtPlusPlus.xmod.forestry.bees.handler.GTPPPropolisType;
 import gtPlusPlus.xmod.forestry.bees.registry.GTPP_Bees;
 
-public class DragonBloodRecipe implements IRecipePool {
+public class DragonBloodRecipe {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (Config.Registry_DragonBlood_ExtraRecipe) {
             // Fluid Heater
             GTValues.RA.stdBuilder()

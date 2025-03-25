@@ -177,7 +177,10 @@ public class TextLocalization {
     // #zh_CN ：{\SPACE}
     public static final String textColon = TextEnums.tr("textColon");
     public static String getBlueprintWithDot(int dot){
-        return textUseBlueprint + EnumChatFormatting.WHITE + " Dot: " + EnumChatFormatting.AQUA+dot;
+        // #tr textDot
+        // # Dot
+        // #zh_CN 提示方块
+        return textUseBlueprint + EnumChatFormatting.WHITE + " " + TextEnums.tr("textDot") + " : " + EnumChatFormatting.AQUA+dot;
     }
 
     // #tr textSpace

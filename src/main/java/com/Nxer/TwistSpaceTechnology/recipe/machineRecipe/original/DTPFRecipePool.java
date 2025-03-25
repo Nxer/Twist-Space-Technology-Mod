@@ -10,7 +10,6 @@ import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
@@ -25,10 +24,9 @@ import gregtech.common.items.CombType;
 import gregtech.loaders.misc.GTBees;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class DTPFRecipePool implements IRecipePool {
+public class DTPFRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         // Entropic Flux
 
@@ -107,7 +105,7 @@ public class DTPFRecipePool implements IRecipePool {
         loadExtraRecipes();
     }
 
-    public void loadExtraRecipes() {
+    public static void loadExtraRecipes() {
         if (!Config.Registry_DTPF_ExtraRecipe) return;
 
         final IRecipeMap DTPF = RecipeMaps.plasmaForgeRecipes;

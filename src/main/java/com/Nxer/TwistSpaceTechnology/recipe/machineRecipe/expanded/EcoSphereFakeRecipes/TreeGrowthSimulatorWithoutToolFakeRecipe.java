@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import galaxyspace.BarnardsSystem.BRFluids;
@@ -28,7 +27,7 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
 
-public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
+public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
     static FluidStack WaterStack = Materials.Water.getFluid(1000);
     static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 1000);
@@ -46,14 +45,13 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
     static ItemStack[] allFruits;
     public static ItemStack[][] allProducts;
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         initStatic();
         loadTreeFarmWithoutToolRecipe();
         loadManualRecipes();
     }
 
-    void initStatic() {
+    static void initStatic() {
         ArrayList<ItemStack> allSaplingsInCopy = new ArrayList<>();
         EnumMap<Mode, ArrayList<ItemStack>> allProductsMap = new EnumMap<>(Mode.class);
 
@@ -112,13 +110,13 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         allProducts = new ItemStack[][] { allLogs, allSaplings, allLeaves, allFruits };
     }
 
-    void loadTreeFarmWithoutToolRecipe() {
+    static void loadTreeFarmWithoutToolRecipe() {
         for (ItemStack Sapling : allSaplingsIn) {
             addFakeRecipe(Sapling, new ItemStack[] { Sapling }, WaterStack);
         }
     }
 
-    void loadManualRecipes() {
+    static void loadManualRecipes() {
         // Barnarda C
         if (Mods.GalaxySpace.isModLoaded()) addSpecialFakeRecipe(
             GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 1),
@@ -178,11 +176,11 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         tag.setTag("ench", enchantments);
     }
 
-    void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
+    static void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
         addFakeRecipe(SpecialSapling, allSaplingWithTag, SpecialFluid);
     }
 
-    void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid) {
+    static void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid) {
         EnumMap<Mode, ItemStack> ProductMap = queryTreeProduct(Sapling);
 
         // ItemStack[] inputStacks = new ItemStack[Mode.values().length];
@@ -213,7 +211,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe implements IRecipePool {
         addFakeRecipe(i, o, specialStacks, inputFluid);
     }
 
-    void addFakeRecipe(ItemStack[] inputStacks, ItemStack[] outputStacks, ItemStack[] specialStacks,
+    static void addFakeRecipe(ItemStack[] inputStacks, ItemStack[] outputStacks, ItemStack[] specialStacks,
         FluidStack inputFluid) {
         GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)

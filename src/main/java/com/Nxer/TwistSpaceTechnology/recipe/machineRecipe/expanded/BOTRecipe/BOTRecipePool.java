@@ -2,17 +2,15 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.OrePrefixes;
 import ic2.api.item.IC2Items;
 import vazkii.botania.api.BotaniaAPI;
 
-public class BOTRecipePool implements IRecipePool {
+public class BOTRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         BotaniaAPI.elvenTradeRecipes.add(
             new ElvenTradeRecipe(
                 GTCMItemList.PurpleMagnoliaSapling.get(1),

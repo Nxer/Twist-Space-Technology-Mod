@@ -16,10 +16,9 @@ import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class FusionReactorRecipePool implements IRecipePool {
+public class FusionReactorRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         // Chromium + Oxygen = Germanium
 

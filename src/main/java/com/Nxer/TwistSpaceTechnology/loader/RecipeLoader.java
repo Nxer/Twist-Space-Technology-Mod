@@ -3,10 +3,11 @@ package com.Nxer.TwistSpaceTechnology.loader;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.SimpleFurnaceFuelPool;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CardiganRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.CosmicProcessorCircuitRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.LapotronChipRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleBlockRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item.SingleItemRecipes;
@@ -23,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemb
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
@@ -70,50 +72,74 @@ public class RecipeLoader {
     public static void loadRecipes() {
 
         // TODO Split GTCMMachineRecipes
-        IRecipePool[] craftRecipePool = {
-            // Item Recipes
-            new SingleItemRecipes(), new SingleBlockRecipes(), new CosmicProcessorCircuitRecipes(),
-            new LapotronChipRecipes(),
-            // Machine Recipes
-            new SingleMachineRecipes(), new GTCMMachineRecipes(), new TSTBufferedEnergyHatchRecipes(),
-            new ModularHatchesRecipes(), new TSTSolidifierHatchRecipes() };
+        // Item Recipes
+        SingleItemRecipes.loadRecipes();
+        SingleBlockRecipes.loadRecipes();
+        CosmicProcessorCircuitRecipes.loadRecipes();
+        LapotronChipRecipes().loadRecipes();
 
-        for (IRecipePool recipePool : craftRecipePool) {
-            recipePool.loadRecipes();
-        }
+        // Machine Recipes
+        SingleMachineRecipes.loadRecipes();
+        TSTBufferedEnergyHatchRecipes.loadRecipes();
+        ModularHatchesRecipes.loadRecipes();
 
-        IRecipePool[] machineRecipePools = new IRecipePool[] {
-            // Original GTNH RecipeMap
-            new ChemicalReactorRecipePool(), new CircuitAssemblerRecipePool(), new DistillationRecipePool(),
-            new ExtractorRecipePool(), new CompressorRecipePool(), new LanthanidesRecipePool(),
-            new CentrifugeRecipePool(), new ShapedCraftRecipePool(), new MixerRecipePool(), new QFTRecipePool(),
-            new NanoForgeRecipePool(), new FluidHeaterRecipePool(), new ParticleColliderRecipePool(),
-            new FusionReactorRecipePool(), new SpaceAssemblerRecipePool(), new TCRecipePool(),
-            new FluidSolidifierRecipePool(), new DragonBloodRecipe(), new DTPFRecipePool(),
-            // TST Recipe Map
-            new IntensifyChemicalDistorterRecipePool(), new PreciseHighEnergyPhotonicQuantumMasterRecipePool(),
-            new MiracleTopRecipePool(), new CrystallineInfinitierRecipePool(), new DSPRecipePool(),
-            new MegaUniversalSpaceStationRecipePool(), new StellarMaterialSiphonRecipePool(),
-            new AssemblyLineWithoutResearchRecipePool(), new BOTRecipePool(), new StarKernelForgeRecipePool(),
-            new ElvenWorkshopRecipePool(), new RuneEngraverRecipePool(), new CokingFactoryRecipePool(),
-            new StellarForgeRecipePool(), new HyperSpacetimeTransformerRecipePool(),
-            new AquaticZoneSimulatorFakeRecipe(), new NeutronActivatorWithEURecipePool(),
-            new MassFabricatorGenesisRecipePool(), new MicroSpaceTimeFabricatorioRecipePool(),
-            new BloodyHellRecipePool(), new MegaStoneBreakerRecipePool(), new IndustrialAlchemyTowerRecipePool(),
-            new CircuitAssemblyLineWithoutImprintRecipePool(), new RapidHeatExchangeRecipePool(),
-            new DeployedNanoCoreRecipePool() };
+        TSTSolidifierHatchRecipes.loadRecipes();
+        GTCMMachineRecipes.loadRecipes();
+        CardiganRecipes.loadRecipes();
 
-        for (IRecipePool recipePool : machineRecipePools) {
-            recipePool.loadRecipes();
-        }
-
-        new SimpleFurnaceFuelPool().loadRecipes();
-        new TCResearches().register();
+        // Original GTNH RecipeMap
+        ChemicalReactorRecipePool.loadRecipes();
+        CircuitAssemblerRecipePool.loadRecipes();
+        DistillationRecipePool.loadRecipes();
+        ExtractorRecipePool.loadRecipes();
+        CompressorRecipePool.loadRecipes();
+        LanthanidesRecipePool.loadRecipes();
+        CentrifugeRecipePool.loadRecipes();
+        ShapedCraftRecipePool.loadRecipes();
+        MixerRecipePool.loadRecipes();
+        QFTRecipePool.loadRecipes();
+        NanoForgeRecipePool.loadRecipes();
+        FluidHeaterRecipePool.loadRecipes();
+        ParticleColliderRecipePool.loadRecipes();
+        FusionReactorRecipePool.loadRecipes();
+        SpaceAssemblerRecipePool.loadRecipes();
+        TCRecipePool.loadRecipes();
+        FluidSolidifierRecipePool.loadRecipes();
+        DragonBloodRecipe.loadRecipes();
+        DTPFRecipePool.loadRecipes();
+        // TST Recipe Map
+        IntensifyChemicalDistorterRecipePool.loadRecipes();
+        PreciseHighEnergyPhotonicQuantumMasterRecipePool.loadRecipes();
+        MiracleTopRecipePool.loadRecipes();
+        CrystallineInfinitierRecipePool.loadRecipes();
+        DSPRecipePool.loadRecipes();
+        MegaUniversalSpaceStationRecipePool.loadRecipes();
+        StellarMaterialSiphonRecipePool.loadRecipes();
+        AssemblyLineWithoutResearchRecipePool.loadRecipes();
+        BOTRecipePool.loadRecipes();
+        StarKernelForgeRecipePool.loadRecipes();
+        ElvenWorkshopRecipePool.loadRecipes();
+        RuneEngraverRecipePool.loadRecipes();
+        CokingFactoryRecipePool.loadRecipes();
+        StellarForgeRecipePool.loadRecipes();
+        HyperSpacetimeTransformerRecipePool.loadRecipes();
+        AquaticZoneSimulatorFakeRecipe.loadRecipes();
+        NeutronActivatorWithEURecipePool.loadRecipes();
+        MassFabricatorGenesisRecipePool.loadRecipes();
+        MicroSpaceTimeFabricatorioRecipePool.loadRecipes();
+        BloodyHellRecipePool.loadRecipes();
+        MegaStoneBreakerRecipePool.loadRecipes();
+        IndustrialAlchemyTowerRecipePool.loadRecipes();
+        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
+        RapidHeatExchangeRecipePool.loadRecipes();
+        DeployedNanoCoreRecipePool().loadRecipes();
+        SimpleFurnaceFuelPool.loadRecipes();
+        TCResearches.register();
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
-        new OP_NormalProcessing().enumOreProcessingRecipes();
+        OP_NormalProcessing.enumOreProcessingRecipes();
 
         if (Config.Enable_MegaCraftingCenter) {
             new ExtremeCraftRecipeHandler().initECRecipe();
@@ -122,7 +148,7 @@ public class RecipeLoader {
     }
 
     public static void loadRecipesPostInit() {
-        new IntensifyChemicalDistorterRecipePool().loadRecipePostInit();
+        IntensifyChemicalDistorterRecipePool.loadRecipePostInit();
     }
 
     public static boolean hasLoadedRecipesServerStarted = false;
@@ -134,10 +160,10 @@ public class RecipeLoader {
         }
         hasLoadedRecipesServerStarted = true;
 
-        new StellarForgeRecipePool().loadOnServerStarted();
-        new TreeGrowthSimulatorWithoutToolFakeRecipe().loadRecipes();
+        StellarForgeRecipePool.loadOnServerStarted();
+        TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {
-            new IndustrialMagicMatrixRecipePool().loadRecipes();
+            IndustrialMagicMatrixRecipePool.loadRecipes();
         }
     }
 

@@ -8,6 +8,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdder01;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemNamedCircuit;
@@ -55,6 +56,8 @@ public class TstItems {
     // don't use this item, but found its stack instance in the class, remember to copy the stacks!
     @SuppressWarnings("unused")
     public static final TSTGeneratedItem Generated = new TSTGeneratedItem();
+
+    public static final ItemCardigan Cardian = new ItemCardigan();
 
     public static final Item ActualPattern = new ItemActualPattern();
 

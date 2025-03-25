@@ -27,7 +27,7 @@
 // import static kubatech.tileentity.gregtech.multiblock.GT_MetaTileEntity_ExtremeEntityCrusher.DIAMOND_SPIKES_DAMAGE;
 // import static kubatech.tileentity.gregtech.multiblock.GT_MetaTileEntity_ExtremeEntityCrusher.MOB_SPAWN_INTERVAL;
 //
-// public class Mode3SimulatorFakeRecipe extends MobHandlerLoader implements IRecipePool{
+// public class Mode3SimulatorFakeRecipe extends MobHandlerLoader {
 // private static MobHandlerLoader instance = null;
 // public static Map<String, MobEECRecipe> MobrecipeMap = new HashMap<>();
 //

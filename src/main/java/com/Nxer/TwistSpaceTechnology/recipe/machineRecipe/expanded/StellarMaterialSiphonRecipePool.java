@@ -9,14 +9,13 @@ import java.util.Map;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.Loader;
 import galaxyspace.SolarSystem.SolarSystemPlanets;
 import gregtech.api.enums.Materials;
 
-public class StellarMaterialSiphonRecipePool implements IRecipePool {
+public class StellarMaterialSiphonRecipePool {
 
     public static final Map<String, Map<Integer, FluidStack>> RECIPES = new HashMap<>();
 
@@ -65,8 +64,7 @@ public class StellarMaterialSiphonRecipePool implements IRecipePool {
         RECIPES.put("blackHole", blackHoleRecipes);// should replace with world later
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (Config.activateMegaSpaceStation) {
             addPumpingRecipes();
         }
