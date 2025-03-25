@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import gregtech.api.enums.ItemList;
@@ -9,10 +8,9 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTUtility;
 
-public class NanoForgeRecipePool implements IRecipePool {
+public class NanoForgeRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         TST_RecipeBuilder.builder()
             .itemInputs(

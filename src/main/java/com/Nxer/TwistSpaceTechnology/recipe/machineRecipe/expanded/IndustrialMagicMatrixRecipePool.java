@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
@@ -31,11 +30,11 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTUtility;
 import thaumcraft.common.items.ItemEssence;
 
-public class IndustrialMagicMatrixRecipePool implements IRecipePool {
+public class IndustrialMagicMatrixRecipePool {
 
-    protected ItemStack[] itemsUnconsumed = new ItemStack[] { new ItemStack(bigPearl) };
+    protected static ItemStack[] itemsUnconsumed = new ItemStack[] { new ItemStack(bigPearl) };
 
-    protected ItemStack[] checkInputSpecial(ItemStack... itemStacks) {
+    protected static ItemStack[] checkInputSpecial(ItemStack... itemStacks) {
         baseLoop: for (ItemStack i : itemStacks) {
             for (ItemStack u : itemsUnconsumed) {
                 if (GTUtility.areStacksEqual(i, u)) {
@@ -47,9 +46,9 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
         return itemStacks;
     }
 
-    protected Set<Item> skips;
+    protected static Set<Item> skips;
 
-    protected boolean shouldSkip(Item item) {
+    protected static boolean shouldSkip(Item item) {
         if (null == skips) {
             skips = new HashSet<>();
             skips.add(itemJarNode);
@@ -70,8 +69,7 @@ public class IndustrialMagicMatrixRecipePool implements IRecipePool {
         return skips.contains(item);
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TCRecipeTools.getInfusionCraftingRecipe();
 
         final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipe;

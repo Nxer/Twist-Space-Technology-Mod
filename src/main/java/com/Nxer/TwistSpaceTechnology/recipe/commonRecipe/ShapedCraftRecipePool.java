@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import appeng.api.AEApi;
 import gregtech.api.enums.ItemList;
@@ -22,11 +21,9 @@ import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
-public class ShapedCraftRecipePool implements IRecipePool {
+public class ShapedCraftRecipePool {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         // Large Steam Forge Hammer
         addCraftingRecipe(
             GTCMItemList.LargeSteamForgeHammer.get(1),

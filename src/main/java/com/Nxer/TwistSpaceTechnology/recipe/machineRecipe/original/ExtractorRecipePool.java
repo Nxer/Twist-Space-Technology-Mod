@@ -4,7 +4,6 @@ import static gregtech.api.enums.TierEU.RECIPE_LV;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;
@@ -12,11 +11,9 @@ import gregtech.api.recipe.RecipeMaps;
 import magicbees.item.types.CombType;
 import magicbees.main.Config;
 
-public class ExtractorRecipePool implements IRecipePool {
+public class ExtractorRecipePool {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         final IRecipeMap Extractor = RecipeMaps.fluidExtractionRecipes;
 
         GTValues.RA.stdBuilder()

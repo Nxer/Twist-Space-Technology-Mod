@@ -5,16 +5,13 @@ import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class FusionReactorRecipePool implements IRecipePool {
+public class FusionReactorRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         // // debug Recipe
         // GTValues.RA.stdBuilder()

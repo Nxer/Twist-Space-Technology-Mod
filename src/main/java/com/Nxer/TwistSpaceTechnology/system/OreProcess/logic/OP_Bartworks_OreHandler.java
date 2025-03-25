@@ -22,7 +22,7 @@ import gregtech.api.util.GTUtility;
 
 public class OP_Bartworks_OreHandler {
 
-    public void processBWOreRecipes() {
+    public static void processBWOreRecipes() {
         for (Werkstoff werkstoff : Werkstoff.werkstoffHashSet) {
             if (!werkstoff.hasItemType(ore)) continue;
             ArrayList<ItemStack> outputs = new ArrayList<>();

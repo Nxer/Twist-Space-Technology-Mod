@@ -58,7 +58,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
@@ -86,9 +85,9 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.LanthItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
-public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
+public class AssemblyLineWithoutResearchRecipePool {
 
-    public ItemStack transToWildCircuit(ItemStack items) {
+    public static ItemStack transToWildCircuit(ItemStack items) {
         ItemData tPrefixMaterial = GTOreDictUnificator.getAssociation(items);
 
         if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) return null;
@@ -118,8 +117,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         return result;
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         TwistSpaceTechnology.LOG.info("Loading Mega Assembly Line Recipes.");
 
         // skip these recipes
@@ -243,7 +241,7 @@ public class AssemblyLineWithoutResearchRecipePool implements IRecipePool {
         // .size());
     }
 
-    public void loadSpecialRecipes() {
+    public static void loadSpecialRecipes() {
         final RecipeMap<?> MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipe;
         final Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
             ? FluidRegistry.getFluid("molten.mutatedlivingsolder")

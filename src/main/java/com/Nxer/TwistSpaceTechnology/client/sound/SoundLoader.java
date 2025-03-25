@@ -8,7 +8,7 @@ public class SoundLoader {
 
     public static ResourceLocation BGM;
 
-    public SoundLoader() {
+    public static void init() {
         if (Config.Enable_PowerChairBGM) {
             BGM = new ResourceLocation("gtnhcommunitymod:PowerChair");
         }

@@ -5,7 +5,6 @@ import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
@@ -19,21 +18,10 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class SingleBlockRecipes implements IRecipePool {
+public class SingleBlockRecipes {
 
     // spotless:off
-    @Override
-    public void loadRecipes() {
-        loadTTBlockRecipes();
-        loadGTBlockRecipes();
-        loadTSTBlockRecipes();
-    }
-
-    void loadTTBlockRecipes() {}
-
-    void loadGTBlockRecipes() {}
-
-    void loadTSTBlockRecipes() {
+    public static void loadRecipes() {
         // Borophene Based Nanowire Composite Thermal Conductive Casing
         TST_RecipeBuilder.builder()
             .itemInputs(

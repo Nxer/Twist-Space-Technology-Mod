@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -35,14 +34,13 @@ import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
-public class ModularHatchesRecipes implements IRecipePool {
+public class ModularHatchesRecipes {
 
-    private long getRecipeVoltageFromModuleTier(int t) {
+    private static long getRecipeVoltageFromModuleTier(int t) {
         return VP[7 + t];
     }
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (!Config.EnableModularizedMachineSystem) return;
 
         Materials[] materials = new Materials[] { Materials.NaquadahAlloy, Materials.Neutronium,

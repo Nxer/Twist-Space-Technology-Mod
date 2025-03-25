@@ -2,18 +2,15 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
-
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.Particle;
 
-public class ParticleColliderRecipePool implements IRecipePool {
+public class ParticleColliderRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         final IRecipeMap PCRP = GTPPRecipeMaps.cyclotronRecipes;
         GTValues.RA.stdBuilder()
             .itemInputs(Particle.getBaseParticle(Particle.PROTON), Particle.getBaseParticle(Particle.ELECTRON))

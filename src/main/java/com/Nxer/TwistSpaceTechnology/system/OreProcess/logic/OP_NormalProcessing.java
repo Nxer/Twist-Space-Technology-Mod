@@ -34,7 +34,7 @@ public class OP_NormalProcessing {
     /**
      * Ore stone types enum
      */
-    public final Set<OrePrefixes> basicStoneTypes = Sets.newHashSet(
+    public static final Set<OrePrefixes> basicStoneTypes = Sets.newHashSet(
         OrePrefixes.ore,
         OrePrefixes.oreBasalt,
         OrePrefixes.oreBlackgranite,
@@ -43,7 +43,7 @@ public class OP_NormalProcessing {
         OrePrefixes.oreNetherrack,
         OrePrefixes.oreEndstone);
 
-    public final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
+    public static final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
         OrePrefixes.oreBasalt,
         OrePrefixes.oreBlackgranite,
         OrePrefixes.oreRedgranite,
@@ -51,9 +51,9 @@ public class OP_NormalProcessing {
         OrePrefixes.oreNetherrack,
         OrePrefixes.oreEndstone);
 
-    public final Map<Materials, ItemStack> processingLineMaterials = new HashMap<>();
+    public static final Map<Materials, ItemStack> processingLineMaterials = new HashMap<>();
 
-    public void initProcessingLineMaterials() {
+    public static void initProcessingLineMaterials() {
         processingLineMaterials.put(Materials.Platinum, WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 1));
         processingLineMaterials.put(Materials.Palladium, WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 1));
         processingLineMaterials.put(Materials.Iridium, WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 1));
@@ -69,7 +69,7 @@ public class OP_NormalProcessing {
     // 535, 540, 541, 542, 543, 544, 545, 770, 810, 817, 826, 884, 894, 918, 920
     // );
 
-    public ItemStack getDustStack(Materials material, int amount) {
+    public static ItemStack getDustStack(Materials material, int amount) {
         if (SpecialProcessingLineMaterialInstead) {
             ItemStack t = processingLineMaterials.get(material);
             if (t != null) {
@@ -82,7 +82,7 @@ public class OP_NormalProcessing {
     /**
      * Generate recipes.
      */
-    public void enumOreProcessingRecipes() {
+    public static void enumOreProcessingRecipes() {
         initProcessingLineMaterials();
         Set<Materials> specialProcesses = Sets.newHashSet(
             Materials.Samarium,
@@ -106,8 +106,8 @@ public class OP_NormalProcessing {
             processOreRecipe(material, i);
         }
 
-        new OP_GTPP_OreHandler().processGTPPOreRecipes();
-        new OP_Bartworks_OreHandler().processBWOreRecipes();
+        OP_GTPP_OreHandler.processGTPPOreRecipes();
+        OP_Bartworks_OreHandler.processBWOreRecipes();
 
         processSpecialOreRecipe();
     }
@@ -115,7 +115,7 @@ public class OP_NormalProcessing {
     /**
      * Generate special ores recipes
      */
-    public void processSpecialOreRecipe() {
+    public static void processSpecialOreRecipe() {
         // spotless:off
 
         // Cerium ore
@@ -247,7 +247,7 @@ public class OP_NormalProcessing {
      * @param material The ore's Material.
      * @param ID       The material ID.
      */
-    public void processOreRecipe(Materials material, int ID) {
+    public static void processOreRecipe(Materials material, int ID) {
         if (GTOreDictUnificator.get(OrePrefixes.ore, material, 1) == null) return;
         ItemStack[] outputs = getOutputs(material, false);
         ItemStack[] outputsRich = getOutputs(material, true);
@@ -277,11 +277,11 @@ public class OP_NormalProcessing {
      * @param material      Input ore's material in GT design.
      * @param isRich        Is this ore a rich type.
      */
-    public void processOreRecipe(ItemStack inputOreItems, Materials material, boolean isRich) {
+    public static void processOreRecipe(ItemStack inputOreItems, Materials material, boolean isRich) {
         registryOreProcessRecipe(inputOreItems, getOutputs(material, isRich));
     }
 
-    public ItemStack[] getOutputs(Materials material, boolean isRich) {
+    public static ItemStack[] getOutputs(Materials material, boolean isRich) {
         List<ItemStack> outputs = new ArrayList<>();
 
         // check byproduct
@@ -330,7 +330,7 @@ public class OP_NormalProcessing {
         return outputs.toArray(new ItemStack[0]);
     }
 
-    public void registryOreProcessRecipe(ItemStack input, ItemStack[] output) {
+    public static void registryOreProcessRecipe(ItemStack input, ItemStack[] output) {
         if (input == null) return;
         TST_RecipeBuilder.builder()
             .itemInputs(input)
@@ -348,7 +348,7 @@ public class OP_NormalProcessing {
      * @param prefixes The style to check.
      * @return True is rich ore.
      */
-    public boolean isRich(OrePrefixes prefixes) {
+    public static boolean isRich(OrePrefixes prefixes) {
         return prefixes == OrePrefixes.oreNetherrack || prefixes == OrePrefixes.oreEndstone;
     }
 

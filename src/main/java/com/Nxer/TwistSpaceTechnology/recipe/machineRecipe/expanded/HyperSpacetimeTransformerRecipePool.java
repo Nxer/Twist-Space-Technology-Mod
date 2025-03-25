@@ -4,7 +4,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -12,10 +11,9 @@ import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
 
 // spotless:off
-public class HyperSpacetimeTransformerRecipePool implements IRecipePool {
+public class HyperSpacetimeTransformerRecipePool  {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
 
         final IRecipeMap HST = GTCMRecipe.HyperSpacetimeTransformerRecipe;
         //terrastrial recipe

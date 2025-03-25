@@ -31,7 +31,6 @@ import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -42,11 +41,9 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 
-public class TSTBufferedEnergyHatchRecipes implements IRecipePool {
+public class TSTBufferedEnergyHatchRecipes {
 
-    @Override
-    public void loadRecipes() {
-
+    public static void loadRecipes() {
         final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1),

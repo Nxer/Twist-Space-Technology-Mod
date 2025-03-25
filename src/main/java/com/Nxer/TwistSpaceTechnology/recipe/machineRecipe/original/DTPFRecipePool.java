@@ -8,7 +8,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
@@ -21,10 +20,9 @@ import gregtech.common.items.CombType;
 import gregtech.loaders.misc.GTBees;
 import gtPlusPlus.core.material.MaterialsElements;
 
-public class DTPFRecipePool implements IRecipePool {
+public class DTPFRecipePool {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         if (!Config.Registry_DTPF_ExtraRecipe) return;
 
         final IRecipeMap DTPF = RecipeMaps.plasmaForgeRecipes;

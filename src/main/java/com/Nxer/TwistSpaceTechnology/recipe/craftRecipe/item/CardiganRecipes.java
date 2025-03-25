@@ -4,15 +4,13 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
-import com.Nxer.TwistSpaceTechnology.recipe.IRecipePool;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.util.GTModHandler;
 
-public class CardiganRecipes implements IRecipePool {
+public class CardiganRecipes {
 
-    @Override
-    public void loadRecipes() {
+    public static void loadRecipes() {
         GTModHandler.addCraftingRecipe(
             ItemCardigan.CardiganULV,
             new Object[] { "W W", "WWW", "WWW", 'W', new ItemStack(Blocks.wool), });
