@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasin
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Kelvin;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
@@ -295,9 +296,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
-        int structureTier = stackSize.stackSize > 1 ? 2 : 1;
         this.buildPiece(
-            "mainT" + structureTier,
+            "mainT" + controllerTier,
             stackSize,
             hintsOnly,
             baseHorizontalOffSet,
@@ -345,8 +345,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
         // Check all tier to render properly in nei
         if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
-                return false;
+            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
+                || controllerTier > 1) return false;
         }
 
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
@@ -1014,7 +1014,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.1")
                 + textColon
                 + EnumChatFormatting.WHITE
-                + tag.getInteger("mHeatingCapacity")));
+                + tag.getInteger("mHeatingCapacity")) + Kelvin);
         if ((IsActive && InPassiveMode) || (!IsActive && IsPassiveMode)) {
             currentTip.add(
                 // #tr Waila.SBF.2
@@ -1023,7 +1023,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.2")
                     + textColon
                     + EnumChatFormatting.WHITE
-                    + tag.getInteger("maxHeatingCapacity")));
+                    + tag.getInteger("maxHeatingCapacity")) + Kelvin);
         }
         currentTip.add(
             // #tr Waila.SBF.3
@@ -1039,10 +1039,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("Waila.SBF.1")
-            + textColon
-            + EnumChatFormatting.GOLD
-            + mHeatingCapacity;
+        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums
+            .tr("Waila.SBF.1") + textColon + EnumChatFormatting.GOLD + mHeatingCapacity + Kelvin;
         return ret;
     }
 
