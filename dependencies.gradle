@@ -48,10 +48,11 @@ dependencies {
     implementation('com.github.GTNewHorizons:ThaumicEnergistics:1.6.27-GTNH:dev')
     implementation('com.github.GTNewHorizons:Botania:1.11.7-GTNH:dev')
     implementation('com.github.GTNewHorizons:supersolarpanels:1.1.3:dev')
-    implementation('curse.maven:advsolar-362768:2885953')
+    implementation(rfg.deobf('curse.maven:advsolar-362768:2885953'))
     implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.5.17:dev')
+    implementation('com.github.GTNewHorizons:Hodgepodge:2.5.90:dev')
     //These 2 deps have conflicts with Amun-Ra by default, see Twist-Space-Technology-Mod#150
-    compileOnly('curse.maven:witchery-69673:2234410')
+    compileOnly(rfg.deobf('curse.maven:witchery-69673:2234410'))
     implementation('com.github.GTNewHorizons:WitcheryExtras:1.3.0:dev')
     implementation('com.google.auto.value:auto-value-annotations:1.10.1')
     annotationProcessor('com.google.auto.value:auto-value:1.10.1')
