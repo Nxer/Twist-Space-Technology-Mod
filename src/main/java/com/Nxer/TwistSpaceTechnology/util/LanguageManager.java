@@ -32,9 +32,6 @@ public class LanguageManager {
         addWerkstoffTooltipLocalization(MaterialPool.ChronoentropicFlux, "熵增");
     }
 
-    /**
-     * Use asm to init before Gregtech
-     */
     public static void initGTMaterials() {
         if (!FMLCommonHandler.instance()
             .getCurrentLanguage()
@@ -46,7 +43,7 @@ public class LanguageManager {
         addGTMaterialLocalization(MaterialsTST.AxonisAlloy, "灵韵合金");
         addGTMaterialLocalization(MaterialsTST.Axonium, "焕律璨金");
         addGTMaterialLocalization(MaterialsTST.Dubnium, "钅杜");
-        addGTMaterialNanitesLocalization(MaterialsTST.Axonium, "焕律璨金");
+        addGTMaterialNanitesLocalization(MaterialsTST.Axonium);
 
         addStringLocalization("tst.blockcasings.multi.32767.name", "任意本方块的子方块");
         addStringLocalization("tst.blockmetal01.0.name", "%material块");
@@ -163,9 +160,7 @@ public class LanguageManager {
         addStringLocalization("gt.blockmachines.wire." + mName + ".16.name", "16x%material导线");
     }
 
-    public static void addGTMaterialNanitesLocalization(Materials aMaterial, String zhName) {
-        String mName = aMaterial.mDefaultLocalName.toLowerCase()
-            .replace(" ", "");
-        addStringLocalization("gt.metaitem.03.4" + mName + ".name", "%material纳米蜂群");
+    public static void addGTMaterialNanitesLocalization(Materials aMaterial) {
+        addStringLocalization("gt.metaitem.03.4" + aMaterial.mMetaItemSubID + ".name", "%material纳米蜂群");
     }
 }
