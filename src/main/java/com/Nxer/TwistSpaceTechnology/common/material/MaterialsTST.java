@@ -12,7 +12,6 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.enums.TCAspects;
 import gregtech.api.enums.TextureSet;
 import gregtech.api.enums.TierEU;
-import gregtech.api.interfaces.IMaterialHandler;
 import gregtech.common.render.items.InfinityRenderer;
 
 /**
