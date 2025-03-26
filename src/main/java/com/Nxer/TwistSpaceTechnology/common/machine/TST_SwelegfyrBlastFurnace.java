@@ -337,14 +337,20 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        repairMachine();
+    public void clearHatches() {
+        super.clearHatches();
         this.glassTier = 0;
         this.mBlazeHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
+    }
+
+    @Override
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
 
         // Check all tier to render properly in nei
         if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
+            clearHatches();
             if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
                 || controllerTier > 1) return false;
         }
