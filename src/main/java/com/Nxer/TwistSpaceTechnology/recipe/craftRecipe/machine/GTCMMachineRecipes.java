@@ -1136,14 +1136,6 @@ public class GTCMMachineRecipes {
             .duration(20 * 1800)
             .addTo(AssemblyLine);
 
-        GTValues.RA.stdBuilder()
-            .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
-            .fluidOutputs(MaterialPool.HolmiumGarnet.getMolten(144))
-            .noOptimize()
-            .eut(96)
-            .duration(72)
-            .addTo(RecipeMaps.fluidExtractionRecipes);
-
         // endregion
 
         // region Miracle Door

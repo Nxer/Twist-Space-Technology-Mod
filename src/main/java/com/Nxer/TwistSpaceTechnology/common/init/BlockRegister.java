@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
+import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.RESOURCE_ROOT_ID;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockArcaneHole;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockStar;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlock01;
@@ -13,6 +14,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationSt
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
@@ -20,6 +22,11 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.common.blocks.BlockMetal;
 
 public class BlockRegister {
 
@@ -47,6 +54,14 @@ public class BlockRegister {
             TstBlocks.SpaceTimeMerger,
             TstMetaBlockItem.class,
             TstBlocks.SpaceTimeMerger.unlocalizedName);
+        GameRegistry.registerBlock(
+            TstBlocks.StabilisationFieldGenerator,
+            TstMetaBlockItem.class,
+            TstBlocks.StabilisationFieldGenerator.unlocalizedName);
+        GameRegistry.registerBlock(
+            TstBlocks.EnergySustainmentMatrix,
+            TstMetaBlockItem.class,
+            TstBlocks.EnergySustainmentMatrix.unlocalizedName);
 
         if (Config.activateMegaSpaceStation) {
             GameRegistry.registerBlock(
@@ -174,13 +189,13 @@ public class BlockRegister {
                 .registerVariantWithTooltips(10, new String[] { TextEnums.tr("Tooltip_CompositeFarmCasing") }));
 
         // #tr tile.MetaBlockCasing01.11.name
-        // # Dense Cyclotron Outer Casing
-        // #zh_CN 致密回旋加速器机械方块
+        // # Dense Particle Constraint Casing
+        // #zh_CN 致密粒子约束机械方块
         GTCMItemList.DenseCyclotronOuterCasing.set(MetaBlockCasing01.registerVariant(11));
 
         // #tr tile.MetaBlockCasing01.12.name
-        // # Compact Cyclotron Coil
-        // #zh_CN 压缩回旋加速器线圈
+        // # Compact Particle Acceleration Coil
+        // #zh_CN 压缩粒子加速线圈
         GTCMItemList.CompactCyclotronCoil.set(MetaBlockCasing01.registerVariant(12));
 
         // #tr tile.MetaBlockCasing01.13.name
@@ -294,6 +309,147 @@ public class BlockRegister {
         GTCMItemList.SpaceTimeMergerT3.set(TstBlocks.SpaceTimeMerger.registerVariant(2));
 
         // endregion
+
+        // Stabilisation Field Generator
+
+        // #tr tile.StabilisationFieldGenerator.0.name
+        // # Stabilisation Field Generator Framework
+        // #zh_CN 稳定力场发生器框架
+        // #tr Tooltip_StabilisationFieldGenerator.0
+        // # The Beginning?
+        // #zh_CN 开始了?
+        GTCMItemList.StabilisationFieldGeneratorFramework.set(
+            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
+                0,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.0") }));
+
+        // #tr tile.StabilisationFieldGenerator.1.name
+        // # Stabilisation Field Generator UEV Tier
+        // #zh_CN 稳定力场发生器(UEV)
+        // #tr Tooltip_StabilisationFieldGenerator.1
+        // # The Beginning
+        // #zh_CN 开始了
+        GTCMItemList.StabilisationFieldGeneratorUEV.set(
+            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
+                1,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.1") }));
+
+        // #tr tile.StabilisationFieldGenerator.2.name
+        // # Stabilisation Field Generator UIV Tier
+        // #zh_CN 稳定力场发生器(UIV)
+        // #tr Tooltip_StabilisationFieldGenerator.2
+        // # How Did We Get Here?
+        // #zh_CN 为什么会变成这样呢？
+        GTCMItemList.StabilisationFieldGeneratorUIV.set(
+            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
+                2,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.2") }));
+
+        // #tr tile.StabilisationFieldGenerator.3.name
+        // # Stabilisation Field Generator UMV Tier
+        // #zh_CN 稳定力场发生器(UMV)
+        // #tr Tooltip_StabilisationFieldGenerator.3
+        // # We Need to Go Deeper
+        // #zh_CN 我们需要再深入些
+        GTCMItemList.StabilisationFieldGeneratorUMV.set(
+            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
+                3,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.3") }));
+
+        // #tr tile.StabilisationFieldGenerator.4.name
+        // # Stabilisation Field Generator UXV Tier
+        // #zh_CN 稳定力场发生器(UXV)
+        // #tr Tooltip_StabilisationFieldGenerator.4
+        // # The End?
+        // #zh_CN 结束了?
+        GTCMItemList.StabilisationFieldGeneratorUXV.set(
+            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
+                4,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.4") }));
+
+        // #tr tile.StabilisationFieldGenerator.5.name
+        // # Stabilisation Field Generator MAX Tier
+        // #zh_CN 稳定力场发生器(MAX)
+        // #tr Tooltip_StabilisationFieldGenerator.5
+        // # The End
+        // #zh_CN 结束了
+        GTCMItemList.StabilisationFieldGeneratorMAX.set(
+            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
+                5,
+                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.5") }));
+
+        // #tr tile.EnergySustainmentMatrix.0.name
+        // # Energy Sustainment Matrix Framework
+        // #zh_CN 能量维持矩阵框架
+        // #tr Tooltip_EnergySustainmentMatrix.0
+        // # With Our Powers Combined
+        // #zh_CN 小心轻放
+        GTCMItemList.EnergySustainmentMatrixFramework.set(
+            TstBlocks.EnergySustainmentMatrix
+                .registerVariantWithTooltips(0, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.0") }));
+
+        // #tr tile.EnergySustainmentMatrix.1.name
+        // # Energy Sustainment Matrix UEV Tier
+        // #zh_CN 能量维持矩阵(UEV)
+        // #tr Tooltip_EnergySustainmentMatrix.1
+        // # Infinator
+        // #zh_CN 无尽工程师
+        GTCMItemList.EnergySustainmentMatrixUEV.set(
+            TstBlocks.EnergySustainmentMatrix
+                .registerVariantWithTooltips(1, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.1") }));
+
+        // #tr tile.EnergySustainmentMatrix.2.name
+        // # Energy Sustainment Matrix UIV Tier
+        // #zh_CN 能量维持矩阵(UIV)
+        // #tr Tooltip_EnergySustainmentMatrix.2
+        // # Subspace Cube
+        // #zh_CN 亚空间立方体
+        GTCMItemList.EnergySustainmentMatrixUIV.set(
+            TstBlocks.EnergySustainmentMatrix
+                .registerVariantWithTooltips(2, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.2") }));
+
+        // #tr tile.EnergySustainmentMatrix.3.name
+        // # Energy Sustainment Matrix UMV Tier
+        // #zh_CN 能量维持矩阵(UMV)
+        // #tr Tooltip_EnergySustainmentMatrix.3
+        // # Paradox
+        // #zh_CN 悖论
+        GTCMItemList.EnergySustainmentMatrixUMV.set(
+            TstBlocks.EnergySustainmentMatrix
+                .registerVariantWithTooltips(3, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.3") }));
+
+        // #tr tile.EnergySustainmentMatrix.4.name
+        // # Energy Sustainment Matrix UXV Tier
+        // #zh_CN 能量维持矩阵(UXV)
+        // #tr Tooltip_EnergySustainmentMatrix.4
+        // # Lava Topic
+        // #zh_CN 热门话题
+        GTCMItemList.EnergySustainmentMatrixUXV.set(
+            TstBlocks.EnergySustainmentMatrix
+                .registerVariantWithTooltips(4, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.4") }));
+
+        // #tr tile.EnergySustainmentMatrix.5.name
+        // # Energy Sustainment Matrix MAX Tier
+        // #zh_CN 能量维持矩阵(MAX)
+        // #tr Tooltip_EnergySustainmentMatrix.5
+        // # Great Horizons From Up Here
+        // #zh_CN 这上面的视野不错
+        GTCMItemList.EnergySustainmentMatrixMAX.set(
+            TstBlocks.EnergySustainmentMatrix
+                .registerVariantWithTooltips(5, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.5") }));
+
+        // end region
+
+        // MaterialBlock
+        TstBlocks.MetalBlock = new BlockMetal(
+            "tst.blockmetal01",
+            new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium,
+                MaterialsTST.Dubnium },
+            OrePrefixes.block,
+            new IIconContainer[] { new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockNeutroniumAlloy"),
+                new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonisAlloy"),
+                new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonium"),
+                new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockDubnium") });
 
         // region PhotonControllerUpgrade
 

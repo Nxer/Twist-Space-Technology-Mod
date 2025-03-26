@@ -430,4 +430,15 @@ public class GTCMRecipe {
         .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic)
         .frontend(TST_RapidCoolingDownFrontend::new)
         .build();
+
+    // #tr tst.recipe.DeployedNanoCoreRecipes
+    // # Nano Core
+    // #zh_CN 纳米核心
+    public static final RecipeMap<TST_RecipeMapBackend> DeployedNanoCoreRecipes = RecipeMapBuilder
+        .of("tst.recipe.DeployedNanoCoreRecipes", TST_RecipeMapBackend::new)
+        .maxIO(6, 2, 3, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.DeployedNanoCore.get(1)))
+        .progressBar(GTUITextures.PROGRESSBAR_ASSEMBLE)
+        .disableOptimize()
+        .build();
 }

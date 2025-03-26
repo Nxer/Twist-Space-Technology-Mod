@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialFix;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.event.ServerEvent;
@@ -29,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
+import com.Nxer.TwistSpaceTechnology.util.LanguageManager;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
@@ -60,6 +62,8 @@ public class CommonProxy {
         }
 
         TCLoader.preInit();
+
+        LanguageManager.init();
     }
 
     public void init(FMLInitializationEvent event) {
@@ -107,7 +111,7 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         TST_Network.registryNetwork();
-
+        MaterialFix.load();
         TST_BigBroArray.registerUUForArray();
         TST_BigBroArray.getGeneratorsForArray();
         TST_BigBroArray.initializeMaterials();
