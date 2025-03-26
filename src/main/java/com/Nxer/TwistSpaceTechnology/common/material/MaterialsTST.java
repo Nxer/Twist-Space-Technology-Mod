@@ -18,11 +18,7 @@ import gregtech.common.render.items.InfinityRenderer;
 /**
  * Register new material here by Gregtech Material System
  */
-public class MaterialsTST implements IMaterialHandler {
-
-    public MaterialsTST() {
-        Materials.add(this);
-    }
+public class MaterialsTST {
 
     static final int offsetID = 260;
     // ID form 2242 ~ 2298 is available
@@ -168,9 +164,8 @@ public class MaterialsTST implements IMaterialHandler {
         Axonium.renderer = new InfinityRenderer();
     }
 
-    @Override
-    public void onMaterialsInit() {
-
+    public static void init() {
+        // to load this class~
     }
 
 }
