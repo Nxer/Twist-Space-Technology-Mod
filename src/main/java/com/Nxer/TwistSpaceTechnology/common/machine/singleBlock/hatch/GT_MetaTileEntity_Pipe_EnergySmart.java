@@ -28,6 +28,7 @@ import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
 import tectech.thing.metaTileEntity.pipe.MTEPipeEnergy;
+import tectech.thing.metaTileEntity.pipe.MTEPipeEnergyMirror;
 import tectech.util.CommonValues;
 
 public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock implements IConnectsToEnergyTunnel {
@@ -175,54 +176,23 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
             MetaTileEntity dynamo = null;
             List<MetaTileEntity> energies = new ArrayList<>();
             for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-                ForgeDirection opposite = side.getOpposite();
                 if (side == aBaseMetaTileEntity.getFrontFacing()) {
                     // Search for energy provider
-                    for (short dist = 1; dist < 1000; dist++) {
-                        IGregTechTileEntity tGTTileEntity = aBaseMetaTileEntity
-                            .getIGregTechTileEntityAtSideAndDistance(side, dist);
-                        if (tGTTileEntity != null && tGTTileEntity.getColorization() == color) {
-                            IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
-                            if (aMetaTileEntity instanceof MTEHatchDynamoTunnel dynamoTunnel
-                                && opposite == tGTTileEntity.getFrontFacing()) {
-                                dynamo = dynamoTunnel;
-                                Voltage = dynamoTunnel.maxEUOutput();
-                                Amperes = dynamoTunnel.Amperes;
-                                break;
-                            } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart energySmart
-                                && opposite != tGTTileEntity.getFrontFacing()) {
-                                    Voltage = energySmart.maxEUOutput();
-                                    Amperes = energySmart.Amperes;
-                                    break;
-                                } else if (aMetaTileEntity instanceof MTEPipeEnergy pipe) {
-                                    if (pipe.connectionCount < 2) {
-                                        break;
-                                    } else {
-                                        pipe.markUsed();
-                                    }
-                                } else break;
-                        } else break;
+                    IMetaTileEntity aMetaTileEntity = findMTE(aBaseMetaTileEntity, color, side, true);
+                    if (aMetaTileEntity instanceof MTEHatchDynamoTunnel dynamoTunnel) {
+                        dynamo = dynamoTunnel;
+                        Voltage = dynamoTunnel.maxEUOutput();
+                        Amperes = dynamoTunnel.Amperes;
+                    } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart energySmart) {
+                        Voltage = energySmart.maxEUOutput();
+                        Amperes = energySmart.Amperes;
                     }
                 } else {
                     // Search for energy receiver
-                    for (short dist = 1; dist < 1000; dist++) {
-                        IGregTechTileEntity tGTTileEntity = aBaseMetaTileEntity
-                            .getIGregTechTileEntityAtSideAndDistance(side, dist);
-                        if (tGTTileEntity != null && tGTTileEntity.getColorization() == color) {
-                            IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
-                            if ((aMetaTileEntity instanceof MTEHatchEnergyTunnel
-                                || aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart)
-                                && opposite == tGTTileEntity.getFrontFacing()) {
-                                energies.add((MetaTileEntity) aMetaTileEntity);
-                                break;
-                            } else if (aMetaTileEntity instanceof MTEPipeEnergy pipe) {
-                                if (pipe.connectionCount < 2) {
-                                    break;
-                                } else {
-                                    pipe.markUsed();
-                                }
-                            } else break;
-                        } else break;
+                    IMetaTileEntity aMetaTileEntity = findMTE(aBaseMetaTileEntity, color, side, false);
+                    if ((aMetaTileEntity instanceof MTEHatchEnergyTunnel
+                        || aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart)) {
+                        energies.add((MetaTileEntity) aMetaTileEntity);
                     }
                 }
             }
@@ -269,6 +239,57 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
                     .getStoredEU() + diff);
         }
 
+    }
+
+    private IMetaTileEntity findMTE(IGregTechTileEntity base, byte color, ForgeDirection travelDirection,
+        boolean findProvider) {
+        if (travelDirection == null) {
+            return null;
+        }
+
+        ForgeDirection facingSide = travelDirection.getOpposite();
+
+        for (short dist = 1; dist < 1000; dist++) {
+            IGregTechTileEntity tGTTileEntity = base.getIGregTechTileEntityAtSideAndDistance(travelDirection, dist);
+            if (tGTTileEntity == null || tGTTileEntity.getColorization() != color) {
+                break;
+            }
+
+            IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
+
+            if (aMetaTileEntity instanceof MTEPipeEnergyMirror tMirror) {
+                ForgeDirection mirrorFacing = tMirror.getBendDirection(facingSide);
+                return findMTE(tMirror.getBaseMetaTileEntity(), color, mirrorFacing, findProvider);
+            }
+
+            if (findProvider && aMetaTileEntity instanceof MTEHatchDynamoTunnel
+                && facingSide == tGTTileEntity.getFrontFacing()) {
+                return aMetaTileEntity;
+            }
+
+            if (!findProvider && aMetaTileEntity instanceof MTEHatchEnergyTunnel
+                && facingSide == tGTTileEntity.getFrontFacing()) {
+                return aMetaTileEntity;
+            }
+
+            if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart) {
+                if ((findProvider && facingSide != tGTTileEntity.getFrontFacing())
+                    || (!findProvider && facingSide == tGTTileEntity.getFrontFacing())) {
+                    return aMetaTileEntity;
+                }
+            }
+
+            if (aMetaTileEntity instanceof MTEPipeEnergy pipe) {
+                if (pipe.connectionCount < 2) {
+                    break;
+                } else {
+                    pipe.markUsed();
+                    continue;
+                }
+            }
+            break;
+        }
+        return null;
     }
 
     @Override
