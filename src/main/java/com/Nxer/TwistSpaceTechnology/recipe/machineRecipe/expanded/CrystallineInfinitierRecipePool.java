@@ -8,17 +8,12 @@ import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UHV;
 import static gregtech.api.enums.TierEU.RECIPE_UV;
-import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.dreammaster.gthandler.CustomItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
@@ -70,61 +65,6 @@ public class CrystallineInfinitierRecipePool {
             .duration(20 * 144)
             .addTo(CI);
         // endregion
-
-        // region Lapotron circuit
-        // Shard
-        GTValues.RA.stdBuilder()
-            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1))
-            .itemOutputs(GTCMItemList.LapotronShard.get(64))
-            .eut(RECIPE_UV)
-            .duration(20 * 5)
-            .addTo(HM);
-
-        // The first piece
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                CustomItemList.RawLapotronCrystal.get(16),
-                CustomItemList.LapotronDust.get(64),
-                CustomItemList.LapotronDust.get(64),
-                CustomItemList.LapotronDust.get(64))
-            .fluidInputs(MaterialPool.HolmiumGarnet.getMolten(144 * 256))
-            .itemOutputs(GTCMItemList.LapotronShard.get(1))
-            .outputChances(999)
-            .eut(RECIPE_UHV)
-            .duration(20 * 3000)
-            .addTo(CI);
-
-        // Growth
-        if (Config.PerfectCrystalRecipeNonCyclized) {
-            GTValues.RA.stdBuilder()
-                .itemInputs(GTCMItemList.LapotronShard.get(1), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-                .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 2))
-                .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(16))
-                .eut(RECIPE_UHV)
-                .duration(20 * 30)
-                .addTo(CI);
-
-            GTValues.RA.stdBuilder()
-                .itemInputs(
-                    GTCMItemList.PerfectLapotronCrystal.get(0),
-                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
-                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
-                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
-                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64))
-                .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 64))
-                .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
-                .eut(RECIPE_UHV)
-                .duration(20 * 300)
-                .addTo(CI);
-        } else {
-            GTValues.RA.stdBuilder()
-                .itemInputs(GTCMItemList.LapotronShard.get(1), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-                .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 2))
-                .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(4))
-                .eut(RECIPE_UHV)
-                .duration(20 * 30)
-                .addTo(CI);
-        }
 
         // Holmium Garnet Dust
         // gt mixer
@@ -246,99 +186,6 @@ public class CrystallineInfinitierRecipePool {
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
-
-        // Chip
-        for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
-            GTValues.RA.stdBuilder()
-                .itemInputs(GTUtility.copyAmountUnsafe(0, itemStack), GTCMItemList.PerfectLapotronCrystal.get(1))
-
-                .itemOutputs(
-                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
-                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
-                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
-                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64))
-
-                .noOptimize()
-                .eut(RECIPE_UHV)
-                .duration(20 * 15)
-                .addTo(LE);
-        }
-
-        // endregion
-
-        // region Energy crystal
-        // Shard
-        GTValues.RA.stdBuilder()
-            .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1))
-            .itemOutputs(GTCMItemList.EnergyCrystalShard.get(64))
-            .eut(RECIPE_ZPM)
-            .duration(20 * 5)
-            .addTo(HM);
-
-        // The first piece
-        GTValues.RA.stdBuilder()
-            .itemInputs(ItemList.IC2_Energium_Dust.get(64), ItemList.IC2_Energium_Dust.get(64))
-            .fluidInputs(Materials.Redstone.getMolten(144 * 1024))
-            .itemOutputs(GTCMItemList.EnergyCrystalShard.get(1))
-            .outputChances(1111)
-            .eut(RECIPE_ZPM)
-            .duration(20 * 3000)
-            .addTo(AC);
-
-        // Growth
-        if (Config.PerfectCrystalRecipeNonCyclized) {
-            GTValues.RA.stdBuilder()
-                .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
-                .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 2))
-                .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(16))
-                .eut(RECIPE_ZPM)
-                .duration(20 * 30)
-                .addTo(CI);
-
-            GTValues.RA.stdBuilder()
-                .itemInputs(
-                    GTCMItemList.PerfectEnergyCrystal.get(0),
-                    ItemList.IC2_Energium_Dust.get(64),
-                    ItemList.IC2_Energium_Dust.get(64),
-                    ItemList.IC2_Energium_Dust.get(64),
-                    ItemList.IC2_Energium_Dust.get(64))
-                .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 64))
-                .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(1))
-                .eut(RECIPE_ZPM)
-                .duration(20 * 300)
-                .addTo(CI);
-        } else {
-            GTValues.RA.stdBuilder()
-                .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
-                .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 2))
-                .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(4))
-                .eut(RECIPE_ZPM)
-                .duration(20 * 30)
-                .addTo(CI);
-        }
-
-        // Autoclave
-        GTValues.RA.stdBuilder()
-            .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
-            .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 16))
-            .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(1))
-            .outputChances(9900)
-            .eut(RECIPE_ZPM)
-            .duration(20 * 300)
-            .addTo(RecipeMaps.autoclaveRecipes);
-
-        // Chip
-        for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
-            GTValues.RA.stdBuilder()
-                .itemInputs(GTUtility.copyAmountUnsafe(0, itemStack), GTCMItemList.PerfectEnergyCrystal.get(1))
-                .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
-                .noOptimize()
-                .eut(RECIPE_UV)
-                .duration(20 * 15)
-                .addTo(LE);
-        }
-
-        // endregion
 
         // region LuAG
         GTValues.RA.stdBuilder()
