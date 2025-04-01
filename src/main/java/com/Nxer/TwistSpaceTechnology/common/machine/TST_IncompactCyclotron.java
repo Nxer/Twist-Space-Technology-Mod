@@ -12,7 +12,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_Separatin
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
