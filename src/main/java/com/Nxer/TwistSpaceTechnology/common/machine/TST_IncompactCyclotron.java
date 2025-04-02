@@ -10,9 +10,9 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
@@ -21,6 +21,9 @@ import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+
+import java.util.Objects;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -39,7 +42,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -131,29 +133,24 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             STRUCTURE_DEFINITION = StructureDefinition.<TST_IncompactCyclotron>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                 .addElement('A', BorosilicateGlass.ofBoroGlass(10))
-                .addElement('B', ofBlock(Block.getBlockFromName("miscutils:blockFrameGtQuantum"), 0))
+                .addElement(
+                    'B',
+                    ofBlock(Objects.requireNonNull(Block.getBlockFromName("miscutils:blockFrameGtQuantum")), 0))
                 .addElement('C', ofBlock(MetaBlockCasing01, 12))
                 .addElement('D', ofBlock(MetaBlockCasing01, 11))
                 .addElement(
                     'E',
-                    ofChain(
-                        BorosilicateGlass.ofBoroGlass(10),
-                        HatchElementBuilder.<TST_IncompactCyclotron>builder()
-                            .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
-                            .adder(TST_IncompactCyclotron::addToMachineList)
-                            .dot(1)
-                            .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                            .build()))
+                    buildHatchAdder(TST_IncompactCyclotron.class)
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
+                        .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
+                        .dot(1)
+                        .buildAndChain(BorosilicateGlass.ofBoroGlass(10)))
                 .addElement(
                     'F',
-                    ofChain(
-                        ofBlock(MetaBlockCasing01, 11),
-                        HatchElementBuilder.<TST_IncompactCyclotron>builder()
-                            .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_IncompactCyclotron::addToMachineList)
-                            .dot(2)
-                            .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                            .build()))
+                    buildHatchAdder(TST_IncompactCyclotron.class).atLeast(Energy.or(ExoticEnergy))
+                        .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
+                        .dot(2)
+                        .buildAndChain(TstBlocks.MetaBlockCasing01, 11))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -238,12 +235,12 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
-            .addController(textUseBlueprint)
-            .addInputHatch(textUseBlueprint, 1)
-            .addOutputHatch(textUseBlueprint, 1)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 1)
-            .addEnergyHatch(textUseBlueprint, 2)
+            .addController(textFrontCenter)
+            .addInputHatch(getBlueprintWithDot(1))
+            .addOutputHatch(getBlueprintWithDot(1))
+            .addInputBus(getBlueprintWithDot(1))
+            .addOutputBus(getBlueprintWithDot(1))
+            .addEnergyHatch(getBlueprintWithDot(2))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher(ModName);

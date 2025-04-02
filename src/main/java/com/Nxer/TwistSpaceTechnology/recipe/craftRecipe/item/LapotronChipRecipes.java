@@ -1,24 +1,32 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
-import static com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
-import static gregtech.api.recipe.RecipeMaps.circuitAssemblerRecipes;
-import static gregtech.api.recipe.RecipeMaps.laserEngraverRecipes;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.gthandler.CustomItemList;
+import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
+import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
@@ -26,11 +34,140 @@ import gtPlusPlus.core.material.MaterialsElements;
 public class LapotronChipRecipes {
 
     public static void loadRecipes() {
-        // Energy Chip
+
+        // Shard
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1))
+            .itemOutputs(GTCMItemList.EnergyCrystalShard.get(64))
+            .eut(TierEU.RECIPE_ZPM)
+            .duration(20 * 5)
+            .addTo(RecipeMaps.hammerRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1))
+            .itemOutputs(GTCMItemList.LapotronShard.get(64))
+            .eut(TierEU.RECIPE_UV)
+            .duration(20 * 5)
+            .addTo(RecipeMaps.hammerRecipes);
+
+        // The first piece
+        GTValues.RA.stdBuilder()
+            .itemInputs(ItemList.IC2_Energium_Dust.get(64), ItemList.IC2_Energium_Dust.get(64))
+            .fluidInputs(Materials.Redstone.getMolten(144 * 1024))
+            .itemOutputs(GTCMItemList.EnergyCrystalShard.get(1))
+            .outputChances(1111)
+            .eut(TierEU.RECIPE_ZPM)
+            .duration(20 * 3000)
+            .addTo(RecipeMaps.autoclaveRecipes);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                CustomItemList.RawLapotronCrystal.get(16),
+                CustomItemList.LapotronDust.get(64),
+                CustomItemList.LapotronDust.get(64),
+                CustomItemList.LapotronDust.get(64))
+            .fluidInputs(MaterialPool.HolmiumGarnet.getMolten(144 * 256))
+            .itemOutputs(GTCMItemList.LapotronShard.get(1))
+            .outputChances(999)
+            .eut(TierEU.RECIPE_UHV)
+            .duration(20 * 3000)
+            .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+
+        // Growth
+        if (Config.PerfectCrystalRecipeNonCyclized) {
+            // Energy Crystal
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
+                .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 2))
+                .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(16))
+                .eut(TierEU.RECIPE_ZPM)
+                .duration(20 * 30)
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTCMItemList.PerfectEnergyCrystal.get(0),
+                    ItemList.IC2_Energium_Dust.get(64),
+                    ItemList.IC2_Energium_Dust.get(64),
+                    ItemList.IC2_Energium_Dust.get(64),
+                    ItemList.IC2_Energium_Dust.get(64))
+                .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 64))
+                .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(1))
+                .eut(TierEU.RECIPE_ZPM)
+                .duration(20 * 300)
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+
+            // Lapotron
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTCMItemList.LapotronShard.get(1), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
+                .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 2))
+                .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(16))
+                .eut(TierEU.RECIPE_UHV)
+                .duration(20 * 30)
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+
+            GTValues.RA.stdBuilder()
+                .itemInputs(
+                    GTCMItemList.PerfectLapotronCrystal.get(0),
+                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
+                    MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64))
+                .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 64))
+                .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
+                .eut(TierEU.RECIPE_UHV)
+                .duration(20 * 300)
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+        } else {
+            // Energy Crystal
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTCMItemList.EnergyCrystalShard.get(1), ItemList.IC2_Energium_Dust.get(64))
+                .fluidInputs(Materials.EnergeticAlloy.getMolten(144 * 2))
+                .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(4))
+                .eut(TierEU.RECIPE_ZPM)
+                .duration(20 * 30)
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+
+            // Lapotron
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTCMItemList.LapotronShard.get(1), MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
+                .fluidInputs(Materials.VibrantAlloy.getMolten(144 * 2))
+                .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(4))
+                .eut(TierEU.RECIPE_UHV)
+                .duration(20 * 30)
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+        }
+
+        // Chip
+        for (ItemStack itemStack : OreDictionary.getOres("craftingLensBlue")) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTCMItemList.PerfectLapotronCrystal.get(1), GTUtility.copyAmountUnsafe(0, itemStack))
+                .itemOutputs(
+                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
+                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
+                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
+                    ItemList.Circuit_Parts_Crystal_Chip_Master.get(64))
+                .noOptimize()
+                .eut(TierEU.RECIPE_UHV)
+                .duration(20 * 15)
+                .addTo(RecipeMaps.laserEngraverRecipes);
+        }
+
+        for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
+            GTValues.RA.stdBuilder()
+                .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1), GTUtility.copyAmountUnsafe(0, itemStack))
+                .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
+                .noOptimize()
+                .eut(TierEU.RECIPE_UV)
+                .duration(20 * 15)
+                .addTo(RecipeMaps.laserEngraverRecipes);
+        }
+
+        // Perfect Energy Chip
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.PerfectEnergyCrystal.get(64),
-                GGMaterial.orundum.get(OrePrefixes.lens, 0),
+                copyAmount(GTOreDictUnificator.get(OrePrefixes.lens, Materials.Force, 1), 0),
                 WerkstoffLoader.MagnetoResonaticDust.get(OrePrefixes.lens, 0),
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade7PurifiedWater.getFluid(200))
@@ -38,12 +175,12 @@ public class LapotronChipRecipes {
             .noOptimize()
             .eut(TierEU.RECIPE_UHV)
             .duration(20 * 120)
-            .addTo(laserEngraverRecipes);
+            .addTo(RecipeMaps.laserEngraverRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.PerfectEnergyCrystal.get(64),
-                GGMaterial.orundum.get(OrePrefixes.lens, 0),
+                copyAmount(GTOreDictUnificator.get(OrePrefixes.lens, Materials.Force, 1), 0),
                 WerkstoffLoader.MagnetoResonaticDust.get(OrePrefixes.lens, 0),
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade8PurifiedWater.getFluid(100))
@@ -51,7 +188,7 @@ public class LapotronChipRecipes {
             .noOptimize()
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 60)
-            .addTo(laserEngraverRecipes);
+            .addTo(RecipeMaps.laserEngraverRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -74,7 +211,7 @@ public class LapotronChipRecipes {
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 60)
             .specialValue(1)
-            .addTo(spaceAssemblerRecipes);
+            .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -97,7 +234,7 @@ public class LapotronChipRecipes {
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
             .specialValue(2)
-            .addTo(spaceAssemblerRecipes);
+            .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -120,13 +257,13 @@ public class LapotronChipRecipes {
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 60)
             .specialValue(2)
-            .addTo(spaceAssemblerRecipes);
+            .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
-        // Lapotron Chip
+        // Perfect Lapotron Chip
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.PerfectLapotronCrystal.get(64),
-                copyAmount(0, GTOreDictUnificator.get(OrePrefixes.lens, Materials.BlueTopaz, 1)),
+                copyAmount(0, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Tanzanite, 1)),
                 WerkstoffLoader.MagnetoResonaticDust.get(OrePrefixes.lens, 0),
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade7PurifiedWater.getFluid(200))
@@ -134,12 +271,12 @@ public class LapotronChipRecipes {
             .noOptimize()
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 240)
-            .addTo(laserEngraverRecipes);
+            .addTo(RecipeMaps.laserEngraverRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.PerfectLapotronCrystal.get(64),
-                copyAmount(0, GTOreDictUnificator.get(OrePrefixes.lens, Materials.BlueTopaz, 1)),
+                copyAmount(0, GTOreDictUnificator.get(OrePrefixes.lens, Materials.Tanzanite, 1)),
                 WerkstoffLoader.MagnetoResonaticDust.get(OrePrefixes.lens, 0),
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade8PurifiedWater.getFluid(100))
@@ -147,7 +284,7 @@ public class LapotronChipRecipes {
             .noOptimize()
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 120)
-            .addTo(laserEngraverRecipes);
+            .addTo(RecipeMaps.laserEngraverRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -170,7 +307,7 @@ public class LapotronChipRecipes {
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
             .specialValue(2)
-            .addTo(spaceAssemblerRecipes);
+            .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -193,7 +330,7 @@ public class LapotronChipRecipes {
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 60)
             .specialValue(2)
-            .addTo(spaceAssemblerRecipes);
+            .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -216,7 +353,7 @@ public class LapotronChipRecipes {
             .eut(TierEU.RECIPE_UXV)
             .duration(20 * 60)
             .specialValue(2)
-            .addTo(spaceAssemblerRecipes);
+            .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         // UltimateEnergyFlowCircuit
         TST_RecipeBuilder.builder()
@@ -233,6 +370,6 @@ public class LapotronChipRecipes {
             .noOptimize()
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 120)
-            .addTo(circuitAssemblerRecipes);
+            .addTo(RecipeMaps.circuitAssemblerRecipes);
     }
 }
