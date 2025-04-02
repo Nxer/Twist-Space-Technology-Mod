@@ -134,7 +134,7 @@ public class CommonProxy {
         TCLoader.postInit();
     }
 
-    public static void complete(FMLLoadCompleteEvent event) {
+    public void complete(FMLLoadCompleteEvent event) {
         RecipeLoader.loadRecipes();
 
         LazyStaticsInitLoader.initStaticsOnCompleteInit();
