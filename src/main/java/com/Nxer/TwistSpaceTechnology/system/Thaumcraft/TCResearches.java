@@ -396,7 +396,7 @@ public class TCResearches {
                 new AspectList().merge(Aspect.TOOL, 1)
                     .merge(Aspect.HUNGER, 1)
                     .merge(Aspect.MINE, 1)
-                    .merge(Aspect.AURA,1),
+                    .merge(Aspect.AURA, 1),
                 0,
                 4,
                 9,
@@ -408,8 +408,8 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.PRIMORDIAL_DISJUNCTUS.1")),
                     new ResearchPage(infusionRecipePrimordialDisjunctus))
-                .setParents("TST_WELCOME")
-                .registerResearchItem();
+                    .setParents("TST_WELCOME")
+                    .registerResearchItem();
         }
         if (Config.Enable_SkypiercerTower) {
             // #tr tc.research_name.SKYPIERCER_TOWER
@@ -444,8 +444,8 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.3")),
                     new ResearchPage(infusionRecipeSkypiercerTower))
-                .setParents("PRIMORDIAL_DISJUNCTUS")
-                .registerResearchItem();
+                    .setParents("PRIMORDIAL_DISJUNCTUS")
+                    .registerResearchItem();
         }
     }
 }

@@ -1,41 +1,4 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
-import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
-import goodgenerator.loader.Loaders;
-import gregtech.api.GregTechAPI;
-import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
-import gregtech.api.objects.XSTR;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.render.TextureFactory;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.api.util.OverclockCalculator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.visnet.VisNetHandler;
-import thaumcraft.common.config.ConfigBlocks;
-import java.util.ArrayList;
-import java.util.Map;
-
-
 
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -53,6 +16,46 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
+
+import java.util.ArrayList;
+import java.util.Map;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
+import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
+import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
+import goodgenerator.loader.Loaders;
+import gregtech.api.GregTechAPI;
+import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
+import gregtech.api.objects.XSTR;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.visnet.VisNetHandler;
+import thaumcraft.common.config.ConfigBlocks;
 
 public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     implements IConstructable, ISurvivalConstructable {
@@ -84,23 +87,57 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private final XSTR xstr = new XSTR();
     // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
     private static final String[][] shapePrimordialDisjunctus = new String[][] {
-        {"               ","               ","ABA         ABA","ABA         ABA","BCB         BCB","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   DDDDDDDDD   ","   DBBBEBBBD   ","   DBFBEBFBD   ","   DBBBEBBBD   ","   DEEEKEEED   ","   DBBBEBBBD   ","   DBFBEBFBD   ","   DBBBEBBBD   ","   DDDDDDDDD   ","               ","               ","               "},
-        {"               ","ABA         ABA"," J           J ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","J J         J J"," J GGGGGGGGG J ","   G   I   G   ","   G   I   G   ","   G   I   G   ","   GIIIHIIIG   ","   G   I   G   ","   G   I   G   ","   G   I   G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","J JGGGGGGGGGJ J"," J G       G J ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","J JG       GJ J"," J G I   I G J ","   G  I I  G   ","   G   H   G   ","   G  I I  G   ","   G I   I G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","J JG       GJ J"," J G       G J ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G   I   G   ","J JG   I   GJ J"," J G IIHII G J ","   G   I   G   ","   G   I   G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","J JG   H   GJ J"," J G       G J ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G  I I  G   ","   G   H   G   ","J JG  I I  GJ J"," J G       G J ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","J JG       GJ J"," J G       G J ","   GGGGGGGGG   ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G   I   G   ","   G  IHI  G   ","   G   I   G   ","   G       G   ","J JG       GJ J"," J GGGGGGGGG J ","               ","               ","               "},
-        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","J JGGGGGGGGGJ J"," J           J ","               ","               "},
-        {"BBB         BBB","ABBBBBB~BBBBBBA","AAA         AAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAA         AAA","AAA         AAA","AAA         AAA"}
+        { "               ", "               ", "ABA         ABA", "ABA         ABA", "BCB         BCB",
+            "               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               ",
+            "               ", "               ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   DDDDDDDDD   ", "   DBBBEBBBD   ",
+            "   DBFBEBFBD   ", "   DBBBEBBBD   ", "   DEEEKEEED   ", "   DBBBEBBBD   ", "   DBFBEBFBD   ",
+            "   DBBBEBBBD   ", "   DDDDDDDDD   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", " J           J ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "   G       G   ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "J J         J J", " J GGGGGGGGG J ", "   G   I   G   ",
+            "   G   I   G   ", "   G   I   G   ", "   GIIIHIIIG   ", "   G   I   G   ", "   G   I   G   ",
+            "   G   I   G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "J JGGGGGGGGGJ J", " J G       G J ",
+            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "   G       G   ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "J JG       GJ J",
+            " J G I   I G J ", "   G  I I  G   ", "   G   H   G   ", "   G  I I  G   ", "   G I   I G   ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "J JG       GJ J", " J G       G J ", "   G   H   G   ", "   G       G   ", "   G       G   ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G   I   G   ", "J JG   I   GJ J", " J G IIHII G J ", "   G   I   G   ", "   G   I   G   ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G       G   ", "   G       G   ", "J JG   H   GJ J", " J G       G J ", "   G       G   ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G       G   ", "   G  I I  G   ", "   G   H   G   ", "J JG  I I  GJ J", " J G       G J ",
+            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "J JG       GJ J",
+            " J G       G J ", "   GGGGGGGGG   ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G       G   ", "   G   I   G   ", "   G  IHI  G   ", "   G   I   G   ", "   G       G   ",
+            "J JG       GJ J", " J GGGGGGGGG J ", "               ", "               ", "               " },
+        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
+            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "   G       G   ",
+            "   G       G   ", "J JGGGGGGGGGJ J", " J           J ", "               ", "               " },
+        { "BBB         BBB", "ABBBBBB~BBBBBBA", "AAA         AAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA",
+            "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA",
+            "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAA         AAA", "AAA         AAA", "AAA         AAA" }
 
     };
 
@@ -110,9 +147,9 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
-        if(multiDefinition==null){
+        if (multiDefinition == null) {
             this.multiDefinition = StructureDefinition.<TST_PrimordialDisjunctus>builder()
-                .addShape(STRUCTURE_PIECE_MAIN,transpose(shapePrimordialDisjunctus))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapePrimordialDisjunctus))
                 .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 0))
                 .addElement(
                     'B',
@@ -131,7 +168,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                             Loaders.essentiaOutputHatch,
                             0),
                         onElementPass(TST_PrimordialDisjunctus::onCasingFound, ofBlock(Loaders.magicCasing, 0))))
-                .addElement('C',ofBlock(Loaders.essentiaHatch,0))
+                .addElement('C', ofBlock(Loaders.essentiaHatch, 0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .addElement('E', gregtech.api.enums.HatchElement.Muffler.newAny(CASING_INDEX, 2))
                 .addElement(
@@ -144,7 +181,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                 .addElement('G', ofBlock(ConfigBlocks.blockCosmeticOpaque, 2))
                 .addElement('H', ofBlock(GregTechAPI.sBlockCasings2, 15))
                 .addElement('K', ofBlock(Loaders.essentiaFilterCasing, 0))
-                .addElement('J',ofFrame(Steel))
+                .addElement('J', ofFrame(Steel))
                 .addElement('I', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .build();
         }
@@ -154,9 +191,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     public String[] getInfoData() {
         String[] info = super.getInfoData();
-        info[7] =
-            EnumChatFormatting.RESET
-            + " Purification Efficiency: "
+        info[7] = EnumChatFormatting.RESET + " Purification Efficiency: "
             + EnumChatFormatting.AQUA
             + this.nodePurificationEfficiency
             + "%"
@@ -168,7 +203,6 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             + EnumChatFormatting.RESET;
         return info;
     }
-
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -233,7 +267,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     protected void onEssentiaCellFound(int tier) {
-        this.mParallel += (1 << tier) ;
+        this.mParallel += (1 << tier);
         this.pTier = Math.max(this.pTier, tier);
     }
 
@@ -257,10 +291,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
         this.mEfficiencyIncrease = 10000;
 
-        OverclockCalculator calculator = new OverclockCalculator()
-            .setRecipeEUt(RECIPE_EUT)
+        OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
-            .setDuration((int) Math.ceil(this.mOutputAspects.visSize() * RECIPE_DURATION * (1 - this.nodeIncrease * 0.005)))
+            .setDuration(
+                (int) Math.ceil(this.mOutputAspects.visSize() * RECIPE_DURATION * (1 - this.nodeIncrease * 0.005)))
             .setDurationDecreasePerOC(2)
             .calculate();
 
@@ -268,12 +302,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
 
-
         this.updateSlots();
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
-
 
     @Override
     protected void addClassicOutputs_EM() {
@@ -302,6 +334,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         super.stopMachine();
         this.mOutputAspects.aspects.clear();
     }
+
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
@@ -380,19 +413,23 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 初源解离机的控制器方块
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_00"))
             // #tr Tooltip_PrimordialDisjunctus_01
-            // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
+            // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal
+            // essentia forth with but a whisper of electric power
             // #zh_CN §9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_01"))
             // #tr Tooltip_PrimordialDisjunctus_02
-            // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation. However, due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
+            // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation. However,
+            // due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the
+            // complex aura into its primal form, leaving only rudimentary Essentia as residue.
             // #zh_CN 将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_02"))
             // #tr Tooltip_PrimordialDisjunctus_03
             // # parallel = The sum of several 2^essentiaCell
-            // #zh_CN 并行 = 若干  2^扩散单元等级 之和 ,最高为128并行
+            // #zh_CN 并行 = 若干 2^扩散单元等级 之和 ,最高为128并行
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_03"))
             // #tr Tooltip_PrimordialDisjunctus_04
-            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
+            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage
+            // increase
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_04"))
             // #tr Tooltip_PrimordialDisjunctus_05
@@ -400,11 +437,13 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 借助科技的力量我们不再需要火vis和水vis来作为启动条件
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_05"))
             // #tr Tooltip_PrimordialDisjunctus_06
-            // # Order vis can inhibit the generation of spell waves, and its generation is independent of the silo level, while Perditio vis will accelerate the machine speed up to 200%%
+            // # Order vis can inhibit the generation of spell waves, and its generation is independent of the silo
+            // level, while Perditio vis will accelerate the machine speed up to 200%%
             // #zh_CN 秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%%
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06"))
             // #tr Tooltip_PrimordialDisjunctus_07
-            // # Please do not give too high voltage, this machine is really fast, otherwise pay attention to your storage
+            // # Please do not give too high voltage, this machine is really fast, otherwise pay attention to your
+            // storage
             // #zh_CN 请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_07"))
             .addSeparator()
@@ -428,19 +467,18 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean aActive, boolean aRedstone) {
+        int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
-            if (aActive) return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
+            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
                 TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
-                .glow()
-                .build() };
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
+                    .glow()
+                    .build() };
             else return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
                 TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
-                .glow()
-                .build() };
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
+                    .glow()
+                    .build() };
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
     }
@@ -455,22 +493,27 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
         return new TST_PrimordialDisjunctus(this.mName);
     }
+
     @Override
     public final boolean shouldCheckMaintenance() {
         return false;
     }
+
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
+
     @Override
     public boolean doRandomMaintenanceDamage() {
         return true;
     }
+
     @Override
     public boolean willExplodeInRain() {
         return false;
     }
+
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;

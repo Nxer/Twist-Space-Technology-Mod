@@ -67,10 +67,10 @@ public class TCRecipePool {
                 .merge(Aspect.MAGIC, 64)
                 .merge(Aspect.MECHANISM, 64),
             new ItemStack(ModBlocks.terraPlate),
-            new ItemStack[]{ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
+            new ItemStack[] { ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1),
                 Materials.Steeleaf.getPlates(1), new ItemStack(ModItems.spawnerMover, 1),
                 ItemList.Field_Generator_EV.get(1), ItemList.Casing_IV.get(1), Materials.Steeleaf.getPlates(1),
-                new ItemStack(ModItems.spawnerMover, 1)});
+                new ItemStack(ModItems.spawnerMover, 1) });
 
         /* INDUSTRIAL_MAGIC_MATRIX */
         if (Config.Enable_IndustrialMagicMatrix) {
@@ -89,7 +89,7 @@ public class TCRecipePool {
                     .merge(Aspect.ORDER, 128)
                     .merge(Aspect.ENTROPY, 128),
                 ItemList.Machine_Multi_Assemblyline.get(1, 0),
-                new ItemStack[]{GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
+                new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
                     new ItemStack(blockMetalDevice, 1, 12),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
@@ -100,7 +100,7 @@ public class TCRecipePool {
                     new ItemStack(blockMetalDevice, 1, 12),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1L),
                     new ItemStack(blockStoneDevice, 1, 2), new ItemStack(blockMetalDevice, 1, 3),
-                    new ItemStack(blockMetalDevice, 1, 12)});
+                    new ItemStack(blockMetalDevice, 1, 12) });
 
             /* ECO_SPHERE_SIMULATOR */
             if (Config.Enable_MegaTreeFarm) {
@@ -120,7 +120,7 @@ public class TCRecipePool {
                         .merge((Aspect) ELECTRUM.mAspect, 8192),
 
                     GTModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
-                    new ItemStack[]{Industrial_TreeFarm.get(1),
+                    new ItemStack[] { Industrial_TreeFarm.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
                         TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
@@ -139,7 +139,7 @@ public class TCRecipePool {
                             : new ItemStack(diamond_sword, 1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1),
                         TITANSTEEL.getPlateDense(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1)});
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.Infinite), 1) });
 
                 infusionRecipeFontOfEcology = ThaumcraftApi.addInfusionCraftingRecipe(
                     "FONT_OF_ECOLOGY",
@@ -152,13 +152,13 @@ public class TCRecipePool {
                         .merge(ULTRA_DEATH, 256),
                     Mods.Witchery.isModLoaded() ? GTModHandler.getModItem(Mods.Witchery.ID, "infinityegg", 1)
                         : new ItemStack(Blocks.dragon_egg, 1),
-                    new ItemStack[]{GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
+                    new ItemStack[] { GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
                         GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1),
-                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1)});
+                        GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1), GTCMItemList.OffSpring.get(1) });
             }
 
             if (Config.Enable_BloodHell) {
@@ -174,12 +174,12 @@ public class TCRecipePool {
                         .merge(Aspect.UNDEAD, 64)
                         .merge(Aspect.MECHANISM, 16),
                     new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockMasterStone),
-                    new ItemStack[]{new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal),
+                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.activationCrystal),
                         BloodArsenal.AmorphicCatalyst.get(1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar),
                         BloodArsenal.AmorphicCatalyst.get(1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockWritingTable),
-                        BloodArsenal.AmorphicCatalyst.get(1)});
+                        BloodArsenal.AmorphicCatalyst.get(1) });
 
                 infusionRecipeCoagulatedBloodCasing = ThaumcraftApi.addInfusionCraftingRecipe(
                     "BLOODY_HELL",
@@ -190,9 +190,9 @@ public class TCRecipePool {
                         .merge(Aspect.MECHANISM, 26),
                     Mods.BloodArsenal.isModLoaded() ? GTModHandler.getModItem(Mods.BloodArsenal.ID, "blood_stone", 1, 1)
                         : new ItemStack(Blocks.stone, 1),
-                    new ItemStack[]{new ItemStack(WayofTime.alchemicalWizardry.ModItems.waterSigil, 1),
+                    new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.waterSigil, 1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.sigilOfTheFastMiner, 1),
-                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.itemSeerSigil, 1)});
+                        new ItemStack(WayofTime.alchemicalWizardry.ModItems.itemSeerSigil, 1) });
 
                 if (Config.Enable_BloodHatch) {
                     infusionRecipeBloodHatch = ThaumcraftApi.addInfusionCraftingRecipe(
@@ -203,9 +203,9 @@ public class TCRecipePool {
                             .merge(Aspect.MECHANISM, 16)
                             .merge(Aspect.TOOL, 12),
                         ItemList.Hatch_Input_IV.get(1),
-                        new ItemStack[]{new ItemStack(WayofTime.alchemicalWizardry.ModItems.weakBloodOrb),
+                        new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.weakBloodOrb),
                             new ItemStack(WayofTime.alchemicalWizardry.ModItems.sacrificialDagger),
-                            new ItemStack(ConfigItems.itemZombieBrain), new ItemStack(ConfigItems.itemZombieBrain),});
+                            new ItemStack(ConfigItems.itemZombieBrain), new ItemStack(ConfigItems.itemZombieBrain), });
                 }
                 infusionRecipeTimeBendingSpeedRune = ThaumcraftApi.addInfusionCraftingRecipe(
                     "TIME_BENDING_SPEED_RUNE",
@@ -215,9 +215,9 @@ public class TCRecipePool {
                         .merge(Aspect.MOTION, 256)
                         .merge((Mods.MagicBees.isModLoaded() ? Aspect.getAspect("tempus") : Aspect.AIR), 64),
                     MaterialsUEVplus.SpaceTime.getBlocks(1),
-                    new ItemStack[]{ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
+                    new ItemStack[] { ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), // Rune of Acceleration
-                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5),});
+                        new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), });
             }
             if (Config.Enable_IndustrialAlchemyTower) {
                 infusionRecipeIndustrialAlchemyTower = ThaumcraftApi.addInfusionCraftingRecipe(
@@ -231,14 +231,14 @@ public class TCRecipePool {
                         .merge(Aspect.EXCHANGE, 64)
                         .merge(Aspect.MAGIC, 128),
                     Industrial_AlloyBlastSmelter.get(1),
-                    new ItemStack[]{new ItemStack(blockMetalDevice, 1, 9),
+                    new ItemStack[] { new ItemStack(blockMetalDevice, 1, 9),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         BloodArsenal.AmorphicCatalyst.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         new ItemStack(blockMetalDevice, 1, 9),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         BloodArsenal.AmorphicCatalyst.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L)});
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
             crucibleRecipeArcaneHole = ThaumcraftApi.addCrucibleRecipe(
                 "TST_ARCANE_HOLE",
@@ -252,44 +252,35 @@ public class TCRecipePool {
                     "PRIMORDIAL_DISJUNCTUS",
                     GTCMItemList.PrimordialDisjunctus.get(1),
                     12,
-                    new AspectList()
-                        .merge(Aspect.MAGIC, 128)
+                    new AspectList().merge(Aspect.MAGIC, 128)
                         .merge((Aspect) ELECTRUM.mAspect, 128)
                         .merge((Aspect) RADIO.mAspect, 128)
-                        .merge(Aspect.EXCHANGE,128),
+                        .merge(Aspect.EXCHANGE, 128),
                     new ItemStack(ConfigBlocks.blockMetalDevice, 1, 0),
-                    new ItemStack[] {
-                        new ItemStack(blockMetalDevice, 1, 9),
+                    new ItemStack[] { new ItemStack(blockMetalDevice, 1, 9),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         new ItemStack(ConfigBlocks.blockMetalDevice, 1, 1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         new ItemStack(blockMetalDevice, 1, 9),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
                         new ItemStack(ConfigBlocks.blockCrystal, 1, 1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) }
-                );
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
             if (Config.Enable_SkypiercerTower) {
                 infusionRecipeSkypiercerTower = ThaumcraftApi.addInfusionCraftingRecipe(
                     "SKYPIERCER_TOWER",
                     GTCMItemList.SkypiercerTower.get(1),
                     16,
-                    new AspectList()
-                        .merge(Aspect.MAGIC, 256)
+                    new AspectList().merge(Aspect.MAGIC, 256)
                         .merge((Aspect) ELECTRUM.mAspect, 256)
                         .merge(Aspect.MECHANISM, 256)
                         .merge(Aspect.CLOTH, 256),
                     Machine_IV_Assembler.get(1),
-                    new ItemStack[]{
-                        new ItemStack(huiCircuit, 1, 0),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
-                        new ItemStack(huiCircuit, 1, 0),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
-                        new ItemStack(huiCircuit, 1, 0),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
-                        new ItemStack(huiCircuit, 1, 0),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L)}
-                );
+                    new ItemStack[] { new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
         }
     }

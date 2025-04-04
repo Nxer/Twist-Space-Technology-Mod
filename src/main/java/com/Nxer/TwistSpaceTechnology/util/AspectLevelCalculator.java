@@ -1,12 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import thaumcraft.api.aspects.Aspect;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import thaumcraft.api.aspects.Aspect;
+
 public class AspectLevelCalculator {
+
     static Map<String, Integer> aspectLevels = new HashMap<>();
+
     public static int computeAspectLevel(Aspect aspect, Map<String, Integer> aspectLevels) {
         String aspectName = aspect.getTag();
         if (aspectLevels.containsKey(aspectName)) {
@@ -27,7 +29,8 @@ public class AspectLevelCalculator {
         aspectLevels.put(aspectName, finalLevel);
         return finalLevel;
     }
-    public static int computeAspectLevel(Aspect aspect){
-        return computeAspectLevel(aspect,aspectLevels);
+
+    public static int computeAspectLevel(Aspect aspect) {
+        return computeAspectLevel(aspect, aspectLevels);
     }
 }

@@ -1,49 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import com.google.common.collect.ImmutableList;
-import java.util.AbstractMap;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
-import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import emt.tile.TileElectricCloud;
-import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
-import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
-import goodgenerator.loader.Loaders;
-import gregtech.api.GregTechAPI;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.render.TextureFactory;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.api.util.OverclockCalculator;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.common.config.ConfigBlocks;
-import thaumcraft.common.config.ConfigItems;
-import thaumcraft.common.tiles.TileCrucible;
-import thaumcraft.common.tiles.TileNitor;
-import thaumicenergistics.common.blocks.BlockEnum;
-import thaumicenergistics.common.tiles.TileInfusionProvider;
-import vazkii.botania.common.block.ModBlocks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower.Essentia_InsentiaL;
@@ -73,9 +29,56 @@ import static thaumcraft.common.config.ConfigBlocks.blockAiry;
 import static thaumcraft.common.config.ConfigBlocks.blockCosmeticSolid;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
 
-public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM
-    implements IConstructable, ISurvivalConstructable {
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.google.common.collect.ImmutableList;
+import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
+import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
+import emt.tile.TileElectricCloud;
+import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
+import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
+import goodgenerator.loader.Loaders;
+import gregtech.api.GregTechAPI;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
+import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.tiles.TileCrucible;
+import thaumcraft.common.tiles.TileNitor;
+import thaumicenergistics.common.blocks.BlockEnum;
+import thaumicenergistics.common.tiles.TileInfusionProvider;
+import vazkii.botania.common.block.ModBlocks;
+
+public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements IConstructable, ISurvivalConstructable {
 
     public TST_SkypiercerTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -102,44 +105,84 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM
         mEssentiaOutputHatches.clear();
     }
 
-    private final int Main_horizontalOffSet =7;
+    private final int Main_horizontalOffSet = 7;
     private final int Main_verticalOffSet = 17;
     private final int Main_depthOffSet = 1;
 
-    //x-offset = 7 , y-of = 19 , z-of = 1
-    private static  final String[][] shapeMain = new String[][]{
-        {"    JJJGJJJ    ","  JJ       JJ  "," JJ         JJ "," J           J ","J             J","J             J","J      C      J","G     C C     G","J      C      J","J             J","J             J"," J           J "," JJ         JJ ","  JJ       JJ  ","    JJJGJJJ    "},
-        {"               ","    JJJGJJJ    ","   J       J   ","  J         J  "," J           J "," J           J "," J     C     J "," G    C C    G "," J     C     J "," J           J "," J           J ","  J         J  ","   J       J   ","    JJJGJJJ    ","               "},
-        {"               ","               ","    JJJGJJJ    ","   JJGGGGGJJ   ","  JJGG G GGJJ  ","  JGG     GGJ  ","  JG   C   GJ  ","  GGG C C GGG  ","  JG   C   GJ  ","  JGG     GGJ  ","  JJGG G GGJJ  ","   JJGGGGGJJ   ","    JJJGJJJ    ","               ","               "},
-        {"               ","               ","               ","               ","      G G      ","     G G G     ","    G  C  G    ","     GC CG     ","    G  C  G    ","     G G G     ","      G G      ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","      AAA      ","     AFFFA     ","    AFHBHFA    ","    AFB BFA    ","    AFHBHFA    ","     AFFFA     ","      AAA      ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
-        {"               ","               ","               ","       A       ","               ","               ","       C       ","   A  C C  A   ","       C       ","               ","               ","       A       ","               ","               ","               "},
-        {"               ","               ","               ","       A       ","       B       ","       H       ","       B       ","   ABHB BHBA   ","       B       ","       H       ","       B       ","       A       ","               ","               ","               "},
-        {"               ","               ","               ","       A       ","       A       ","       B       ","               ","   AAB   BAA   ","               ","       B       ","       A       ","       A       ","               ","               ","               "},
-        {"               ","               ","               ","       A       ","               ","               ","       B       ","   A  B B  A   ","       B       ","               ","               ","       A       ","               ","               ","               "},
-        {"               ","               ","       A       ","               ","               ","               ","               ","  A         A  ","               ","               ","               ","               ","       A       ","               ","               "},
-        {"               ","               ","       A       ","               ","               ","               ","               ","  A         A  ","               ","               ","               ","               ","       A       ","               ","               "},
-        {"               ","               ","       A       ","               ","       L       ","               ","               ","  A L     L A  ","               ","               ","       L       ","               ","       A       ","               ","               "},
-        {"               ","      NAN      ","               ","               ","               ","               "," N           N "," A     M     A "," N           N ","               ","               ","               ","               ","      NAN      ","               "},
-        {"               ","      B~B      ","               ","               ","       I       ","               "," B    DDD    B "," A  I DDD I  A "," B    DDD    B ","               ","       I       ","               ","               ","      BAB      ","               "},
-        {"   AAAAAAAAA   ","  AACCGGGCCAA  "," AACGGGGGGGCAA ","AACGGGGGGGGGCAA","ACGGGGEGEGGGGCA","ACGGGEGGGEGGGCA","AGGGEGGGGGEGGGA","AGGGGGGGGGGGGGA","AGGGEGGGGGEGGGA","ACGGGEGGGEGGGCA","ACGGGGEGEGGGGCA","AACGGGGGGGGGCAA"," AACGGGGGGGCAA ","  AACCGGGCCAA  ","   AAAAAAAAA   "}
-    };
-    private final int Rings_horizontalOffSet =4;
+    // x-offset = 7 , y-of = 19 , z-of = 1
+    private static final String[][] shapeMain = new String[][] {
+        { "    JJJGJJJ    ", "  JJ       JJ  ", " JJ         JJ ", " J           J ", "J             J",
+            "J             J", "J      C      J", "G     C C     G", "J      C      J", "J             J",
+            "J             J", " J           J ", " JJ         JJ ", "  JJ       JJ  ", "    JJJGJJJ    " },
+        { "               ", "    JJJGJJJ    ", "   J       J   ", "  J         J  ", " J           J ",
+            " J           J ", " J     C     J ", " G    C C    G ", " J     C     J ", " J           J ",
+            " J           J ", "  J         J  ", "   J       J   ", "    JJJGJJJ    ", "               " },
+        { "               ", "               ", "    JJJGJJJ    ", "   JJGGGGGJJ   ", "  JJGG G GGJJ  ",
+            "  JGG     GGJ  ", "  JG   C   GJ  ", "  GGG C C GGG  ", "  JG   C   GJ  ", "  JGG     GGJ  ",
+            "  JJGG G GGJJ  ", "   JJGGGGGJJ   ", "    JJJGJJJ    ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "      G G      ",
+            "     G G G     ", "    G  C  G    ", "     GC CG     ", "    G  C  G    ", "     G G G     ",
+            "      G G      ", "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "      AAA      ",
+            "     AFFFA     ", "    AFHBHFA    ", "    AFB BFA    ", "    AFHBHFA    ", "     AFFFA     ",
+            "      AAA      ", "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "       A       ",
+            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
+            "       A       ", "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "       A       ",
+            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
+            "       A       ", "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "       A       ",
+            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
+            "       A       ", "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "               ", "       A       ",
+            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
+            "       A       ", "               ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "       A       ", "               ",
+            "               ", "       C       ", "   A  C C  A   ", "       C       ", "               ",
+            "               ", "       A       ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "       A       ", "       B       ",
+            "       H       ", "       B       ", "   ABHB BHBA   ", "       B       ", "       H       ",
+            "       B       ", "       A       ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "       A       ", "       A       ",
+            "       B       ", "               ", "   AAB   BAA   ", "               ", "       B       ",
+            "       A       ", "       A       ", "               ", "               ", "               " },
+        { "               ", "               ", "               ", "       A       ", "               ",
+            "               ", "       B       ", "   A  B B  A   ", "       B       ", "               ",
+            "               ", "       A       ", "               ", "               ", "               " },
+        { "               ", "               ", "       A       ", "               ", "               ",
+            "               ", "               ", "  A         A  ", "               ", "               ",
+            "               ", "               ", "       A       ", "               ", "               " },
+        { "               ", "               ", "       A       ", "               ", "               ",
+            "               ", "               ", "  A         A  ", "               ", "               ",
+            "               ", "               ", "       A       ", "               ", "               " },
+        { "               ", "               ", "       A       ", "               ", "       L       ",
+            "               ", "               ", "  A L     L A  ", "               ", "               ",
+            "       L       ", "               ", "       A       ", "               ", "               " },
+        { "               ", "      NAN      ", "               ", "               ", "               ",
+            "               ", " N           N ", " A     M     A ", " N           N ", "               ",
+            "               ", "               ", "               ", "      NAN      ", "               " },
+        { "               ", "      B~B      ", "               ", "               ", "       I       ",
+            "               ", " B    DDD    B ", " A  I DDD I  A ", " B    DDD    B ", "               ",
+            "       I       ", "               ", "               ", "      BAB      ", "               " },
+        { "   AAAAAAAAA   ", "  AACCGGGCCAA  ", " AACGGGGGGGCAA ", "AACGGGGGGGGGCAA", "ACGGGGEGEGGGGCA",
+            "ACGGGEGGGEGGGCA", "AGGGEGGGGGEGGGA", "AGGGGGGGGGGGGGA", "AGGGEGGGGGEGGGA", "ACGGGEGGGEGGGCA",
+            "ACGGGGEGEGGGGCA", "AACGGGGGGGGGCAA", " AACGGGGGGGCAA ", "  AACCGGGCCAA  ", "   AAAAAAAAA   " } };
+    private final int Rings_horizontalOffSet = 4;
     private final int Rings_verticalOffSet = 5;
     private final int Rings_depthOffSet = -2;
 
-    private static final  String[][] shapeRings = new String[][]{
-        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
-        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
-        {"  PEOEP  "," P     P ","P       P","E   C   E","O  C C  O","E   C   E","P       P"," P     P ","  PEOEP  "},
-        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
-        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "}
-    };
-
+    private static final String[][] shapeRings = new String[][] {
+        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
+            "         " },
+        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
+            "         " },
+        { "  PEOEP  ", " P     P ", "P       P", "E   C   E", "O  C C  O", "E   C   E", "P       P", " P     P ",
+            "  PEOEP  " },
+        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
+            "         " },
+        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
+            "         " } };
 
     public TST_SkypiercerTower(String mName) {
         super(mName);
@@ -147,15 +190,15 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM
 
     @Override
     public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
-        if(multiDefinition==null){
+        if (multiDefinition == null) {
             var channel = "chisel";
             var list = ImmutableList.of(
                 TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
                 TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
                 TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
             this.multiDefinition = StructureDefinition.<TST_SkypiercerTower>builder()
-                .addShape(STRUCTURE_PIECE_MAIN,transpose(shapeMain))
-                .addShape(STRUCTURE_PIECE_RINGS,transpose(shapeRings))
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addShape(STRUCTURE_PIECE_RINGS, transpose(shapeRings))
                 .addElement(
                     'A',
                     ofChain(
@@ -176,50 +219,46 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM
                             TST_SkypiercerTower::addEssentiaOutputHatchToMachineList,
                             MTEEssentiaOutputHatch.class,
                             Loaders.essentiaOutputHatch,
-                            0)
-                    )
-                )
-                .addElement('B',ofBlock(GregTechAPI.sBlockCasings8, 8))
-                .addElement('C',ofBlock(GregTechAPI.sBlockFrames,330))
+                            0)))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))
+                .addElement('C', ofBlock(GregTechAPI.sBlockFrames, 330))
                 .addElement('D', ofBlockAnyMeta(Blocks.iron_block, 1))
                 .addElement('E', ofBlock(blockMetalDevice, 9))
                 .addElement('F', ofBlock(ConfigBlocks.blockCosmeticOpaque, 2))
                 .addElement('G', ofVariableBlock(channel, BlockArcane_1.getLeft(), BlockArcane_1.getRight(), list))
-                .addElement('H',ofBlock(ModBlocks.seaLamp,0))
+                .addElement('H', ofBlock(ModBlocks.seaLamp, 0))
                 .addElement('I', ofAccurateTile(TileCrucible.class, blockMetalDevice, 0))
                 .addElement('J', ofBlock(ConfigBlocks.blockCosmeticOpaque, 2))
-                .addElement('L',
-                    ofChain(
-                        ofAccurateTileAdder(TST_SkypiercerTower::addTileElectricCloud, electricCloud, 0)
-                    )
-                )
+                .addElement(
+                    'L',
+                    ofChain(ofAccurateTileAdder(TST_SkypiercerTower::addTileElectricCloud, electricCloud, 0)))
                 .addElement('M', ofBlockAnyMeta(Blocks.beacon, 1))
                 .addElement('N', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
-                .addElement('N',
+                .addElement(
+                    'N',
                     ofChain(
                         ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1),
-                        ofAccurateTileAdder(TST_SkypiercerTower::addNitor, blockAiry, 1)
-                    )
-                )
-                .addElement('O',ofBlock(GregTechAPI.sBlockCasings2, 9))
+                        ofAccurateTileAdder(TST_SkypiercerTower::addNitor, blockAiry, 1)))
+                .addElement('O', ofBlock(GregTechAPI.sBlockCasings2, 9))
                 .addElement('P', ofBlock(blockCosmeticSolid, 6))
                 .build();
         }
         return multiDefinition;
     }
 
-public boolean addInfusionProvider(TileEntity aTileEntity) {
-    if (aTileEntity instanceof TileInfusionProvider) {
-        TileInfusionProvider provider = (TileInfusionProvider) aTileEntity;
-        if (!this.mTileInfusionProvider.contains(provider)) {
-            return this.mTileInfusionProvider.add(provider);
-        } else {
-            return true;
+    public boolean addInfusionProvider(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileInfusionProvider) {
+            TileInfusionProvider provider = (TileInfusionProvider) aTileEntity;
+            if (!this.mTileInfusionProvider.contains(provider)) {
+                return this.mTileInfusionProvider.add(provider);
+            } else {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
-//Originally wanted to write some features, but a little difficult, later on
+
+    // Originally wanted to write some features, but a little difficult, later on
     public boolean addNitor(TileEntity aTileEntity) {
         if (aTileEntity instanceof TileNitor) {
             TileNitor nitor = (TileNitor) aTileEntity;
@@ -276,12 +315,17 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
         super.loadNBTData(aNBT);
     }
 
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int rings = stackSize.stackSize;
         rings--;
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, Main_horizontalOffSet, Main_verticalOffSet, Main_depthOffSet);
+        buildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hintsOnly,
+            Main_horizontalOffSet,
+            Main_verticalOffSet,
+            Main_depthOffSet);
         for (int i = 0; i < rings; i++) {
             buildPiece(
                 STRUCTURE_PIECE_RINGS,
@@ -289,8 +333,7 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
                 hintsOnly,
                 Rings_horizontalOffSet,
                 Main_verticalOffSet + Rings_verticalOffSet * i + Rings_verticalOffSet, // 19 + 5n
-                Rings_depthOffSet
-            );
+                Rings_depthOffSet);
         }
     }
 
@@ -311,8 +354,7 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
             elementBudget,
             env,
             false,
-            true
-        );
+            true);
 
         for (int i = 0; i < rings; i++) {
             built[i + 1] = survivialBuildPiece(
@@ -324,8 +366,7 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
                 elementBudget,
                 env,
                 false,
-                true
-            );
+                true);
         }
 
         return TstUtils.multiBuildPiece(built);
@@ -349,7 +390,7 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
         }
 
         this.mParallel = (int) Math.min((long) this.ringCount * Parallel_PerRing_SkypiercerTower, Integer.MAX_VALUE);
-        //FMLLog.info("[SkypiercerTower] Parallel: %f | Rings: %d", mParallel, ringCount);
+        // FMLLog.info("[SkypiercerTower] Parallel: %f | Rings: %d", mParallel, ringCount);
         return true;
     }
 
@@ -360,31 +401,32 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
         return false;
     }
 
-
     private static Aspect getAspectByName(String name) {
         for (Aspect aspect : Aspect.aspects.values()) {
-            if (aspect.getName().equalsIgnoreCase(name)) {
+            if (aspect.getName()
+                .equalsIgnoreCase(name)) {
                 return aspect;
             }
         }
         return null;
     }
 
-//wtf, why is AspectList a LinkHashMap that I find out after I write it, so there's no way to check the aspects in full order.
+    // wtf, why is AspectList a LinkHashMap that I find out after I write it, so there's no way to check the aspects in
+    // full order.
     @Override
     public @NotNull CheckRecipeResult checkProcessing_EM() {
         RECIPE_DURATION = 0;
-        //Read the paper and cut it
+        // Read the paper and cut it
         ArrayList<ItemStack> tItemsList = getStoredInputs();
-        if (tItemsList.isEmpty() ) return CheckRecipeResultRegistry.NO_RECIPE;
+        if (tItemsList.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
         ItemStack itemStack = tItemsList.get(0);
         int itemStacksize = itemStack.stackSize;
-        String localizedName = itemStack.getDisplayName().toUpperCase();
+        String localizedName = itemStack.getDisplayName()
+            .toUpperCase();
         String[] parts = localizedName.split("\\+");
-        //max-heap is used to store preprocessing aspects0
+        // max-heap is used to store preprocessing aspects0
         PriorityQueue<Map.Entry<Integer, AspectList>> PreprocessedAspectMaxHeap = new PriorityQueue<>(
-            (entry1, entry2) -> Integer.compare(entry2.getKey(), entry1.getKey())
-        );
+            (entry1, entry2) -> Integer.compare(entry2.getKey(), entry1.getKey()));
 
         AspectList outputAspects = new AspectList();
 
@@ -394,15 +436,16 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
             Aspect aspect = getAspectByName(aspectName);
             if (aspect != null) {
                 outputAspects.add(aspect, amount);
-                PreprocessedAspectMaxHeap.add(new AbstractMap.SimpleEntry<>(computeAspectLevel(aspect),new AspectList().add(aspect, amount)));
+                PreprocessedAspectMaxHeap.add(
+                    new AbstractMap.SimpleEntry<>(computeAspectLevel(aspect), new AspectList().add(aspect, amount)));
             } else {
                 return SimpleCheckRecipeResult.ofFailure("Unknown aspect name: " + aspectName);
             }
         }
-        //Check the InfusionProvider
+        // Check the InfusionProvider
         if (mTileInfusionProvider.isEmpty()) return Essentia_InsentiaL;
 
-        //Get a copy of the Aspect within the network
+        // Get a copy of the Aspect within the network
         Map<Aspect, Integer> simulatedNetwork = new HashMap<>();
         for (Aspect aspect : Aspect.aspects.values()) {
             int totalAmount = mTileInfusionProvider.stream()
@@ -410,46 +453,51 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
                 .sum();
             simulatedNetwork.put(aspect, totalAmount);
         }
-        //SynthesisOrder is stored for computing the processing time
-        //consumptionSteps to eliminate the intrinsic Aspects of the network
-        //shortageAspects count the cases where the Primal Aspect is insufficient
+        // SynthesisOrder is stored for computing the processing time
+        // consumptionSteps to eliminate the intrinsic Aspects of the network
+        // shortageAspects count the cases where the Primal Aspect is insufficient
         AspectList synthesisOrder = new AspectList();
         AspectList consumptionSteps = new AspectList();
         AspectList shortageAspects = new AspectList();
         Boolean primalAspectShortage = false;
-        //The synthesis process is simulated and the Aspect is calculated to be sufficient
+        // The synthesis process is simulated and the Aspect is calculated to be sufficient
         while (!PreprocessedAspectMaxHeap.isEmpty()) {
             Map.Entry<Integer, AspectList> entry = PreprocessedAspectMaxHeap.poll();
             AspectList aspectList = entry.getValue();
-            Aspect currentAspect  = aspectList.getAspects()[0];
+            Aspect currentAspect = aspectList.getAspects()[0];
             int required = aspectList.getAmount(currentAspect);
             int available = simulatedNetwork.getOrDefault(currentAspect, 0);
-                int remaining = available - required;
-                if (remaining >= 0) {
-                    simulatedNetwork.put(currentAspect, remaining);
-                    consumptionSteps.add(currentAspect, required);
-                } else {
-                    simulatedNetwork.put(currentAspect, 0);
-                    int deficit = required - available;
-                    if(available > 0) consumptionSteps.add(currentAspect, available);
-                    synthesisOrder.add(currentAspect, deficit);
-                    if (currentAspect.isPrimal()) {
-                        primalAspectShortage = true;
-                        shortageAspects.add(currentAspect,deficit);
-                        continue;
-                    }
-                    for (Aspect component : currentAspect.getComponents()) {
-                        PreprocessedAspectMaxHeap.add(new AbstractMap.SimpleEntry<>(deficit, new AspectList().add(component, deficit)));
-                    }
+            int remaining = available - required;
+            if (remaining >= 0) {
+                simulatedNetwork.put(currentAspect, remaining);
+                consumptionSteps.add(currentAspect, required);
+            } else {
+                simulatedNetwork.put(currentAspect, 0);
+                int deficit = required - available;
+                if (available > 0) consumptionSteps.add(currentAspect, available);
+                synthesisOrder.add(currentAspect, deficit);
+                if (currentAspect.isPrimal()) {
+                    primalAspectShortage = true;
+                    shortageAspects.add(currentAspect, deficit);
+                    continue;
                 }
+                for (Aspect component : currentAspect.getComponents()) {
+                    PreprocessedAspectMaxHeap
+                        .add(new AbstractMap.SimpleEntry<>(deficit, new AspectList().add(component, deficit)));
+                }
+            }
         }
-        //Determine whether the network Aspect are sufficient
+        // Determine whether the network Aspect are sufficient
         if (primalAspectShortage) {
             StringBuilder errorMessage = new StringBuilder("Missing Aspects: ");
-            for (Aspect aspect : shortageAspects.getAspects()) errorMessage.append(aspect.getName()).append(shortageAspects.getAmount(aspect)).append(" ");
-            return SimpleCheckRecipeResult.ofFailure(errorMessage.toString().trim());
+            for (Aspect aspect : shortageAspects.getAspects()) errorMessage.append(aspect.getName())
+                .append(shortageAspects.getAmount(aspect))
+                .append(" ");
+            return SimpleCheckRecipeResult.ofFailure(
+                errorMessage.toString()
+                    .trim());
         }
-        //Consume network aspect correctly
+        // Consume network aspect correctly
         for (Aspect aspect : consumptionSteps.getAspects()) {
             int amount = consumptionSteps.getAmount(aspect);
             for (TileInfusionProvider hatch : mTileInfusionProvider) {
@@ -458,15 +506,15 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
                 }
             }
         }
-        //Calculate the original machining time
-        for(int i = 0 ; i < synthesisOrder.size(); i++) {
+        // Calculate the original machining time
+        for (int i = 0; i < synthesisOrder.size(); i++) {
             Aspect aspect = synthesisOrder.getAspects()[i];
-            int amount = synthesisOrder.getAmount(aspect) ;
+            int amount = synthesisOrder.getAmount(aspect);
             int aspectLevel = computeAspectLevel(aspect);
             RECIPE_DURATION += amount * (int) Math.pow(2, aspectLevel);
         }
 
-        //Aspect output and state quantity restoration
+        // Aspect output and state quantity restoration
         this.mOutputAspects.add(outputAspects);
         consumptionSteps.aspects.clear();
         synthesisOrder.aspects.clear();
@@ -475,14 +523,14 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
         outputAspects.aspects.clear();
         itemStack.stackSize--;
         this.mEfficiencyIncrease = 10000;
-        OverclockCalculator calculator = new OverclockCalculator()
-            .setRecipeEUt(RECIPE_EUT)
+        OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
-            .setDuration((int) Math.ceil( 20*RECIPE_DURATION/(mParallel!=0?mParallel:1)))
+            .setDuration((int) Math.ceil(20 * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
             .setDurationDecreasePerOC(2)
             .calculate();
-        //The time coefficient of 20 comes from: Base synthesis time = 1 second (set 10)
-        //×2 adjustment for unexpected EV overclocking effects halving the duration.This serves as a compensation factor.
+        // The time coefficient of 20 comes from: Base synthesis time = 1 second (set 10)
+        // ×2 adjustment for unexpected EV overclocking effects halving the duration.This serves as a compensation
+        // factor.
         useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
@@ -490,7 +538,6 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
         this.updateSlots();
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
-
 
     @Override
     protected void addClassicOutputs_EM() {
@@ -541,23 +588,29 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
             // #zh_CN §9我们必须知道，我们必将知道.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_01"))
             // #tr Tooltip_SkypiercerTower_02
-            // # Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
+            // # Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while
+            // recombination demands human intervention to overcome inherent resistance.
             // #zh_CN 神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
             // #tr Tooltip_SkypiercerTower_03
-            // # Each aspect is assigned a level, and the synthesis time doubles for each level increase. The exact calculations are somewhat complex, check the Thaumonomicon for details.
+            // # Each aspect is assigned a level, and the synthesis time doubles for each level increase. The exact
+            // calculations are somewhat complex, check the Thaumonomicon for details.
             // #zh_CN 每一个要素被赋予了等级,等级每提升一级,合成时间翻倍,具体计算较为复杂,请查看魔导手册.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
             // #tr Tooltip_SkypiercerTower_04
-            // # This machine is driven by command papers. Rename the paper on the anvil to 'AspectValue+...' format to craft the corresponding number of Aspects.
+            // # This machine is driven by command papers. Rename the paper on the anvil to 'AspectValue+...' format to
+            // craft the corresponding number of Aspects.
             // #zh_CN 这台机器使用命令纸驱动,将纸在铁砧上重新命名为AspectValue+...的格式即可制取Value数目的Aspect.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_04"))
             // #tr Tooltip_SkypiercerTower_05
-            // # Each ring segment increases parallel processing by 16 units. However, as this machine operates on a single-task principle, the corresponding parallel capacity is converted into a speed multiplier, resulting in a 1600%% performance enhancement.
+            // # Each ring segment increases parallel processing by 16 units. However, as this machine operates on a
+            // single-task principle, the corresponding parallel capacity is converted into a speed multiplier,
+            // resulting in a 1600%% performance enhancement.
             // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%%的速度提升。
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
             // #tr Tooltip_SkypiercerTower_06
-            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
+            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage
+            // increase
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
             .addSeparator()
@@ -580,7 +633,7 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int aColorIndex, boolean aActive, boolean aRedstone) {
+        int aColorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
             if (aActive) return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
@@ -609,22 +662,27 @@ public boolean addInfusionProvider(TileEntity aTileEntity) {
 
         return new TST_SkypiercerTower(this.mName);
     }
+
     @Override
     public final boolean shouldCheckMaintenance() {
         return false;
     }
+
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return 10000;
     }
+
     @Override
     public boolean doRandomMaintenanceDamage() {
         return true;
     }
+
     @Override
     public boolean willExplodeInRain() {
         return false;
     }
+
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;

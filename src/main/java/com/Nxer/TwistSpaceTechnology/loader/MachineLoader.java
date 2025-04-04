@@ -563,21 +563,15 @@ public final class MachineLoader {
             // # Primordial Disjunctus
             // #zh_CN 初源解离机
             GTCMItemList.PrimordialDisjunctus.set(
-                new TST_PrimordialDisjunctus(
-                    19070,
-                    "PrimordialDisjunctus",
-                    TextEnums.tr("NamePrimordialDisjunctus")));
+                new TST_PrimordialDisjunctus(19070, "PrimordialDisjunctus", TextEnums.tr("NamePrimordialDisjunctus")));
         }
 
         if (Config.Enable_SkypiercerTower) {
             // #tr NameSkypiercerTower
             // # Skypiercer Tower
             // #zh_CN 穿云尖塔
-            GTCMItemList.SkypiercerTower.set(
-                new TST_SkypiercerTower(
-                    19071,
-                    "NameSkypiercerTower",
-                    TextEnums.tr("NameSkypiercerTower")));
+            GTCMItemList.SkypiercerTower
+                .set(new TST_SkypiercerTower(19071, "NameSkypiercerTower", TextEnums.tr("NameSkypiercerTower")));
         }
         // endregion
 
