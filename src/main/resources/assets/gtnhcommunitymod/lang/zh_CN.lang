@@ -2064,3 +2064,32 @@ tile.EnergySustainmentMatrix.4.name=能量维持矩阵(UXV)
 Tooltip_EnergySustainmentMatrix.4=热门话题
 tile.EnergySustainmentMatrix.5.name=能量维持矩阵(MAX)
 Tooltip_EnergySustainmentMatrix.5=这上面的视野不错
+Tooltip_PrimordialDisjunctus_MachineType=初始源质提取者
+Tooltip_PrimordialDisjunctus_00=初源解离机的控制器方块
+Tooltip_PrimordialDisjunctus_01=§9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
+Tooltip_PrimordialDisjunctus_02=将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
+Tooltip_PrimordialDisjunctus_03=并行 = 若干  2^扩散单元等级 之和 ,最高为128并行
+Tooltip_PrimordialDisjunctus_04=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
+Tooltip_PrimordialDisjunctus_05=借助科技的力量我们不再需要火vis和水vis来作为启动条件
+Tooltip_PrimordialDisjunctus_06=秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%%
+Tooltip_PrimordialDisjunctus_07=请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
+Tooltip_PrimordialDisjunctus_HatchBusInfo=任何舱室替换魔法机械方块
+Tooltip_SkypiercerTwoer_MachineType=源质合成者
+Tooltip_SkypiercerTower_00=穿云尖塔的控制器方块
+Tooltip_SkypiercerTower_01=§9我们必须知道，我们必将知道.
+Tooltip_SkypiercerTower_02=神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
+Tooltip_SkypiercerTower_03=每一个要素被赋予了等级,等级每提升一级,合成时间翻倍,具体计算较为复杂,请查看魔导手册.
+Tooltip_SkypiercerTower_04=这台机器使用命令纸驱动,将纸在铁砧上重新命名为AspectValue+...的格式即可制取Value数目的Aspect.
+Tooltip_SkypiercerTower_05=每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%%的速度提升。
+Tooltip_SkypiercerTower_06=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
+Tooltip_SkypiercerTower_HatchBusInfo=任何舱室替换化学惰性方块
+NamePrimordialDisjunctus=初源解离机
+NameSkypiercerTower=穿云尖塔
+tc.research_name.PRIMORDIAL_DISJUNCTUS=初源解离机
+tc.research_text.PRIMORDIAL_DISJUNCTUS=初等源质自由!
+tc.research_text.PRIMORDIAL_DISJUNCTUS.1=源质自由的第一步!
+tc.research_name.SKYPIERCER_TOWER=穿云尖塔
+tc.research_text.SKYPIERCER_TOWER=源质自由!
+tc.research_text.SKYPIERCER_TOWER.1=§l关于源质/要素等级和机器时间计算的说明:§r<BR><BR>§l要素等级:<BR>§r初等要素为1级。复合要素等级取决于组成要素的等级:  如果组成要素同级，则等级+1；  否则取较高者。<BR><BR>§l加工时间公式:<BR>§r等级g的要素需2^g秒。
+tc.research_text.SKYPIERCER_TOWER.2=§l关于递归合成的说明:§r<BR><BR>若复合要素完全由初等要素递归合成,每层需要逐步合成:  先合成两个组成要素;  若组成要素仍为复合要素, 则继续递归直到初等要素。<BR><BR>由于组成要素的合成时间为复合要素的一半,所以每层合成时间其实是相等的,合成深度为g–1层。<BR><BR>§l总时间 = (g–1) × 2^g 秒。<BR><BR>§l注意:<BR>§r初等要素(第1层)无法被合成,必须预先存在,否则机器无法启动。
+tc.research_text.SKYPIERCER_TOWER.3=§l例子 – 模拟时间计算:§r<BR><BR>假如你将一张纸(其实用别的也无所谓)命名为"fabrico32+auram16": 即32个工具(5级)和16个灵气(3级)<BR><BR>若仅有初等要素的情况下:§r工具: 单个(5–1) × 2^5 = 128秒 → 总的128 × 32 = 4096秒§r灵气: 单个(3–1) × 2^3 = 16秒 → 总的16 × 16 = 256秒<BR>总合成时间 = 4096 + 256 = 4352 秒<BR><BR>所以……最好多装点环。不然怎么「穿云」？<BR>

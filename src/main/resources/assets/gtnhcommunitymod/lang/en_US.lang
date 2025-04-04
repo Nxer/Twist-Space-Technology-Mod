@@ -2064,3 +2064,32 @@ tile.EnergySustainmentMatrix.4.name=Energy Sustainment Matrix UXV Tier
 Tooltip_EnergySustainmentMatrix.4=Lava Topic
 tile.EnergySustainmentMatrix.5.name=Energy Sustainment Matrix MAX Tier
 Tooltip_EnergySustainmentMatrix.5=Great Horizons From Up Here
+Tooltip_PrimordialDisjunctus_MachineType=Essentia Extractor
+Tooltip_PrimordialDisjunctus_00=Controller block for the Primordial Disjunctus
+Tooltip_PrimordialDisjunctus_01=§9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
+Tooltip_PrimordialDisjunctus_02=Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation. However, due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
+Tooltip_PrimordialDisjunctus_03=parallel = The sum of several 2^essentiaCell
+Tooltip_PrimordialDisjunctus_04=At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
+Tooltip_PrimordialDisjunctus_05=With the power of technology, we no longer need fire vis and water vis as starting conditions
+Tooltip_PrimordialDisjunctus_06=Order vis can inhibit the generation of spell waves, and its generation is independent of the silo level, while Perditio vis will accelerate the machine speed up to 200%%
+Tooltip_PrimordialDisjunctus_07=Please do not give too high voltage, this machine is really fast, otherwise pay attention to your storage
+Tooltip_PrimordialDisjunctus_HatchBusInfo=Replace Magic mechanical blocks in any cabin
+Tooltip_SkypiercerTwoer_MachineType=Essentia Synthesizer
+Tooltip_SkypiercerTower_00=Controller block for the SkypiercerTower
+Tooltip_SkypiercerTower_01=§9Wir müssen wissen. Wir werden wissen.
+Tooltip_SkypiercerTower_02=Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
+Tooltip_SkypiercerTower_03=Each aspect is assigned a level, and the synthesis time doubles for each level increase. The exact calculations are somewhat complex, check the Thaumonomicon for details.
+Tooltip_SkypiercerTower_04=This machine is driven by command papers. Rename the paper on the anvil to 'AspectValue+...' format to craft the corresponding number of Aspects.
+Tooltip_SkypiercerTower_05=Each ring segment increases parallel processing by 16 units. However, as this machine operates on a single-task principle, the corresponding parallel capacity is converted into a speed multiplier, resulting in a 1600%% performance enhancement.
+Tooltip_SkypiercerTower_06=At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
+Tooltip_SkypiercerTower_HatchBusInfo=Replace Magic mechanical blocks in any cabin
+NamePrimordialDisjunctus=Primordial Disjunctus
+NameSkypiercerTower=Skypiercer Tower
+tc.research_name.PRIMORDIAL_DISJUNCTUS=Primordial Disjunctus
+tc.research_text.PRIMORDIAL_DISJUNCTUS=Elementary essentia free!
+tc.research_text.PRIMORDIAL_DISJUNCTUS.1=The first step in the freedom of source matter
+tc.research_name.SKYPIERCER_TOWER=Skypiercer Tower
+tc.research_text.SKYPIERCER_TOWER=Eessentia free!
+tc.research_text.SKYPIERCER_TOWER.1=§lEssentia/Aspect Tier and Machine Processing Time Rules:§r<BR><BR>§lTier Assignment:<BR>§rPrimal Aspects are Tier 1. Composite Aspect tiers depend on their components:  If the components are of the same tier, the composite is one tier higher;  Otherwise, it takes the higher tier.<BR><BR>§lProcessing Time Formula:<BR>§rAn Aspect of tier g requires 2^g seconds to process.
+tc.research_text.SKYPIERCER_TOWER.2=§lRecursive Synthesis Note:§r<BR><BR>If a Composite Aspect is synthesized entirely from Primal Aspects, each layer must be built step by step:  First synthesize the two components;  If either component is also Composite, repeat recursively until reaching Primal.<BR><BR>Since each component takes half the time of the composite, each layer effectively costs the same, and the synthesis depth is g–1 layers.<BR><BR>§lTotal Time = (g–1) × 2^g seconds.<BR><BR>§lCritical:<BR>§rPrimal Aspects (Layer 1) cannot be synthesized. They must pre-exist, or the machine will fail to start.
+tc.research_text.SKYPIERCER_TOWER.3=§lExample – Simulation Cost Calculation:§r<BR><BR>Suppose you name a piece of paper (or anything else, really) "fabrico32+auram16": ig 32 Fabrico (Tier 5) and 16 Auram (Tier 3)<BR><BR>If only Primal Aspects are available:§r Fabrico: single (5–1) × 2^5 = 128s → total 128 × 32 = 4096s§r Auram: single (3–1) × 2^3 = 16s → total 16 × 16 = 256s<BR>Total synthesis time = 4096 + 256 = 4352 seconds<BR><BR>So... better install more rings. Otherwise, are you truly worthy of the name "Skypiercer"?<BR>

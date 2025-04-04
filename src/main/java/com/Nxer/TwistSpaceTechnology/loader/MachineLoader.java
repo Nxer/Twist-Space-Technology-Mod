@@ -59,8 +59,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_PrimordialDisjunctus;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ProcessingArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SkypiercerTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
@@ -556,6 +558,27 @@ public final class MachineLoader {
                     TextEnums.tr("NameHyperThermalConvector")));
         }
 
+        if (Config.Enable_PrimordialDisjunctus) {
+            // #tr NamePrimordialDisjunctus
+            // # Primordial Disjunctus
+            // #zh_CN 初源解离机
+            GTCMItemList.PrimordialDisjunctus.set(
+                new TST_PrimordialDisjunctus(
+                    19070,
+                    "PrimordialDisjunctus",
+                    TextEnums.tr("NamePrimordialDisjunctus")));
+        }
+
+        if (Config.Enable_SkypiercerTower) {
+            // #tr NameSkypiercerTower
+            // # Skypiercer Tower
+            // #zh_CN 穿云尖塔
+            GTCMItemList.SkypiercerTower.set(
+                new TST_SkypiercerTower(
+                    19071,
+                    "NameSkypiercerTower",
+                    TextEnums.tr("NameSkypiercerTower")));
+        }
         // endregion
 
         // region Single block Machine
