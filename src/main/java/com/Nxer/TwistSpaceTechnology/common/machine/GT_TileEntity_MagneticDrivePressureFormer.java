@@ -80,7 +80,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      */
 
     public byte glassTier;
-    public HeatingCoilLevel coilLevel;
+    public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
 
     public HeatingCoilLevel getCoilLevel() {
         return coilLevel;
