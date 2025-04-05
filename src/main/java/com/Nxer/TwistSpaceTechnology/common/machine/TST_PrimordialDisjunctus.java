@@ -404,6 +404,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_PrimordialDisjunctus_MachineType
         // # Essentia Extractor
         // #zh_CN 初始源质提取者
@@ -413,14 +414,11 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 初源解离机的控制器方块
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_00"))
             // #tr Tooltip_PrimordialDisjunctus_01
-            // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal
-            // essentia forth with but a whisper of electric power
+            // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
             // #zh_CN §9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_01"))
             // #tr Tooltip_PrimordialDisjunctus_02
-            // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation. However,
-            // due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the
-            // complex aura into its primal form, leaving only rudimentary Essentia as residue.
+            // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation.However,due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
             // #zh_CN 将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_02"))
             // #tr Tooltip_PrimordialDisjunctus_03
@@ -428,8 +426,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 并行 = 若干 2^扩散单元等级 之和 ,最高为128并行
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_03"))
             // #tr Tooltip_PrimordialDisjunctus_04
-            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage
-            // increase
+            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_04"))
             // #tr Tooltip_PrimordialDisjunctus_05
@@ -437,13 +434,11 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 借助科技的力量我们不再需要火vis和水vis来作为启动条件
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_05"))
             // #tr Tooltip_PrimordialDisjunctus_06
-            // # Order vis can inhibit the generation of spell waves, and its generation is independent of the silo
-            // level, while Perditio vis will accelerate the machine speed up to 200%%
-            // #zh_CN 秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%%
+            // # Order vis can inhibit the generation of spell waves, and its generation is independent of the silo level, while Perditio vis will accelerate the machine speed up to 200%
+            // #zh_CN 秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06"))
             // #tr Tooltip_PrimordialDisjunctus_07
-            // # Please do not give too high voltage, this machine is really fast, otherwise pay attention to your
-            // storage
+            // # Please do not give too high voltage, this machine is really fast, otherwise pay attention to your storage
             // #zh_CN 请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_07"))
             .addSeparator()
@@ -459,6 +454,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #tr Tooltip_PrimordialDisjunctus_HatchBusInfo
             // # Replace Magic mechanical blocks in any cabin
             // #zh_CN 任何舱室替换魔法机械方块
+            // spotless:on
             .addEnergyHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_EnergyHatch"))
 
             .toolTipFinisher(ModName);

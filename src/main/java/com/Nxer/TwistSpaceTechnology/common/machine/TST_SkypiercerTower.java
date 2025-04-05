@@ -207,7 +207,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                             .atLeast(
                                 gregtech.api.enums.HatchElement.Energy,
                                 gregtech.api.enums.HatchElement.InputBus,
-                                gregtech.api.enums.HatchElement.InputHatch)
+                                gregtech.api.enums.HatchElement.OutputBus)
                             .casingIndex(176)
                             .dot(1)
                             .build(),
@@ -420,7 +420,6 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         ArrayList<ItemStack> tItemsList = getStoredInputs();
         if (tItemsList.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
         ItemStack itemStack = tItemsList.get(0);
-        int itemStacksize = itemStack.stackSize;
         String localizedName = itemStack.getDisplayName()
             .toUpperCase();
         String[] parts = localizedName.split("\\+");
@@ -429,6 +428,11 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             (entry1, entry2) -> Integer.compare(entry2.getKey(), entry1.getKey()));
 
         AspectList outputAspects = new AspectList();
+        // output a item named completed for easy automation.
+        ItemStack outputItem = tItemsList.get(0).copy();
+        outputItem.stackSize = 1;
+        outputItem.setStackDisplayName("Completed");
+        this.mOutputItems = new ItemStack[] { outputItem };
 
         for (String part : parts) {
             String aspectName = part.replaceAll("[^A-Za-z]", "");
@@ -575,6 +579,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_SkypiercerTwoer_MachineType
         // # Essentia Synthesizer
         // #zh_CN 源质合成者
@@ -588,29 +593,23 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #zh_CN §9我们必须知道，我们必将知道.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_01"))
             // #tr Tooltip_SkypiercerTower_02
-            // # Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while
-            // recombination demands human intervention to overcome inherent resistance.
+            // # Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
             // #zh_CN 神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
             // #tr Tooltip_SkypiercerTower_03
-            // # Each aspect is assigned a level, and the synthesis time doubles for each level increase. The exact
-            // calculations are somewhat complex, check the Thaumonomicon for details.
+            // # Each aspect is assigned a level, and the synthesis time doubles for each level increase. The exact calculations are somewhat complex, check the Thaumonomicon for details.
             // #zh_CN 每一个要素被赋予了等级,等级每提升一级,合成时间翻倍,具体计算较为复杂,请查看魔导手册.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
             // #tr Tooltip_SkypiercerTower_04
-            // # This machine is driven by command papers. Rename the paper on the anvil to 'AspectValue+...' format to
-            // craft the corresponding number of Aspects.
+            // # This machine is driven by command papers. Rename the paper on the anvil to 'AspectValue+...' format to craft the corresponding number of Aspects.
             // #zh_CN 这台机器使用命令纸驱动,将纸在铁砧上重新命名为AspectValue+...的格式即可制取Value数目的Aspect.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_04"))
             // #tr Tooltip_SkypiercerTower_05
-            // # Each ring segment increases parallel processing by 16 units. However, as this machine operates on a
-            // single-task principle, the corresponding parallel capacity is converted into a speed multiplier,
-            // resulting in a 1600%% performance enhancement.
-            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%%的速度提升。
+            // # Each ring segment increases parallel processing by 16 units. However, as this machine operates on a single-task principle, the corresponding parallel capacity is converted into a speed multiplier,resulting in a 1600% performance enhancement.
+            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
             // #tr Tooltip_SkypiercerTower_06
-            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage
-            // increase
+            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
             .addSeparator()
@@ -626,6 +625,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #tr Tooltip_SkypiercerTower_HatchBusInfo
             // # Replace Magic mechanical blocks in any cabin
             // #zh_CN 任何舱室替换化学惰性方块
+            // spotless:on
             .addEnergyHatch(TextEnums.tr("Tooltip_SkypiercerTower_EnergyHatch"))
             .toolTipFinisher(ModName);
         return tt;

@@ -2068,10 +2068,10 @@ Tooltip_PrimordialDisjunctus_MachineType=初始源质提取者
 Tooltip_PrimordialDisjunctus_00=初源解离机的控制器方块
 Tooltip_PrimordialDisjunctus_01=§9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
 Tooltip_PrimordialDisjunctus_02=将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
-Tooltip_PrimordialDisjunctus_03=并行 = 若干  2^扩散单元等级 之和 ,最高为128并行
+Tooltip_PrimordialDisjunctus_03=并行 = 若干 2^扩散单元等级 之和 ,最高为128并行
 Tooltip_PrimordialDisjunctus_04=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
 Tooltip_PrimordialDisjunctus_05=借助科技的力量我们不再需要火vis和水vis来作为启动条件
-Tooltip_PrimordialDisjunctus_06=秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%%
+Tooltip_PrimordialDisjunctus_06=秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%
 Tooltip_PrimordialDisjunctus_07=请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
 Tooltip_PrimordialDisjunctus_HatchBusInfo=任何舱室替换魔法机械方块
 Tooltip_SkypiercerTwoer_MachineType=源质合成者
@@ -2080,7 +2080,7 @@ Tooltip_SkypiercerTower_01=§9我们必须知道，我们必将知道.
 Tooltip_SkypiercerTower_02=神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
 Tooltip_SkypiercerTower_03=每一个要素被赋予了等级,等级每提升一级,合成时间翻倍,具体计算较为复杂,请查看魔导手册.
 Tooltip_SkypiercerTower_04=这台机器使用命令纸驱动,将纸在铁砧上重新命名为AspectValue+...的格式即可制取Value数目的Aspect.
-Tooltip_SkypiercerTower_05=每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%%的速度提升。
+Tooltip_SkypiercerTower_05=每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
 Tooltip_SkypiercerTower_06=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
 Tooltip_SkypiercerTower_HatchBusInfo=任何舱室替换化学惰性方块
 NamePrimordialDisjunctus=初源解离机
