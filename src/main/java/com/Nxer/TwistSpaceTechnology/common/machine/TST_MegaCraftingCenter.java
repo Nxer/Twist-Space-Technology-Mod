@@ -705,6 +705,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 .map(
                     stack -> stack.getItem()
                         .getContainerItem(stack))
+                .filter(Objects::nonNull)
                 // put them to output list
                 .forEach(stack -> TstUtils.addStacksToList(additionalOutput, stack, stack.stackSize * scale));
         }
