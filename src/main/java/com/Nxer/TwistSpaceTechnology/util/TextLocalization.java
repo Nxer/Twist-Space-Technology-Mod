@@ -573,7 +573,7 @@ public class TextLocalization {
     public static final String NameMagneticDrivePressureFormer = TextEnums.tr("NameMagneticDrivePressureFormer");
 
     // #tr Tooltip_MagneticDrivePressureFormer_MachineType
-    // # Extruder | Bending Machine | Forming Press
+    // # Extruder | Bending Machine | Forming Press | Forge Hammer
     // #zh_CN 压模机 | 卷板机 | 冲压机床 | 锻造锤
     public static final String Tooltip_MagneticDrivePressureFormer_MachineType = TextEnums.tr("Tooltip_MagneticDrivePressureFormer_MachineType");
 
