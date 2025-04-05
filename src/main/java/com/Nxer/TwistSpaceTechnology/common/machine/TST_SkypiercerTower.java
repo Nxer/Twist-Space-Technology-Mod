@@ -429,7 +429,8 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
 
         AspectList outputAspects = new AspectList();
         // output a item named completed for easy automation.
-        ItemStack outputItem = tItemsList.get(0).copy();
+        ItemStack outputItem = tItemsList.get(0)
+            .copy();
         outputItem.stackSize = 1;
         outputItem.setStackDisplayName("Completed");
         this.mOutputItems = new ItemStack[] { outputItem };
