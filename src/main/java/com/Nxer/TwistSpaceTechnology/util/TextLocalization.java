@@ -858,8 +858,8 @@ public class TextLocalization {
     public static final String NameSpaceScaler = TextEnums.tr("NameSpaceScaler");
 
     // #tr Tooltip_SpaceScaler_MachineType
-    // # Compressor | Extractor | Particle Collider | Electric Implosion Compressor
-    // #zh_CN 压缩机 | 提取机 | 粒子对撞机 | 电动聚爆压缩机
+    // # Compressor | Extractor | Particle Collider | Electric Implosion Compressor | Neutronium Compressor
+    // #zh_CN 压缩机 | 提取机 | 粒子对撞机 | 电动聚爆压缩机 | 中子态素压缩机
     public static final String Tooltip_SpaceScaler_MachineType = TextEnums.tr("Tooltip_SpaceScaler_MachineType");
 
     // #tr Tooltip_SpaceScaler_00
@@ -1029,7 +1029,7 @@ public class TextLocalization {
     public static final String Tooltip_DSPLauncher_03 = TextEnums.tr("Tooltip_DSPLauncher_03");
 
     // #tr Tooltip_DSPLauncher_04
-    // # Higher tier of Elevator Module means faster launching.
+    // # Higher tier of Elevator motor Module means faster launching.
     // #zh_CN 更高级的加速轨道可以减少发射耗时.
     public static final String Tooltip_DSPLauncher_04 = TextEnums.tr("Tooltip_DSPLauncher_04");
 

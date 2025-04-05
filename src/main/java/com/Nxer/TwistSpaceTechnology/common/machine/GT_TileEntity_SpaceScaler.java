@@ -461,6 +461,9 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             .addInfo(TextLocalization.Tooltip_SpaceScaler_04)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_05)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
+            // #tr Tooltip_SpaceScaler_07
+            // # Gallifreyan Stabilisation Field Generator block enables Electric Implosion Compressor & Neutronium Compressor mode.
+            // #zh_CN 鸿蒙稳定力场发生器等级允许使用电动聚爆压缩机模式和中子态素压缩机模式.
             .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
             .addInfo(TextLocalization.Tooltip_SpaceScaler_08)
             // #tr Tooltip_SpaceScaler_09
