@@ -9,6 +9,8 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeFontOfEcology;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipePrimordialDisjunctus;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeSkypiercerTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRune;
 
 import net.minecraft.init.Items;
@@ -379,6 +381,70 @@ public class TCResearches {
                     new ResearchPage(crucibleRecipeArcaneHole))
                     .setParents("TST_WELCOME")
                     .setSecondary()
+                    .registerResearchItem();
+        }
+        if (Config.Enable_PrimordialDisjunctus) {
+            // #tr tc.research_name.PRIMORDIAL_DISJUNCTUS
+            // # Primordial Disjunctus
+            // #zh_CN 初源解离机
+            // #tr tc.research_text.PRIMORDIAL_DISJUNCTUS
+            // # Elementary essentia free!
+            // #zh_CN 初等源质自由!
+            new ResearchItem(
+                "PRIMORDIAL_DISJUNCTUS",
+                "TST",
+                new AspectList().merge(Aspect.TOOL, 1)
+                    .merge(Aspect.HUNGER, 1)
+                    .merge(Aspect.MINE, 1)
+                    .merge(Aspect.AURA, 1),
+                0,
+                4,
+                9,
+                GTCMItemList.PrimordialDisjunctus.get(1)).setPages(
+                    // spotless:off
+                    // #tr tc.research_text.PRIMORDIAL_DISJUNCTUS.1
+                    // # The first step in the freedom of source matter
+                    // #zh_CN 源质自由的第一步!
+                    // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.PRIMORDIAL_DISJUNCTUS.1")),
+                    new ResearchPage(infusionRecipePrimordialDisjunctus))
+                    .setParents("TST_WELCOME")
+                    .registerResearchItem();
+        }
+        if (Config.Enable_SkypiercerTower) {
+            // #tr tc.research_name.SKYPIERCER_TOWER
+            // # Skypiercer Tower
+            // #zh_CN 穿云尖塔
+            // #tr tc.research_text.SKYPIERCER_TOWER
+            // # Eessentia free!
+            // #zh_CN 源质自由!
+            new ResearchItem(
+                "SKYPIERCER_TOWER",
+                "TST",
+                new AspectList().merge(Aspect.MECHANISM, 1)
+                    .merge(Aspect.MAGIC, 1)
+                    .merge(Aspect.AURA, 1)
+                    .merge(Aspect.ENERGY, 1),
+                0,
+                6,
+                9,
+                GTCMItemList.SkypiercerTower.get(1)).setPages(
+                    // spotless:off
+                    // #tr tc.research_text.SKYPIERCER_TOWER.1
+                    // # {\BOLD}Essentia/Aspect Tier and Machine Processing Time Rules:{\RESET}<BR><BR>{\BOLD}Tier Assignment:<BR>{\RESET}Primal Aspects are Tier 1. Composite Aspect tiers depend on their components:  If the components are of the same tier, the composite is one tier higher;  Otherwise, it takes the higher tier.<BR><BR>{\BOLD}Processing Time Formula:<BR>{\RESET}An Aspect of tier g requires 2^g seconds to process.
+                    // #zh_CN {\BOLD}关于源质/要素等级和机器时间计算的说明:{\RESET}<BR><BR>{\BOLD}要素等级:<BR>{\RESET}初等要素为1级。复合要素等级取决于组成要素的等级:  如果组成要素同级，则等级+1；  否则取较高者。<BR><BR>{\BOLD}加工时间公式:<BR>{\RESET}等级g的要素需2^g秒。
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.1")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.2
+                    // # {\BOLD}Recursive Synthesis Note:{\RESET}<BR><BR>If a Composite Aspect is synthesized entirely from Primal Aspects, each layer must be built step by step:  First synthesize the two components;  If either component is also Composite, repeat recursively until reaching Primal.<BR><BR>Since each component takes half the time of the composite, each layer effectively costs the same, and the synthesis depth is g–1 layers.<BR><BR>{\BOLD}Total Time = (g–1) × 2^g seconds.<BR><BR>{\BOLD}Critical:<BR>{\RESET}Primal Aspects (Layer 1) cannot be synthesized. They must pre-exist, or the machine will fail to start.
+                    // #zh_CN {\BOLD}关于递归合成的说明:{\RESET}<BR><BR>若复合要素完全由初等要素递归合成,每层需要逐步合成:  先合成两个组成要素;  若组成要素仍为复合要素, 则继续递归直到初等要素。<BR><BR>由于组成要素的合成时间为复合要素的一半,所以每层合成时间其实是相等的,合成深度为g–1层。<BR><BR>{\BOLD}总时间 = (g–1) × 2^g 秒。<BR><BR>{\BOLD}注意:<BR>{\RESET}初等要素(第1层)无法被合成,必须预先存在,否则机器无法启动。
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.2")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.3
+                    // # {\BOLD}Example – Simulation Cost Calculation:{\RESET}<BR><BR>Suppose you name a piece of paper (or anything else, really) "fabrico32+auram16": ig 32 Fabrico (Tier 5) and 16 Auram (Tier 3)<BR><BR>If only Primal Aspects are available:{\RESET} Fabrico: single (5–1) × 2^5 = 128s → total 128 × 32 = 4096s{\RESET} Auram: single (3–1) × 2^3 = 16s → total 16 × 16 = 256s<BR>Total synthesis time = 4096 + 256 = 4352 seconds<BR><BR>So... better install more rings. Otherwise, are you truly worthy of the name "Skypiercer"?<BR>
+                    // #zh_CN {\BOLD}例子 – 模拟时间计算:{\RESET}<BR><BR>假如你将一张纸(其实用别的也无所谓)命名为"fabrico32+auram16": 即32个工具(5级)和16个灵气(3级)<BR><BR>若仅有初等要素的情况下:{\RESET}工具: 单个(5–1) × 2^5 = 128秒 → 总的128 × 32 = 4096秒{\RESET}灵气: 单个(3–1) × 2^3 = 16秒 → 总的16 × 16 = 256秒<BR>总合成时间 = 4096 + 256 = 4352 秒<BR><BR>所以……最好多装点环。不然怎么「穿云」？<BR>
+                    // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.3")),
+                    new ResearchPage(infusionRecipeSkypiercerTower))
+                    .setParents("PRIMORDIAL_DISJUNCTUS")
                     .registerResearchItem();
         }
     }

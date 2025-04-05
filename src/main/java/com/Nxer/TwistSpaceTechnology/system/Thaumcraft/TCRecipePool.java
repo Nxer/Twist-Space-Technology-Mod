@@ -3,7 +3,10 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.BloodArsenal;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
+import static goodgenerator.loader.Loaders.huiCircuit;
+import static gregtech.api.enums.ItemList.Machine_IV_Assembler;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
+import static gregtech.api.enums.TCAspects.RADIO;
 import static gtPlusPlus.core.material.MaterialsAlloy.TITANSTEEL;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_AlloyBlastSmelter;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
@@ -49,7 +52,8 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipeBloodHatch;
     public static InfusionRecipe infusionRecipeTimeBendingSpeedRune;
     public static InfusionRecipe infusionRecipeIndustrialAlchemyTower;
-
+    public static InfusionRecipe infusionRecipePrimordialDisjunctus;
+    public static InfusionRecipe infusionRecipeSkypiercerTower;
     public static CrucibleRecipe crucibleRecipeArcaneHole;
 
     public static void loadRecipes() {
@@ -243,7 +247,41 @@ public class TCRecipePool {
                 new AspectList().merge(Aspect.VOID, 16)
                     .merge(Aspect.DARKNESS, 8)
                     .merge(Aspect.SENSES, 8));
+            if (Config.Enable_PrimordialDisjunctus) {
+                infusionRecipePrimordialDisjunctus = ThaumcraftApi.addInfusionCraftingRecipe(
+                    "PRIMORDIAL_DISJUNCTUS",
+                    GTCMItemList.PrimordialDisjunctus.get(1),
+                    12,
+                    new AspectList().merge(Aspect.MAGIC, 128)
+                        .merge((Aspect) ELECTRUM.mAspect, 128)
+                        .merge((Aspect) RADIO.mAspect, 128)
+                        .merge(Aspect.EXCHANGE, 128),
+                    new ItemStack(ConfigBlocks.blockMetalDevice, 1, 0),
+                    new ItemStack[] { new ItemStack(blockMetalDevice, 1, 9),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
+                        new ItemStack(ConfigBlocks.blockMetalDevice, 1, 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
+                        new ItemStack(blockMetalDevice, 1, 9),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L),
+                        new ItemStack(ConfigBlocks.blockCrystal, 1, 1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
+            }
+            if (Config.Enable_SkypiercerTower) {
+                infusionRecipeSkypiercerTower = ThaumcraftApi.addInfusionCraftingRecipe(
+                    "SKYPIERCER_TOWER",
+                    GTCMItemList.SkypiercerTower.get(1),
+                    16,
+                    new AspectList().merge(Aspect.MAGIC, 256)
+                        .merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.CLOTH, 256),
+                    Machine_IV_Assembler.get(1),
+                    new ItemStack[] { new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
+            }
         }
     }
-
 }

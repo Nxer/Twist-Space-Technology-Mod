@@ -497,7 +497,15 @@ public class Config {
     public static int TickEveryProcess_MegaCraftingCenter = 20;
     public static int MaxMagnification_MegaCraftingCenter = 8388608;
     // endregion
+    // region Primordial Disjunctus
+    public static boolean Enable_PrimordialDisjunctus =true ;
+    // endregion
 
+
+    // region SkypiercerTower
+    public static boolean Enable_SkypiercerTower =true ;
+    public static int Parallel_PerRing_SkypiercerTower = 16;
+    // endregion
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
