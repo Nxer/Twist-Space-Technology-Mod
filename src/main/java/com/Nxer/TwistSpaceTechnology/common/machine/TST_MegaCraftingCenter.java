@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.system.RecipePattern.ExtremeCraftRecipeHandler.extremeCraftRecipes;
+import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.extremeCraftRecipesMap;
+import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.visualExtremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -29,7 +30,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -37,16 +37,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.api.IAlternativeItem;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -84,19 +85,17 @@ import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import scala.actors.migration.pattern;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
@@ -315,66 +314,118 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     /**
-     * @param r   The find recipe of this pattern.
+     * @param r   A recipe of this machine.
      * @param in  The pattern input items.
      * @param out The pattern output item.
-     * @return If this pattern is valid.
+     * @return If this pattern is valid, of this recipe.
      */
-    protected static boolean checkPatternRecipe(GTRecipe r, ItemStack[] in, ItemStack out) {
-        ItemStack rOut = r.mOutputs[0];
-        if (out == null || out.getItem() == null || out.stackSize < 1) return false;
-        if (!GTUtility.areStacksEqual(out, rOut)) return false;
-        // check amount
-        if (out.stackSize < rOut.stackSize || out.stackSize % rOut.stackSize != 0) return false;
-        // the multiple of pattern
-        int multiple = out.stackSize / rOut.stackSize;
-
-        Map<TST_ItemID, Long> rItemMap = new HashMap<>();
-        Map<Item, Long> rWildcardMap = new HashMap<>();
-        for (ItemStack i : r.mInputs) {
-            if (i == null || i.getItem() == null || i.stackSize < 1) continue;
-            ItemData iData = GTOreDictUnificator.getAssociation(i);
-            if (iData != null) {
-                rItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
-            } else if (i.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-                rWildcardMap.merge(i.getItem(), (long) i.stackSize, Long::sum);
-            } else {
-                rItemMap.merge(TST_ItemID.createNoNBT(i), (long) i.stackSize, Long::sum);
-            }
+    protected static boolean checkPatternRecipe(ExtremeCraftRecipe r, ItemStack[] in, ItemStack out) {
+        // first check the output item is same
+        if (!r.outputItem.isItemEqual(out)) {
+            return false;
         }
 
-        Map<TST_ItemID, Long> pItemMap = new HashMap<>();
-        Map<Item, Long> pWildcardMap = new HashMap<>();
-        for (ItemStack i : in) {
-            if (i == null || i.getItem() == null || i.stackSize < 1) continue;
-            ItemData iData = GTOreDictUnificator.getAssociation(i);
-            if (iData != null) {
-                pItemMap.merge(TST_ItemID.createNoNBT(iData.mUnificationTarget), (long) i.stackSize, Long::sum);
-            } else {
-                Item ii = i.getItem();
-                if (rWildcardMap.containsKey(ii)) {
-                    pWildcardMap.merge(ii, (long) i.stackSize, Long::sum);
-                } else {
-                    pItemMap.merge(TST_ItemID.createNoNBT(i), (long) i.stackSize, Long::sum);
+        // then check the input item is in a same amount of type
+        // though OreDict Compatible Mode should be more flexible
+        // for example
+        // allow users use different items in pattern for one type of input in recipe
+        /*
+         * if (in.length != r.getInputTypeAmount()) {
+         * return false;
+         * }
+         */
+        // maybe it is possible to be more flexible
+
+        // now if the situation is normal, there is a high probability that it will match
+        // this machine allow quantity of pattern to be doubled
+        // we should check the precise quantitative relationship of I/O of patten and recipe
+
+        // the pattern Magnification can be determined by the quantity relationship of Output Item
+        int magnification = out.stackSize / r.outputItem.stackSize;
+
+        // and it must be divisible
+        if (magnification * r.outputItem.stackSize != out.stackSize) {
+            return false;
+        }
+
+        // separate calculation method by whether the recipe using OreDict
+        if (r.useAlternativeItem()) {
+            // this recipe is using OreDict
+
+            // one map to collecting general item input
+            // and one map to collecting OreDict input
+            Map<TST_ItemID, Long> itemCollecting = new HashMap<>();
+            Map<IAlternativeItem, Long> oreDictCollecting = new HashMap<>();
+
+            baseLoop: for (ItemStack itemStack : in) {
+                // first step to collect general items
+                for (TST_ItemID id : r.inputItemsGeneral.keySet()) {
+                    if (id.equalItemStack(itemStack)) {
+                        itemCollecting.merge(id, (long) itemStack.stackSize, Long::sum);
+                        continue baseLoop;
+                    }
                 }
 
+                // then collect the ore dict if this input doesn't fill in general item checking
+                for (IAlternativeItem od : r.inputItemsAlts.keySet()) {
+                    if (od.containsItem(itemStack)) {
+                        oreDictCollecting.merge(od, (long) itemStack.stackSize, Long::sum);
+                        continue baseLoop;
+                    }
+                }
+
+                // Unexpected item in pattern appears, an item in pattern doesn't belong to any item type in recipe
+                return false;
             }
+
+            // finish input stack re-collecting
+            // check the magnification
+
+            // general item part
+            for (Map.Entry<TST_ItemID, Integer> rInputEntry : r.inputItemsGeneral.entrySet()) {
+                if (magnification != (itemCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
+                    return false;
+                }
+            }
+
+            // ore dict part
+            for (Map.Entry<IAlternativeItem, Integer> rInputEntry : r.inputItemsAlts.entrySet()) {
+                if (magnification != (oreDictCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
+                    return false;
+                }
+            }
+
+        } else {
+            // this recipe is pure general item stack inputting
+            // but we still should check the Wildcard
+            // though Wildcard checking step has been all delegated to Item ID
+            // we still need to pay attention to the order
+            Map<TST_ItemID, Long> patternCollecting = new HashMap<>();
+            baseLoop: for (ItemStack itemStack : in) {
+
+                for (TST_ItemID id : r.inputItemsGeneral.keySet()) {
+                    if (id.equalItemStack(itemStack)) {
+                        patternCollecting.merge(id, (long) itemStack.stackSize, Long::sum);
+                        continue baseLoop;
+                    }
+                }
+
+                // Unexpected item in pattern appears, an item in pattern doesn't belong to any item type in recipe
+                return false;
+            }
+
+            // finish input stack re-collecting
+            // check the magnification
+            for (Map.Entry<TST_ItemID, Integer> rInputEntry : r.inputItemsGeneral.entrySet()) {
+                if (magnification != (patternCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
+                    return false;
+                }
+            }
+
         }
 
-        if (rItemMap.size() != pItemMap.size() || rWildcardMap.size() != pWildcardMap.size()) return false;
-
-        for (Map.Entry<TST_ItemID, Long> rItemEntry : rItemMap.entrySet()) {
-            Long pAmount = pItemMap.get(rItemEntry.getKey());
-            if (pAmount == null || pAmount == 0 || !pAmount.equals(rItemEntry.getValue() * multiple)) return false;
-        }
-
-        for (Map.Entry<Item, Long> rWildcardEntry : rWildcardMap.entrySet()) {
-            Long pAmount = pWildcardMap.get(rWildcardEntry.getKey());
-            if (pAmount == null || pAmount == 0 || !pAmount.equals(rWildcardEntry.getValue() * multiple)) return false;
-        }
-
+        // finally this pattern passes all checks
         return true;
-
     }
 
     /**
@@ -390,43 +441,40 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             ICraftingPatternDetails d = patternItem.getPatternForItem(pattern, null);
             if (d == null) return null;
             if (d.isCraftable()) {
+                // vanilla crafting table recipe will be checked directly
                 return d;
             } else {
+                // to check extreme crafting table recipe
+
+                // first, the extreme crafting table recipe only allow ONE stack of output item
                 IAEItemStack[] dOutputs = d.getOutputs();
                 if (dOutputs == null || dOutputs.length != 1 || dOutputs[0] == null) return null;
+
+                // now use the output item to find the true recipe in extreme crafting center
+                Collection<ExtremeCraftRecipe> possibleRecipes = extremeCraftRecipesMap
+                    .get(TST_ItemID.create(dOutputs[0]));
+                if (possibleRecipes == null || possibleRecipes.isEmpty()) {
+                    // no recipe is of this pattern
+                    return null;
+                }
 
                 ItemStack[] dInputs = convertAEToMC(d.getInputs());
                 if (!TstUtils.areItemsValid(dInputs)) return null;
 
-                // fine all available extreme recipes of this pattern
-                GTRecipe[] validResult = extremeCraftRecipes.findRecipeQuery()
-                    .items(dInputs)
-                    .findAll()
-                    .toArray(GTRecipe[]::new);
+                ItemStack oItems = dOutputs[0].getItemStack();
+                if (oItems == null || oItems.getItem() == null || oItems.stackSize < 1) return null;
 
-                if (validResult.length < 1) return null;
-
-                @NotNull
-                ItemStack pItems = dOutputs[0].getItemStack();
-                if (pItems == null || pItems.getItem() == null || pItems.stackSize < 1) return null;
-
-                if (validResult.length == 1) {
-                    if (validResult[0] == null) return null;
-
-                    if (checkPatternRecipe(validResult[0], dInputs, pItems)) {
+                // now check what recipe is this pattern of
+                for (ExtremeCraftRecipe r : possibleRecipes) {
+                    if (checkPatternRecipe(r, dInputs, oItems)) {
+                        // find
                         return d;
-                    } else {
-                        return null;
                     }
-
-                } else {
-                    for (int i = 0; i < validResult.length; i++) {
-                        if (checkPatternRecipe(validResult[i], dInputs, pItems)) {
-                            return d;
-                        }
-                    }
-
                 }
+
+                // it is a pity, this pattern hasn't been through the check
+                return null;
+
             }
         }
 
@@ -768,7 +816,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return extremeCraftRecipes;
+        return visualExtremeCraftRecipes;
     }
 
     @Override

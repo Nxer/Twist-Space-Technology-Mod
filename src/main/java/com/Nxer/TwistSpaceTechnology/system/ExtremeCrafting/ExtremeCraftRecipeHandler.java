@@ -1,36 +1,47 @@
-package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
+package com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.api.OreDictItem;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.dreammaster.gthandler.CustomItemList;
 
 import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
 import fox.spiteful.avaritia.crafting.ExtremeShapedOreRecipe;
 import fox.spiteful.avaritia.crafting.ExtremeShapedRecipe;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
 import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.util.GTOreDictUnificator;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
 
 public class ExtremeCraftRecipeHandler {
 
-    public static RecipeMap<RecipeMapBackend> extremeCraftRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.extremeCraftRecipes")
+    public static final RecipeMap<RecipeMapBackend> visualExtremeCraftRecipes = RecipeMapBuilder
+        .of("gtcm.recipe.visualExtremeCraftRecipes")
         .maxIO(16, 1, 0, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .frontend(TST_GeneralFrontend::new)
@@ -39,6 +50,13 @@ public class ExtremeCraftRecipeHandler {
                 .setMaxRecipesPerPage(1))
         .disableOptimize()
         .build();
+
+    public static final Collection<ExtremeCraftRecipe> extremeCraftRecipes = new ArrayList<>();
+
+    /**
+     * Output item to recipe.
+     */
+    public static final Map<TST_ItemID, Collection<ExtremeCraftRecipe>> extremeCraftRecipesMap = new HashMap<>();
 
     /**
      * temp method
@@ -102,10 +120,45 @@ public class ExtremeCraftRecipeHandler {
 
     public void initECRecipe() {
 
+        ExtremeCraftingManager.getInstance()
+            .addExtremeShapedOreRecipe(
+                ItemList.Cover_SolarPanel_LV.get(1L),
+                "---------",
+                "---------",
+                "---aba---",
+                "---cdc---",
+                "---efe---",
+                "---cdc---",
+                "---aba---",
+                "---------",
+                "---------",
+                'a',
+                "wireGt01SuperconductorMV",
+                'b',
+                CustomItemList.IrradiantReinforcedAluminiumPlate.get(1L),
+                'c',
+                ItemList.Circuit_Silicon_Wafer2.get(1L),
+                'd',
+                "platePolytetrafluoroethylene",
+                'e',
+                "circuitAdvanced",
+                'f',
+                ItemList.Cover_SolarPanel_8V.get(1L));
+
         List<IRecipe> originRecipes = ExtremeCraftingManager.getInstance()
             .getRecipeList();
 
         LOG.info("start init extreme craft table recipe :" + originRecipes.size());
+
+        // pre init
+        {
+            // Ore Dict "cropSpace" and "cropTcetiESeaweed" are same in list content
+            // so we need to pre-process these two Ore Dicts
+            OreDictItem odi = new OreDictItem("cropSpace");
+            OreDictItem.UsedOreDictItems.put("cropSpace", odi);
+            OreDictItem.UsedOreDictItems.put("cropTcetiESeaweed", odi);
+        }
+
         for (var Recipe : originRecipes) {
             Object[] inputs = null;
             ItemStack output = null;
@@ -123,17 +176,42 @@ public class ExtremeCraftRecipeHandler {
             }
 
             if (inputs != null && output != null) {
-                GTValues.RA.stdBuilder()
+                GTRecipeBuilder builder = GTValues.RA.stdBuilder()
                     .ignoreCollision()
                     .itemInputs(inputs)
                     .itemOutputs(output)
                     .eut(0)
-                    .duration(128)
-                    .addTo(extremeCraftRecipes);
+                    .duration(Config.TickEveryProcess_MegaCraftingCenter);
+
+                Optional<GTRecipe.GTRecipe_WithAlt> oRecipe = builder.buildWithAlt();
+                if (oRecipe.isPresent()) {
+                    visualExtremeCraftRecipes.add(oRecipe.get());
+                } else {
+                    builder.addTo(visualExtremeCraftRecipes);
+                }
+
+                ExtremeCraftRecipe ecr = new ExtremeCraftRecipe().itemInputs(inputs)
+                    .itemOutputs(output);
+                extremeCraftRecipes.add(ecr);
+
+                TST_ItemID oi = TST_ItemID.create(output);
+                if (extremeCraftRecipesMap.containsKey(oi)) {
+                    extremeCraftRecipesMap.get(oi)
+                        .add(ecr);
+                } else {
+                    Set<ExtremeCraftRecipe> s = new HashSet<>();
+                    s.add(ecr);
+                    extremeCraftRecipesMap.put(oi, s);
+                }
+
             } else {
                 LOG.info("ExtremeCraftRecipeHandler get a null recipe.");
             }
+
         }
+
+        LOG.info("complete init extreme craft table recipe :" + extremeCraftRecipes.size());
+
     }
 
 }

@@ -9,6 +9,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.jetbrains.annotations.Nullable;
 
+import appeng.api.storage.data.IAEItemStack;
 import gregtech.api.util.GTUtility;
 
 public class TST_ItemID extends GTUtility.ItemId {
@@ -55,6 +56,10 @@ public class TST_ItemID extends GTUtility.ItemId {
     public static TST_ItemID createAsWildcard(ItemStack itemStack) {
         if (null == itemStack) return NULL;
         return new TST_ItemID(itemStack.getItem(), OreDictionary.WILDCARD_VALUE);
+    }
+
+    public static TST_ItemID create(IAEItemStack aeStack) {
+        return create(aeStack.getItemStack());
     }
 
     public static TST_ItemID[] create(ItemStack... itemStacks) {
