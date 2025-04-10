@@ -24,6 +24,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Lists;
+import gregtech.api.interfaces.fluid.IFluidStore;
+import gregtech.api.util.GTUtility;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -312,6 +315,12 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
+        // overriding this for calculating parallels correctly.
+        return GTUtility.filterValidMTEs(Lists.newArrayList(mColdFluidHatch, mSteamHatch));
     }
 
     @Override
