@@ -385,7 +385,7 @@ public enum GTCMItemList {
     EngravedLaptronExposedChip,
     PerfectEngravedLaptronChip,
     UltimateEnergyFlowCircuit,
-    SwelegfgrUpgradeChip,
+    SwelegfyrUpgradeChip,
     BoropheneFoil,
     BoropheneBasedNanowireCompositeThermalConductiveMedium,
 
