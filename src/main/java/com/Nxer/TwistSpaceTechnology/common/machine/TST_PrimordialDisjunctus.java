@@ -18,11 +18,16 @@ import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -71,7 +76,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     protected int mCasing = 0;
     protected double mParallel = 0;
     private int pTier = 0;
+    protected int primalAspectsGenerated = 0;
+    protected int nodeIncrease = 0;
     protected int nodePurificationEfficiency = 0;
+    private static final int SECOND_IN_TICKS = 20;
     private static final int RECIPE_DURATION = 20;
     private static final int RECIPE_EUT = 1920;
     private static final String STRUCTURE_PIECE_MAIN = "main";
@@ -83,7 +91,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         mEssentiaOutputHatches.clear();
     }
 
-    protected int nodeIncrease = 0;
+
     private final XSTR xstr = new XSTR();
     // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
     private static final String[][] shapePrimordialDisjunctus = new String[][] {
@@ -190,18 +198,17 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     public String[] getInfoData() {
-        String[] info = super.getInfoData();
-        info[7] = EnumChatFormatting.RESET + " Purification Efficiency: "
-            + EnumChatFormatting.AQUA
-            + this.nodePurificationEfficiency
-            + "%"
-            + EnumChatFormatting.RESET
-            + " Speed Up: "
-            + EnumChatFormatting.GRAY
-            + this.nodeIncrease
-            + "%"
-            + EnumChatFormatting.RESET;
-        return info;
+        // This info gets shown when scanning the controller block.
+        String[] inInfo = super.getInfoData();
+        String[] outInfo = new String[inInfo.length + 3];
+        System.arraycopy(inInfo, 0, outInfo, 0, inInfo.length);
+        outInfo[inInfo.length] = EnumChatFormatting.AQUA + "Generating: "
+            + EnumChatFormatting.GOLD + this.primalAspectsGenerated + " Primal Aspects";
+        outInfo[inInfo.length + 1] = EnumChatFormatting.AQUA + "Boost: "
+            + EnumChatFormatting.GOLD + this.nodeIncrease + "%";
+        outInfo[inInfo.length + 2] = EnumChatFormatting.AQUA + "Purification Efficiency: "
+            + EnumChatFormatting.GOLD + this.nodePurificationEfficiency + "%";
+        return outInfo;
     }
 
     @Override
@@ -240,13 +247,22 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+
+        // This data is set through the structure check so we reset it here
         this.mCasing = 0;
         this.mParallel = 0;
         this.pTier = 0;
-        this.nodePurificationEfficiency = 0;
-        this.nodeIncrease = 0;
 
-        return checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1);
+        boolean bStructureCheck = checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1);
+
+        // Only reset this data if we have an invalid structure check
+        if (!bStructureCheck)
+        {
+            this.nodeIncrease = 0;
+            this.nodePurificationEfficiency = 0;
+        }
+
+        return bStructureCheck;
     }
 
     @Override
@@ -267,40 +283,71 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     protected void onEssentiaCellFound(int tier) {
-        this.mParallel += (1 << tier);
+        this.mParallel += (1 << tier); // 1 << 0 = 1, 1 << 1 = 2, 1 << 2 = 4, 1 << 3 = 8
         this.pTier = Math.max(this.pTier, tier);
     }
 
     @Override
     public @NotNull CheckRecipeResult checkProcessing_EM() {
-        int p = (int) this.mParallel;
-        if (p <= 0) {
+        int parallel = (int) this.mParallel;
+        if (parallel <= 0) {
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
 
-        AspectList generatedAspects = new AspectList();
-
-        generatedAspects.add(Aspect.AIR, p);
-        generatedAspects.add(Aspect.EARTH, p);
-        generatedAspects.add(Aspect.FIRE, p);
-        generatedAspects.add(Aspect.WATER, p);
-        generatedAspects.add(Aspect.ORDER, p);
-        generatedAspects.add(Aspect.ENTROPY, p);
-
-        this.mOutputAspects.add(generatedAspects);
-
-        this.mEfficiencyIncrease = 10000;
+        // Parallels (all same tier)
+        // T1: 4
+        // T2: 8
+        // T3: 16
+        // T4: 32
+        //
+        // 16 amount primal base.
+        //
+        // Base cycle time.
+        // 20 s
+        // Min cycle time.
+        // 1 s
+        // Mathematically stops scaling at UMV power
+        //
+        // Output of each primal (not boosted, not overclocked) [T1][T2][T3][T4]
+        // 3.2/s 6.4/s 12.8/s 25.6/s
+        // Output of each primal (boosted, not overclocked) [T1][T2][T3][T4]
+        // 6.4/s 12.8/s 25.6/s 51.2/s
+        // Output of each primal (boosted, overclocked UV) [T1][T2][T3][T4]
+        // 102.4/s 204.8/s 409.6/s 819.2/s
+        // Output of each primal (boosted, overclocked UMV) [T1][T2][T3][T4]
+        // 2560/s 5120/s 10240/s 20480/s
+        this.primalAspectsGenerated = (int) (parallel * 16 * (1.0 + this.nodeIncrease * 0.01));
 
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
-            .setDuration(
-                (int) Math.ceil(this.mOutputAspects.visSize() * RECIPE_DURATION * (1 - this.nodeIncrease * 0.005)))
+            .setDuration(SECOND_IN_TICKS * RECIPE_DURATION)
             .setDurationDecreasePerOC(2)
             .calculate();
 
         useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
+
+        // This keeps the progress time to a minimum of 1 second without decreasing the output.
+        if (mMaxProgresstime < SECOND_IN_TICKS)
+        {
+            // This caps out at UMV where it 1 ticks and any further overclocking is irrelevant
+            this.primalAspectsGenerated = (int) ((double)SECOND_IN_TICKS / mMaxProgresstime * this.primalAspectsGenerated);
+            mMaxProgresstime = SECOND_IN_TICKS;
+        }
+
+        AspectList generatedAspects = new AspectList();
+
+        generatedAspects.add(Aspect.AIR, this.primalAspectsGenerated);
+        generatedAspects.add(Aspect.EARTH, this.primalAspectsGenerated);
+        generatedAspects.add(Aspect.FIRE, this.primalAspectsGenerated);
+        generatedAspects.add(Aspect.WATER, this.primalAspectsGenerated);
+        generatedAspects.add(Aspect.ORDER, this.primalAspectsGenerated);
+        generatedAspects.add(Aspect.ENTROPY, this.primalAspectsGenerated);
+
+        this.mOutputAspects.add(generatedAspects);
+
+        this.mEfficiencyIncrease = 10000;
 
         this.updateSlots();
 
@@ -327,17 +374,28 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     protected void runMachine(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.runMachine(aBaseMetaTileEntity, aTick);
+
+
     }
 
     @Override
     public void stopMachine() {
         super.stopMachine();
+
+        this.mCasing = 0;
+        this.mParallel = 0;
+        this.pTier = 0;
+        this.primalAspectsGenerated = 0;
         this.mOutputAspects.aspects.clear();
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+
+        // This happens 4 times per second
+        // Meaning we gain at most 12% per second of purification efficiency
+        // Meaning we gain at most 8% per second of boost
         if (aTick % 5 == 0 && this.mMachine) {
             final World WORLD = this.getBaseMetaTileEntity()
                 .getWorld();
@@ -347,20 +405,31 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                 .getYCoord();
             int z = this.getBaseMetaTileEntity()
                 .getZCoord();
+
+            // Loses 5 every post tick, Gains 10 max every post tick
             this.nodePurificationEfficiency = Math.max(0, this.nodePurificationEfficiency - 1);
             if (this.nodePurificationEfficiency < 100) {
-                this.nodePurificationEfficiency = (int) Math.min(
+                this.nodePurificationEfficiency = Math.min(
                     100,
                     this.nodePurificationEfficiency
-                        + Math.ceil(VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ORDER, 200) * 0.05));
+                        + (int)(VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ORDER, 200) * 0.02)
+                );
             }
-            this.nodeIncrease = Math.min(100, VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125));
+
+            // Loses 5 every post tick, Gains 7 max every post tick
+            this.nodeIncrease = Math.max(0, this.nodeIncrease - 1);
+            if (this.nodeIncrease < 100)
+            {
+                this.nodeIncrease = Math.min(
+                    100,
+                    this.nodeIncrease
+                        + (int)(VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125) * 0.024));
+            }
         }
     }
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        this.nodePurificationEfficiency = Math.max(0, this.nodePurificationEfficiency - 1);
         if (xstr.nextInt(40) == 0) {
             if (xstr.nextInt(100) < Math.max(100 - this.nodePurificationEfficiency, 0)) {
                 final World WORLD = this.getBaseMetaTileEntity()
@@ -422,23 +491,23 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_02"))
             // #tr Tooltip_PrimordialDisjunctus_03
-            // # parallel = The sum of several 2^essentiaCell
+            // # parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
             // #zh_CN 并行 = 若干 2^扩散单元等级 之和 ,最高为128并行
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_03"))
             // #tr Tooltip_PrimordialDisjunctus_04
-            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
+            // # Min voltage 1A EV, standard overclocks
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_04"))
             // #tr Tooltip_PrimordialDisjunctus_05
-            // # With the power of technology, we no longer need fire vis and water vis as starting conditions
+            // # With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
             // #zh_CN 借助科技的力量我们不再需要火vis和水vis来作为启动条件
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_05"))
             // #tr Tooltip_PrimordialDisjunctus_06
-            // # Order vis can inhibit the generation of spell waves, and its generation is independent of the silo level, while Perditio vis will accelerate the machine speed up to 200%
+            // # Providing Ordo centi-vis will reduce the flux produced to nothing, flux produced is not affected by muffler tier, while providing Perditio centi-vis will boost primal aspect production up to 200%
             // #zh_CN 秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06"))
             // #tr Tooltip_PrimordialDisjunctus_07
-            // # Please do not give too high voltage, this machine is really fast, otherwise pay attention to your storage
+            // # This machine maxes out at 1 UMV amp anything more will just void power.
             // #zh_CN 请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_07"))
             .addSeparator()
@@ -513,5 +582,44 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+                                int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        tag.setInteger("primalAspectsPerCycle", this.primalAspectsGenerated);
+        tag.setInteger("boost", this.nodeIncrease);
+        tag.setInteger("purificationEfficiency", this.nodePurificationEfficiency);
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+                             IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.hasKey("primalAspectsPerCycle")) {
+            currentTip.add(
+                EnumChatFormatting.AQUA + "Generating: "
+                    + EnumChatFormatting.GOLD + tag.getInteger("primalAspectsPerCycle") + " Primal Aspects"
+                    + EnumChatFormatting.RESET
+            );
+        }
+
+        if (tag.hasKey("boost")) {
+            currentTip.add(
+                EnumChatFormatting.AQUA + "Boost: "
+                    + EnumChatFormatting.GOLD + tag.getInteger("boost") + "%"
+                    + EnumChatFormatting.RESET
+            );
+        }
+
+        if (tag.hasKey("purificationEfficiency")) {
+            currentTip.add(
+                EnumChatFormatting.AQUA + "Purification Efficiency: "
+                    + EnumChatFormatting.GOLD + tag.getInteger("purificationEfficiency") + "%"
+                    + EnumChatFormatting.RESET
+            );
+        }
     }
 }

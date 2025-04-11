@@ -2068,11 +2068,11 @@ Tooltip_PrimordialDisjunctus_MachineType=Essentia Extractor
 Tooltip_PrimordialDisjunctus_00=Controller block for the Primordial Disjunctus
 Tooltip_PrimordialDisjunctus_01=§9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
 Tooltip_PrimordialDisjunctus_02=Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation.However,due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
-Tooltip_PrimordialDisjunctus_03=parallel = The sum of several 2^essentiaCell
-Tooltip_PrimordialDisjunctus_04=At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
-Tooltip_PrimordialDisjunctus_05=With the power of technology, we no longer need fire vis and water vis as starting conditions
-Tooltip_PrimordialDisjunctus_06=Order vis can inhibit the generation of spell waves, and its generation is independent of the silo level, while Perditio vis will accelerate the machine speed up to 200%
-Tooltip_PrimordialDisjunctus_07=Please do not give too high voltage, this machine is really fast, otherwise pay attention to your storage
+Tooltip_PrimordialDisjunctus_03=parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
+Tooltip_PrimordialDisjunctus_04=Min voltage 1A EV, standard overclocks
+Tooltip_PrimordialDisjunctus_05=With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
+Tooltip_PrimordialDisjunctus_06=Providing Ordo centi-vis will reduce the flux produced to nothing, flux produced is not affected by muffler tier, while providing Perditio centi-vis will boost primal aspect production up to 200%
+Tooltip_PrimordialDisjunctus_07=This machine maxes out at 1 UMV amp anything more will just void power.
 Tooltip_PrimordialDisjunctus_HatchBusInfo=Replace Magic mechanical blocks in any cabin
 Tooltip_SkypiercerTwoer_MachineType=Essentia Synthesizer
 Tooltip_SkypiercerTower_00=Controller block for the SkypiercerTower
