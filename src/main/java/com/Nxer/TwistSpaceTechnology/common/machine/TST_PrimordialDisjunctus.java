@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,6 +54,8 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -90,7 +90,6 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         super.clearHatches_EM();
         mEssentiaOutputHatches.clear();
     }
-
 
     private final XSTR xstr = new XSTR();
     // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
@@ -203,11 +202,17 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         String[] outInfo = new String[inInfo.length + 3];
         System.arraycopy(inInfo, 0, outInfo, 0, inInfo.length);
         outInfo[inInfo.length] = EnumChatFormatting.AQUA + "Generating: "
-            + EnumChatFormatting.GOLD + this.primalAspectsGenerated + " Primal Aspects";
+            + EnumChatFormatting.GOLD
+            + this.primalAspectsGenerated
+            + " Primal Aspects";
         outInfo[inInfo.length + 1] = EnumChatFormatting.AQUA + "Boost: "
-            + EnumChatFormatting.GOLD + this.nodeIncrease + "%";
+            + EnumChatFormatting.GOLD
+            + this.nodeIncrease
+            + "%";
         outInfo[inInfo.length + 2] = EnumChatFormatting.AQUA + "Purification Efficiency: "
-            + EnumChatFormatting.GOLD + this.nodePurificationEfficiency + "%";
+            + EnumChatFormatting.GOLD
+            + this.nodePurificationEfficiency
+            + "%";
         return outInfo;
     }
 
@@ -256,8 +261,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         boolean bStructureCheck = checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1);
 
         // Only reset this data if we have an invalid structure check
-        if (!bStructureCheck)
-        {
+        if (!bStructureCheck) {
             this.nodeIncrease = 0;
             this.nodePurificationEfficiency = 0;
         }
@@ -329,10 +333,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         mMaxProgresstime = calculator.getDuration();
 
         // This keeps the progress time to a minimum of 1 second without decreasing the output.
-        if (mMaxProgresstime < SECOND_IN_TICKS)
-        {
+        if (mMaxProgresstime < SECOND_IN_TICKS) {
             // This caps out at UMV where it 1 ticks and any further overclocking is irrelevant
-            this.primalAspectsGenerated = (int) ((double)SECOND_IN_TICKS / mMaxProgresstime * this.primalAspectsGenerated);
+            this.primalAspectsGenerated = (int) ((double) SECOND_IN_TICKS / mMaxProgresstime
+                * this.primalAspectsGenerated);
             mMaxProgresstime = SECOND_IN_TICKS;
         }
 
@@ -375,7 +379,6 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     protected void runMachine(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.runMachine(aBaseMetaTileEntity, aTick);
 
-
     }
 
     @Override
@@ -412,18 +415,15 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                 this.nodePurificationEfficiency = Math.min(
                     100,
                     this.nodePurificationEfficiency
-                        + (int)(VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ORDER, 200) * 0.02)
-                );
+                        + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ORDER, 200) * 0.02));
             }
 
             // Loses 5 every post tick, Gains 7 max every post tick
             this.nodeIncrease = Math.max(0, this.nodeIncrease - 1);
-            if (this.nodeIncrease < 100)
-            {
+            if (this.nodeIncrease < 100) {
                 this.nodeIncrease = Math.min(
                     100,
-                    this.nodeIncrease
-                        + (int)(VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125) * 0.024));
+                    this.nodeIncrease + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125) * 0.024));
             }
         }
     }
@@ -586,7 +586,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-                                int z) {
+        int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         tag.setInteger("primalAspectsPerCycle", this.primalAspectsGenerated);
         tag.setInteger("boost", this.nodeIncrease);
@@ -595,31 +595,34 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-                             IWailaConfigHandler config) {
+        IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.hasKey("primalAspectsPerCycle")) {
             currentTip.add(
                 EnumChatFormatting.AQUA + "Generating: "
-                    + EnumChatFormatting.GOLD + tag.getInteger("primalAspectsPerCycle") + " Primal Aspects"
-                    + EnumChatFormatting.RESET
-            );
+                    + EnumChatFormatting.GOLD
+                    + tag.getInteger("primalAspectsPerCycle")
+                    + " Primal Aspects"
+                    + EnumChatFormatting.RESET);
         }
 
         if (tag.hasKey("boost")) {
             currentTip.add(
                 EnumChatFormatting.AQUA + "Boost: "
-                    + EnumChatFormatting.GOLD + tag.getInteger("boost") + "%"
-                    + EnumChatFormatting.RESET
-            );
+                    + EnumChatFormatting.GOLD
+                    + tag.getInteger("boost")
+                    + "%"
+                    + EnumChatFormatting.RESET);
         }
 
         if (tag.hasKey("purificationEfficiency")) {
             currentTip.add(
                 EnumChatFormatting.AQUA + "Purification Efficiency: "
-                    + EnumChatFormatting.GOLD + tag.getInteger("purificationEfficiency") + "%"
-                    + EnumChatFormatting.RESET
-            );
+                    + EnumChatFormatting.GOLD
+                    + tag.getInteger("purificationEfficiency")
+                    + "%"
+                    + EnumChatFormatting.RESET);
         }
     }
 }
