@@ -351,6 +351,7 @@ public class Config {
     public static int StandardWaterNeed_EyeOfWood = 256;
     public static int StandardLavaNeed_EyeOfWood = 256;
     public static int SecondsPerProcessing_EyeOfWood = 60;
+    public static int StandardDimensionID_EyeOfWood = 0;
 
     // endregion
 
@@ -567,6 +568,7 @@ public class Config {
         StandardWaterNeed_EyeOfWood = configuration.getInt("StandardWaterNeed_EyeOfWood", EOW, StandardWaterNeed_EyeOfWood, 1, 1024, "Standard amount (in L) of Water per processing need of Eye of Wood. Type: int");
         StandardLavaNeed_EyeOfWood = configuration.getInt("StandardLavaNeed_EyeOfWood", EOW, StandardLavaNeed_EyeOfWood, 1, 1024, "Standard amount (in L) of Lava per processing need of Eye of Wood. Type: int");
         SecondsPerProcessing_EyeOfWood = configuration.getInt("SecondsPerProcessing_EyeOfWood", EOW, SecondsPerProcessing_EyeOfWood, 1, 3600, "How many seconds per processing cost of Eye of Wood. Type: int");
+        StandardDimensionID_EyeOfWood = configuration.getInt("StandardDimensionID_EyeOfWood", EOW, StandardDimensionID_EyeOfWood, -9999, 9999, "Standard dimension the Eye of Wood is allowed in. Default 0 - Overworld. Type: int");
 
         // endregion
 

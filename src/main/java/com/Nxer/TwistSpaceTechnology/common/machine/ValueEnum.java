@@ -260,6 +260,7 @@ public final class ValueEnum {
     public static final int StandardWaterNeed_EyeOfWood = Config.StandardWaterNeed_EyeOfWood;
     public static final int StandardLavaNeed_EyeOfWood = Config.StandardLavaNeed_EyeOfWood;
     public static final int TicksPerProcessing_EyeOfWood = 20 * Config.SecondsPerProcessing_EyeOfWood;
+    public static final int StandardDimensionID_EyeOfWood = Config.StandardDimensionID_EyeOfWood;
     // endregion
 
     // region Space Apiary

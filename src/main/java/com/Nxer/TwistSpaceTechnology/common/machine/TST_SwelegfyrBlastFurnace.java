@@ -407,7 +407,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
-        if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfgrUpgradeChip.get(1);
+        if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfyrUpgradeChip.get(1);
     }
 
     private boolean setRemoveBlaze() {
