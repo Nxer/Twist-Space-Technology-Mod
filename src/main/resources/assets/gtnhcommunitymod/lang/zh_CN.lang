@@ -2068,11 +2068,11 @@ Tooltip_PrimordialDisjunctus_MachineType=初始源质提取者
 Tooltip_PrimordialDisjunctus_00=初源解离机的控制器方块
 Tooltip_PrimordialDisjunctus_01=§9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
 Tooltip_PrimordialDisjunctus_02=将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
-Tooltip_PrimordialDisjunctus_03=并行 = 若干 2^扩散单元等级 之和 ,最高为128并行
-Tooltip_PrimordialDisjunctus_04=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
-Tooltip_PrimordialDisjunctus_05=借助科技的力量我们不再需要火vis和水vis来作为启动条件
-Tooltip_PrimordialDisjunctus_06=秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%
-Tooltip_PrimordialDisjunctus_07=请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
+Tooltip_PrimordialDisjunctus_03=并行 = 扩散单元等级的总和 ( 新手=1，学徒=2，大师=4，宗师=8 )
+Tooltip_PrimordialDisjunctus_04=最低使用1A EV, 使用标准超频 ( 即每提升一级电压加工时间减半 )
+Tooltip_PrimordialDisjunctus_05=借助科技的力量, 此过程仅需能量, 在1A EV电压下每20秒每个并行产出16单位基础源质.
+Tooltip_PrimordialDisjunctus_06=提供秩序vis可将咒波污染降为零(与消声仓等级无关),提供混沌vis可提升源质产量最高200%
+Tooltip_PrimordialDisjunctus_07=本机最高支持1A UMV,超出的电力将被直接浪费.
 Tooltip_PrimordialDisjunctus_HatchBusInfo=任何舱室替换魔法机械方块
 Tooltip_SkypiercerTwoer_MachineType=源质合成者
 Tooltip_SkypiercerTower_00=穿云尖塔的控制器方块

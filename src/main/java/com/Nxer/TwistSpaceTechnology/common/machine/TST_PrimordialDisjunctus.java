@@ -80,10 +80,19 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     protected int nodeIncrease = 0;
     protected int nodePurificationEfficiency = 0;
     private static final int SECOND_IN_TICKS = 20;
-    private static final int RECIPE_DURATION = 20;
     private static final int RECIPE_EUT = 1920;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private IStructureDefinition<TST_PrimordialDisjunctus> multiDefinition = null;
+
+    // Config values
+    private static final int STANDARD_RECIPE_DURATION = ValueEnum.BaseRecipeDuration_PrimordialDisjunctus;
+    private static final int STANDARD_DIFFUSION_CELL_PARALLEL = ValueEnum.DiffusionCellParallel_PrimordialDisjunctus;
+    private static final int STANDARD_PRIMAL_ASPECTS_PER_PARALLEL = ValueEnum.PrimalAspectsPerParallel_PrimordialDisjunctus;
+    private static final int STANDARD_PURIFICATION_GAIN_MULTIPLIER = ValueEnum.PurificationGainMultiplier_PrimordialDisjunctus;
+    private static final int STANDARD_PURIFICATION_REDUCTION = ValueEnum.PurificationReduction_PrimordialDisjunctus;
+    private static final int STANDARD_BOOST_MULTIPLIER = ValueEnum.BoostMultiplier_PrimordialDisjunctus;
+    private static final int STANDARD_BOOST_GAIN_MULTIPLIER = ValueEnum.BoostGainMultiplier_PrimordialDisjunctus;
+    private static final int STANDARD_BOOST_REDUCTION = ValueEnum.BoostReduction_PrimordialDisjunctus;
 
     @Override
     protected void clearHatches_EM() {
@@ -287,7 +296,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     protected void onEssentiaCellFound(int tier) {
-        this.mParallel += (1 << tier); // 1 << 0 = 1, 1 << 1 = 2, 1 << 2 = 4, 1 << 3 = 8
+        this.mParallel += (STANDARD_DIFFUSION_CELL_PARALLEL << tier); // 1 << 0 = 1, 1 << 1 = 2, 1 << 2 = 4, 1 << 3 = 8
         this.pTier = Math.max(this.pTier, tier);
     }
 
@@ -320,11 +329,12 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         // 102.4/s 204.8/s 409.6/s 819.2/s
         // Output of each primal (boosted, overclocked UMV) [T1][T2][T3][T4]
         // 2560/s 5120/s 10240/s 20480/s
-        this.primalAspectsGenerated = (int) (parallel * 16 * (1.0 + this.nodeIncrease * 0.01));
+        this.primalAspectsGenerated = (int) (parallel * STANDARD_PRIMAL_ASPECTS_PER_PARALLEL
+            * (1.0 + (this.nodeIncrease * 0.01 * STANDARD_BOOST_MULTIPLIER)));
 
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
-            .setDuration(SECOND_IN_TICKS * RECIPE_DURATION)
+            .setDuration(SECOND_IN_TICKS * STANDARD_RECIPE_DURATION)
             .setDurationDecreasePerOC(2)
             .calculate();
 
@@ -335,7 +345,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         // This keeps the progress time to a minimum of 1 second without decreasing the output.
         if (mMaxProgresstime < SECOND_IN_TICKS) {
             // This caps out at UMV where it 1 ticks and any further overclocking is irrelevant
-            this.primalAspectsGenerated = (int) ((double) SECOND_IN_TICKS / mMaxProgresstime
+            this.primalAspectsGenerated = (int) (((double) SECOND_IN_TICKS / mMaxProgresstime)
                 * this.primalAspectsGenerated);
             mMaxProgresstime = SECOND_IN_TICKS;
         }
@@ -410,20 +420,23 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                 .getZCoord();
 
             // Loses 5 every post tick, Gains 10 max every post tick
-            this.nodePurificationEfficiency = Math.max(0, this.nodePurificationEfficiency - 1);
+            this.nodePurificationEfficiency = Math
+                .max(0, this.nodePurificationEfficiency - STANDARD_PURIFICATION_REDUCTION);
             if (this.nodePurificationEfficiency < 100) {
                 this.nodePurificationEfficiency = Math.min(
                     100,
                     this.nodePurificationEfficiency
-                        + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ORDER, 200) * 0.02));
+                        + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ORDER, 200) * 0.02
+                            * STANDARD_PURIFICATION_GAIN_MULTIPLIER));
             }
 
             // Loses 5 every post tick, Gains 7 max every post tick
-            this.nodeIncrease = Math.max(0, this.nodeIncrease - 1);
+            this.nodeIncrease = Math.max(0, this.nodeIncrease - STANDARD_BOOST_REDUCTION);
             if (this.nodeIncrease < 100) {
                 this.nodeIncrease = Math.min(
                     100,
-                    this.nodeIncrease + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125) * 0.024));
+                    this.nodeIncrease + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125) * 0.024
+                        * STANDARD_BOOST_GAIN_MULTIPLIER));
             }
         }
     }
@@ -492,23 +505,23 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_02"))
             // #tr Tooltip_PrimordialDisjunctus_03
             // # parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
-            // #zh_CN 并行 = 若干 2^扩散单元等级 之和 ,最高为128并行
+            // #zh_CN 并行 = 扩散单元等级的总和 ( 新手=1，学徒=2，大师=4，宗师=8 )
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_03"))
             // #tr Tooltip_PrimordialDisjunctus_04
             // # Min voltage 1A EV, standard overclocks
-            // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
+            // #zh_CN 最低使用1A EV, 使用标准超频 ( 即每提升一级电压加工时间减半 )
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_04"))
             // #tr Tooltip_PrimordialDisjunctus_05
             // # With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
-            // #zh_CN 借助科技的力量我们不再需要火vis和水vis来作为启动条件
+            // #zh_CN 借助科技的力量, 此过程仅需能量, 在1A EV电压下每20秒每个并行产出16单位基础源质.
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_05"))
             // #tr Tooltip_PrimordialDisjunctus_06
             // # Providing Ordo centi-vis will reduce the flux produced to nothing, flux produced is not affected by muffler tier, while providing Perditio centi-vis will boost primal aspect production up to 200%
-            // #zh_CN 秩序vis可以遏制咒波的产生,另外咒波产生与消声仓等级无关,而混沌vis会加速机器速度,最高200%
+            // #zh_CN 提供秩序vis可将咒波污染降为零(与消声仓等级无关),提供混沌vis可提升源质产量最高200%
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06"))
             // #tr Tooltip_PrimordialDisjunctus_07
             // # This machine maxes out at 1 UMV amp anything more will just void power.
-            // #zh_CN 请不要给予过高的电压,这台机器的速度真的很快,否则注意你的存储
+            // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_07"))
             .addSeparator()
             .addInfo(StructureTooComplex)
