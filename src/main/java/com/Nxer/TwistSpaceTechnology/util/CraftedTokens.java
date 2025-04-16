@@ -8,7 +8,6 @@ public enum CraftedTokens {
 
     Aditya("Aditya & Hive Run", EnumChatFormatting.LIGHT_PURPLE);
 
-
     private final String name;
     private final EnumChatFormatting color;
 
@@ -25,7 +24,8 @@ public enum CraftedTokens {
         ArrayList<String> list = new ArrayList<>();
         for (CraftedTokens craftedTokens : CraftedTokens.values()) {
             list.add(
-                "    " + craftedTokens.getId() + ": " + craftedTokens.color + craftedTokens.name + EnumChatFormatting.RESET);
+                "    " + craftedTokens
+                    .getId() + ": " + craftedTokens.color + craftedTokens.name + EnumChatFormatting.RESET);
         }
         return list;
     }
