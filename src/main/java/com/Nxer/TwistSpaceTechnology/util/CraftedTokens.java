@@ -6,23 +6,26 @@ import net.minecraft.util.EnumChatFormatting;
 
 public enum CraftedTokens {
 
-    Aditya(1, "Aditya & Hive Run", EnumChatFormatting.GOLD);
+    Aditya("Aditya & Hive Run", EnumChatFormatting.LIGHT_PURPLE);
 
-    public final int id;
-    public final String name;
-    public final EnumChatFormatting color;
 
-    CraftedTokens(int id, String name, EnumChatFormatting color) {
-        this.id = id;
+    private final String name;
+    private final EnumChatFormatting color;
+
+    CraftedTokens(String name, EnumChatFormatting color) {
         this.name = name;
         this.color = color;
+    }
+
+    public int getId() {
+        return this.ordinal() + 1;
     }
 
     public static ArrayList<String> getAllName() {
         ArrayList<String> list = new ArrayList<>();
         for (CraftedTokens craftedTokens : CraftedTokens.values()) {
             list.add(
-                "    " + craftedTokens.id + ": " + craftedTokens.color + craftedTokens.name + EnumChatFormatting.RESET);
+                "    " + craftedTokens.getId() + ": " + craftedTokens.color + craftedTokens.name + EnumChatFormatting.RESET);
         }
         return list;
     }
