@@ -9,7 +9,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 
+import com.Nxer.TwistSpaceTechnology.util.CraftedTokens;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
@@ -62,6 +64,11 @@ public class ItemProofOfHeroes extends Item {
                     // # {\LIGHT_PURPLE}Go touch some grass
                     // #zh_CN {\LIGHT_PURPLE}Go touch some grass
                     TextEnums.tr("tooltips.ProofOfGods.line2"));
+                toolTip.add("");
+                // #tr tooltips.ProofOfGods.line3
+                // # The first people to make a TwistToken
+                toolTip.add(EnumChatFormatting.WHITE + TextEnums.tr("tooltips.ProofOfGods.line3"));
+                toolTip.addAll(CraftedTokens.getAllName());
             } else {
                 toolTip.add(
                     // #tr tooltips.ProofOfGods.line1

@@ -2093,3 +2093,4 @@ tc.research_text.SKYPIERCER_TOWER=源质自由!
 tc.research_text.SKYPIERCER_TOWER.1=§l关于源质/要素等级和机器时间计算的说明:§r<BR><BR>§l要素等级:<BR>§r初等要素为1级。复合要素等级取决于组成要素的等级:  如果组成要素同级，则等级+1；  否则取较高者。<BR><BR>§l加工时间公式:<BR>§r等级g的要素需2^g秒。
 tc.research_text.SKYPIERCER_TOWER.2=§l关于递归合成的说明:§r<BR><BR>若复合要素完全由初等要素递归合成,每层需要逐步合成:  先合成两个组成要素;  若组成要素仍为复合要素, 则继续递归直到初等要素。<BR><BR>由于组成要素的合成时间为复合要素的一半,所以每层合成时间其实是相等的,合成深度为g–1层。<BR><BR>§l总时间 = (g–1) × 2^g 秒。<BR><BR>§l注意:<BR>§r初等要素(第1层)无法被合成,必须预先存在,否则机器无法启动。
 tc.research_text.SKYPIERCER_TOWER.3=§l例子 – 模拟时间计算:§r<BR><BR>假如你将一张纸(其实用别的也无所谓)命名为"fabrico32+auram16": 即32个工具(5级)和16个灵气(3级)<BR><BR>若仅有初等要素的情况下:§r工具: 单个(5–1) × 2^5 = 128秒 → 总的128 × 32 = 4096秒§r灵气: 单个(3–1) × 2^3 = 16秒 → 总的16 × 16 = 256秒<BR>总合成时间 = 4096 + 256 = 4352 秒<BR><BR>所以……最好多装点环。不然怎么「穿云」？<BR>
+tooltips.ProofOfGods.line3=The first people to make a TwistToken
