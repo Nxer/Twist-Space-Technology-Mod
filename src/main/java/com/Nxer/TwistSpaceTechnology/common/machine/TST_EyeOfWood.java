@@ -80,6 +80,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     private static final int STANDARD_WATER_AMOUNT = STANDARD_WATER_BUCKET * 1000;
     private static final int STANDARD_LAVA_BUCKET = ValueEnum.StandardLavaNeed_EyeOfWood;
     private static final int STANDARD_LAVA_AMOUNT = STANDARD_LAVA_BUCKET * 1000;
+    private static final int STANDARD_DIMENSION_ID = ValueEnum.StandardDimensionID_EyeOfWood;
     private static final double STANDARD_SUBSTRATE = Math
         .pow(2_000_000_000d, 1d / Math.max(STANDARD_WATER_BUCKET, STANDARD_LAVA_BUCKET));
     private int storedWater = 0;
@@ -293,7 +294,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
             World world = aBaseMetaTileEntity.getWorld();
             int dimID = world.provider.dimensionId;
 
-            if (dimID != 0) {
+            if (dimID != STANDARD_DIMENSION_ID) {
                 explodeMultiblock();
                 return;
             }

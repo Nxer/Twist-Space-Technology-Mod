@@ -1958,7 +1958,7 @@ Tooltip_AdvCircuitAssemblyLine.7=Any grate machine casing
 tile.MetaBlockCasing01.15.name=Swelegfyr Casing
 Tooltip_SwelegfyrCasing=§6Withstands the inferno!
 tile.MetaBlockCasing02.2.name=Iridium-Reinforced Neutronium Casing
-item.MetaItem01.42.name=Swelegfgr Upgrade Chip
+item.MetaItem01.42.name=Swelegfyr Upgrade Chip
 Swelegfyr.modeMsg.0=Normal Mode
 Swelegfyr.modeMsg.1=Passive Mode
 SBF.Msg.setOrClearBlaze=Place / Clear Pyrotheum
@@ -2068,11 +2068,11 @@ Tooltip_PrimordialDisjunctus_MachineType=Essentia Extractor
 Tooltip_PrimordialDisjunctus_00=Controller block for the Primordial Disjunctus
 Tooltip_PrimordialDisjunctus_01=§9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
 Tooltip_PrimordialDisjunctus_02=Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation.However,due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
-Tooltip_PrimordialDisjunctus_03=parallel = The sum of several 2^essentiaCell
-Tooltip_PrimordialDisjunctus_04=At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
-Tooltip_PrimordialDisjunctus_05=With the power of technology, we no longer need fire vis and water vis as starting conditions
-Tooltip_PrimordialDisjunctus_06=Order vis can inhibit the generation of spell waves, and its generation is independent of the silo level, while Perditio vis will accelerate the machine speed up to 200%
-Tooltip_PrimordialDisjunctus_07=Please do not give too high voltage, this machine is really fast, otherwise pay attention to your storage
+Tooltip_PrimordialDisjunctus_03=parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
+Tooltip_PrimordialDisjunctus_04=Min voltage 1A EV, standard overclocks
+Tooltip_PrimordialDisjunctus_05=With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
+Tooltip_PrimordialDisjunctus_06=Providing Ordo centi-vis will reduce the flux produced to nothing, flux produced is not affected by muffler tier, while providing Perditio centi-vis will boost primal aspect production up to 200%
+Tooltip_PrimordialDisjunctus_07=This machine maxes out at 1 UMV amp anything more will just void power.
 Tooltip_PrimordialDisjunctus_HatchBusInfo=Replace Magic mechanical blocks in any cabin
 Tooltip_SkypiercerTwoer_MachineType=Essentia Synthesizer
 Tooltip_SkypiercerTower_00=Controller block for the SkypiercerTower
@@ -2093,6 +2093,7 @@ tc.research_text.SKYPIERCER_TOWER=Eessentia free!
 tc.research_text.SKYPIERCER_TOWER.1=§lEssentia/Aspect Tier and Machine Processing Time Rules:§r<BR><BR>§lTier Assignment:<BR>§rPrimal Aspects are Tier 1. Composite Aspect tiers depend on their components:  If the components are of the same tier, the composite is one tier higher;  Otherwise, it takes the higher tier.<BR><BR>§lProcessing Time Formula:<BR>§rAn Aspect of tier g requires 2^g seconds to process.
 tc.research_text.SKYPIERCER_TOWER.2=§lRecursive Synthesis Note:§r<BR><BR>If a Composite Aspect is synthesized entirely from Primal Aspects, each layer must be built step by step:  First synthesize the two components;  If either component is also Composite, repeat recursively until reaching Primal.<BR><BR>Since each component takes half the time of the composite, each layer effectively costs the same, and the synthesis depth is g–1 layers.<BR><BR>§lTotal Time = (g–1) × 2^g seconds.<BR><BR>§lCritical:<BR>§rPrimal Aspects (Layer 1) cannot be synthesized. They must pre-exist, or the machine will fail to start.
 tc.research_text.SKYPIERCER_TOWER.3=§lExample – Simulation Cost Calculation:§r<BR><BR>Suppose you name a piece of paper (or anything else, really) "fabrico32+auram16": ig 32 Fabrico (Tier 5) and 16 Auram (Tier 3)<BR><BR>If only Primal Aspects are available:§r Fabrico: single (5–1) × 2^5 = 128s → total 128 × 32 = 4096s§r Auram: single (3–1) × 2^3 = 16s → total 16 × 16 = 256s<BR>Total synthesis time = 4096 + 256 = 4352 seconds<BR><BR>So... better install more rings. Otherwise, are you truly worthy of the name "Skypiercer"?<BR>
+tooltips.ProofOfGods.line3=The first people to make a TwistToken
 NameMeteorMiner=Meteor Miner
 Tooltip_METEOR_MINER_CONTROLLER.fortune.0=No Augment Applied
 Tooltip_METEOR_MINER_CONTROLLER.fortune.1=Fortune I

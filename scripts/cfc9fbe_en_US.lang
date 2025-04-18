@@ -135,6 +135,7 @@ tooltips.ProofOfHeroes.line1=The physical culmination of your journey has the po
 tooltips.ProofOfHeroes.line2=§dThe culmination of your journey has the power to make the gods laugh.
 tooltips.ProofOfGods.line1=Impossible final goal
 tooltips.ProofOfGods.line2=§dGo touch some grass
+tooltips.ProofOfGods.line3=The first people to make a TwistToken
 ProofOfHeroes.name=英雄の証
 ProofOfGods.name=Twist Token
 MagneticDrivePressureFormer.modeMsg.0=Mode: Extruder

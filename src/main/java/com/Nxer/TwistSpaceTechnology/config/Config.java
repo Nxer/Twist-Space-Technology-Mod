@@ -65,6 +65,7 @@ public class Config {
     public static final String ProcessingArray = "ProcessingArray";
     public static final String MegaCraftingCenter = "MegaCraftingCenter";
     public static final String SwelegfyrBlastFurnace = "SwelegfyrBlastFurnace";
+    public static final String PrimordialDisjunctus = "PrimordialDisjunctus";
     // endregion
 
     // region General
@@ -351,6 +352,7 @@ public class Config {
     public static int StandardWaterNeed_EyeOfWood = 256;
     public static int StandardLavaNeed_EyeOfWood = 256;
     public static int SecondsPerProcessing_EyeOfWood = 60;
+    public static int StandardDimensionID_EyeOfWood = 0;
 
     // endregion
 
@@ -492,14 +494,25 @@ public class Config {
     // region Swelegfyr Blast Furnace
     public static boolean Enable_HyperThermalConvector = true;
     // endregion
+
     // region Mega Crafting Center
     public static boolean Enable_MegaCraftingCenter = true;
     public static int TickEveryProcess_MegaCraftingCenter = 20;
     public static int MaxMagnification_MegaCraftingCenter = 8388608;
     // endregion
+
     // region Primordial Disjunctus
-    public static boolean Enable_PrimordialDisjunctus =true ;
+    public static boolean Enable_PrimordialDisjunctus = true;
+    public static int BaseRecipeDuration_PrimordialDisjunctus = 20;
+    public static int DiffusionCellParallel_PrimordialDisjunctus = 1;
+    public static int PrimalAspectsPerParallel_PrimordialDisjunctus = 16;
+    public static int PurificationGainMultiplier_PrimordialDisjunctus = 1;
+    public static int PurificationReduction_PrimordialDisjunctus = 1;
+    public static int BoostMultiplier_PrimordialDisjunctus = 1;
+    public static int BoostGainMultiplier_PrimordialDisjunctus = 1;
+    public static int BoostReduction_PrimordialDisjunctus = 1;
     // endregion
+
     // region Laser Meteor Miner
     public static boolean Enable_LaserMeteorMiner = true;
     //endregion
@@ -508,6 +521,7 @@ public class Config {
     public static boolean Enable_SkypiercerTower =true ;
     public static int Parallel_PerRing_SkypiercerTower = 16;
     // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -570,6 +584,7 @@ public class Config {
         StandardWaterNeed_EyeOfWood = configuration.getInt("StandardWaterNeed_EyeOfWood", EOW, StandardWaterNeed_EyeOfWood, 1, 1024, "Standard amount (in L) of Water per processing need of Eye of Wood. Type: int");
         StandardLavaNeed_EyeOfWood = configuration.getInt("StandardLavaNeed_EyeOfWood", EOW, StandardLavaNeed_EyeOfWood, 1, 1024, "Standard amount (in L) of Lava per processing need of Eye of Wood. Type: int");
         SecondsPerProcessing_EyeOfWood = configuration.getInt("SecondsPerProcessing_EyeOfWood", EOW, SecondsPerProcessing_EyeOfWood, 1, 3600, "How many seconds per processing cost of Eye of Wood. Type: int");
+        StandardDimensionID_EyeOfWood = configuration.getInt("StandardDimensionID_EyeOfWood", EOW, StandardDimensionID_EyeOfWood, -9999, 9999, "Standard dimension the Eye of Wood is allowed in. Default 0 - Overworld. Type: int");
 
         // endregion
 
@@ -877,6 +892,17 @@ public class Config {
         ManufacturingCenter_SpeedBonus_Tier = configuration.getFloat("Speed Bonus Tier", "ManufacturingCenter", ManufacturingCenter_SpeedBonus_Tier, 0.0F, Float.MAX_VALUE, "The Speed Bonus for each tier over the lowest tier (not included)");
         ManufacturingCenter_PowerReduction = configuration.getFloat("Power Reduction", "ManufacturingCenter", ManufacturingCenter_PowerReduction, 0.0F, Float.MAX_VALUE, "The Power Reduction for each tier over the lowest tier (not included)");
         ManufacturingCenter_MaxParallelModifier = configuration.getInt("Max Parallel Modifier", "ManufacturingCenter", ManufacturingCenter_MaxParallelModifier, 1, Integer.MAX_VALUE, "The maximum parallel modifier");
+        // endregion
+
+        // region PrimordialDisjunctus
+        BaseRecipeDuration_PrimordialDisjunctus = configuration.getInt("BaseRecipeDuration_PrimordialDisjunctus", PrimordialDisjunctus, BaseRecipeDuration_PrimordialDisjunctus, 1, 2147483646, "Base recipe time to generate primordial aspects. At 1A EV with 20s base recipe time this machine stops scaling at 1A UMV due to one ticking. Type: int");;
+        DiffusionCellParallel_PrimordialDisjunctus = configuration.getInt("DiffusionCellParallel_PrimordialDisjunctus", PrimordialDisjunctus, DiffusionCellParallel_PrimordialDisjunctus, 1, 512, "Base amount of parallels per diffusion cell starting at novice tier this value doubles every diffusion cell tier. Type: int");;
+        PrimalAspectsPerParallel_PrimordialDisjunctus = configuration.getInt("PrimalAspectsPerParallel_PrimordialDisjunctus", PrimordialDisjunctus, PrimalAspectsPerParallel_PrimordialDisjunctus, 1, 16384, "Base amount of primordial aspects generated per parallel. Type: int");
+        PurificationGainMultiplier_PrimordialDisjunctus = configuration.getInt("PurificationGainMultiplier_PrimordialDisjunctus", PrimordialDisjunctus, PurificationGainMultiplier_PrimordialDisjunctus, 0, 100, "Amplifies the amount of purification efficiency gain per cycle, 0 = no gain. Type: int");
+        PurificationReduction_PrimordialDisjunctus = configuration.getInt("PurificationReduction_PrimordialDisjunctus", PrimordialDisjunctus, PurificationReduction_PrimordialDisjunctus, 0, 100, "The amount of purification efficiency degrades per cycle, 0 = no degradation. Type: int");
+        BoostMultiplier_PrimordialDisjunctus = configuration.getInt("BoostMultiplier_PrimordialDisjunctus", PrimordialDisjunctus, BoostMultiplier_PrimordialDisjunctus, 0, 16, "Amplifies the primordial aspect output boost, 0 = no increase in primordial aspect from boost. Type: int");
+        BoostGainMultiplier_PrimordialDisjunctus = configuration.getInt("BoostGainMultiplier_PrimordialDisjunctus", PrimordialDisjunctus, BoostGainMultiplier_PrimordialDisjunctus, 0, 100, "Amplifies the amount of boost gain per cycle, 0 = no gain. Type: int");
+        BoostReduction_PrimordialDisjunctus = configuration.getInt("BoostReduction_PrimordialDisjunctus", PrimordialDisjunctus, BoostReduction_PrimordialDisjunctus, 0, 100, "The amount of boost degrades per cycle, 0 = no degradation. Type: int");
         // endregion
 
         TST_CleanRoom.loadConfig(configuration);

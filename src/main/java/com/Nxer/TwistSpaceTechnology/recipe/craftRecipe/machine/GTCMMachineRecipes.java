@@ -3288,7 +3288,7 @@ public class GTCMMachineRecipes {
                     MaterialsAlloy.ABYSSAL.getFluidStack(144 * 64),
                     new FluidStack(TFFluids.fluidPyrotheum, 1000 * 4096)
                 },
-                GTCMItemList.SwelegfgrUpgradeChip.get(1),
+                GTCMItemList.SwelegfyrUpgradeChip.get(1),
                 20 * 320,
                 (int) RECIPE_UEV
             );

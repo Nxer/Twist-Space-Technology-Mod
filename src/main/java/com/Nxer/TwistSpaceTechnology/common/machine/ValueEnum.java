@@ -260,6 +260,7 @@ public final class ValueEnum {
     public static final int StandardWaterNeed_EyeOfWood = Config.StandardWaterNeed_EyeOfWood;
     public static final int StandardLavaNeed_EyeOfWood = Config.StandardLavaNeed_EyeOfWood;
     public static final int TicksPerProcessing_EyeOfWood = 20 * Config.SecondsPerProcessing_EyeOfWood;
+    public static final int StandardDimensionID_EyeOfWood = Config.StandardDimensionID_EyeOfWood;
     // endregion
 
     // region Space Apiary
@@ -287,4 +288,16 @@ public final class ValueEnum {
     public static boolean EnablePerfectOverclock_IncompactCyclotron = Config.EnablePerfectOverclock_IncompactCyclotron;
     public static float SpeedBouns_IncompactCyclotron = Config.SpeedBonus_IncompactCyclotron;
     public static int MaxParallel_IncompactCyclotron = Config.MaxParallel_IncompactCyclotron;
+    // end region
+
+    // region PrimordialDisjunctus
+    public static int BaseRecipeDuration_PrimordialDisjunctus = Config.BaseRecipeDuration_PrimordialDisjunctus;
+    public static int DiffusionCellParallel_PrimordialDisjunctus = Config.DiffusionCellParallel_PrimordialDisjunctus;
+    public static int PrimalAspectsPerParallel_PrimordialDisjunctus = Config.PrimalAspectsPerParallel_PrimordialDisjunctus;
+    public static int PurificationGainMultiplier_PrimordialDisjunctus = Config.PurificationGainMultiplier_PrimordialDisjunctus;
+    public static int PurificationReduction_PrimordialDisjunctus = Config.PurificationReduction_PrimordialDisjunctus;
+    public static int BoostMultiplier_PrimordialDisjunctus = Config.BoostMultiplier_PrimordialDisjunctus;
+    public static int BoostGainMultiplier_PrimordialDisjunctus = Config.BoostGainMultiplier_PrimordialDisjunctus;
+    public static int BoostReduction_PrimordialDisjunctus = Config.BoostReduction_PrimordialDisjunctus;
+    // end region
 }

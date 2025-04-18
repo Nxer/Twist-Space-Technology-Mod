@@ -363,9 +363,9 @@ public class ItemRegister {
         // #zh_CN 优秀的储能芯片
         GTCMItemList.PerfectEngravedLaptronChip.set(MetaItem01.registerVariantWithTooltips(40,new String[]{ tr("PerfectEngravedLaptronChip.tooltips.01")}));
         // #tr item.MetaItem01.42.name
-        // # Swelegfgr Upgrade Chip
+        // # Swelegfyr Upgrade Chip
         // #zh_CN 熯焱高炉升级芯片
-        GTCMItemList.SwelegfgrUpgradeChip.set(MetaItem01.registerVariant(42));
+        GTCMItemList.SwelegfyrUpgradeChip.set(MetaItem01.registerVariant(42));
         // #tr item.MetaItem01.43.name
         // # Borophene Foil
         // #zh_CN 硼烯箔
