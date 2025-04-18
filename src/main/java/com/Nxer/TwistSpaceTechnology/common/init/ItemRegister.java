@@ -1017,6 +1017,17 @@ public class ItemRegister {
         GTCMItemList.Yamato.set(new ItemStack(TstItems.Yamato, 1));
 
         GTCMItemList.ActualPattern.set(new ItemStack(TstItems.ActualPattern, 1));
+
+        // Region Meteor Miner
+        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
+                433,
+            new String[]{"Meteor Miner Tier 1 Schematic"},
+            new String[]{"Schematic needed to enable the Tier 1 Meteor Miner"}));
+        GTCMItemList.MeteorMinerSchematic2.set(
+            MetaItem01.registerVariantWithTooltips(
+                434,
+                new String[]{"Meteor Miner Tier 2 Schematic"},
+                    new String[]{"Schematic needed to enable the Tier 2 Meteor Miner"}));
     }
 
     // spotless:on

@@ -13,6 +13,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationSt
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
+import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
@@ -84,6 +85,7 @@ public class BlockRegister {
         GameRegistry.registerTileEntity(TileStar.class, "StarRender");
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
         GameRegistry.registerTileEntity(TileArcaneHole.class, "TileArcaneHole");
+        GameRegistry.registerTileEntity(TileEntityLaserBeacon.class, "MeteorMinerRenderer");
 
         GameRegistry.registerBlock(TstBlocks.TimeBendingSpeedRune, "TimeBendingSpeedRune");
     }

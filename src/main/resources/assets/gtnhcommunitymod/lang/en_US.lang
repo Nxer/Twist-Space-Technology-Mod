@@ -2093,3 +2093,15 @@ tc.research_text.SKYPIERCER_TOWER=Eessentia free!
 tc.research_text.SKYPIERCER_TOWER.1=§lEssentia/Aspect Tier and Machine Processing Time Rules:§r<BR><BR>§lTier Assignment:<BR>§rPrimal Aspects are Tier 1. Composite Aspect tiers depend on their components:  If the components are of the same tier, the composite is one tier higher;  Otherwise, it takes the higher tier.<BR><BR>§lProcessing Time Formula:<BR>§rAn Aspect of tier g requires 2^g seconds to process.
 tc.research_text.SKYPIERCER_TOWER.2=§lRecursive Synthesis Note:§r<BR><BR>If a Composite Aspect is synthesized entirely from Primal Aspects, each layer must be built step by step:  First synthesize the two components;  If either component is also Composite, repeat recursively until reaching Primal.<BR><BR>Since each component takes half the time of the composite, each layer effectively costs the same, and the synthesis depth is g–1 layers.<BR><BR>§lTotal Time = (g–1) × 2^g seconds.<BR><BR>§lCritical:<BR>§rPrimal Aspects (Layer 1) cannot be synthesized. They must pre-exist, or the machine will fail to start.
 tc.research_text.SKYPIERCER_TOWER.3=§lExample – Simulation Cost Calculation:§r<BR><BR>Suppose you name a piece of paper (or anything else, really) "fabrico32+auram16": ig 32 Fabrico (Tier 5) and 16 Auram (Tier 3)<BR><BR>If only Primal Aspects are available:§r Fabrico: single (5–1) × 2^5 = 128s → total 128 × 32 = 4096s§r Auram: single (3–1) × 2^3 = 16s → total 16 × 16 = 256s<BR>Total synthesis time = 4096 + 256 = 4352 seconds<BR><BR>So... better install more rings. Otherwise, are you truly worthy of the name "Skypiercer"?<BR>
+NameMeteorMiner=Meteor Miner
+Tooltip_METEOR_MINER_CONTROLLER.fortune.0=No Augment Applied
+Tooltip_METEOR_MINER_CONTROLLER.fortune.1=Fortune I
+Tooltip_METEOR_MINER_CONTROLLER.fortune.2=Fortune II
+Tooltip_METEOR_MINER_CONTROLLER.fortune.3=Fortune III
+Tooltip_METEOR_MINER_CONTROLLER.tier.0=Incomplete Structure
+Tooltip_METEOR_MINER_CONTROLLER.tier.1=1
+Tooltip_METEOR_MINER_CONTROLLER.tier.2=2
+GT5U.gui.text.meteor_mining=§dCurrently Mining!
+GT5U.gui.text.meteor_waiting=§dWaiting for a Meteor...
+GT5U.gui.text.meteor_reset=§dReset completed!
+GT5U.gui.text.missing_schematic=§dMissing Schematic.

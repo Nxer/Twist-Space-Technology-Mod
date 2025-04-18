@@ -30,6 +30,9 @@ public enum TextEnums {
     // #zh_CN 作者：{\GOLD}Taskeren（楓）
     Author_Taskeren("Author_Taskeren"),
 
+    //
+    Author_Totto("Author_Totto"),
+
     // #tr AddByTwistSpaceTechnology
     // # Added by {\GREEN}Twist Space Technology{\GRAY}
     // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加

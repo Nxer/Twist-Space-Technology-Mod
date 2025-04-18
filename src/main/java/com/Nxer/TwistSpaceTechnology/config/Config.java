@@ -500,7 +500,9 @@ public class Config {
     // region Primordial Disjunctus
     public static boolean Enable_PrimordialDisjunctus =true ;
     // endregion
-
+    // region Laser Meteor Miner
+    public static boolean Enable_LaserMeteorMiner = true;
+    //endregion
 
     // region SkypiercerTower
     public static boolean Enable_SkypiercerTower =true ;
@@ -541,6 +543,7 @@ public class Config {
         // region Processing Array
         Enable_ProcessingArray = configuration.getBoolean("Enable_ProcessingArray", ProcessingArray, Enable_ProcessingArray, "Enable Processing Array System.");
         // endregion
+
 
         // region MicroSpaceTimeFabricatorioRecipes
         Parallel_MicroSpaceTimeFabricatorio = configuration.getInt("Parallel_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Parallel_MicroSpaceTimeFabricatorio, 1, 2000000000, "Max parallel of Micro SpaceTime Fabricatorio.");
