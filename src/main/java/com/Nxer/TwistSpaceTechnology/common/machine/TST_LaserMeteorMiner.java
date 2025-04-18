@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -29,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.google.common.collect.ImmutableMap;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -765,11 +765,11 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
             (this.multiTier > 0 ? "Current Tier: " : "") + EnumChatFormatting.WHITE
-                + StatCollector.translateToLocal("GT5U.METEOR_MINER_CONTROLLER.tier." + tag.getInteger("tier"))
+                + TextEnums.tr("GT5U.METEOR_MINER_CONTROLLER.tier." + tag.getInteger("tier"))
                 + EnumChatFormatting.RESET);
         currentTip.add(
             "Augment: " + EnumChatFormatting.WHITE
-                + StatCollector.translateToLocal("GT5U.METEOR_MINER_CONTROLLER.fortune." + tag.getInteger("fortune"))
+                + TextEnums.tr("GT5U.METEOR_MINER_CONTROLLER.fortune." + tag.getInteger("fortune"))
                 + EnumChatFormatting.RESET);
     }
 }

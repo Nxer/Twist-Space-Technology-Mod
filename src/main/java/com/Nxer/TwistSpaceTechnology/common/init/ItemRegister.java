@@ -1021,12 +1021,10 @@ public class ItemRegister {
         // Region Meteor Miner
         GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
                 433,
-            new String[]{"Meteor Miner Tier 1 Schematic"},
             new String[]{"Schematic needed to enable the Tier 1 Meteor Miner"}));
         GTCMItemList.MeteorMinerSchematic2.set(
             MetaItem01.registerVariantWithTooltips(
                 434,
-                new String[]{"Meteor Miner Tier 2 Schematic"},
                     new String[]{"Schematic needed to enable the Tier 2 Meteor Miner"}));
     }
 
