@@ -306,9 +306,9 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         tt.addMachineType("Miner")
             .addInfo("Controller Block for the Meteor Miner!")
             .addInfo(
-                "To work properly the center of the meteor has to be 32 blocks above the highest block of the multi.")
+                "To work properly the center of the meteor has to be 48 blocks above the highest block of the multi.")
             .addInfo(
-                "The laser will mine in a radius of up to 30 blocks in each direction from the center of the meteor.")
+                "The laser will mine in a radius of up to 40 blocks in each direction from the center of the meteor.")
             .addInfo("All the chunks involved must be chunkloaded.")
             .addInfo("The laser will automatically set its radius based on the meteorite,")
             .addInfo("if it doesn't find any it will wait for a meteor to spawn, considering the block")
@@ -723,10 +723,11 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .setAmperage(getMaxInputAmps())
             .setRecipeEUt(128)
             .setDuration(12 * 20)
-            .setAmperageOC(mEnergyHatches.size() != 1).enablePerfectOC();
+            .setAmperageOC(mEnergyHatches.size() != 1)
+            .enablePerfectOC();
         calculator.calculate();
         this.mMaxProgresstime = (isWaiting) ? ticksPerSecond * standardRecipeDuration : calculator.getDuration();
-        this.mEUt = (int) (calculator.getConsumption() / ((isWaiting) ? 8 : 1));
+        this.mEUt = (int) (isWaiting ? 0 : -calculator.getConsumption());
     }
 
     private boolean isEnergyEnough() {
