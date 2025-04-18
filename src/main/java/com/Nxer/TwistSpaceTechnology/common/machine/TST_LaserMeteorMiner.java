@@ -83,12 +83,15 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_GLOW = new Textures.BlockIcons.CustomIcon(
         "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
 
+    private final int ticksPerSecond = 20;
+    private final int standardRecipeDuration = 10;
+    private final int distanceFromMeteor = 48;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_TIER2 = "tier2";
     private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION = null;
     protected TileEntityLaserBeacon renderer;
     private static final int BASE_CASING_COUNT = 469;
-    private static final int MAX_RADIUS = 30;
+    private static final int MAX_RADIUS = 40;
     private int currentRadius = MAX_RADIUS;
     private int xDrill, yDrill, zDrill;
     private int xStart, yStart, zStart;
@@ -522,7 +525,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
         if (!hasFinished) {
             renderer.setShouldRender(true);
-            renderer.setRange((double) (this.currentRadius + 32.5 + this.getLaserToEndHeight()));
+            renderer.setRange((double) (this.currentRadius + distanceFromMeteor + 0.5 + this.getLaserToEndHeight()));
             this.setFortuneTier();
             this.startMining(this.multiTier);
             mOutputItems = res.toArray(new ItemStack[0]);
@@ -675,7 +678,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 + getBaseMetaTileEntity().getXCoord();
             zStart = getBaseMetaTileEntity().getZCoord();
         }
-        yStart = (this.multiTier == 1 ? 45 : 47) + getBaseMetaTileEntity().getYCoord();
+        yStart = distanceFromMeteor + (this.multiTier == 1 ? 13 : 15) + getBaseMetaTileEntity().getYCoord();
     }
 
     private void setReady() {
@@ -720,9 +723,9 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .setAmperage(getMaxInputAmps())
             .setRecipeEUt(128)
             .setDuration(12 * 20)
-            .setAmperageOC(mEnergyHatches.size() != 1);
+            .setAmperageOC(mEnergyHatches.size() != 1).enablePerfectOC();
         calculator.calculate();
-        this.mMaxProgresstime = (isWaiting) ? 200 : calculator.getDuration();
+        this.mMaxProgresstime = (isWaiting) ? ticksPerSecond * standardRecipeDuration : calculator.getDuration();
         this.mEUt = (int) (calculator.getConsumption() / ((isWaiting) ? 8 : 1));
     }
 
@@ -765,11 +768,11 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
             (this.multiTier > 0 ? "Current Tier: " : "") + EnumChatFormatting.WHITE
-                + TextEnums.tr("GT5U.METEOR_MINER_CONTROLLER.tier." + tag.getInteger("tier"))
+                + TextEnums.tr("Tooltip_METEOR_MINER_CONTROLLER.tier." + tag.getInteger("tier"))
                 + EnumChatFormatting.RESET);
         currentTip.add(
             "Augment: " + EnumChatFormatting.WHITE
-                + TextEnums.tr("GT5U.METEOR_MINER_CONTROLLER.fortune." + tag.getInteger("fortune"))
+                + TextEnums.tr("Tooltip_METEOR_MINER_CONTROLLER.fortune." + tag.getInteger("fortune"))
                 + EnumChatFormatting.RESET);
     }
 }
