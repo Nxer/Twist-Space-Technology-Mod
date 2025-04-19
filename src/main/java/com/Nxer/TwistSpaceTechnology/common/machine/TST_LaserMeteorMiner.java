@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.sLaserBeaconRender;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Totto;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Mod_TwistSpaceTechnology;
@@ -159,7 +159,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 .addElement('D', ofFrame(Materials.StainlessSteel))
                 .addElement('E', ofBlock(ModBlocks.blockSpecialMultiCasings, 6)) // Structural Solar Casings
                 .addElement('F', ofBlock(ModBlocks.blockSpecialMultiCasings, 8)) // Thermally Insulated Casing
-                .addElement('G', ofBlock(sLaserBeaconRender, 0))
+                .addElement('G', ofBlock(LaserBeaconRender, 0))
                 .addElement(
                     'H',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)

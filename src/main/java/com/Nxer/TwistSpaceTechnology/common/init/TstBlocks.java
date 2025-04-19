@@ -59,5 +59,5 @@ public class TstBlocks {
 
     public static final BlockMultiUseCore MultiUseCore = new BlockMultiUseCore();
 
-    public static Block sLaserBeaconRender = new BlockLaserBeacon();
+    public static Block LaserBeaconRender = new BlockLaserBeacon();
 }
