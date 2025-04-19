@@ -1,13 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.sLaserBeaconRender;
+import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Totto;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Mod_TwistSpaceTechnology;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.*;
+import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
@@ -84,15 +85,12 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_GLOW = new Textures.BlockIcons.CustomIcon(
         "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
 
-    private final int ticksPerSecond = 20;
-    private final int standardRecipeDuration = 10;
-    private final int distanceFromMeteor = 48;
+    private static final int distanceFromMeteor = 48;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_TIER2 = "tier2";
-    private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION = null;
-    protected TileEntityLaserBeacon renderer;
-    private static final int BASE_CASING_COUNT = 469;
     private static final int MAX_RADIUS = 40;
+    private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION;
+    protected TileEntityLaserBeacon renderer;
     private int currentRadius = MAX_RADIUS;
     private int xDrill, yDrill, zDrill;
     private int xStart, yStart, zStart;
@@ -167,20 +165,14 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(TAE.getIndexFromPage(0, 10))
                         .dot(1)
-                        .buildAndChain(
-                            onElementPass(
-                                TST_LaserMeteorMiner::onCasingAdded,
-                                ofBlock(ModBlocks.blockSpecialMultiCasings, 6))))
+                        .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'I',
                     buildHatchAdder(TST_LaserMeteorMiner.class)
                         .atLeast(ImmutableMap.of(InputBus.withAdder(TST_LaserMeteorMiner::addInjector), 1))
                         .casingIndex(TAE.getIndexFromPage(1, 10))
                         .dot(2)
-                        .buildAndChain(
-                            onElementPass(
-                                TST_LaserMeteorMiner::onCasingAdded,
-                                ofBlock(ModBlocks.blockSpecialMultiCasings, 6))))
+                        .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement('c', ofBlock(GregTechAPI.sBlockCasings4, 7)) // Fusion Coil Block
                 .addElement('d', ofBlock(GregTechAPI.sBlockCasings8, 2)) // Mining Neutronium Casing
                 .addElement('e', ofBlock(GregTechAPI.sBlockCasings8, 3)) // Mining Black Plutonium Casing
@@ -192,8 +184,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                         .dot(3)
-                        .buildAndChain(
-                            onElementPass(TST_LaserMeteorMiner::onCasingAdded, ofBlock(GregTechAPI.sBlockCasings8, 2))))
+                        .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 2)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -213,15 +204,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         super(aName);
     }
 
-    protected int aCasingAmount;
-
-    @Override
-    public void clearHatches() {
-        super.clearHatches();
-
-        aCasingAmount = 0;
-    }
-
     @Override
     public void onDisableWorking() {
         if (renderer != null) renderer.setShouldRender(false);
@@ -232,10 +214,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     public void onBlockDestroyed() {
         if (renderer != null) renderer.setShouldRender(false);
         super.onBlockDestroyed();
-    }
-
-    private void onCasingAdded() {
-        aCasingAmount++;
     }
 
     private boolean addInjector(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
@@ -339,7 +317,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .addInfo(tr("TST_LaserMeteorMiner_tooltips_07"))
             // #tr TST_LaserMeteorMiner_tooltips_08
             // # The reset button will restart the machine without optimizing the radius.
-            // #zh_CN 点击刷新按钮将重启机器, 并且不进行半径适配优化.
+            // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
             .addInfo(tr("TST_LaserMeteorMiner_tooltips_08"))
             // #tr TST_LaserMeteorMiner_tooltips_09
             // # {\RED}{\BOLD} TIER I
@@ -451,7 +429,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        aCasingAmount = 0;
         this.multiTier = 0;
         if (aStack != null) {
             if (checkPiece(STRUCTURE_PIECE_MAIN, 9, 13, 7)) this.multiTier = getMultiTier(aStack);
@@ -814,12 +791,13 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
         OverclockCalculator calculator = new OverclockCalculator().setEUt(getAverageInputVoltage())
             .setAmperage(getMaxInputAmps())
-            .setRecipeEUt(128)
-            .setDuration(12 * 20)
+            .setRecipeEUt(RECIPE_MV)
+            .setDuration(StandardRecipeDuration_Second_LaserMeteorMiner * 20)
             .setAmperageOC(mEnergyHatches.size() != 1)
             .enablePerfectOC();
         calculator.calculate();
-        this.mMaxProgresstime = (isWaiting) ? ticksPerSecond * standardRecipeDuration : calculator.getDuration();
+        this.mMaxProgresstime = (isWaiting) ? 20 * StandardRecipeDuration_Second_LaserMeteorMiner
+            : calculator.getDuration();
         this.mEUt = (int) (isWaiting ? 0 : -calculator.getConsumption());
     }
 
@@ -844,7 +822,11 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                         return new IDrawable[] { GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_CYCLIC };
                     })
                 .setPos(new Pos2d(174, 112))
+                .addTooltip(tr("TST_LaserMeteorMiner.button.reset"))
                 .setSize(16, 16));
+        // #tr TST_LaserMeteorMiner.button.reset
+        // # Reset machine
+        // #zh_CN 重启机器
     }
 
     @Override
