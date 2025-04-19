@@ -381,6 +381,10 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             // # The reset button will restart the machine without optimizing the radius.
             // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
             .addInfo(tr("TST_LaserMeteorMiner_tooltips_08"))
+            // #tr TST_LaserMeteorMiner_tooltips_needSchematic
+            // # Machine need Meteor Miner Schematic put in controller slot to run.
+            // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_needSchematic"))
             // #tr TST_LaserMeteorMiner_tooltips_09
             // # {\RED}{\BOLD} TIER I
             // #zh_CN {\RED}{\BOLD} 等级 I
@@ -531,6 +535,11 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
         return false;
     }
 

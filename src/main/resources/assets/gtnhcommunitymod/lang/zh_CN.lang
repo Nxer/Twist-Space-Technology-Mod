@@ -2142,3 +2142,4 @@ laserbeacontooltip=用高电流产生高精度激光.
 TST_LaserMeteorMiner_message_screwdriverRightClick_off=渲染特效关闭
 TST_LaserMeteorMiner_message_screwdriverRightClick_on=渲染特效开启
 TST_LaserMeteorMiner.button.reset=重启机器
+TST_LaserMeteorMiner_tooltips_needSchematic=机器需要在控制器方块内放置陨星采矿场设计图才可运行.
