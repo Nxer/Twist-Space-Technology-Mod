@@ -576,6 +576,9 @@ public final class MachineLoader {
         }
 
         if (Config.Enable_LaserMeteorMiner) {
+            // #tr NameMeteorMiner
+            // # Laser Meteor Miner
+            // #zh_CN 激光陨星采矿场
             GTCMItemList.MeteorMiner
                 .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TextEnums.tr("NameMeteorMiner")));
         }
