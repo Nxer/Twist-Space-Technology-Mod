@@ -182,6 +182,9 @@ public enum GTCMItemList {
     UmvFlask,
     UxvFlask,
 
+    MeteorMinerSchematic1,
+    MeteorMinerSchematic2,
+
     // endregion
 
     // region Blocks
@@ -222,6 +225,7 @@ public enum GTCMItemList {
     ReinforcedIridiumAlloyCasing,
     BoropheneBasedNanowireCompositeThermalConductiveCasing,
     NeutroniumPipeCasing,
+    Laser_Beacon,
     // endregion
 
     // region Machines
@@ -287,6 +291,7 @@ public enum GTCMItemList {
     AdvCircuitAssemblyLine,
     SwelegfyrBlastFurnace,
     HyperThermalConvector,
+    MeteorMiner,
     // endregion
 
     // region Modularized Machines

@@ -66,6 +66,7 @@ public class Config {
     public static final String MegaCraftingCenter = "MegaCraftingCenter";
     public static final String SwelegfyrBlastFurnace = "SwelegfyrBlastFurnace";
     public static final String PrimordialDisjunctus = "PrimordialDisjunctus";
+    public static final String LaserMeteorMiner = "LaserMeteorMiner";
     // endregion
 
     // region General
@@ -513,6 +514,11 @@ public class Config {
     public static int BoostReduction_PrimordialDisjunctus = 1;
     // endregion
 
+    // region Laser Meteor Miner
+    public static boolean Enable_LaserMeteorMiner = true;
+    public static int StandardRecipeDuration_Second_LaserMeteorMiner = 10;
+    //endregion
+
     // region SkypiercerTower
     public static boolean Enable_SkypiercerTower =true ;
     public static int Parallel_PerRing_SkypiercerTower = 16;
@@ -536,6 +542,11 @@ public class Config {
         Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DTPF_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
         // endregion
 
+        // region LaserMeteorMiner
+        Enable_LaserMeteorMiner = configuration.getBoolean("Enable_LaserMeteorMiner", LaserMeteorMiner, Enable_LaserMeteorMiner, "Enable Laser Meteor Miner.");
+        StandardRecipeDuration_Second_LaserMeteorMiner = configuration.getInt("StandardRecipeDuration_Second_LaserMeteorMiner", LaserMeteorMiner, StandardRecipeDuration_Second_LaserMeteorMiner, 1, 64, "Standard recipe time of Laser Meteor Miner, unit second. Type: int");
+        // endregion
+
         // region SwelegfyrBlastFurnace
         Enable_SwelegfyrBlastFurnace = configuration.getBoolean("Enable_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, Enable_SwelegfyrBlastFurnace, "Enable Swelegfyr Blast Furnace.");
         SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace = (float) configuration.get("SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace", SwelegfyrBlastFurnace, SpeedMultiplier_NormalMode_SwelegfyrBlastFurnace, "Speed Multiplier in Normal Mode of Swelegfyr Blast Furnace. Type: float").getDouble();
@@ -553,6 +564,7 @@ public class Config {
         // region Processing Array
         Enable_ProcessingArray = configuration.getBoolean("Enable_ProcessingArray", ProcessingArray, Enable_ProcessingArray, "Enable Processing Array System.");
         // endregion
+
 
         // region MicroSpaceTimeFabricatorioRecipes
         Parallel_MicroSpaceTimeFabricatorio = configuration.getInt("Parallel_MicroSpaceTimeFabricatorio", MicroSpaceTimeFabricatorio, Parallel_MicroSpaceTimeFabricatorio, 1, 2000000000, "Max parallel of Micro SpaceTime Fabricatorio.");

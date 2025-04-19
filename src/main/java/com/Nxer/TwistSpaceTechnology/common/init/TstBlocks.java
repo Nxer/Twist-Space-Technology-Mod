@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockArcaneHole;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockStar;
 import com.Nxer.TwistSpaceTechnology.common.block.bloodMagic.BlockTimeBendingSpeedRune;
@@ -57,4 +58,6 @@ public class TstBlocks {
     public static final BlockTimeBendingSpeedRune TimeBendingSpeedRune = new BlockTimeBendingSpeedRune();
 
     public static final BlockMultiUseCore MultiUseCore = new BlockMultiUseCore();
+
+    public static Block LaserBeaconRender = new BlockLaserBeacon();
 }

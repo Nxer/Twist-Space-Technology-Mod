@@ -52,6 +52,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamForgeHammer;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_LaserMeteorMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ManufacturingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
@@ -572,6 +573,14 @@ public final class MachineLoader {
             // #zh_CN 穿云尖塔
             GTCMItemList.SkypiercerTower
                 .set(new TST_SkypiercerTower(19071, "NameSkypiercerTower", TextEnums.tr("NameSkypiercerTower")));
+        }
+
+        if (Config.Enable_LaserMeteorMiner) {
+            // #tr NameMeteorMiner
+            // # Laser Meteor Miner
+            // #zh_CN 激光陨星采矿场
+            GTCMItemList.MeteorMiner
+                .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TextEnums.tr("NameMeteorMiner")));
         }
         // endregion
 
