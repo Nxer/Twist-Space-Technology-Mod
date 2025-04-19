@@ -20,6 +20,7 @@ import java.util.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -72,6 +73,7 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.PlayerUtils;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import thaumcraft.common.config.ConfigItems;
 
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable {
@@ -493,11 +495,12 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     .getInventoryHandler()
                     .getStackInSlot(0));
             if (input.isPresent()) {
-                String name = input.get()
-                    .getDisplayName();
-                this.fortuneTier = name.equals("Terra Shatterer") ? 3
-                    : name.equals("Bound Pickaxe") ? 2 : name.equals("Pickaxe of the Core") ? 1 : 0;
-                return;
+                Item inv = input.get()
+                    .getItem();
+
+                this.fortuneTier = inv.equals(vazkii.botania.common.item.ModItems.terraPick) ? 3
+                    : inv.equals(WayofTime.alchemicalWizardry.ModItems.boundPickaxe) ? 2
+                        : inv.equals(ConfigItems.itemPickElemental) ? 1 : 0;
             }
         }
     }
