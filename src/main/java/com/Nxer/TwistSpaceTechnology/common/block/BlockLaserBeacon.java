@@ -35,7 +35,7 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
         super(Material.iron);
         setBlockName("LaserBeacon");
         this.setCreativeTab(GregTechAPI.TAB_GREGTECH);
-        // #tr LaserBeacon.name
+        // #tr tile.LaserBeacon.name
         // # Laser Inducing Beacon
         // #zh_CN 激光激发信标
         GregTechAPI.registerMachineBlock(this, -1);
@@ -65,11 +65,6 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
     @Override
     public int getHarvestLevel(int aMeta) {
         return 2;
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return "LaserBeacon";
     }
 
     @Override

@@ -2142,4 +2142,3 @@ laserbeacontooltip=Produces a high precision laser from a powerful current.
 TST_LaserMeteorMiner_message_screwdriverRightClick_off=Rendering off
 TST_LaserMeteorMiner_message_screwdriverRightClick_on=Rendering on
 TST_LaserMeteorMiner.button.reset=Reset machine
-LaserBeacon.name=Laser Inducing Beacon
