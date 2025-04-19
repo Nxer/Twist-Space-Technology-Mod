@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableMap;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -70,10 +71,8 @@ import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gregtech.common.blocks.BlockCasings8;
 import gtPlusPlus.core.block.ModBlocks;
-import gtPlusPlus.core.util.minecraft.PlayerUtils;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import thaumcraft.common.config.ConfigItems;
 
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable {
@@ -418,10 +417,18 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         stopAllRendering = !stopAllRendering;
+        // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_off
+        // # Rendering off
+        // #zh_CN 渲染特效关闭
+        // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_on
+        // # Rendering on
+        // #zh_CN 渲染特效开启
         if (stopAllRendering) {
-            PlayerUtils.messagePlayer(aPlayer, "Rendering off");
+            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_off");
             if (renderer != null) renderer.setShouldRender(false);
-        } else PlayerUtils.messagePlayer(aPlayer, "Rendering on");
+        } else {
+            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_on");
+        }
     }
 
     @Override
@@ -443,9 +450,9 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     private int getMultiTier(ItemStack inventory) {
-        if (inventory == null) return 0;
-        return inventory.isItemEqual(GTCMItemList.MeteorMinerSchematic2.get(1)) ? 2
-            : inventory.isItemEqual(GTCMItemList.MeteorMinerSchematic1.get(1)) ? 1 : 0;
+        if (inventory == null || inventory.stackSize < 1) return 0;
+        return GTCMItemList.MeteorMinerSchematic2.equal(inventory) ? 2
+            : GTCMItemList.MeteorMinerSchematic1.equal(inventory) ? 1 : 0;
     }
 
     @Override
@@ -461,10 +468,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @Override
     public boolean explodesOnComponentBreak(ItemStack aStack) {
         return false;
-    }
-
-    protected int getBaseProgressTime() {
-        return 480;
     }
 
     protected int getXDrill() {
@@ -495,14 +498,18 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     .getInventoryHandler()
                     .getStackInSlot(0));
             if (input.isPresent()) {
-                Item inv = input.get()
-                    .getItem();
-
-                this.fortuneTier = inv.equals(vazkii.botania.common.item.ModItems.terraPick) ? 3
-                    : inv.equals(WayofTime.alchemicalWizardry.ModItems.boundPickaxe) ? 2
-                        : inv.equals(ConfigItems.itemPickElemental) ? 1 : 0;
+                this.fortuneTier = getFortuneTier(input.get());
             }
         }
+    }
+
+    private static int getFortuneTier(ItemStack itemStack) {
+        if (itemStack == null || itemStack.stackSize < 1) return 0;
+        Item t = itemStack.getItem();
+        if (MiscHelper.PickaxeOfTheCore.equals(t)) return 1;
+        if (MiscHelper.BoundPickaxe.equals(t)) return 2;
+        if (MiscHelper.TerraShatterer.equals(t)) return 3;
+        return 0;
     }
 
     @Override

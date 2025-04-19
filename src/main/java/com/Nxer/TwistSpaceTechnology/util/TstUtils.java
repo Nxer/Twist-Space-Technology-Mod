@@ -13,8 +13,11 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -587,5 +590,17 @@ public class TstUtils {
             }
         }
         return null;
+    }
+
+    public static void sendMessageKeyToPlayer(EntityPlayer player, String messageKey) {
+        if (player instanceof EntityPlayerMP && messageKey != null) {
+            player.addChatComponentMessage(new ChatComponentTranslation(messageKey));
+        }
+    }
+
+    public static void sendMessageKeyToPlayer(EntityPlayer player, String messageKey, Object... formatArgs) {
+        if (player instanceof EntityPlayerMP && messageKey != null) {
+            player.addChatComponentMessage(new ChatComponentTranslation(messageKey, formatArgs));
+        }
     }
 }

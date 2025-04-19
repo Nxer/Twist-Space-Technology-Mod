@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -21,7 +23,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
-import gregtech.api.util.GTLanguageManager;
 
 public class BlockLaserBeacon extends Block implements ITileEntityProvider {
 
@@ -34,7 +35,9 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
         super(Material.iron);
         setBlockName("LaserBeacon");
         this.setCreativeTab(GregTechAPI.TAB_GREGTECH);
-        GTLanguageManager.addStringLocalization(getUnlocalizedName() + ".name", "Laser Inducing Beacon");
+        // #tr LaserBeacon.name
+        // # Laser Inducing Beacon
+        // #zh_CN 激光激发信标
         GregTechAPI.registerMachineBlock(this, -1);
         GameRegistry.registerBlock(this, ItemBlockLaserBeacon.class, getUnlocalizedName());
         GTCMItemList.Laser_Beacon.set(new ItemStack(this, 1));
@@ -66,7 +69,7 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
 
     @Override
     public String getUnlocalizedName() {
-        return "gt.laserbeacon";
+        return "LaserBeacon";
     }
 
     @Override
@@ -119,10 +122,10 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
 
         @Override
         public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean f3_h) {
-            tooltip.add(
-                GTLanguageManager.addStringLocalization(
-                    "gt.laserbeacontooltip",
-                    "Produces a high precision laser from a powerful current"));
+            // #tr laserbeacontooltip
+            // # Produces a high precision laser from a powerful current.
+            // #zh_CN 用高电流产生高精度激光.
+            tooltip.add(tr("laserbeacontooltip"));
         }
     }
 }
