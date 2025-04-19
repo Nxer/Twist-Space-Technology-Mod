@@ -2772,6 +2772,8 @@ public class GTCMMachineRecipes {
                 .duration(20 * 300)
                 .addTo(assembler);
         }
+        // endregion
+
 
         //region Lightning Spire
         if (Config.Enable_LightningSpire){
@@ -2794,6 +2796,7 @@ public class GTCMMachineRecipes {
                 .duration(20 * 120)
                 .addTo(assembler);
         }
+        // endregion
 
         //region Incompact Cyclotron
         if(Config.Enable_IncompactCyclotron){
@@ -2875,6 +2878,7 @@ public class GTCMMachineRecipes {
                 .duration(20 * 60)
                 .addTo(assemblyLine);
         }
+        // endregion
 
         // Casing Stone Brick
         GTValues.RA
@@ -3031,6 +3035,8 @@ public class GTCMMachineRecipes {
                 .duration(20 * 900)
                 .addTo(assemblyLine);
         }
+        // endregion
+
 
         GTValues.RA
             .stdBuilder()
@@ -3421,6 +3427,90 @@ public class GTCMMachineRecipes {
             .eut(RECIPE_LuV)
             .duration(20 * 15)
             .addTo(assembler);
+        // endregion
+
+        // region Laser Meteor Miner
+        if (Config.Enable_LaserMeteorMiner) {
+
+            // Laser Meteor Miner
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(10),
+                    getModItem(Mods.BloodMagic.ID, "masterStone", 1, new ItemStack(Blocks.stone)),
+                    ItemList.OreDrill3.get(4),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 12, 28, new ItemStack(Items.diamond)),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 12, 29, new ItemStack(Items.gold_ingot)),
+                    ItemList.Sensor_LuV.get(3),
+                    ItemRefer.HiC_T2.get(8),
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 18)
+                )
+                .itemOutputs(GTCMItemList.MeteorMiner.get(1))
+                .eut(RECIPE_LuV)
+                .duration(20 * 180)
+                .addTo(assembler);
+
+            // laser beacon
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(3),
+                    ItemList.Casing_Coil_Superconductor.get(4),
+                    GTOreDictUnificator.get(OrePrefixes.gemExquisite, Materials.Diamond, 64),
+                    ItemList.Emitter_LuV.get(3),
+                    ItemRefer.HiC_T2.get(8),
+                    HighEnergyFlowCircuit.get(1),
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 18)
+                )
+                .itemOutputs(GTCMItemList.Laser_Beacon.get(1))
+                .eut(RECIPE_LuV)
+                .duration(20 * 180)
+                .addTo(assembler);
+
+            // T1 schematic
+            GTValues.RA
+                .stdBuilder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(3),
+                    getModItem(Mods.GTNHIntergalactic.ID, "item.MiningDrone", 1, 2, new ItemStack(Items.iron_pickaxe)),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 1, 28, new ItemStack(Items.diamond)),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 1, 29, new ItemStack(Items.gold_ingot)),
+                    ItemList.Emitter_LuV.get(1),
+                    ItemRefer.HiC_T2.get(8),
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TungstenSteel, 18)
+                )
+                .itemOutputs(GTCMItemList.MeteorMinerSchematic1.get(1))
+                .eut(RECIPE_LuV)
+                .duration(20 * 180)
+                .addTo(assembler);
+
+            // T2 schematic
+            GTValues.RA
+                .stdBuilder()
+                .metadata(RESEARCH_ITEM, GTCMItemList.MeteorMinerSchematic1.get(1))
+                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .itemInputs(
+                    getModItem(Mods.GTNHIntergalactic.ID, "item.MiningDrone", 1, 6, new ItemStack(Items.iron_pickaxe)),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 28, new ItemStack(Items.diamond)),
+                    getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 29, new ItemStack(Items.gold_ingot)),
+                    ItemList.Emitter_ZPM.get(1),
+                    ItemRefer.HiC_T3.get(8),
+                    HighEnergyFlowCircuit.get(2)
+                )
+                .fluidInputs(
+                    new FluidStack(solderIndAlloy, 144 * 16)
+                )
+                .itemOutputs(GTCMItemList.MeteorMinerSchematic2.get(1))
+                .eut(RECIPE_UV)
+                .duration(20 * 300)
+                .addTo(assemblyLine);
+
+        }
+
+        // endregion
+
+
+
     }
 
     // spotless:on
