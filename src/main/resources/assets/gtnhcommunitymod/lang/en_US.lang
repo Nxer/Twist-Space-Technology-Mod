@@ -2135,3 +2135,5 @@ TST_LaserMeteorMiner_tooltips_T2=§6§lTIER II
 TST_LaserMeteorMiner_structure_info_T2_controller=Highest layer of the ritual
 TST_LaserMeteorMiner_structure_info_T2_hatches=Any Neutronium Casing below the controller
 Author_Totto=Author: §bTotto
+tooltips.MeteorMinerSchematic1.01=Schematic needed to enable the Tier 1 Meteor Miner.
+tooltips.MeteorMinerSchematic2.01=Schematic needed to enable the Tier 2 Meteor Miner.

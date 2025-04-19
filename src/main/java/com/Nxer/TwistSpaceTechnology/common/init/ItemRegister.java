@@ -1018,14 +1018,30 @@ public class ItemRegister {
 
         GTCMItemList.ActualPattern.set(new ItemStack(TstItems.ActualPattern, 1));
 
-        // Region Meteor Miner
+        // region Meteor Miner
+
+        // #tr item.MetaItem01.433.name
+        // # Meteor Miner Tier 1 Schematic
+        // #zh_CN 陨星采矿场T1设计图
         GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
                 433,
-            new String[]{"Schematic needed to enable the Tier 1 Meteor Miner"}));
+            // #tr tooltips.MeteorMinerSchematic1.01
+            // # Schematic needed to enable the Tier 1 Meteor Miner.
+            // #zh_CN 启用T1激光陨星采矿场所需的设计图.
+            new String[]{tr("tooltips.MeteorMinerSchematic1.01")}));
+
+        // #tr item.MetaItem01.434.name
+        // # Meteor Miner Tier 2 Schematic
+        // #zh_CN 陨星采矿场T2设计图
         GTCMItemList.MeteorMinerSchematic2.set(
             MetaItem01.registerVariantWithTooltips(
                 434,
-                    new String[]{"Schematic needed to enable the Tier 2 Meteor Miner"}));
+                // #tr tooltips.MeteorMinerSchematic2.01
+                // # Schematic needed to enable the Tier 2 Meteor Miner.
+                // #zh_CN 启用T2激光陨星采矿场所需的设计图.
+                    new String[]{tr("tooltips.MeteorMinerSchematic2.01")}));
+
+        // endregion
     }
 
     // spotless:on
