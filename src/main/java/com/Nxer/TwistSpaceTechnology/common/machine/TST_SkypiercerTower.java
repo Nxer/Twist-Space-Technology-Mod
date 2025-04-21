@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower.Essentia_InsentiaL;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerRing_SkypiercerTower;
 import static com.Nxer.TwistSpaceTechnology.util.AspectLevelCalculator.computeAspectLevel;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTile;
@@ -803,6 +802,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #zh_CN 任何舱室替换化学惰性方块
             .addOtherStructurePart("Essentia Output Hatch", TextEnums.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
             .toolTipFinisher(ModName);
+        // spotless:on
         return tt;
     }
 
