@@ -1,10 +1,15 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemNamedCircuit;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemRune;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MultiStructuresLinkTool;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ProofOfGods;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ProofOfHeroes;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.Yamato;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.RiseOfDarkFog;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
@@ -20,10 +25,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { MetaItem01, TstItems.ProofOfHeroes, TstItems.ProofOfGods, MultiStructuresLinkTool,
-
-            TstItems.MetaItemRune, TstItems.MetaItemIzumik, TstItems.Yamato, TstItems.ActualPattern,
-            MetaItemNamedCircuit };
+        Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
+            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -33,6 +36,12 @@ public class ItemRegister {
 
     // spotless:off
     public static void registryItemContainers() {
+
+        /**
+         * The order of arrangement is based on the registration order of the Minecraft Forge
+         * */
+
+        /*    ---Meta Item 01---    */
 
         // #tr item.MetaItem01.0.name
         // # Test Item
@@ -374,6 +383,28 @@ public class ItemRegister {
         // # Borophene-Based Nanowire Composite Thermal Conductive Medium
         // #zh_CN 硼烯基纳米线复合导热介质
         GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveMedium.set(MetaItem01.registerVariant(44));
+
+        // #tr item.MetaItem01.45.name
+        // # Meteor Miner Tier 1 Schematic
+        // #zh_CN 陨星采矿场T1设计图
+        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
+            45,
+            // #tr tooltips.MeteorMinerSchematic1.01
+            // # Schematic needed to enable the Tier 1 Meteor Miner.
+            // #zh_CN 启用T1激光陨星采矿场所需的设计图.
+            new String[]{tr("tooltips.MeteorMinerSchematic1.01")}));
+
+        // #tr item.MetaItem01.46.name
+        // # Meteor Miner Tier 2 Schematic
+        // #zh_CN 陨星采矿场T2设计图
+        GTCMItemList.MeteorMinerSchematic2.set(
+            MetaItem01.registerVariantWithTooltips(
+                46,
+                // #tr tooltips.MeteorMinerSchematic2.01
+                // # Schematic needed to enable the Tier 2 Meteor Miner.
+                // #zh_CN 启用T2激光陨星采矿场所需的设计图.
+                new String[]{tr("tooltips.MeteorMinerSchematic2.01")}));
+
         if (Config.activateMegaSpaceStation) {
             // #tr item.MetaItem01.176.name
             // # High-dimensional extend
@@ -883,60 +914,7 @@ public class ItemRegister {
             GTCMItemList.Space_TimeLifeCore.set(MetaItem01.registerVariant(419));
         }
 
-        // Endgame Challenge content
-
-        // #tr item.MetaItem01.420.name
-        // # LV FLASK
-        // #zh_CN LV FLASK
-        GTCMItemList.LvFlask.set(MetaItem01.registerVariant(420));
-        // #tr item.MetaItem01.421.name
-        // # MV FLASK
-        // #zh_CN MV FLASK
-        GTCMItemList.MvFlask.set(MetaItem01.registerVariant(421));
-        // #tr item.MetaItem01.422.name
-        // # HV FLASK
-        // #zh_CN HV FLASK
-        GTCMItemList.HvFlask.set(MetaItem01.registerVariant(422));
-        // #tr item.MetaItem01.423.name
-        // # EV FLASK
-        // #zh_CN EV FLASK
-        GTCMItemList.EvFlask.set(MetaItem01.registerVariant(423));
-        // #tr item.MetaItem01.424.name
-        // # IV FLASK
-        // #zh_CN IV FLASK
-        GTCMItemList.IvFlask.set(MetaItem01.registerVariant(424));
-        // #tr item.MetaItem01.425.name
-        // # LUV FLASK
-        // #zh_CN LUV FLASK
-        GTCMItemList.LuvFlask.set(MetaItem01.registerVariant(425));
-        // #tr item.MetaItem01.426.name
-        // # ZPM FLASK
-        // #zh_CN ZPM FLASK
-        GTCMItemList.ZpmFlask.set(MetaItem01.registerVariant(426));
-        // #tr item.MetaItem01.427.name
-        // # UV FLASK
-        // #zh_CN UV FLASK
-        GTCMItemList.UvFlask.set(MetaItem01.registerVariant(427));
-        // #tr item.MetaItem01.428.name
-        // # UHV FLASK
-        // #zh_CN UHV FLASK
-        GTCMItemList.UhvFlask.set(MetaItem01.registerVariant(428));
-        // #tr item.MetaItem01.429.name
-        // # UEV FLASK
-        // #zh_CN UEV FLASK
-        GTCMItemList.UevFlask.set(MetaItem01.registerVariant(429));
-        // #tr item.MetaItem01.430.name
-        // # UIV FLASK
-        // #zh_CN UIV FLASK
-        GTCMItemList.UivFlask.set(MetaItem01.registerVariant(430));
-        // #tr item.MetaItem01.431.name
-        // # UMV FLASK
-        // #zh_CN UMV FLASK
-        GTCMItemList.UmvFlask.set(MetaItem01.registerVariant(431));
-        // #tr item.MetaItem01.432.name
-        // # UXV FLASK
-        // #zh_CN UXV FLASK
-        GTCMItemList.UxvFlask.set(MetaItem01.registerVariant(432));
+        /*    ---Meta Item Rune---    */
 
         // #tr item.MetaItemRune.0.name
         // # Rune of Vigilance
@@ -966,6 +944,8 @@ public class ItemRegister {
         // # Perdition.
         // #zh_CN {\DARK_RED}永远不为从未存在的救赎祈祷。
         GTCMItemList.Rune_of_Perdition.set(MetaItemRune.registerVariantWithTooltips(3, new String[]{tr("tooltips.Rune_of_Perdition.line1")}));
+
+        /*    ---Meta Item Izumik---    */
 
         // #tr item.MetaItemIzumik.0.name
         // # {\BLUE}{\BOLD}Fount Of Ecology
@@ -999,7 +979,11 @@ public class ItemRegister {
         // #tr Offspring.tooltips.04
         // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
         // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
+
         GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(1, new String[]{tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02")}, new String[]{tr("Offspring.tooltips.03"), tr("Offspring.tooltips.04")}));
+
+        /*    ---Meta Item Named Circuit---    */
+
         // #tr item.MetaItemNamedCircuit.0.name
         // # Ultimate Energy Flow Circuit
         // #zh_CN 终极能量流电路
@@ -1008,38 +992,69 @@ public class ItemRegister {
         // #zh_CN 高负载电路的终极选择
         GTCMItemList.UltimateEnergyFlowCircuit.set(MetaItemNamedCircuit.registerVariantWithTooltips(0,new String[]{ tr("UltimateEnergyFlowCircuit.tooltips.01")}));
 
-        GTCMItemList.ProofOfGods.set(new ItemStack(TstItems.ProofOfGods, 1));
-        GTCMItemList.ProofOfHeroes.set(new ItemStack(TstItems.ProofOfHeroes, 2));
-//        GTCMItemList.PowerChair.set(new ItemStack(TstItems.PowerChair, 1));
+        /*    ---Meta Item Flask---    */
 
+        // #tr item.MetaItemFlask.0.name
+        // # LV FLASK
+        // #zh_CN LV FLASK
+        GTCMItemList.LvFlask.set(MetaItemFlask.registerVariant(0));
+        // #tr item.MetaItemFlask.1.name
+        // # MV FLASK
+        // #zh_CN MV FLASK
+        GTCMItemList.MvFlask.set(MetaItemFlask.registerVariant(1));
+        // #tr item.MetaItemFlask.2.name
+        // # HV FLASK
+        // #zh_CN HV FLASK
+        GTCMItemList.HvFlask.set(MetaItemFlask.registerVariant(2));
+        // #tr item.MetaItemFlask.3.name
+        // # EV FLASK
+        // #zh_CN EV FLASK
+        GTCMItemList.EvFlask.set(MetaItemFlask.registerVariant(3));
+        // #tr item.MetaItemFlask.4.name
+        // # IV FLASK
+        // #zh_CN IV FLASK
+        GTCMItemList.IvFlask.set(MetaItemFlask.registerVariant(4));
+        // #tr item.MetaItemFlask.5.name
+        // # LUV FLASK
+        // #zh_CN LUV FLASK
+        GTCMItemList.LuvFlask.set(MetaItemFlask.registerVariant(5));
+        // #tr item.MetaItemFlask.6.name
+        // # ZPM FLASK
+        // #zh_CN ZPM FLASK
+        GTCMItemList.ZpmFlask.set(MetaItemFlask.registerVariant(6));
+        // #tr item.MetaItemFlask.7.name
+        // # UV FLASK
+        // #zh_CN UV FLASK
+        GTCMItemList.UvFlask.set(MetaItemFlask.registerVariant(7));
+        // #tr item.MetaItemFlask.8.name
+        // # UHV FLASK
+        // #zh_CN UHV FLASK
+        GTCMItemList.UhvFlask.set(MetaItemFlask.registerVariant(8));
+        // #tr item.MetaItemFlask.9.name
+        // # UEV FLASK
+        // #zh_CN UEV FLASK
+        GTCMItemList.UevFlask.set(MetaItemFlask.registerVariant(9));
+        // #tr item.MetaItemFlask.10.name
+        // # UIV FLASK
+        // #zh_CN UIV FLASK
+        GTCMItemList.UivFlask.set(MetaItemFlask.registerVariant(10));
+        // #tr item.MetaItemFlask.11.name
+        // # UMV FLASK
+        // #zh_CN UMV FLASK
+        GTCMItemList.UmvFlask.set(MetaItemFlask.registerVariant(11));
+        // #tr item.MetaItemFlask.12.name
+        // # UXV FLASK
+        // #zh_CN UXV FLASK
+        GTCMItemList.UxvFlask.set(MetaItemFlask.registerVariant(12));
+
+        /*    ---Single Items---    */
+
+        GTCMItemList.ProofOfGods.set(new ItemStack(ProofOfGods, 1));
+        GTCMItemList.ProofOfHeroes.set(new ItemStack(ProofOfHeroes, 2));
+        // GTCMItemList.PowerChair.set(new ItemStack(TstItems.PowerChair, 1));
         GTCMItemList.HatchUpdateTool.set(new ItemStack(TstItems.HatchUpdateTool, 1));
-
-        GTCMItemList.Yamato.set(new ItemStack(TstItems.Yamato, 1));
-
-        GTCMItemList.ActualPattern.set(new ItemStack(TstItems.ActualPattern, 1));
-
-        // region Meteor Miner
-
-        // #tr item.MetaItem01.433.name
-        // # Meteor Miner Tier 1 Schematic
-        // #zh_CN 陨星采矿场T1设计图
-        GTCMItemList.MeteorMinerSchematic1.set(MetaItem01.registerVariantWithTooltips(
-                433,
-            // #tr tooltips.MeteorMinerSchematic1.01
-            // # Schematic needed to enable the Tier 1 Meteor Miner.
-            // #zh_CN 启用T1激光陨星采矿场所需的设计图.
-            new String[]{tr("tooltips.MeteorMinerSchematic1.01")}));
-
-        // #tr item.MetaItem01.434.name
-        // # Meteor Miner Tier 2 Schematic
-        // #zh_CN 陨星采矿场T2设计图
-        GTCMItemList.MeteorMinerSchematic2.set(
-            MetaItem01.registerVariantWithTooltips(
-                434,
-                // #tr tooltips.MeteorMinerSchematic2.01
-                // # Schematic needed to enable the Tier 2 Meteor Miner.
-                // #zh_CN 启用T2激光陨星采矿场所需的设计图.
-                    new String[]{tr("tooltips.MeteorMinerSchematic2.01")}));
+        GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
+        GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
 
         // endregion
     }
