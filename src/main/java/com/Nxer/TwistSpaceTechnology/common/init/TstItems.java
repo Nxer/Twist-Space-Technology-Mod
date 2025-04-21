@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdder01;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderFlask;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
@@ -21,6 +22,7 @@ public class TstItems {
     public static final ItemAdder01 MetaItem01 = new ItemAdder01();
     public static final ItemAdderRune MetaItemRune = new ItemAdderRune();
     public static final ItemAdderIzumik MetaItemIzumik = new ItemAdderIzumik();
+    public static final ItemAdderFlask MetaItemFlask = new ItemAdderFlask();
     public static final ItemNamedCircuit MetaItemNamedCircuit = new ItemNamedCircuit();
 
     // #tr item.ProofOfHeroes.name
