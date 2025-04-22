@@ -30,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_Multi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -1213,7 +1214,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             // the Quantum Computer
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.1")) // Used to generate
             // computation (and heat)
-            .addInfo(translateToLocal("tt.keyword.Structure.StructureTooComplex")) // The structure is too complex!
+            .addInfo(TstSharedLocalization.MachineTooltip.tooComplex()) // The structure is too complex!
             .addSeparator()
             // .addInfo("what the fuck")
             .addInfo(translateToLocal("tst.computer.desc.0"))
