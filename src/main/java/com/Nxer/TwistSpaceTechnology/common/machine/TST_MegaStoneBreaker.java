@@ -97,7 +97,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         int EuTier = (int) calculateVoltageTier(getMaxInputEu());
         return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
     }

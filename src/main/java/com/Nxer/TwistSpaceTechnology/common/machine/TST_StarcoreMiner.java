@@ -38,18 +38,15 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import bartworks.API.BorosilicateGlass;
 import bwcrossmod.galacticgreg.VoidMinerUtility;
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -58,9 +55,9 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gtnhintergalactic.block.IGBlocks;
 
-public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
-    implements IWirelessEnergyHatchInformation {
+public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> {
 
     // region Class Constructor
     public TST_StarcoreMiner(int aID, String aName, String aNameRegional) {
@@ -151,7 +148,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
                     .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 0))
                     .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
                     .addElement('I', ofBlock(sBlockCasingsTT, 8))
-                    .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                    .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
                     .addElement(
                         'K',
                         ofChain(
@@ -437,7 +434,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

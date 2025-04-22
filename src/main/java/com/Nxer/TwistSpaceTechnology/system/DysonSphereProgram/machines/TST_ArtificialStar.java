@@ -37,7 +37,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
-import static com.gtnewhorizons.gtnhintergalactic.block.IGBlocks.SpaceElevatorCasing;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
@@ -45,6 +44,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
+import static gtnhintergalactic.block.IGBlocks.SpaceElevatorCasing;
 import static tectech.thing.casing.TTCasingsContainer.SpacetimeCompressionFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.TimeAccelerationFieldGenerator;
@@ -83,12 +83,10 @@ import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -97,13 +95,13 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gtnhintergalactic.block.IGBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
-public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar>
-    implements IWirelessEnergyHatchInformation {
+public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar> {
 
     // region Class Constructor
     public TST_ArtificialStar(int aID, String aName, String aNameRegional) {
@@ -245,7 +243,8 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.enableRender = (byte) ((this.enableRender + 1) % 2);
             GTUtility.sendChatToPlayer(
@@ -552,7 +551,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                        t -> t.tierStabilisationField)))
                    .addElement('H', ofBlock(sBlockCasingsTT, 12))
                    .addElement('I', ofBlock(sBlockCasingsTT, 13))
-                   .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                   .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
                    .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                    .addElement('L',
                                HatchElementBuilder.<TST_ArtificialStar>builder()
@@ -682,7 +681,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

@@ -22,7 +22,7 @@ public class SpaceAssemblerRecipePool {
 
     public static void loadRecipes() {
 
-        final RecipeMap<?> SA = com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
+        final RecipeMap<?> SA = gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
 
         final Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
             ? FluidRegistry.getFluid("molten.mutatedlivingsolder")

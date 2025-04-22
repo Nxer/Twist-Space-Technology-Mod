@@ -55,7 +55,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -69,8 +68,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier>
-    implements IWirelessEnergyHatchInformation {
+public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier> {
 
     // region Class Constructor
     public TST_HephaestusAtelier(int aID, String aName, String aNameRegional) {
@@ -432,7 +430,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 

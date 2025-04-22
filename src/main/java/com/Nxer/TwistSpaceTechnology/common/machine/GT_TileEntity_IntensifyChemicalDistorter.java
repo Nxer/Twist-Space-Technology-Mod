@@ -151,7 +151,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return machineMode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
             : Parallel_LCRMode_IntensifyChemicalDistorter;
     }

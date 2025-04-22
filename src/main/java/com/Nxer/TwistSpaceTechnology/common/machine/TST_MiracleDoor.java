@@ -63,15 +63,12 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -85,12 +82,12 @@ import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.ParallelHelper;
 import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import gtnhintergalactic.block.IGBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleDoor>
-    implements IWirelessEnergyHatchInformation {
+public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleDoor> {
 
     // region Class Constructor
     public TST_MiracleDoor(int aID, String aName, String aNameRegional) {
@@ -322,7 +319,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -379,7 +376,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 .addElement('G', ofBlock(sBlockCasingsTT, 10))
                 .addElement('H', ofBlock(sBlockCasingsTT, 12))
                 .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
                 .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'L',

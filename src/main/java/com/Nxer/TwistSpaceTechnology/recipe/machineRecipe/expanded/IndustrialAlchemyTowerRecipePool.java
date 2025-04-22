@@ -39,7 +39,6 @@ public class IndustrialAlchemyTowerRecipePool {
                     .special(Essence)
                     .itemInputs(combined)
                     .itemOutputs(recipe.getOutputItem())
-                    .noOptimize()
                     .duration(30 * SECONDS + Math.min(recipe.getAspectAmount() * SECONDS, 600))
                     .eut(RECIPE_IV)
                     .addTo(IIA);

@@ -50,7 +50,7 @@ public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 0;
     }
 

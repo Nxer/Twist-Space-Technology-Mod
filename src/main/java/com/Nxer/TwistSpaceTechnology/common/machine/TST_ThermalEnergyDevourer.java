@@ -165,7 +165,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         if (wirelessMode) return Integer.MAX_VALUE;
         return machineMode == 1 ? ValueEnum.Parallel_HighParallelMode_ThermalEnergyDevourer
             : ValueEnum.Parallel_HighSpeedMode_ThermalEnergyDevourer;

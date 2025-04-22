@@ -502,7 +502,8 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     // region UI
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.OperatingMode = (this.OperatingMode + 1) % 3;
             GTUtility.sendChatToPlayer(
@@ -565,12 +566,12 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
             .widget(
                 new TextWidget().setStringSupplier(() -> "Currently stored LR:" + numberFormat.format(tRods))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
+                    .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> tRods, val -> tRods = val))
             .widget(
                 new TextWidget().setStringSupplier(() -> "EU Gen per strike:" + numberFormat.format(tProduct))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
+                    .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> tProduct, val -> tProduct = val));
     }
 

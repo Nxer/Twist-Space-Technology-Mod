@@ -115,8 +115,8 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             RecipeMap<?> currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
 
             @Override
-            protected RecipeMap<?> preProcess() {
-                if (machineMode != 0) return super.preProcess();
+            protected RecipeMap<?> getCurrentRecipeMap() {
+                if (machineMode != 0) return super.getCurrentRecipeMap();
 
                 // add tool casting recipes to solidifier mode
                 if (lastRecipeMap != RecipeMaps.fluidSolidifierRecipes

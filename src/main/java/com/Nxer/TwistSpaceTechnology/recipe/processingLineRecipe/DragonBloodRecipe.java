@@ -38,7 +38,6 @@ public class DragonBloodRecipe {
                 .itemInputs(new ItemStack(Blocks.dragon_egg, 0, 0))
                 .fluidInputs(getFluidStack("potion.dragonblood", 16000))
                 .fluidOutputs(DRAGON_METAL.getFluidStack(36))
-                .noOptimize()
                 .eut(RECIPE_UXV)
                 .duration(20 * 6)
                 .addTo(RecipeMaps.fluidHeaterRecipes);
@@ -50,7 +49,6 @@ public class DragonBloodRecipe {
                         0))
                 .fluidInputs(getFluidStack("potion.dragonblood", 16000))
                 .fluidOutputs(DRAGON_METAL.getFluidStack(144))
-                .noOptimize()
                 .eut(RECIPE_UXV)
                 .duration(20 * 3)
                 .addTo(RecipeMaps.fluidHeaterRecipes);
@@ -65,7 +63,6 @@ public class DragonBloodRecipe {
                     GTPP_Bees.drop.getStackForType(GTPPDropType.DRAGONBLOOD))
                 .outputChances(4000, 2250, 750)
                 .fluidOutputs(getFluidStack("fieryblood", 500))
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(20 * 120)
                 .addTo(chemicalBathRecipes);
@@ -79,7 +76,6 @@ public class DragonBloodRecipe {
                     GTPP_Bees.drop.getStackForType(GTPPDropType.DRAGONBLOOD))
                 .fluidOutputs(DRAGON_METAL.getFluidStack(36))
                 .outputChances(10000, 6000, 2000)
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(20 * 100)
                 .addTo(chemicalBathRecipes);
@@ -134,7 +130,6 @@ public class DragonBloodRecipe {
             GTValues.RA.stdBuilder()
                 .itemInputs(new ItemStack(Blocks.dragon_egg, 1))
                 .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 16))
-                .noOptimize()
                 .specialValue(13500)
                 .eut(RECIPE_MAX)
                 .duration(20 * 10)
@@ -147,7 +142,6 @@ public class DragonBloodRecipe {
                         GTModHandler.getModItem("witchery", "infinityegg", 1, GTCMItemList.TestItem0.get(1))))
                 .fluidInputs(getFluidStack("fieryblood", 1000 * 16384))
                 .fluidOutputs(new FluidStack(DRAGON_METAL.getPlasma(), 144 * 16384))
-                .noOptimize()
                 .specialValue(13500)
                 .eut(RECIPE_MAX)
                 .duration(20 * 10)

@@ -33,9 +33,9 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
@@ -187,7 +187,7 @@ public class MM_LargeNeutronOscillator
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement('D', ofBlock(sBlockCasingsTT, 0))
                 .addElement('E', ofBlock(Loaders.speedingPipe, 0))
-                .addElement('F', Glasses.chainAllGlasses())
+                .addElement('F', GTStructureUtility.chainAllGlasses())
                 .addElement('G', ofFrame(Materials.NaquadahAlloy))
                 .build();
             /*

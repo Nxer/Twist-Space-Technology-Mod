@@ -417,7 +417,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

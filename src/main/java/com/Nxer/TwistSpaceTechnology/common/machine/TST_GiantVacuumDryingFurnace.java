@@ -45,9 +45,9 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -231,7 +231,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
                 .addShape(STRUCTURE_PIECE_DTM, transpose(shapeDryingTowerMiddle))
                 .addShape(STRUCTURE_PIECE_DTH, transpose(shapeDryingTowerHat))
 
-                .addElement('A', Glasses.chainAllGlasses())
+                .addElement('A', GTStructureUtility.chainAllGlasses())
                 .addElement('S', ofBlock(GregTechAPI.sBlockCasings4, 1))
                 .addElement('G', ofBlock(GregTechAPI.sBlockCasings8, 1))
                 .addElement('V', ofBlock(GregTechAPI.sBlockCasings8, 0))

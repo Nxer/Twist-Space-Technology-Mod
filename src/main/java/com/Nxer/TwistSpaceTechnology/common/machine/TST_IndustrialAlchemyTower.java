@@ -317,7 +317,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         if (getControllerSlot() == null) {
             return getmParallel();
         } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {

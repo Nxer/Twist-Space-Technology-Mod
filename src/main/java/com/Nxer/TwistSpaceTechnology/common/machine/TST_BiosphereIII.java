@@ -43,8 +43,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import bartworks.API.BorosilicateGlass;
 import bartworks.API.recipe.BartWorksRecipeMaps;
 import bartworks.common.configs.Configuration;
-import bartworks.common.tileentities.multis.MTEBioVat;
-import bartworks.common.tileentities.tiered.GT_MetaTileEntity_RadioHatch;
+import bartworks.common.tileentities.tiered.MTERadioHatch;
 import bartworks.util.BWUtil;
 import bartworks.util.MathUtils;
 import bartworks.util.ResultWrongSievert;
@@ -62,10 +61,12 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.ParallelHelper;
+import gregtech.api.util.recipe.Sievert;
 
 public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
@@ -91,7 +92,9 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     private int mSievert = 0;
     private int mNeededSievert = 0;
     private int efficiency = 1;
-    private ArrayList<GT_MetaTileEntity_RadioHatch> mRadHatches = new ArrayList<>();
+    private ArrayList<MTERadioHatch> mRadHatches = new ArrayList<>();
+
+    private static final Sievert DEFAULT_SIEVERT = new Sievert(0, false);
 
     @Override
     public int totalMachineMode() {
@@ -153,7 +156,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return switch (machineMode) {
             case 0 -> (getControllerSlot() == null) ? 0 : getControllerSlot().stackSize * 4; // Bio Vat normal
             case 1 -> (getControllerSlot() == null) ? 0 : getControllerSlot().stackSize; // Bio Vat automation
@@ -177,9 +180,10 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
                     .areStacksEqualOrNull((ItemStack) recipe.mSpecialItems, TST_BiosphereIII.this.getControllerSlot()))
                     return CheckRecipeResultRegistry.NO_RECIPE;
 
-                int[] conditions = MTEBioVat.specialValueUnpack(recipe.mSpecialValue);
-                TST_BiosphereIII.this.mNeededGlassTier = conditions[0];
-                TST_BiosphereIII.this.mNeededSievert = conditions[3];
+                Sievert data = recipe.getMetadataOrDefault(GTRecipeConstants.SIEVERT, DEFAULT_SIEVERT);
+                boolean checkSievertExact = data.isExact;
+                TST_BiosphereIII.this.mNeededSievert = data.sievert;
+                TST_BiosphereIII.this.mNeededGlassTier = recipe.getMetadataOrDefault(GTRecipeConstants.GLASS, 0);
 
                 // Glass tier check
                 if (TST_BiosphereIII.this.mGlassTier < TST_BiosphereIII.this.mNeededGlassTier) {
@@ -187,7 +191,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
                 }
 
                 // Sievert check
-                if (conditions[2] == 0) {
+                if (!checkSievertExact) {
                     if (TST_BiosphereIII.this.mSievert < TST_BiosphereIII.this.mNeededSievert) {
                         return ResultWrongSievert.insufficientSievert(TST_BiosphereIII.this.mNeededSievert);
                     }
@@ -367,11 +371,11 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             return false;
         }
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (!(aMetaTileEntity instanceof GT_MetaTileEntity_RadioHatch)) {
+        if (!(aMetaTileEntity instanceof MTERadioHatch)) {
             return false;
         } else {
-            ((GT_MetaTileEntity_RadioHatch) aMetaTileEntity).updateTexture(CasingIndex);
-            return this.mRadHatches.add((GT_MetaTileEntity_RadioHatch) aMetaTileEntity);
+            ((MTERadioHatch) aMetaTileEntity).updateTexture(CasingIndex);
+            return this.mRadHatches.add((MTERadioHatch) aMetaTileEntity);
         }
     }
     // spotless:on

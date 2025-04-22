@@ -70,10 +70,7 @@ public class CrystallineInfinitierRecipePool {
         // gt mixer
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
-
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(RecipeMaps.mixerRecipes);
@@ -83,10 +80,7 @@ public class CrystallineInfinitierRecipePool {
                 GTUtility.getIntegratedCircuit(4),
                 Materials.Holmium.getDust(3),
                 Materials.GreenSapphire.getDust(10))
-
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(RecipeMaps.mixerRecipes);
@@ -97,13 +91,10 @@ public class CrystallineInfinitierRecipePool {
                 Materials.Holmium.getDust(60),
                 Materials.Sapphire.getDust(64),
                 Materials.Sapphire.getDust(36))
-
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(RecipeMaps.mixerRecipes);
@@ -116,13 +107,10 @@ public class CrystallineInfinitierRecipePool {
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(8))
-
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(RecipeMaps.mixerRecipes);
@@ -130,10 +118,7 @@ public class CrystallineInfinitierRecipePool {
         // gt++ mixer
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(4), Materials.Holmium.getDust(3), Materials.Sapphire.getDust(5))
-
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -143,10 +128,7 @@ public class CrystallineInfinitierRecipePool {
                 GTUtility.getIntegratedCircuit(4),
                 Materials.Holmium.getDust(3),
                 Materials.GreenSapphire.getDust(10))
-
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -157,13 +139,10 @@ public class CrystallineInfinitierRecipePool {
                 Materials.Holmium.getDust(60),
                 Materials.Sapphire.getDust(64),
                 Materials.Sapphire.getDust(36))
-
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -176,13 +155,10 @@ public class CrystallineInfinitierRecipePool {
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(64),
                 Materials.GreenSapphire.getDust(8))
-
             .itemOutputs(
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
-
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);

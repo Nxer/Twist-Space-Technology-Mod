@@ -176,7 +176,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Max Parallel (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return maxParallel;
     }
 
@@ -731,13 +731,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (supportsMachineModeSwitch()) {
                 setMachineMode(nextMachineMode());
                 GTUtility.sendChatToPlayer(aPlayer, getMachineModeName());
             } else {
-                super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+                super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aStack);
             }
         }
     }

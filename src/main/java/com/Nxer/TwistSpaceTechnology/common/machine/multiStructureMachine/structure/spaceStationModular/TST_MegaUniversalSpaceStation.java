@@ -24,8 +24,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
-import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
@@ -39,6 +37,8 @@ import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
+import gtnhintergalactic.block.IGBlocks;
+import gtnhintergalactic.client.IGTextures;
 import tectech.thing.casing.TTCasingsContainer;
 
 // spotless:off
@@ -180,19 +180,19 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
                     StructureUtility.ofChain(
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addMaintenanceToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addOutputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         StructureUtility.ofBlock(SpaceStationAntiGravityBlock, 13)))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))
@@ -248,7 +248,7 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 0;
     }
 

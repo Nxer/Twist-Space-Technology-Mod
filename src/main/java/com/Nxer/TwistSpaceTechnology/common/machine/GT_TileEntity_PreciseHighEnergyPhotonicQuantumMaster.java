@@ -247,7 +247,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return machineMode == 1 ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
             : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
     }

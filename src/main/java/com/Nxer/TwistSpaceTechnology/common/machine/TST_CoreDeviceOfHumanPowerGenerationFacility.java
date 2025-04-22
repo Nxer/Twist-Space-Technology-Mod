@@ -124,7 +124,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 

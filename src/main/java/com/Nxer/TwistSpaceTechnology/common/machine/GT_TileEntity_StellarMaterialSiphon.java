@@ -29,9 +29,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMateri
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
-import com.gtnewhorizons.gtnhintergalactic.Tags;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
-import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.ItemList;
@@ -51,6 +48,9 @@ import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
+import gtnhintergalactic.GTNHIntergalactic;
+import gtnhintergalactic.block.IGBlocks;
+import gtnhintergalactic.client.IGTextures;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import tectech.thing.casing.TTCasingsContainer;
 
@@ -282,7 +282,7 @@ public class GT_TileEntity_StellarMaterialSiphon
             .addMaintenanceHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
             .addInputBus(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
             .addOutputHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
-            .toolTipFinisher(DARK_PURPLE + Tags.MODNAME);
+            .toolTipFinisher(DARK_PURPLE + GTNHIntergalactic.MODNAME);
         return tt;
     }
 
@@ -322,19 +322,19 @@ public class GT_TileEntity_StellarMaterialSiphon
                     StructureUtility.ofChain(
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addMaintenanceToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addExoticEnergyInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             GT_TileEntity_StellarMaterialSiphon::addOutputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 0)))// L -> ofBlock...(tile.stone, 0,
                                                                                    // ...);
@@ -370,19 +370,19 @@ public class GT_TileEntity_StellarMaterialSiphon
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstone) {
         if (side == facing) {
-            if (active) return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
-                TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
-                    .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX),
+            if (active)
+                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
+                    TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
+                        .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
+                        .glow()
+                        .build() };
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
                 TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
                     .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
                     .glow()
                     .build() };
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.ADVANCED_MACHINE_FRAME_INDEX) };
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON) };
     }
 
     /**
@@ -540,20 +540,9 @@ public class GT_TileEntity_StellarMaterialSiphon
         }
     }
 
-    /**
-     * Callback that wil be invoked when the controller is right-clicked with a soldering tool
-     *
-     * @param side          Clicked side of the controller
-     * @param wrenchingSide Clicked grid side (the grid that gets displayed, when holding a tool while looking at it)
-     * @param player        Player that clicked
-     * @param x             X coordinate of the machine
-     * @param y             Y coordinate of the machine
-     * @param z             Z coordinate of the machine
-     * @return True if event was processed, else false
-     */
     @Override
     public boolean onSolderingToolRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer player,
-        float x, float y, float z) {
+        float aX, float aY, float aZ, ItemStack aTool) {
         if (side == getBaseMetaTileEntity().getFrontFacing()) {
             mChunkLoadingEnabled = !mChunkLoadingEnabled;
             GTUtility.sendChatToPlayer(
@@ -562,7 +551,7 @@ public class GT_TileEntity_StellarMaterialSiphon
                     : GTUtility.trans("503", "Mining chunk loading disabled"));
             return true;
         }
-        return super.onSolderingToolRightClick(side, wrenchingSide, player, x, y, z);
+        return super.onSolderingToolRightClick(side, wrenchingSide, player, aX, aY, aZ, aTool);
     }
 
     /**

@@ -492,7 +492,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return isPassiveMode ? Config.Parallel_PassiveMode_SwelegfyrBlastFurnace
             : Config.Parallel_NormalMode_SwelegfyrBlastFurnace;
     }

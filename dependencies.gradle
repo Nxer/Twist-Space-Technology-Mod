@@ -34,23 +34,24 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
-    implementation('com.github.GTNewHorizons:GT5-Unofficial:5.09.50.118:dev')
-    implementation('com.github.GTNewHorizons:GTNHLib:0.6.0:dev')
-    implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.3.54-gtnh:dev')
-    implementation('com.github.GTNewHorizons:GTNH-Intergalactic:1.4.34:dev')
-    implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.6.99:dev')
-    implementation('com.github.GTNewHorizons:Avaritia:1.59:dev')
+    implementation('org.jetbrains:annotations:26.0.2')
+
+    implementation('com.github.GTNewHorizons:GT5-Unofficial:5.09.51.249-pre:dev')
+    implementation('com.github.GTNewHorizons:GTNHLib:0.6.20:dev')
+    implementation('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.4.54-gtnh-pre:dev')
+    implementation('com.github.GTNewHorizons:NewHorizonsCoreMod:2.7.162-pre:dev')
+    implementation('com.github.GTNewHorizons:Avaritia:1.62:dev')
     implementation('com.github.GTNewHorizons:Avaritiaddons:1.8.4-GTNH:dev')
     implementation('com.github.GTNewHorizons:Eternal-Singularity:1.2.1:dev')
-    implementation('com.github.GTNewHorizons:Universal-Singularities:8.9.0:dev')
-    implementation('com.github.GTNewHorizons:MagicBees:2.9.1-GTNH:dev')
+    implementation('com.github.GTNewHorizons:Universal-Singularities:8.10.0:dev')
+    implementation('com.github.GTNewHorizons:MagicBees:2.9.2-GTNH:dev')
     implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
-    implementation('com.github.GTNewHorizons:ThaumicEnergistics:1.6.27-GTNH:dev')
-    implementation('com.github.GTNewHorizons:Botania:1.11.7-GTNH:dev')
-    implementation('com.github.GTNewHorizons:supersolarpanels:1.1.3:dev')
+    implementation('com.github.GTNewHorizons:ThaumicEnergistics:1.7.7-GTNH:dev')
+    implementation('com.github.GTNewHorizons:Botania:1.12.7-GTNH-pre:dev')
+    implementation('com.github.GTNewHorizons:supersolarpanels:1.1.4:dev')
     implementation(rfg.deobf('curse.maven:advsolar-362768:2885953'))
-    implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.5.17:dev')
-    implementation('com.github.GTNewHorizons:Hodgepodge:2.5.90:dev')
+    implementation('com.github.GTNewHorizons:Electro-Magic-Tools:1.6.4:dev')
+    implementation('com.github.GTNewHorizons:Hodgepodge:2.6.37:dev')
     //These 2 deps have conflicts with Amun-Ra by default, see Twist-Space-Technology-Mod#150
     compileOnly(rfg.deobf('curse.maven:witchery-69673:2234410'))
     implementation('com.github.GTNewHorizons:WitcheryExtras:1.3.0:dev')
@@ -58,11 +59,13 @@ dependencies {
     annotationProcessor('com.google.auto.value:auto-value:1.10.1')
     //These 2 deps are for mixin
 
-    implementation('com.github.GTNewHorizons:BloodMagic:1.6.11:dev')
-    implementation('com.github.GTNewHorizons:EnderIO:2.8.24:dev')
+    implementation('com.github.GTNewHorizons:BloodMagic:1.7.10-pre:dev')
+    implementation('com.github.GTNewHorizons:EnderIO:2.9.7:dev')
     implementation('com.github.GTNewHorizons:EnderCore:0.4.6:dev')
+
+    implementation("com.github.GTNewHorizons:Galaxy-Space-GTNH:1.1.114-GTNH:dev")
 
     // dependencies for mod testing
     // using transitive to prevent mod duplication and conflicts
-    runtimeOnlyNonPublishable("com.github.GTNewHorizons:BlockRenderer6343:1.2.16:dev") { transitive = false }
+    runtimeOnlyNonPublishable("com.github.GTNewHorizons:BlockRenderer6343:1.3.9:dev") { transitive = false }
 }

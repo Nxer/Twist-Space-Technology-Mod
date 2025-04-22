@@ -143,7 +143,6 @@ public class MegaUniversalSpaceStationRecipePool {
             .fluidInputs(MaterialsUEVplus.Universium.getFluid(1440))
             .itemOutputs(processor)
 
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(20)
             .addTo(MT);
@@ -162,7 +161,6 @@ public class MegaUniversalSpaceStationRecipePool {
                     .getFluid(1440))
             .itemOutputs(assembly)
 
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(200)
             .addTo(MT);
@@ -183,7 +181,6 @@ public class MegaUniversalSpaceStationRecipePool {
                     .getFluid(1440))
             .itemOutputs(computer)
 
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(2000)
             .addTo(MT);
@@ -611,7 +608,6 @@ public class MegaUniversalSpaceStationRecipePool {
 
             .itemOutputs(GTCMItemList.megaUniversalSpaceStation.get(1))
 
-            .noOptimize()
             .eut(1024 * RECIPE_MAX)
             .duration(20 * 1000)
             .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -622,7 +618,6 @@ public class MegaUniversalSpaceStationRecipePool {
                 .fluidInputs(Materials.Plastic.getFluid(1440 * i))
                 .itemOutputs(spaceStationStructureBlock[i])
 
-                .noOptimize()
                 .eut((int) (32 * Math.pow(4, i)))
                 .duration(20 * 10 * i)
                 .addTo(GTRecipeConstants.AssemblerOD);
@@ -635,7 +630,6 @@ public class MegaUniversalSpaceStationRecipePool {
 
                 .itemOutputs(SpaceStationAntiGravityBlock[i])
 
-                .noOptimize()
                 .eut((long) (32 * Math.pow(2, i)))
                 .duration(20 * 10 * i)
                 .addTo(GTRecipeConstants.AssemblerOD);
@@ -654,7 +648,6 @@ public class MegaUniversalSpaceStationRecipePool {
                 .fluidInputs(MaterialsUEVplus.TranscendentMetal.getFluid(1440 * i))
                 .itemOutputs(spaceStationStructureBlock[i])
 
-                .noOptimize()
                 .eut((long) (Math.pow(16, i)))
                 .duration(200 * 10 * i)
                 .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -669,7 +662,6 @@ public class MegaUniversalSpaceStationRecipePool {
                 .fluidInputs()
                 .itemOutputs(SpaceStationAntiGravityBlock[i])
 
-                .noOptimize()
                 .eut((long) (32 * Math.pow(2, i)))
                 .duration(20 * 10 * i)
                 .addTo(GTRecipeConstants.AssemblerOD);

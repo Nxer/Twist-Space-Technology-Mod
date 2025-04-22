@@ -7,8 +7,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
-import galaxyspace.core.register.GSItems;
-import galaxyspace.core.register.GSMaterials;
+import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
@@ -19,6 +18,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
+import gtnhintergalactic.item.IGItems;
 
 public class SingleItemRecipes {
 
@@ -49,14 +49,14 @@ public class SingleItemRecipes {
         // Borophene Based Nanowire Composite Thermal Conductive Medium
         TST_RecipeBuilder.builder()
             .itemInputs(
-                new ItemStack(GSItems.DysonSwarmItems, 5, 1),
-                new ItemStack(GSItems.DysonSwarmItems, 5, 2),
+                new ItemStack(IGItems.DysonSwarmItems, 5, 1),
+                new ItemStack(IGItems.DysonSwarmItems, 5, 2),
                 GTCMItemList.BoropheneFoil.get(8),
                 ItemRefer.Special_Ceramics_Plate.get(16))
             .fluidInputs(
                 MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 5),
                 new FluidStack(TFFluids.fluidCryotheum,1000 * 2),
-                GSMaterials.liquidHelium.getFluidOrGas(1000 * 6),
+                WerkstoffLoader.LiquidHelium.getFluidOrGas(1000 * 6),
                 GGMaterial.hikarium.getMolten(144 * 10))
             .itemOutputs(GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveMedium.get(3))
             .eut(TierEU.RECIPE_ZPM)

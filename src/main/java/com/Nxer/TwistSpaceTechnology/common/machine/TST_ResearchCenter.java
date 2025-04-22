@@ -442,7 +442,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
         int z) {
         tag.setBoolean("hasProblems", (getIdealStatus() - getRepairStatus()) > 0);
         tag.setFloat("efficiency", mEfficiency / 100.0F);
-        tag.setBoolean("incompleteStructure", (getBaseMetaTileEntity().getErrorDisplayID() & 64) != 0);
+        tag.setBoolean("incompleteStructure", (getErrorDisplayID() & 64) != 0);
         tag.setLong("computation", (computationRequired - computationRemaining) / 20L);
         tag.setLong("computationRequired", computationRequired / 20L);
     }

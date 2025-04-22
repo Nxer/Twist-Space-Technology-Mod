@@ -82,9 +82,7 @@ import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -92,7 +90,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -102,12 +99,13 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.core.block.ModBlocks;
+import gtnhintergalactic.block.IGBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
 public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO, IWirelessEnergyHatchInformation {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO {
 
     // region Class Constructor
     public TST_DSPReceiver(int aID, String aName, String aNameRegional) {
@@ -551,8 +549,8 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                                    .addElement('J', ofBlock(sBlockCasingsTT, 7)) // J -> ofBlock...(gt.blockcasingsTT, 7, ...);
                                    .addElement('K', ofBlock(sBlockCasingsTT, 9)) // K -> ofBlock...(gt.blockcasingsTT, 9, ...);
                                    .addElement('L', ofBlock(ModBlocks.blockCasings4Misc, 4)) // L -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-                                   .addElement('M', ofBlock(GSBlocks.DysonSwarmBlocks, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
-                                   .addElement('N', ofBlock(GSBlocks.DysonSwarmBlocks, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+                                   .addElement('M', ofBlock(IGBlocks.DysonSwarmCasing, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
+                                   .addElement('N', ofBlock(IGBlocks.DysonSwarmCasing, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
                                    .addElement('O', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // O -> ofBlock...(tile.quantumGlass, 0, ...);
                                    .addElement(
 			                           'P',
@@ -659,7 +657,7 @@ Q -> ofFrame...(NaquadahAlloy, ...);
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

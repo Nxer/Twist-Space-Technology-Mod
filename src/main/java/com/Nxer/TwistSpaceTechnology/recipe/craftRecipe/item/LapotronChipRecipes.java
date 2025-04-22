@@ -14,7 +14,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
-import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
@@ -30,6 +29,7 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
+import gtnhintergalactic.recipe.IGRecipeMaps;
 
 public class LapotronChipRecipes {
 
@@ -147,7 +147,6 @@ public class LapotronChipRecipes {
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64))
-                .noOptimize()
                 .eut(TierEU.RECIPE_UHV)
                 .duration(20 * 15)
                 .addTo(RecipeMaps.laserEngraverRecipes);
@@ -157,7 +156,6 @@ public class LapotronChipRecipes {
             GTValues.RA.stdBuilder()
                 .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1), GTUtility.copyAmountUnsafe(0, itemStack))
                 .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
-                .noOptimize()
                 .eut(TierEU.RECIPE_UV)
                 .duration(20 * 15)
                 .addTo(RecipeMaps.laserEngraverRecipes);

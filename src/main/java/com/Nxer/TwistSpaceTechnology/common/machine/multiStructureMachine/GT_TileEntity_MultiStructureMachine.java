@@ -53,7 +53,7 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
 
     protected abstract float getSpeedBonus();
 
-    protected abstract int getMaxParallelRecipes();
+    public abstract int getMaxParallelRecipes();
 
     public void setShape() {
         StructureLoader.load(mName, mName);

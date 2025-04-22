@@ -197,8 +197,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                 if (recipe.mFluidInputs != null) {
                     ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                 }
-                ra.noOptimize()
-                    .eut(recipe.mEUt)
+                ra.eut(recipe.mEUt)
                     .duration(recipe.mDuration)
                     .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
 
@@ -225,8 +224,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     if (recipe.mFluidInputs != null) {
                         ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                     }
-                    ra.noOptimize()
-                        .eut(recipe.mEUt)
+                    ra.eut(recipe.mEUt)
                         .duration(recipe.mDuration)
                         .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
                 }

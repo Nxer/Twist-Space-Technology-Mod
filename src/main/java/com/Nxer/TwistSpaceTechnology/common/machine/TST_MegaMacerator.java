@@ -117,7 +117,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         switch (mBlockTier) {
             case (1):
                 return BlockTier1Parallel_MegaMacerator;
