@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -35,6 +34,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;

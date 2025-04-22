@@ -17,7 +17,6 @@ import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
 import static tectech.util.CommonValues.MULTI_CHECK_AT;
 import static vazkii.botania.common.block.ModBlocks.pylon;
 
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_Multi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
