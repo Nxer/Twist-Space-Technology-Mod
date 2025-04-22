@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -188,7 +189,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.research.desc.3")) // Does not consume the
             // item until
             // the Data Stick is written
-            .addInfo(translateToLocal("tt.keyword.Structure.StructureTooComplex")) // The structure is too complex!
+            .addInfo(TstSharedLocalization.MachineTooltip.tooComplex()) // The structure is too complex!
             .addSeparator()
             .beginStructureBlock(3, 7, 7, false)
             .addOtherStructurePart(
