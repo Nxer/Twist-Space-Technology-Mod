@@ -107,6 +107,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
 
     private static int RECIPE_DURATION = 32;
     private static final int RECIPE_EUT = 1920;
+    private static final int SECOND_IN_TICKS = 20;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_RINGS = "rings";
     private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
@@ -556,7 +557,8 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             Aspect aspect = synthesisOrder.getAspects()[i];
             int amount = synthesisOrder.getAmount(aspect);
             int aspectLevel = computeAspectLevel(aspect);
-            RECIPE_DURATION += amount * aspectLevel;
+            int baseDuration = 2;
+            RECIPE_DURATION += amount * baseDuration * aspectLevel;
         }
 
         // Aspect output and state quantity restoration
@@ -581,7 +583,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
 
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
-            .setDuration((int) Math.ceil(20 * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
+            .setDuration((int) Math.ceil(SECOND_IN_TICKS * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
             .setDurationDecreasePerOC(2)
             .calculate();
 
@@ -748,37 +750,29 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #zh_CN §9我们必须知道，我们必将知道.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_01"))
             // #tr Tooltip_SkypiercerTower_02
-            // #en_US Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
-            // #zh_CN 神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
+            // #en_US Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
+            // #zh_CN
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
             // #tr Tooltip_SkypiercerTower_03
-            // #en_US Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
+            // #en_US You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
             // #zh_CN
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
             // #tr Tooltip_SkypiercerTower_04
-            // #en_US The total time it takes to synthesize the requested aspects is not only the final aspect time but also the sub-step non-primal aspects crafting time.
+            // #en_US This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
             // #zh_CN
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_04"))
             // #tr Tooltip_SkypiercerTower_05
-            // #en_US Example Motus[T1]: Time added[1s per Motus]
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
-            // #tr Tooltip_SkypiercerTower_06
-            // #en_US Example Alienis[T3]: Time added[3s per Alienis], Time added[2s per Tenebrae(sub-step)], Time added[1s per Vacuos(sub-step)], Time added[1s per Lux(sub-step)]
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
-            // #tr Tooltip_SkypiercerTower_07
-            // #en_US This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
-            // #zh_CN
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
-            // #tr Tooltip_SkypiercerTower_08
-            // #en_US Each ring segment increases parallel processing by 16 units. However, as this machine operates on a single-task principle, the corresponding parallel capacity is converted into a speed multiplier,resulting in a 1600% speed boost.
-            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_08"))
-            // #tr Tooltip_SkypiercerTower_09
             // #en_US Min voltage 1A EV, standard overclocks
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_09"))
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
+            // #tr Tooltip_SkypiercerTower_06
+            // #en_US Each ring segment grants a 1600% speed boost that stacks additively.
+            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
+            // #tr Tooltip_SkypiercerTower_07
+            // #en_US TotalProcessingTime = ((AmountOfAspects * BaseSynthesizeTimeAspects) / (NumberOfRings * 16 or Minimum value 1)) / 2^NumberOfOverclocks
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
