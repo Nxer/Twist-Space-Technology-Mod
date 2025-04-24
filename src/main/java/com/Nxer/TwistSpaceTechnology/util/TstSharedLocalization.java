@@ -33,6 +33,14 @@ public class TstSharedLocalization {
         }
     }
 
+    public static class MachineTooltip {
+
+        public static String tooComplex() {
+            return TstUtils.tr("GT5U.MBTT.Structure.Complex");
+        }
+
+    }
+
     public static class Command {
 
         public static ChatComponentTranslation invalidCommand() {
