@@ -750,29 +750,33 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #zh_CN §9我们必须知道，我们必将知道.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_01"))
             // #tr Tooltip_SkypiercerTower_02
-            // #en_US Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
-            // #zh_CN 从初等要素合成复合要素,至少1A EV,一个要素合成最少需要2s.
+            // # Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
+            // #zh_CN 神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
             // #tr Tooltip_SkypiercerTower_03
-            // #en_US You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
-            // #zh_CN 你可以在魔导手册上查询各个要素的合成时间.
+            // #en_US Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
+            // #zh_CN 从初等要素合成复合要素,至少1A EV,一个要素合成最少需要2s.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
             // #tr Tooltip_SkypiercerTower_04
-            // #en_US This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
-            // #zh_CN 这台机器采用重命名的物体驱动,格式'AspectValue(+AspectValue+...)'即可制取Value数目的Aspect,而+可以继续书写多个请求要素.
+            // #en_US You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
+            // #zh_CN 你可以在魔导手册上查询各个要素的合成时间.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_04"))
             // #tr Tooltip_SkypiercerTower_05
-            // #en_US Min voltage 1A EV, standard overclocks
-            // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
+            // #en_US This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
+            // #zh_CN 这台机器采用重命名的物体驱动,格式'AspectValue(+AspectValue+...)'即可制取Value数目的Aspect,而+可以继续书写多个请求要素.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
             // #tr Tooltip_SkypiercerTower_06
-            // #en_US Each ring segment grants a 1600% speed boost that stacks additively.
-            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+            // #en_US Min voltage 1A EV, standard overclocks
+            // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
             // #tr Tooltip_SkypiercerTower_07
+            // #en_US Each ring segment grants a 1600% speed boost that stacks additively.
+            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
+            // #tr Tooltip_SkypiercerTower_08
             // #en_US TotalProcessingTime = ((AmountOfAspects * BaseSynthesizeTimeAspects) / (NumberOfRings * 16 or Minimum value 1)) / 2^NumberOfOverclocks
             // #zh_CN 总处理时间 = ((要素数量 × 基础合成时间) / max(环数量 × 16, 1)) / 2^超频次数
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_08"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)

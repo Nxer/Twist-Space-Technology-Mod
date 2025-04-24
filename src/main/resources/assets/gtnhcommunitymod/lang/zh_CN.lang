@@ -2052,12 +2052,12 @@ Tooltip_SkypiercerTwoer_MachineType=源质合成者
 Tooltip_SkypiercerTower_00=穿云尖塔的控制器方块
 Tooltip_SkypiercerTower_01=§9我们必须知道，我们必将知道.
 Tooltip_SkypiercerTower_02=神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
-Tooltip_SkypiercerTower_03=
-Tooltip_SkypiercerTower_04=
-Tooltip_SkypiercerTower_05=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
-Tooltip_SkypiercerTower_06=每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+Tooltip_SkypiercerTower_03=从初等要素合成复合要素,至少1A EV,一个要素合成最少需要2s.
+Tooltip_SkypiercerTower_04=你可以在魔导手册上查询各个要素的合成时间.
+Tooltip_SkypiercerTower_05=这台机器采用重命名的物体驱动,格式'AspectValue(+AspectValue+...)'即可制取Value数目的Aspect,而+可以继续书写多个请求要素.
+Tooltip_SkypiercerTower_06=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
 Tooltip_SkypiercerTower_07=每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
-Tooltip_SkypiercerTower_08=每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+Tooltip_SkypiercerTower_08=总处理时间 = ((要素数量 × 基础合成时间) / max(环数量 × 16, 1)) / 2^超频次数
 Tooltip_SkypiercerTower_09=至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
 Tooltip_SkypiercerTower_InputBusInfo=任何舱室替换化学惰性方块
 Tooltip_SkypiercerTower_EnergyHatch=任何舱室替换化学惰性方块

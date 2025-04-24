@@ -2051,12 +2051,12 @@ Tooltip_PrimordialDisjunctus_HatchBusInfo=Replace Magic mechanical blocks in any
 Tooltip_SkypiercerTwoer_MachineType=Essentia Synthesizer
 Tooltip_SkypiercerTower_00=Controller block for the SkypiercerTower
 Tooltip_SkypiercerTower_01=§9Wir müssen wissen. Wir werden wissen.
-Tooltip_SkypiercerTower_02=Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
-Tooltip_SkypiercerTower_03=You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
-Tooltip_SkypiercerTower_04=This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
-Tooltip_SkypiercerTower_05=Min voltage 1A EV, standard overclocks
-Tooltip_SkypiercerTower_06=Each ring segment grants a 1600% speed boost that stacks additively.
-Tooltip_SkypiercerTower_07=TotalProcessingTime = ((AmountOfAspects * BaseSynthesizeTimeAspects) / (NumberOfRings * 16 or Minimum value 1)) / 2^NumberOfOverclocks
+Tooltip_SkypiercerTower_02=Thaumaturgical research confirms: Essentia(Hydration Aspect) degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
+Tooltip_SkypiercerTower_03=Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
+Tooltip_SkypiercerTower_04=You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
+Tooltip_SkypiercerTower_05=This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
+Tooltip_SkypiercerTower_06=Min voltage 1A EV, standard overclocks
+Tooltip_SkypiercerTower_07=Each ring segment grants a 1600% speed boost that stacks additively.
 Tooltip_SkypiercerTower_08=TotalProcessingTime = ((AmountOfAspects * BaseSynthesizeTimeAspects) / (NumberOfRings * 16 or Minimum value 1)) / 2^NumberOfOverclocks
 Tooltip_SkypiercerTower_09=Min voltage 1A EV, standard overclocks
 Tooltip_SkypiercerTower_InputBusInfo=Replace any chemically inert machine casing
