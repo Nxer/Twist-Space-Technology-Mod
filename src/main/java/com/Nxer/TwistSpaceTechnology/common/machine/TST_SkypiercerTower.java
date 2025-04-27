@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower.Essentia_InsentiaL;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerRing_SkypiercerTower;
 import static com.Nxer.TwistSpaceTechnology.util.AspectLevelCalculator.computeAspectLevel;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTile;
@@ -31,15 +30,20 @@ import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.function.LongConsumer;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +56,12 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.math.Alignment;
+import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
+import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
+import com.gtnewhorizons.modularui.common.widget.SlotWidget;
+import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import emt.tile.TileElectricCloud;
 import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
@@ -88,13 +98,16 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
     protected ArrayList<TileNitor> mTileNitors = new ArrayList<>();
     protected ArrayList<TileElectricCloud> mTileElectricCloud = new ArrayList<>();
-    public AspectList mOutputAspects = new AspectList();
+    protected AspectList mOutputAspects = new AspectList();
+    protected String[] mOutputAspectNames = null;
+    protected Integer[] mOutputAspectAmounts = null;
     protected double mParallel = 0;
 
     private int ringCount = 0;
 
     private static int RECIPE_DURATION = 32;
     private static final int RECIPE_EUT = 1920;
+    private static final int SECOND_IN_TICKS = 20;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_RINGS = "rings";
     private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
@@ -376,6 +389,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
         this.mParallel = 0;
         this.ringCount = 0;
+        this.mTileInfusionProvider.clear();
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, Main_horizontalOffSet, Main_verticalOffSet, Main_depthOffSet)) {
             return false;
@@ -416,48 +430,65 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     @Override
     public @NotNull CheckRecipeResult checkProcessing_EM() {
         RECIPE_DURATION = 0;
-        // Read the paper and cut it
+        ResetOutputs();
+
+        // Check for any requested aspect
         ArrayList<ItemStack> tItemsList = getStoredInputs();
-        if (tItemsList.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-        ItemStack itemStack = tItemsList.get(0);
-        String localizedName = itemStack.getDisplayName()
-            .toUpperCase();
-        String[] parts = localizedName.split("\\+");
-        // max-heap is used to store preprocessing aspects0
+        if (tItemsList.isEmpty()) {
+            return CheckRecipeResultRegistry.NO_RECIPE;
+        }
+
+        // Max-heap is used to store preprocessing aspects0
+        AspectList outputAspects = new AspectList();
         PriorityQueue<Map.Entry<Integer, AspectList>> PreprocessedAspectMaxHeap = new PriorityQueue<>(
             (entry1, entry2) -> Integer.compare(entry2.getKey(), entry1.getKey()));
 
-        AspectList outputAspects = new AspectList();
-        // output a item named completed for easy automation.
-        ItemStack outputItem = tItemsList.get(0)
-            .copy();
-        outputItem.stackSize = 1;
-        outputItem.setStackDisplayName("Completed");
-        this.mOutputItems = new ItemStack[] { outputItem };
+        // Add all the requested aspects
+        for (ItemStack itemStack : tItemsList) {
+            String localizedName = itemStack.getDisplayName()
+                .toUpperCase();
 
-        for (String part : parts) {
-            String aspectName = part.replaceAll("[^A-Za-z]", "");
-            int amount = Integer.parseInt(part.replaceAll("[^0-9]", ""));
-            Aspect aspect = getAspectByName(aspectName);
-            if (aspect != null) {
+            String[] parts = localizedName.split("\\+");
+
+            for (String part : parts) {
+                String aspectName = part.replaceAll("[^A-Za-z]", "");
+                if (aspectName.isEmpty()) {
+                    return SimpleCheckRecipeResult.ofFailure(
+                        "Invalid request [" + localizedName + "] Couldn't find aspect name in part [" + part + "]");
+                }
+
+                String literalAmount = part.replaceAll("[^0-9]", "");
+                if (literalAmount.isEmpty()) {
+                    return SimpleCheckRecipeResult.ofFailure(
+                        "Invalid request [" + localizedName + "] Couldn't find amount in part [" + literalAmount + "]");
+                }
+
+                Aspect aspect = getAspectByName(aspectName);
+                if (aspect == null) {
+                    return SimpleCheckRecipeResult.ofFailure("Unknown aspect name: " + aspectName);
+                }
+
+                int amount = Integer.parseInt(literalAmount) * itemStack.stackSize;
                 outputAspects.add(aspect, amount);
                 PreprocessedAspectMaxHeap.add(
                     new AbstractMap.SimpleEntry<>(computeAspectLevel(aspect), new AspectList().add(aspect, amount)));
-            } else {
-                return SimpleCheckRecipeResult.ofFailure("Unknown aspect name: " + aspectName);
             }
         }
-        // Check the InfusionProvider
-        if (mTileInfusionProvider.isEmpty()) return Essentia_InsentiaL;
 
-        // Get a copy of the Aspect within the network
-        Map<Aspect, Integer> simulatedNetwork = new HashMap<>();
-        for (Aspect aspect : Aspect.aspects.values()) {
-            int totalAmount = mTileInfusionProvider.stream()
-                .mapToInt(hatch -> (int) hatch.getAspectAmountInNetwork(aspect))
-                .sum();
-            simulatedNetwork.put(aspect, totalAmount);
+        // Check if the Infusion Provider exists
+        if (mTileInfusionProvider.isEmpty()) {
+            return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("No Infusion Provider found.");
         }
+
+        // Get a copy of the primal aspect within the network
+        Map<Aspect, Integer> aspectsInNetwork = new HashMap<>();
+        for (Aspect primalAspect : Aspect.getPrimalAspects()) {
+            int totalAmount = mTileInfusionProvider.stream()
+                .mapToInt(hatch -> (int) hatch.getAspectAmountInNetwork(primalAspect))
+                .sum();
+            aspectsInNetwork.put(primalAspect, totalAmount);
+        }
+
         // SynthesisOrder is stored for computing the processing time
         // consumptionSteps to eliminate the intrinsic Aspects of the network
         // shortageAspects count the cases where the Primal Aspect is insufficient
@@ -465,43 +496,52 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         AspectList consumptionSteps = new AspectList();
         AspectList shortageAspects = new AspectList();
         Boolean primalAspectShortage = false;
+
         // The synthesis process is simulated and the Aspect is calculated to be sufficient
         while (!PreprocessedAspectMaxHeap.isEmpty()) {
             Map.Entry<Integer, AspectList> entry = PreprocessedAspectMaxHeap.poll();
             AspectList aspectList = entry.getValue();
             Aspect currentAspect = aspectList.getAspects()[0];
             int required = aspectList.getAmount(currentAspect);
-            int available = simulatedNetwork.getOrDefault(currentAspect, 0);
+            int available = aspectsInNetwork.getOrDefault(currentAspect, 0);
             int remaining = available - required;
             if (remaining >= 0) {
-                simulatedNetwork.put(currentAspect, remaining);
+                aspectsInNetwork.put(currentAspect, remaining);
                 consumptionSteps.add(currentAspect, required);
             } else {
-                simulatedNetwork.put(currentAspect, 0);
+                aspectsInNetwork.put(currentAspect, 0);
                 int deficit = required - available;
-                if (available > 0) consumptionSteps.add(currentAspect, available);
+                if (available > 0) {
+                    consumptionSteps.add(currentAspect, available);
+                }
+
                 synthesisOrder.add(currentAspect, deficit);
                 if (currentAspect.isPrimal()) {
                     primalAspectShortage = true;
                     shortageAspects.add(currentAspect, deficit);
                     continue;
                 }
+
                 for (Aspect component : currentAspect.getComponents()) {
                     PreprocessedAspectMaxHeap
                         .add(new AbstractMap.SimpleEntry<>(deficit, new AspectList().add(component, deficit)));
                 }
             }
         }
+
         // Determine whether the network Aspect are sufficient
         if (primalAspectShortage) {
             StringBuilder errorMessage = new StringBuilder("Missing Aspects: ");
-            for (Aspect aspect : shortageAspects.getAspects()) errorMessage.append(aspect.getName())
-                .append(shortageAspects.getAmount(aspect))
-                .append(" ");
+            for (Aspect aspect : shortageAspects.getAspects()) {
+                errorMessage.append(aspect.getName())
+                    .append(shortageAspects.getAmount(aspect))
+                    .append(" ");
+            }
             return SimpleCheckRecipeResult.ofFailure(
                 errorMessage.toString()
                     .trim());
         }
+
         // Consume network aspect correctly
         for (Aspect aspect : consumptionSteps.getAspects()) {
             int amount = consumptionSteps.getAmount(aspect);
@@ -511,28 +551,42 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                 }
             }
         }
+
         // Calculate the original machining time
         for (int i = 0; i < synthesisOrder.size(); i++) {
             Aspect aspect = synthesisOrder.getAspects()[i];
             int amount = synthesisOrder.getAmount(aspect);
             int aspectLevel = computeAspectLevel(aspect);
-            RECIPE_DURATION += amount * (int) Math.pow(2, aspectLevel);
+            int baseDuration = 2;
+            RECIPE_DURATION += amount * baseDuration * aspectLevel;
         }
 
         // Aspect output and state quantity restoration
         this.mOutputAspects.add(outputAspects);
+        this.mOutputAspectNames = new String[outputAspects.aspects.size()];
+        this.mOutputAspectAmounts = new Integer[outputAspects.aspects.size()];
+        int i = 0;
+        for (Map.Entry<Aspect, Integer> outputAspect : outputAspects.aspects.entrySet()) {
+            this.mOutputAspectNames[i] = outputAspect.getKey()
+                .getName();
+            this.mOutputAspectAmounts[i] = outputAspect.getValue();
+            ++i;
+        }
+
         consumptionSteps.aspects.clear();
         synthesisOrder.aspects.clear();
         PreprocessedAspectMaxHeap.clear();
-        simulatedNetwork.clear();
+        aspectsInNetwork.clear();
         outputAspects.aspects.clear();
-        itemStack.stackSize--;
+
         this.mEfficiencyIncrease = 10000;
+
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
-            .setDuration((int) Math.ceil(20 * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
+            .setDuration((int) Math.ceil(SECOND_IN_TICKS * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
             .setDurationDecreasePerOC(2)
             .calculate();
+
         // The time coefficient of 20 comes from: Base synthesis time = 1 second (set 10)
         // ×2 adjustment for unexpected EV overclocking effects halving the duration.This serves as a compensation
         // factor.
@@ -541,7 +595,14 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         mMaxProgresstime = calculator.getDuration();
 
         this.updateSlots();
+
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private void ResetOutputs() {
+        mOutputAspects.aspects.clear();
+        mOutputAspectNames = null;
+        mOutputAspectAmounts = null;
     }
 
     @Override
@@ -569,7 +630,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     @Override
     public void stopMachine() {
         super.stopMachine();
-        this.mOutputAspects.aspects.clear();
+        ResetOutputs();
     }
 
     @Override
@@ -578,19 +639,114 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     }
 
     @Override
+    protected boolean showRecipeTextInGUI() {
+        return false;
+    }
+
+    @Override
+    protected String generateCurrentRecipeInfoString() {
+        StringBuffer ret = new StringBuffer(EnumChatFormatting.WHITE + "Progress: ");
+
+        numberFormat.setMinimumFractionDigits(2);
+        numberFormat.setMaximumFractionDigits(2);
+        numberFormat.format((double) mProgresstime / 20, ret);
+        ret.append("s / ");
+        numberFormat.format((double) mMaxProgresstime / 20, ret);
+        ret.append("s (");
+        numberFormat.setMinimumFractionDigits(1);
+        numberFormat.setMaximumFractionDigits(1);
+        numberFormat.format((double) mProgresstime / mMaxProgresstime * 100, ret);
+        ret.append("%)\n");
+        numberFormat.setMinimumFractionDigits(0);
+        numberFormat.setMaximumFractionDigits(2);
+
+        LongConsumer appendRate = (amount) -> {
+            double processPerTick = (double) amount / mMaxProgresstime * 20;
+            ret.append(" (");
+            if (processPerTick > 1) {
+                numberFormat.format(Math.round(processPerTick * 10) / 10.0, ret);
+                ret.append("/s)");
+            } else {
+                numberFormat.format(Math.round(1 / processPerTick * 10) / 10.0, ret);
+                ret.append("s/ea)");
+            }
+        };
+
+        int lines = 0;
+        int MAX_LINES = 10;
+
+        if (mOutputAspectNames != null && mOutputAspectAmounts != null
+            && mOutputAspectNames.length == mOutputAspectAmounts.length) {
+            int outputAspectTypesAmounts = mOutputAspectAmounts.length;
+            HashMap<String, Long> nameToAmount = new HashMap<>();
+            for (int i = 0; i < outputAspectTypesAmounts; ++i) {
+                nameToAmount.merge(mOutputAspectNames[i], (long) mOutputAspectAmounts[i], Long::sum);
+            }
+            for (Map.Entry<String, Long> entry : nameToAmount.entrySet()) {
+                if (lines >= MAX_LINES) {
+                    ret.append("...");
+                    return ret.toString();
+                }
+                lines++;
+                ret.append(EnumChatFormatting.AQUA)
+                    .append(entry.getKey())
+                    .append(EnumChatFormatting.WHITE)
+                    .append(" x ")
+                    .append(EnumChatFormatting.GOLD);
+                numberFormat.format(entry.getValue(), ret);
+                ret.append(EnumChatFormatting.WHITE);
+                appendRate.accept(entry.getValue());
+                ret.append('\n');
+            }
+        }
+        return ret.toString();
+    }
+
+    @Override
+    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+        super.drawTexts(screenElements, inventorySlot);
+
+        // Custoom widget
+        screenElements.widget(
+            TextWidget.dynamicString(this::generateCurrentRecipeInfoString)
+                .setSynced(false)
+                .setDefaultColor(COLOR_TEXT_WHITE.get())
+                .setTextAlignment(Alignment.CenterLeft)
+                .setEnabled(
+                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && mOutputAspectNames != null
+                        && mOutputAspectNames.length > 0
+                        && mOutputAspectAmounts != null
+                        && mOutputAspectAmounts.length > 0))
+            .widget(
+                new FakeSyncWidget.ListSyncer<>(
+                    () -> mOutputAspectNames != null ? Arrays.asList(mOutputAspectNames) : Collections.emptyList(),
+                    val -> mOutputAspectNames = val.toArray(new String[0]),
+                    NetworkUtils::writeStringSafe,
+                    NetworkUtils::readStringSafe))
+            .widget(
+                new FakeSyncWidget.ListSyncer<>(
+                    () -> mOutputAspectAmounts != null ? Arrays.asList(mOutputAspectAmounts) : Collections.emptyList(),
+                    val -> mOutputAspectAmounts = val.toArray(new Integer[0]),
+                    PacketBuffer::writeVarIntToBuffer,
+                    PacketBuffer::readVarIntFromBuffer))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> mProgresstime, val -> mProgresstime = val))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, val -> mMaxProgresstime = val));
+    }
+
+    @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_SkypiercerTwoer_MachineType
-        // # Essentia Synthesizer
+        // #en_US Essentia Synthesizer
         // #zh_CN 源质合成者
         tt.addMachineType(TextEnums.tr("Tooltip_SkypiercerTwoer_MachineType"))
             // #tr Tooltip_SkypiercerTower_00
-            // # Controller block for the SkypiercerTower
+            // #en_US Controller block for the SkypiercerTower
             // #zh_CN 穿云尖塔的控制器方块
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_00"))
             // #tr Tooltip_SkypiercerTower_01
-            // # §9Wir müssen wissen. Wir werden wissen.
+            // #en_US §9Wir müssen wissen. Wir werden wissen.
             // #zh_CN §9我们必须知道，我们必将知道.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_01"))
             // #tr Tooltip_SkypiercerTower_02
@@ -598,37 +754,53 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #zh_CN 神秘学研究表明:源质(水化要素)天然倾向于分解,而重组需要人为干预以克服内阻.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
             // #tr Tooltip_SkypiercerTower_03
-            // # Each aspect is assigned a level, and the synthesis time doubles for each level increase. The exact calculations are somewhat complex, check the Thaumonomicon for details.
-            // #zh_CN 每一个要素被赋予了等级,等级每提升一级,合成时间翻倍,具体计算较为复杂,请查看魔导手册.
+            // #en_US Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
+            // #zh_CN 从初等要素合成复合要素,至少1A EV,一个要素合成最少需要2s.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
             // #tr Tooltip_SkypiercerTower_04
-            // # This machine is driven by command papers. Rename the paper on the anvil to 'AspectValue+...' format to craft the corresponding number of Aspects.
-            // #zh_CN 这台机器使用命令纸驱动,将纸在铁砧上重新命名为AspectValue+...的格式即可制取Value数目的Aspect.
+            // #en_US You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
+            // #zh_CN 你可以在魔导手册上查询各个要素的合成时间.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_04"))
             // #tr Tooltip_SkypiercerTower_05
-            // # Each ring segment increases parallel processing by 16 units. However, as this machine operates on a single-task principle, the corresponding parallel capacity is converted into a speed multiplier,resulting in a 1600% performance enhancement.
-            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+            // #en_US This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
+            // #zh_CN 这台机器采用重命名的物体驱动,格式'AspectValue(+AspectValue+...)'即可制取Value数目的Aspect,而+可以继续书写多个请求要素.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
             // #tr Tooltip_SkypiercerTower_06
-            // # At least EV voltage, use 4/2 overclocking, that is, the processing time is halved for each voltage increase
+            // #en_US Min voltage 1A EV, standard overclocks
             // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
+            // #tr Tooltip_SkypiercerTower_07
+            // #en_US Each ring segment grants a 1600% speed boost that stacks additively.
+            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
+            // #tr Tooltip_SkypiercerTower_08
+            // #en_US TotalProcessingTime = ((AmountOfAspects * BaseSynthesizeTimeAspects) / (NumberOfRings * 16 or Minimum value 1)) / 2^NumberOfOverclocks
+            // #zh_CN 总处理时间 = ((要素数量 × 基础合成时间) / max(环数量 × 16, 1)) / 2^超频次数
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_08"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
 
-            // #tr Tooltip_SkypiercerTower_HatchBusInfo
-            // # Replace chemically inert machine casing in any cabin
+            // #tr Tooltip_SkypiercerTower_InputBusInfo
+            // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            .addOutputHatch(TextEnums.tr("Tooltip_SkypiercerTower_HatchBusInfo"))
-            // #tr Tooltip_SkypiercerTower_HatchBusInfo
-            // # Replace Magic mechanical blocks in any cabin
+            .addInputBus(TextEnums.tr("Tooltip_SkypiercerTower_InputBusInfo"))
+            // #tr Tooltip_SkypiercerTower_EnergyHatch
+            // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            // spotless:on
             .addEnergyHatch(TextEnums.tr("Tooltip_SkypiercerTower_EnergyHatch"))
+            // #tr Tooltip_SkypiercerTower_InfusionProvider
+            // #en_US Replace any chemically inert machine casing
+            // #zh_CN 任何舱室替换化学惰性方块
+            .addOtherStructurePart("Infusion Provider", TextEnums.tr("Tooltip_SkypiercerTower_InfusionProvider"))
+            // #tr Tooltip_SkypiercerTower_EssentiaOutputHatch
+            // #en_US Replace any chemically inert machine casing
+            // #zh_CN 任何舱室替换化学惰性方块
+            .addOtherStructurePart("Essentia Output Hatch", TextEnums.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
             .toolTipFinisher(ModName);
+        // spotless:on
         return tt;
     }
 
