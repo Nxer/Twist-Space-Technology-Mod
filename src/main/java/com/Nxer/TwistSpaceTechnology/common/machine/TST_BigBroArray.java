@@ -49,7 +49,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -1371,7 +1371,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        GTCM_ProcessingLogic gtcm_processingLogic = new GTCM_ProcessingLogic() {
+        TstProcessingLogic gtcm_processingLogic = new TstProcessingLogic() {
 
             @NotNull
             @Override
