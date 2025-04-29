@@ -19,7 +19,7 @@ public class TstParallelHelper extends ParallelHelper {
         if (truncatedItemOutputs.length == 0) return;
         ArrayList<ItemStack> itemOutputsList = new ArrayList<>();
         for (int i = 0; i < truncatedItemOutputs.length; i++) {
-            if (recipe.getOutput(i) != null) continue;
+            if (recipe.getOutput(i) == null) continue;
             ItemStack origin = recipe.getOutput(i)
                 .copy();
             final long itemStackSize = origin.stackSize;
