@@ -101,11 +101,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
         super(aID, aName, aNameRegional, aTier, aInvSlotCount, aDescription, aTextures);
     }
 
-    public TST_TileEntity_Hatch_UltimateMEIO(String aName, int aTier, int aInvSlotCount, String aDescription,
-        ITexture[][][] aTextures) {
-        super(aName, aTier, aInvSlotCount, aDescription, aTextures);
-    }
-
     public TST_TileEntity_Hatch_UltimateMEIO(String aName, int aTier, int aInvSlotCount, String[] aDescription,
         ITexture[][][] aTextures) {
         super(aName, aTier, aInvSlotCount, aDescription, aTextures);

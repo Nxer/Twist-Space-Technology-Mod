@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -11,6 +10,7 @@ import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
@@ -18,7 +18,6 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
-import gtnhintergalactic.item.IGItems;
 
 public class SingleItemRecipes {
 
@@ -49,8 +48,8 @@ public class SingleItemRecipes {
         // Borophene Based Nanowire Composite Thermal Conductive Medium
         TST_RecipeBuilder.builder()
             .itemInputs(
-                new ItemStack(IGItems.DysonSwarmItems, 5, 1),
-                new ItemStack(IGItems.DysonSwarmItems, 5, 2),
+                ItemList.DysonSwarmModule.getWithDamage(5, 1),
+                ItemList.DysonSwarmModule.getWithDamage(5, 2),
                 GTCMItemList.BoropheneFoil.get(8),
                 ItemRefer.Special_Ceramics_Plate.get(16))
             .fluidInputs(

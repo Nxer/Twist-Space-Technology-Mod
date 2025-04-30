@@ -63,6 +63,7 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
 import goodgenerator.items.GGMaterial;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -80,7 +81,6 @@ import gregtech.api.util.recipe.Scanning;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.Particle;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import gtnhintergalactic.block.IGBlocks;
 import gtnhintergalactic.recipe.IGRecipeMaps;
 import micdoodle8.mods.galacticraft.core.blocks.GCBlocks;
 
@@ -132,8 +132,8 @@ public class DSPRecipePool {
                 Laser_Lens_Special.get(64),
 
                 SpaceWarper.get(64),
-                new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                new ItemStack(IGBlocks.DysonSwarmCasing, 64, 9))
+                new ItemStack(GregTechAPI.sBlockCasingsSE, 64),
+                new ItemStack(GregTechAPI.sBlockCasingsDyson, 64, 9))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 1024),
@@ -167,8 +167,8 @@ public class DSPRecipePool {
 
                 GTUtility.copyAmountUnsafe(64, LightWeightPlate),
                 eM_Power.get(64),
-                new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
-                new ItemStack(IGBlocks.DysonSwarmCasing, 64, 9))
+                new ItemStack(GregTechAPI.sBlockCasingsSE, 64),
+                new ItemStack(GregTechAPI.sBlockCasingsDyson, 64, 9))
             .fluidInputs(
                 new FluidStack(solderPlasma, 144 * 8192),
                 Materials.UUMatter.getFluid(1000 * 128),

@@ -85,7 +85,6 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gtPlusPlus.core.block.ModBlocks;
-import gtnhintergalactic.block.IGBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -547,10 +546,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                             ne -> ne.fieldGeneratorTier)))
                 .addElement('G', ofBlock(MetaBlockCasing01, 1))
                 .addElement('H', ofBlock(ModBlocks.blockCasingsTieredGTPP, 9))
-                .addElement('I', ofBlock(IGBlocks.DysonSwarmCasing, 1))
-                .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 8))
-                .addElement('K', ofBlock(IGBlocks.DysonSwarmCasing, 0))
-                .addElement('L', ofBlock(IGBlocks.DysonSwarmCasing, 5))
+                .addElement('I', ofBlock(GregTechAPI.sBlockCasingsDyson, 1))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 8))
+                .addElement('K', ofBlock(GregTechAPI.sBlockCasingsDyson, 0))
+                .addElement('L', ofBlock(GregTechAPI.sBlockCasingsDyson, 5))
                 .addElement('M', ofBlock(sBlockCasingsTT, 10))
                 .addElement('N', ofFrame(Materials.SuperconductorUIVBase))
                 .addElement('O', ofFrame(Materials.Neutronium))

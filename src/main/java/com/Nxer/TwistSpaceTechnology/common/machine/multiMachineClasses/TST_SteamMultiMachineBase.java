@@ -63,7 +63,7 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
             protected OverclockCalculator createOverclockCalculator(@NotNull GTRecipe recipe) {
                 return OverclockCalculator.ofNoOverclock(recipe)
                     .setEUtDiscount(1.33F)
-                    .setSpeedBoost(1.5F);
+                    .setDurationModifier(1.5F);
             }
 
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);

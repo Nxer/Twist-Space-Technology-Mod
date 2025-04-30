@@ -82,7 +82,6 @@ import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.ParallelHelper;
 import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import gtnhintergalactic.block.IGBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
@@ -368,15 +367,15 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                 .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shapeMainErr))
                 .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 13))
-                .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
-                .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
                 .addElement('D', ofBlock(sBlockCasingsTT, 4))
                 .addElement('E', ofBlock(sBlockCasingsTT, 6))
                 .addElement('F', ofBlock(sBlockCasingsTT, 9))
                 .addElement('G', ofBlock(sBlockCasingsTT, 10))
                 .addElement('H', ofBlock(sBlockCasingsTT, 12))
                 .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                 .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'L',

@@ -44,7 +44,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
-import static gtnhintergalactic.block.IGBlocks.SpaceElevatorCasing;
 import static tectech.thing.casing.TTCasingsContainer.SpacetimeCompressionFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.TimeAccelerationFieldGenerator;
@@ -95,7 +94,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gtnhintergalactic.block.IGBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
@@ -507,7 +505,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                        (t,m) -> t.tierDimensionField = m,
                                        t -> t.tierDimensionField
                                    )))
-                   .addElement('B', ofBlock(SpaceElevatorCasing, 2))
+                   .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
                    .addElement('C', ofBlock(sBlockCasingsTT, 4))
                    .addElement(
                        'D',
@@ -551,7 +549,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                        t -> t.tierStabilisationField)))
                    .addElement('H', ofBlock(sBlockCasingsTT, 12))
                    .addElement('I', ofBlock(sBlockCasingsTT, 13))
-                   .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
+                   .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                    .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                    .addElement('L',
                                HatchElementBuilder.<TST_ArtificialStar>builder()

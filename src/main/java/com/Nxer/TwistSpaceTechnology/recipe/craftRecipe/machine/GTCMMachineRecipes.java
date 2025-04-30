@@ -192,6 +192,7 @@ import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.ItemRefer;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -216,9 +217,6 @@ import gtPlusPlus.core.recipe.common.CI;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
-import gtnhintergalactic.block.IGBlocks;
-import gtnhintergalactic.item.IGItems;
-import gtnhintergalactic.item.ItemMiningDrones;
 import gtnhintergalactic.recipe.IGRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
@@ -2173,9 +2171,9 @@ public class GTCMMachineRecipes {
                 .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.toolHeadDrill, Materials.Infinity, 1))
                 .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
-                    new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
+                    new ItemStack(GregTechAPI.sBlockCasingsSE, 64),
                     GTUtility.copyAmountUnsafe(64, voidminer[2]),
-                    new ItemStack(IGItems.MiningDrones, 18, ItemMiningDrones.DroneTiers.UEV.ordinal()),
+                    ItemList.MiningDroneUEV.get(18),
                     SpaceWarper.get(18),
 
                     ItemList.EnergisedTesseract.get(64),
@@ -2282,7 +2280,7 @@ public class GTCMMachineRecipes {
                     Casing_Industrial_Arc_Furnace.get(8),
                     eM_Power.get(8),
                     ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
-                    new ItemStack(IGItems.DysonSwarmItems, 64, 3),
+                    ItemList.DysonSwarmModule.getWithDamage(64, 3),
 
                     TransmissionComponent_UV.get(16),
                     ItemList.Electric_Piston_UHV.get(8),
@@ -3287,7 +3285,7 @@ public class GTCMMachineRecipes {
 
                 GregtechItemList.Hatch_Input_Pyrotheum.get(1),
                 GregtechItemList.TransmissionComponent_LuV.get(4),
-                new ItemStack(IGItems.DysonSwarmItems, 6, 3),
+                ItemList.DysonSwarmModule.getWithDamage(6, 3),
 
                 MaterialsAlloy.PIKYONIUM.getPlateDense(3),
                 MaterialsAlloy.ZERON_100.getPlateDense(3)
@@ -3310,7 +3308,7 @@ public class GTCMMachineRecipes {
                 GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.Neutronium,2),
                 ItemList.neutroniumHeatCapacitor.get(1),
                 ItemList.Neutron_Reflector.get(64),
-                new ItemStack(IGItems.DysonSwarmItems, 24, 3),
+                ItemList.DysonSwarmModule.getWithDamage(24, 3),
 
                 ItemRefer.Advanced_Radiation_Protection_Plate.get(36),
                 ItemList.Electric_Piston_UV.get(4),

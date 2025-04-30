@@ -55,7 +55,6 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
-import gtnhintergalactic.block.IGBlocks;
 
 public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> {
 
@@ -145,10 +144,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                     .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
                     .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
                     .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
-                    .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 0))
-                    .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
+                    .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+                    .addElement('H', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
                     .addElement('I', ofBlock(sBlockCasingsTT, 8))
-                    .addElement('J', ofBlock(IGBlocks.DysonSwarmCasing, 9))
+                    .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                     .addElement(
                         'K',
                         ofChain(
@@ -164,7 +163,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                             .adder(TST_StarcoreMiner::addToMachineList)
                             .dot(1)
                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
-                            .buildAndChain(IGBlocks.SpaceElevatorCasing, 0)
+                            .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
                     )
                     /*
                     Blocks:

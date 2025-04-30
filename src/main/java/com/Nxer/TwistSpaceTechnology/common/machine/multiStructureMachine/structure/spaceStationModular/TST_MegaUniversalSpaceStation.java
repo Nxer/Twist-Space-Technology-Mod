@@ -37,7 +37,6 @@ import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
-import gtnhintergalactic.block.IGBlocks;
 import gtnhintergalactic.client.IGTextures;
 import tectech.thing.casing.TTCasingsContainer;
 
@@ -198,8 +197,8 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))
                 .addElement('E', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 10))
                 .addElement('F', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 12))
-                .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
-                .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
+                .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('H', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
                 .addElement('I', ofBlock(TTCasingsContainer.sBlockCasingsTT, 2))
                 .addElement('J', ofBlock(TTCasingsContainer.sBlockCasingsTT, 3))
                 .addElement('K', ofBlock(GregTechAPI.sBlockMetal9, 6))

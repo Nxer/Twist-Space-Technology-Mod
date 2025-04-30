@@ -49,7 +49,6 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 import gtnhintergalactic.GTNHIntergalactic;
-import gtnhintergalactic.block.IGBlocks;
 import gtnhintergalactic.client.IGTextures;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import tectech.thing.casing.TTCasingsContainer;
@@ -302,9 +301,9 @@ public class GT_TileEntity_StellarMaterialSiphon
                 // ofBlock...(gt.blockcasingsBA0,
                 // 12,//
                 // ...);
-                .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// D -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// E -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                .addElement('F', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// F -> ofBlock...(gt.blockcasingsSE, 2, ...);
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// D -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// E -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// F -> ofBlock...(gt.blockcasingsSE, 2, ...);
                 .addElement('G', ofBlock(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2))// G ->
                 // ofBlock...(gt.spacetime_compression_field_generator,
                 // 2, ...);
@@ -336,8 +335,8 @@ public class GT_TileEntity_StellarMaterialSiphon
                             GT_TileEntity_StellarMaterialSiphon::addOutputToMachineList,
                             IGTextures.CASING_INDEX_SIPHON,
                             1),
-                        StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 0)))// L -> ofBlock...(tile.stone, 0,
-                                                                                   // ...);
+                        StructureUtility.ofBlock(GregTechAPI.sBlockCasingsSE, 0)))// L -> ofBlock...(tile.stone, 0,
+                                                                                  // ...);
                 .addElement('M', ofBlock(SpaceStationAntiGravityBlock, 13))
                 .build();// IGBlocks.SpaceElevatorCasing
         }

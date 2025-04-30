@@ -66,7 +66,6 @@ import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
 import gtPlusPlus.core.block.base.BasicBlock;
 import gtPlusPlus.core.material.MaterialsAlloy;
-import gtnhintergalactic.block.IGBlocks;
 
 public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperThermalConvector> {
 
@@ -139,7 +138,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 .addElement('J', ofFrame(Materials.Iridium))
                 .addElement('K', ofFrame(Materials.CosmicNeutronium))
                 .addElement('L', ofBlock(Loaders.pressureResistantWalls, 0))
-                .addElement('M', ofBlock(IGBlocks.DysonSwarmCasing, 9))
+                .addElement('M', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                 .addElement('N', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement('O', ofBlock(TstBlocks.MetaBlockCasing02, 3))
                 .addElement('P', ofBlock(TstBlocks.MetaBlockCasing02, 4))
