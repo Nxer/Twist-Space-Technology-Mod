@@ -189,11 +189,6 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus implement
     }
 
     @Override
-    public boolean displaysStackSize() {
-        return true;
-    }
-
-    @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_ME_CRAFTING_INPUT_BUFFER) };
     }

@@ -80,7 +80,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return ParallelMultiply_IndustrialMagnetarSeparator * GTUtility.getTier(this.getMaxInputVoltage());
     }
 

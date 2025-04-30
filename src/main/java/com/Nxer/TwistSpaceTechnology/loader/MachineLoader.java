@@ -635,112 +635,98 @@ public final class MachineLoader {
                 "NameBufferedEnergyHatchLV",
                 TstUtils.tr("NameBufferedEnergyHatchLV"),
                 1,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchMV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18985,
                 "NameBufferedEnergyHatchMV",
                 TstUtils.tr("NameBufferedEnergyHatchMV"),
                 2,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchHV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18986,
                 "NameBufferedEnergyHatchHV",
                 TstUtils.tr("NameBufferedEnergyHatchHV"),
                 3,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchEV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18987,
                 "NameBufferedEnergyHatchEV",
                 TstUtils.tr("NameBufferedEnergyHatchEV"),
                 4,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchIV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18988,
                 "NameBufferedEnergyHatchIV",
                 TstUtils.tr("NameBufferedEnergyHatchIV"),
                 5,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchLuV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18989,
                 "NameBufferedEnergyHatchLuV",
                 TstUtils.tr("NameBufferedEnergyHatchLuV"),
                 6,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchZPM.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18990,
                 "NameBufferedEnergyHatchZPM",
                 TstUtils.tr("NameBufferedEnergyHatchZPM"),
                 7,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchUV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18991,
                 "NameBufferedEnergyHatchUV",
                 TstUtils.tr("NameBufferedEnergyHatchUV"),
                 8,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchUHV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18992,
                 "NameBufferedEnergyHatchUHV",
                 TstUtils.tr("NameBufferedEnergyHatchUHV"),
                 9,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchUEV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18993,
                 "NameBufferedEnergyHatchUEV",
                 TstUtils.tr("NameBufferedEnergyHatchUEV"),
                 10,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchUIV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18994,
                 "NameBufferedEnergyHatchUIV",
                 TstUtils.tr("NameBufferedEnergyHatchUIV"),
                 11,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchUMV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18995,
                 "NameBufferedEnergyHatchUMV",
                 TstUtils.tr("NameBufferedEnergyHatchUMV"),
                 12,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchUXV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18996,
                 "NameBufferedEnergyHatchUXV",
                 TstUtils.tr("NameBufferedEnergyHatchUXV"),
                 13,
-                16,
-                null));
+                16));
         GTCMItemList.BufferedEnergyHatchMAX.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18997,
                 "NameBufferedEnergyHatchMAX",
                 TstUtils.tr("NameBufferedEnergyHatchMAX"),
                 14,
-                16,
-                null));
+                16));
 
         GTCMItemList.DebugUncertaintyHatch.set(
             new GT_MetaTileEntity_Hatch_UncertaintyDebug(

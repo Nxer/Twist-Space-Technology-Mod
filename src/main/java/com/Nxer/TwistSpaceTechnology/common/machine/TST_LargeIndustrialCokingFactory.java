@@ -78,7 +78,7 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 

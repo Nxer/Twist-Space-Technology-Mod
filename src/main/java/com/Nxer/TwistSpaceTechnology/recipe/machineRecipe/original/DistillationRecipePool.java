@@ -19,7 +19,6 @@ public class DistillationRecipePool {
             .itemOutputs(GTCMItemList.VoidPollen.get(1))
             .fluidOutputs(MaterialPool.PurifiedMana.getFluidOrGas(800))
             .outputChances(100)
-            .noOptimize()
             .eut(RECIPE_IV)
             .duration(200)
             .addTo(DT);

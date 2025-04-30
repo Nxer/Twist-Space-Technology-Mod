@@ -56,7 +56,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -64,6 +63,7 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
@@ -114,7 +114,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LaserMeteorMiner>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape_T1))
                 .addShape(STRUCTURE_PIECE_TIER2, transpose(shape_T2))
-                .addElement('A', Glasses.chainAllGlasses())
+                .addElement('A', GTStructureUtility.chainAllGlasses())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 15)) // Superconducting Coil
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 7)) // Fusion Coil Block
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 2)) // Mining Neutronium Casing
@@ -482,7 +482,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     private boolean stopAllRendering = false;
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         stopAllRendering = !stopAllRendering;
         // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_off
         // # Rendering off

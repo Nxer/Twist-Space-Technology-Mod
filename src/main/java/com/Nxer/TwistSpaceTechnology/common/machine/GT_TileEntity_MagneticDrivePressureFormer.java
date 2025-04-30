@@ -136,7 +136,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Parallel_MagneticDrivePressureFormer;
     }
 

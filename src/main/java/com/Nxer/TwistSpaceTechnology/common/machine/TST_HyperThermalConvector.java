@@ -44,7 +44,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import galaxyspace.core.register.GSBlocks;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
@@ -139,7 +138,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 .addElement('J', ofFrame(Materials.Iridium))
                 .addElement('K', ofFrame(Materials.CosmicNeutronium))
                 .addElement('L', ofBlock(Loaders.pressureResistantWalls, 0))
-                .addElement('M', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                .addElement('M', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                 .addElement('N', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement('O', ofBlock(TstBlocks.MetaBlockCasing02, 3))
                 .addElement('P', ofBlock(TstBlocks.MetaBlockCasing02, 4))
@@ -334,7 +333,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
