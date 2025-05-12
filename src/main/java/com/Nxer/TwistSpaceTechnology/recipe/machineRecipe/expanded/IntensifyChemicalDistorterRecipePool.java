@@ -1026,7 +1026,7 @@ public class IntensifyChemicalDistorterRecipePool {
             Material.Hypogen.getDust(12))
         .fluidOutputs(
             Materials.FilteredWater.getFluid(1000*200000),
-            Materials.OzonatedWater..getFluid(1000*200000),
+            Materials.OzonatedWater.getFluid(1000*200000),
             Materials.FlocculatedWater.getFluid(1000*200000),
             Materials.pHNeutralizedWater.getFluid(1000*200000),
             Materials.ExtremeTemperaturetratedWater.getFluid(1000*200000),
