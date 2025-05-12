@@ -944,7 +944,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         aNBT.setByte("mTier", controllerTier);
         aNBT.setByte("mGlass", glassTier);
         aNBT.setByte("mMode", (byte) machineMode);
-        aNBT.setInteger("mRecipeHeatingCapacity", getCoilHeat());
         aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
         aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
         aNBT.setBoolean("isBlazeFinishClear", isBlazeFinishClear);
@@ -1018,7 +1017,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         currentTip.add(
             // #tr Waila.SBF.0
             // # Recipe Heat
-            // #zh_CN 当前炉温
+            // #zh_CN 配方烤箱温度
             (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.0")
                 + textColon
                 + EnumChatFormatting.WHITE
