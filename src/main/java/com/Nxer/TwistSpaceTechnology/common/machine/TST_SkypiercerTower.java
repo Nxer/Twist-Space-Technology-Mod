@@ -713,7 +713,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                 .setDefaultColor(COLOR_TEXT_WHITE.get())
                 .setTextAlignment(Alignment.CenterLeft)
                 .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && mOutputAspectNames != null
+                    widget -> getErrorDisplayID() == 0 && mOutputAspectNames != null
                         && mOutputAspectNames.length > 0
                         && mOutputAspectAmounts != null
                         && mOutputAspectAmounts.length > 0))
