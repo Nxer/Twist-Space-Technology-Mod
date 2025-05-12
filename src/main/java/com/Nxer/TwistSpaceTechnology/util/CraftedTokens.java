@@ -6,7 +6,8 @@ import net.minecraft.util.EnumChatFormatting;
 
 public enum CraftedTokens {
 
-    Aditya("Aditya & Hive Run", EnumChatFormatting.LIGHT_PURPLE);
+    Aditya("Aditya & Hive Run", EnumChatFormatting.LIGHT_PURPLE),
+    HoroborosAndKoneko("Horoboros & Koneko", EnumChatFormatting.RED);
 
     private final String name;
     private final EnumChatFormatting color;

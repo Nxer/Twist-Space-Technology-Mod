@@ -298,3 +298,14 @@ tasks.register('preprocessLangInJavaFiles') {
 tasks.processResources {
     dependsOn(tasks.preprocessLangInJavaFiles)
 }
+
+tasks.register("installPreCommitCheck", Copy) {
+    group = "twist"
+    from "scripts/pre-commit"
+    into ".git/hooks"
+}
+
+tasks.register("uninstallPreCommitCheck", Delete) {
+    group = "twist"
+    delete ".git/hooks/pre-commit"
+}

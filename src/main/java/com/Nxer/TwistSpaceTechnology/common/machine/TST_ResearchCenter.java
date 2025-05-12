@@ -34,6 +34,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -188,7 +189,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.research.desc.3")) // Does not consume the
             // item until
             // the Data Stick is written
-            .addInfo(translateToLocal("tt.keyword.Structure.StructureTooComplex")) // The structure is too complex!
+            .addInfo(TstSharedLocalization.MachineTooltip.tooComplex()) // The structure is too complex!
             .addSeparator()
             .beginStructureBlock(3, 7, 7, false)
             .addOtherStructurePart(

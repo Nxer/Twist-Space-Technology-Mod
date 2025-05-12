@@ -416,7 +416,7 @@ public class TCResearches {
             // # Skypiercer Tower
             // #zh_CN 穿云尖塔
             // #tr tc.research_text.SKYPIERCER_TOWER
-            // # Eessentia free!
+            // # Crafting Essentia On Demand!
             // #zh_CN 源质自由!
             new ResearchItem(
                 "SKYPIERCER_TOWER",
@@ -431,18 +431,59 @@ public class TCResearches {
                 GTCMItemList.SkypiercerTower.get(1)).setPages(
                     // spotless:off
                     // #tr tc.research_text.SKYPIERCER_TOWER.1
-                    // # {\BOLD}Essentia/Aspect Tier and Machine Processing Time Rules:{\RESET}<BR><BR>{\BOLD}Tier Assignment:<BR>{\RESET}Primal Aspects are Tier 1. Composite Aspect tiers depend on their components:  If the components are of the same tier, the composite is one tier higher;  Otherwise, it takes the higher tier.<BR><BR>{\BOLD}Processing Time Formula:<BR>{\RESET}An Aspect of tier g requires 2^g seconds to process.
-                    // #zh_CN {\BOLD}关于源质/要素等级和机器时间计算的说明:{\RESET}<BR><BR>{\BOLD}要素等级:<BR>{\RESET}初等要素为1级。复合要素等级取决于组成要素的等级:  如果组成要素同级，则等级+1；  否则取较高者。<BR><BR>{\BOLD}加工时间公式:<BR>{\RESET}等级g的要素需2^g秒。
+                    // # {\BOLD}Aspect tier and machine processing time rules:{\RESET}<BR><BR>{\BOLD}Aspect Tier:<BR>{\RESET}Primal aspects are Tier 0.<BR> Composite aspect (aspects made from composite/primal aspects) take the highest tier component and add 1 to determine its tier.<BR><BR>{\BOLD}Processing Time:<BR>{\RESET}An aspect tier of 'x' requires 2 * x seconds (excluding time to synthesize its components).
+                    // #zh_CN {\BOLD}要素等级与机器加工时间规则:{\RESET}<BR><BR>{\BOLD}要素等级:<BR>{\RESET}初等要素为0级。<BR>复合要素(由初等或其他复合要素组成)等级为其子要素等级较高者加1.<BR><BR>{\BOLD}加工时间:<BR>{\RESET}等级为 x 的要素需加工 2 * x 秒(不包括合成其组成部分所需的时间).
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.1")),
                     // #tr tc.research_text.SKYPIERCER_TOWER.2
-                    // # {\BOLD}Recursive Synthesis Note:{\RESET}<BR><BR>If a Composite Aspect is synthesized entirely from Primal Aspects, each layer must be built step by step:  First synthesize the two components;  If either component is also Composite, repeat recursively until reaching Primal.<BR><BR>Since each component takes half the time of the composite, each layer effectively costs the same, and the synthesis depth is g–1 layers.<BR><BR>{\BOLD}Total Time = (g–1) × 2^g seconds.<BR><BR>{\BOLD}Critical:<BR>{\RESET}Primal Aspects (Layer 1) cannot be synthesized. They must pre-exist, or the machine will fail to start.
-                    // #zh_CN {\BOLD}关于递归合成的说明:{\RESET}<BR><BR>若复合要素完全由初等要素递归合成,每层需要逐步合成:  先合成两个组成要素;  若组成要素仍为复合要素, 则继续递归直到初等要素。<BR><BR>由于组成要素的合成时间为复合要素的一半,所以每层合成时间其实是相等的,合成深度为g–1层。<BR><BR>{\BOLD}总时间 = (g–1) × 2^g 秒。<BR><BR>{\BOLD}注意:<BR>{\RESET}初等要素(第1层)无法被合成,必须预先存在,否则机器无法启动。
+                    // # {\BOLD}Recursive Synthesis Note:{\RESET}<BR><BR>All composite aspects are synthesized entirely from primal aspects. Each composite aspect must be synthesized step by step. Meaning that the total synthesized time for high tier composite aspects can differ quite a bit.<BR>{\BOLD}(see next page for timings){\RESET}<BR><BR>{\BOLD}Critical:<BR>{\RESET}Primal aspects (tier 0) cannot be synthesized. They must be made available to the Skypiercer Tower through the infusion provider or the machine will fail to start.
+                    // #zh_CN {\BOLD}关于递归合成的说明:{\RESET}<BR><BR>所有复合要素都必须由初等要素逐步合成,每一个复合要素都需一层层构建.因此,高等级复合要素的总合成时间会迅速增加(实际上是指数级增长)<BR>{\BOLD}(具体时间请参见下一页){\RESET}<BR><BR>{\BOLD}注意:<BR>{\RESET}初等要素(0级)无法被合成,必须通过注魔供应器提供给穿云尖塔,否则机器将无法启动.
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.2")),
                     // #tr tc.research_text.SKYPIERCER_TOWER.3
-                    // # {\BOLD}Example – Simulation Cost Calculation:{\RESET}<BR><BR>Suppose you name a piece of paper (or anything else, really) "fabrico32+auram16": ig 32 Fabrico (Tier 5) and 16 Auram (Tier 3)<BR><BR>If only Primal Aspects are available:{\RESET} Fabrico: single (5–1) × 2^5 = 128s → total 128 × 32 = 4096s{\RESET} Auram: single (3–1) × 2^3 = 16s → total 16 × 16 = 256s<BR>Total synthesis time = 4096 + 256 = 4352 seconds<BR><BR>So... better install more rings. Otherwise, are you truly worthy of the name "Skypiercer"?<BR>
-                    // #zh_CN {\BOLD}例子 – 模拟时间计算:{\RESET}<BR><BR>假如你将一张纸(其实用别的也无所谓)命名为"fabrico32+auram16": 即32个工具(5级)和16个灵气(3级)<BR><BR>若仅有初等要素的情况下:{\RESET}工具: 单个(5–1) × 2^5 = 128秒 → 总的128 × 32 = 4096秒{\RESET}灵气: 单个(3–1) × 2^3 = 16秒 → 总的16 × 16 = 256秒<BR>总合成时间 = 4096 + 256 = 4352 秒<BR><BR>所以……最好多装点环。不然怎么「穿云」？<BR>
-                    // spotless:on
+                    // #en_US {\BOLD}Tier 1 Compound Aspects{\RESET}<BR>{\BOLD}Gelum:{\RESET} 2 seconds<BR>{\BOLD}Lux:{\RESET} 2 seconds<BR>{\BOLD}Motus:{\RESET} 2 seconds<BR>{\BOLD}Permutatio:{\RESET} 2 seconds<BR>{\BOLD}Potentia:{\RESET} 2 seconds<BR>{\BOLD}Tempestas:{\RESET} 2 seconds<BR>{\BOLD}Vacuos:{\RESET} 2 seconds<BR>{\BOLD}Venenum:{\RESET} 2 seconds<BR>{\BOLD}Victus:{\RESET} 2 seconds<BR>{\BOLD}Vitreus:{\RESET} 2 seconds
+                    // #zh_CN {\BOLD}一级复合要素{\RESET}<BR>{\BOLD}寒冰:{\RESET} 2 秒<BR>{\BOLD}光明:{\RESET} 2 秒<BR>{\BOLD}移动:{\RESET} 2 秒<BR>{\BOLD}交换:{\RESET} 2 秒<BR>{\BOLD}能量:{\RESET} 2 秒<BR>{\BOLD}气候:{\RESET} 2 秒<BR>{\BOLD}虚空:{\RESET} 2 秒<BR>{\BOLD}毒药:{\RESET} 2 秒<BR>{\BOLD}生命:{\RESET} 2 秒<BR>{\BOLD}水晶:{\RESET} 2 秒
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.3")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.4
+                    // #en_US {\BOLD}Tier 2 Compound Aspects (1/2){\RESET}<BR>{\BOLD}Bestia:{\RESET} 8 seconds<BR>{\BOLD}Fames:{\RESET} 8 seconds<BR>{\BOLD}Herba:{\RESET} 6 seconds<BR>{\BOLD}Iter:{\RESET} 6 seconds<BR>{\BOLD}Limus:{\RESET} 6 seconds<BR>{\BOLD}Metalum:{\RESET} 6 seconds<BR>{\BOLD}Mortuus:{\RESET} 6 seconds<BR>{\BOLD}Praecantio:{\RESET} 8 seconds<BR>{\BOLD}Radio:{\RESET} 8 seconds<BR>{\BOLD}Sano:{\RESET} 6 seconds
+                    // #zh_CN {\BOLD}二级复合要素 (1/2){\RESET}<BR>{\BOLD}野兽:{\RESET} 8 秒<BR>{\BOLD}饥饿:{\RESET} 8 秒<BR>{\BOLD}植物:{\RESET} 6 秒<BR>{\BOLD}旅行:{\RESET} 6 秒<BR>{\BOLD}粘液:{\RESET} 6 秒<BR>{\BOLD}金属:{\RESET} 6 秒<BR>{\BOLD}死亡:{\RESET} 6 秒<BR>{\BOLD}魔力:{\RESET} 8 秒<BR>{\BOLD}Radio:{\RESET} 8 秒<BR>{\BOLD}治疗:{\RESET} 6 秒
+
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.4")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.5
+                    // #en_US {\BOLD}Tier 2 Compound Aspects (2/2){\RESET}<BR>{\BOLD}Tempus:{\RESET} 6 seconds<BR>{\BOLD}Tenebrae:{\RESET} 6 seconds<BR>{\BOLD}Vinculum:{\RESET} 6 seconds<BR>{\BOLD}Volatus:{\RESET} 6 seconds
+                    // #zh_CN {\BOLD}二级复合要素 (2/2){\RESET}<BR>{\BOLD}Tempus:{\RESET} 6 秒<BR>{\BOLD}黑暗:{\RESET} 6 秒<BR>{\BOLD}陷阱:{\RESET} 6 秒<BR>{\BOLD}飞行:{\RESET} 6 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.5")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.6
+                    // #en_US {\BOLD}Tier 3 Compound Aspects (1/2){\RESET}<BR>{\BOLD}Alienis:{\RESET} 14 seconds<BR>{\BOLD}Arbor:{\RESET} 12 seconds<BR>{\BOLD}Auram:{\RESET} 14 seconds<BR>{\BOLD}Corpus:{\RESET} 20 seconds<BR>{\BOLD}Exanimis:{\RESET} 14 seconds<BR>{\BOLD}Gula:{\RESET} 16 seconds<BR>{\BOLD}Infernus:{\RESET} 14 seconds<BR>{\BOLD}Magneto:{\RESET} 18 seconds<BR>{\BOLD}Spiritus:{\RESET} 14 seconds<BR>{\BOLD}Superbia:{\RESET} 14 seconds
+                    // #zh_CN {\BOLD}三级复合要素 (1/2){\RESET}<BR>{\BOLD}异域:{\RESET} 14 秒<BR>{\BOLD}树木:{\RESET} 12 秒<BR>{\BOLD}灵气:{\RESET} 14 秒<BR>{\BOLD}肉体:{\RESET} 20 秒<BR>{\BOLD}不死:{\RESET} 14 秒<BR>{\BOLD}Gula:{\RESET} 16 秒<BR>{\BOLD}Infernus:{\RESET} 14 秒<BR>{\BOLD}Magneto:{\RESET} 18 秒<BR>{\BOLD}灵魂:{\RESET} 14 秒<BR>{\BOLD}Superbia:{\RESET} 14 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.6")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.7
+                    // #en_US {\BOLD}Tier 3 Compound Aspects (2/2){\RESET}<BR>{\BOLD}Vitium:{\RESET} 14 seconds
+                    // #zh_CN {\BOLD}三级复合要素 (2/2){\RESET}<BR>{\BOLD}污染:{\RESET} 14 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.7")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.8
+                    // #en_US {\BOLD}Tier 4 Compound Aspects{\RESET}<BR>{\BOLD}Cognito:{\RESET} 22 seconds<BR>{\BOLD}Desidia:{\RESET} 28 seconds<BR>{\BOLD}Luxuria:{\RESET} 36 seconds<BR>{\BOLD}Sensus:{\RESET} 22 seconds
+                    // #zh_CN {\BOLD}四级复合要素{\RESET}<BR>{\BOLD}认知:{\RESET} 22 秒<BR>{\BOLD}Desidia:{\RESET} 28 秒<BR>{\BOLD}Luxuria:{\RESET} 36 秒<BR>{\BOLD}感官:{\RESET} 22 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.8")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.9
+                    // #en_US {\BOLD}Tier 5 Compound Aspects{\RESET}<BR>{\BOLD}Humanus:{\RESET} 40 seconds<BR>{\BOLD}Invidia:{\RESET} 40 seconds<BR>{\BOLD}Strontio:{\RESET} 32 seconds
+                   // #zh_CN {\BOLD}五级复合要素{\RESET}<BR>{\BOLD}人类:{\RESET} 40 秒<BR>{\BOLD}Invidia:{\RESET} 40 秒<BR>{\BOLD}Strontio:{\RESET} 32 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.9")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.10
+                    // #en_US {\BOLD}Tier 6 Compound Aspects{\RESET}<BR>{\BOLD}Instrumentum:{\RESET} 52 seconds<BR>{\BOLD}Lucrum:{\RESET} 60 seconds<BR>{\BOLD}Messis:{\RESET} 58 seconds<BR>{\BOLD}Perforio:{\RESET} 52 seconds
+                    // #zh_CN {\BOLD}六级复合要素{\RESET}<BR>{\BOLD}工具:{\RESET} 52 秒<BR>{\BOLD}贪婪:{\RESET} 60 秒<BR>{\BOLD}作物:{\RESET} 58 秒<BR>{\BOLD}矿藏:{\RESET} 52 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.10")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.11
+                    // #en_US {\BOLD}Tier 7 Compound Aspects{\RESET}<BR>{\BOLD}Fabrico:{\RESET} 106 seconds<BR>{\BOLD}Machina:{\RESET} 68 seconds<BR>{\BOLD}Meto:{\RESET} 124 seconds<BR>{\BOLD}Nebrisum:{\RESET} 126 seconds<BR>{\BOLD}Pannus:{\RESET} 74 seconds<BR>{\BOLD}Telum:{\RESET} 66 seconds<BR>{\BOLD}Terminus:{\RESET} 88 seconds<BR>{\BOLD}Tutamen:{\RESET} 66 seconds
+                    // #zh_CN {\BOLD}七级复合要素{\RESET}<BR>{\BOLD}合成:{\RESET} 106 秒<BR>{\BOLD}机械:{\RESET} 68 秒<BR>{\BOLD}收获:{\RESET} 124 秒<BR>{\BOLD}Nebrisum:{\RESET} 126 秒<BR>{\BOLD}布匹:{\RESET} 74 秒<BR>{\BOLD}武器:{\RESET} 66 秒<BR>{\BOLD}Terminus:{\RESET} 88 秒<BR>{\BOLD}防护:{\RESET} 66 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.11")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.12
+                    // #en_US {\BOLD}Tier 8 Compound Aspects{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 seconds<BR>{\BOLD}Ira:{\RESET} 82 seconds
+                    // #zh_CN {\BOLD}八级复合要素{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 秒<BR>{\BOLD}Ira:{\RESET} 82 秒
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.12")),
+                    // #tr tc.research_text.SKYPIERCER_TOWER.13
+                    // #en_US {\BOLD}Piercing the sky:{\RESET}<BR><BR>As an upgrade to this multi-block you can increase its processing speed by 16x for each layer (additively). If you want to produce a lot of aspects with this multi-block on demand or maintained up to a level you will need a lot of time, power or rings. So... better install more rings. Otherwise, are you truly worthy of the name "Skypiercer"?<BR>
+                    // #zh_CN {\BOLD}穿云尖塔:{\RESET}<BR><BR>作为该多方块结构的附加升级,你可以通过每增加一层提升其16倍的处理速度(可叠加).如果你希望随时或维持地大量产出要素,你将需要大量的时间,电力或环装置.所以……还是多装些环吧.不然怎么称得上“穿云”？<BR>
+                    // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.13")),
                     new ResearchPage(infusionRecipeSkypiercerTower))
                     .setParents("PRIMORDIAL_DISJUNCTUS")
                     .registerResearchItem();
