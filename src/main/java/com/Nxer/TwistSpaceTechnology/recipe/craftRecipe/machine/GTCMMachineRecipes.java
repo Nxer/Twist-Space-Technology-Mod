@@ -111,7 +111,6 @@ import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTModHandler.getModItem;
@@ -209,6 +208,7 @@ import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.recipe.Scanning;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import gtPlusPlus.core.fluids.GTPPFluids;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
@@ -1910,7 +1910,7 @@ public class GTCMMachineRecipes {
             new Object[]{
                 LegendTarget.get(1),
                 getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
-                getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
+                new ItemStack(GregTechAPI.sBlockCasingsDyson, 1, 4),
                 tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
 
                 tectech.thing.CustomItemList.eM_Power.get(64),
@@ -2326,7 +2326,7 @@ public class GTCMMachineRecipes {
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64)
                 )
                 .fluidInputs(
-                    Materials.Hydrogen.getFluid(1_800_000),
+                    new FluidStack(GTPPFluids.LiquidHydrogen, 1_800_000),
                     new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1_800_000),
                     Materials.Nitrogen.getPlasma(1_800_000),
                     new FluidStack(MaterialsElements.getInstance().KRYPTON.getPlasma(), 1_800_000),
@@ -2364,7 +2364,7 @@ public class GTCMMachineRecipes {
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64)
                 )
                 .fluidInputs(
-                    Materials.Hydrogen.getFluid(1_800_000),
+                    new FluidStack(GTPPFluids.LiquidHydrogen, 1_800_000),
                     new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1_800_000),
                     Materials.Nitrogen.getPlasma(1_800_000),
                     new FluidStack(MaterialsElements.getInstance().KRYPTON.getPlasma(), 1_800_000),
