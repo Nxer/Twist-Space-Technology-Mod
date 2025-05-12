@@ -397,7 +397,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     public int getCoilHeat() {
-        return (int) getCoilLevel().getHeat();
+        return (int) getCoilLevel().getHeat() + 100 * (GTUtility.getTier(getMaxInputVoltage()) - 2);
     }
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
@@ -944,6 +944,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         aNBT.setByte("mTier", controllerTier);
         aNBT.setByte("mGlass", glassTier);
         aNBT.setByte("mMode", (byte) machineMode);
+        aNBT.setInteger("mRecipeHeatingCapacity", getCoilHeat());
         aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
         aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
         aNBT.setBoolean("isBlazeFinishClear", isBlazeFinishClear);
@@ -982,6 +983,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
+            tag.setInteger("mRecipeHeatingCapacity", getCoilHeat());
             tag.setInteger("mHeatingCapacity", mHeatingCapacity);
             tag.setInteger("maxHeatingCapacity", maxHeatingCapacity);
             tag.setInteger("correctBlazeCost", correctBlazeCost);
@@ -1014,6 +1016,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         }
 
         currentTip.add(
+            // #tr Waila.SBF.0
+            // # Recipe Heat
+            // #zh_CN 当前炉温
+            (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.0")
+                + textColon
+                + EnumChatFormatting.WHITE
+                + tag.getInteger("mRecipeHeatingCapacity")) + Kelvin);
+        currentTip.add(
             // #tr Waila.SBF.1
             // # Current Heat
             // #zh_CN 当前炉温
@@ -1043,9 +1053,11 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
+        String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums
+            .tr("Waila.SBF.0") + textColon + EnumChatFormatting.GOLD + getCoilHeat() + Kelvin;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums
             .tr("Waila.SBF.1") + textColon + EnumChatFormatting.GOLD + mHeatingCapacity + Kelvin;
         return ret;
     }
