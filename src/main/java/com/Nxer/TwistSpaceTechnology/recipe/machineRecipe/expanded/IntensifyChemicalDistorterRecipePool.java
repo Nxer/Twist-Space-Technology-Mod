@@ -1015,6 +1015,31 @@ public class IntensifyChemicalDistorterRecipePool {
             .duration(2 * 100)
             .addTo(ICD);
 
+        // Waterline
+    GTValue.RA.stdBuilder()
+        .itemInputs(
+            GTUtlitity.getIntegratedCircuit(19).
+            Materials.Eternity.getDust(1))
+        .fluidInputs(
+            Materials.Water.getFluid(1000*2000000))
+        .itemOutputs(
+            Material.Hypogen.getDust(12))
+        .fluidOutputs(
+            Materials.FilteredWater.getFluid(1000*200000),
+            Materials.OzonatedWater..getFluid(1000*200000),
+            Materials.FlocculatedWater.getFluid(1000*200000),
+            Materials.pHNeutralizedWater.getFluid(1000*200000),
+            Materials.ExtremeTemperaturetratedWater.getFluid(1000*200000),
+            Materials.UltraVioletTreatedElectricallyNeutralWater.getFluid(1000*200000),
+            Materials.DegassedDecontaminatFreeWater.getFluid(1000*200000),
+            Materials.SubatomicallyPerfectwater.getFluid(1000*200000),
+            Materials.StabilisedBaryonicMatter.getFluid(1000*200000)
+            )
+        .specialValue(12600)
+        .eut(RECIPE_UXV)
+        .duration(2*60)
+        .addTo(ICD);
+            
         // endregion
 
     }
