@@ -71,14 +71,14 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus implement
         TST_ItemID.createNoNBT(ItemList.Shape_Mold_Pipe_Huge.get(1));
         TST_ItemID.createNoNBT(ItemList.Shape_Mold_ToolHeadDrill.get(1));
 
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolFile.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolWrench.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolCrowbar.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolWireCutter.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolHardHammer.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolSoftHammer.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolScrewdriver.get(1));
-        TST_ItemID.createNoNBT(GGItemList.Shape_One_Use_craftingToolSaw.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseFile.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseWrench.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseCrowbar.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseWireCutter.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseHardHammer.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseSoftHammer.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseScrewdriver.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseSaw.get(1));
     }
     private final FluidStack[] mStoredFluid;
     private final FluidStackTank[] fluidTanks;
@@ -310,6 +310,11 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus implement
     @Override
     public boolean supportsFluids() {
         return true;
+    }
+
+    @Override
+    public ItemStack[] getSharedItems() {
+        return new ItemStack[0];
     }
 
     @Override

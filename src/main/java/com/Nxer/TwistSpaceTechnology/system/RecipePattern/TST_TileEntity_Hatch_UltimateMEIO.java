@@ -116,11 +116,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
         super.onUnload();
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return super.useModularUI();
-    // }
-
     @Override
     public boolean isMachineBlockUpdateRecursive() {
         return super.isMachineBlockUpdateRecursive();
@@ -197,39 +192,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
             craftingRounds++;
             return true;
         }
-
-        // public void refund(AENetworkProxy proxy, BaseActionSource src) throws GridAccessException {
-        // IMEMonitor<IAEItemStack> sg = proxy.getStorage()
-        // .getItemInventory();
-        //// IMEMonitor<IAEFluidStack> fsg = proxy.getStorage()
-        //// .getFluidInventory();
-        // var itemInventory = recipe.getInputs();
-        // for (var itemStack : itemInventory) {
-        // if (itemStack == null || itemStack.stackSize == 0) continue;
-        // IAEItemStack rest = Platform.poweredInsert(
-        // proxy.getEnergy(),
-        // sg,
-        // itemStack,
-        // src);
-        // itemStack.stackSize = rest != null && rest.getStackSize() > 0 ? (int) rest.getStackSize() : 0;
-        // }
-        // }
-        //
-        // public IAEItemStack[] output(AENetworkProxy proxy, BaseActionSource src, IAEItemStack[] stack) throws
-        // GridAccessException {
-        // IMEMonitor<IAEItemStack> sg = proxy.getStorage()
-        // .getItemInventory();
-        // for (var itemStack : stack) {
-        // if (itemStack == null || itemStack.getStackSize() == 0) continue;
-        // IAEItemStack rest = Platform.poweredInsert(
-        // proxy.getEnergy(),
-        // sg,
-        // itemStack,
-        // src);
-        // itemStack.setStackSize(rest != null && rest.getStackSize() > 0 ? (int) rest.getStackSize() : 0);
-        // }
-        // return stack;
-        // }
 
         public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
             nbt.setTag("pattern", pattern.writeToNBT(new NBTTagCompound()));
@@ -537,23 +499,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
                     + EnumChatFormatting.BLUE
                     + describePattern(slot.patternDetails)
                     + EnumChatFormatting.RESET);
-            // for (var item : slot.itemInventory) {
-            // if (item == null || item.stackSize == 0) continue;
-            // ret.add(
-            // item.getItem()
-            // .getItemStackDisplayName(item) + ": "
-            // + EnumChatFormatting.GOLD
-            // + nc.toWideReadableForm(item.stackSize)
-            // + EnumChatFormatting.RESET);
-            // }
-            // for (var fluid : slot.fluidInventory) {
-            // if (fluid == null || fluid.amount == 0) continue;
-            // ret.add(
-            // fluid.getLocalizedName() + ": "
-            // + EnumChatFormatting.AQUA
-            // + nc.toWideReadableForm(fluid.amount)
-            // + EnumChatFormatting.RESET);
-            // }
         }
         return ret.toArray(new String[0]);
     }
@@ -713,23 +658,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
 
         NBTTagList inventory = new NBTTagList();
         HashMap<String, Long> nameToAmount = new HashMap<>();
-        // for (Iterator<PatternSlot> it = inventories(); it.hasNext(); ) {
-        // var i = it.next();
-        // for (var item : i.itemInventory) {
-        // if (item != null && item.stackSize > 0) {
-        // var name = item.getDisplayName();
-        // var amount = nameToAmount.getOrDefault(name, 0L);
-        // nameToAmount.put(name, amount + item.stackSize);
-        // }
-        // }
-        // for (var fluid : i.fluidInventory) {
-        // if (fluid != null && fluid.amount > 0) {
-        // var name = fluid.getLocalizedName();
-        // var amount = nameToAmount.getOrDefault(name, 0L);
-        // nameToAmount.put(name, amount + fluid.amount);
-        // }
-        // }
-        // }
         for (var entry : nameToAmount.entrySet()) {
             var item = new NBTTagCompound();
             item.setString("name", entry.getKey());
@@ -920,6 +848,11 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
     @Override
     public boolean supportsFluids() {
         return true;
+    }
+
+    @Override
+    public ItemStack[] getSharedItems() {
+        return new ItemStack[0];
     }
 
     @Override

@@ -45,7 +45,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
-import gregtech.common.tileentities.machines.MTEHatchOutputBusME;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
@@ -185,9 +184,10 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 for (var item : c.get(i).mInventory) {
                     if (item != null) {
                         if (item_me) {
-                            item.stackSize -= ((MTEHatchOutputBusME) d.get(0)).store(item);
+                            if (!d.get(0)
+                                .storePartial(item)) {}
                         } else if (d.get(i)
-                            .storeAll(item.copy())) {
+                            .storePartial(item.copy())) {
                                 item.stackSize = 0;
                             }
                     }

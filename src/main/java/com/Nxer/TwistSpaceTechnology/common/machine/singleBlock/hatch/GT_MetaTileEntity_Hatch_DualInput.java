@@ -298,6 +298,11 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     }
 
     @Override
+    public ItemStack[] getSharedItems() {
+        return new ItemStack[0];
+    }
+
+    @Override
     public boolean canTankBeFilled() {
         return true;
     }
