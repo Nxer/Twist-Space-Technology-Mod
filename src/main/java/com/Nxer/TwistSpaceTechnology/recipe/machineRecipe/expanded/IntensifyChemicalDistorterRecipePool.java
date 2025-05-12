@@ -1025,14 +1025,14 @@ public class IntensifyChemicalDistorterRecipePool {
         .itemOutputs(
             Material.Hypogen.getDust(12))
         .fluidOutputs(
-            Materials.FilteredWater.getFluid(1000*200000),
-            Materials.OzonatedWater.getFluid(1000*200000),
-            Materials.FlocculatedWater.getFluid(1000*200000),
-            Materials.pHNeutralizedWater.getFluid(1000*200000),
-            Materials.ExtremeTemperaturetratedWater.getFluid(1000*200000),
-            Materials.UltraVioletTreatedElectricallyNeutralWater.getFluid(1000*200000),
-            Materials.DegassedDecontaminatFreeWater.getFluid(1000*200000),
-            Materials.SubatomicallyPerfectwater.getFluid(1000*200000),
+            Materials.Grade1PurifiedWater.getFluid(1000*200000),
+            Materials.Grade2PurifiedWater.getFluid(1000*200000),
+            Materials.Grade3PurifiedWater.getFluid(1000*200000),
+            Materials.Grade4PurifiedWater.getFluid(1000*200000),
+            Materials.Grade5PurifiedWater.getFluid(1000*200000),
+            Materials.Grade6PurifiedWater.getFluid(1000*200000),
+            Materials.Grade7PurifiedWater.getFluid(1000*200000),
+            Materials.Grade8PurifiedWater.getFluid(1000*200000),
             Materials.StabilisedBaryonicMatter.getFluid(1000*200000)
             )
         .specialValue(12600)
