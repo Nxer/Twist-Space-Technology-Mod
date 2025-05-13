@@ -182,28 +182,28 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             + dspDataCell.getOwnerName());
         ret.add(space
             // #tr DSPDataCell.getDSPGalaxy
-            // # Galaxy :
+            // # Galaxy:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPGalaxy")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getGalaxy());
         ret.add(space
             // #tr DSPDataCell.getDSPSolarSail
-            // # Solar Sail :
+            // # Solar Sail:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPSolarSail")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getDSPSolarSail());
         ret.add(space
             // #tr DSPDataCell.getDSPNode
-            // # Node :
+            // # Node:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPNode")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getDSPNode());
         ret.add(space
             // #tr DSPDataCell.getInfoData.01
-            // # Overload time :
+            // # Overload time:
             // #zh_CN 剩余过载时间:
             + EnumChatFormatting.GOLD
             + TextEnums.tr("TST_DSPLauncher.getInfoData.01")
@@ -212,7 +212,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             + "s");
         ret.add(space
             // #tr DSPDataCell.getInfoData.02
-            // # Speed Up :
+            // # Speed Up:
             // #zh_CN 速度倍率:
             + EnumChatFormatting.GOLD
             + tr("TST_DSPLauncher.getInfoData.02")

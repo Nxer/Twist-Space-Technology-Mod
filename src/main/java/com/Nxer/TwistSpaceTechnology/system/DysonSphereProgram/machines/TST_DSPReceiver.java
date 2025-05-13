@@ -193,27 +193,29 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // # Generating EU/t:
             // #zh_CN 实际接收 EU/t:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.01")
-            + EnumChatFormatting.RESET
+            + EnumChatFormatting.RESET + " "
             + generateTickEU());
         ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.02
             // # Used Power Point:
             // #zh_CN 已占用产能点数:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.02")
-            + EnumChatFormatting.RESET
+            + EnumChatFormatting.RESET + " "
             + usedPowerPoint);
         ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.03
             // # Gravitational Lens Intensify Mode remaining time:
             // #zh_CN 引力透镜增强模式剩余时间:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.03")
-            + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s");
+            + EnumChatFormatting.RESET + " "
+            + (gravitationalLensTime/20) + " s");
         ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.04
             // # Overload Multiplier:
             // #zh_CN 过载倍率:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.04")
-            + EnumChatFormatting.RESET + astralArrayOverloadMultiplier);
+            + EnumChatFormatting.RESET + " "
+            + astralArrayOverloadMultiplier);
         //DSPDataCell
         ret.add(EnumChatFormatting.AQUA
             // #tr DSPDataCell.getInfoData
@@ -223,28 +225,28 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             + EnumChatFormatting.RESET);
         ret.add(space
             // #tr DSPDataCell.getDSPOwnerName
-            // # Owner Name :
+            // # Owner Name:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPOwnerName")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getOwnerName());
         ret.add(space
             // #tr DSPDataCell.getDSPGalaxy
-            // # Galaxy :
+            // # Galaxy:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPGalaxy")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getGalaxy());
         ret.add(space
             // #tr DSPDataCell.getDSPSolarSail
-            // # Solar Sail :
+            // # Solar Sail:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPSolarSail")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getDSPSolarSail());
         ret.add(space
             // #tr DSPDataCell.getDSPNode
-            // # Node :
+            // # Node:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPNode")
             + EnumChatFormatting.RESET + " "
