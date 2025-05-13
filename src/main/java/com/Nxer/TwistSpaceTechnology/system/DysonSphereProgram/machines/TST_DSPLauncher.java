@@ -175,7 +175,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             + EnumChatFormatting.RESET);
         ret.add(space
             // #tr DSPDataCell.getDSPOwnerName
-            // # Owner Name :
+            // # Owner Name:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPOwnerName")
             + EnumChatFormatting.RESET + " "
