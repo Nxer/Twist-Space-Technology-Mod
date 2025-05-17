@@ -8,3 +8,7 @@ minecraft {
     extraRunJvmArguments.add("-Xmx8G")
     extraRunJvmArguments.add("-Xms8G")
 }
+
+configurations.configureEach {
+    exclude group: "com.github.GTNewHorizons", module: "Baubles"
+}

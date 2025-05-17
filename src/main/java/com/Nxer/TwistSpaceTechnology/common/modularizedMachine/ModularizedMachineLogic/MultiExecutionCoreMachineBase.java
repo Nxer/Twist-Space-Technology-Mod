@@ -115,7 +115,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
      * Quickly process by using local collectors to get ME input hatches.
      */
     @Override
-    protected void startRecipeProcessing() {
+    public void startRecipeProcessing() {
         startedRecipeProcessing = true;
         if (MEInputHatches.isEmpty()) return;
         for (IRecipeProcessingAwareHatch hatch : filterValidMTE(MEInputHatches)) {
@@ -127,7 +127,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
      * Quickly process by using local collectors to get ME input hatches.
      */
     @Override
-    protected void endRecipeProcessing() {
+    public void endRecipeProcessing() {
         startedRecipeProcessing = false;
         if (MEInputHatches.isEmpty()) return;
         for (IRecipeProcessingAwareHatch hatch : filterValidMTE(MEInputHatches)) {

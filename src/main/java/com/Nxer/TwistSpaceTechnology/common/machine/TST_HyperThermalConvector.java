@@ -191,7 +191,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             baseHorizontalOffSet,
@@ -380,7 +380,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    protected void startRecipeProcessing() {
+    public void startRecipeProcessing() {
         super.startRecipeProcessing();
         isRecipeProcessing = true;
         for (MTEHatchInput mHatch : dedicatedHatches) {
@@ -393,7 +393,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    protected void endRecipeProcessing() {
+    public void endRecipeProcessing() {
         isRecipeProcessing = false;
         super.endRecipeProcessing();
         for (MTEHatchInput mHatch : dedicatedHatches) {

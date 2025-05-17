@@ -753,7 +753,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 1, 6, 0, elementBudget, env, false, true);
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 1, 6, 0, elementBudget, env, false, true);
     }
 
     @Override
@@ -768,7 +768,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     }
 
     @Override
-    protected boolean showRecipeTextInGUI() {
+    public boolean showRecipeTextInGUI() {
         return false;
     }
 

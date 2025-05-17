@@ -283,7 +283,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     }
 
     @Override
-    protected void startRecipeProcessing() {
+    public void startRecipeProcessing() {
         super.startRecipeProcessing();
         if (null != specialInputBus && specialInputBus.isValid()) {
             if (specialInputBus instanceof IRecipeProcessingAwareHatch aware) {
@@ -293,7 +293,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     }
 
     @Override
-    protected void endRecipeProcessing() {
+    public void endRecipeProcessing() {
         super.endRecipeProcessing();
         if (null != specialInputBus && specialInputBus.isValid()) {
             if (specialInputBus instanceof IRecipeProcessingAwareHatch aware) {
@@ -311,7 +311,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
