@@ -53,7 +53,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
@@ -294,7 +294,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (!checkStructure(true)) {
                 GTUtility.sendChatToPlayer(
@@ -302,7 +303,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aStack);
         }
     }
 
@@ -648,7 +649,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 
@@ -787,8 +788,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public GTCM_ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+    public TstProcessingLogic createProcessingLogic() {
+        return new TstProcessingLogic() {
 
             @Override
             @Nonnull

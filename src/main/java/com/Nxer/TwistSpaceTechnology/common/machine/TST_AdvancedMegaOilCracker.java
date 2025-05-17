@@ -102,7 +102,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Parallel_AdvancedMegaOilCracker;
     }
 

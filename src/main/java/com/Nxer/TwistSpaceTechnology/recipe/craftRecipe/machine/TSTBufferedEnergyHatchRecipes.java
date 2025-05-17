@@ -67,7 +67,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Tin, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchLV.get(1))
-            .noOptimize()
             .eut(RECIPE_LV)
             .duration(120)
             .addTo(assembler);
@@ -79,7 +78,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Copper, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchMV.get(1))
-            .noOptimize()
             .eut(RECIPE_MV)
             .duration(120)
             .addTo(assembler);
@@ -91,7 +89,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Gold, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchHV.get(1))
-            .noOptimize()
             .eut(RECIPE_HV)
             .duration(120)
             .addTo(assembler);
@@ -103,7 +100,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Aluminium, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchEV.get(1))
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(120)
             .addTo(assembler);
@@ -115,7 +111,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorIV, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchIV.get(1))
-            .noOptimize()
             .eut(RECIPE_IV)
             .duration(120)
             .addTo(assembler);
@@ -127,7 +122,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorLuV, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchLuV.get(1))
-            .noOptimize()
             .eut(RECIPE_LuV)
             .duration(120)
             .addTo(assembler);
@@ -139,7 +133,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorZPM, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchZPM.get(1))
-            .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(120)
             .addTo(assembler);
@@ -151,7 +144,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUV, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUV.get(1))
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(120)
             .addTo(assembler);
@@ -163,7 +155,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUHV, 1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUHV.get(1))
-            .noOptimize()
             .eut(RECIPE_UHV)
             .duration(120)
             .addTo(assembler);
@@ -175,7 +166,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Field_Generator_UEV.get(1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUEV.get(1))
-            .noOptimize()
             .eut(RECIPE_UEV)
             .duration(120)
             .addTo(assembler);
@@ -187,7 +177,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Field_Generator_UIV.get(1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUIV.get(1))
-            .noOptimize()
             .eut(RECIPE_UIV)
             .duration(120)
             .addTo(assembler);
@@ -199,7 +188,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Field_Generator_UMV.get(1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUMV.get(1))
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(120)
             .addTo(assembler);
@@ -211,7 +199,6 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Field_Generator_UXV.get(1))
             .fluidInputs(Materials.Plastic.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUXV.get(1))
-            .noOptimize()
             .eut(RECIPE_UXV)
             .duration(120)
             .addTo(assembler);

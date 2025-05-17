@@ -109,7 +109,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
         return piece >= PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
     }
 
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Parallel_PerPiece_MoleculeDeconstructor * this.piece;
     }
 

@@ -41,8 +41,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
     private long mStored = 0;
     private long mMax = 0;
 
-    public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
-        String[] aDescription, ITexture... aTextures) {
+    public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount) {
         super(
             aID,
             aName,
@@ -50,13 +49,11 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
             aTier,
             aInvSlotCount,
             new String[] { TstUtils.tr("BufferedEnergyHatch.Tooltips.01"),
-                TstUtils.tr("BufferedEnergyHatch.Tooltips.02"), TextLocalization.ModNameDesc },
-            aTextures);
+                TstUtils.tr("BufferedEnergyHatch.Tooltips.02"), TextLocalization.ModNameDesc });
     }
 
-    public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, int aslot, String[] aDescription,
-        ITexture[][][] aTextures) {
-        super(aName, aTier, aslot, aDescription, aTextures);
+    public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+        super(aName, aTier, aDescription, aTextures);
     }
 
     @Override
@@ -68,11 +65,6 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
         // #zh_CN 格
         desc[mDescriptionArray.length] = mInventory.length + " " + TstUtils.tr("Slots");
         return desc;
-    }
-
-    @Override
-    public boolean isSimpleMachine() {
-        return false;
     }
 
     @Override
@@ -352,7 +344,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_Hatch_BufferedEnergyHatch(mName, mTier, mInventory.length, mDescriptionArray, mTextures);
+        return new GT_Hatch_BufferedEnergyHatch(mName, mTier, mDescriptionArray, mTextures);
     }
 
 }

@@ -206,7 +206,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 16;
     }
 

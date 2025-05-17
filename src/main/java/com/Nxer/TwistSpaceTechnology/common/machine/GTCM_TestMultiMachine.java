@@ -56,7 +56,7 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -112,7 +112,8 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
             GTUtility.sendChatToPlayer(
