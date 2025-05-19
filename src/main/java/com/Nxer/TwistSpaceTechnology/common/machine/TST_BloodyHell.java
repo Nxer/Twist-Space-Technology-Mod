@@ -191,6 +191,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             // # And there is a small text on the corner said, "Speed Runes can be the key."
             // #zh_CN 在角落里有一行小字写道，“速度符文也许是关键。”
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_2"))
+            // #tr Tooltip_BloodyHell_3
+            // # Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
+            // #zh_CN 还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
+            .addInfo(TextEnums.tr("Tooltip_BloodyHell_3"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
