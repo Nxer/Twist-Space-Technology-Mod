@@ -2155,3 +2155,5 @@ DSPDataCell.getInfoData.01=Overload time:
 DSPDataCell.getInfoData.02=Speed Up:
 Waila.SBF.0=Recipe Heat
 Tooltip_BloodyHell_3=Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
+Tooltip.InfusionProvider=Infusion Provider
+Tooltip.EssentiaOutputHatch=Essentia Output Hatch
