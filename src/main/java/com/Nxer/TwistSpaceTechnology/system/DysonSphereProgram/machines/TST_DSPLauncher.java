@@ -176,6 +176,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         ret.add(space
             // #tr DSPDataCell.getDSPOwnerName
             // # Owner Name:
+            // #zh_CN 拥有者名称:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPOwnerName")
             + EnumChatFormatting.RESET + " "
@@ -183,6 +184,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         ret.add(space
             // #tr DSPDataCell.getDSPGalaxy
             // # Galaxy:
+            // #zh_CN 星系:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPGalaxy")
             + EnumChatFormatting.RESET + " "
@@ -190,6 +192,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         ret.add(space
             // #tr DSPDataCell.getDSPSolarSail
             // # Solar Sail:
+            // #zh_CN 太阳帆:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPSolarSail")
             + EnumChatFormatting.RESET + " "
@@ -197,6 +200,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         ret.add(space
             // #tr DSPDataCell.getDSPNode
             // # Node:
+            // #zh_CN 戴森球节点:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPNode")
             + EnumChatFormatting.RESET + " "

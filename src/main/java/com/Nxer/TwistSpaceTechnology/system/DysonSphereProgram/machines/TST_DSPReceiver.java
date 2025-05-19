@@ -216,37 +216,27 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             + TextEnums.tr("TST_DSPReceiver.getInfoData.04")
             + EnumChatFormatting.RESET + " "
             + astralArrayOverloadMultiplier);
-        //DSPDataCell
+        // DSPDataCell
+        // Language file writer is set in TST_DSPLauncher
         ret.add(EnumChatFormatting.AQUA
-            // #tr DSPDataCell.getInfoData
-            // # Dyson Sphere Data:
-            // #zh_CN 戴森球信息:
             + tr("DSPDataCell.getInfoData")
             + EnumChatFormatting.RESET);
         ret.add(space
-            // #tr DSPDataCell.getDSPOwnerName
-            // # Owner Name:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPOwnerName")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getOwnerName());
         ret.add(space
-            // #tr DSPDataCell.getDSPGalaxy
-            // # Galaxy:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPGalaxy")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getGalaxy());
         ret.add(space
-            // #tr DSPDataCell.getDSPSolarSail
-            // # Solar Sail:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPSolarSail")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getDSPSolarSail());
         ret.add(space
-            // #tr DSPDataCell.getDSPNode
-            // # Node:
             + EnumChatFormatting.GOLD
             + tr("DSPDataCell.getDSPNode")
             + EnumChatFormatting.RESET + " "
