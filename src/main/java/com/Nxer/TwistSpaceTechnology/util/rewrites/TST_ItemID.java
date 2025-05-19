@@ -167,7 +167,9 @@ public class TST_ItemID extends GTUtility.ItemId {
     }
 
     public boolean equalItemStack(ItemStack itemStack) {
-        return this.equals(isWildcard() ? createAsWildcard(itemStack) : createNoNBT(itemStack));
+        if (isWildcard()) return equals(createAsWildcard(itemStack));
+        if (nbt != null) return equals(create(itemStack));
+        return equals(createNoNBT(itemStack));
     }
 
     @Override
