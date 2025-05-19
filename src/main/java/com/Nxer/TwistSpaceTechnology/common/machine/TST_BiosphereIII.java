@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -203,6 +204,18 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
                 return super.createParallelHelper(recipeAfterEfficiencyCalculation(recipe, inputFluids));
             }
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclockType(
+                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
+                return super.process();
+            }
+
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
