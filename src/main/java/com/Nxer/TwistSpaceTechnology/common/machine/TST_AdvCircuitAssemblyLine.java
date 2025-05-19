@@ -107,21 +107,21 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputBus, OutputBus, InputHatch)
                         .adder(TST_AdvCircuitAssemblyLine::addToMachineList)
                         .casingIndex(16)
-                        .dot(2)
+                        .dot(1)
                         .buildAndChain(GregTechAPI.sBlockCasings2, 0))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
                 .addElement(
                     'D',
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(Energy.or(ExoticEnergy))
                         .casingIndex(16)
-                        .dot(1)
+                        .dot(2)
                         .buildAndChain(GregTechAPI.sBlockCasings2, 6))
                 .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
                 .addElement('F', ofBlock(GregTechAPI.sBlockCasings3, 10))
                 .addElement(
                     'G',
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
-                        .dot(5)
+                        .dot(3)
                         .casingIndex(42)
                         .buildAndChain(GregTechAPI.sBlockCasings3, 10))
                 .build();
@@ -363,10 +363,10 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
-            .addEnergyHatch(textUseBlueprint, 1)
-            .addInputBus(textUseBlueprint, 2)
-            .addInputHatch(textUseBlueprint, 3)
-            .addOutputBus(textEndSides, 2)
+            .addEnergyHatch(textUseBlueprint, 2)
+            .addInputBus(textUseBlueprint, 1)
+            .addInputHatch(textUseBlueprint, 1)
+            .addOutputBus(textEndSides, 1)
             // #tr Tooltip_AdvCircuitAssemblyLine.6
             // # Imprint circuit hatch
             // #zh_CN 压印电路仓
@@ -376,7 +376,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             .addOtherStructurePart(
                 TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.6"),
                 TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.7"),
-                5)
+                3)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher(ModName);
         return tt;
