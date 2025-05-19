@@ -425,8 +425,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 // inject infinite blood to the input fluids when tier 6 blood orb is found in the controller.
                 // this is mostly used with CRIB, where CRIB will not read the content in other hatches.
-                if(getOrbTier() >= 6) {
-                    FluidStack[] newInputFluids = ArrayUtils.add(this.inputFluids, getLifeEssenceFluidStack(Integer.MAX_VALUE));
+                if (getOrbTier() >= 6) {
+                    FluidStack[] newInputFluids = ArrayUtils
+                        .add(this.inputFluids, getLifeEssenceFluidStack(Integer.MAX_VALUE));
                     setInputFluids(newInputFluids);
                 }
 
@@ -489,8 +490,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     boolean isVaildFluid = false;
                     if (this.getStoredFluids() != null) {
                         for (FluidStack aFluid : inputFluids) {
-                            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1))
-                                && aFluid.amount >= 1000) {
+                            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1)) && aFluid.amount >= 1000) {
                                 aFluid.amount -= 1000;
                                 isVaildFluid = true;
                                 break;
