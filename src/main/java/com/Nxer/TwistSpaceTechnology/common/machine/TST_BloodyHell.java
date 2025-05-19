@@ -38,6 +38,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
@@ -418,6 +419,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 setOverclockType(
                     isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
 
+                // inject infinite blood to the input fluids when tier 6 blood orb is found in the controller.
+                // this is mostly used with CRIB, where CRIB will not read the content in other hatches.
+                if(getOrbTier() >= 6) {
+                    FluidStack[] newInputFluids = ArrayUtils.add(this.inputFluids, getLifeEssenceFluidStack(Integer.MAX_VALUE));
+                    setInputFluids(newInputFluids);
+                }
+
                 return super.process();
             }
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
@@ -449,7 +457,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         ArrayList<FluidStack> inputFluids = this.getStoredFluids();
         int mBloodAmount = 0;
         for (FluidStack aFluid : inputFluids) {
-            if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))) {
+            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1))) {
                 mBloodAmount += aFluid.amount;
             }
         }
@@ -477,7 +485,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     boolean isVaildFluid = false;
                     if (this.getStoredFluids() != null) {
                         for (FluidStack aFluid : inputFluids) {
-                            if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))
+                            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1))
                                 && aFluid.amount >= 1000) {
                                 aFluid.amount -= 1000;
                                 isVaildFluid = true;
@@ -499,6 +507,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
         isBloodChecked = true;
         return true;
+    }
+
+    protected static FluidStack getLifeEssenceFluidStack(int amount) {
+        return FluidUtils.getFluidStack("lifeessence", amount);
     }
 
     @Override
