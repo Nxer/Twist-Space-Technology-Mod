@@ -152,6 +152,15 @@ public class ElvenWorkshopRecipePool  {
             .duration(20 * 30)
             .addTo(EW);
 
+         GTValues.RA.stdBuilder()
+            .itemInputs(new ItemStack(Items.quartz_block, 1))
+            .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1500))
+            .itemOutputs(new ItemStack(Modblock.prismarine,1,0))
+            .eut(RECIPE_LV)
+            .duration(20 * 1)
+            .addTo(EW);
+
+        
     }
 }
 // spotless:on
