@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
-import static gregtech.api.enums.Mods.EnderIO;
 import static gregtech.api.util.GTModHandler.getModItem;
 
 import java.util.ArrayList;
@@ -26,13 +25,11 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Gen
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.dreammaster.gthandler.CustomItemList;
 
 import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
 import fox.spiteful.avaritia.crafting.ExtremeShapedOreRecipe;
 import fox.spiteful.avaritia.crafting.ExtremeShapedRecipe;
 import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
