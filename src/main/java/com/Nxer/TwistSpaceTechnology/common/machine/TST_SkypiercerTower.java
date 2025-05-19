@@ -794,11 +794,17 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #tr Tooltip_SkypiercerTower_InfusionProvider
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            .addOtherStructurePart("Infusion Provider", TextEnums.tr("Tooltip_SkypiercerTower_InfusionProvider"))
+            // #tr Tooltip.InfusionProvider
+            // # Infusion Provider
+            // #zh_CN 注魔供应器
+            .addOtherStructurePart(TextEnums.tr("Tooltip.InfusionProvider"), TextEnums.tr("Tooltip_SkypiercerTower_InfusionProvider"))
             // #tr Tooltip_SkypiercerTower_EssentiaOutputHatch
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            .addOtherStructurePart("Essentia Output Hatch", TextEnums.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
+            // #tr Tooltip.EssentiaOutputHatch
+            // # Essentia Output Hatch
+            // #zh_CN 源质输出仓
+            .addOtherStructurePart(TextEnums.tr("Tooltip.EssentiaOutputHatch"), TextEnums.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
             .toolTipFinisher(ModName);
         // spotless:on
         return tt;
