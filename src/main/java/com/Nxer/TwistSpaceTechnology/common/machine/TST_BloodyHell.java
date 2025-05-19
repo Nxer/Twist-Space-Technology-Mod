@@ -38,6 +38,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
@@ -190,6 +191,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             // # And there is a small text on the corner said, "Speed Runes can be the key."
             // #zh_CN 在角落里有一行小字写道，“速度符文也许是关键。”
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_2"))
+            // #tr Tooltip_BloodyHell_3
+            // # Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
+            // #zh_CN 还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
+            .addInfo(TextEnums.tr("Tooltip_BloodyHell_3"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
@@ -418,6 +423,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 setOverclockType(
                     isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
 
+                // inject infinite blood to the input fluids when tier 6 blood orb is found in the controller.
+                // this is mostly used with CRIB, where CRIB will not read the content in other hatches.
+                if (getOrbTier() >= 6) {
+                    FluidStack[] newInputFluids = ArrayUtils
+                        .add(this.inputFluids, getLifeEssenceFluidStack(Integer.MAX_VALUE));
+                    setInputFluids(newInputFluids);
+                }
+
                 return super.process();
             }
         }.setMaxParallelSupplier(this::getLimitedMaxParallel);
@@ -449,7 +462,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         ArrayList<FluidStack> inputFluids = this.getStoredFluids();
         int mBloodAmount = 0;
         for (FluidStack aFluid : inputFluids) {
-            if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))) {
+            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1))) {
                 mBloodAmount += aFluid.amount;
             }
         }
@@ -477,8 +490,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     boolean isVaildFluid = false;
                     if (this.getStoredFluids() != null) {
                         for (FluidStack aFluid : inputFluids) {
-                            if (aFluid.isFluidEqual(FluidUtils.getFluidStack("lifeessence", 1))
-                                && aFluid.amount >= 1000) {
+                            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1)) && aFluid.amount >= 1000) {
                                 aFluid.amount -= 1000;
                                 isVaildFluid = true;
                                 break;
@@ -499,6 +511,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         }
         isBloodChecked = true;
         return true;
+    }
+
+    protected static FluidStack getLifeEssenceFluidStack(int amount) {
+        return FluidUtils.getFluidStack("lifeessence", amount);
     }
 
     @Override
