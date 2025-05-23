@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockArcaneHole;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockEyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockStar;
@@ -50,6 +51,7 @@ public class TstBlocks {
     public static final SpaceStationAntiGravityCasing SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing();
     public static Block MetalBlock;
     public static final Block BlockStar = new BlockStar();
+    public static final Block BlockEyeOfWoodRender = new BlockEyeOfWoodRender();
     public static final Block NuclearReactorBlock = new BlockNuclearReactor();
 
     public static final Block BlockPowerChair = new BlockPowerChair();
