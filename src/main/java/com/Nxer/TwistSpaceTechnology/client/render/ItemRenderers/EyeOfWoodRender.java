@@ -1,7 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers;
 
-import static com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender.WOOD_MODEL;
-import static com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender.WOOD_TEXTURE;
+import static com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender.WOOD_SWEAT_MODEL;
+import static com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender.WOOD_SWEAT_TEXTURE;
+import static com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender.WOOD_THINKING_MODEL;
+import static com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender.WOOD_THINKING_TEXTURE;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockEyeOfWoodRender;
 
 import net.minecraft.client.Minecraft;
@@ -10,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
+
+import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -57,8 +61,16 @@ public class EyeOfWoodRender implements IItemRenderer {
                 GL11.glScaled(0.4, 0.4, 0.4);
                 GL11.glRotated(5, 1, 1, 1);
         }
-        Minecraft.getMinecraft().renderEngine.bindTexture(WOOD_TEXTURE);
-        WOOD_MODEL.renderAll();
+        switch (Config.RenderModelDefault_EyeOfWood) {
+            case 1 -> {
+                Minecraft.getMinecraft().renderEngine.bindTexture(WOOD_THINKING_TEXTURE);
+                WOOD_THINKING_MODEL.renderAll();
+            }
+            default -> {
+                Minecraft.getMinecraft().renderEngine.bindTexture(WOOD_SWEAT_TEXTURE);
+                WOOD_SWEAT_MODEL.renderAll();
+            }
+        }
         GL11.glPopMatrix();
 
     }

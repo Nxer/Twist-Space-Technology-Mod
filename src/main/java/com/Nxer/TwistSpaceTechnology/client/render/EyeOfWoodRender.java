@@ -2,8 +2,6 @@ package com.Nxer.TwistSpaceTechnology.client.render;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.RESOURCE_ROOT_ID;
 
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -24,10 +22,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class EyeOfWoodRender extends TileEntitySpecialRenderer {
 
-    public static final ResourceLocation WOOD_TEXTURE = new ResourceLocation(
+    public static final ResourceLocation WOOD_SWEAT_TEXTURE = new ResourceLocation(
         RESOURCE_ROOT_ID + ":" + "model/Sweat.png");
-    public static final IModelCustom WOOD_MODEL = AdvancedModelLoader
+    public static final IModelCustom WOOD_SWEAT_MODEL = AdvancedModelLoader
         .loadModel(new ResourceLocation(RESOURCE_ROOT_ID + ":" + "model/Sweat.obj"));
+
+    public static final ResourceLocation WOOD_THINKING_TEXTURE = new ResourceLocation(
+        RESOURCE_ROOT_ID + ":" + "model/Thinking.png");
+    public static final IModelCustom WOOD_THINKING_MODEL = AdvancedModelLoader
+        .loadModel(new ResourceLocation(RESOURCE_ROOT_ID + ":" + "model/Thinking.obj"));
 
     public EyeOfWoodRender() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEyeOfWoodRender.class, this);
@@ -66,23 +69,20 @@ public class EyeOfWoodRender extends TileEntitySpecialRenderer {
     }
 
     public void renderStar(TileEyeOfWoodRender tileEyeOfWoodRender, double size) {
-        List<IModelCustom> models = tileEyeOfWoodRender.getModels();
-        for (int i = 0; i < models.size(); i++) {
-            IModelCustom model = models.get(i);
-            GL11.glPushMatrix();
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_CULL_FACE);
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            this.bindTexture(tileEyeOfWoodRender.getTexture(i));
-            GL11.glScaled(size, size, size);
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-            model.renderAll();
-            GL11.glDisable(GL11.GL_BLEND);
-            GL11.glDepthMask(true);
-            GL11.glEnable(GL11.GL_CULL_FACE);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glPopMatrix();
-        }
+        IModelCustom model = tileEyeOfWoodRender.getModel();
+        GL11.glPushMatrix();
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        this.bindTexture(tileEyeOfWoodRender.getTexture());
+        GL11.glScaled(size, size, size);
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+        model.renderAll();
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glPopMatrix();
     }
 }
