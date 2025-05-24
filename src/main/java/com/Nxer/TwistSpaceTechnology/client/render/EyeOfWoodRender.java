@@ -14,6 +14,7 @@ import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.tile.TileEyeOfWoodRender;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -64,18 +65,29 @@ public class EyeOfWoodRender extends TileEntitySpecialRenderer {
         GL11.glRotated(yaw + 90, 0, 1, 0);
         GL11.glRotated(-pitch, 1, 0, 0);
 
-        renderStar(star, size);
+        renderStar(size);
         GL11.glPopMatrix();
     }
 
-    public void renderStar(TileEyeOfWoodRender tileEyeOfWoodRender, double size) {
-        IModelCustom model = tileEyeOfWoodRender.getModel();
+    public void renderStar(double size) {
+        ResourceLocation texture;
+        IModelCustom model;
+        switch (Config.RenderModelDefault_EyeOfWood) {
+            case 1 -> {
+                model = WOOD_THINKING_MODEL;
+                texture = WOOD_THINKING_TEXTURE;
+            }
+            default -> {
+                model = WOOD_SWEAT_MODEL;
+                texture = WOOD_SWEAT_TEXTURE;
+            }
+        }
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_CULL_FACE);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        this.bindTexture(tileEyeOfWoodRender.getTexture());
+        this.bindTexture(texture);
         GL11.glScaled(size, size, size);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
         model.renderAll();

@@ -72,6 +72,5 @@ public class EyeOfWoodRender implements IItemRenderer {
             }
         }
         GL11.glPopMatrix();
-
     }
 }
