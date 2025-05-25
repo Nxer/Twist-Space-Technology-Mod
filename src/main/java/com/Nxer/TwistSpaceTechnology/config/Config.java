@@ -354,6 +354,8 @@ public class Config {
     public static int StandardLavaNeed_EyeOfWood = 256;
     public static int SecondsPerProcessing_EyeOfWood = 60;
     public static int StandardDimensionID_EyeOfWood = 0;
+    public static byte RenderModelDefault_EyeOfWood = 1;
+    public static boolean EnableRenderDefault_EyeOfWood = true;
 
     // endregion
 
@@ -592,7 +594,8 @@ public class Config {
         StandardLavaNeed_EyeOfWood = configuration.getInt("StandardLavaNeed_EyeOfWood", EOW, StandardLavaNeed_EyeOfWood, 1, 1024, "Standard amount (in L) of Lava per processing need of Eye of Wood. Type: int");
         SecondsPerProcessing_EyeOfWood = configuration.getInt("SecondsPerProcessing_EyeOfWood", EOW, SecondsPerProcessing_EyeOfWood, 1, 3600, "How many seconds per processing cost of Eye of Wood. Type: int");
         StandardDimensionID_EyeOfWood = configuration.getInt("StandardDimensionID_EyeOfWood", EOW, StandardDimensionID_EyeOfWood, -9999, 9999, "Standard dimension the Eye of Wood is allowed in. Default 0 - Overworld. Type: int");
-
+        RenderModelDefault_EyeOfWood = (byte) configuration.getInt("RenderModelDefault_EyeOfWood", EOW, RenderModelDefault_EyeOfWood, 0, 1, "Select Render Model for Eye of Wood. Default 0 - Sweat. 1 - Thinking. Type: int");
+        EnableRenderDefault_EyeOfWood = configuration.getBoolean("EnableRenderDefault_EyeOfWood", EOW, EnableRenderDefault_EyeOfWood, "Enable Render for Eye of Wood when placing a new one.");
         // endregion
 
         // region Disassembler

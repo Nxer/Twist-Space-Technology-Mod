@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.sendMessageKeyToPlayer;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -15,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,7 +32,9 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -51,6 +57,7 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.shutdown.ShutDownReason;
 
 public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
@@ -85,6 +92,8 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         .pow(2_000_000_000d, 1d / Math.max(STANDARD_WATER_BUCKET, STANDARD_LAVA_BUCKET));
     private int storedWater = 0;
     private int storedLava = 0;
+    private boolean enableRender = Config.EnableRenderDefault_EyeOfWood;
+    public boolean isRendering = false;
 
     @Override
     public String[] getInfoData() {
@@ -131,6 +140,8 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         super.saveNBTData(aNBT);
         aNBT.setInteger("storedWater", storedWater);
         aNBT.setInteger("storedLava", storedLava);
+        aNBT.setBoolean("isRendering", isRendering);
+        aNBT.setBoolean("enableRender", enableRender);
     }
 
     @Override
@@ -138,6 +149,55 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         super.loadNBTData(aNBT);
         storedWater = aNBT.getInteger("storedWater");
         storedLava = aNBT.getInteger("storedLava");
+        isRendering = aNBT.getBoolean("isRendering");
+        enableRender = aNBT.getBoolean("enableRender");
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.enableRender = !enableRender;
+            sendMessageKeyToPlayer(aPlayer, "EyeOfWood.enableRender." + this.enableRender);
+            if ((!enableRender) && isRendering) {
+                destroyRenderBlock();
+                isRendering = false;
+            }
+        }
+    }
+
+    public void createRenderBlock() {
+        int x = getBaseMetaTileEntity().getXCoord();
+        int y = getBaseMetaTileEntity().getYCoord();
+        int z = getBaseMetaTileEntity().getZCoord();
+
+        double xOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetX;
+        double zOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
+        double yOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), TstBlocks.BlockEyeOfWoodRender);
+    }
+
+    private void destroyRenderBlock() {
+        IGregTechTileEntity gregTechTileEntity = this.getBaseMetaTileEntity();
+
+        int x = gregTechTileEntity.getXCoord();
+        int y = gregTechTileEntity.getYCoord();
+        int z = gregTechTileEntity.getZCoord();
+
+        double xOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetX;
+        double zOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
+        double yOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
+
+        isRendering = false;
     }
 
     @NotNull
@@ -168,6 +228,10 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         updateSlots();
         mMaxProgresstime = ValueEnum.TicksPerProcessing_EyeOfWood;
 
+        if (enableRender && !isRendering) {
+            createRenderBlock();
+            isRendering = true;
+        }
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
@@ -307,6 +371,18 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
             }
         }
 
+    }
+
+    @Override
+    public void stopMachine(@Nonnull ShutDownReason reason) {
+        destroyRenderBlock();
+        super.stopMachine(reason);
+    }
+
+    @Override
+    public void onBlockDestroyed() {
+        destroyRenderBlock();
+        super.onBlockDestroyed();
     }
 
     protected void initDropMap() {
