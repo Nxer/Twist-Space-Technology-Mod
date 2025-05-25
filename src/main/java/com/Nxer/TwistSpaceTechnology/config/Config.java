@@ -354,7 +354,7 @@ public class Config {
     public static int StandardLavaNeed_EyeOfWood = 256;
     public static int SecondsPerProcessing_EyeOfWood = 60;
     public static int StandardDimensionID_EyeOfWood = 0;
-    public static byte RenderModelDefault_EyeOfWood = 0;
+    public static byte RenderModelDefault_EyeOfWood = 1;
     public static boolean EnableRenderDefault_EyeOfWood = true;
 
     // endregion
