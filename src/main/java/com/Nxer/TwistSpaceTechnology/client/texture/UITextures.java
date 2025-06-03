@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture;
+package com.Nxer.TwistSpaceTechnology.client.texture;
 
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.TST_ID;
 
