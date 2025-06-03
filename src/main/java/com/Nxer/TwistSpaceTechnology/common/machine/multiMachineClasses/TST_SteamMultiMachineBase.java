@@ -47,7 +47,7 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
 
     public void repairMachine() {
         mHardHammer = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mScrewdriver = true;
         mCrowbar = true;
         mSolderingTool = true;

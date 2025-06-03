@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
-import static gregtech.api.util.GTUtility.copyAmount;
-
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -18,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -39,6 +38,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
 import com.google.common.collect.Lists;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
@@ -130,6 +130,90 @@ public class TstUtils {
      */
     public static ItemStack newItemWithMeta(Block block, int meta) {
         return new ItemStack(block, 1, meta);
+    }
+
+    /**
+     * GT++ styled ItemStack generator.
+     * <p>
+     * Be aware that the parameter order is {@code newItemStack(what, meta, count)}, which is different from
+     * {@code new ItemStack(what, count, meta)}.
+     */
+    public static ItemStack newItemStack(Item item, int meta) {
+        return newItemStack(item, meta, 1);
+    }
+
+    /**
+     * GT++ styled ItemStack generator.
+     * <p>
+     * Be aware that the parameter order is {@code newItemStack(what, meta, count)}, which is different from
+     * {@code new ItemStack(what, count, meta)}.
+     */
+    public static ItemStack newItemStack(Block block, int meta) {
+        return newItemStack(block, meta, 1);
+    }
+
+    /**
+     * GT++ styled ItemStack generator.
+     * <p>
+     * Be aware that the parameter order is {@code newItemStack(what, meta, count)}, which is different from
+     * {@code new ItemStack(what, count, meta)}.
+     *
+     * @param fqrn the FQRN (fully qualified resource name) of an item like "minecraft:stone" or
+     *             "examplemod:example_item".
+     */
+    public static ItemStack newItemStack(String fqrn, int meta) {
+        return newItemStack(fqrn, meta, 1);
+    }
+
+    /**
+     * GT++ styled ItemStack generator.
+     * <p>
+     * Be aware that the parameter order is {@code newItemStack(what, meta, count)}, which is different from
+     * {@code new ItemStack(what, count, meta)}.
+     */
+    public static ItemStack newItemStack(Item item, int meta, int count) {
+        return new ItemStack(item, count, meta);
+    }
+
+    /**
+     * GT++ styled ItemStack generator.
+     * <p>
+     * Be aware that the parameter order is {@code newItemStack(what, meta, count)}, which is different from
+     * {@code new ItemStack(what, count, meta)}.
+     */
+    public static ItemStack newItemStack(Block block, int meta, int count) {
+        return new ItemStack(block, count, meta);
+    }
+
+    /**
+     * GT++ styled ItemStack generator.
+     * <p>
+     * Be aware that the parameter order is {@code newItemStack(what, meta, count)}, which is different from
+     * {@code new ItemStack(what, count, meta)}.
+     *
+     * @param fqrn the FQRN (fully qualified resource name) of an item like "minecraft:stone" or
+     *             "examplemod:example_item".
+     */
+    public static ItemStack newItemStack(String fqrn, int meta, int count) {
+        var lookupInfo = parseItemFqn(fqrn);
+        Item item = GameRegistry.findItem(lookupInfo[0], lookupInfo[1]);
+        if (item == null) {
+            return null;
+        }
+
+        return new ItemStack(item, count, meta);
+    }
+
+    /**
+     * Read the "full qualified resource name" for an item like "minecraft:stone" or "examplemod:example_item" and
+     * return the parsed domain and path.
+     *
+     * @param fqn the fqrn of an item; if the domain is missing, it will fallback to "minecraft".
+     * @return a 2-sized array where the first element is the domain and the second element is the path.
+     */
+    private static String[] parseItemFqn(String fqn) {
+        var rl = new ResourceLocation(fqn);
+        return new String[] { rl.getResourceDomain(), rl.getResourcePath() };
     }
 
     // endregion

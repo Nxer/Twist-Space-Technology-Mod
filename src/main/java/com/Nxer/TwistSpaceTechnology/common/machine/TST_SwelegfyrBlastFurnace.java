@@ -616,7 +616,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 ItemStack ControllerSlot = this.getControllerSlot();
                 if (GTUtility.areStacksEqual(UpgradeItem, ControllerSlot)) {
                     controllerTier = 2;
-                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
+                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot, 1);
                     markDirty();
                     // schedule a structure check
                     mUpdated = true;
@@ -898,7 +898,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             ItemStack heldItem = aPlayer.getHeldItem();
             if (GTUtility.areStacksEqual(UpgradeItem, heldItem)) {
                 controllerTier = 2;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, 1));
                 if (getBaseMetaTileEntity().isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();

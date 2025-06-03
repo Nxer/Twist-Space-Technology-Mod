@@ -98,7 +98,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         mEfficiency = 0;
         mWrench = false;
         mScrewdriver = false;
-        mSoftHammer = false;
+        mSoftMallet = false;
         mHardHammer = false;
         mSolderingTool = false;
         mCrowbar = false;

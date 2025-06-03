@@ -874,7 +874,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected void maintenance_EM() {
         mWrench = true;
         mScrewdriver = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mHardHammer = true;
         mSolderingTool = true;
         mCrowbar = true;

@@ -80,7 +80,6 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.LanthItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
@@ -311,7 +310,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     Materials.Neutronium.getNanite(1),
                     GTUtility.copyAmountUnsafe(4096, Materials.Lanthanum.getPlates(1)),
                     GTUtility.copyAmountUnsafe(6144, Materials.NaquadahAlloy.getPlates(1)),
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 1))
+                    TstUtils.newItemStack(ModItems.itemStandarParticleBase, 0, 1))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),

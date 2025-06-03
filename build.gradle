@@ -11,13 +11,4 @@ minecraft {
 
 configurations.configureEach {
     exclude group: "com.github.GTNewHorizons", module: "Baubles"
-
-    /**
-     * https://github.com/GTNewHorizons/Hodgepodge/pull/522#issuecomment-2888609247
-     *
-     * Hodgepodge 2.6.58-pre has a sneaky bug, so it is excluded here, and is included in "libs/".
-     *
-     * TODO: Remove this and the JAR in "libs/" when the fix commit is merged in either master or dev.
-     */
-    exclude group: "com.github.GTNewHorizons", module: "Hodgepodge"
 }

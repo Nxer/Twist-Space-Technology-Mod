@@ -188,7 +188,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             ItemStack ControllerSlot = this.getControllerSlot();
             if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
                 controllerTier = 1;
-                mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
+                mInventory[1] = ItemUtils.depleteStack(ControllerSlot, 1);
                 markDirty();
                 // schedule a structure check
                 mUpdated = true;
@@ -203,7 +203,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             ItemStack heldItem = aPlayer.getHeldItem();
             if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, 1));
                 if (getBaseMetaTileEntity().isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();

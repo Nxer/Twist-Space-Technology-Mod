@@ -76,7 +76,7 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus implement
         TST_ItemID.createNoNBT(GGItemList.SingleUseCrowbar.get(1));
         TST_ItemID.createNoNBT(GGItemList.SingleUseWireCutter.get(1));
         TST_ItemID.createNoNBT(GGItemList.SingleUseHardHammer.get(1));
-        TST_ItemID.createNoNBT(GGItemList.SingleUseSoftHammer.get(1));
+        TST_ItemID.createNoNBT(GGItemList.SingleUseSoftMallet.get(1));
         TST_ItemID.createNoNBT(GGItemList.SingleUseScrewdriver.get(1));
         TST_ItemID.createNoNBT(GGItemList.SingleUseSaw.get(1));
     }

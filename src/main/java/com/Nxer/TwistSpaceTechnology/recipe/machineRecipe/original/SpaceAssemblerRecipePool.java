@@ -6,6 +6,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import goodgenerator.util.ItemRefer;
@@ -16,7 +17,6 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 
 public class SpaceAssemblerRecipePool {
 
@@ -34,7 +34,7 @@ public class SpaceAssemblerRecipePool {
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 3),
+                    TstUtils.newItemStack(ModItems.itemStandarParticleBase, 0, 3),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.ElectrumFlux, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),

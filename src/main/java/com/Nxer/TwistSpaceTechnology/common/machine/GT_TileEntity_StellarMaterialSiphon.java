@@ -446,7 +446,7 @@ public class GT_TileEntity_StellarMaterialSiphon
 
     public void repairMachine() {
         mHardHammer = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mScrewdriver = true;
         mCrowbar = true;
         mSolderingTool = true;

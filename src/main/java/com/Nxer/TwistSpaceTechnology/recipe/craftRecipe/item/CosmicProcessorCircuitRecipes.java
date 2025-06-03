@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
 
@@ -50,7 +51,6 @@ import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.recipe.Scanning;
 import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 
 public class CosmicProcessorCircuitRecipes {
 
@@ -205,8 +205,8 @@ public class CosmicProcessorCircuitRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
-                ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 17, 1),
-                GTCMItemList.ParticleTrapTimeSpaceShield.get(128),
+                TstUtils.newItemStack(ModItems.itemStandarParticleBase, 17, 1),
+                ParticleTrapTimeSpaceShield.get(128),
                 ItemList.EnergisedTesseract.get(4),
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 32))
             .fluidInputs(MaterialsUEVplus.Time.getMolten(144))

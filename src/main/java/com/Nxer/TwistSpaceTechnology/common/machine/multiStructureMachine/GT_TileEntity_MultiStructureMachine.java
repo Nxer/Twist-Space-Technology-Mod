@@ -192,7 +192,7 @@ public abstract class GT_TileEntity_MultiStructureMachine<T extends GT_TileEntit
     protected void turnOffMaintenance() {
         mWrench = true;
         mScrewdriver = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mHardHammer = true;
         mSolderingTool = true;
         mCrowbar = true;

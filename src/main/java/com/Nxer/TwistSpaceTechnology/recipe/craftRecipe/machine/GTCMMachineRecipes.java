@@ -177,6 +177,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import appeng.api.AEApi;
@@ -214,7 +215,6 @@ import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.recipe.common.CI;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import gtnhintergalactic.recipe.IGRecipeMaps;
@@ -2359,7 +2359,7 @@ public class GTCMMachineRecipes {
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.InfinityCatalyst, 64),
 
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                    ItemUtils.getSimpleStack(ModItems.itemChargePack_High_4, 1),
+                    TstUtils.newItemStack(ModItems.itemChargePack_High_4, 1),
                     ItemList.ZPM5.get(1),
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64)
                 )
@@ -2812,7 +2812,7 @@ public class GTCMMachineRecipes {
                     .itemInputs(
                         Casing_Cyclotron_External.get(4),
                         Casing_AdvancedVacuum.get(4),
-                        ItemUtils.simpleMetaStack("miscutils:itemDehydratorCoilWire", 3, 16),
+                        TstUtils.newItemStack("miscutils:itemDehydratorCoilWire", 3, 16),
                         ItemRefer.Advanced_Radiation_Protection_Plate.get(6),
 
                         MaterialsAlloy.ABYSSAL.getLongRod(12),
@@ -2840,7 +2840,7 @@ public class GTCMMachineRecipes {
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.Bio), 2},
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 16),
+                    TstUtils.newItemStack(ModItems.itemStandarParticleBase, 19, 16),
                     ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(
