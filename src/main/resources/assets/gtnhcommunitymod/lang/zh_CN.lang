@@ -2159,3 +2159,9 @@ Waila.SBF.0=配方炉温限制
 Tooltip_BloodyHell_3=还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
 Tooltip.InfusionProvider=注魔供应器
 Tooltip.EssentiaOutputHatch=源质输出仓
+NameLaserFocusedSmartNode=激光聚焦智能节点
+LaserFocusedSmartNode.description.01=精密计算, 然后, 聚焦！
+LaserFocusedSmartNode.description.02=§b连接不同方向的设备.
+LaserFocusedSmartNode.description.03=§b从正面输出能量, 从其他面输入.
+LaserFocusedSmartNode.description.04=§b同原始版本一样,请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
+
