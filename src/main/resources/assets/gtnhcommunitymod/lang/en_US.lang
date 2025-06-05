@@ -2163,6 +2163,4 @@ NameLaserFocusedSmartNode=Laser-Focused Smart Node
 LaserFocusedSmartNode.description.01=Precise calculation, then, focus!
 LaserFocusedSmartNode.description.02=§bConnects devices in different directions.
 LaserFocusedSmartNode.description.03=§bOutput energy from the front and input from other sides.
-LaserFocusedSmartNode.description.04=§bAs in the original version, please note that if the source voltage is greater than the receiving voltage, it will explode; if it is less, it will not work. Please ensure that the voltages are consistent.
-
-
+LaserFocusedSmartNode.description.04=§bAs in the original version, please note that if the source voltage is greater than the receiving

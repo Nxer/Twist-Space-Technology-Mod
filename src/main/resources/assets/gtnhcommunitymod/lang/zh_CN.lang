@@ -2164,4 +2164,3 @@ LaserFocusedSmartNode.description.01=精密计算, 然后, 聚焦！
 LaserFocusedSmartNode.description.02=§b连接不同方向的设备.
 LaserFocusedSmartNode.description.03=§b从正面输出能量, 从其他面输入.
 LaserFocusedSmartNode.description.04=§b同原始版本一样,请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
-
