@@ -81,7 +81,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_Solidify;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
-import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart_Reverse;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart_Focusing;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
@@ -754,7 +754,7 @@ public final class MachineLoader {
             new GT_MetaTileEntity_Pipe_EnergySmart(18960, "NameLaserSmartNode", TextLocalization.NameLaserSmartNode));
 
         GTCMItemList.LaserFocusedSmartNode.set(
-            new GT_MetaTileEntity_Pipe_EnergySmart_Reverse(
+            new GT_MetaTileEntity_Pipe_EnergySmart_Focusing(
                 18961,
                 "NameLaserFocusedSmartNode",
                 TextLocalization.NameLaserFocusedSmartNode));

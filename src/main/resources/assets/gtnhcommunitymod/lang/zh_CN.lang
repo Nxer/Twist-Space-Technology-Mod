@@ -2163,4 +2163,5 @@ NameLaserFocusedSmartNode=激光聚焦智能节点
 LaserFocusedSmartNode.description.01=精密计算, 然后, 聚焦！
 LaserFocusedSmartNode.description.02=§b连接不同方向的设备.
 LaserFocusedSmartNode.description.03=§b从正面输出能量, 从其他面输入.
-LaserFocusedSmartNode.description.04=§b同原始版本一样,请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
+LaserFocusedSmartNode.description.04=§b请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
+LaserFocusedSmartNode.description.05=§b尽量不要将两种智能节点混用,在一般情况是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.

@@ -8,8 +8,12 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -24,6 +28,8 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTETieredMachineBlock;
 import gregtech.api.render.TextureFactory;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
@@ -31,7 +37,7 @@ import tectech.thing.metaTileEntity.pipe.MTEPipeEnergy;
 import tectech.thing.metaTileEntity.pipe.MTEPipeEnergyMirror;
 import tectech.util.CommonValues;
 
-public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachineBlock
+public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachineBlock
     implements IConnectsToEnergyTunnel {
 
     public long Voltage = 0;
@@ -39,11 +45,11 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
 
     private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe;
 
-    public GT_MetaTileEntity_Pipe_EnergySmart_Reverse(int aID, String aName, String aNameRegional) {
+    public GT_MetaTileEntity_Pipe_EnergySmart_Focusing(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
     }
 
-    public GT_MetaTileEntity_Pipe_EnergySmart_Reverse(String aName, int aTier, String[] aDescription,
+    public GT_MetaTileEntity_Pipe_EnergySmart_Focusing(String aName, int aTier, String[] aDescription,
         ITexture[][][] aTextures) {
         super(aName, aTier, 0, aDescription, aTextures);
     }
@@ -58,7 +64,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity tile) {
-        return new GT_MetaTileEntity_Pipe_EnergySmart_Reverse(mName, mTier, mDescriptionArray, mTextures);
+        return new GT_MetaTileEntity_Pipe_EnergySmart_Focusing(mName, mTier, mDescriptionArray, mTextures);
     }
 
     @Override
@@ -75,6 +81,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
 
     @Override
     public String[] getDescription() {
+        // spotless:off
         return new String[] { CommonValues.TEC_MARK_EM,
             // #tr LaserFocusedSmartNode.description.01
             // # Precise calculation, then, focus!
@@ -89,11 +96,15 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
             // #zh_CN {\AQUA}从正面输出能量, 从其他面输入.
             TextEnums.tr("LaserFocusedSmartNode.description.03"),
             // #tr LaserFocusedSmartNode.description.04
-            // # {\AQUA}As in the original version, please note that if the source voltage is greater than the receiving
-            // voltage, it will explode; if it is less, it will not work. Please ensure that the voltages are
-            // consistent.
-            // #zh_CN {\AQUA}同原始版本一样,请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
-            TextEnums.tr("LaserFocusedSmartNode.description.04"), TextEnums.AddByTwistSpaceTechnology.getText() };
+            // # {\AQUA}Please note that if the source voltage is greater than the receiving voltage, it will explode; if it is less, it will not work. Please ensure that the voltages are consistent.
+            // #zh_CN {\AQUA}请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
+            TextEnums.tr("LaserFocusedSmartNode.description.04"),
+            // #tr LaserFocusedSmartNode.description.05
+            // # {\AQUA}Try not to mix the two types of intelligent nodes. In general, it is allowed, but if a loop occurs in the laser network (that is, the output passes through several nodes and then becomes the input), there may be unpredictable consequences.
+            // #zh_CN {\AQUA}尽量不要将两种智能节点混用,在一般情况是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.
+            TextEnums.tr("LaserFocusedSmartNode.description.05"),
+            TextEnums.AddByTwistSpaceTechnology.getText() };
+        // spotless:on
     }
 
     @Override
@@ -178,6 +189,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
 
             List<MetaTileEntity> inputs = new ArrayList<>();
             MetaTileEntity output = null;
+            long maxVoltage = 0;
 
             ForgeDirection front = base.getFrontFacing();
 
@@ -185,25 +197,39 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
                 if (dir == front) {
                     IMetaTileEntity found = findMTE(base, color, dir, false);
                     if (found instanceof MTEHatchEnergyTunnel
-                        || found instanceof GT_MetaTileEntity_Pipe_EnergySmart_Reverse) {
+                        || found instanceof GT_MetaTileEntity_Pipe_EnergySmart_Focusing
+                        || found instanceof GT_MetaTileEntity_Pipe_EnergySmart) {
                         output = (MetaTileEntity) found;
                     }
                 } else {
                     IMetaTileEntity found = findMTE(base, color, dir, true);
                     if (found instanceof MTEHatchDynamoTunnel
-                        || found instanceof GT_MetaTileEntity_Pipe_EnergySmart_Reverse) {
-                        inputs.add((MetaTileEntity) found);
+                        || found instanceof GT_MetaTileEntity_Pipe_EnergySmart_Focusing
+                        || found instanceof GT_MetaTileEntity_Pipe_EnergySmart) {
+                        MetaTileEntity input = (MetaTileEntity) found;
+                        inputs.add(input);
+                        maxVoltage = Math.max(maxVoltage, input.maxEUOutput());
                     }
                 }
             }
-
+            this.Voltage = maxVoltage;
+            this.Amperes = 0;
             for (MetaTileEntity input : inputs) {
-                this.Voltage = input.maxEUOutput();
-                this.Amperes = input.maxAmperesOut();
-                moveEnergy(input, this);
+                if (input.maxEUOutput() == this.Voltage) {
+                    this.Amperes += input.maxAmperesOut();
+                }
             }
-
-            if (output != null && base.getStoredEU() > getMinimumStoredEU()) {
+            // Prevent input reduction Although there is also a mechanism in moveEnergy to prevent the transmission of
+            // negative energy
+            if (this.maxEUStore() > this.getBaseMetaTileEntity()
+                .getStoredEU()) {
+                for (MetaTileEntity input : inputs) {
+                    if (input.maxEUOutput() == this.Voltage && input instanceof MTEHatchDynamoTunnel) {
+                        moveEnergy(input, this);
+                    }
+                }
+            }
+            if (output != null) {
                 moveEnergy(this, output);
             }
         }
@@ -217,9 +243,10 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
             target.doExplosion(sourceVoltage);
             return;
         }
+        if (sourceVoltage < targetVoltage) return;
+
         long voltage = Math.min(sourceVoltage, targetVoltage);
         long amperes = Math.min(source.maxAmperesOut(), target.maxAmperesIn());
-
         if (voltage <= 0 || amperes <= 0) return;
 
         long maxTransfer = voltage * amperes * 20;
@@ -230,7 +257,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
                     .getStoredEU(),
                 target.maxEUStore() - target.getBaseMetaTileEntity()
                     .getStoredEU()));
-
         if (actualTransfer > 0) {
             source.setEUVar(
                 source.getBaseMetaTileEntity()
@@ -252,17 +278,21 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
             if (mte == null) break;
 
             if (mte instanceof MTEPipeEnergyMirror mirror) {
-                ForgeDirection nextTravel = mirror.getBendDirection(facingSide); // 修正方向
+                ForgeDirection nextTravel = mirror.getBendDirection(facingSide);
                 return findMTE(mirror.getBaseMetaTileEntity(), color, nextTravel, findProvider);
             }
 
             if (findProvider) {
                 if (mte instanceof MTEHatchDynamoTunnel && facingSide == target.getFrontFacing()) return mte;
-                if (mte instanceof GT_MetaTileEntity_Pipe_EnergySmart_Reverse && facingSide != target.getFrontFacing())
+                if (mte instanceof GT_MetaTileEntity_Pipe_EnergySmart_Focusing && facingSide == target.getFrontFacing())
+                    return mte;
+                if (mte instanceof GT_MetaTileEntity_Pipe_EnergySmart && facingSide != target.getFrontFacing())
                     return mte;
             } else {
                 if (mte instanceof MTEHatchEnergyTunnel && facingSide == target.getFrontFacing()) return mte;
-                if (mte instanceof GT_MetaTileEntity_Pipe_EnergySmart_Reverse && facingSide != target.getFrontFacing())
+                if (mte instanceof GT_MetaTileEntity_Pipe_EnergySmart_Focusing && facingSide != target.getFrontFacing())
+                    return mte;
+                if (mte instanceof GT_MetaTileEntity_Pipe_EnergySmart && facingSide == target.getFrontFacing())
                     return mte;
             }
 
@@ -273,8 +303,32 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Reverse extends MTETieredMachine
                 break;
             }
         }
-
         return null;
+    }
+
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        tag.setLong("wailaVoltage", this.Voltage);
+        tag.setLong("wailaInputAmperes", this.Amperes);
+        tag.setLong("wailaMaxEuStore", this.maxEUStore());
+        tag.setLong(
+            "wailaGetStoredEU",
+            this.getBaseMetaTileEntity()
+                .getStoredEU());
+    }
+
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        currentTip.add(EnumChatFormatting.AQUA + "Voltage: " + EnumChatFormatting.GOLD + tag.getLong("wailaVoltage"));
+        currentTip.add(
+            EnumChatFormatting.AQUA + "InputAmperes: " + EnumChatFormatting.GOLD + tag.getLong("wailaInputAmperes"));
+        currentTip
+            .add(EnumChatFormatting.AQUA + "MaxEuStore: " + EnumChatFormatting.GOLD + tag.getLong("wailaMaxEuStore"));
+        currentTip
+            .add(EnumChatFormatting.AQUA + "NowEuStore: " + EnumChatFormatting.GOLD + tag.getLong("wailaGetStoredEU"));
     }
 
     @Override
