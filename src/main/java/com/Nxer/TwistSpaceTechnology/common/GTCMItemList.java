@@ -466,6 +466,7 @@ public enum GTCMItemList {
     BufferedEnergyHatchMAX,
     DebugUncertaintyHatch,
     LaserSmartNode,
+    LaserFocusedSmartNode,
     FackRackHatch,
     RealRackHatch,
     WirelessDataInputHatch,

@@ -31,6 +31,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteAirHatch
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.InfiniteWirelessDynamoHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.IntensifyChemicalDistorter;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LargeIndustrialCokingFactory;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserFocusedSmartNode;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.LaserSmartNode;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDomainConstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticDrivePressureFormer;
@@ -1715,6 +1716,19 @@ public class GTCMMachineRecipes {
             )
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(LaserSmartNode.get(1))
+            .eut(RECIPE_UHV)
+            .duration(20 * 5)
+            .addTo(assembler);
+        // endregion
+
+
+        // region LaserFocusedSmartNode
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                LaserSmartNode.get(1)
+            )
+            .itemOutputs(LaserFocusedSmartNode.get(1))
             .eut(RECIPE_UHV)
             .duration(20 * 5)
             .addTo(assembler);

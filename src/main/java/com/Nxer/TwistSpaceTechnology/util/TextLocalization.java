@@ -2228,6 +2228,11 @@ public class TextLocalization {
     // #zh_CN 激光智能节点
     public static final String NameLaserSmartNode = TextEnums.tr("NameLaserSmartNode");
 
+    // #tr NameLaserFocusedSmartNode
+    // # Laser-Focused Smart Node
+    // #zh_CN 激光聚焦智能节点
+    public static final String NameLaserFocusedSmartNode = TextEnums.tr("NameLaserFocusedSmartNode");
+
     // region Vacuum Filter Extractor
 
     // #tr NameVacuumFilterExtractor
