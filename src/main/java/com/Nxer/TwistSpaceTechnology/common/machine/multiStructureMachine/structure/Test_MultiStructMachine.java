@@ -58,7 +58,7 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 

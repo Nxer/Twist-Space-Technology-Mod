@@ -15,7 +15,6 @@ public class CompressorRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(GTCMItemList.PurpleMagnoliaPetal.get(8))
             .itemOutputs(IC2Items.getItem("plantBall"))
-            .noOptimize()
             .eut(2)
             .duration(15 * 20)
             .addTo(Compressor);

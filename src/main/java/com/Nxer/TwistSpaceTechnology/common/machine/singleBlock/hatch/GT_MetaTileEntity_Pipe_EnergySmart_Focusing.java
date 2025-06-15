@@ -33,8 +33,8 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
-import tectech.thing.metaTileEntity.pipe.MTEPipeEnergy;
-import tectech.thing.metaTileEntity.pipe.MTEPipeEnergyMirror;
+import tectech.thing.metaTileEntity.pipe.MTEPipeLaser;
+import tectech.thing.metaTileEntity.pipe.MTEPipeLaserMirror;
 import tectech.util.CommonValues;
 
 public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachineBlock
@@ -159,11 +159,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
     }
 
     @Override
-    public boolean isSimpleMachine() {
-        return true;
-    }
-
-    @Override
     public boolean isFacingValid(ForgeDirection f) {
         return true;
     }
@@ -277,7 +272,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
             IMetaTileEntity mte = target.getMetaTileEntity();
             if (mte == null) break;
 
-            if (mte instanceof MTEPipeEnergyMirror mirror) {
+            if (mte instanceof MTEPipeLaserMirror mirror) {
                 ForgeDirection nextTravel = mirror.getBendDirection(facingSide);
                 return findMTE(mirror.getBaseMetaTileEntity(), color, nextTravel, findProvider);
             }
@@ -296,7 +291,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
                     return mte;
             }
 
-            if (mte instanceof MTEPipeEnergy pipe) {
+            if (mte instanceof MTEPipeLaser pipe) {
                 if (pipe.connectionCount < 2) break;
                 pipe.markUsed();
             } else {

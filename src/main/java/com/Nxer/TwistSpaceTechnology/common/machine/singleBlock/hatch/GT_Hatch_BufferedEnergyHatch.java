@@ -41,8 +41,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
     private long mStored = 0;
     private long mMax = 0;
 
-    public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
-        String[] aDescription, ITexture... aTextures) {
+    public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount) {
         super(
             aID,
             aName,
@@ -50,13 +49,12 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
             aTier,
             aInvSlotCount,
             new String[] { TstUtils.tr("BufferedEnergyHatch.Tooltips.01"),
-                TstUtils.tr("BufferedEnergyHatch.Tooltips.02"), TextLocalization.ModNameDesc },
-            aTextures);
+                TstUtils.tr("BufferedEnergyHatch.Tooltips.02"), TextLocalization.ModNameDesc });
     }
 
-    public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, int aslot, String[] aDescription,
+    public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, int inventorySize, String[] aDescription,
         ITexture[][][] aTextures) {
-        super(aName, aTier, aslot, aDescription, aTextures);
+        super(aName, aTier, inventorySize, aDescription, aTextures);
     }
 
     @Override
@@ -68,11 +66,6 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
         // #zh_CN 格
         desc[mDescriptionArray.length] = mInventory.length + " " + TstUtils.tr("Slots");
         return desc;
-    }
-
-    @Override
-    public boolean isSimpleMachine() {
-        return false;
     }
 
     @Override

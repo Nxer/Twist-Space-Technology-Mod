@@ -44,7 +44,7 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.common.tileentities.machines.MTEHatchOutputBusME;
+import gregtech.api.util.OverclockCalculator;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
@@ -98,7 +98,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         mEfficiency = 0;
         mWrench = false;
         mScrewdriver = false;
-        mSoftHammer = false;
+        mSoftMallet = false;
         mHardHammer = false;
         mSolderingTool = false;
         mCrowbar = false;
@@ -151,7 +151,13 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         mEfficiencyIncrease = 100;
 
         // use the standard overclock mechanism to determine duration and estimate a maximum consumption
-        calculateOverclockedNessMultiInternal(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage(), false);
+        OverclockCalculator calc = new OverclockCalculator().setEUt(40)
+            .setDuration(45 * Math.max(1, mHeight - 1))
+            .setDurationDecreasePerOC(2.0)
+            .calculate();
+        lEUt = calc.getConsumption();
+        mMaxProgresstime = calc.getDuration();
+
         // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
         // consumption.
         lEUt /= -10;
@@ -178,9 +184,10 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 for (var item : c.get(i).mInventory) {
                     if (item != null) {
                         if (item_me) {
-                            item.stackSize -= ((MTEHatchOutputBusME) d.get(0)).store(item);
+                            if (!d.get(0)
+                                .storePartial(item)) {}
                         } else if (d.get(i)
-                            .storeAll(item.copy())) {
+                            .storePartial(item.copy())) {
                                 item.stackSize = 0;
                             }
                     }
@@ -496,7 +503,8 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
 
     // @Override
     // public void saveNBTData(NBTTagCompound aNBT) {
-    //// aNBT.setLong("bufferedEU", bufferedEU);
+
+    /// / aNBT.setLong("bufferedEU", bufferedEU);
     // super.saveNBTData(aNBT);
     // }
 

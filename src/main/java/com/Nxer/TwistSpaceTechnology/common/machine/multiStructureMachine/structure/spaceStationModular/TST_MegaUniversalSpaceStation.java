@@ -1,13 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular;// spotless:off
 
 import static bartworks.common.loaders.ItemRegistry.bw_realglas2;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationStructureBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 
 import java.io.File;
 
@@ -24,8 +24,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
-import com.gtnewhorizons.gtnhintergalactic.client.IGTextures;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
@@ -39,6 +37,7 @@ import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
+import gtnhintergalactic.client.IGTextures;
 import tectech.thing.casing.TTCasingsContainer;
 
 // spotless:off
@@ -180,26 +179,26 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
                     StructureUtility.ofChain(
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addMaintenanceToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addExoticEnergyInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addInputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         GTStructureUtility.ofHatchAdder(
                             TST_MegaUniversalSpaceStation::addOutputToMachineList,
-                            IGTextures.ADVANCED_MACHINE_FRAME_INDEX,
+                            IGTextures.CASING_INDEX_SIPHON,
                             1),
                         StructureUtility.ofBlock(SpaceStationAntiGravityBlock, 13)))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 1))
                 .addElement('E', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 10))
                 .addElement('F', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 12))
-                .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
-                .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
+                .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('H', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
                 .addElement('I', ofBlock(TTCasingsContainer.sBlockCasingsTT, 2))
                 .addElement('J', ofBlock(TTCasingsContainer.sBlockCasingsTT, 3))
                 .addElement('K', ofBlock(GregTechAPI.sBlockMetal9, 6))
@@ -248,7 +247,7 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 0;
     }
 
