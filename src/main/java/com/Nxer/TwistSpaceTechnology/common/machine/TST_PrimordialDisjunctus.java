@@ -528,19 +528,15 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
-
             // #tr Tooltip_PrimordialDisjunctus_HatchBusInfo
             // # Replace Magic mechanical blocks in any cabin
             // #zh_CN 任何舱室替换魔法机械方块
             .addOutputHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            // #tr Tooltip_PrimordialDisjunctus_HatchBusInfo
-            // # Replace Magic mechanical blocks in any cabin
-            // #zh_CN 任何舱室替换魔法机械方块
-            // spotless:on
-            .addEnergyHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_EnergyHatch"))
-
+            .addEnergyHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
+            .addOtherStructurePart(TextEnums.tr("Tooltip.EssentiaOutputHatch"), TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
             .toolTipFinisher(ModName);
         return tt;
+        // spotless:on
     }
 
     @Override

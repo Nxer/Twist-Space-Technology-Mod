@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
+import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
@@ -52,6 +53,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -179,45 +181,80 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     @Override
     public String[] getInfoData() {
         // spotless:off
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 7];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.GOLD
+        List<String> ret = new ArrayList<>(Arrays.asList(super.getInfoData()));
+        String space = "    ";
+        ret.add(EnumChatFormatting.AQUA + "Owner Name: " + EnumChatFormatting.RESET + ownerName);
+        ret.add(EnumChatFormatting.AQUA + "UUID: " + EnumChatFormatting.RESET + ownerUUID);
+        ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.01
             // # Generating EU/t:
             // #zh_CN 实际接收 EU/t:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.01")
-            + EnumChatFormatting.RESET
-            + generateTickEU();
-        ret[origin.length + 1] = EnumChatFormatting.GOLD
+            + EnumChatFormatting.RESET + " "
+            + generateTickEU());
+        ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.02
             // # Used Power Point:
             // #zh_CN 已占用产能点数:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.02")
-            + EnumChatFormatting.RESET
-            + usedPowerPoint;
-        ret[origin.length + 2] = EnumChatFormatting.GOLD
+            + EnumChatFormatting.RESET + " "
+            + usedPowerPoint);
+        ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.03
             // # Gravitational Lens Intensify Mode remaining time:
             // #zh_CN 引力透镜增强模式剩余时间:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.03")
-            + EnumChatFormatting.RESET + (gravitationalLensTime/20) + " s";
-        ret[origin.length + 3] = EnumChatFormatting.GOLD
+            + EnumChatFormatting.RESET + " "
+            + (gravitationalLensTime/20) + " s");
+        ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.04
             // # Overload Multiplier:
             // #zh_CN 过载倍率:
             + TextEnums.tr("TST_DSPReceiver.getInfoData.04")
-            + EnumChatFormatting.RESET + astralArrayOverloadMultiplier;
-        ret[origin.length + 4] = EnumChatFormatting.GOLD + infoText_CurrentStellarCoefficient + EnumChatFormatting.RESET + dspDataCell.getGalaxy() + " -> " + EnumChatFormatting.YELLOW + dspDataCell.getGalaxy().stellarCoefficient;
-        ret[origin.length + 5] = EnumChatFormatting.GOLD + infoText_CurrentPlanetCoefficient + EnumChatFormatting.RESET + DSP_Planet.getPlanetFromDimID(dimID) + " -> " + EnumChatFormatting.YELLOW + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID);
-        ret[origin.length + 6] = EnumChatFormatting.GOLD
-            // #tr DSPDataCell.getInfoData
-            // # Dyson Sphere Data:
-            // #zh_CN 戴森球信息:
-            + TextEnums.tr("DSPDataCell.getInfoData")
+            + EnumChatFormatting.RESET + " "
+            + astralArrayOverloadMultiplier);
+        // DSPDataCell
+        // Language file writer is set in TST_DSPLauncher
+        ret.add(EnumChatFormatting.AQUA
+            + tr("DSPDataCell.getInfoData")
+            + EnumChatFormatting.RESET);
+        ret.add(space
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPOwnerName")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getOwnerName());
+        ret.add(space
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPGalaxy")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getGalaxy());
+        ret.add(space
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPSolarSail")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getDSPSolarSail());
+        ret.add(space
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPNode")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getDSPNode());
+        ret.add(space
+            + EnumChatFormatting.GOLD
+            + infoText_CurrentStellarCoefficient
             + EnumChatFormatting.RESET
-            + dspDataCell;
-        return ret;
+            + dspDataCell.getGalaxy()
+            + " -> "
+            + EnumChatFormatting.YELLOW
+            + dspDataCell.getGalaxy().stellarCoefficient);
+        ret.add(space
+            + EnumChatFormatting.GOLD
+            + infoText_CurrentPlanetCoefficient
+            + EnumChatFormatting.RESET
+            + DSP_Planet.getPlanetFromDimID(dimID)
+            + " -> "
+            + EnumChatFormatting.YELLOW
+            + DSP_Planet.getPlanetaryCoefficientWithDimID(dimID));
+        return ret.toArray(new String[0]);
         // spotless:on
     }
 
@@ -295,22 +332,26 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // normal
             astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, canUse);
-        } else if (controllerStack.getItem() instanceof ItemIntegratedCircuit) {
+        }
+
+        if (controllerStack.getItem() instanceof ItemIntegratedCircuit) {
             // use integrated circuit to limit
             double multiplier = Math
                 .min(1, ((double) controllerStack.getItemDamage()) / ((double) controllerStack.stackSize));
             long limited = (long) (multiplier * maxPowerPointLimit);
             astralArrayOverloadMultiplier = 1;
             return Math.min(DSP_Values.maxPowerPointPerReceiver, Math.min(limited, canUse));
-        } else
-            if (GTUtility.areStacksEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
-                // use Astral Array Fabricator to overload over max input limitation
-                astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
-                return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
-            } else {
-                astralArrayOverloadMultiplier = 1;
-                return 0;
-            }
+        }
+
+        if (GTUtility.areStacksEqual(controllerStack, ASTRAL_ARRAY_FABRICATOR) && controllerStack.stackSize >= 1) {
+            // use Astral Array Fabricator to overload over max input limitation
+            astralArrayOverloadMultiplier = calculateAstralArrayOverloadMultiplier(controllerStack.stackSize);
+            return Math.min(DSP_Values.maxPowerPointPerReceiver * astralArrayOverloadMultiplier, canUse);
+        }
+
+        // other invalid item, ignore
+        astralArrayOverloadMultiplier = 1;
+        return Math.min(DSP_Values.maxPowerPointPerReceiver, canUse);
     }
 
     protected static int calculateAstralArrayOverloadMultiplier(int astralArrayAmount) {
@@ -515,7 +556,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		return this.survivialBuildPiece(
+		return this.survivalBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,

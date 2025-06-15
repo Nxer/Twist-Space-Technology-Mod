@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
+import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures;
@@ -26,6 +27,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init(FMLInitializationEvent event) {
         super.init(event);
+        new EyeOfWoodRender();
         new ArtificialStarRender();
         new TileArcaneHoleRender();
         MinecraftForge.EVENT_BUS.register(new CooldownEventHandler());// load cooldown HUD

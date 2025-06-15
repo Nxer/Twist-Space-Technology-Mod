@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
+import static gregtech.api.util.GTModHandler.getModItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,8 @@ import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -22,13 +25,11 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Gen
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.dreammaster.gthandler.CustomItemList;
 
 import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
 import fox.spiteful.avaritia.crafting.ExtremeShapedOreRecipe;
 import fox.spiteful.avaritia.crafting.ExtremeShapedRecipe;
 import gregtech.api.enums.GTValues;
-import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMapBackend;
@@ -117,32 +118,17 @@ public class ExtremeCraftRecipeHandler {
 
     }
 
-    public void initECRecipe() {
+    ItemStack createItemStack(String aModID, String aItem, long aAmount, int aMeta, String aNBTString) {
+        ItemStack s = getModItem(aModID, aItem, aAmount, aMeta);
+        try {
+            s.stackTagCompound = (NBTTagCompound) JsonToNBT.func_150315_a(aNBTString);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return s;
+    }
 
-        ExtremeCraftingManager.getInstance()
-            .addExtremeShapedOreRecipe(
-                ItemList.Cover_SolarPanel_LV.get(1L),
-                "---------",
-                "---------",
-                "---aba---",
-                "---cdc---",
-                "---efe---",
-                "---cdc---",
-                "---aba---",
-                "---------",
-                "---------",
-                'a',
-                "wireGt01SuperconductorMV",
-                'b',
-                CustomItemList.IrradiantReinforcedAluminiumPlate.get(1L),
-                'c',
-                ItemList.Circuit_Silicon_Wafer2.get(1L),
-                'd',
-                "platePolytetrafluoroethylene",
-                'e',
-                "circuitAdvanced",
-                'f',
-                ItemList.Cover_SolarPanel_8V.get(1L));
+    public void initECRecipe() {
 
         List<IRecipe> originRecipes = ExtremeCraftingManager.getInstance()
             .getRecipeList();

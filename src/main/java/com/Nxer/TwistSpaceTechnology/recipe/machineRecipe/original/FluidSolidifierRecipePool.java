@@ -24,6 +24,9 @@ public class FluidSolidifierRecipePool {
 
     public static void loadRecipes() {
         final IRecipeMap fs = RecipeMaps.fluidSolidifierRecipes;
+
+        // region Singularities
+
         // Mold Singularity
         GTValues.RA.stdBuilder()
             .itemInputs(GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1))

@@ -50,6 +50,9 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -155,35 +158,69 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 
     @Override
     public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 5];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.GOLD + "Owner Name: " + EnumChatFormatting.RESET + ownerName;
-        ret[origin.length + 1] = EnumChatFormatting.GOLD + "UUID: " + EnumChatFormatting.RESET + ownerUUID;
-        ret[origin.length + 2] = EnumChatFormatting.GOLD
+        // spotless:off
+        List<String> ret = new ArrayList<>(Arrays.asList(super.getInfoData()));
+        String space = "    ";
+        ret.add(EnumChatFormatting.AQUA + "Owner Name: " + EnumChatFormatting.RESET + ownerName);
+        ret.add(EnumChatFormatting.AQUA + "UUID: " + EnumChatFormatting.RESET + ownerUUID);
+        //DSPDataCell
+        ret.add(EnumChatFormatting.AQUA
             // #tr DSPDataCell.getInfoData
             // # Dyson Sphere Data:
             // #zh_CN 戴森球信息:
-            + TextEnums.tr("DSPDataCell.getInfoData")
-            + EnumChatFormatting.RESET
-            + dspDataCell;
-        ret[origin.length + 3] = EnumChatFormatting.GOLD
-            // #tr TST_DSPLauncher.getInfoData.01
+            + tr("DSPDataCell.getInfoData")
+            + EnumChatFormatting.RESET);
+        ret.add(space
+            // #tr DSPDataCell.getDSPOwnerName
+            // # Owner Name:
+            // #zh_CN 拥有者名称:
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPOwnerName")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getOwnerName());
+        ret.add(space
+            // #tr DSPDataCell.getDSPGalaxy
+            // # Galaxy:
+            // #zh_CN 星系:
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPGalaxy")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getGalaxy());
+        ret.add(space
+            // #tr DSPDataCell.getDSPSolarSail
+            // # Solar Sail:
+            // #zh_CN 太阳帆:
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPSolarSail")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getDSPSolarSail());
+        ret.add(space
+            // #tr DSPDataCell.getDSPNode
+            // # Node:
+            // #zh_CN 戴森球节点:
+            + EnumChatFormatting.GOLD
+            + tr("DSPDataCell.getDSPNode")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getDSPNode());
+        ret.add(space
+            // #tr DSPDataCell.getInfoData.01
             // # Overload time:
             // #zh_CN 剩余过载时间:
+            + EnumChatFormatting.GOLD
             + TextEnums.tr("TST_DSPLauncher.getInfoData.01")
-            + EnumChatFormatting.RESET
+            + EnumChatFormatting.RESET + " "
             + (overloadTime / 20)
-            + " s";
-
-        // #tr TST_DSPLauncher.getInfoData.02
-        // # Speed Up :{\SPACE}
-        // #zh_CN 速度倍率:{\SPACE}
-        ret[origin.length + 4] = EnumChatFormatting.GOLD + tr("TST_DSPLauncher.getInfoData.02")
-            + EnumChatFormatting.RESET
-            + (calculateOverloadSpeedUp());
-
-        return ret;
+            + "s");
+        ret.add(space
+            // #tr DSPDataCell.getInfoData.02
+            // # Speed Up:
+            // #zh_CN 速度倍率:
+            + EnumChatFormatting.GOLD
+            + tr("TST_DSPLauncher.getInfoData.02")
+            + EnumChatFormatting.RESET + " "
+            + (calculateOverloadSpeedUp()));
+        return ret.toArray(new String[0]);
+        // spotless:on
     }
 
     /*
@@ -340,7 +377,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		return this.survivialBuildPiece(
+		return this.survivalBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
