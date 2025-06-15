@@ -12,3 +12,7 @@ minecraft {
 configurations.configureEach {
     exclude group: "com.github.GTNewHorizons", module: "Baubles"
 }
+
+test {
+    useJUnitPlatform()
+}

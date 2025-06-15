@@ -14,11 +14,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstReflectionUtils;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import com.cleanroommc.modularui.utils.item.ItemStackHandler;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
@@ -57,23 +54,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
 
     public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, int inventorySize, String[] aDescription,
         ITexture[][][] aTextures) {
-        super(aName, aTier, aDescription, aTextures);
-
-        // TODO: remove this if there is a ctor to assign the inventory size.
-        remakeInventory(this, inventorySize);
-    }
-
-    protected static void remakeInventory(GT_Hatch_BufferedEnergyHatch hatch, int inventorySize) {
-        try {
-            ItemStack[] mInventoryReplacement = new ItemStack[inventorySize];
-            ItemStackHandler inventoryHandlerReplacement = new ItemStackHandler(mInventoryReplacement);
-
-            TstReflectionUtils.setFieldValue(hatch, "mInventory", mInventoryReplacement);
-            TstReflectionUtils.setFieldValue(hatch, "inventoryHandler", inventoryHandlerReplacement);
-        } catch (Throwable e) {
-            TwistSpaceTechnology.LOG
-                .error("Failed to remake inventory for GT_Hatch_BufferedEnergyHatch as a bug fix.", e);
-        }
+        super(aName, aTier, inventorySize, aDescription, aTextures);
     }
 
     @Override

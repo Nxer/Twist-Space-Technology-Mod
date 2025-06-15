@@ -18,7 +18,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
-val modpackVersion = "nightly"
+val modpackVersion = "daily"
 
 val manifestUrl =
     "https://github.com/GTNewHorizons/DreamAssemblerXXL/raw/refs/heads/master/releases/manifests/${modpackVersion}.json"
