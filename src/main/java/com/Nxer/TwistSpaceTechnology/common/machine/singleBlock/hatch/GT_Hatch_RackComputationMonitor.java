@@ -127,11 +127,6 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
     }
 
     @Override
-    public boolean isSimpleMachine() {
-        return true;
-    }
-
-    @Override
     public boolean isFacingValid(ForgeDirection facing) {
         return facing.offsetY == 0;
     }

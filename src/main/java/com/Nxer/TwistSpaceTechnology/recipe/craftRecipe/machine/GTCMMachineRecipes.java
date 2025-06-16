@@ -112,7 +112,6 @@ import static gregtech.api.enums.Mods.AE2WCT;
 import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTModHandler.getModItem;
@@ -120,9 +119,8 @@ import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gregtech.api.util.GTUtility.copyAmount;
-import static gtPlusPlus.core.item.chemistry.RocketFuels.Liquid_Hydrogen;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.COMET_Cyclotron;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_AdvancedVacuum;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_Coil;
@@ -180,11 +178,8 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
-import com.gtnewhorizons.gtnhintergalactic.item.IGItems;
-import com.gtnewhorizons.gtnhintergalactic.item.ItemMiningDrones;
-import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
@@ -193,12 +188,12 @@ import bartworks.common.loaders.ItemRegistry;
 import bartworks.system.material.CircuitGeneration.BWMetaItems;
 import bartworks.system.material.WerkstoffLoader;
 import fox.spiteful.avaritia.items.LudicrousItems;
-import galaxyspace.core.register.GSItems;
 import ggfab.GGItemList;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.ItemRefer;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -213,15 +208,17 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.recipe.Scanning;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import gtPlusPlus.core.fluids.GTPPFluids;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.recipe.common.CI;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
+import gtnhintergalactic.recipe.IGRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 import tectech.recipe.TTRecipeAdder;
@@ -307,8 +304,7 @@ public class GTCMMachineRecipes {
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 16))
 
             .itemOutputs(IntensifyChemicalDistorter.get(1))
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 120)
             .addTo(assembler);
 
@@ -328,8 +324,7 @@ public class GTCMMachineRecipes {
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 128))
             .itemOutputs(GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 120)
             .addTo(assembler);
 
@@ -422,7 +417,7 @@ public class GTCMMachineRecipes {
         // Upgrade LuV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105))
-            .metadata(RESEARCH_TIME, 1 * HOURS)
+            .metadata(SCANNING, new Scanning(1 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105),
@@ -444,7 +439,7 @@ public class GTCMMachineRecipes {
         // Upgrade ZPM
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106),
@@ -467,7 +462,7 @@ public class GTCMMachineRecipes {
         // Upgrade UV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107),
@@ -489,7 +484,7 @@ public class GTCMMachineRecipes {
         // Upgrade UHV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 8, 11107),
@@ -518,7 +513,7 @@ public class GTCMMachineRecipes {
         // Upgrade UEV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUHV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 11107),
@@ -549,7 +544,7 @@ public class GTCMMachineRecipes {
         // Upgrade UIV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, PhotonControllerUpgradeUEV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 SpaceWarper.get(1),
@@ -580,7 +575,7 @@ public class GTCMMachineRecipes {
         // Upgrade UMV
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, SpaceWarper.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
                 SpaceWarper.get(4),
@@ -682,7 +677,7 @@ public class GTCMMachineRecipes {
                 RESEARCH_ITEM,
                 Config.Enable_AdvCircuitAssemblyLine ? GTCMItemList.AdvCircuitAssemblyLine.get(1)
                     : GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 12735))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 Config.Enable_AdvCircuitAssemblyLine ? GTCMItemList.AdvCircuitAssemblyLine.get(64)
                     : GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 12735),
@@ -716,7 +711,7 @@ public class GTCMMachineRecipes {
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, eM_Coil.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 eM_Hollow.get(4),
                 SpaceWarper.get(8),
@@ -758,7 +753,7 @@ public class GTCMMachineRecipes {
         // region MagneticDrivePressureFormer
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, Industrial_Extruder.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_MiningOsmiridium.get(64),
                 Industrial_Extruder.get(64),
@@ -825,8 +820,7 @@ public class GTCMMachineRecipes {
             .fluidInputs(Materials.NaquadahAlloy.getMolten(144 * 4))
             .itemOutputs(GTModHandler.getModItem("gregtech", "gt.blockcasings2", 1, 8))
 
-            .noOptimize()
-            .eut(RECIPE_UV)
+                        .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(assembler);
 
@@ -846,8 +840,7 @@ public class GTCMMachineRecipes {
             .fluidInputs(Materials.Iridium.getMolten(144 * 64))
             .itemOutputs(MagneticMixer.get(1))
 
-            .noOptimize()
-            .eut(RECIPE_UV)
+                        .eut(RECIPE_UV)
             .duration(20 * 384)
             .addTo(assembler);
 
@@ -887,8 +880,7 @@ public class GTCMMachineRecipes {
             )
             .fluidInputs(new FluidStack(solderPlasma, 144 * 64))
             .itemOutputs(MagneticDomainConstructor.get(1))
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 320)
             .addTo(assembler);
 
@@ -911,8 +903,7 @@ public class GTCMMachineRecipes {
             )
             .fluidInputs(Materials.Iridium.getMolten(144 * 32))
             .itemOutputs(Silksong.get(1))
-            .noOptimize()
-            .eut(RECIPE_ZPM)
+                        .eut(RECIPE_ZPM)
             .duration(20 * 600)
             .addTo(assembler);
 
@@ -932,8 +923,7 @@ public class GTCMMachineRecipes {
             )
             .fluidInputs(Materials.Iridium.getMolten(144 * 32))
             .itemOutputs(GiantVacuumDryingFurnace.get(1))
-            .noOptimize()
-            .eut(RECIPE_ZPM)
+                        .eut(RECIPE_ZPM)
             .duration(20 * 600)
             .addTo(assembler);
         // endregion
@@ -941,7 +931,7 @@ public class GTCMMachineRecipes {
         // region HolySeparator
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.CuttingMachineUHV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
                 ItemList.CuttingMachineUHV.get(32),
@@ -967,8 +957,7 @@ public class GTCMMachineRecipes {
             )
             .itemOutputs(HolySeparator.get(1))
 
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 1200)
             .addTo(AssemblyLine);
 
@@ -990,8 +979,7 @@ public class GTCMMachineRecipes {
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32))
             .itemOutputs(eM_Containment_Field.get(4))
 
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 60)
             .addTo(assembler);
 
@@ -1000,7 +988,7 @@ public class GTCMMachineRecipes {
         // region SpaceScaler
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, CompressorUHV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
                 CompressorUHV.get(64),
@@ -1035,7 +1023,7 @@ public class GTCMMachineRecipes {
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, eM_Containment_Field.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 eM_Containment_Field.get(4),
                 ItemList.Field_Generator_UIV.get(16),
@@ -1065,8 +1053,7 @@ public class GTCMMachineRecipes {
 
             .itemOutputs(GTModHandler.getModItem("Avaritia", "Resource", 1, 5))
 
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(10)
             .addTo(RecipeMaps.compressorRecipes);
 
@@ -1075,7 +1062,7 @@ public class GTCMMachineRecipes {
         // region Molecule Deconstructor
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.ElectrolyzerUV.get(1))
-            .metadata(RESEARCH_TIME, 2 * HOURS)
+            .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Casing_MAX.get(16),
                 ItemList.ElectrolyzerUV.get(64),
@@ -1100,8 +1087,7 @@ public class GTCMMachineRecipes {
             )
             .itemOutputs(MoleculeDeconstructor.get(1))
 
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 600)
             .addTo(AssemblyLine);
 
@@ -1110,7 +1096,7 @@ public class GTCMMachineRecipes {
         // region CrystallineInfinitier
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.AutoclaveUHV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
                 eM_Containment_Field.get(4),
@@ -1142,7 +1128,7 @@ public class GTCMMachineRecipes {
         // region Miracle Door
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, eM_Teleportation.get(1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, new Scanning(24 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 Mega_AlloyBlastSmelter.get(64),
                 Mega_AlloyBlastSmelter.get(64),
@@ -1191,7 +1177,7 @@ public class GTCMMachineRecipes {
         // eM_Teleportation blockCasingsTT 10
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_PlasmaForge.get(1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, new Scanning(24 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
                 eM_Ultimate_Containment.get(4),
@@ -1226,7 +1212,7 @@ public class GTCMMachineRecipes {
         // region Infinite Dynamo Hatch
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, tectech.thing.CustomItemList.eM_dynamoMulti64_UMV.get(1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, new Scanning(24 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 AnnihilationConstrainer.get(1),
                 ItemRefer.Compact_Fusion_Coil_T0.get(1),
@@ -1258,7 +1244,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Ore_Processor.get(1))
-            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .metadata(SCANNING, new Scanning(16 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
                 ItemList.Ore_Processor.get(64),
@@ -1302,8 +1288,7 @@ public class GTCMMachineRecipes {
             .fluidOutputs(
                 new FluidStack(FluidRegistry.getFluid("molten.germanium"), 36)
             )
-            .noOptimize()
-            .eut(RECIPE_IV)
+                        .eut(RECIPE_IV)
             .duration((int) (20 * 37.5))
             .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
 
@@ -1318,8 +1303,7 @@ public class GTCMMachineRecipes {
             .fluidOutputs(
                 new FluidStack(FluidRegistry.getFluid("molten.rhenium"), 36)
             )
-            .noOptimize()
-            .eut(RECIPE_IV)
+                        .eut(RECIPE_IV)
             .duration((int) (20 * 37.5))
             .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
 
@@ -1334,8 +1318,7 @@ public class GTCMMachineRecipes {
             .fluidOutputs(
                 new FluidStack(FluidRegistry.getFluid("molten.rhenium"), 18)
             )
-            .noOptimize()
-            .eut(RECIPE_IV)
+                        .eut(RECIPE_IV)
             .duration((int) (20 * 37.5))
             .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
 
@@ -1350,8 +1333,7 @@ public class GTCMMachineRecipes {
             .fluidOutputs(
                 new FluidStack(FluidRegistry.getFluid("molten.rhenium"), 36)
             )
-            .noOptimize()
-            .eut(RECIPE_IV)
+                        .eut(RECIPE_IV)
             .duration(20 * 75)
             .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
 
@@ -1367,8 +1349,7 @@ public class GTCMMachineRecipes {
             .fluidOutputs(
                 new FluidStack(FluidRegistry.getFluid("molten.thallium"), 288)
             )
-            .noOptimize()
-            .eut(RECIPE_IV)
+                        .eut(RECIPE_IV)
             .duration(20 * 75)
             .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
 
@@ -1391,8 +1372,7 @@ public class GTCMMachineRecipes {
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 32))
             .itemOutputs(CircuitConverter.get(1))
 
-            .noOptimize()
-            .eut(RECIPE_IV)
+                        .eut(RECIPE_IV)
             .duration(20 * 30)
             .addTo(assembler);
 
@@ -1417,8 +1397,7 @@ public class GTCMMachineRecipes {
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 96))
             .itemOutputs(LargeIndustrialCokingFactory.get(1))
 
-            .noOptimize()
-            .eut(RECIPE_UHV)
+                        .eut(RECIPE_UHV)
             .duration(20 * 128)
             .addTo(assembler);
         // endregion
@@ -1438,8 +1417,7 @@ public class GTCMMachineRecipes {
 
             .itemOutputs(MegaBrickedBlastFurnace.get(1))
 
-            .noOptimize()
-            .eut(RECIPE_LV)
+                        .eut(RECIPE_LV)
             .duration(20 * 114)
             .addTo(assembler);
         // endregion
@@ -1524,8 +1502,7 @@ public class GTCMMachineRecipes {
             )
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 32))
             .itemOutputs(Scavenger.get(1))
-            .noOptimize()
-            .eut(RECIPE_ZPM)
+                        .eut(RECIPE_ZPM)
             .duration(20 * 60)
             .addTo(assembler);
         // endregion
@@ -1536,7 +1513,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, bioVat.copy())
-            .metadata(RESEARCH_TIME, 16 * HOURS)
+            .metadata(SCANNING, new Scanning(16 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 64),
                 GTUtility.copyAmountUnsafe(64, bioVat),
@@ -1650,7 +1627,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, megaMachines[1])
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
                 GTUtility.copyAmountUnsafe(64, megaMachines[1]),
@@ -1738,7 +1715,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.DistilleryUV.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackPlutonium, 64),
                 GTUtility.copyAmountUnsafe(64, megaMachines[2]),
@@ -1810,8 +1787,7 @@ public class GTCMMachineRecipes {
             )
             .fluidInputs(new FluidStack(solderIndAlloy, 144 * 64))
             .itemOutputs(MegaMacerator.get(1))
-            .noOptimize()
-            .eut(RECIPE_ZPM)
+                        .eut(RECIPE_ZPM)
             .duration(20 * 300)
             .addTo(assembler);
         // endregion
@@ -1820,7 +1796,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemList.Machine_Multi_Furnace.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 ItemList.Machine_Multi_Furnace.get(64),
                 ItemList.Casing_HeatProof.get(64),
@@ -1870,7 +1846,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVTarget104.get(1))
-            .metadata(RESEARCH_TIME, 640 * HOURS)
+            .metadata(SCANNING, new Scanning(640 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 UXVTarget104.get(64),
                 ItemList.Field_Generator_UXV.get(64),
@@ -1906,7 +1882,7 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, UXVSource104.get(1))
-            .metadata(RESEARCH_TIME, 640 * HOURS)
+            .metadata(SCANNING, new Scanning(640 * HOURS, TierEU.RECIPE_LV))
             .itemInputs(
                 UXVSource104.get(64),
                 ItemList.Field_Generator_UXV.get(64),
@@ -1948,7 +1924,7 @@ public class GTCMMachineRecipes {
             new Object[]{
                 LegendTarget.get(1),
                 getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
-                getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
+                new ItemStack(GregTechAPI.sBlockCasingsDyson, 1, 4),
                 tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
 
                 tectech.thing.CustomItemList.eM_Power.get(64),
@@ -2043,7 +2019,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Machine_Multi_Computer.get(1))
-                .metadata(RESEARCH_TIME, 114514 * 20)
+                .metadata(SCANNING, new Scanning(114514 * 20, TierEU.RECIPE_LV))
                 .itemInputs(
                     Machine_Multi_Computer.get(64),
                     Machine_Multi_Computer.get(64),
@@ -2152,7 +2128,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
-                .metadata(RESEARCH_TIME, 720000)
+                .metadata(SCANNING, new Scanning(720000, TierEU.RECIPE_LV))
                 .itemInputs(
                     GTUtility.copyAmountUnsafe(64, quantumCard),
                     GTUtility.copyAmountUnsafe(64, quantumCard),
@@ -2207,11 +2183,11 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.toolHeadDrill, Materials.Infinity, 1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
-                    new ItemStack(IGBlocks.SpaceElevatorCasing, 64),
+                    new ItemStack(GregTechAPI.sBlockCasingsSE, 64),
                     GTUtility.copyAmountUnsafe(64, voidminer[2]),
-                    new ItemStack(IGItems.MiningDrones, 18, ItemMiningDrones.DroneTiers.UEV.ordinal()),
+                    ItemList.MiningDroneUEV.get(18),
                     SpaceWarper.get(18),
 
                     ItemList.EnergisedTesseract.get(64),
@@ -2243,7 +2219,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemList.Machine_LV_Assembler.get(1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     AssemblingMachineUHV.get(64),
                     ItemList.Field_Generator_UHV.get(16),
@@ -2276,7 +2252,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Industrial_Arc_Furnace.get(1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     HighPowerRadiationProofCasing.get(64),
                     Industrial_Arc_Furnace.get(64),
@@ -2313,12 +2289,12 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Casing_Industrial_Arc_Furnace.get(1))
-                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     Casing_Industrial_Arc_Furnace.get(8),
                     eM_Power.get(8),
                     ItemRefer.Advanced_Radiation_Protection_Plate.get(64),
-                    new ItemStack(GSItems.DysonSwarmItems, 64, 3),
+                    ItemList.DysonSwarmModule.getWithDamage(64, 3),
 
                     TransmissionComponent_UV.get(16),
                     ItemList.Electric_Piston_UHV.get(8),
@@ -2364,7 +2340,7 @@ public class GTCMMachineRecipes {
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64)
                 )
                 .fluidInputs(
-                    new FluidStack(Liquid_Hydrogen, 1_800_000),
+                    new FluidStack(GTPPFluids.LiquidHydrogen, 1_800_000),
                     new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1_800_000),
                     Materials.Nitrogen.getPlasma(1_800_000),
                     new FluidStack(MaterialsElements.getInstance().KRYPTON.getPlasma(), 1_800_000),
@@ -2397,12 +2373,12 @@ public class GTCMMachineRecipes {
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.InfinityCatalyst, 64),
 
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
-                    ItemUtils.getSimpleStack(ModItems.itemChargePack_High_4, 1),
+                    TstUtils.newItemStack(ModItems.itemChargePack_High_4, 1),
                     ItemList.ZPM5.get(1),
                     GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64)
                 )
                 .fluidInputs(
-                    new FluidStack(Liquid_Hydrogen, 1_800_000),
+                    new FluidStack(GTPPFluids.LiquidHydrogen, 1_800_000),
                     new FluidStack(MaterialsElements.getInstance().XENON.getPlasma(), 1_800_000),
                     Materials.Nitrogen.getPlasma(1_800_000),
                     new FluidStack(MaterialsElements.getInstance().KRYPTON.getPlasma(), 1_800_000),
@@ -2420,7 +2396,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, GregtechItemList.Casing_Coil_QuantumForceTransformer.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .metadata(SCANNING, new Scanning(24 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Longasssuperconductornameforuhvwire, 8),
                     GregtechItemList.Casing_Coil_QuantumForceTransformer.get(4),
@@ -2817,7 +2793,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, COMET_Cyclotron.get(1))
-                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     ItemList.Hull_UEV.get(64),
                     COMET_Cyclotron.get(64),
@@ -2846,11 +2822,11 @@ public class GTCMMachineRecipes {
                 GTValues.RA
                     .stdBuilder()
                     .metadata(RESEARCH_ITEM, Casing_Cyclotron_External.get(1))
-                    .metadata(RESEARCH_TIME, 2 * HOURS)
+                    .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
                     .itemInputs(
                         Casing_Cyclotron_External.get(4),
                         Casing_AdvancedVacuum.get(4),
-                        ItemUtils.simpleMetaStack("miscutils:itemDehydratorCoilWire", 3, 16),
+                        TstUtils.newItemStack("miscutils:itemDehydratorCoilWire", 3, 16),
                         ItemRefer.Advanced_Radiation_Protection_Plate.get(6),
 
                         MaterialsAlloy.ABYSSAL.getLongRod(12),
@@ -2870,7 +2846,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Casing_Cyclotron_Coil.get(1))
-                .metadata(RESEARCH_TIME, 4 * HOURS)
+                .metadata(SCANNING, new Scanning(4 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     Casing_Cyclotron_Coil.get(16),
                     ItemList.Casing_Coil_Superconductor.get(4),
@@ -2878,7 +2854,7 @@ public class GTCMMachineRecipes {
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.Bio), 2},
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 19, 16),
+                    TstUtils.newItemStack(ModItems.itemStandarParticleBase, 19, 16),
                     ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(
@@ -2899,7 +2875,7 @@ public class GTCMMachineRecipes {
             .stdBuilder()
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Palladium, 1),
-                com.dreammaster.item.ItemList.StonePlate.getIS(6)
+                com.dreammaster.item.NHItemList.StonePlate.getIS(6)
             )
             .fluidInputs(
                 new FluidStack(FluidRegistry.getFluid("concrete"), 36000)
@@ -2992,7 +2968,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, Controller_IndustrialRockBreaker.get(1))
-                .metadata(RESEARCH_TIME, 8 * HOURS)
+                .metadata(SCANNING, new Scanning(8 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     ItemList.Hull_UEV.get(4),
                     ItemList.RockBreakerZPM.get(16),
@@ -3030,7 +3006,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemRegistry.cal)
-                .metadata(RESEARCH_TIME, HOURS)
+                .metadata(SCANNING, new Scanning(HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     copyAmount(16,ItemRegistry.cal),
                     new Object[] {OrePrefixes.circuit.get(Materials.ZPM), 16},
@@ -3100,7 +3076,7 @@ public class GTCMMachineRecipes {
                 GTValues.RA
                     .stdBuilder()
                     .metadata(RESEARCH_ITEM, MiracleDoor.get(1))
-                    .metadata(RESEARCH_TIME, 24 * HOURS)
+                    .metadata(SCANNING, new Scanning(24 * HOURS, TierEU.RECIPE_LV))
                     .itemInputs(
                         eM_Teleportation.get(64),
                         ItemList.Machine_Multi_PlasmaForge.get(64),
@@ -3186,7 +3162,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemList.MassFabricatorUMV.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .metadata(SCANNING, new Scanning(24 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 64),
                     Industrial_MassFab.get(64),
@@ -3254,7 +3230,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, GregtechItemList.Machine_Adv_BlastFurnace.get(1))
-                .metadata(RESEARCH_TIME, 30 * MINUTES)
+                .metadata(SCANNING, new Scanning(30 * MINUTES, TierEU.RECIPE_LV))
                 .itemInputs(
                     GregtechItemList.Machine_Adv_BlastFurnace.get(64),
                     GregtechItemList.Machine_Adv_BlastFurnace.get(64),
@@ -3323,7 +3299,7 @@ public class GTCMMachineRecipes {
 
                 GregtechItemList.Hatch_Input_Pyrotheum.get(1),
                 GregtechItemList.TransmissionComponent_LuV.get(4),
-                new ItemStack(GSItems.DysonSwarmItems, 6, 3),
+                ItemList.DysonSwarmModule.getWithDamage(6, 3),
 
                 MaterialsAlloy.PIKYONIUM.getPlateDense(3),
                 MaterialsAlloy.ZERON_100.getPlateDense(3)
@@ -3346,7 +3322,7 @@ public class GTCMMachineRecipes {
                 GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.Neutronium,2),
                 ItemList.neutroniumHeatCapacitor.get(1),
                 ItemList.Neutron_Reflector.get(64),
-                new ItemStack(GSItems.DysonSwarmItems, 24, 3),
+                ItemList.DysonSwarmModule.getWithDamage(24, 3),
 
                 ItemRefer.Advanced_Radiation_Protection_Plate.get(36),
                 ItemList.Electric_Piston_UV.get(4),
@@ -3502,7 +3478,7 @@ public class GTCMMachineRecipes {
             GTValues.RA
                 .stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.MeteorMinerSchematic1.get(1))
-                .metadata(RESEARCH_TIME, 2 * HOURS)
+                .metadata(SCANNING, new Scanning(2 * HOURS, TierEU.RECIPE_LV))
                 .itemInputs(
                     getModItem(Mods.GTNHIntergalactic.ID, "item.MiningDrone", 1, 6, new ItemStack(Items.iron_pickaxe)),
                     getModItem(Mods.BloodMagic.ID, "bloodMagicBaseItems", 16, 28, new ItemStack(Items.diamond)),

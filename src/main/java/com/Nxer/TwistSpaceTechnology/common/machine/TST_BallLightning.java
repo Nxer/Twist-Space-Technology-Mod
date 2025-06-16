@@ -55,7 +55,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -66,7 +66,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.BorosilicateGlass;
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
@@ -74,7 +73,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -90,8 +88,7 @@ import gtPlusPlus.core.block.ModBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
-    implements IWirelessEnergyHatchInformation {
+public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> {
 
     // region Class Constructor
     public TST_BallLightning(int aID, String aName, String aNameRegional) {
@@ -200,7 +197,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         if (isWirelessMode || machineMode == 3) return Integer.MAX_VALUE;
         else if (machineMode == 2) return 65536;
         else return (int) Math.pow(2, compactFusionCoilTier * (coilLevel.getTier() - 10));
@@ -254,7 +251,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide() && mMachineTier != 0) {
             if (!checkStructure(true)) {
                 // #tr BallLightning.modeMsg.IncompleteStructure
@@ -266,7 +264,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                 return;
             }
         }
-        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aStack);
     }
 
     private void flushOverclockParameter() {
@@ -287,7 +285,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+        return new TstProcessingLogic() {
 
             @NotNull
             @Override
@@ -548,10 +546,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
                             ne -> ne.fieldGeneratorTier)))
                 .addElement('G', ofBlock(MetaBlockCasing01, 1))
                 .addElement('H', ofBlock(ModBlocks.blockCasingsTieredGTPP, 9))
-                .addElement('I', ofBlock(GSBlocks.DysonSwarmBlocks, 1))
-                .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 8))
-                .addElement('K', ofBlock(GSBlocks.DysonSwarmBlocks, 0))
-                .addElement('L', ofBlock(GSBlocks.DysonSwarmBlocks, 5))
+                .addElement('I', ofBlock(GregTechAPI.sBlockCasingsDyson, 1))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 8))
+                .addElement('K', ofBlock(GregTechAPI.sBlockCasingsDyson, 0))
+                .addElement('L', ofBlock(GregTechAPI.sBlockCasingsDyson, 5))
                 .addElement('M', ofBlock(sBlockCasingsTT, 10))
                 .addElement('N', ofFrame(Materials.SuperconductorUIVBase))
                 .addElement('O', ofFrame(Materials.Neutronium))
