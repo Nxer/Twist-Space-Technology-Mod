@@ -181,6 +181,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
+     * @return {@code true} to enable unlimited tier skips.
+     */
+    @ApiStatus.OverrideOnly
+    public boolean isUnlimitedTierSkips() {
+        // true by default
+        return true;
+    }
+
+    /**
      * Limit the max parallel to prevent overflow.
      *
      * @return Limited parallel.
@@ -238,6 +247,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         mOutputFluids = processingLogic.getOutputFluids();
 
         return result;
+    }
+
+    @Override
+    protected void setupProcessingLogic(ProcessingLogic logic) {
+        super.setupProcessingLogic(logic);
+        if (isUnlimitedTierSkips()) {
+            logic.setUnlimitedTierSkips();
+        }
     }
 
     /**
@@ -607,14 +624,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    /**
-     * If it explodes when the Component has to be replaced.
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
     }
 
     /**
