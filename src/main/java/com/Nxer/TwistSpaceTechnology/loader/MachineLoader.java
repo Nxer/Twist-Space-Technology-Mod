@@ -48,6 +48,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_InfusionMaterialDispenser;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -582,6 +583,17 @@ public final class MachineLoader {
             // #zh_CN 激光陨星采矿场
             GTCMItemList.MeteorMiner
                 .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TextEnums.tr("NameMeteorMiner")));
+        }
+
+        if (Config.Enable_InfusionMaterialDispenser) {
+            // #tr NameInfusionMaterialDispenser
+            // # Infusion Material Dispenser
+            // #zh_CN 注魔分配器
+            GTCMItemList.InfusionMaterialDispenser.set(
+                new TST_InfusionMaterialDispenser(
+                    19073,
+                    "NameInfusionMaterialDispenser",
+                    TextEnums.tr("NameInfusionMaterialDispenser")));
         }
         // endregion
 

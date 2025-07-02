@@ -521,9 +521,13 @@ public class Config {
     public static int StandardRecipeDuration_Second_LaserMeteorMiner = 10;
     //endregion
 
-    // region SkypiercerTower
+    // region Skypiercer Tower
     public static boolean Enable_SkypiercerTower =true ;
     public static int Parallel_PerRing_SkypiercerTower = 16;
+    // endregion
+
+    // region Infusion Material Dispenser
+    public static boolean Enable_InfusionMaterialDispenser =true ;
     // endregion
 
     public static void synchronizeConfiguration(File configFile) {

@@ -548,7 +548,8 @@ public enum GTCMItemList {
     // endregion
 
     PrimordialDisjunctus,
-    SkypiercerTower;
+    SkypiercerTower,
+    InfusionMaterialDispenser;
 
     // region Member Variables
 
