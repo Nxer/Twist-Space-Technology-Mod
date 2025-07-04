@@ -93,79 +93,84 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         super.loadNBTData(aNBT);
     }
 
-    // spotless:off
-    //In the logical section, code formatting is prohibited to avoid affecting readability.
+    // logic region
     @Override
-    public @NotNull CheckRecipeResult checkProcessing()  {
+    public @NotNull CheckRecipeResult checkProcessing() {
         ArrayList<ItemStack> tItemsList = getStoredInputs();
-        //Set some basic parameters
+        // Set some basic parameters
         setElectricityStats();
 
-        //Actually, it's not necessary to check every time, but who cares about this little expense?
-        World world = this.getBaseMetaTileEntity().getWorld();
-        int x = this.getBaseMetaTileEntity().getXCoord();
-        int y = this.getBaseMetaTileEntity().getYCoord();
-        int z = this.getBaseMetaTileEntity().getZCoord();
+        // Actually, it's not necessary to check every time, but who cares about this little expense?
+        World world = this.getBaseMetaTileEntity()
+            .getWorld();
+        int x = this.getBaseMetaTileEntity()
+            .getXCoord();
+        int y = this.getBaseMetaTileEntity()
+            .getYCoord();
+        int z = this.getBaseMetaTileEntity()
+            .getZCoord();
 
-        //Check if there is an infusion matrix beneath the main unit.
+        // Check if there is an infusion matrix beneath the main unit.
         TileEntity tempTile = null;
-         tempTile = world.getTileEntity(x, y-1, z );
-         if (!(tempTile instanceof TileInfusionMatrix)) {
-             // #tr GT5U.gui.text.no_infusion_matrix
-             // # {\RED}Can't find infusion matrix
-             // #zh_CN {\RED}未找到注魔矩阵
-             return SimpleCheckRecipeResult.ofFailure("no_infusion_matrix");
-         }
-         targetMatrix = (TileInfusionMatrix) tempTile;
+        tempTile = world.getTileEntity(x, y - 1, z);
+        if (!(tempTile instanceof TileInfusionMatrix)) {
+            // #tr GT5U.gui.text.no_infusion_matrix
+            // # {\RED}Can't find infusion matrix
+            // #zh_CN {\RED}未找到注魔矩阵
+            return SimpleCheckRecipeResult.ofFailure("no_infusion_matrix");
+        }
+        targetMatrix = (TileInfusionMatrix) tempTile;
 
-         //Check if there is an Unactivated infusion matrix .
-        if(!targetMatrix.active){
+        // Check if there is an Unactivated infusion matrix .
+        if (!targetMatrix.active) {
             // #tr GT5U.gui.text.unactivated_infusion_matrix
             // # {\RED}Unactivated infusion matrix
             // #zh_CN {\RED}未激活注魔矩阵
             return SimpleCheckRecipeResult.ofFailure("unactivated_infusion_matrix");
         }
 
-        //Obtain the entities of the pedestal.If targetMatrix is activated, then the mainPedestal must exist.
-        mainPedestal = (TilePedestal) world.getTileEntity(x, y-3, z );
-        if(subPedestals.isEmpty()){AddSubPedestals();}
+        // Obtain the entities of the pedestal.If targetMatrix is activated, then the mainPedestal must exist.
+        mainPedestal = (TilePedestal) world.getTileEntity(x, y - 3, z);
+        if (subPedestals.isEmpty()) {
+            AddSubPedestals();
+        }
 
         if (this.fakePlayer == null) {
-            //This code is the core of Gadomancy's Infusion Claw. Thank you for the open source.
-            //Otherwise, I might get stuck by this thing for a very long time.
-            if(getControllerSlot()==null)
+            // This code is the core of Gadomancy's Infusion Claw. Thank you for the open source.
+            // Otherwise, I might get stuck by this thing for a very long time.
+            if (getControllerSlot() == null)
                 // #tr GT5U.gui.text.no_paper_in_controller
                 // # {\RED}The controller should contain a piece of paper with the player's name on it.
                 // #zh_CN {\RED}控制器内应当放置一张带有玩家名称的纸张
                 return SimpleCheckRecipeResult.ofFailure("no_paper_in_controller");
             playerName = getControllerSlot().getDisplayName();
-            this.fakePlayer = FakePlayerFactory.get(
-                (WorldServer) world,
-                new GameProfile(UUID.randomUUID(), "[TST_InfusionFakePlayer]")
-            );
+            this.fakePlayer = FakePlayerFactory
+                .get((WorldServer) world, new GameProfile(UUID.randomUUID(), "[TST_InfusionFakePlayer]"));
             Thaumcraft.proxy.getCompletedResearch()
                 .put(this.fakePlayer.getCommandSenderName(), ResearchManager.getResearchForPlayerSafe(playerName));
         }
 
-        //The two states can be mutually transferred.
-        //Since the machine should immediately re-run this function once it successfully operates, I believe there is no significant loss of time.
-        if(infusionState == STATE_IDLE){
-            if(tItemsList.isEmpty() && isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0)==null){
+        // The two states can be mutually transferred.
+        // Since the machine should immediately re-run this function once it successfully operates, I believe there is
+        // no significant loss of time.
+        if (infusionState == STATE_IDLE) {
+            if (tItemsList.isEmpty() && isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0) == null) {
                 // #tr GT5U.gui.text.waiting_for_infusion
                 // # {\GREEN}Waiting for infusion's materials
                 // #zh_CN {\GREEN}等待注魔材料
                 return SimpleCheckRecipeResult.ofSuccess("waiting_for_infusion");
             }
-            if(isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0)==null){
-                if(isPedestalSpaceSufficient(tItemsList, subPedestals)>0)
+            if (isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0) == null) {
+                if (isPedestalSpaceSufficient(tItemsList, subPedestals) > 0)
                     // #tr GT5U.gui.text.losing_pedestals
                     // # {\RED}pedestals are missing and space is not enough.
                     // #zh_CN {\RED}个注魔基座少了,空间不足.
-                    return SimpleCheckRecipeResult.ofFailure( isPedestalSpaceSufficient(tItemsList, subPedestals)+"losing_pedestals");
-                else{
-                    insertItemsIntoPedestals(tItemsList,mainPedestal,subPedestals);
-                    //Deletion maybe lazy deletion, so it is necessary to manually clear the input bus.
-                    //If not, it will lead to multiple reads of the same item.
+                    return SimpleCheckRecipeResult
+                        .ofFailure(isPedestalSpaceSufficient(tItemsList, subPedestals) + "losing_pedestals");
+                else {
+                    insertItemsIntoPedestals(tItemsList, mainPedestal, subPedestals);
+                    // Deletion maybe lazy deletion, so it is necessary to manually clear the input bus.
+                    // If not, it will lead to multiple reads of the same item.
                     for (MTEHatchInputBus bus : validMTEList(mInputBusses)) {
                         if (!(bus instanceof MTEHatchCraftingInputME)) {
                             IGregTechTileEntity tile = bus.getBaseMetaTileEntity();
@@ -174,10 +179,11 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                             }
                         }
                     }
-                    //This might not work because the research has not been finished.
+                    // This might not work because the research has not been finished.
                     targetMatrix.craftingStart(fakePlayer);
                     infusionState = STATE_INFUSING;
-                    //The immediate return here is to enable the machine to start this function immediately and then enter the processing stage.
+                    // The immediate return here is to enable the machine to start this function immediately and then
+                    // enter the processing stage.
                     // #tr GT5U.gui.text.infusioning
                     // # {\GREEN}Infusioning
                     // #zh_CN {\GREEN}正在注魔
@@ -186,16 +192,17 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
         }
 
-        if(infusionState == STATE_INFUSING) {
-            //Utilize the working time of only 1 tick to frequently check the working status.
-            if(targetMatrix.crafting) {
+        if (infusionState == STATE_INFUSING) {
+            // Utilize the working time of only 1 tick to frequently check the working status.
+            if (targetMatrix.crafting) {
                 // #tr GT5U.gui.text.infusioning
                 // # {\GREEN}Infusioning
                 // #zh_CN {\GREEN}正在注魔
                 return SimpleCheckRecipeResult.ofSuccess("infusioning");
             } else {
                 if (!outputProcessed) {
-                    //If the infusion is not crafted at all, all the items will be recycled. This wasn't in my plan, but the performance was good.
+                    // If the infusion is not crafted at all, all the items will be recycled. This wasn't in my plan,
+                    // but the performance was good.
                     collectAndOutputResults();
                     outputProcessed = true;
                     // #tr GT5U.gui.text.infusion_complete
@@ -212,7 +219,9 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         // #zh_CN {\RED}未知问题
         return SimpleCheckRecipeResult.ofFailure("unknown_problem");
     }
-    //Make the fake player be null, so that it will indirectly affect the progress of the research during the inspection.
+
+    // Make the fake player be null, so that it will indirectly affect the progress of the research during the
+    // inspection.
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         this.fakePlayer = null;
@@ -230,7 +239,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
         this.mEfficiency = 10000;
         this.mEfficiencyIncrease = 10000;
-        //The processing time must be set; otherwise, the items will not be popped out.
+        // The processing time must be set; otherwise, the items will not be popped out.
         this.mMaxProgresstime = 1;
         OverclockCalculator calculator = new OverclockCalculator().setEUt(0)
             .setAmperage(0)
@@ -238,8 +247,9 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             .enablePerfectOC();
         calculator.calculate();
     }
-    //Check whether the number of pedestal is sufficient
-    public int isPedestalSpaceSufficient(ArrayList<ItemStack> tItemsList, ArrayList<TilePedestal> subPedestals){
+
+    // Check whether the number of pedestal is sufficient
+    public int isPedestalSpaceSufficient(ArrayList<ItemStack> tItemsList, ArrayList<TilePedestal> subPedestals) {
         int totalItems = 0;
         for (ItemStack stack : tItemsList) {
             if (stack != null && stack.stackSize > 0) {
@@ -247,18 +257,22 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
         }
         int totalPedestals = subPedestals.size() + 1;
-            return totalItems-totalPedestals;
+        return totalItems - totalPedestals;
     }
 
-    public void insertItemsIntoPedestals(ArrayList<ItemStack> ItemsList, TilePedestal mainPedestal, ArrayList<TilePedestal> subPedestals) {
+    public void insertItemsIntoPedestals(ArrayList<ItemStack> ItemsList, TilePedestal mainPedestal,
+        ArrayList<TilePedestal> subPedestals) {
         if (mainPedestal.getStackInSlot(0) == null && !ItemsList.isEmpty()) {
-            mainPedestal.setInventorySlotContents(0, ItemsList.get(ItemsList.size()-1).copy());
-            ItemsList.get(ItemsList.size()-1).stackSize--;
-            if (ItemsList.get(ItemsList.size()-1).stackSize <= 0) {
-                ItemsList.remove(ItemsList.size()-1);
+            mainPedestal.setInventorySlotContents(
+                0,
+                ItemsList.get(ItemsList.size() - 1)
+                    .copy());
+            ItemsList.get(ItemsList.size() - 1).stackSize--;
+            if (ItemsList.get(ItemsList.size() - 1).stackSize <= 0) {
+                ItemsList.remove(ItemsList.size() - 1);
             }
         }
-        for (int i = ItemsList.size()-1; i >= 0; i--) {
+        for (int i = ItemsList.size() - 1; i >= 0; i--) {
             while (ItemsList.get(i).stackSize > 0) {
                 TilePedestal tp = null;
                 for (TilePedestal pedestal : subPedestals) {
@@ -268,7 +282,10 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                     }
                 }
                 if (tp == null) break;
-                tp.setInventorySlotContents(0, ItemsList.get(i).copy());
+                tp.setInventorySlotContents(
+                    0,
+                    ItemsList.get(i)
+                        .copy());
                 ItemsList.get(i).stackSize--;
 
                 if (ItemsList.get(i).stackSize <= 0) {
@@ -278,20 +295,26 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
         }
     }
-//The lock was used. However, I don't understand why simply removing it would cause the same product to be generated in double amounts every two times.
+
+    // The lock was used. However, I don't understand why simply removing it would cause the same product to be
+    // generated in double amounts every two times.
     private void collectAndOutputResults() {
 
         ArrayList<ItemStack> outputBuffer = new ArrayList<>();
 
         synchronized (this) {
             if (mainPedestal.getStackInSlot(0) != null) {
-                outputBuffer.add(mainPedestal.getStackInSlot(0).copy());
+                outputBuffer.add(
+                    mainPedestal.getStackInSlot(0)
+                        .copy());
                 mainPedestal.setInventorySlotContents(0, null);
             }
 
             for (TilePedestal pedestal : subPedestals) {
                 if (pedestal != null && pedestal.getStackInSlot(0) != null) {
-                    outputBuffer.add(pedestal.getStackInSlot(0).copy());
+                    outputBuffer.add(
+                        pedestal.getStackInSlot(0)
+                            .copy());
                     pedestal.setInventorySlotContents(0, null);
                 }
             }
@@ -300,28 +323,32 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     }
 
-    //Check to see if all the pedestals are empty.
+    // Check to see if all the pedestals are empty.
     public boolean isAllPedestalsEmpty() {
         if (subPedestals == null || subPedestals.isEmpty()) {
             return true;
         }
         for (TilePedestal pedestal : subPedestals) {
-                ItemStack stack = pedestal.getStackInSlot(0);
-                if (stack != null) {
-                    return false;
+            ItemStack stack = pedestal.getStackInSlot(0);
+            if (stack != null) {
+                return false;
             }
         }
         return true;
     }
 
-//Migrate the original code for pedestal scanning from TC
+    // Migrate the original code for pedestal scanning from TC
     public void AddSubPedestals() {
         this.subPedestals.clear();
-        World world = this.getBaseMetaTileEntity().getWorld();
-        int centerX = this.getBaseMetaTileEntity().getXCoord();
-        int centerY = this.getBaseMetaTileEntity().getYCoord();
+        World world = this.getBaseMetaTileEntity()
+            .getWorld();
+        int centerX = this.getBaseMetaTileEntity()
+            .getXCoord();
+        int centerY = this.getBaseMetaTileEntity()
+            .getYCoord();
         centerY--;
-        int centerZ = this.getBaseMetaTileEntity().getZCoord();
+        int centerZ = this.getBaseMetaTileEntity()
+            .getZCoord();
 
         // Scanning range: ±12 grids in X/Z directions, -5 to +10 grids in Y direction
         for (int xOffset = -12; xOffset <= 12; xOffset++) {
@@ -341,7 +368,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
         }
     }
-    // spotless:on
+    // logic region end
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
