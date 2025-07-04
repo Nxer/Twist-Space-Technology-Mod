@@ -20,14 +20,13 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -69,9 +68,9 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     private TilePedestal mainPedestal; //
     private ArrayList<TilePedestal> subPedestals = new ArrayList<>();
 
-    public EntityPlayerMP fakePlayer = null;
-    public String playerName = null;// The names of the items inside the controller should be named after the real
-                                    // players' names.
+    public FakePlayer fakePlayer = null;
+    public String playerName = null;
+    // The names of the items inside the controller should be named after the real players' names.
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_INFUSING = 1;
@@ -103,50 +102,66 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         setElectricityStats();
 
         //Actually, it's not necessary to check every time, but who cares about this little expense?
-        World WORLD = this.getBaseMetaTileEntity().getWorld();
+        World world = this.getBaseMetaTileEntity().getWorld();
         int x = this.getBaseMetaTileEntity().getXCoord();
         int y = this.getBaseMetaTileEntity().getYCoord();
         int z = this.getBaseMetaTileEntity().getZCoord();
 
+        //Check if there is an infusion matrix beneath the main unit.
         TileEntity tempTile = null;
-         tempTile = WORLD.getTileEntity(x, y-1, z );
-         //Check if there is an infusion matrix beneath the main unit.
+         tempTile = world.getTileEntity(x, y-1, z );
          if (!(tempTile instanceof TileInfusionMatrix)) {
-             return SimpleCheckRecipeResult.ofFailure("Can't find infusion matrix");
+             // #tr GT5U.gui.text.no_infusion_matrix
+             // # {\RED}Can't find infusion matrix
+             // #zh_CN {\RED}未找到注魔矩阵
+             return SimpleCheckRecipeResult.ofFailure("no_infusion_matrix");
          }
          targetMatrix = (TileInfusionMatrix) tempTile;
 
          //Check if there is an Unactivated infusion matrix .
         if(!targetMatrix.active){
-            return SimpleCheckRecipeResult.ofFailure("Unactivated infusion matrix");
+            // #tr GT5U.gui.text.unactivated_infusion_matrix
+            // # {\RED}Unactivated infusion matrix
+            // #zh_CN {\RED}未激活注魔矩阵
+            return SimpleCheckRecipeResult.ofFailure("unactivated_infusion_matrix");
         }
 
         //Obtain the entities of the pedestal.If targetMatrix is activated, then the mainPedestal must exist.
-        mainPedestal = (TilePedestal) WORLD.getTileEntity(x, y-3, z );
+        mainPedestal = (TilePedestal) world.getTileEntity(x, y-3, z );
         if(subPedestals.isEmpty()){AddSubPedestals();}
 
         if (this.fakePlayer == null) {
             //This code is the core of Gadomancy's Infusion Claw. Thank you for the open source.
             //Otherwise, I might get stuck by this thing for a very long time.
             if(getControllerSlot()==null)
-                return SimpleCheckRecipeResult.ofFailure("The controller should contain a piece of paper with the player's name on it.");
+                // #tr GT5U.gui.text.no_paper_in_controller
+                // # {\RED}The controller should contain a piece of paper with the player's name on it.
+                // #zh_CN {\RED}控制器内应当放置一张带有玩家名称的纸张
+                return SimpleCheckRecipeResult.ofFailure("no_paper_in_controller");
             playerName = getControllerSlot().getDisplayName();
-            this.fakePlayer = new EntityPlayerMP(MinecraftServer.getServer(),
-                (WorldServer)WORLD,
-                new GameProfile(UUID.randomUUID(), "[InfusionCore]"),
-                new ItemInWorldManager(WORLD));
+            this.fakePlayer = FakePlayerFactory.get(
+                (WorldServer) world,
+                new GameProfile(UUID.randomUUID(), "[TST_InfusionFakePlayer]")
+            );
             Thaumcraft.proxy.getCompletedResearch()
                 .put(this.fakePlayer.getCommandSenderName(), ResearchManager.getResearchForPlayerSafe(playerName));
         }
+
         //The two states can be mutually transferred.
         //Since the machine should immediately re-run this function once it successfully operates, I believe there is no significant loss of time.
         if(infusionState == STATE_IDLE){
             if(tItemsList.isEmpty() && isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0)==null){
-                return SimpleCheckRecipeResult.ofFailure("waiting for infusion");
+                // #tr GT5U.gui.text.waiting_for_infusion
+                // # {\GREEN}Waiting for infusion's materials
+                // #zh_CN {\GREEN}等待注魔材料
+                return SimpleCheckRecipeResult.ofSuccess("waiting_for_infusion");
             }
             if(isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0)==null){
                 if(isPedestalSpaceSufficient(tItemsList, subPedestals)>0)
-                    return SimpleCheckRecipeResult.ofFailure( isPedestalSpaceSufficient(tItemsList, subPedestals)+"pedestals are missing");
+                    // #tr GT5U.gui.text.losing_pedestals
+                    // # {\RED}pedestals are missing and space is not enough.
+                    // #zh_CN {\RED}个注魔基座少了,空间不足.
+                    return SimpleCheckRecipeResult.ofFailure( isPedestalSpaceSufficient(tItemsList, subPedestals)+"losing_pedestals");
                 else{
                     insertItemsIntoPedestals(tItemsList,mainPedestal,subPedestals);
                     //Deletion maybe lazy deletion, so it is necessary to manually clear the input bus.
@@ -162,26 +177,40 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                     //This might not work because the research has not been finished.
                     targetMatrix.craftingStart(fakePlayer);
                     infusionState = STATE_INFUSING;
+                    //The immediate return here is to enable the machine to start this function immediately and then enter the processing stage.
+                    // #tr GT5U.gui.text.infusioning
+                    // # {\GREEN}Infusioning
+                    // #zh_CN {\GREEN}正在注魔
                     return SimpleCheckRecipeResult.ofSuccess("infusioning");
                 }
             }
         }
 
         if(infusionState == STATE_INFUSING) {
+            //Utilize the working time of only 1 tick to frequently check the working status.
             if(targetMatrix.crafting) {
+                // #tr GT5U.gui.text.infusioning
+                // # {\GREEN}Infusioning
+                // #zh_CN {\GREEN}正在注魔
                 return SimpleCheckRecipeResult.ofSuccess("infusioning");
             } else {
                 if (!outputProcessed) {
                     //If the infusion is not crafted at all, all the items will be recycled. This wasn't in my plan, but the performance was good.
                     collectAndOutputResults();
                     outputProcessed = true;
-                    return SimpleCheckRecipeResult.ofSuccess("infusion complete");
+                    // #tr GT5U.gui.text.infusion_complete
+                    // # {\GREEN}Infusion complete
+                    // #zh_CN {\GREEN}注魔完成
+                    return SimpleCheckRecipeResult.ofSuccess("infusion_complete");
                 }
                 infusionState = STATE_IDLE;
                 outputProcessed = false;
             }
         }
-        return SimpleCheckRecipeResult.ofFailure("unknown infusion state");
+        // #tr GT5U.gui.text.unknown_problem
+        // # {\RED}Unknown problem
+        // #zh_CN {\RED}未知问题
+        return SimpleCheckRecipeResult.ofFailure("unknown_problem");
     }
     //Make the fake player be null, so that it will indirectly affect the progress of the research during the inspection.
     @Override
@@ -285,7 +314,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         return true;
     }
 
-//Migrate the original code for pedestal scanning
+//Migrate the original code for pedestal scanning from TC
     public void AddSubPedestals() {
         this.subPedestals.clear();
         World world = this.getBaseMetaTileEntity().getWorld();
