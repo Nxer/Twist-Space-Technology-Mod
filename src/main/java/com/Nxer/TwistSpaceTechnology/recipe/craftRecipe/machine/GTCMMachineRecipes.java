@@ -1726,8 +1726,12 @@ public class GTCMMachineRecipes {
         GTValues.RA
             .stdBuilder()
             .itemInputs(
-                LaserSmartNode.get(1)
+                LASERpipe.get(64),
+                Laser_Lens_Special.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Bio), 1},
+                ItemList.Hatch_Dynamo_UHV.get(1)
             )
+            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(LaserFocusedSmartNode.get(1))
             .eut(RECIPE_UHV)
             .duration(20 * 5)

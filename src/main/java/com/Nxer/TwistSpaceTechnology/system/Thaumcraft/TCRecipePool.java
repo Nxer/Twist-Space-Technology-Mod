@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.BloodArsen
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static goodgenerator.loader.Loaders.huiCircuit;
+import static gregtech.api.enums.ItemList.Automation_ChestBuffer_IV;
 import static gregtech.api.enums.ItemList.Machine_IV_Assembler;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
 import static gregtech.api.enums.TCAspects.RADIO;
@@ -54,6 +55,7 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipeIndustrialAlchemyTower;
     public static InfusionRecipe infusionRecipePrimordialDisjunctus;
     public static InfusionRecipe infusionRecipeSkypiercerTower;
+    public static InfusionRecipe infusionRecipeInfusionMaterialDispenser;
     public static CrucibleRecipe crucibleRecipeArcaneHole;
 
     public static void loadRecipes() {
@@ -281,6 +283,20 @@ public class TCRecipePool {
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L), new ItemStack(huiCircuit, 1, 0),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
+            }
+            if (Config.Enable_InfusionMaterialDispenser) {
+                infusionRecipeInfusionMaterialDispenser = ThaumcraftApi.addInfusionCraftingRecipe(
+                    "INFUSION_MATERIAL_DISPENSER",
+                    GTCMItemList.InfusionMaterialDispenser.get(1),
+                    8,
+                    new AspectList().merge(Aspect.MOTION, 32)
+                        .merge(Aspect.MECHANISM, 32)
+                        .merge(Aspect.EXCHANGE, 32)
+                        .merge(Aspect.MAN, 32),
+                    Automation_ChestBuffer_IV.get(1),
+                    new ItemStack[] { new ItemStack(ConfigItems.itemWandCasting, 3), ItemList.Conveyor_Module_IV.get(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
+
             }
         }
     }

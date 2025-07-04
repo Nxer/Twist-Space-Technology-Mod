@@ -42,6 +42,10 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
 
     public long Voltage;
     public long Amperes;
+
+    public long actualInputAmperes = 0;
+    public long actualOutputAmperes = 0;
+    public long lastStoredEU = 0;
     private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe;
 
     public GT_MetaTileEntity_Pipe_EnergySmart(int aID, String aName, String aNameRegional) {
@@ -100,7 +104,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
             TextEnums.tr("LaserFocusedSmartNode.description.04"),
             // #tr LaserFocusedSmartNode.description.05
             // # {\AQUA}Try not to mix the two types of intelligent nodes. In general, it is allowed, but if a loop occurs in the laser network (that is, the output passes through several nodes and then becomes the input), there may be unpredictable consequences.
-            // #zh_CN {\AQUA}尽量不要将两种智能节点混用,在一般情况是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.
+            // #zh_CN {\AQUA}尽量不要将两种智能节点混用,在一般情况下是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.
             TextEnums.tr("LaserFocusedSmartNode.description.05"),
             TextEnums.AddByTwistSpaceTechnology.getText() };
         // spotless:on
@@ -184,8 +188,24 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     }
 
     @Override
+    public void setEUVar(long newEU) {
+        long deltaEU = newEU - this.lastStoredEU;
+
+        if (deltaEU > 0) {
+            this.actualInputAmperes += (deltaEU / (Voltage * 20));
+        } else if (deltaEU < 0) {
+            this.actualOutputAmperes += (-deltaEU / (Voltage * 20));
+        }
+
+        this.lastStoredEU = newEU;
+        super.setEUVar(newEU);
+    }
+
+    @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0) {
+            this.actualInputAmperes = 0;
+            this.actualOutputAmperes = 0;
             byte color = getBaseMetaTileEntity().getColorization();
             if (color < 0) {
                 return;
@@ -326,7 +346,9 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         tag.setLong("wailaVoltage", this.Voltage);
-        tag.setLong("wailaInputAmperes", this.Amperes);
+        tag.setLong("wailaAmperes", this.Amperes);
+        tag.setLong("wailaActualInputAmperes", this.actualInputAmperes);
+        tag.setLong("wailaActualOutputAmperes", this.actualOutputAmperes);
         tag.setLong("wailaMaxEuStore", this.maxEUStore());
         tag.setLong(
             "wailaGetStoredEU",
@@ -339,8 +361,15 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(EnumChatFormatting.AQUA + "Voltage: " + EnumChatFormatting.GOLD + tag.getLong("wailaVoltage"));
+        currentTip.add(EnumChatFormatting.AQUA + "Amperes: " + EnumChatFormatting.GOLD + tag.getLong("wailaAmperes"));
         currentTip.add(
-            EnumChatFormatting.AQUA + "InputAmperes: " + EnumChatFormatting.GOLD + tag.getLong("wailaInputAmperes"));
+            EnumChatFormatting.AQUA + "Actual Input Amperes: "
+                + EnumChatFormatting.GOLD
+                + tag.getLong("wailaActualInputAmperes"));
+        currentTip.add(
+            EnumChatFormatting.AQUA + "Actual Output Amperes: "
+                + EnumChatFormatting.GOLD
+                + tag.getLong("wailaActualOutputAmperes"));
         currentTip
             .add(EnumChatFormatting.AQUA + "MaxEuStore: " + EnumChatFormatting.GOLD + tag.getLong("wailaMaxEuStore"));
         currentTip
