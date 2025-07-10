@@ -161,12 +161,13 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                 return SimpleCheckRecipeResult.ofSuccess("waiting_for_infusion");
             }
             if (isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0) == null) {
-                if (isPedestalSpaceSufficient(tItemsList, subPedestals) > 0)
+                if (isPedestalSpaceSufficient(tItemsList, subPedestals) > 0) {
                     // #tr GT5U.gui.text.losing_pedestals
-                    // # {\RED}pedestals are missing and space is not enough.
-                    // #zh_CN {\RED}个注魔基座少了,空间不足.
+                    // # {\RED}(Right click screwdriver to check again)The number of missing pedestals:
+                    // #zh_CN {\RED}(螺丝刀右键可重新检查)基座缺少数量:
                     return SimpleCheckRecipeResult
-                        .ofFailure(isPedestalSpaceSufficient(tItemsList, subPedestals) + "losing_pedestals");
+                        .ofFailure("losing_pedestals" + isPedestalSpaceSufficient(tItemsList, subPedestals));
+                }
                 else {
                     insertItemsIntoPedestals(tItemsList, mainPedestal, subPedestals);
                     // Deletion maybe lazy deletion, so it is necessary to manually clear the input bus.
@@ -225,6 +226,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         this.fakePlayer = null;
+        AddSubPedestals();
     }
 
     @Override
@@ -260,20 +262,21 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         return totalItems - totalPedestals;
     }
 
-    public void insertItemsIntoPedestals(ArrayList<ItemStack> ItemsList, TilePedestal mainPedestal,
+    public void insertItemsIntoPedestals(ArrayList<ItemStack> itemsList, TilePedestal mainPedestal,
         ArrayList<TilePedestal> subPedestals) {
-        if (mainPedestal.getStackInSlot(0) == null && !ItemsList.isEmpty()) {
+        if (mainPedestal.getStackInSlot(0) == null && !itemsList.isEmpty()) {
             mainPedestal.setInventorySlotContents(
                 0,
-                ItemsList.get(ItemsList.size() - 1)
+                itemsList.get(itemsList.size() - 1)
                     .copy());
-            ItemsList.get(ItemsList.size() - 1).stackSize--;
-            if (ItemsList.get(ItemsList.size() - 1).stackSize <= 0) {
-                ItemsList.remove(ItemsList.size() - 1);
+            itemsList.get(itemsList.size() - 1).stackSize--;
+            itemsList.spliterator();
+            if (itemsList.get(itemsList.size() - 1).stackSize <= 0) {
+                itemsList.remove(itemsList.size() - 1);
             }
         }
-        for (int i = ItemsList.size() - 1; i >= 0; i--) {
-            while (ItemsList.get(i).stackSize > 0) {
+        for (int i = itemsList.size() - 1; i >= 0; i--) {
+            while (itemsList.get(i).stackSize > 0) {
                 TilePedestal tp = null;
                 for (TilePedestal pedestal : subPedestals) {
                     if (pedestal.getStackInSlot(0) == null) {
@@ -284,12 +287,12 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                 if (tp == null) break;
                 tp.setInventorySlotContents(
                     0,
-                    ItemsList.get(i)
+                    itemsList.get(i)
                         .copy());
-                ItemsList.get(i).stackSize--;
+                itemsList.get(i).stackSize--;
 
-                if (ItemsList.get(i).stackSize <= 0) {
-                    ItemsList.remove(i);
+                if (itemsList.get(i).stackSize <= 0) {
+                    itemsList.remove(i);
                     break;
                 }
             }
@@ -441,8 +444,8 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // #zh_CN 需要在控制器内放入一张写有玩家名称的纸,使得假人获取研究进度,否则机器会崩溃.
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_01"))
             // #tr Tooltip_InfusionMaterialDispenser_02
-            // # By right-clicking controller with a screwdriver, the research progress can be actively refreshed.
-            // #zh_CN 螺丝刀右键主机可以主动刷新研究进度.
+            // # By right-clicking controller with a screwdriver, refresh the research progress and check the number of pedestals again.
+            // #zh_CN 螺丝刀右键主机可以主动刷新研究进度并重新检查基座数量.
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_02"))
             // #tr Tooltip_InfusionMaterialDispenser_03
             // # For research, no management. If materials are directly recycled, it indicates that the research has not been unlocked and the infusion cannot be activated.
@@ -473,6 +476,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        this.subPedestals.clear();
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
