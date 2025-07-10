@@ -167,8 +167,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                     // #zh_CN {\RED}(螺丝刀右键可重新检查)基座缺少数量:
                     return SimpleCheckRecipeResult
                         .ofFailure("losing_pedestals" + isPedestalSpaceSufficient(tItemsList, subPedestals));
-                }
-                else {
+                } else {
                     insertItemsIntoPedestals(tItemsList, mainPedestal, subPedestals);
                     // Deletion maybe lazy deletion, so it is necessary to manually clear the input bus.
                     // If not, it will lead to multiple reads of the same item.
