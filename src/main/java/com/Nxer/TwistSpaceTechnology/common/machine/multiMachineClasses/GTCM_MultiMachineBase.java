@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
+import static gregtech.api.util.GTUtility.validMTEList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -767,6 +768,75 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                     + getMachineModeName(tag.getInteger("mode"))
                     + EnumChatFormatting.RESET);
         }
+    }
+
+    public long getAllDynamoBuffer() {
+        long buffer = 0;
+        for (MTEHatch tHatch : validMTEList(mDynamoHatches)) {
+            buffer += tHatch.getEUVar();
+        }
+        return buffer;
+    }
+
+    public long getAllMaxDynamoBuffer() {
+        long buffer = 0;
+        for (MTEHatch tHatch : validMTEList(mDynamoHatches)) {
+            buffer += tHatch.maxEUStore();
+        }
+        return buffer;
+    }
+
+    public long getDynamoAmperage() {
+        long dynamoAmperage = 0;
+        for (MTEHatch tHatch : validMTEList(mDynamoHatches)) {
+            dynamoAmperage += tHatch.getBaseMetaTileEntity()
+                .getOutputAmperage();
+        }
+        return dynamoAmperage;
+    }
+
+    public boolean setDynamoTier(int tier, boolean onlyThisTier) {
+        if (onlyThisTier) {
+            return mDynamoHatches.stream()
+                .allMatch(dynamo -> dynamo.getTierForStructure() == tier);
+        }
+        return mDynamoHatches.stream()
+            .allMatch(dynamo -> dynamo.getTierForStructure() <= tier);
+    }
+
+    public boolean checkMixedDynamo() {
+        long firstVoltage = -1;
+        for (MTEHatchDynamo tHatch : validMTEList(mDynamoHatches)) {
+            long aVoltage = tHatch.maxEUOutput();
+            if (firstVoltage == -1) {
+                firstVoltage = aVoltage;
+            } else {
+                if (firstVoltage != aVoltage) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkCountDynamo(int countAvaliableDynamo) {
+        int count = 0;
+        for (MTEHatchDynamo tHatch : validMTEList(mDynamoHatches)) {
+            count++;
+            if (count > countAvaliableDynamo) return false;
+        }
+        return true;
+    }
+
+    public long getTierDynamo() {
+        if (!checkMixedDynamo()) {
+            return mDynamoHatches.stream()
+                .mapToLong(MTEHatchDynamo::maxEUOutput)
+                .distinct()
+                .reduce((a, b) -> 0)
+                .orElse(0);
+        }
+        return 0;
     }
 
     // endregion

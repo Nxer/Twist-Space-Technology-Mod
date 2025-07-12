@@ -285,6 +285,7 @@ public enum GTCMItemList {
     BloodyHell,
     MegaStoneBreaker,
     ManufacturingCenter,
+    SteamBasicGenerator,
     IndustrialAlchemyTower,
     GiantVacuumDryingFurnace,
     ProcessingArray,

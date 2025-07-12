@@ -2740,6 +2740,14 @@ public class TextLocalization {
 
     // endregion
 
+    // region TST_SteamBasicGenerator
+
+    public static final String Tooltip_SteamBasicGenerator_MachineType = TextEnums.tr("Tooltip_SteamBasicGenerator_MachineType");
+    public static final String Tooltip_SteamBasicGenerator_00 = TextEnums.tr("Tooltip_SteamBasicGenerator_00");
+    public static final String Tooltip_SteamBasicGenerator_01 = TextEnums.tr("Tooltip_SteamBasicGenerator_01");
+    public static final String Tooltip_SteamBasicGenerator_02 = TextEnums.tr("Tooltip_SteamBasicGenerator_02");
+    public static final String Tooltip_SteamBasicGenerator_03 = TextEnums.tr("Tooltip_SteamBasicGenerator_03");
+
 
 }
 // spotless:on
