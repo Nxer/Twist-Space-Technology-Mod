@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine;
+package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -13,6 +13,7 @@ import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElem
 
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;

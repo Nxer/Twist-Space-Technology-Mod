@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine;
+package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
