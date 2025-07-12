@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -31,6 +30,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMateria
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GT_TileEntity_MegaEggGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_SteamBasicGenerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvCircuitAssemblyLine;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
@@ -589,8 +589,8 @@ public final class MachineLoader {
         GTCMItemList.SteamBasicGenerator.set(
             new TST_SteamBasicGenerator(19073, "NameSteamBasicGenerator", TextEnums.tr("NameSteamBasicGenerator")));
 
-        GTCMItemList.UniversalGenerator.set(
-            new TST_UniversalGenerator(19074,"NameUniversalGenerator", TextEnums.tr("NameUniversalGenerator")));
+        GTCMItemList.UniversalGenerator
+            .set(new TST_UniversalGenerator(19074, "NameUniversalGenerator", TextEnums.tr("NameUniversalGenerator")));
 
         // endregion
 
