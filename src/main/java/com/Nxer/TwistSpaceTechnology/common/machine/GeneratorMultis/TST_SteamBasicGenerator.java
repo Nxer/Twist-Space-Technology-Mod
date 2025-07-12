@@ -179,9 +179,6 @@ C -> ofBlock...(gt.blockframes, 300, ...);
             .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_02)
             .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_03)
             .addInfo(TextEnums.Author_EvgenWarGold.getText())
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);

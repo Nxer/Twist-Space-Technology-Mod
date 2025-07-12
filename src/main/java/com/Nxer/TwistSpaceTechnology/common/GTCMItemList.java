@@ -293,6 +293,7 @@ public enum GTCMItemList {
     SwelegfyrBlastFurnace,
     HyperThermalConvector,
     MeteorMiner,
+    UniversalGenerator,
     // endregion
 
     // region Modularized Machines

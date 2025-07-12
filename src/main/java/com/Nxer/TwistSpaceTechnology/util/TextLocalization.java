@@ -2741,12 +2741,20 @@ public class TextLocalization {
     // endregion
 
     // region TST_SteamBasicGenerator
-
     public static final String Tooltip_SteamBasicGenerator_MachineType = TextEnums.tr("Tooltip_SteamBasicGenerator_MachineType");
     public static final String Tooltip_SteamBasicGenerator_00 = TextEnums.tr("Tooltip_SteamBasicGenerator_00");
     public static final String Tooltip_SteamBasicGenerator_01 = TextEnums.tr("Tooltip_SteamBasicGenerator_01");
     public static final String Tooltip_SteamBasicGenerator_02 = TextEnums.tr("Tooltip_SteamBasicGenerator_02");
     public static final String Tooltip_SteamBasicGenerator_03 = TextEnums.tr("Tooltip_SteamBasicGenerator_03");
+    // endregion
+
+    // region TST_SteamBasicGenerator
+    public static final String Tooltip_UniversalGenerator_MachineType = TextEnums.tr("Tooltip_UniversalGenerator_MachineType");
+    public static final String Tooltip_UniversalGenerator_00 = TextEnums.tr("Tooltip_UniversalGenerator_00");
+    public static final String Tooltip_UniversalGenerator_01 = TextEnums.tr("Tooltip_UniversalGenerator_01");
+    public static final String Tooltip_UniversalGenerator_02 = TextEnums.tr("Tooltip_UniversalGenerator_02");
+    public static final String Tooltip_UniversalGenerator_03 = TextEnums.tr("Tooltip_UniversalGenerator_03");
+    // endregion
 
 
 }

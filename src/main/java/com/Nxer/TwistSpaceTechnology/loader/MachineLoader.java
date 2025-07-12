@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -587,6 +588,10 @@ public final class MachineLoader {
 
         GTCMItemList.SteamBasicGenerator.set(
             new TST_SteamBasicGenerator(19073, "NameSteamBasicGenerator", TextEnums.tr("NameSteamBasicGenerator")));
+
+        GTCMItemList.UniversalGenerator.set(
+            new TST_UniversalGenerator(19074,"NameUniversalGenerator", TextEnums.tr("NameUniversalGenerator")));
+
         // endregion
 
         // region Single block Machine
