@@ -74,8 +74,6 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     private int mCasing = 0;
 
     private int mSetTier = 1;
-    // checkProcessing
-    private int fuelValue;
     private double fuelBurning;
     private long DYNAMO_AMP;
     private long DYNAMO_TIER;
@@ -119,7 +117,8 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                     .findFuel(tFluid);
 
                 if (tRecipe == null) continue;
-                fuelValue = tRecipe.mSpecialValue * 1_000;
+                // checkProcessing
+                int fuelValue = tRecipe.mSpecialValue * 1_000;
                 euPerTick = DYNAMO_TIER * DYNAMO_AMP;
                 fuelBurning = (double) fuelValue / (euPerTick * 20);
                 fuelName = tFluid.getLocalizedName();
@@ -154,7 +153,6 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
 
         for (Object[] piece : pieces) {
             clearHatches();
-            STRUCTURE_DEFINITION = null;
             if (checkPiece((String) piece[0], (int) piece[1], (int) piece[2], (int) piece[3])) {
                 mSetTier = (int) piece[4];
                 break;
