@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.recipes.ResultInsufficientPedestals;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -162,11 +163,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
             if (isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0) == null) {
                 if (isPedestalSpaceSufficient(tItemsList, subPedestals) > 0) {
-                    // #tr GT5U.gui.text.losing_pedestals
-                    // # {\RED}(Right click screwdriver to check again)The number of missing pedestals:
-                    // #zh_CN {\RED}(螺丝刀右键可重新检查)基座缺少数量:
-                    return SimpleCheckRecipeResult
-                        .ofFailure("losing_pedestals" + isPedestalSpaceSufficient(tItemsList, subPedestals));
+                    return new ResultInsufficientPedestals(isPedestalSpaceSufficient(tItemsList, subPedestals));
                 } else {
                     insertItemsIntoPedestals(tItemsList, mainPedestal, subPedestals);
                     // Deletion maybe lazy deletion, so it is necessary to manually clear the input bus.
@@ -225,7 +222,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     @Override
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         this.fakePlayer = null;
-        AddSubPedestals();
+        this.subPedestals.clear();
     }
 
     @Override
