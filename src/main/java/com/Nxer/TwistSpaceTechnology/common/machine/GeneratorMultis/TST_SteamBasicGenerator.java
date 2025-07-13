@@ -63,11 +63,11 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
 
     // region Processing Logic
 
-    private final int STEAM_PER_SEC = 915;
-    private final int EU_PER_TICK = 32;
+    private static final int STEAM_PER_SEC = 915;
+    private static final int EU_PER_TICK = 32;
     private long DYNAMO_AMP = 0;
     private int mCasing = 0;
-    public static FluidStack steamFluid = FluidUtils.getSteam(1);
+    public FluidStack steamFluid = FluidUtils.getSteam(1);
 
     @Nonnull
     @Override
