@@ -50,6 +50,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_IncompactCyclotron;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_InfusionMaterialDispenser;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -592,6 +593,16 @@ public final class MachineLoader {
         GTCMItemList.UniversalGenerator
             .set(new TST_UniversalGenerator(19074, "NameUniversalGenerator", TextEnums.tr("NameUniversalGenerator")));
 
+        if (Config.Enable_InfusionMaterialDispenser) {
+            // #tr NameInfusionMaterialDispenser
+            // # Infusion Material Dispenser
+            // #zh_CN 注魔分配器
+            GTCMItemList.InfusionMaterialDispenser.set(
+                new TST_InfusionMaterialDispenser(
+                    19075,
+                    "NameInfusionMaterialDispenser",
+                    TextEnums.tr("NameInfusionMaterialDispenser")));
+        }
         // endregion
 
         // region Single block Machine
