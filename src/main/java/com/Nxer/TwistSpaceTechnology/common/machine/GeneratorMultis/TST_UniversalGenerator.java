@@ -357,14 +357,17 @@ F -> ofBlock...(gt.blockframes, 305, ...);
                 () -> EnumChatFormatting.WHITE
                     // #tr TST_UniversalGenerator.gui.01
                     // # Mode:
+                    // #zh_CN 模式 :
                     + TextEnums.tr("TST_UniversalGenerator.gui.01")
                     + " "
                     + EnumChatFormatting.GOLD
                     // #tr TST_UniversalGenerator.gui.02
                     // # Gas:
+                    // #zh_CN 燃气 :
 
                     // #tr TST_UniversalGenerator.gui.03
                     // # Fuel:
+                    // #zh_CN 燃油 :
                     + (mSetTier == 2 ? TextEnums.tr("TST_UniversalGenerator.gui.03")
                         : TextEnums.tr("TST_UniversalGenerator.gui.02"))
                     + EnumChatFormatting.RESET)
@@ -374,6 +377,7 @@ F -> ofBlock...(gt.blockframes, 305, ...);
                     () -> EnumChatFormatting.WHITE
                         // #tr TST_UniversalGenerator.gui.04
                         // # Current fluid:
+                        // #zh_CN 当前使用:
                         + TextEnums.tr("TST_UniversalGenerator.gui.04")
                         + " "
                         + EnumChatFormatting.GOLD
@@ -385,6 +389,7 @@ F -> ofBlock...(gt.blockframes, 305, ...);
                     () -> EnumChatFormatting.WHITE
                         // #tr TST_UniversalGenerator.gui.05
                         // # Eu per tick:
+                        // #zh_CN 发电量 EU/t :
                         + TextEnums.tr("TST_UniversalGenerator.gui.05")
                         + " "
                         + EnumChatFormatting.GOLD
@@ -396,6 +401,7 @@ F -> ofBlock...(gt.blockframes, 305, ...);
                     () -> EnumChatFormatting.WHITE
                         // #tr TST_UniversalGenerator.gui.06
                         // # Fuel burning:
+                        // #zh_CN 燃料消耗速度 :
                         + TextEnums.tr("TST_UniversalGenerator.gui.06")
                         + " "
                         + EnumChatFormatting.GOLD

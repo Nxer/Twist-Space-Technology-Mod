@@ -245,6 +245,7 @@ C -> ofBlock...(gt.blockframes, 300, ...);
                 () -> EnumChatFormatting.WHITE
                     // #tr TST_SteamBasicGenerator.gui.01
                     // # Steam consumption:
+                    // #zh_CN 蒸汽消耗 :
                     + TextEnums.tr("TST_SteamBasicGenerator.gui.01")
                     + " "
                     + EnumChatFormatting.GOLD
@@ -260,6 +261,7 @@ C -> ofBlock...(gt.blockframes, 300, ...);
                     () -> EnumChatFormatting.WHITE
                         // #tr TST_SteamBasicGenerator.gui.03
                         // # Currently generates:
+                        // #zh_CN 当前发电 :
                         + TextEnums.tr("TST_SteamBasicGenerator.gui.03")
                         + " "
                         + EnumChatFormatting.GOLD
