@@ -76,7 +76,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     public static final int STATE_IDLE = 0;
     public static final int STATE_INFUSING = 1;
     private boolean outputProcessed = false;
-    private IStructureDefinition<TST_InfusionMaterialDispenser> multiDefinition = null;
+    private static IStructureDefinition<TST_InfusionMaterialDispenser> multiDefinition = null;
     public int infusionState = STATE_IDLE;
 
     @Override
