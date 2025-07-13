@@ -436,7 +436,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // #zh_CN 自动分配?什么?这不可能!
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_00"))
             // #tr Tooltip_InfusionMaterialDispenser_01
-            // # A paper with player's name should be in controller to enable the fakeplayer to obtain research.Otherwise, the machine will crash.
+            // # A paper with player's name should be in controller to enable the fakeplayer to obtain research. Otherwise, the machine will crash.
             // #zh_CN 需要在控制器内放入一张写有玩家名称的纸,使得假人获取研究进度,否则机器会崩溃.
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_01"))
             // #tr Tooltip_InfusionMaterialDispenser_02
@@ -452,7 +452,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // #zh_CN 对于源质不做管理,若源质不足,并使用世界加速器的话...
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_04"))
             // #tr Tooltip_InfusionMaterialDispenser_05
-            // # The controller is located in the upper square of the infusion matrix.Also,remember to open InterfaceBlockingMode for the input bus.
+            // # The controller is located in the upper square of the infusion matrix. Also,remember to open InterfaceBlockingMode for the input bus.
             // #zh_CN 控制器在注魔矩阵的上面,另外输入总线记得开阻挡模式.
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_05"))
             .addSeparator()
