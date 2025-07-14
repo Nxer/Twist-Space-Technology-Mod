@@ -3527,6 +3527,35 @@ public class GTCMMachineRecipes {
 
         // endregion
 
+        // region SteamBasicGenerator
+
+        addCraftingRecipe(
+            GTCMItemList.SteamBasicGenerator.get(1),
+            new Object[]{"ABA", "CDC", "FGF",
+                'A', MaterialsAlloy.TUMBAGA.getRotor(1),
+                'B', OrePrefixes.cableGt04.get(Materials.Lead),
+                'C', ItemList.Generator_Steam_Turbine_LV.get(1),
+                'D', ItemList.Hull_LV.get(1),
+                'F', OrePrefixes.plateQuintuple.get(Materials.Steel),
+                'G', ItemList.Hatch_Input_LV.get(1)
+            });
+
+        // endregion
+
+        // region UniversalGenerator
+
+        addCraftingRecipe(
+            GTCMItemList.UniversalGenerator.get(1),
+            new Object[]{"ABA", "BDB", "FGF",
+                'A', ItemList.Robot_Arm_LV.get(1),
+                'B', OrePrefixes.rotor.get(Materials.Steel),
+                'D', ItemList.Hull_LV.get(1),
+                'F', ItemList.Electric_Piston_LV.get(1),
+                'G', OrePrefixes.cableGt04.get(Materials.Tin)
+            });
+
+        // endregion
+
 
 
     }

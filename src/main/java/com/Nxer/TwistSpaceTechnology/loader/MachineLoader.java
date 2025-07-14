@@ -13,7 +13,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_CrystallineInfinitier;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_ElvenWorkshop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_HyperSpacetimeTransformer;
-import com.Nxer.TwistSpaceTechnology.common.machine.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_HolySeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IndustrialMagicMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_IntensifyChemicalDistorter;
@@ -21,7 +20,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDomain
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticDrivePressureFormer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MagneticMixer;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaEggGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MiracleTop;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MoleculeDeconstructor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSwitcher;
@@ -29,6 +27,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEne
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GTCM_LightningSpire;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GT_TileEntity_MegaEggGenerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_SteamBasicGenerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvCircuitAssemblyLine;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvancedMegaOilCracker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BallLightning;
@@ -585,13 +587,19 @@ public final class MachineLoader {
                 .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TextEnums.tr("NameMeteorMiner")));
         }
 
+        GTCMItemList.SteamBasicGenerator.set(
+            new TST_SteamBasicGenerator(19073, "NameSteamBasicGenerator", TextEnums.tr("NameSteamBasicGenerator")));
+
+        GTCMItemList.UniversalGenerator
+            .set(new TST_UniversalGenerator(19074, "NameUniversalGenerator", TextEnums.tr("NameUniversalGenerator")));
+
         if (Config.Enable_InfusionMaterialDispenser) {
             // #tr NameInfusionMaterialDispenser
             // # Infusion Material Dispenser
             // #zh_CN 注魔分配器
             GTCMItemList.InfusionMaterialDispenser.set(
                 new TST_InfusionMaterialDispenser(
-                    19073,
+                    19075,
                     "NameInfusionMaterialDispenser",
                     TextEnums.tr("NameInfusionMaterialDispenser")));
         }

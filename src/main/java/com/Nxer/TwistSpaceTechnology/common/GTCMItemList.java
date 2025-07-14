@@ -285,6 +285,7 @@ public enum GTCMItemList {
     BloodyHell,
     MegaStoneBreaker,
     ManufacturingCenter,
+    SteamBasicGenerator,
     IndustrialAlchemyTower,
     GiantVacuumDryingFurnace,
     ProcessingArray,
@@ -292,6 +293,7 @@ public enum GTCMItemList {
     SwelegfyrBlastFurnace,
     HyperThermalConvector,
     MeteorMiner,
+    UniversalGenerator,
     // endregion
 
     // region Modularized Machines
