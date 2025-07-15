@@ -8,6 +8,8 @@ import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_TIER;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -40,7 +42,7 @@ public class MaterialFix {
         // Neutronium Alloy
 
         addBlastRecipe(MaterialsTST.NeutroniumAlloy, (int) TierEU.RECIPE_UIV, 54 * 20, 12500, true);
-        addVacuumFreezerRecipe(MaterialsTST.NeutroniumAlloy,(int)TierEU.RECIPE_UEV,18 * 20);
+        addVacuumFreezerRecipe(MaterialsTST.NeutroniumAlloy, (int) TierEU.RECIPE_UEV, 18 * 20);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -83,7 +85,7 @@ public class MaterialFix {
                 MaterialsUEVplus.Creon.getDust(2),
                 Materials.Ichorium.getDust(1),
                 Materials.Terbium.getDust(1),
-                GGMaterial.shirabon.get(OrePrefixes.dust,1))
+                GGMaterial.shirabon.get(OrePrefixes.dust, 1))
             .fluidOutputs(MaterialsTST.AxonisAlloy.getMolten(144 * 12))
             .eut(TierEU.RECIPE_UMV)
             .duration(720 * 20)
@@ -91,13 +93,13 @@ public class MaterialFix {
 
         // Axonium
 
-        makeWires(MaterialsTST.Axonium,20000,0L, 0L,Integer.MAX_VALUE, Integer.MAX_VALUE, false, true);
+        makeWires(MaterialsTST.Axonium, 20000, 0L, 0L, Integer.MAX_VALUE, Integer.MAX_VALUE, false, true);
 
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(20))
             .fluidInputs(
-                new FluidStack( MaterialsElements.STANDALONE.DRAGON_METAL.getPlasma(),5000),
-                new FluidStack( MaterialsElements.STANDALONE.HYPOGEN.getPlasma(),3000),
+                new FluidStack(MaterialsElements.STANDALONE.DRAGON_METAL.getPlasma(), 5000),
+                new FluidStack(MaterialsElements.STANDALONE.HYPOGEN.getPlasma(), 3000),
                 MaterialsUEVplus.Creon.getPlasma(2000),
                 Materials.Ichorium.getPlasma(1000),
                 Materials.Terbium.getPlasma(1000),
@@ -115,8 +117,10 @@ public class MaterialFix {
     // spotless:on
     public static void addBlastRecipe(Materials aMaterial, int EUt, int duration, int level, boolean gas) {
         ItemStack input = aMaterial.getDust(1);
+        if (input == null) input = TstUtils.newPlaceholderItemStack("Dust of " + aMaterial.mName);
         ItemStack output = level > 1750 ? GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1)
             : aMaterial.getIngots(1);
+        if (output == null) output = TstUtils.newPlaceholderItemStack("Ingot or Hot Ingot of " + aMaterial.mName);
         if (gas) {
             GTValues.RA.stdBuilder()
                 .itemInputs(input, GTUtility.getIntegratedCircuit(11))
@@ -139,10 +143,14 @@ public class MaterialFix {
 
     public static void addVacuumFreezerRecipe(Materials aMaterial, FluidStack[] fluidIn, FluidStack[] fluidOut, int eut,
         int ticks) {
+        ItemStack input = GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1);
+        if (input == null) input = TstUtils.newPlaceholderItemStack("Hot Ingot of " + aMaterial.mName);
+        ItemStack output = aMaterial.getIngots(1);
+        if (output == null) output = TstUtils.newPlaceholderItemStack("Ingot of " + aMaterial.mName);
         GTValues.RA.stdBuilder()
-            .itemInputs(GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1))
+            .itemInputs(input)
             .fluidInputs(fluidIn)
-            .itemOutputs(aMaterial.getIngots(1))
+            .itemOutputs(output)
             .fluidOutputs(fluidOut)
             .eut(eut)
             .duration(ticks)

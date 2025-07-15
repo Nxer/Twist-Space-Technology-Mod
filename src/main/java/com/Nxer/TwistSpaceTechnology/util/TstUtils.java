@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
@@ -202,6 +203,17 @@ public class TstUtils {
         }
 
         return new ItemStack(item, count, meta);
+    }
+
+    /**
+     * Create a new Fire ItemStack used as a placeholder of an missing item.
+     * 
+     * @param message the message shown as the name of the item
+     */
+    public static ItemStack newPlaceholderItemStack(String message) {
+        ItemStack stack = new ItemStack(Blocks.fire);
+        stack.setStackDisplayName("Placeholder: " + message);
+        return stack;
     }
 
     /**
