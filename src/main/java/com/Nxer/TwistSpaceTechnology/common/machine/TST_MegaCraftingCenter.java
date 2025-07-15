@@ -766,7 +766,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (mMaxProgresstime > 0) {
                 // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
@@ -873,7 +874,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected void maintenance_EM() {
         mWrench = true;
         mScrewdriver = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mHardHammer = true;
         mSolderingTool = true;
         mCrowbar = true;

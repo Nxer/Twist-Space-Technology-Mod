@@ -2,10 +2,11 @@ package com.Nxer.TwistSpaceTechnology.common.material;
 
 import static bartworks.util.BWUtil.subscriptNumbers;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import bartworks.system.material.Werkstoff;
-import bartworks.util.Pair;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
@@ -100,8 +101,8 @@ public class MaterialPool implements Runnable {
             .addCells(),
         offsetID_01 + 6,
         TextureSet.SET_FLUID,
-        new Pair<>(PureMana, 1),
-        new Pair<>(Materials.Stone, 2));
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
     public static final Werkstoff PurifiedMana = new Werkstoff(
         new short[] { 173, 216, 230 }, // LightBLue
@@ -113,8 +114,8 @@ public class MaterialPool implements Runnable {
             .addCells(),
         offsetID_01 + 7,
         TextureSet.SET_FLUID,
-        new Pair<>(PureMana, 1),
-        new Pair<>(Materials.Stone, 2));
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
     public static final Werkstoff StabiliseVoidMatter = new Werkstoff(
         new short[] { 0, 0, 0 }, // Dark
@@ -126,8 +127,8 @@ public class MaterialPool implements Runnable {
             .addCells(),
         offsetID_01 + 8,
         TextureSet.SET_FLUID,
-        new Pair<>(PureMana, 1),
-        new Pair<>(Materials.Stone, 2));
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
     public static final Werkstoff LiquidStargate = new Werkstoff(
         new short[] { 66, 170, 255 }, // Dark
@@ -139,8 +140,8 @@ public class MaterialPool implements Runnable {
             .addCells(),
         offsetID_01 + 9,
         TextureSet.SET_FLUID,
-        new Pair<>(PureMana, 1),
-        new Pair<>(Materials.Stone, 2));
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
     public static final Werkstoff ConcentratedUUMatter = new Werkstoff(
         new short[] { 90, 0, 128 },

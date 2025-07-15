@@ -23,7 +23,6 @@ public class MixerRecipePool {
                 Materials.Tantalum.getDust(4),
                 Materials.Carbon.getDust(5))
             .itemOutputs(GTModHandler.getModItem(Mods.BartWorks.ID, "gt.bwMetaGenerateddust", 10, 11502))
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(20 * 10)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -41,7 +40,6 @@ public class MixerRecipePool {
                 Materials.Chrome.getDust(2),
                 Materials.Vanadium.getDust(2))
             .itemOutputs(Materials.HSSS.getDust(27))
-            .noOptimize()
             .eut(RECIPE_LuV)
             .duration(20 * 30)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
