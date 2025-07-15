@@ -111,13 +111,7 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         TST_Network.registryNetwork();
-        try {
-            MaterialFix.load();
-        } catch (Exception e) {
-            // ignored
-            // TODO: fix this
-            TwistSpaceTechnology.LOG.error("Failed to load MaterialFix", e);
-        }
+        MaterialFix.load();
         TST_BigBroArray.registerUUForArray();
         TST_BigBroArray.getGeneratorsForArray();
         TST_BigBroArray.initializeMaterials();
