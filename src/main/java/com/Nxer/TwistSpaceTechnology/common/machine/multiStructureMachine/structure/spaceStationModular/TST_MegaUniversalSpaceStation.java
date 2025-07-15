@@ -9,8 +9,6 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAn
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationStructureBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 
-import java.io.File;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -310,8 +308,4 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
     }
 
-    @Override
-    public void onWorldSave(File aSaveDirectory) {
-        super.onWorldSave(aSaveDirectory);
-    }
 }

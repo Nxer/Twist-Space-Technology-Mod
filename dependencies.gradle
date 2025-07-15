@@ -37,6 +37,7 @@ dependencies {
     implementation(gtnh("GT5-Unofficial"))
     implementation(gtnh("GTNHLib"))
     implementation(gtnh("AE2FluidCraft-Rework"))
+    implementation(gtnh("Galaxy-Space-GTNH"))
     implementation(gtnh("NewHorizonsCoreMod"))
     implementation(gtnh("Avaritia"))
     implementation(gtnh("Avaritiaddons"))

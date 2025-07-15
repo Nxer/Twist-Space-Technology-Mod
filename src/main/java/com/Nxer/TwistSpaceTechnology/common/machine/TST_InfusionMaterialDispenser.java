@@ -220,7 +220,8 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     // Make the fake player be null, so that it will indirectly affect the progress of the research during the
     // inspection.
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack itemStack) {
         this.fakePlayer = null;
         this.subPedestals.clear();
     }
@@ -378,7 +379,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         this.subPedestals.clear();
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
