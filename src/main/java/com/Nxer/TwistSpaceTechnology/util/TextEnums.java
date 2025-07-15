@@ -34,6 +34,8 @@ public enum TextEnums {
     // # Author: {\AQUA}Totto
     // #zh_CN 作者: {\AQUA}Totto
     Author_Totto("Author_Totto"),
+    Author_EvgenWarGold("Author_EvgenWarGold"),
+
 
     // #tr AddByTwistSpaceTechnology
     // # Added by {\GREEN}Twist Space Technology{\GRAY}

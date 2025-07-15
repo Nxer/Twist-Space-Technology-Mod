@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.Nxer.TwistSpaceTechnology.util.recipes.ResultInsufficientPedestals;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -11,6 +13,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 @Mod(
     modid = Tags.MODID,
@@ -54,6 +57,9 @@ public class TwistSpaceTechnology {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+        if (!CheckRecipeResultRegistry.isRegistered("insufficient_pedestals")) {
+            CheckRecipeResultRegistry.register(new ResultInsufficientPedestals(0));
+        }
     }
 
     @Mod.EventHandler

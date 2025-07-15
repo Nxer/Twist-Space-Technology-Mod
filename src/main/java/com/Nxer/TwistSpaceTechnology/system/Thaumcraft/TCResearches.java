@@ -9,6 +9,7 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeFontOfEcology;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeInfusionMaterialDispenser;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipePrimordialDisjunctus;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeSkypiercerTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeTimeBendingSpeedRune;
@@ -486,6 +487,34 @@ public class TCResearches {
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.13")),
                     new ResearchPage(infusionRecipeSkypiercerTower))
                     .setParents("PRIMORDIAL_DISJUNCTUS")
+                    .registerResearchItem();
+        }
+        if (Config.Enable_InfusionMaterialDispenser) {
+            // #tr tc.research_name.INFUSION_MATERIAL_DISPENSER
+            // # Infusion Material Dispenser
+            // #zh_CN 注魔原料分配器
+            // #tr tc.research_text.INFUSION_MATERIAL_DISPENSER
+            // # automatically dispense!
+            // #zh_CN 自动分配!
+            new ResearchItem(
+                "INFUSION_MATERIAL_DISPENSER",
+                "TST",
+                new AspectList().merge(Aspect.MECHANISM, 1)
+                    .merge(Aspect.HUNGER, 1)
+                    .merge(Aspect.MOTION, 1)
+                    .merge(Aspect.EXCHANGE, 1),
+                0,
+                8,
+                9,
+                GTCMItemList.InfusionMaterialDispenser.get(1)).setPages(
+                    // spotless:off
+                    // #tr tc.research_text.INFUSION_MATERIAL_DISPENSER.1
+                    // # Help players who have difficulty with automation to receive assistance in infusion.
+                    // #zh_CN 帮助自动化较为困难的玩家进行辅助注魔.
+                    // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.1")),
+                    new ResearchPage(infusionRecipeInfusionMaterialDispenser))
+                    .setParents("TST_WELCOME")
                     .registerResearchItem();
         }
     }
