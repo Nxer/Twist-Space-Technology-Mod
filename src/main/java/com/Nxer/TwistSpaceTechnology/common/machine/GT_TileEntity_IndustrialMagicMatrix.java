@@ -62,6 +62,7 @@ import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizon.structurelib.structure.StructureUtility;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
 import gregtech.api.GregTechAPI;
@@ -79,7 +80,6 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import scala.Int;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -393,7 +393,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         if (getControllerSlot() == null) {
             return this.mParallel;
         } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
-            return Int.MaxValue();
+            return Integer.MAX_VALUE;
         } else return this.mParallel;
     }
     // end region
@@ -2981,7 +2981,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     'Y',
                     ofChain(
                         ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addNodeEnergized, Blocks.air, 0),
-                        ofBlock(Blocks.air, 0)))
+                        StructureUtility.isAir()))
                 .addElement(
                     'Z',
                     ofChain(
