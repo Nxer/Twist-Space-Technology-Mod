@@ -19,7 +19,6 @@ public class ExtractorRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(Config.combs.getStackForType(CombType.OTHERWORLDLY))
             .fluidOutputs(MaterialPool.LiquidMana.getFluidOrGas(10))
-            .noOptimize()
             .eut(RECIPE_LV)
             .duration(30 * 20)
             .addTo(Extractor);
@@ -27,7 +26,6 @@ public class ExtractorRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(GTCMItemList.PurpleMagnoliaPetal.get(1))
             .fluidOutputs(MaterialPool.LiquidMana.getFluidOrGas(5))
-            .noOptimize()
             .eut(RECIPE_LV)
             .duration(10 * 20)
             .addTo(Extractor);

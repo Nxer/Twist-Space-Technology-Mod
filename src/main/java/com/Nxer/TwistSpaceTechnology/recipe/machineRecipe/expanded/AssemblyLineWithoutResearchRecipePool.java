@@ -8,7 +8,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.google.common.math.LongMath.pow;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.enums.Mods.GraviSuite;
 import static gregtech.api.enums.Mods.GregTech;
@@ -65,6 +64,7 @@ import com.dreammaster.gthandler.CustomItemList;
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -80,7 +80,6 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.LanthItemList;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
@@ -197,8 +196,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                 if (recipe.mFluidInputs != null) {
                     ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                 }
-                ra.noOptimize()
-                    .eut(recipe.mEUt)
+                ra.eut(recipe.mEUt)
                     .duration(recipe.mDuration)
                     .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
 
@@ -225,8 +223,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     if (recipe.mFluidInputs != null) {
                         ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                     }
-                    ra.noOptimize()
-                        .eut(recipe.mEUt)
+                    ra.eut(recipe.mEUt)
                         .duration(recipe.mDuration)
                         .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
                 }
@@ -299,7 +296,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
                 .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(GTUtility.copyAmountUnsafe(8192, getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1)))
+                .itemOutputs(GTUtility.copyAmountUnsafe(8192, new ItemStack(GregTechAPI.sBlockCasingsDyson, 1)))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
@@ -313,7 +310,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     Materials.Neutronium.getNanite(1),
                     GTUtility.copyAmountUnsafe(4096, Materials.Lanthanum.getPlates(1)),
                     GTUtility.copyAmountUnsafe(6144, Materials.NaquadahAlloy.getPlates(1)),
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 1))
+                    TstUtils.newItemStack(ModItems.itemStandarParticleBase, 0, 1))
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),
@@ -927,8 +924,8 @@ public class AssemblyLineWithoutResearchRecipePool {
                             getModItem(SuperSolarPanels.ID, "bluecomponent", 64),
 
                             boltList[absoluteTier],
-                            getModItem(GalaxySpace.ID, "dysonswarmparts", (absoluteTier + 1) * 4, 2),
-                            getModItem(GalaxySpace.ID, "dysonswarmparts", (absoluteTier + 1) * 4, 1),
+                            new ItemStack(GregTechAPI.sBlockCasingsDyson, (absoluteTier + 1) * 4, 2),
+                            new ItemStack(GregTechAPI.sBlockCasingsDyson, (absoluteTier + 1) * 4, 1),
                             getModItem(GregTech.ID, "gt.blockmachines", (absoluteTier + 1) * 4, 11107),
 
                             ItemList.Energy_Module.get(absoluteTier + 1),
@@ -986,7 +983,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                             spatialCasings[absoluteTier],
                             baseCasing,
                             // Dyson Swarm Module.
-                            getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 4 * (absoluteTier + 1), 0),
+                            new ItemStack(GregTechAPI.sBlockCasingsDyson, (absoluteTier + 1) * 4),
 
                             GTOreDictUnificator
                                 .get(OrePrefixes.frameGt, Materials.SuperconductorUMVBase, 4 * (absoluteTier + 1)),

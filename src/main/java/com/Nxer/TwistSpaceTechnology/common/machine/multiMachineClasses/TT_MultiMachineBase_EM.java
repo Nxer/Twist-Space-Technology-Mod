@@ -14,7 +14,7 @@ public abstract class TT_MultiMachineBase_EM extends TTMultiblockBase {
 
     public void repairMachine() {
         mHardHammer = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mScrewdriver = true;
         mCrowbar = true;
         mSolderingTool = true;

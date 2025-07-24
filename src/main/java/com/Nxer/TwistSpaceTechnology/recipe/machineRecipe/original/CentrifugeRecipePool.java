@@ -20,7 +20,6 @@ public class CentrifugeRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Coal.getDust(3), Materials.Saltpeter.getDust(2))
-            .noOptimize()
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
@@ -28,7 +27,6 @@ public class CentrifugeRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Carbon.getDust(3), Materials.Saltpeter.getDust(2))
-            .noOptimize()
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
@@ -36,7 +34,6 @@ public class CentrifugeRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(3), Materials.Gunpowder.getDust(6))
             .itemOutputs(Materials.Sulfur.getDust(1), Materials.Charcoal.getDust(3), Materials.Saltpeter.getDust(2))
-            .noOptimize()
             .eut(RECIPE_LV)
             .duration(70)
             .addTo(centrifuge);
@@ -52,7 +49,6 @@ public class CentrifugeRecipePool {
                 Materials.Coal.getDust(64),
                 Materials.Coal.getDust(32),
                 Materials.Saltpeter.getDust(64))
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(30)
             .addTo(centrifuge);
@@ -68,7 +64,6 @@ public class CentrifugeRecipePool {
                 Materials.Carbon.getDust(64),
                 Materials.Carbon.getDust(32),
                 Materials.Saltpeter.getDust(64))
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(30)
             .addTo(centrifuge);
@@ -84,7 +79,6 @@ public class CentrifugeRecipePool {
                 Materials.Charcoal.getDust(64),
                 Materials.Charcoal.getDust(32),
                 Materials.Saltpeter.getDust(64))
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(30)
             .addTo(centrifuge);

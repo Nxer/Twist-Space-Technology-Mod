@@ -36,10 +36,10 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -1327,8 +1327,8 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 .addShape(MAIN, shape)// FRF_Coil_1
                 .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
                 .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
-                .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
                 // .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
                 // ...);
                 .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
@@ -1348,7 +1348,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                     'E',
                     StructureUtility.ofChain(
                         GTStructureUtility.ofHatchAdder(TST_Computer::superAddToMachineList, textureOffset + 2, 1),
-                        StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
+                        StructureUtility.ofBlock(GregTechAPI.sBlockCasingsSE, 2)))
                 .addElement('Q', ofBlock(sBlockCasingsTT, 3))
                 .build();
         }

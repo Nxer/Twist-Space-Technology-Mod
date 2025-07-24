@@ -358,7 +358,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         rings--;
         int[] built = new int[1 + rings];
 
-        built[0] = survivialBuildPiece(
+        built[0] = survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             Main_horizontalOffSet,
@@ -370,7 +370,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             true);
 
         for (int i = 0; i < rings; i++) {
-            built[i + 1] = survivialBuildPiece(
+            built[i + 1] = survivalBuildPiece(
                 STRUCTURE_PIECE_RINGS,
                 stackSize,
                 Rings_horizontalOffSet,
@@ -639,12 +639,12 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     }
 
     @Override
-    protected boolean showRecipeTextInGUI() {
+    public boolean showRecipeTextInGUI() {
         return false;
     }
 
     @Override
-    protected String generateCurrentRecipeInfoString() {
+    public String generateCurrentRecipeInfoString() {
         StringBuffer ret = new StringBuffer(EnumChatFormatting.WHITE + "Progress: ");
 
         numberFormat.setMinimumFractionDigits(2);
@@ -713,7 +713,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                 .setDefaultColor(COLOR_TEXT_WHITE.get())
                 .setTextAlignment(Alignment.CenterLeft)
                 .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && mOutputAspectNames != null
+                    widget -> getErrorDisplayID() == 0 && mOutputAspectNames != null
                         && mOutputAspectNames.length > 0
                         && mOutputAspectAmounts != null
                         && mOutputAspectAmounts.length > 0))

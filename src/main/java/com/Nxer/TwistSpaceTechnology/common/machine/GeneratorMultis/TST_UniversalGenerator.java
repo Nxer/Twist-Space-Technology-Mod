@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
@@ -7,10 +11,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static gregtech.api.GregTechAPI.sBlockCasings1;
 import static gregtech.api.enums.HatchElement.Dynamo;
 import static gregtech.api.enums.HatchElement.InputHatch;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
@@ -186,10 +186,10 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
         int built = 0;
         if (stackSize.stackSize == 1) {
             mSetTier = 1;
-            built += this.survivialBuildPiece(STRUCTURE_PIECE_GAS, stackSize, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, elementBudget, env, false, true);
+            built += this.survivalBuildPiece(STRUCTURE_PIECE_GAS, stackSize, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, elementBudget, env, false, true);
         } else {
             mSetTier = 2;
-            built += this.survivialBuildPiece(STRUCTURE_PIECE_FUEL, stackSize, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, elementBudget, env, false, true);
+            built += this.survivalBuildPiece(STRUCTURE_PIECE_FUEL, stackSize, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, elementBudget, env, false, true);
         }
         return built;
     }

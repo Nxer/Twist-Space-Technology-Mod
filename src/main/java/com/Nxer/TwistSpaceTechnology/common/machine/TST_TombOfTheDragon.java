@@ -90,7 +90,7 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

@@ -20,7 +20,6 @@ public class LanthanidesRecipePool {
             .fluidInputs(Materials.Chlorine.getGas(6000))
             .itemOutputs(Materials.SiliconDioxide.getDust(1))
             .fluidOutputs(WerkstoffMaterialPool.ChlorinatedRareEarthEnrichedSolution.getFluidOrGas(1000))
-            .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(40)
             .addTo(digester);
@@ -32,7 +31,6 @@ public class LanthanidesRecipePool {
             .itemOutputs(Materials.SiliconDioxide.getDust(1))
             .fluidOutputs(WerkstoffMaterialPool.MuddyRareEarthMonaziteSolution.getFluidOrGas(400))
             .specialValue(800)
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(20 * 20)
             .addTo(digester);
@@ -44,7 +42,6 @@ public class LanthanidesRecipePool {
             .itemOutputs(Materials.SiliconDioxide.getDust(1))
             .fluidOutputs(WerkstoffMaterialPool.MuddyRareEarthBastnasiteSolution.getFluidOrGas(400))
             .specialValue(800)
-            .noOptimize()
             .eut(RECIPE_EV)
             .duration(20 * 20)
             .addTo(digester);
