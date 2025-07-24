@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.gtnewhorizon.gtnhlib.capability.Capabilities;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -420,9 +421,18 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         for (int dX = -x + 1; dX <= x - 1; dX++) {
             for (int dZ = -z + 1; dZ <= z - 1; dZ++) for (int dY = -1; dY >= y + 1; dY--) {
                 TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
+                if (tTileEntity == null) {
+                    continue;
+                }
                 if (tTileEntity instanceof ICleanroomReceiver receiver) {
                     receiver.setCleanroom(this);
                     cleanroomReceivers.add(receiver);
+                } else { // new cleanroom system with Capabilities
+                    ICleanroomReceiver receiver = Capabilities.getCapability(tTileEntity, ICleanroomReceiver.class);
+                    if (receiver != null) {
+                        receiver.setCleanroom(this);
+                        cleanroomReceivers.add(receiver);
+                    }
                 }
             }
         }
@@ -467,11 +477,6 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
     }
 
     @Override
