@@ -31,7 +31,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -53,7 +52,6 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.egs.EGSBucket;
-import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -80,6 +78,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTModHandler;
@@ -452,8 +451,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             if (aActive) {
                 return new ITexture[] {
                     Textures.BlockIcons.getCasingTextureForId(
-                        controllerTier == 0 ? TAE.getIndexFromPage(1, 15)
-                            : MetaBlockCasing01.getTextureIndex(13)),
+                        controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
                     TextureFactory.builder()
                         .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
                         .extFacing()
@@ -465,8 +463,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         .build() };
             }
 
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(
-                controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
+            return new ITexture[] {
+                Textures.BlockIcons.getCasingTextureForId(
+                    controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
                 TextureFactory.builder()
                     .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
                     .extFacing()
@@ -849,17 +848,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     inputFluids = new FluidStack[0];
                 }
 
-                if (bucket == null){
-                    bucket = new EGSBucket(TST_MegaTreeFarm.this);
-                }
-
-                bucket.UpdateBucket(TST_MegaTreeFarm.this);
-
-                if (!bucket.isValid())
-                {
-                    return SimpleCheckRecipeResult.ofFailure("Invalid_Seed");
-                }
-
                 SetRemoveWater();
                 EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
 
@@ -1090,6 +1078,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             private CheckRecipeResult GreenHouseSimulator() {
                 int tier_temp = EuTier;
 
+                if (bucket == null) {
+                    bucket = new EGSBucket(TST_MegaTreeFarm.this);
+                }
+
+                bucket.UpdateBucket(TST_MegaTreeFarm.this);
+
+                if (!bucket.isValid()) {
+                    return SimpleCheckRecipeResult.ofFailure("Invalid_Seed");
+                }
+
                 ItemStack Seed = getControllerSlot();
                 if (Seed == null) return SimpleCheckRecipeResult.ofFailure("no_seed");
 
@@ -1106,7 +1104,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 // tier 2 Eco Growth Sphere = free fertilizer
 
                 int consumedFertilizer = 0;
-                int maxFertilizerToConsume = Seed.stackSize * ((int)tierMultiplier / 64);
+                int maxFertilizerToConsume = Seed.stackSize * ((int) tierMultiplier / 64);
 
                 ArrayList<ItemStack> inputs = getStoredInputs();
                 for (ItemStack i : inputs) {
@@ -1117,8 +1115,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     }
                     if (consumedFertilizer == maxFertilizerToConsume) break;
                 }
-                double multiplier =  (tierMultiplier / 2.5) * (1.0 + ((double) (consumedFertilizer / maxFertilizerToConsume))
-                    * MTEExtremeIndustrialGreenhouse.EIG_BALANCE_MAX_FERTILIZER_BOOST);
+                double multiplier = (tierMultiplier / 2.5)
+                    * (1.0 + ((double) (consumedFertilizer / maxFertilizerToConsume))
+                        * MTEExtremeIndustrialGreenhouse.EIG_BALANCE_MAX_FERTILIZER_BOOST);
 
                 // compute drops based on the drop tracker
                 guiDropTracker = new EIGDropTable();
@@ -1131,7 +1130,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
                 this.outputItems = dropTracker.getDrops();
 
-                //duration = controllerTier > 0 ? 20 : 100;
+                // duration = controllerTier > 0 ? 20 : 100;
                 this.calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
                 this.duration = controllerTier > 0 ? 20 : 100;
                 return CheckRecipeResultRegistry.SUCCESSFUL;

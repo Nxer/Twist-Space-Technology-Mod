@@ -6,7 +6,6 @@ import static kubatech.api.utils.ItemUtils.writeItemStackToNBT;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockStem;
@@ -18,7 +17,6 @@ import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.ItemList;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
@@ -168,8 +167,10 @@ public class EGSBucket {
         greenhouse.getControllerSlot().stackSize = 64;
 
         if (ItemList.IC2_Crop_Seeds.isStackEqual(greenhouse.getControllerSlot(), true, true)) {
-            if (greenhouse.getControllerSlot().hasTagCompound()) {
-                NBTTagCompound nbt = greenhouse.getControllerSlot().getTagCompound();
+            if (greenhouse.getControllerSlot()
+                .hasTagCompound()) {
+                NBTTagCompound nbt = greenhouse.getControllerSlot()
+                    .getTagCompound();
                 if (nbt.hasKey("growth") && nbt.hasKey("gain") && nbt.hasKey("resistance")) {
                     nbt.setInteger("growth", 31);
                     nbt.setInteger("gain", 31);
