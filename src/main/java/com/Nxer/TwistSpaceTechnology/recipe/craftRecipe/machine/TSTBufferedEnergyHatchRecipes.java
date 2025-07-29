@@ -13,20 +13,19 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHa
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchUXV;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.BufferedEnergyHatchZPM;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
-import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
-import static com.dreammaster.gthandler.GT_Loader_Machines.bitsd;
+import static gregtech.api.enums.TierEU.RECIPE_EV;
+import static gregtech.api.enums.TierEU.RECIPE_HV;
+import static gregtech.api.enums.TierEU.RECIPE_IV;
+import static gregtech.api.enums.TierEU.RECIPE_LV;
+import static gregtech.api.enums.TierEU.RECIPE_LuV;
+import static gregtech.api.enums.TierEU.RECIPE_MV;
+import static gregtech.api.enums.TierEU.RECIPE_UEV;
+import static gregtech.api.enums.TierEU.RECIPE_UHV;
+import static gregtech.api.enums.TierEU.RECIPE_UIV;
+import static gregtech.api.enums.TierEU.RECIPE_UMV;
+import static gregtech.api.enums.TierEU.RECIPE_UV;
+import static gregtech.api.enums.TierEU.RECIPE_UXV;
+import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 
 import net.minecraft.item.ItemStack;
 
@@ -44,17 +43,17 @@ import gregtech.api.util.GTOreDictUnificator;
 public class TSTBufferedEnergyHatchRecipes {
 
     public static void loadRecipes() {
-        final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1),
+        final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1) };
 
@@ -204,9 +203,9 @@ public class TSTBufferedEnergyHatchRecipes {
             .addTo(assembler);
         GTModHandler.addCraftingRecipe(
             GTCMItemList.superCleanRoom.get(1),
-            bitsd,
+            GTModHandler.RecipeBits.BITSD,
             new Object[] { "COL", "XMP", "COL", 'M', ItemList.Machine_Multi_Cleanroom, 'C',
-                OrePrefixes.cableGt01.get(Materials.Tin), 'X', OrePrefixes.circuit.get(Materials.Basic), 'O',
+                OrePrefixes.cableGt01.get(Materials.Tin), 'X', OrePrefixes.circuit.get(Materials.LV), 'O',
                 ItemList.LV_Coil, 'L', OrePrefixes.cell.get(Materials.Lubricant), 'P', ItemList.Electric_Pump_LV });
         // GTValues.RA.stdBuilder().itemInputs(CustomItemList.Hatch_Energy_MAX.get(1)).fluidInputs().itemOutputs(BufferedEnergyHatchMAX.get(1)).noOptimize().eut(RECIPE_MAX).duration(120).addTo(assembler);
     }
