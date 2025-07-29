@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemicTierKey;
@@ -165,7 +165,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return parallel;
     }
 
@@ -350,7 +350,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         if (tier > 6) tier = 6;
         if (mMachine && tier <= mTier) return -1;
 
-        int blocksBuilt = this.survivialBuildPiece(
+        int blocksBuilt = this.survivalBuildPiece(
             "tier" + tier,
             stackSize,
             getOffset(0, tier, 0),
@@ -364,7 +364,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         if (tier < 3) return blocksBuilt;
         else {
             int tierF = tier == 6 ? 2 : 1;
-            int fluidBuilt = this.survivialBuildPiece(
+            int fluidBuilt = this.survivalBuildPiece(
                 "fluid" + tierF,
                 stackSize,
                 getOffset(1, tier, 0),
@@ -391,7 +391,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+        return new TstProcessingLogic() {
 
             @NotNull
             @Override

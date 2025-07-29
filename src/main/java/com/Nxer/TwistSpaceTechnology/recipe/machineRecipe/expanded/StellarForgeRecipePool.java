@@ -7,10 +7,13 @@ import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -164,21 +167,17 @@ public class StellarForgeRecipePool {
             ArrayList<FluidStack> outputFluids = new ArrayList<>();
 
             // process Item input
-            byte integrateNum = 0;
-            for (ItemStack inputs : recipe.mInputs) {
-
-                if (GTUtility.areStacksEqual(inputs, GTUtility.getIntegratedCircuit(1))) {
-                    integrateNum = 1;
-                    continue;
-                }
-                if (GTUtility.areStacksEqual(inputs, GTUtility.getIntegratedCircuit(11))) {
-                    integrateNum = 11;
-                    continue;
-                }
-
-                inputItems.add(inputs.copy());
-
-            }
+            AtomicReference<Integer> integrateNum = new AtomicReference<>(0);
+            Arrays.stream(recipe.mInputs)
+                .peek(input -> {
+                    if (GTUtility.areStacksEqual(input, GTUtility.getIntegratedCircuit(1))) {
+                        integrateNum.set(1);
+                    } else if (GTUtility.areStacksEqual(input, GTUtility.getIntegratedCircuit(11))) {
+                        integrateNum.set(11);
+                    }
+                })
+                .filter(Objects::nonNull)
+                .forEach(inputItems::add);
 
             // process Item output
             for (ItemStack outputs : recipe.mOutputs) {
@@ -204,7 +203,7 @@ public class StellarForgeRecipePool {
                 }
                 if (!isRecipeAdded) {
                     // if this output item is not Ingot
-                    outputItems.add(outputs.copy());
+                    outputItems.add(GTUtility.copy(outputs));
                 }
             }
 
@@ -221,7 +220,7 @@ public class StellarForgeRecipePool {
             }
 
             // New Alloy Recipe in Blast Furnace conflicts with some single item recipes
-            if (integrateNum != 0 || inputItems.size() < 2) {
+            if (integrateNum.get() != 0 || inputItems.size() < 2) {
                 inputItems.add(GTUtility.getIntegratedCircuit(1));
             }
 
@@ -230,7 +229,7 @@ public class StellarForgeRecipePool {
             boolean canAddNewRecipe = true;
 
             int duration = Math.max(1, recipe.mDuration / 3);
-            if (integrateNum != 0) {
+            if (integrateNum.get() != 0) {
                 for (GTRecipe recipeCheck : GTCMRecipe.StellarForgeRecipes.getAllRecipes()) {
                     if (!itemStackArrayEqualFuzzy(recipeCheck.mInputs, inputItemsArray)) continue;
                     if (!fluidStackEqualFuzzy(recipeCheck.mFluidOutputs, outputFluidsArray)) continue;
