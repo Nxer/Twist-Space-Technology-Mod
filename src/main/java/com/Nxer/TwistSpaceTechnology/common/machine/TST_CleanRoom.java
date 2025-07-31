@@ -533,6 +533,8 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         cfg.get("cleanroom_allowed_blocks.warded_glass", "Name", "tile.blockCosmeticOpaque");
         cfg.get("cleanroom_allowed_blocks.warded_glass", "Meta", 2);
         cfg.get("cleanroom_allowed_blocks.warded_glass", "Percentage", 50);
+        cfg.get("cleanroom_allowed_blocks.ethereal_glass", "Name", "tile.extrautils:etherealglass");
+        cfg.get("cleanroom_allowed_blocks.ethereal_glass", "Percentage", 50);
     }
 
     public static void loadConfig(Configuration cfg) {
