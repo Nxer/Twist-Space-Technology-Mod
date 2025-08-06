@@ -294,7 +294,7 @@ public class TCRecipePool {
                         .merge(Aspect.EXCHANGE, 32)
                         .merge(Aspect.MAN, 32),
                     Automation_ChestBuffer_IV.get(1),
-                    new ItemStack[] { new ItemStack(ConfigItems.itemWandCasting, 3), ItemList.Conveyor_Module_IV.get(1),
+                    new ItemStack[] { new ItemStack(ConfigItems.itemWandCasting, 1), ItemList.Conveyor_Module_IV.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
 
             }
