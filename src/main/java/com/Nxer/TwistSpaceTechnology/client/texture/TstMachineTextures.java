@@ -21,8 +21,8 @@ public enum TstMachineTextures implements IIconContainer {
     OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW("iconSets/OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW"),
     OVERLAY_FRONT_PROCESSING_ARRAY_GLOW("iconSets/OVERLAY_FRONT_PROCESSING_ARRAY_GLOW"),
 
-    oMCAIndustrialMultiMachine("blocks/iconSets/gtpp/industrialMultiMachine"),
-    oMCAIndustrialMultiMachineActive("blocks/iconSets/gtpp/industrialMultiMachineActive"),;
+    oMCAIndustrialMultiMachine("iconSets/gtpp/industrialMultiMachine"),
+    oMCAIndustrialMultiMachineActive("iconSets/gtpp/industrialMultiMachineActive"),;
 
     @Nullable
     public IIcon icon;
