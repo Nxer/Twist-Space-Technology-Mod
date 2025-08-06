@@ -300,7 +300,6 @@ public class TCRecipePool {
                         new ItemStack(ConfigItems.itemWandCasting, 1), 
                         ItemList.Conveyor_Module_IV.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
-
             }
         }
     }
