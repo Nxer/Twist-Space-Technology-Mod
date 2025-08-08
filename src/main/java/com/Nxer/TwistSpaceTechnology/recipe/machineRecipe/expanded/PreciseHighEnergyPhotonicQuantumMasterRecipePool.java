@@ -117,7 +117,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
             .itemOutputs(GTCMItemList.OpticalSOC.get(16), GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
             .fluidOutputs(Materials.Helium.getPlasma(4000))
             .outputChances(10000, 1)
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(6144 * 20)
             .addTo(PhC);
@@ -134,7 +133,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
             .outputChances(10000, 10)
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(12288 * 20)
             .addTo(PhC);
@@ -149,7 +147,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
             .itemOutputs(GTCMItemList.OpticalSOC.get(96), GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 1, 14))
             .fluidOutputs(Materials.Helium.getPlasma(4000))
             .outputChances(10000, 10)
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(128 * 20)
             .addTo(PhC);
@@ -167,7 +164,6 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 8, 14))
             .fluidOutputs(Materials.Helium.getPlasma(8000))
             .outputChances(10000, 1000)
-            .noOptimize()
             .eut(RECIPE_UMV)
             .duration(64 * 20)
             .addTo(PhC);

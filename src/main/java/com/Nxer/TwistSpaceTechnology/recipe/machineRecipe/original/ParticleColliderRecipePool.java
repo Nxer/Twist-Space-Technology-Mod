@@ -18,7 +18,6 @@ public class ParticleColliderRecipePool {
             .itemOutputs(Particle.getBaseParticle(Particle.NEUTRON), Particle.getBaseParticle(Particle.UNKNOWN))
             .outputChances(1000, 1000)
             .fluidOutputs(Materials.Hydrogen.getPlasma(250))
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(15 * 20)
             .addTo(PCRP);

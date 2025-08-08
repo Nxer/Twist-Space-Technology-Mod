@@ -189,7 +189,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

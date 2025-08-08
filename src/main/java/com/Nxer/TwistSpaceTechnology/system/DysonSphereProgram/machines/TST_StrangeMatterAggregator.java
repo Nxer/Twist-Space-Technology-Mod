@@ -726,7 +726,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
-    protected void startRecipeProcessing() {
+    public void startRecipeProcessing() {
         super.startRecipeProcessing();
         if (null != SpaceTimeMaintenanceConsumablesInputHatch && SpaceTimeMaintenanceConsumablesInputHatch.isValid()) {
             if (SpaceTimeMaintenanceConsumablesInputHatch instanceof IRecipeProcessingAwareHatch aware) {
@@ -741,7 +741,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
-    protected void endRecipeProcessing() {
+    public void endRecipeProcessing() {
         super.endRecipeProcessing();
         if (null != SpaceTimeMaintenanceConsumablesInputHatch && SpaceTimeMaintenanceConsumablesInputHatch.isValid()) {
             if (SpaceTimeMaintenanceConsumablesInputHatch instanceof IRecipeProcessingAwareHatch aware) {
@@ -1199,7 +1199,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
 
-        int built = survivialBuildPiece(
+        int built = survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet_main,
@@ -1219,7 +1219,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
         for (int i = 0; i < limit; i++) {
             for (int j = 0; j < buildingRingPieceArray.length; j++) {
-                built = survivialBuildPiece(
+                built = survivalBuildPiece(
                     buildingRingPieceArray[j],
                     stackSize,
                     horizontalOffSet_ring,
@@ -1234,7 +1234,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             }
         }
 
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             horizontalOffSet_main,
