@@ -266,7 +266,8 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
     public void setActive(boolean active) {
         this.active = active;
-        getBaseMetaTileEntity().setActive(active);
+        IGregTechTileEntity mte = getBaseMetaTileEntity();
+        if (mte != null) mte.setActive(active);
     }
 
     public void trySetActive() {
