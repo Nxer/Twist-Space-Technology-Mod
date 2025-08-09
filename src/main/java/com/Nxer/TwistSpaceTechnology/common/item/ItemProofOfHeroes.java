@@ -62,18 +62,19 @@ public class ItemProofOfHeroes extends Item {
                 toolTip.add(
                     // #tr tooltips.ProofOfGods.line2
                     // # {\LIGHT_PURPLE}Go touch some grass
-                    // #zh_CN {\LIGHT_PURPLE}Go touch some grass
+                    // #zh_CN {\LIGHT_PURPLE}多留意下窗外的碧水蓝天
                     TextEnums.tr("tooltips.ProofOfGods.line2"));
                 toolTip.add("");
                 // #tr tooltips.ProofOfGods.line3
                 // # The first people to make a TwistToken
+                // #zh_CN 成功登顶的人们
                 toolTip.add(EnumChatFormatting.WHITE + TextEnums.tr("tooltips.ProofOfGods.line3"));
                 toolTip.addAll(CraftedTokens.getAllName());
             } else {
                 toolTip.add(
                     // #tr tooltips.ProofOfGods.line1
                     // # Impossible final goal
-                    // #zh_CN Impossible final goal
+                    // #zh_CN 可能，也许，最后……
                     TextEnums.tr("tooltips.ProofOfGods.line1"));
             }
         }

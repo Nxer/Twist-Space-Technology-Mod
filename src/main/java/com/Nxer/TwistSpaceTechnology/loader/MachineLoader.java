@@ -587,9 +587,15 @@ public final class MachineLoader {
                 .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TextEnums.tr("NameMeteorMiner")));
         }
 
+        // #tr NameSteamBasicGenerator
+        // # Basic Steam Generator
+        // #zh_CN 基础蒸汽发电机
         GTCMItemList.SteamBasicGenerator.set(
             new TST_SteamBasicGenerator(19073, "NameSteamBasicGenerator", TextEnums.tr("NameSteamBasicGenerator")));
 
+        // #tr NameUniversalGenerator
+        // # Universal Generator
+        // #zh_CN 通用发电机
         GTCMItemList.UniversalGenerator
             .set(new TST_UniversalGenerator(19074, "NameUniversalGenerator", TextEnums.tr("NameUniversalGenerator")));
 
