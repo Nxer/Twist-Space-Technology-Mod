@@ -49,7 +49,6 @@ public class ExtremeCraftRecipeHandler {
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.ExtremeCraftCenter.get(1))
                 .setMaxRecipesPerPage(1))
-        .disableOptimize()
         .build();
 
     public static final Collection<ExtremeCraftRecipe> extremeCraftRecipes = new ArrayList<>();

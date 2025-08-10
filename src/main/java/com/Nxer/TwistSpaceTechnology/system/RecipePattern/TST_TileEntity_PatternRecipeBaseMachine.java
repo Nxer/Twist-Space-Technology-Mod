@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +43,8 @@ public abstract class TST_TileEntity_PatternRecipeBaseMachine extends TTMultiblo
     }
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
+        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aStack);
     }
 }

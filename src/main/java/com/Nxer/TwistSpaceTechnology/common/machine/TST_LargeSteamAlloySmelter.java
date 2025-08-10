@@ -26,7 +26,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GTRenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
@@ -115,13 +114,13 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     // region General
     @Override
-    protected GTRenderedTexture getFrontOverlay() {
-        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER);
+    protected ITexture getFrontOverlay() {
+        return TextureFactory.of(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER);
     }
 
     @Override
-    protected GTRenderedTexture getFrontOverlayActive() {
-        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE);
+    protected ITexture getFrontOverlayActive() {
+        return TextureFactory.of(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE);
     }
 
     @Override

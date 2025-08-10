@@ -82,7 +82,7 @@ public class TST_PatternMachineClass extends GTCM_MultiMachineBase<TST_PatternMa
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

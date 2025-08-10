@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture;
+package com.Nxer.TwistSpaceTechnology.client.texture;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
@@ -23,7 +23,6 @@ public class ElvenWorkshopTexture implements IIconContainer {
 
     @Override
     public ResourceLocation getTextureFile() {
-        // TODO Auto-generated method stub
         return new ResourceLocation("Machines.ElvenWorkshop");
     }
 
