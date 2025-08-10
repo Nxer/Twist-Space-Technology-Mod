@@ -212,14 +212,13 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        // return BartWorksRecipeMaps.circuitAssemblyLineRecipes;
         return GTCMRecipe.advCircuitAssemblyLineRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(BartWorksRecipeMaps.circuitAssemblyLineRecipes);
+        return Arrays.asList(BartWorksRecipeMaps.circuitAssemblyLineRecipes, GTCMRecipe.advCircuitAssemblyLineRecipes);
     }
 
     @Override
@@ -371,8 +370,8 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // # Imprint circuit hatch
             // #zh_CN 压印电路仓
             // #tr Tooltip_AdvCircuitAssemblyLine.7
-            // # Any grate machine casing
-            // #zh_CN 任意格栅机械方块
+            // # Grate machine casing next to the controller
+            // #zh_CN 主机旁的格栅机械方块
             .addOtherStructurePart(
                 TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.6"),
                 TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.7"),
