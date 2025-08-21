@@ -171,12 +171,12 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
                 TextEnums.tr("Waila.TST_ArtificialStar.1")
                 + " "
                 + EnumChatFormatting.GOLD
-                + tag.getLong("currentOutputEU")
+                + String.format("%,d", tag.getLong("currentOutputEU"))
                 + EnumChatFormatting.RED
                 + " * "
                 + decimalFormat.format(tag.getDouble("outputMultiplier"))
                 + EnumChatFormatting.GREEN
-                + " * 2147483647"
+                + " * 2,147,483,647"
                 + EnumChatFormatting.RESET
                 + " EU / "
                 + secondsOfArtificialStarProgressCycleTime
