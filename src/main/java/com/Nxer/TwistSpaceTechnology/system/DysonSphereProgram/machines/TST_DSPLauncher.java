@@ -161,8 +161,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 
     @Override
     public String[] getInfoData() {
-        long amountOfSailsBeforeVoid = (2048 + 256 * dspDataCell.getDSPNode())
-            - dspDataCell.getDSPSolarSail();
+        long amountOfSailsBeforeVoid = (2048 + 256 * dspDataCell.getDSPNode()) - dspDataCell.getDSPSolarSail();
         // spotless:off
         List<String> ret = new ArrayList<>(Arrays.asList(super.getInfoData()));
         String space = "    ";

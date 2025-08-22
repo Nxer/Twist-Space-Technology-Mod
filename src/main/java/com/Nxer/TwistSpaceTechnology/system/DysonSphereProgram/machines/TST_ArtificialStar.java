@@ -182,21 +182,20 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
                 + secondsOfArtificialStarProgressCycleTime
                 + " s");
 
-            BigDecimal currentEuOutput =
-                BigDecimal.valueOf(tag.getLong("currentOutputEU"))
+            BigDecimal currentEuOutput = BigDecimal.valueOf(tag.getLong("currentOutputEU"))
                 .multiply(BigDecimal.valueOf(tag.getDouble("outputMultiplier")))
                 .multiply(BigDecimal.valueOf(2147483647))
                 .divide(BigDecimal.valueOf(secondsOfArtificialStarProgressCycleTime), RoundingMode.DOWN)
                 .divide(BigDecimal.valueOf(20), RoundingMode.DOWN);
 
             String currentEuOutputScientificFormat = scientificFormat.format(currentEuOutput);
-            currentTip.add(EnumChatFormatting.AQUA +
-                TextEnums.tr("Waila.TST_ArtificialStar.1")
-                + " "
-                + EnumChatFormatting.GOLD
-                + currentEuOutputScientificFormat
-                + EnumChatFormatting.RESET
-                + " EU / t");
+            currentTip.add(
+                EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_ArtificialStar.1")
+                    + " "
+                    + EnumChatFormatting.GOLD
+                    + currentEuOutputScientificFormat
+                    + EnumChatFormatting.RESET
+                    + " EU / t");
         }
     }
 
