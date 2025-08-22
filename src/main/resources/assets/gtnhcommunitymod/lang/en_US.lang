@@ -369,7 +369,7 @@ Tooltip_ArtificialStar_02_04=Input fuels will be consumed at once, process 6.4s 
 Tooltip_ArtificialStar_02_05=Rewards multiplier 1%% increase per run when continuous operation.
 Tooltip_ArtificialStar_02_06=Maximum is 150%%, Minimum is 100%% when uncontinuous.
 Tooltip_ArtificialStar_Controller=Controller block for the Artificial Star
-Waila.TST_ArtificialStar.1=Current Generating :
+Waila.TST_ArtificialStar.1=Current Generating:
 Tooltip_DSPInfo_00=Dyson Sphere Energy Credit = Solar Sail Output (default 524288) * Solar Sail amount * (Node + 1)^0.8
 Tooltip_DSPInfo_01=Every Node can absorb (default) 256 Solar Sails.
 Tooltip_DSPInfo_02=If unabsorbed solar sails amount is larger than 2048,
@@ -2210,3 +2210,5 @@ GT5U.gui.text.infusion_complete=§aInfusion complete
 GT5U.gui.text.unknown_problem=§cUnknown problem
 GT5U.gui.text.insufficient_pedestals=§c(Right-click screwdriver to check again) Missing pedestals: %d
 tst.recipe.advCircuitAssemblyLineRecipes=Adv Circuit Assembly Line (Actual recipe pool at runtime)
+DSPDataCell.amountOfSailsBeforeVoid=Amount of Sails Before Void:
+DSPDataCell.amountOfSailsToBeVoided=Amount of Sails To Be Destroyed:
