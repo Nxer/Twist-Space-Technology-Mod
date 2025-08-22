@@ -23,10 +23,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -54,9 +56,7 @@ import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
-import gtPlusPlus.core.util.minecraft.PlayerUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GTPPMultiBlockBase;
-import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -365,9 +365,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public void onModeChangeByScrewdriver(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         setMachineMode(nextMachineMode());
-        PlayerUtils.messagePlayer(
-            aPlayer,
-            String.format(StatCollector.translateToLocal("GT5U.MULTI_MACHINE_CHANGE"), getMachineModeName()));
+        TstUtils.sendMessageKeyToPlayer(aPlayer, "GT5U.MULTI_MACHINE_CHANGE", getMachineMode());
     }
 
     private static int getMachineModesCount() {
@@ -459,12 +457,12 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     protected IIconContainer getActiveOverlay() {
-        return TexturesGtBlock.oMCAIndustrialMultiMachineActive;
+        return TstMachineTextures.oMCAIndustrialMultiMachineActive;
     }
 
     @Override
     protected IIconContainer getInactiveOverlay() {
-        return TexturesGtBlock.oMCAIndustrialMultiMachine;
+        return TstMachineTextures.oMCAIndustrialMultiMachine;
     }
 
     @Override
@@ -520,7 +518,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true);
+        return survivalBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true);
     }
 
     @Override

@@ -26,7 +26,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -78,7 +78,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     // region new methods
     public void repairMachine() {
         mHardHammer = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mScrewdriver = true;
         mCrowbar = true;
         mSolderingTool = true;
@@ -125,7 +125,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      */
     @ApiStatus.OverrideOnly
     protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+        return new TstProcessingLogic() {
 
             @NotNull
             @Override
@@ -177,8 +177,17 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Max Parallel (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return maxParallel;
+    }
+
+    /**
+     * @return {@code true} to enable unlimited tier skips.
+     */
+    @ApiStatus.OverrideOnly
+    public boolean isUnlimitedTierSkips() {
+        // true by default
+        return true;
     }
 
     /**
@@ -239,6 +248,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         mOutputFluids = processingLogic.getOutputFluids();
 
         return result;
+    }
+
+    @Override
+    protected void setupProcessingLogic(ProcessingLogic logic) {
+        super.setupProcessingLogic(logic);
+        if (isUnlimitedTierSkips()) {
+            logic.setUnlimitedTierSkips();
+        }
     }
 
     /**
@@ -611,14 +628,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
-     * If it explodes when the Component has to be replaced.
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    /**
      * no longer afraid of rain
      */
     @Override
@@ -732,13 +741,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (supportsMachineModeSwitch()) {
                 setMachineMode(nextMachineMode());
                 GTUtility.sendChatToPlayer(aPlayer, getMachineModeName());
             } else {
-                super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+                super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aStack);
             }
         }
     }

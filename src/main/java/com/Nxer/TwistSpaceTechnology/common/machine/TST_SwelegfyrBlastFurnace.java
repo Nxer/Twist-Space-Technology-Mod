@@ -51,9 +51,9 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.client.texture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
@@ -311,7 +311,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         int built;
         int builtW;
         int structureTier = stackSize.stackSize > 1 ? 2 : 1;
-        built = survivialBuildPiece(
+        built = survivalBuildPiece(
             "mainT" + structureTier,
             stackSize,
             baseHorizontalOffSet,
@@ -321,7 +321,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             env,
             false,
             true);
-        builtW = survivialBuildPiece(
+        builtW = survivalBuildPiece(
             "BlazeT" + structureTier,
             stackSize,
             BlazeHorizontalOffSet,
@@ -497,7 +497,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return isPassiveMode ? Config.Parallel_PassiveMode_SwelegfyrBlastFurnace
             : Config.Parallel_NormalMode_SwelegfyrBlastFurnace;
     }
@@ -621,7 +621,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 ItemStack ControllerSlot = this.getControllerSlot();
                 if (GTUtility.areStacksEqual(UpgradeItem, ControllerSlot)) {
                     controllerTier = 2;
-                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
+                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot, 1);
                     markDirty();
                     // schedule a structure check
                     mUpdated = true;
@@ -903,7 +903,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             ItemStack heldItem = aPlayer.getHeldItem();
             if (GTUtility.areStacksEqual(UpgradeItem, heldItem)) {
                 controllerTier = 2;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, 1));
                 if (getBaseMetaTileEntity().isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();
