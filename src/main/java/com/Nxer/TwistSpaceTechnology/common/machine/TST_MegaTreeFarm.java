@@ -1265,7 +1265,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.13"))
             // #tr Tooltip_EcoSphereSimulator.0.14
             // # {\GREEN}Green House Mode:
-            // #zh_CN supports both normal & IC2 crops
+            // #zh_CN
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.14"))
             // #tr Tooltip_EcoSphereSimulator.0.15
             // # - supports both normal & IC2 crops
