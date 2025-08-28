@@ -26,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.ItemList;
+import gregtech.mixin.interfaces.accessors.IBlockStemAccessor;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.Crops;
 import ic2.core.Ic2Items;
@@ -321,12 +322,13 @@ public class EGSBucket {
             int metadata = -1;
 
             if (plantBlock instanceof BlockStem blockStem) {
+                Block cropBlock = ((IBlockStemAccessor) blockStem).gt5u$getCropBlock();
                 metadata = 0;
-                if (blockStem != Blocks.air) {
+                if (cropBlock != null && cropBlock != Blocks.air) {
                     // Simulate drops
                     for (int i = 0; i < NUMBER_OF_DROPS_TO_SIMULATE; i++) {
                         // simulate 1 round of drops
-                        ArrayList<ItemStack> stemDrops = blockStem.getDrops(
+                        ArrayList<ItemStack> blockDrops = cropBlock.getDrops(
                             greenhouse.getBaseMetaTileEntity()
                                 .getWorld(),
                             greenhouse.getBaseMetaTileEntity()
@@ -337,22 +339,19 @@ public class EGSBucket {
                                 .getZCoord(),
                             metadata,
                             0);
-
-                        if (stemDrops == null || stemDrops.isEmpty()) continue;
-
+                        if (blockDrops == null || blockDrops.isEmpty()) continue;
                         // if the droped item is a block that places itself, assume this is the only possible drop
                         // eg: pumpkin, redlon
-                        if (i == 0 && stemDrops.size() == 1) {
-                            ItemStack drop = stemDrops.get(0);
+                        if (i == 0 && blockDrops.size() == 1) {
+                            ItemStack drop = blockDrops.get(0);
                             if (drop != null && drop.stackSize >= 1
-                                && drop.getItem() == Item.getItemFromBlock(blockStem)) {
+                                && drop.getItem() == Item.getItemFromBlock(cropBlock)) {
                                 drops.addDrop(drop, drop.stackSize);
                                 break;
                             }
                         }
-
                         // else append all the drops
-                        for (ItemStack drop : stemDrops) {
+                        for (ItemStack drop : blockDrops) {
                             drops.addDrop(drop, drop.stackSize / (double) NUMBER_OF_DROPS_TO_SIMULATE);
                         }
                     }

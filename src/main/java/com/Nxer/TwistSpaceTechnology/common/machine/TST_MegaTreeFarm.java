@@ -1130,7 +1130,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
                 this.outputItems = dropTracker.getDrops();
 
-                // duration = controllerTier > 0 ? 20 : 100;
                 this.calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
                 this.duration = controllerTier > 0 ? 20 : 100;
                 return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -1264,6 +1263,22 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             // # Secondary recipes incomplete
             // #zh_CN 二级配方尚未完成
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.13"))
+            // #tr Tooltip_EcoSphereSimulator.0.14
+            // # {\GREEN}Green House Mode:
+            // #zh_CN supports both normal & IC2 crops
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.14"))
+            // #tr Tooltip_EcoSphereSimulator.0.15
+            // # - supports both normal & IC2 crops
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.15"))
+            // #tr Tooltip_EcoSphereSimulator.0.16
+            // # - Can be boosted by supplying fertilizer
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.16"))
+            // #tr Tooltip_EcoSphereSimulator.0.17
+            // # - Given 1 IC2 crop seed it will optimize its stats & amount for maximum productivity
+            // #zh_CN
+            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.17"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
