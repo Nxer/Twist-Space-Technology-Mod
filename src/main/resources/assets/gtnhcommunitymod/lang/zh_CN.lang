@@ -2215,4 +2215,4 @@ DSPDataCell.amountOfSailsToBeVoided=可能会损毁的太阳帆数量:
 Tooltip_EcoSphereSimulator.0.14=工业温室模式:
 Tooltip_EcoSphereSimulator.0.15= - 同时支持普通作物与IC2作物
 Tooltip_EcoSphereSimulator.0.16= - 提供肥料提高产量
-Tooltip_EcoSphereSimulator.0.17= - 提供一个普通的IC2作物种子即可获得最佳生产属性状态收益
+Tooltip_EcoSphereSimulator.0.17= - 机器将主动将内部种子的数量设置为64, 并将IC2作物属性调整至31/31/1的完美状态

@@ -1277,7 +1277,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.16"))
             // #tr Tooltip_EcoSphereSimulator.0.17
             // # - Given 1 IC2 crop seed it will optimize its stats & amount for maximum productivity
-            // #zh_CN {\SPACE}- 提供一个普通的IC2作物种子即可获得最佳生产属性状态收益
+            // #zh_CN {\SPACE}- 机器将主动将内部种子的数量设置为64, 并将IC2作物属性调整至31/31/1的完美状态
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.17"))
             .addSeparator()
             .addInfo(StructureTooComplex)
