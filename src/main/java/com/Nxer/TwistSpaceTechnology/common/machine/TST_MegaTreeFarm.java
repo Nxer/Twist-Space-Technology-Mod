@@ -1265,19 +1265,19 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.13"))
             // #tr Tooltip_EcoSphereSimulator.0.14
             // # {\GREEN}Green House Mode:
-            // #zh_CN
+            // #zh_CN 工业温室模式:
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.14"))
             // #tr Tooltip_EcoSphereSimulator.0.15
-            // # - supports both normal & IC2 crops
-            // #zh_CN
+            // # {\SPACE}- supports both normal & IC2 crops
+            // #zh_CN {\SPACE}- 同时支持普通作物与IC2作物
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.15"))
             // #tr Tooltip_EcoSphereSimulator.0.16
-            // # - Can be boosted by supplying fertilizer
-            // #zh_CN
+            // # {\SPACE}- Can be boosted by supplying fertilizer
+            // #zh_CN {\SPACE}- 提供肥料提高产量
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.16"))
             // #tr Tooltip_EcoSphereSimulator.0.17
             // # - Given 1 IC2 crop seed it will optimize its stats & amount for maximum productivity
-            // #zh_CN
+            // #zh_CN {\SPACE}- 提供一个普通的IC2作物种子即可获得最佳生产属性状态收益
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.17"))
             .addSeparator()
             .addInfo(StructureTooComplex)
