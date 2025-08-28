@@ -27,6 +27,7 @@ import com.Nxer.TwistSpaceTechnology.loader.MachineLoader;
 import com.Nxer.TwistSpaceTechnology.loader.MaterialLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RecipeLoader;
 import com.Nxer.TwistSpaceTechnology.loader.TCLoader;
+import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
@@ -132,6 +133,7 @@ public class CommonProxy {
         CropInfo.registerAllCropInfo();
 
         TCLoader.postInit();
+        NEIHandler.IMCSender();
     }
 
     public void complete(FMLLoadCompleteEvent event) {
