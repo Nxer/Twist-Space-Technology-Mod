@@ -1265,7 +1265,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.13"))
             // #tr Tooltip_EcoSphereSimulator.0.14
             // # {\GREEN}Green House Mode:
-            // #zh_CN 工业温室模式:
+            // #zh_CN {\GREEN}工业温室模式:
             .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.14"))
             // #tr Tooltip_EcoSphereSimulator.0.15
             // # {\SPACE}- supports both normal & IC2 crops
@@ -1324,4 +1324,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // #tr GT5U.gui.text.fishing
     // # {\BLUE}Fishing
     // #zh_CN {\BLUE}捕鱼中
+
+    // #tr GT5U.gui.text.Invalid_Seed
+    // # Invalid Seed
+    // #zh_CN 无效种子
 }
