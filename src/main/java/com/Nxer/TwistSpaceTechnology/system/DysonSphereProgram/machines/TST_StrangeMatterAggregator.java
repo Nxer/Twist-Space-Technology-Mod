@@ -341,7 +341,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             default -> Config.BasicRodAmountPerConstrainerProduce_SpaceTime_StrangeMatterAggregator;
         };
 
-        constrainerFactor = oscillatorTier * oscillatorPiece
+        constrainerFactor = (long)oscillatorTier * oscillatorPiece
             * constraintorTier
             * constraintorPiece
             * mergerTier
@@ -494,13 +494,13 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
         // check how many recipe can do limited by annihilation constrainer amount
         // parallel limit = (constrainer * rod can produce) / recipe rod output
-        double parallel = (antiMatterRodMaxOutput / rodAmountRecipe);
+        double parallel = ((double)antiMatterRodMaxOutput / rodAmountRecipe);
 
         // check how many recipe can do limited by anti matter amount
         parallel = Math.min(parallel, antiMatterAmount / inputFactor);
 
         // check hydrogen plasma
-        parallel = Math.min(parallel, hydrogenPlasmaAmount / recipeHydrogenPlasma);;
+        parallel = Math.min(parallel, hydrogenPlasmaAmount / recipeHydrogenPlasma);
 
         // check tesseract
         parallel = Math.min(parallel, tesseractAmount * tesseractFactor / auxiliaryMaterialConsumptionRate);
