@@ -51,9 +51,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
-import com.Nxer.TwistSpaceTechnology.common.egs.EGSBucket;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EGSArtificialGreenHouseOutputBucket;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
@@ -126,7 +126,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public final EIGDropTable dropTracker = new EIGDropTable();
     public EIGDropTable guiDropTracker = new EIGDropTable();
     public HashMap<ItemStack, Double> synchedGUIDropTracker = new HashMap<>();
-    public EGSBucket bucket = null;
+    public EGSArtificialGreenHouseOutputBucket bucket = null;
 
     @Override
     public int totalMachineMode() {
@@ -1079,7 +1079,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 int tier_temp = EuTier;
 
                 if (bucket == null) {
-                    bucket = new EGSBucket(TST_MegaTreeFarm.this);
+                    bucket = new EGSArtificialGreenHouseOutputBucket(TST_MegaTreeFarm.this);
                 }
 
                 bucket.UpdateBucket(TST_MegaTreeFarm.this);

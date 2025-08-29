@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.egs;
+package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
 
 import static kubatech.api.utils.ItemUtils.readItemStackFromNBT;
 import static kubatech.api.utils.ItemUtils.writeItemStackToNBT;
@@ -34,9 +34,9 @@ import ic2.core.crop.IC2Crops;
 import ic2.core.crop.TileEntityCrop;
 import kubatech.api.eig.EIGDropTable;
 
-public class EGSBucket {
+public class EGSArtificialGreenHouseOutputBucket {
 
-    public static final IEGSBucketFactory factory = new EGSBucket.Factory();
+    public static final IEGSBucketFactory factory = new EGSArtificialGreenHouseOutputBucket.Factory();
     public static final String NBT_IDENTIFIER = "GREENHOUSE";
     private static final int NUMBER_OF_DROPS_TO_SIMULATE = 1000;
 
@@ -48,13 +48,13 @@ public class EGSBucket {
         }
 
         @Override
-        public EGSBucket tryCreateBucket(TST_MegaTreeFarm greenhouse) {
-            return new EGSBucket(greenhouse);
+        public EGSArtificialGreenHouseOutputBucket tryCreateBucket(TST_MegaTreeFarm greenhouse) {
+            return new EGSArtificialGreenHouseOutputBucket(greenhouse);
         }
 
         @Override
-        public EGSBucket restore(NBTTagCompound nbt) {
-            return new EGSBucket(nbt);
+        public EGSArtificialGreenHouseOutputBucket restore(NBTTagCompound nbt) {
+            return new EGSArtificialGreenHouseOutputBucket(nbt);
         }
     }
 
@@ -63,11 +63,11 @@ public class EGSBucket {
     protected boolean isValid = false;
     protected EIGDropTable drops = new EIGDropTable();
 
-    public EGSBucket(@NotNull TST_MegaTreeFarm greenhouse) {
+    public EGSArtificialGreenHouseOutputBucket(@NotNull TST_MegaTreeFarm greenhouse) {
         UpdateBucket(greenhouse);
     }
 
-    public EGSBucket(@NotNull NBTTagCompound nbt) {
+    public EGSArtificialGreenHouseOutputBucket(@NotNull NBTTagCompound nbt) {
         this.seed = readItemStackFromNBT(nbt.getCompoundTag("seed"));
         this.seedCount = nbt.getInteger("count");
     }
@@ -142,7 +142,9 @@ public class EGSBucket {
      */
     public void UpdateBucket(@NotNull TST_MegaTreeFarm greenhouse) {
         // Abort is input if empty
-        if (greenhouse.getControllerSlot() == null || greenhouse.getControllerSlot().stackSize <= 0) return;
+        if (greenhouse.getControllerSlot() == null) return;
+
+        if (greenhouse.getControllerSlot().stackSize <= 0) return;
 
         seed = greenhouse.getControllerSlot()
             .copy();
@@ -215,7 +217,7 @@ public class EGSBucket {
      * bucket.
      *
      * @param greenhouse The greenhouse that contains the bucket.
-     * @return True if the bucket was successfully validated. {@link EGSBucket#isValid()} should also return true.
+     * @return True if the bucket was successfully validated. {@link EGSArtificialGreenHouseOutputBucket#isValid()} should also return true.
      */
     public boolean revalidate(TST_MegaTreeFarm greenhouse) {
         recalculateDrops(greenhouse);
@@ -252,7 +254,7 @@ public class EGSBucket {
                             .getZCoord();
 
                         try {
-                            crop = new EGSBucket.FakeTileEntityCrop(this, greenhouse, xyz);
+                            crop = new EGSArtificialGreenHouseOutputBucket.FakeTileEntityCrop(this, greenhouse, xyz);
 
                             crop.setSize((byte) cropCard.maxSize());
                             // check if the crop can be harvested at its max size
@@ -551,7 +553,7 @@ public class EGSBucket {
         public boolean isValid = false;
         private int lightLevel = 0;
 
-        public FakeTileEntityCrop(EGSBucket bucket, TST_MegaTreeFarm greenhouse, int[] xyz) {
+        public FakeTileEntityCrop(EGSArtificialGreenHouseOutputBucket bucket, TST_MegaTreeFarm greenhouse, int[] xyz) {
             super();
             this.isValid = false;
             this.ticker = 1;
