@@ -217,7 +217,8 @@ public class EGSArtificialGreenHouseOutputBucket {
      * bucket.
      *
      * @param greenhouse The greenhouse that contains the bucket.
-     * @return True if the bucket was successfully validated. {@link EGSArtificialGreenHouseOutputBucket#isValid()} should also return true.
+     * @return True if the bucket was successfully validated. {@link EGSArtificialGreenHouseOutputBucket#isValid()}
+     *         should also return true.
      */
     public boolean revalidate(TST_MegaTreeFarm greenhouse) {
         recalculateDrops(greenhouse);
