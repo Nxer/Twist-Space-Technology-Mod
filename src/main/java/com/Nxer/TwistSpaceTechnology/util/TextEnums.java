@@ -37,8 +37,7 @@ public enum TextEnums {
     Author_EvgenWarGold("Author_EvgenWarGold"),
 
     // #tr Author_Faotik
-    // # Author: {\AQUA}Faotik
-    // #zh_CN 作者: {\AQUA}Faotik
+    // # Author: {\YELLOW}Faotik
     Author_Faotik("Author_Faotik"),
 
     // #tr AddByTwistSpaceTechnology

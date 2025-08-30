@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
@@ -20,7 +19,6 @@ import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 import gregtech.api.enums.GTValues;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -47,7 +45,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
@@ -67,8 +64,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_AR
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
-import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 
 public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBoiler> {
 
@@ -83,11 +78,11 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     // endregion
 
-    private final double heatIncreaseSpeed = 0.01; //1 % per second
-    private final double heatDecreaseSpeed = 0.005; //0.5 % per second
+    private final double heatIncreaseSpeed = 0.001; // 0.1% per second
+    private final double heatDecreaseSpeed = 0.0001; // 0.01% per second
 
-    private final double calcificationDelayTicks = 20*20; // 20 seconds
-    private final double calcificationIncreaseSpeed = 0.005; //0.5 % per second
+    private final long calcificationDelayTicks = 20 * 60 * 60 * 24; // 24 hours
+    private final long calcificationTimeSeconds = 60 * 60 * 36; // 48 hours
     private final int calcificationFactor = 3; // max calcification level will reduce steam production by 3 times
 
     private final int steamProductionBronze = 4800;
@@ -129,8 +124,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 amountOfFluidInHatch = hatchFluid.amount;
             }
 
-            if(runningTicks > calcificationDelayTicks && hasWater) {
-                calcification+=calcificationIncreaseSpeed;
+            boolean shouldIncreaseCalcification = (runningTicks/20)%(calcificationTimeSeconds/100)==0;
+            if(runningTicks > calcificationDelayTicks && shouldIncreaseCalcification && hasWater) {
+                calcification+=0.01;
                 if (calcification > 1) {
                     calcification = 1;
                 }
@@ -211,7 +207,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         tierMachineCasing = -1;
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            TwistSpaceTechnology.LOG.info(tierMachineCasing);
             return false;
         }
 
@@ -462,9 +457,100 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         )
         .addInfo(
             // #tr TST_LargeSolarBoiler.tooltip.01
-            // # TODO
+            // # Steam Power by the Sun.
             TextEnums.tr("TST_LargeSolarBoiler.tooltip.01")
         )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.02
+            // # Works similarly to the singleblock version.
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.02")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.03
+            // # Has §6Heat§7 and §6Calcification§7 mechanics.
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.03")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.04
+            // # On a clear day, it will quickly
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.04")
+            + " (" + heatIncreaseSpeed*100 + "%/s) "
+            // #tr TST_LargeSolarBoiler.tooltip.05
+            // # increase its temperature until it reaches its maximum.
+            +TextEnums.tr("TST_LargeSolarBoiler.tooltip.05")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.06
+            // # At night or in bad weather, it will cool down slowly
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.06")
+            + " (" + heatDecreaseSpeed*100 + "%/s)."
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.07
+            // # The controller needs a clear view of the sky to heat up.
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.07")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.08
+            // # After
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.08")
+            + " "
+            + EnumChatFormatting.GREEN
+            + String.format("%.1f ", calcificationDelayTicks / 20.0 / 60.0 / 60.0)
+            + EnumChatFormatting.GRAY
+            // #tr TST_LargeSolarBoiler.tooltip.09
+            // # hours will start to calcify during its work, at max level reducing steam output by:
+            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.09")
+            + " "
+            + EnumChatFormatting.GREEN
+            + calcificationFactor
+            + EnumChatFormatting.GRAY
+            + "."
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.10
+            // # It will take
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.10")
+                + " "
+                + EnumChatFormatting.GREEN
+                + String.format("%.1f ", calcificationTimeSeconds / 60.0 / 60.0)
+                + EnumChatFormatting.GRAY
+                // #tr TST_LargeSolarBoiler.tooltip.11
+                // # hours to reach max level of calcification. Use button in GUI to clear the machine.
+                + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11")
+        )
+        .addSeparator()
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.12
+            // # Has two tiers: §6Bronze§7 and §8Steel§7
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.12")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.13
+            // # Max steam production:
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.13")
+        )
+        .addInfo(
+            "   "
+            // #tr TST_LargeSolarBoiler.tooltip.14
+            // # §6Bronze§7:
+            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.14")
+            + " "
+            + EnumChatFormatting.WHITE
+            + steamProductionBronze
+            + EnumChatFormatting.GRAY
+        )
+        .addInfo(
+            "   "
+            // #tr TST_LargeSolarBoiler.tooltip.15
+            // # §8Steel§7:
+            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.15")
+                + " "
+                + EnumChatFormatting.WHITE
+                + steamProductionSteel
+                + EnumChatFormatting.GRAY
+        )
+        .addSeparator()
         .addInfo(TextEnums.Author_Faotik.getText())
         .toolTipFinisher(TextLocalization.ModName);
         return tt;
