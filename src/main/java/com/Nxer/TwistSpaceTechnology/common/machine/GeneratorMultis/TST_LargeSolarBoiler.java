@@ -452,6 +452,23 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     // endregion
 
     // region Overrides
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        tt.addMachineType(
+            // #tr TST_LargeSolarBoiler.machineType
+            // # Solar Boiler
+            TextEnums.tr("TST_LargeSolarBoiler.machineType")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.01
+            // # TODO
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.01")
+        )
+        .addInfo(TextEnums.Author_Faotik.getText())
+        .toolTipFinisher(TextLocalization.ModName);
+        return tt;
+    }
 
     @Override
     public boolean supportsVoidProtection() {
