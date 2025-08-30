@@ -64,7 +64,7 @@ public class EGSArtificialGreenHouseOutputBucket {
     protected EIGDropTable drops = new EIGDropTable();
 
     public EGSArtificialGreenHouseOutputBucket(@NotNull TST_MegaTreeFarm greenhouse) {
-        UpdateBucket(greenhouse);
+        updateBucket(greenhouse);
     }
 
     public EGSArtificialGreenHouseOutputBucket(@NotNull NBTTagCompound nbt) {
@@ -140,7 +140,7 @@ public class EGSArtificialGreenHouseOutputBucket {
     /**
      * Updates the bucket to the latest seeds
      */
-    public void UpdateBucket(@NotNull TST_MegaTreeFarm greenhouse) {
+    public void updateBucket(@NotNull TST_MegaTreeFarm greenhouse) {
         // Abort is input if empty
         if (greenhouse.getControllerSlot() == null) return;
 

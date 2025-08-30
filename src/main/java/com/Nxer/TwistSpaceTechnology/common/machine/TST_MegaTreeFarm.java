@@ -869,7 +869,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
                 if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
 
-                int tier_temp = EuTier;
+                int tierTemp = EuTier;
 
                 // different liquid = different output
                 Fluid RecipeLiquid = null;
@@ -928,11 +928,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     }
                 }
                 if (inputWaterAmount < Math.pow(2, EuTier) * RecipeLiquidCost) {
-                    tier_temp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
-                    if (tier_temp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
-                    tierMultiplier = getTierMultiplier(tier_temp);
+                    tierTemp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
+                    if (tierTemp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
+                    tierMultiplier = getTierMultiplier(tierTemp);
                 }
-                long costWaterAmount = (long) (Math.pow(2, tier_temp) * RecipeLiquidCost);
+                long costWaterAmount = (long) (Math.pow(2, tierTemp) * RecipeLiquidCost);
                 if (inputWaterAmount < costWaterAmount) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
 
                 for (FluidStack aFluid : WaterHatchStack) {
@@ -990,7 +990,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 outputItems = outputs.toArray(new ItemStack[0]);
 
                 duration = controllerTier > 0 ? 20 : 100;
-                calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
+                calculatedEut = (long) (8 * Math.pow(4, tierTemp) * 15 / 16);
                 return SimpleCheckRecipeResult.ofSuccess("growing_trees");
             }
 
@@ -1076,22 +1076,22 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             }
 
             private CheckRecipeResult GreenHouseSimulator() {
-                int tier_temp = EuTier;
+                int tierTemp = EuTier;
 
                 if (bucket == null) {
                     bucket = new EGSArtificialGreenHouseOutputBucket(TST_MegaTreeFarm.this);
+                } else {
+                    bucket.updateBucket(TST_MegaTreeFarm.this);
                 }
-
-                bucket.UpdateBucket(TST_MegaTreeFarm.this);
 
                 if (!bucket.isValid()) {
                     return SimpleCheckRecipeResult.ofFailure("Invalid_Seed");
                 }
 
-                ItemStack Seed = getControllerSlot();
-                if (Seed == null) return SimpleCheckRecipeResult.ofFailure("no_seed");
+                ItemStack seed = getControllerSlot();
+                if (seed == null) return SimpleCheckRecipeResult.ofFailure("no_seed");
 
-                int waterUsage = Seed.stackSize * 1000;
+                int waterUsage = seed.stackSize * 1000;
 
                 // Consume water, fail if we don't have enough
                 if (!tryDrain(new FluidStack(FluidRegistry.WATER, waterUsage), false)) {
@@ -1104,7 +1104,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 // tier 2 Eco Growth Sphere = free fertilizer
 
                 int consumedFertilizer = 0;
-                int maxFertilizerToConsume = Seed.stackSize * ((int) tierMultiplier / 64);
+                int maxFertilizerToConsume = seed.stackSize * ((int) tierMultiplier / 64);
 
                 ArrayList<ItemStack> inputs = getStoredInputs();
                 for (ItemStack i : inputs) {
@@ -1130,7 +1130,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
                 this.outputItems = dropTracker.getDrops();
 
-                this.calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
+                this.calculatedEut = (long) (8 * Math.pow(4, tierTemp) * 15 / 16);
                 this.duration = controllerTier > 0 ? 20 : 100;
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
