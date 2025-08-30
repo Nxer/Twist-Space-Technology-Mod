@@ -499,11 +499,11 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             + String.format("%.1f ", calcificationDelayTicks / 20.0 / 60.0 / 60.0)
             + EnumChatFormatting.GRAY
             // #tr TST_LargeSolarBoiler.tooltip.09
-            // # hours will start to calcify during its work, at max level reducing steam output by:
+            // # hours will start to calcify during its work, at max level reducing steam output to:
             + TextEnums.tr("TST_LargeSolarBoiler.tooltip.09")
             + " "
             + EnumChatFormatting.GREEN
-            + calcificationFactor
+            + String.format("%.2f%%", 100.0/calcificationFactor)
             + EnumChatFormatting.GRAY
             + "."
         )
@@ -518,6 +518,12 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 // #tr TST_LargeSolarBoiler.tooltip.11
                 // # hours to reach max level of calcification. Use button in GUI to clear the machine.
                 + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11")
+        )
+        .addSeparator()
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.16
+            // # Will §cExplode§7 if water is added when heat is equal or above 50%
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.16")
         )
         .addSeparator()
         .addInfo(
@@ -538,6 +544,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             + " "
             + EnumChatFormatting.WHITE
             + steamProductionBronze
+            + " L/s"
             + EnumChatFormatting.GRAY
         )
         .addInfo(
@@ -545,10 +552,11 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             // #tr TST_LargeSolarBoiler.tooltip.15
             // # §8Steel§7:
             + TextEnums.tr("TST_LargeSolarBoiler.tooltip.15")
-                + " "
-                + EnumChatFormatting.WHITE
-                + steamProductionSteel
-                + EnumChatFormatting.GRAY
+            + " "
+            + EnumChatFormatting.WHITE
+            + steamProductionSteel
+            + " L/s"
+            + EnumChatFormatting.GRAY
         )
         .addSeparator()
         .addInfo(TextEnums.Author_Faotik.getText())
