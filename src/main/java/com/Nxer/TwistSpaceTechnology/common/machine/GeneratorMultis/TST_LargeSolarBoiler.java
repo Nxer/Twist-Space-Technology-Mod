@@ -569,9 +569,14 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         builder
             .widget(
                 new ButtonWidget()
-                    .setOnClick((clickData, widget) -> {})
+                    .setOnClick((clickData, widget) -> {
+                        if (clickData.mouseButton == 0) {
+                            calcification = 0;
+                            runningTicks = 0;
+                        }
+                    })
                     .setPlayClickSound(true)
-                    .setBackground(() -> new IDrawable[] { GTUITextures.BUTTON_STANDARD, GTUITextures.SLOT_MAINTENANCE })
+                    .setBackground(() -> new IDrawable[] { GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
                     .addTooltip(
                         EnumChatFormatting.WHITE
                         // #tr TST_LargeSolarBoiler.gui.01
