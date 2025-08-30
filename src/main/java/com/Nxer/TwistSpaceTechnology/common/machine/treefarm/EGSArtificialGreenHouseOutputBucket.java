@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.misc.TSTMath;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.ItemList;
@@ -473,66 +474,18 @@ public class EGSArtificialGreenHouseOutputBucket {
      */
     private static double getRealAverageDropRounds(TileEntityCrop te, CropCard cc) {
         // this should be ~99.995% accurate
-        double chance = (double) cc.dropGainChance() * powInt(1.03, te.getGain());
+        double chance = (double) cc.dropGainChance() * TSTMath.powInt(1.03, te.getGain());
         // this is essentially just performing an integration using the composite trapezoidal rule.
         double min = -10, max = 10;
         int steps = 10000;
         double stepSize = (max - min) / steps;
         double sum = 0;
         for (int k = 1; k <= steps - 1; k++) {
-            sum += getWeightedDropChance(min + k * stepSize, chance);
+            sum += TSTMath.getWeightedDropChance(min + k * stepSize, chance);
         }
-        double minVal = getWeightedDropChance(min, chance);
-        double maxVal = getWeightedDropChance(max, chance);
+        double minVal = TSTMath.getWeightedDropChance(min, chance);
+        double maxVal = TSTMath.getWeightedDropChance(max, chance);
         return stepSize * ((minVal + maxVal) / 2 + sum);
-    }
-
-    /**
-     * Computes base raised to the power of an integer exponent.
-     * Typically faster than {@link java.lang.Math#pow(double, double)} when {@code exp} is an integer.
-     */
-    private static double powInt(double base, int exp) {
-        if (exp > 0) return powBySquaring(base, exp);
-        if (exp < 0) return 1.0 / powBySquaring(base, -exp);
-        return 1.0;
-    }
-
-    /**
-     * Computes base raised to non-negative integer exponent.
-     */
-    private static double powBySquaring(double base, int exp) {
-        if (base == 2) return 1 << exp;
-        if (base == 4) return 1 << 2 * exp;
-        double result = 1.0;
-        while (exp > 0) {
-            if ((exp & 1) == 1) result *= base;
-            base *= base;
-            exp >>= 1;
-        }
-        return result;
-    }
-
-    /**
-     * Evaluates the value of y for a standard normal distribution
-     *
-     * @param x The value of x to evaluate
-     * @return The value of y
-     */
-    private static double stdNormDistr(double x) {
-        return Math.exp(-0.5 * (x * x)) / SQRT2PI;
-    }
-
-    private static final double SQRT2PI = Math.sqrt(2.0d * Math.PI);
-
-    /**
-     * Calculates the weighted drop chance using
-     *
-     * @param x      The value rolled by nextGaussian
-     * @param chance the base drop chance
-     * @return the weighted drop chance
-     */
-    private static double getWeightedDropChance(double x, double chance) {
-        return Math.max(0L, Math.round(x * chance * 0.6827d + chance)) * stdNormDistr(x);
     }
 
     /**
