@@ -16,10 +16,13 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTUtility.validMTEList;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -75,21 +78,18 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_INFUSING = 1;
-    private boolean outputProcessed = false;
     private static IStructureDefinition<TST_InfusionMaterialDispenser> multiDefinition = null;
     public int infusionState = STATE_IDLE;
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("infusionState", this.infusionState);
-        aNBT.setBoolean("outputProcessed", this.outputProcessed);
         super.saveNBTData(aNBT);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         this.infusionState = aNBT.getInteger("infusionState");
-        this.outputProcessed = aNBT.getBoolean("outputProcessed");
         this.subPedestals.clear();
         super.loadNBTData(aNBT);
     }
@@ -197,18 +197,14 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                 // #zh_CN {\GREEN}正在注魔
                 return SimpleCheckRecipeResult.ofSuccess("infusioning");
             } else {
-                if (!outputProcessed) {
-                    // If the infusion is not crafted at all, all the items will be recycled. This wasn't in my plan,
-                    // but the performance was good.
-                    collectAndOutputResults();
-                    outputProcessed = true;
-                    // #tr GT5U.gui.text.infusion_complete
-                    // # {\GREEN}Infusion complete
-                    // #zh_CN {\GREEN}注魔完成
-                    return SimpleCheckRecipeResult.ofSuccess("infusion_complete");
-                }
+                // If the infusion is not crafted at all, all the items will be recycled. This wasn't in my plan,
+                // but the performance was good.
+                collectAndOutputResults();
                 infusionState = STATE_IDLE;
-                outputProcessed = false;
+                // #tr GT5U.gui.text.infusion_complete
+                // # {\GREEN}Infusion complete
+                // #zh_CN {\GREEN}注魔完成
+                return SimpleCheckRecipeResult.ofSuccess("infusion_complete");
             }
         }
         // #tr GT5U.gui.text.unknown_problem
@@ -228,7 +224,6 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     @Override
     public void onDisableWorking() {
         this.mOutputItems = new ItemStack[0];
-        this.outputProcessed = false;
         super.onDisableWorking();
     }
 
@@ -302,7 +297,27 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         ArrayList<ItemStack> outputBuffer = new ArrayList<>();
 
         synchronized (this) {
+            ItemStack mainStack = mainPedestal.getStackInSlot(0);
             if (mainPedestal.getStackInSlot(0) != null) {
+                // The reflection method solves the problem of WG pearls
+                try {
+                    Class<?> clazz = Class.forName("witchinggadgets.api.IPrimordialCrafting");
+                    if (clazz.isInstance(mainStack.getItem())) {
+                        Method getReturnedPearls = clazz.getMethod("getReturnedPearls", ItemStack.class);
+                        int pearls = (Integer) getReturnedPearls.invoke(mainStack.getItem(), mainStack);
+                        if (pearls > 0) {
+                            Class<?> wgContentClass = Class.forName("witchinggadgets.common.WGContent");
+                            Object itemMaterial = wgContentClass.getField("ItemMaterial")
+                                .get(null);
+                            Constructor<ItemStack> constructor = ItemStack.class
+                                .getConstructor(Item.class, int.class, int.class);
+                            ItemStack pearlStack = constructor.newInstance((Item) itemMaterial, pearls, 12);
+                            outputBuffer.add(pearlStack);
+                        }
+                    }
+                } catch (ClassNotFoundException e) {} catch (Exception e) {
+                    e.printStackTrace();
+                }
                 outputBuffer.add(
                     mainPedestal.getStackInSlot(0)
                         .copy());
