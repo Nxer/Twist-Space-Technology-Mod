@@ -511,13 +511,18 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             // #tr TST_LargeSolarBoiler.tooltip.10
             // # It will take
             TextEnums.tr("TST_LargeSolarBoiler.tooltip.10")
-                + " "
-                + EnumChatFormatting.GREEN
-                + String.format("%.1f ", calcificationTimeSeconds / 60.0 / 60.0)
-                + EnumChatFormatting.GRAY
-                // #tr TST_LargeSolarBoiler.tooltip.11
-                // # hours to reach max level of calcification. Use button in GUI to clear the machine.
-                + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11")
+            + " "
+            + EnumChatFormatting.GREEN
+            + String.format("%.1f ", calcificationTimeSeconds / 60.0 / 60.0)
+            + EnumChatFormatting.GRAY
+            // #tr TST_LargeSolarBoiler.tooltip.11
+            // # hours to reach max level of calcification. Use button in GUI to clear the machine.
+            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11")
+        )
+        .addInfo(
+            // #tr TST_LargeSolarBoiler.tooltip.17
+            // # Use §bdistilled water§7 to prevent calcification.
+            TextEnums.tr("TST_LargeSolarBoiler.tooltip.17")
         )
         .addSeparator()
         .addInfo(
@@ -537,7 +542,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             TextEnums.tr("TST_LargeSolarBoiler.tooltip.13")
         )
         .addInfo(
-            "   "
+            "  - "
             // #tr TST_LargeSolarBoiler.tooltip.14
             // # §6Bronze§7:
             + TextEnums.tr("TST_LargeSolarBoiler.tooltip.14")
@@ -548,7 +553,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             + EnumChatFormatting.GRAY
         )
         .addInfo(
-            "   "
+            "  - "
             // #tr TST_LargeSolarBoiler.tooltip.15
             // # §8Steel§7:
             + TextEnums.tr("TST_LargeSolarBoiler.tooltip.15")
