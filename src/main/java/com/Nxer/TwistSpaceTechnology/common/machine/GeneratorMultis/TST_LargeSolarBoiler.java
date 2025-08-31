@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -18,6 +17,7 @@ import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
+import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
@@ -31,10 +31,12 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.blocks.BlockCasings1;
 import gregtech.common.blocks.BlockCasings2;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -55,6 +57,7 @@ import static gregtech.api.GregTechAPI.sBlockCasings1;
 import static gregtech.api.GregTechAPI.sBlockCasings2;
 import static gregtech.api.GregTechAPI.sBlockCasings3;
 import static gregtech.api.GregTechAPI.sBlockFrames;
+import static gregtech.api.GregTechAPI.sBlockMetal6;
 import static gregtech.api.enums.GTValues.V;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputHatch;
@@ -276,8 +279,8 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     }
 
     private static final String STRUCTURE_PIECE_MAIN = "mainLargeSolarBoiler";
-    private final int horizontalOffSet = 11;
-    private final int verticalOffSet = 2;
+    private final int horizontalOffSet = 6;
+    private final int verticalOffSet = 0;
     private final int depthOffSet = 0;
 
     private static IStructureDefinition<TST_LargeSolarBoiler> STRUCTURE_DEFINITION = null;
@@ -289,7 +292,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 .addShape(STRUCTURE_PIECE_MAIN,
                     transpose(shapeMain))
                 .addElement('A', Glasses.chainAllGlasses())
-                .addElement('B',
+                .addElement('J',
                     ofChain(
                         buildHatchAdder(TST_LargeSolarBoiler.class)
                             .atLeast(InputHatch)
@@ -305,7 +308,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         )
                     )
                 )
-                .addElement('C',
+                .addElement('K',
                     ofChain(
                         buildHatchAdder(TST_LargeSolarBoiler.class)
                             .atLeast(OutputHatch)
@@ -321,7 +324,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         )
                     )
                 )
-                .addElement('D',
+                .addElement('C',
                     ofBlocksTiered(
                         TST_LargeSolarBoiler::getMachineCasingTier,
                         ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
@@ -330,7 +333,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         t -> t.tierMachineCasing
                     )
                 )
-                .addElement('E',
+                .addElement('D',
                     ofBlocksTiered(
                         TST_LargeSolarBoiler::getGearBoxCasingTier,
                         ImmutableList.of(Pair.of(sBlockCasings2, 2), Pair.of(sBlockCasings2, 3)),
@@ -339,7 +342,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         t -> t.tierGearBoxCasing
                     )
                 )
-                .addElement('F',
+                .addElement('E',
                     ofBlocksTiered(
                         TST_LargeSolarBoiler::getPipeCasingTier,
                         ImmutableList.of(Pair.of(sBlockCasings2, 12), Pair.of(sBlockCasings2, 13)),
@@ -348,7 +351,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         t -> t.tierPipeCasing
                     )
                 )
-                .addElement('G',
+                .addElement('F',
                     ofBlocksTiered(
                         TST_LargeSolarBoiler::getFireBoxCasingTier,
                         ImmutableList.of(Pair.of(sBlockCasings3, 13), Pair.of(sBlockCasings3, 14)),
@@ -357,7 +360,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         t -> t.tierFireBoxCasing
                     )
                 )
-                .addElement('H',
+                .addElement('G',
                     ofBlocksTiered(
                         TST_LargeSolarBoiler::getFrameCasingTier,
                         ImmutableList.of(Pair.of(sBlockFrames, 300), Pair.of(sBlockFrames, 305)),
@@ -365,6 +368,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         (t, m) -> t.tierFrameCasing = m,
                         t -> t.tierFrameCasing
                     )
+                )
+                .addElement('H',
+                    ofBlock(sBlockMetal6, 10)
                 )
                 .build();
         }
@@ -374,19 +380,18 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     /*
     Blocks:
     A -> ofBlock...(blockAlloyGlass, 0, ...);
-    B -> ofBlock...(gt.blockcasings, 0, ...);
-    C -> ofBlock...(gt.blockcasings, 1, ...);
-    D -> ofBlock...(gt.blockcasings, 10, ...);
-    E -> ofBlock...(gt.blockcasings2, 2, ...);
-    F -> ofBlock...(gt.blockcasings2, 12, ...);
-    G -> ofBlock...(gt.blockcasings3, 13, ...);
-    H -> ofBlock...(gt.blockframes, 300, ...);
-
+    C -> ofBlock...(gt.blockcasings, 10, ...);
+    D -> ofBlock...(gt.blockcasings2, 2, ...);
+    E -> ofBlock...(gt.blockcasings2, 12, ...);
+    F -> ofBlock...(gt.blockcasings3, 13, ...);
+    G -> ofBlock...(gt.blockframes, 300, ...);
+    H -> ofBlock...(gt.blockmetal6, 10, ...);
     */
+
     private final String[][] shapeMain = new String[][]{
-        {"                  "," D                ","DDD             D "," D             DDD","                D ","                  "},
-        {"       HHHH       ","DAD   HEEEEH      ","A A   HEEEEH   DAD","DAD   HEEEEH   A A","      HEEEEH   DAD","       HHHH       "},
-        {"      DGGGG~      ","HDH   DDDDDD      ","BDDFF DDDDDDFF HDH","HDH FFDDDDDD FFDDC","      DDDDDD   HDH","      DGGGGD      "}
+        {"     C~C     "," C  CAAAC  C ","CCC CAAAC CCC"," C  CAAAC  C ","     CCC     "},
+        {"     DDD     ","CAC D---D CAC","A-A D---D A-A","CAC D---D CAC","     DDD     "},
+        {"     FFF     ","GJG FHHHF GKG","JCCEFHHHFECCK","GJG FHHHF GKG","     FFF     "}
     };
 
     public static Integer getFrameCasingTier(Block block, int meta) {
