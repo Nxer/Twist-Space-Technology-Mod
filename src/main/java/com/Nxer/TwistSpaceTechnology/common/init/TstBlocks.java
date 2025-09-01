@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
+import com.Nxer.TwistSpaceTechnology.common.block.BlockLargeSolarBoilerRender;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockArcaneHole;
@@ -62,4 +63,6 @@ public class TstBlocks {
     public static final BlockMultiUseCore MultiUseCore = new BlockMultiUseCore();
 
     public static Block LaserBeaconRender = new BlockLaserBeacon();
+
+    public static final Block BlockLargeSolarBoilerRender = new BlockLargeSolarBoilerRender();
 }

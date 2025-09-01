@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
@@ -100,6 +102,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     private long runningTicks = 0;
     private boolean shouldExplode = false;
     private int machineTier = 1;
+    private boolean isRendering = false;
 
     private int tierFrameCasing = -1;
     private int tierGearBoxCasing = -1;
@@ -112,6 +115,10 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     @Override
     public CheckRecipeResult checkProcessing() {
         runningTicks+=20;
+
+        if(!isRendering){
+            createRenderBlock();
+        }
 
         final ArrayList<FluidStack> storedFluids = super.getStoredFluids();
         for (FluidStack hatchFluid : storedFluids) {
@@ -264,6 +271,66 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return steamProductionBronze;
     }
 
+    public void createRenderBlock() {
+        int x = getBaseMetaTileEntity().getXCoord();
+        int y = getBaseMetaTileEntity().getYCoord();
+        int z = getBaseMetaTileEntity().getZCoord();
+
+        int xBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetX;
+        int zBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetZ;
+        int xRightOffset = getExtendedFacing().getRelativeLeftInWorld().offsetX;
+        int zRightOffset = getExtendedFacing().getRelativeLeftInWorld().offsetZ;
+
+        if(this.getBaseMetaTileEntity()
+            .getWorld().getBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2)).equals(Blocks.air)){
+            this.getBaseMetaTileEntity()
+                .getWorld()
+                .setBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2), TstBlocks.BlockLargeSolarBoilerRender);
+
+            if (this.getBaseMetaTileEntity().getWorld().getTileEntity((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2)) instanceof TileLargeSolarBoilerRender tileRenderer){
+                tileRenderer.zBackOffset = zBackOffset;
+                tileRenderer.xRightOffset = xRightOffset;
+                tileRenderer.zRightOffset = zRightOffset;
+                tileRenderer.updateToClient();
+            }
+        }
+
+        isRendering = true;
+    }
+
+    private void destroyRenderBlock() {
+        IGregTechTileEntity gregTechTileEntity = this.getBaseMetaTileEntity();
+
+        int x = gregTechTileEntity.getXCoord();
+        int y = gregTechTileEntity.getYCoord();
+        int z = gregTechTileEntity.getZCoord();
+
+        int xBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetX;
+        int zBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetZ;;
+        int xRightOffset = getExtendedFacing().getRelativeRightInWorld().offsetX;
+        int zRightOffset = getExtendedFacing().getRelativeRightInWorld().offsetZ;
+
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((x + xBackOffset*2), (y - 1), (z + zBackOffset*2), Blocks.air);
+
+
+        isRendering = false;
+    }
+
+    @Override
+    public void stopMachine(@Nonnull ShutDownReason reason) {
+        destroyRenderBlock();
+        super.stopMachine(reason);
+    }
+
+    @Override
+    public void onBlockDestroyed() {
+        destroyRenderBlock();
+        super.onBlockDestroyed();
+    }
+
     // endregion
 
     // region Structure
@@ -390,7 +457,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     private final String[][] shapeMain = new String[][]{
         {"     C~C     "," C  CAAAC  C ","CCC CAAAC CCC"," C  CAAAC  C ","     CCC     "},
-        {"     DDD     ","CAC D---D CAC","A-A D---D A-A","CAC D---D CAC","     DDD     "},
+        {"     DDD     ","CAC D   D CAC","A-A D   D A-A","CAC D   D CAC","     DDD     "},
         {"     FFF     ","GJG FHHHF GKG","JCCEFHHHFECCK","GJG FHHHF GKG","     FFF     "}
     };
 
@@ -702,6 +769,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         aNBT.setBoolean("shouldExplode", shouldExplode);
         aNBT.setLong("runningTicks", runningTicks);
         aNBT.setInteger("machineTier", machineTier);
+        aNBT.setBoolean("isRendering", isRendering);
     }
 
     @Override
@@ -712,6 +780,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         shouldExplode = aNBT.getBoolean("shouldExplode");
         runningTicks = aNBT.getLong("runningTicks");
         machineTier = aNBT.getInteger("machineTier");
+        isRendering = aNBT.getBoolean("isRendering");
     }
 
     // endregion

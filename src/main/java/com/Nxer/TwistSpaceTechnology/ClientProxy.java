@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
 import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
+import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
@@ -29,6 +30,7 @@ public class ClientProxy extends CommonProxy {
         new EyeOfWoodRender();
         new ArtificialStarRender();
         new TileArcaneHoleRender();
+        new LargeSolarBoilerRender();
         MinecraftForge.EVENT_BUS.register(new CooldownEventHandler());// load cooldown HUD
         TST_BigBroArray.initializeDefaultTextures();
     }
