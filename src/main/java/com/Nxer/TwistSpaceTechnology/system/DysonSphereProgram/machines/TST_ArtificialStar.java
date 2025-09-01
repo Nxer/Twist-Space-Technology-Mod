@@ -50,7 +50,9 @@ import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerato
 import static tectech.thing.casing.TTCasingsContainer.TimeAccelerationFieldGenerator;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
@@ -152,6 +154,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     private byte rewardContinuous = 0;
     private long currentOutputEU = 0;
     private final DecimalFormat decimalFormat = new DecimalFormat("#.0");
+    private final DecimalFormat scientificFormat = new DecimalFormat("0.#E0");
     private boolean isRendering = false;
     private byte enableRender = EnableRenderDefaultArtificialStar;
 
@@ -163,20 +166,36 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         if (tag.getBoolean("isActive")) {
             currentTip.add(EnumChatFormatting.AQUA +
             // #tr Waila.TST_ArtificialStar.1
-            // # Current Generating :
-            // #zh_CN 当前发电 :
+            // # Current Generating:
+            // #zh_CN 当前发电:
                 TextEnums.tr("Waila.TST_ArtificialStar.1")
+                + " "
                 + EnumChatFormatting.GOLD
-                + tag.getLong("currentOutputEU")
+                + String.format("%,d", tag.getLong("currentOutputEU"))
                 + EnumChatFormatting.RED
                 + " * "
                 + decimalFormat.format(tag.getDouble("outputMultiplier"))
                 + EnumChatFormatting.GREEN
-                + " * 2147483647"
+                + " * 2,147,483,647"
                 + EnumChatFormatting.RESET
                 + " EU / "
                 + secondsOfArtificialStarProgressCycleTime
                 + " s");
+
+            BigDecimal currentEuOutput = BigDecimal.valueOf(tag.getLong("currentOutputEU"))
+                .multiply(BigDecimal.valueOf(tag.getDouble("outputMultiplier")))
+                .multiply(BigDecimal.valueOf(2147483647))
+                .divide(BigDecimal.valueOf(secondsOfArtificialStarProgressCycleTime), RoundingMode.DOWN)
+                .divide(BigDecimal.valueOf(20), RoundingMode.DOWN);
+
+            String currentEuOutputScientificFormat = scientificFormat.format(currentEuOutput);
+            currentTip.add(
+                EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_ArtificialStar.1")
+                    + " "
+                    + EnumChatFormatting.GOLD
+                    + currentEuOutputScientificFormat
+                    + EnumChatFormatting.RESET
+                    + " EU / t");
         }
     }
 
