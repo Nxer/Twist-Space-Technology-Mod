@@ -19,7 +19,6 @@ import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
-import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
@@ -51,7 +50,6 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -87,7 +85,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     private final double heatDecreaseSpeed = 0.0001; // 0.01% per second
 
     private final long calcificationDelayTicks = 20 * 60 * 60 * 24; // 24 hours
-    private final long calcificationTimeSeconds = 60 * 60 * 36; // 48 hours
+    private final long calcificationTimeSeconds = 60 * 60 * 36; // 36 hours
     private final int calcificationFactor = 3; // max calcification level will reduce steam production by 3 times
 
     private final int steamProductionBronze = 4800;
@@ -156,9 +154,11 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     return CheckRecipeResultRegistry.NONE;
                 }
 
-                int consumedWater = (int)(Math.min(amountOfFluidInHatch, getSteamProduction() / GTValues.STEAM_PER_WATER) * heat / ((calcification * (calcificationFactor - 1)) + 1));
+                int consumedWater = (int)(Math.min(amountOfFluidInHatch, getSteamProduction() / GTValues.STEAM_PER_WATER)
+                    * heat
+                    / ((calcification * (calcificationFactor - 1)) + 1));
 
-                FluidStack liquidToDeplete = null;
+                FluidStack liquidToDeplete;
                 if(hasWater){
                     liquidToDeplete = FluidUtils.getWater(consumedWater);
                 }
@@ -307,34 +307,22 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
         int xBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetX;
         int zBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetZ;;
-        int xRightOffset = getExtendedFacing().getRelativeRightInWorld().offsetX;
-        int zRightOffset = getExtendedFacing().getRelativeRightInWorld().offsetZ;
 
-
-        this.getBaseMetaTileEntity()
+        if(this.getBaseMetaTileEntity()
             .getWorld()
-            .setBlock((x + xBackOffset*2), (y - 1), (z + zBackOffset*2), Blocks.air);
+            .getBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2)).equals(TstBlocks.BlockLargeSolarBoilerRender)) {
 
+            this.getBaseMetaTileEntity()
+                .getWorld()
+                .setBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2), Blocks.air);
+        }
 
         isRendering = false;
-    }
-
-    @Override
-    public void stopMachine(@Nonnull ShutDownReason reason) {
-        destroyRenderBlock();
-        super.stopMachine(reason);
-    }
-
-    @Override
-    public void onBlockDestroyed() {
-        destroyRenderBlock();
-        super.onBlockDestroyed();
     }
 
     // endregion
 
     // region Structure
-    // spotless:off
     @Override
     public void construct(ItemStack itemStack, boolean b) {
         buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -352,6 +340,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     private static IStructureDefinition<TST_LargeSolarBoiler> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
     @Override
     public IStructureDefinition<TST_LargeSolarBoiler> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -461,6 +450,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         {"     FFF     ","GJG FHHHF GKG","JCCEFHHHFECCK","GJG FHHHF GKG","     FFF     "}
     };
 
+    // spotless:on
     public static Integer getFrameCasingTier(Block block, int meta) {
         if (block == sBlockFrames && meta == 300) {
             return 1;
@@ -515,7 +505,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     protected IAlignmentLimits getInitialAlignmentLimits() {
         return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
-    // spotless:on
     // endregion
 
     // region Overrides
@@ -781,6 +770,18 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         runningTicks = aNBT.getLong("runningTicks");
         machineTier = aNBT.getInteger("machineTier");
         isRendering = aNBT.getBoolean("isRendering");
+    }
+
+    @Override
+    public void stopMachine(@Nonnull ShutDownReason reason) {
+        destroyRenderBlock();
+        super.stopMachine(reason);
+    }
+
+    @Override
+    public void onBlockDestroyed() {
+        destroyRenderBlock();
+        super.onBlockDestroyed();
     }
 
     // endregion

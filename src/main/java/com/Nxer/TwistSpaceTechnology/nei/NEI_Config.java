@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.nei;
 
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,8 @@ public class NEI_Config implements IConfigureNEI {
     @Override
     public void loadConfig() {
         isAdded = true;
+
+        hide(TstBlocks.BlockLargeSolarBoilerRender);
     }
 
     @Override

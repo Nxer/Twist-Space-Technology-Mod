@@ -6,7 +6,6 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import tectech.thing.metaTileEntity.multi.godforge.color.ForgeOfGodsStarColor;
 
 public class TileLargeSolarBoilerRender extends TileEntity {
 

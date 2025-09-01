@@ -1,29 +1,18 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.RESOURCE_ROOT_ID;
-
 import gtPlusPlus.core.util.minecraft.FluidUtils;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 
 import net.minecraftforge.fluids.Fluid;
 import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
-import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -31,8 +20,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
-
-    private final RenderBlocks renderBlocks = new RenderBlocks();
 
     public LargeSolarBoilerRender() {
         ClientRegistry.bindTileEntitySpecialRenderer(TileLargeSolarBoilerRender.class, this);
@@ -42,8 +29,6 @@ public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float timeSinceLastTick) {
         TileLargeSolarBoilerRender tile = (TileLargeSolarBoilerRender) te;
 
-        int xBackOffset = tile.xBackOffset;
-        int zBackOffset = tile.zBackOffset;
         int xRightOffset = tile.xRightOffset;
         int zRightOffset = tile.zRightOffset;
 
