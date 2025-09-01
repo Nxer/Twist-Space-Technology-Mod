@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_LargeSolarBoiler;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -30,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GT_TileEntity_MegaEggGenerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_LargeSolarBoiler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_SteamBasicGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvCircuitAssemblyLine;

@@ -4,8 +4,8 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.client.render.ArtificialStarRender;
 import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
-import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
+import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;

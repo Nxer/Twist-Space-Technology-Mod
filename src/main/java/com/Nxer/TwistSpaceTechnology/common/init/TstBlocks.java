@@ -1,10 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
-import com.Nxer.TwistSpaceTechnology.common.block.BlockLargeSolarBoilerRender;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockArcaneHole;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockEyeOfWoodRender;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockStar;

@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -8,8 +7,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-
 import net.minecraftforge.fluids.Fluid;
+
 import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
@@ -17,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 @SideOnly(Side.CLIENT)
 public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
@@ -36,28 +36,24 @@ public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GL11.glDisable(GL11.GL_LIGHTING);
 
-        Fluid water = FluidUtils.getWater(1).getFluid();
-        Fluid steam = FluidUtils.getSteam(1).getFluid();
+        Fluid water = FluidUtils.getWater(1)
+            .getFluid();
+        Fluid steam = FluidUtils.getSteam(1)
+            .getFluid();
 
         GL11.glPushMatrix();
-        GL11.glTranslated(x-1, y, z-1);
-        renderFluidCuboid(water,
-            0f, 0f, 0f,
-            3f, 1f, 3f);
+        GL11.glTranslated(x - 1, y, z - 1);
+        renderFluidCuboid(water, 0f, 0f, 0f, 3f, 1f, 3f);
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
         GL11.glTranslated(x + xRightOffset * 5, y, z + zRightOffset * 5);
-        renderFluidCuboid(steam,
-            0f, 0f, 0f,
-            1f, 1f, 1f);
+        renderFluidCuboid(steam, 0f, 0f, 0f, 1f, 1f, 1f);
         GL11.glPopMatrix();
 
         GL11.glPushMatrix();
         GL11.glTranslated(x + xRightOffset * -5, y, z + zRightOffset * -5);
-        renderFluidCuboid(water,
-            0f, 0f, 0f,
-            1f, 1f, 1f);
+        renderFluidCuboid(water, 0f, 0f, 0f, 1f, 1f, 1f);
         GL11.glPopMatrix();
 
         GL11.glEnable(GL11.GL_LIGHTING);
@@ -65,14 +61,15 @@ public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
 
     }
 
-    public static void renderFluidCuboid(Fluid fluid, float minX, float minY, float minZ,
-                                         float maxX, float maxY, float maxZ) {
+    public static void renderFluidCuboid(Fluid fluid, float minX, float minY, float minZ, float maxX, float maxY,
+        float maxZ) {
         if (fluid == null) return;
 
         Minecraft mc = Minecraft.getMinecraft();
         Tessellator tess = Tessellator.instance;
 
-        mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        mc.getTextureManager()
+            .bindTexture(TextureMap.locationBlocksTexture);
 
         IIcon icon = fluid.getStillIcon();
         if (icon == null) return;

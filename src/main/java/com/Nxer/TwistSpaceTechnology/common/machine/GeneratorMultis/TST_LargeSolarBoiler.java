@@ -1,5 +1,39 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static gregtech.api.GregTechAPI.sBlockCasings1;
+import static gregtech.api.GregTechAPI.sBlockCasings2;
+import static gregtech.api.GregTechAPI.sBlockCasings3;
+import static gregtech.api.GregTechAPI.sBlockFrames;
+import static gregtech.api.GregTechAPI.sBlockMetal6;
+import static gregtech.api.enums.GTValues.V;
+import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputHatch;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
+import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+
+import java.util.ArrayList;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
@@ -19,6 +53,7 @@ import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
+
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
@@ -36,37 +71,6 @@ import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.blocks.BlockCasings1;
 import gregtech.common.blocks.BlockCasings2;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import org.apache.commons.lang3.tuple.Pair;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.GregTechAPI.sBlockCasings1;
-import static gregtech.api.GregTechAPI.sBlockCasings2;
-import static gregtech.api.GregTechAPI.sBlockCasings3;
-import static gregtech.api.GregTechAPI.sBlockFrames;
-import static gregtech.api.GregTechAPI.sBlockMetal6;
-import static gregtech.api.enums.GTValues.V;
-import static gregtech.api.enums.HatchElement.InputHatch;
-import static gregtech.api.enums.HatchElement.OutputHatch;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
-import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
-import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
 public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBoiler> {
 
@@ -112,9 +116,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        runningTicks+=20;
+        runningTicks += 20;
 
-        if(!isRendering){
+        if (!isRendering) {
             createRenderBlock();
         }
 
@@ -128,46 +132,46 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
             int amountOfFluidInHatch = 0;
 
-            if(hasWater || hasDistilledWater){
+            if (hasWater || hasDistilledWater) {
                 amountOfFluidInHatch = hatchFluid.amount;
             }
 
-            boolean shouldIncreaseCalcification = (runningTicks/20)%(calcificationTimeSeconds/100)==0;
-            if(runningTicks > calcificationDelayTicks && shouldIncreaseCalcification && hasWater) {
-                calcification+=0.01;
+            boolean shouldIncreaseCalcification = (runningTicks / 20) % (calcificationTimeSeconds / 100) == 0;
+            if (runningTicks > calcificationDelayTicks && shouldIncreaseCalcification && hasWater) {
+                calcification += 0.01;
                 if (calcification > 1) {
                     calcification = 1;
                 }
             }
 
             if (amountOfFluidInHatch > 0) {
-                if(heat < heatThresholdToExplode){
+                if (heat < heatThresholdToExplode) {
                     shouldExplode = false;
                 }
 
-                if(shouldExplode){
+                if (shouldExplode) {
 
-                    for (MTEHatchInput hatch : mInputHatches){
+                    for (MTEHatchInput hatch : mInputHatches) {
                         hatch.doExplosion(explosionPower);
                     }
 
                     return CheckRecipeResultRegistry.NONE;
                 }
 
-                int consumedWater = (int)(Math.min(amountOfFluidInHatch, getSteamProduction() / GTValues.STEAM_PER_WATER)
-                    * heat
+                int consumedWater = (int) (Math
+                    .min(amountOfFluidInHatch, getSteamProduction() / GTValues.STEAM_PER_WATER) * heat
                     / ((calcification * (calcificationFactor - 1)) + 1));
 
                 FluidStack liquidToDeplete;
-                if(hasWater){
+                if (hasWater) {
                     liquidToDeplete = FluidUtils.getWater(consumedWater);
-                }
-                else{
+                } else {
                     liquidToDeplete = FluidUtils.getDistilledWater(consumedWater);
                 }
 
                 if (super.depleteInput(liquidToDeplete)) {
-                    super.mOutputFluids = new FluidStack[]{FluidUtils.getSteam(consumedWater * GTValues.STEAM_PER_WATER)};
+                    super.mOutputFluids = new FluidStack[] {
+                        FluidUtils.getSteam(consumedWater * GTValues.STEAM_PER_WATER) };
                     super.mMaxProgresstime = 20;
                     super.mEfficiency = getMaxEfficiency(null);
 
@@ -187,20 +191,19 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
         World world = aBaseMetaTileEntity.getWorld();
         if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0) {
-            if(mMachine){
+            if (mMachine) {
                 boolean isClearWeather = !world.isRaining() && !world.isThundering()
                     || aBaseMetaTileEntity.getBiome().rainfall == 0.0F;
                 boolean isSeeSky = aBaseMetaTileEntity.getSkyAtSide(ForgeDirection.UP);
                 boolean isDay = world.isDaytime();
-                if((!isClearWeather || !isSeeSky || !isDay)){
+                if ((!isClearWeather || !isSeeSky || !isDay)) {
                     heat -= heatDecreaseSpeed;
-                    if (heat < 0){
+                    if (heat < 0) {
                         heat = 0;
                     }
-                }
-                else{
+                } else {
                     heat += heatIncreaseSpeed;
-                    if (heat > 1){
+                    if (heat > 1) {
                         heat = 1;
                     }
                 }
@@ -220,22 +223,18 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             return false;
         }
 
-        if (tierGearBoxCasing == 1 &&
-            tierPipeCasing == 1 &&
-            tierFireBoxCasing == 1 &&
-            tierMachineCasing == 1 &&
-            tierFrameCasing == 1
-        ) {
+        if (tierGearBoxCasing == 1 && tierPipeCasing == 1
+            && tierFireBoxCasing == 1
+            && tierMachineCasing == 1
+            && tierFrameCasing == 1) {
             updateHatchTexture();
             machineTier = 1;
             return true;
         }
-        if (tierGearBoxCasing == 2 &&
-            tierPipeCasing == 2 &&
-            tierFireBoxCasing == 2 &&
-            tierMachineCasing == 2 &&
-            tierFrameCasing == 2
-        ) {
+        if (tierGearBoxCasing == 2 && tierPipeCasing == 2
+            && tierFireBoxCasing == 2
+            && tierMachineCasing == 2
+            && tierFrameCasing == 2) {
             updateHatchTexture();
             machineTier = 2;
             return true;
@@ -250,8 +249,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     }
 
     private int getCasingTextureID() {
-        if (machineTier == 2)
-            return((BlockCasings2) sBlockCasings2).getTextureIndex(0);
+        if (machineTier == 2) return ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
         return ((BlockCasings1) sBlockCasings1).getTextureIndex(10);
     }
 
@@ -265,9 +263,8 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return (byte) machineTier;
     }
 
-    private int getSteamProduction(){
-        if(machineTier == 2)
-            return steamProductionSteel;
+    private int getSteamProduction() {
+        if (machineTier == 2) return steamProductionSteel;
         return steamProductionBronze;
     }
 
@@ -281,13 +278,20 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         int xRightOffset = getExtendedFacing().getRelativeLeftInWorld().offsetX;
         int zRightOffset = getExtendedFacing().getRelativeLeftInWorld().offsetZ;
 
-        if(this.getBaseMetaTileEntity()
-            .getWorld().getBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2)).equals(Blocks.air)){
+        if (this.getBaseMetaTileEntity()
+            .getWorld()
+            .getBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2))
+            .equals(Blocks.air)) {
             this.getBaseMetaTileEntity()
                 .getWorld()
                 .setBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2), TstBlocks.BlockLargeSolarBoilerRender);
 
-            if (this.getBaseMetaTileEntity().getWorld().getTileEntity((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2)) instanceof TileLargeSolarBoilerRender tileRenderer){
+            if (this.getBaseMetaTileEntity()
+                .getWorld()
+                .getTileEntity(
+                    (x + xBackOffset * 2),
+                    (y - 1),
+                    (z + zBackOffset * 2)) instanceof TileLargeSolarBoilerRender tileRenderer) {
                 tileRenderer.zBackOffset = zBackOffset;
                 tileRenderer.xRightOffset = xRightOffset;
                 tileRenderer.zRightOffset = zRightOffset;
@@ -308,9 +312,10 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         int xBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetX;
         int zBackOffset = getExtendedFacing().getRelativeBackInWorld().offsetZ;;
 
-        if(this.getBaseMetaTileEntity()
+        if (this.getBaseMetaTileEntity()
             .getWorld()
-            .getBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2)).equals(TstBlocks.BlockLargeSolarBoilerRender)) {
+            .getBlock((x + xBackOffset * 2), (y - 1), (z + zBackOffset * 2))
+            .equals(TstBlocks.BlockLargeSolarBoilerRender)) {
 
             this.getBaseMetaTileEntity()
                 .getWorld()
@@ -330,7 +335,16 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
+        return survivialBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
 
     private static final String STRUCTURE_PIECE_MAIN = "mainLargeSolarBoiler";
@@ -514,119 +528,100 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         tt.addMachineType(
             // #tr TST_LargeSolarBoiler.machineType
             // # Solar Boiler
-            TextEnums.tr("TST_LargeSolarBoiler.machineType")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.01
-            // # Steam Power by the Sun.
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.01")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.02
-            // # Works similarly to the singleblock version.
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.02")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.03
-            // # Has §6Heat§7 and §6Calcification§7 mechanics.
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.03")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.04
-            // # On a clear day, it will quickly
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.04")
-            + " (" + heatIncreaseSpeed*100 + "%/s) "
-            // #tr TST_LargeSolarBoiler.tooltip.05
-            // # increase its temperature until it reaches its maximum.
-            +TextEnums.tr("TST_LargeSolarBoiler.tooltip.05")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.06
-            // # At night or in bad weather, it will cool down slowly
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.06")
-            + " (" + heatDecreaseSpeed*100 + "%/s)."
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.07
-            // # The controller needs a clear view of the sky to heat up.
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.07")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.08
-            // # After
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.08")
-            + " "
-            + EnumChatFormatting.GREEN
-            + String.format("%.1f ", calcificationDelayTicks / 20.0 / 60.0 / 60.0)
-            + EnumChatFormatting.GRAY
-            // #tr TST_LargeSolarBoiler.tooltip.09
-            // # hours will start to calcify during its work, at max level reducing steam output to:
-            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.09")
-            + " "
-            + EnumChatFormatting.GREEN
-            + String.format("%.2f%%", 100.0/calcificationFactor)
-            + EnumChatFormatting.GRAY
-            + "."
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.10
-            // # It will take
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.10")
-            + " "
-            + EnumChatFormatting.GREEN
-            + String.format("%.1f ", calcificationTimeSeconds / 60.0 / 60.0)
-            + EnumChatFormatting.GRAY
-            // #tr TST_LargeSolarBoiler.tooltip.11
-            // # hours to reach max level of calcification. Use button in GUI to clear the machine.
-            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.17
-            // # Use §bdistilled water§7 to prevent calcification.
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.17")
-        )
-        .addSeparator()
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.16
-            // # Will §cExplode§7 if water is added when heat is equal or above 50%
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.16")
-        )
-        .addSeparator()
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.12
-            // # Has two tiers: §6Bronze§7 and §8Steel§7
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.12")
-        )
-        .addInfo(
-            // #tr TST_LargeSolarBoiler.tooltip.13
-            // # Max steam production:
-            TextEnums.tr("TST_LargeSolarBoiler.tooltip.13")
-        )
-        .addInfo(
-            "  - "
-            // #tr TST_LargeSolarBoiler.tooltip.14
-            // # §6Bronze§7:
-            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.14")
-            + " "
-            + EnumChatFormatting.WHITE
-            + steamProductionBronze
-            + " L/s"
-            + EnumChatFormatting.GRAY
-        )
-        .addInfo(
-            "  - "
-            // #tr TST_LargeSolarBoiler.tooltip.15
-            // # §8Steel§7:
-            + TextEnums.tr("TST_LargeSolarBoiler.tooltip.15")
-            + " "
-            + EnumChatFormatting.WHITE
-            + steamProductionSteel
-            + " L/s"
-            + EnumChatFormatting.GRAY
-        )
-        .addSeparator()
-        .addInfo(TextEnums.Author_Faotik.getText())
-        .toolTipFinisher(TextLocalization.ModName);
+            TextEnums.tr("TST_LargeSolarBoiler.machineType"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.01
+                // # Steam Power by the Sun.
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.01"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.02
+                // # Works similarly to the singleblock version.
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.02"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.03
+                // # Has §6Heat§7 and §6Calcification§7 mechanics.
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.03"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.04
+                // # On a clear day, it will quickly
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.04") + " (" + heatIncreaseSpeed * 100 + "%/s) "
+                // #tr TST_LargeSolarBoiler.tooltip.05
+                // # increase its temperature until it reaches its maximum.
+                    + TextEnums.tr("TST_LargeSolarBoiler.tooltip.05"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.06
+                // # At night or in bad weather, it will cool down slowly
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.06") + " (" + heatDecreaseSpeed * 100 + "%/s).")
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.07
+                // # The controller needs a clear view of the sky to heat up.
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.07"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.08
+                // # After
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.08") + " "
+                    + EnumChatFormatting.GREEN
+                    + String.format("%.1f ", calcificationDelayTicks / 20.0 / 60.0 / 60.0)
+                    + EnumChatFormatting.GRAY
+                    // #tr TST_LargeSolarBoiler.tooltip.09
+                    // # hours will start to calcify during its work, at max level reducing steam output to:
+                    + TextEnums.tr("TST_LargeSolarBoiler.tooltip.09")
+                    + " "
+                    + EnumChatFormatting.GREEN
+                    + String.format("%.2f%%", 100.0 / calcificationFactor)
+                    + EnumChatFormatting.GRAY
+                    + ".")
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.10
+                // # It will take
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.10") + " "
+                    + EnumChatFormatting.GREEN
+                    + String.format("%.1f ", calcificationTimeSeconds / 60.0 / 60.0)
+                    + EnumChatFormatting.GRAY
+                    // #tr TST_LargeSolarBoiler.tooltip.11
+                    // # hours to reach max level of calcification. Use button in GUI to clear the machine.
+                    + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.17
+                // # Use §bdistilled water§7 to prevent calcification.
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.17"))
+            .addSeparator()
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.16
+                // # Will §cExplode§7 if water is added when heat is equal or above 50%
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.16"))
+            .addSeparator()
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.12
+                // # Has two tiers: §6Bronze§7 and §8Steel§7
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.12"))
+            .addInfo(
+                // #tr TST_LargeSolarBoiler.tooltip.13
+                // # Max steam production:
+                TextEnums.tr("TST_LargeSolarBoiler.tooltip.13"))
+            .addInfo(
+                "  - "
+                    // #tr TST_LargeSolarBoiler.tooltip.14
+                    // # §6Bronze§7:
+                    + TextEnums.tr("TST_LargeSolarBoiler.tooltip.14")
+                    + " "
+                    + EnumChatFormatting.WHITE
+                    + steamProductionBronze
+                    + " L/s"
+                    + EnumChatFormatting.GRAY)
+            .addInfo(
+                "  - "
+                    // #tr TST_LargeSolarBoiler.tooltip.15
+                    // # §8Steel§7:
+                    + TextEnums.tr("TST_LargeSolarBoiler.tooltip.15")
+                    + " "
+                    + EnumChatFormatting.WHITE
+                    + steamProductionSteel
+                    + " L/s"
+                    + EnumChatFormatting.GRAY)
+            .addSeparator()
+            .addInfo(TextEnums.Author_Faotik.getText())
+            .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 
@@ -669,10 +664,11 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
-                .extFacing()
-                .build(),
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
+                    .extFacing()
+                    .build(),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
                     .extFacing()
@@ -685,69 +681,55 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
-        screenElements
+        screenElements.widget(
+            new TextWidget().setStringSupplier(
+                () -> EnumChatFormatting.WHITE
+                    // #tr TST_LargeSolarBoiler.gui.02
+                    // # Heat:
+                    + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
+                    + " "
+                    + EnumChatFormatting.GOLD
+                    + numberFormat.format((int) (heat * 100))
+                    + "% "
+                    + EnumChatFormatting.RESET))
             .widget(
-                new TextWidget()
-                    .setStringSupplier(
-                        () -> EnumChatFormatting.WHITE
-                            // #tr TST_LargeSolarBoiler.gui.02
-                            // # Heat:
-                            + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
-                            + " "
-                            + EnumChatFormatting.GOLD
-                            + numberFormat.format((int)(heat*100))
-                            + "% "
-                            + EnumChatFormatting.RESET
-                    )
-            )
-            .widget(
-                new TextWidget()
-                    .setStringSupplier(
-                        () -> EnumChatFormatting.WHITE
-                            // #tr TST_LargeSolarBoiler.gui.03
-                            // # Calcification Level:
-                            + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
-                            + " "
-                            + EnumChatFormatting.GOLD
-                            + numberFormat.format((int)(calcification*100))
-                            + "% "
-                            + EnumChatFormatting.RESET
-                    )
-            )
-            .widget(
-                new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val)
-            )
-            .widget(
-                new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val)
-            );;
+                new TextWidget().setStringSupplier(
+                    () -> EnumChatFormatting.WHITE
+                        // #tr TST_LargeSolarBoiler.gui.03
+                        // # Calcification Level:
+                        + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
+                        + " "
+                        + EnumChatFormatting.GOLD
+                        + numberFormat.format((int) (calcification * 100))
+                        + "% "
+                        + EnumChatFormatting.RESET))
+            .widget(new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val))
+            .widget(new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val));;
     }
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         super.addUIWidgets(builder, buildContext);
 
-        builder
-            .widget(
-                new ButtonWidget()
-                    .setOnClick((clickData, widget) -> {
-                        if (clickData.mouseButton == 0) {
-                            calcification = 0;
-                            runningTicks = 0;
-                        }
-                    })
-                    .setPlayClickSound(true)
-                    .setBackground(() -> new IDrawable[] { GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
-                    .addTooltip(
-                        EnumChatFormatting.WHITE
-                        // #tr TST_LargeSolarBoiler.gui.01
-                        // # Press to clear the machine
-                        + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
-                        + EnumChatFormatting.RESET
-                    )
-                    .setTooltipShowUpDelay(TOOLTIP_DELAY)
-                    .setPos(new Pos2d(174, 91))
-                    .setSize(16, 16)
-            );
+        builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
+            if (clickData.mouseButton == 0) {
+                calcification = 0;
+                runningTicks = 0;
+            }
+        })
+            .setPlayClickSound(true)
+            .setBackground(
+                () -> new IDrawable[] { GTUITextures.BUTTON_STANDARD,
+                    GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
+            .addTooltip(
+                EnumChatFormatting.WHITE
+                    // #tr TST_LargeSolarBoiler.gui.01
+                    // # Press to clear the machine
+                    + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
+                    + EnumChatFormatting.RESET)
+            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+            .setPos(new Pos2d(174, 91))
+            .setSize(16, 16));
     }
 
     @Override
