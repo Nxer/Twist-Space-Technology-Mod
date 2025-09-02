@@ -531,43 +531,53 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         tt.addMachineType(
             // #tr TST_LargeSolarBoiler.machineType
             // # Solar Boiler
+            // #zh_CN 太阳能锅炉
             TextEnums.tr("TST_LargeSolarBoiler.machineType"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.01
                 // # Steam Power by the Sun.
+                // #zh_CN 蒸汽版太阳神之力.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.01"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.02
                 // # Works similarly to the singleblock version.
+                // #zh_CN 与单方块版本运行模式类似.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.02"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.03
                 // # Has §6Heat§7 and §6Calcification§7 mechanics.
+                // #zh_CN 有§6热量§7和§6钙化§7机制.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.03"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.04
                 // # On a clear day, it will quickly
+                // #zh_CN 在白天晴天时, 机器将快速升温,
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.04") + " (" + heatIncreaseSpeed * 100 + "%/s) "
                 // #tr TST_LargeSolarBoiler.tooltip.05
                 // # increase its temperature until it reaches its maximum.
+                // #zh_CN , 直到达到最大温度.
                     + TextEnums.tr("TST_LargeSolarBoiler.tooltip.05"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.06
                 // # At night or in bad weather, it will cool down slowly
+                // #zh_CN 在夜晚或非晴天时, 机器将缓慢降温
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.06") + " (" + heatDecreaseSpeed * 100 + "%/s).")
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.07
                 // # The controller needs a clear view of the sky to heat up.
+                // #zh_CN 控制器上方不允许遮挡.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.07"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.08
                 // # After
+                // #zh_CN 运行
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.08") + " "
                     + EnumChatFormatting.GREEN
                     + String.format("%.1f ", calcificationDelayTicks / 20.0 / 60.0 / 60.0)
                     + EnumChatFormatting.GRAY
                     // #tr TST_LargeSolarBoiler.tooltip.09
                     // # hours will start to calcify during its work, at max level reducing steam output to:
+                    // #zh_CN 小时之后机器将逐渐发生钙化, 直到将蒸汽产出率降低至原产出的:
                     + TextEnums.tr("TST_LargeSolarBoiler.tooltip.09")
                     + " "
                     + EnumChatFormatting.GREEN
@@ -577,35 +587,42 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.10
                 // # It will take
+                // #zh_CN 大约需要
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.10") + " "
                     + EnumChatFormatting.GREEN
                     + String.format("%.1f ", calcificationTimeSeconds / 60.0 / 60.0)
                     + EnumChatFormatting.GRAY
                     // #tr TST_LargeSolarBoiler.tooltip.11
                     // # hours to reach max level of calcification. Use button in GUI to clear the machine.
+                    // #zh_CN 小时达到最大钙化程度. 在GUI内手动点击按钮清除机器的钙化.
                     + TextEnums.tr("TST_LargeSolarBoiler.tooltip.11"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.17
                 // # Use §bdistilled water§7 to prevent calcification.
+                // #zh_CN 使用§b蒸馏室§7不会提高钙化程度.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.17"))
             .addSeparator()
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.16
                 // # Will §cExplode§7 if water is added when heat is equal or above 50%
+                // #zh_CN 当温度达到50%后再加水会引起§c爆炸§7.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.16"))
             .addSeparator()
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.12
                 // # Has two tiers: §6Bronze§7 and §8Steel§7
+                // #zh_CN 拥有两个等级: §6青铜§7 | §8钢§7
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.12"))
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.13
                 // # Max steam production:
+                // #zh_CN 最大蒸汽产速:
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.13"))
             .addInfo(
                 "  - "
                     // #tr TST_LargeSolarBoiler.tooltip.14
                     // # §6Bronze§7:
+                    // #zh_CN §6青铜§7:
                     + TextEnums.tr("TST_LargeSolarBoiler.tooltip.14")
                     + " "
                     + EnumChatFormatting.WHITE
@@ -616,6 +633,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 "  - "
                     // #tr TST_LargeSolarBoiler.tooltip.15
                     // # §8Steel§7:
+                    // #zh_CN §8钢§7:
                     + TextEnums.tr("TST_LargeSolarBoiler.tooltip.15")
                     + " "
                     + EnumChatFormatting.WHITE
@@ -689,6 +707,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 () -> EnumChatFormatting.WHITE
                     // #tr TST_LargeSolarBoiler.gui.02
                     // # Heat:
+                    // #zh_CN 热量:
                     + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
                     + " "
                     + EnumChatFormatting.GOLD
@@ -700,6 +719,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     () -> EnumChatFormatting.WHITE
                         // #tr TST_LargeSolarBoiler.gui.03
                         // # Calcification Level:
+                        // #zh_CN 钙化程度:
                         + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
                         + " "
                         + EnumChatFormatting.GOLD
@@ -728,6 +748,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 EnumChatFormatting.WHITE
                     // #tr TST_LargeSolarBoiler.gui.01
                     // # Press to clear the machine
+                    // #zh_CN 点击以清洁机器的钙化
                     + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
                     + EnumChatFormatting.RESET)
             .setTooltipShowUpDelay(TOOLTIP_DELAY)
