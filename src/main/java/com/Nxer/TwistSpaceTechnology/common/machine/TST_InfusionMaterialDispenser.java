@@ -16,7 +16,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTUtility.validMTEList;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -290,6 +289,22 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         }
     }
 
+    // The reflection method solves the problem of WG pearls
+    private static Method getReturnedPearlsMethod;
+    private static Item wgItemMaterial;
+    static {
+        try {
+            Class<?> clazz = Class.forName("witchinggadgets.api.IPrimordialCrafting");
+            getReturnedPearlsMethod = clazz.getMethod("getReturnedPearls", ItemStack.class);
+
+            Class<?> wgContentClass = Class.forName("witchinggadgets.common.WGContent");
+            wgItemMaterial = (Item) wgContentClass.getField("ItemMaterial")
+                .get(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // The lock was used. However, I don't understand why simply removing it would cause the same product to be
     // generated in double amounts every two times.
     private void collectAndOutputResults() {
@@ -299,24 +314,16 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         synchronized (this) {
             ItemStack mainStack = mainPedestal.getStackInSlot(0);
             if (mainPedestal.getStackInSlot(0) != null) {
-                // The reflection method solves the problem of WG pearls
-                try {
-                    Class<?> clazz = Class.forName("witchinggadgets.api.IPrimordialCrafting");
-                    if (clazz.isInstance(mainStack.getItem())) {
-                        Method getReturnedPearls = clazz.getMethod("getReturnedPearls", ItemStack.class);
-                        int pearls = (Integer) getReturnedPearls.invoke(mainStack.getItem(), mainStack);
+                if (getReturnedPearlsMethod != null && wgItemMaterial != null) {
+                    try {
+                        int pearls = (Integer) getReturnedPearlsMethod.invoke(mainStack.getItem(), mainStack);
                         if (pearls > 0) {
-                            Class<?> wgContentClass = Class.forName("witchinggadgets.common.WGContent");
-                            Object itemMaterial = wgContentClass.getField("ItemMaterial")
-                                .get(null);
-                            Constructor<ItemStack> constructor = ItemStack.class
-                                .getConstructor(Item.class, int.class, int.class);
-                            ItemStack pearlStack = constructor.newInstance((Item) itemMaterial, pearls, 12);
+                            ItemStack pearlStack = new ItemStack(wgItemMaterial, pearls, 12);
                             outputBuffer.add(pearlStack);
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (ClassNotFoundException e) {} catch (Exception e) {
-                    e.printStackTrace();
                 }
                 outputBuffer.add(
                     mainPedestal.getStackInSlot(0)
