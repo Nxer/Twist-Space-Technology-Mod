@@ -85,19 +85,22 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     // endregion
 
-    private final double heatIncreaseSpeed = 0.001; // 0.1% per second
-    private final double heatDecreaseSpeed = 0.0001; // 0.01% per second
+    private static final double heatIncreaseSpeed = 0.001; // 0.1% per second
+    private static final double heatDecreaseSpeed = 0.0001; // 0.01% per second
 
-    private final long calcificationDelayTicks = 20 * 60 * 60 * 24; // 24 hours
-    private final long calcificationTimeSeconds = 60 * 60 * 36; // 36 hours
-    private final int calcificationFactor = 3; // max calcification level will reduce steam production by 3 times
+    private static final long calcificationDelayTicks = 20 * 60 * 60 * 24; // 24 hours
+    private static final long calcificationTimeSeconds = 60 * 60 * 36; // 36 hours
+    private static final int calcificationFactor = 3; // max calcification level will reduce steam production by 3 times
 
-    private final int steamProductionBronze = 4800;
-    private final int steamProductionSteel = 14400;
+    private static final int steamProductionBronze = 4800;
+    private static final int steamProductionSteel = 14400;
 
-    private final double heatThresholdToExplode = 0.5;
+    private static final double heatThresholdToExplode = 0.5;
 
-    private final long explosionPower = V[1];
+    private static final long explosionPower = V[1];
+
+    private static final FluidStack waterFluid = FluidUtils.getWater(1);
+    private static final FluidStack distilledWaterFluid = FluidUtils.getDistilledWater(1);
 
     private double heat = 0; // min - 0, max - 1
     private double calcification = 0; // min - 0, max - 1
@@ -116,19 +119,15 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        runningTicks += 20;
-
         if (!isRendering) {
             createRenderBlock();
         }
 
         final ArrayList<FluidStack> storedFluids = super.getStoredFluids();
         for (FluidStack hatchFluid : storedFluids) {
-            FluidStack waterFluid = FluidUtils.getWater(1);
-            FluidStack distilledWaterFluid = FluidUtils.getDistilledWater(1);
 
-            boolean hasWater = hatchFluid.isFluidEqual(waterFluid) && waterFluid != null;
-            boolean hasDistilledWater = hatchFluid.isFluidEqual(distilledWaterFluid) && distilledWaterFluid != null;
+            boolean hasWater = hatchFluid.isFluidEqual(waterFluid);
+            boolean hasDistilledWater = hatchFluid.isFluidEqual(distilledWaterFluid);
 
             int amountOfFluidInHatch = 0;
 
@@ -174,6 +173,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         FluidUtils.getSteam(consumedWater * GTValues.STEAM_PER_WATER) };
                     super.mMaxProgresstime = 20;
                     super.mEfficiency = getMaxEfficiency(null);
+                    runningTicks += 20;
 
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
@@ -189,9 +189,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
 
-        World world = aBaseMetaTileEntity.getWorld();
         if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0) {
             if (mMachine) {
+                World world = aBaseMetaTileEntity.getWorld();
                 boolean isClearWeather = !world.isRaining() && !world.isThundering()
                     || aBaseMetaTileEntity.getBiome().rainfall == 0.0F;
                 boolean isSeeSky = aBaseMetaTileEntity.getSkyAtSide(ForgeDirection.UP);
@@ -220,6 +220,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         tierMachineCasing = -1;
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
+            if (isRendering) {
+                destroyRenderBlock();
+            }
             return false;
         }
 
