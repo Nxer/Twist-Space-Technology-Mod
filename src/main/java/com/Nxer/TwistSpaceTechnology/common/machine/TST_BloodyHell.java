@@ -76,6 +76,7 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.render.ISBRWorldContext;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
@@ -995,6 +996,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
+    public boolean renderInWorld(ISBRWorldContext ctx) {
+        return this.renderInWorld(
+            ctx.getBlockAccess(),
+            ctx.getX(),
+            ctx.getY(),
+            ctx.getZ(),
+            ctx.getBlock(),
+            ctx.getRenderBlocks());
+    }
+
     public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
         if (!isNewStyleRendering() || !mFormed) return false;
         int[] tABCCoord = new int[] { -1, -1, 0 };

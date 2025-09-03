@@ -4,7 +4,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextEnums.AddByTwistSpaceTechno
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Goderium;
 import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.GRAY;
 import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.GREEN;
-import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
 
 import java.util.UUID;
@@ -96,12 +95,4 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
         }
     }
 
-    private void tryFetchingEnergy() {
-        long currentEU = getBaseMetaTileEntity().getStoredEU();
-        long maxEU = maxEUStore();
-        long euToTransfer = maxEU - currentEU;
-        if (euToTransfer <= 0) return; // nothing to transfer
-        if (!addEUToGlobalEnergyMap(owner_uuid, -euToTransfer)) return;
-        setEUVar(maxEU);
-    }
 }
