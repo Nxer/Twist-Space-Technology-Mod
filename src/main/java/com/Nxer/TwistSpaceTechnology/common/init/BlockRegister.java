@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.RESOURCE_ROOT_ID;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockArcaneHole;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockEyeOfWoodRender;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockLargeSolarBoilerRender;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockStar;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlock01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
@@ -19,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileEyeOfWoodRender;
+import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -90,6 +92,8 @@ public class BlockRegister {
         GameRegistry.registerTileEntity(TilePowerChair.class, "TilePowerChair");
         GameRegistry.registerTileEntity(TileArcaneHole.class, "TileArcaneHole");
         GameRegistry.registerTileEntity(TileEntityLaserBeacon.class, "MeteorMinerRenderer");
+        GameRegistry.registerBlock(BlockLargeSolarBoilerRender, BlockLargeSolarBoilerRender.unlocalizedName);
+        GameRegistry.registerTileEntity(TileLargeSolarBoilerRender.class, "TileLargeSolarBoilerRender");
 
         GameRegistry.registerBlock(TstBlocks.TimeBendingSpeedRune, "TimeBendingSpeedRune");
     }

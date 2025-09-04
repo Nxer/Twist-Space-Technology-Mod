@@ -54,6 +54,8 @@ dependencies {
     implementation(gtnh("EnderIO"))
     implementation(gtnh("EnderCore"))
 
+    implementation ("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+
     runtimeOnlyNonPublishable(gtnh("BlockRenderer6343")) { transitive = false }
 
     implementation("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")

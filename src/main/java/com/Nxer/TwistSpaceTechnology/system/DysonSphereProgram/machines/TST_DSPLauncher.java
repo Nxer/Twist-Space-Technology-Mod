@@ -158,6 +158,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 
     @Override
     public String[] getInfoData() {
+        long amountOfSailsBeforeVoid = (2048 + 256 * dspDataCell.getDSPNode()) - dspDataCell.getDSPSolarSail();
         // spotless:off
         List<String> ret = new ArrayList<>(Arrays.asList(super.getInfoData()));
         String space = "    ";
@@ -202,6 +203,25 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             + tr("DSPDataCell.getDSPNode")
             + EnumChatFormatting.RESET + " "
             + dspDataCell.getDSPNode());
+        if(amountOfSailsBeforeVoid >= 0) {
+            ret.add(space
+                // #tr DSPDataCell.amountOfSailsBeforeVoid
+                // # Amount of Sails Before Void:
+                // #zh_CN 可负载太阳帆的安全空间:
+                + EnumChatFormatting.GOLD
+                + tr("DSPDataCell.amountOfSailsBeforeVoid")
+                + EnumChatFormatting.RESET + " "
+                + amountOfSailsBeforeVoid);
+        } else {
+            ret.add(space
+                // #tr DSPDataCell.amountOfSailsToBeVoided
+                // # Amount of Sails To Be Destroyed:
+                // #zh_CN 可能会损毁的太阳帆数量:
+                + EnumChatFormatting.GOLD
+                + tr("DSPDataCell.amountOfSailsToBeVoided")
+                + EnumChatFormatting.RESET + " "
+                + (amountOfSailsBeforeVoid * -1));
+        }
         ret.add(space
             // #tr DSPDataCell.getInfoData.01
             // # Overload time:
