@@ -335,7 +335,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         int builtW;
         int structureTier = stackSize.stackSize + controllerTier - 1;
         if (structureTier > 1) structureTier = 1;
-        built = survivialBuildPiece(
+        built = survivalBuildPiece(
             "mainEcoSphereSimulator" + structureTier,
             stackSize,
             16,
@@ -345,7 +345,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             env,
             false,
             true);
-        builtW = survivialBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
+        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
         if (built >= 0) return built;
         return built + builtW;
 
