@@ -613,6 +613,7 @@ public final class MachineLoader {
 
         // #tr NameLargeSolarBoiler
         // # Large Solar Boiler
+        // #zh_CN 大型太阳能锅炉
         GTCMItemList.LargeSolarBoiler
             .set(new TST_LargeSolarBoiler(19076, "NameLargeSolarBoiler", TextEnums.tr("NameLargeSolarBoiler")));
 

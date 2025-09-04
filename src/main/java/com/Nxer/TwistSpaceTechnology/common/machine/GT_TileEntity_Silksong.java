@@ -23,7 +23,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -46,7 +47,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings1;
 import gregtech.common.blocks.BlockCasings8;
 
-public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_Silksong> {
+public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_TileEntity_Silksong> {
 
     // region Class Constructor
     public GT_TileEntity_Silksong(int aID, String aName, String aNameRegional) {
@@ -89,6 +90,11 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
     }
 
     @Override
+    public int getWirelessModeProcessingTime() {
+        return 188;
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.wiremillRecipes;
     }
@@ -119,6 +125,15 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
         // speed bonus = 0.85^voltageTier / (coilTier * 1)
         speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_Silksong, getTotalPowerTier())
             / (getCoilTier() * SpeedMultiplier_CoilTier_Silksong));
+
+        // allow machine use perfect overclock when piece reach 94, and enter wireless mode if no energy hatch
+        if (piece >= 94) {
+            enablePerfectOverclock = true;
+            wirelessMode = mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
+        } else {
+            enablePerfectOverclock = false;
+            wirelessMode = false;
+        }
 
         return true;
     }
@@ -304,6 +319,10 @@ public class GT_TileEntity_Silksong extends GTCM_MultiMachineBase<GT_TileEntity_
             .addInputBus(TextLocalization.textUseBlueprint, 3)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            // #tr Tooltip_Silksong_SilksongReleaseDate
+            // # {\BLACK}Something special when piece reaches 94.
+            // #zh_CN {\BLACK}层数达到94层后有一些特别的东西.
+            .addStructureInfo(TextEnums.tr("Tooltip_Silksong_SilksongReleaseDate"))
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
