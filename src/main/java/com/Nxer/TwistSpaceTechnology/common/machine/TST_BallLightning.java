@@ -681,7 +681,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning>
         ret[origin.length + 5] = EnumChatFormatting.AQUA + TextEnums.CoilTier.getText()
             + " : "
             + EnumChatFormatting.GOLD
-            + this.coilLevel.getTier();
+            + (this.coilLevel != null ? this.coilLevel.getTier() : 0);
         return ret;
     }
 
