@@ -95,6 +95,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + mode);
     }
 
+    @Override
     protected float getEuModifier() {
         float EuUsage = 1.0F;
         if (machineMode == 0) {
@@ -108,12 +109,14 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         return EuUsage;
     };
 
+    @Override
     protected float getSpeedBonus() {
         return 1F / (machineMode == 0 ? SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer
             : SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer);
     };
 
-    protected int getMaxParallelRecipes() {
+    @Override
+    public int getMaxParallelRecipes() {
         if (machineMode == 0) return Math.min(
             ValueEnum.MAX_PARALLEL_LIMIT,
             Math.min(SCfieldGeneratorTier * TAfieldGeneratorTier * STfieldGeneratorTier, 512)
@@ -121,6 +124,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         else return mCraftingTier * mFocusingTier;
     };
 
+    @Override
     protected boolean isEnablePerfectOverclock() {
         if (machineMode == 0) return EnablePerfectOverclock_MolecularTransformerMode_HyperSpacetimeTransformer;
         return false;

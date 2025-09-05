@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EGSArtificialGreenHouseOutputBucket;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -197,7 +197,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             ItemStack ControllerSlot = this.getControllerSlot();
             if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
                 controllerTier = 1;
-                mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
+                mInventory[1] = ItemUtils.depleteStack(ControllerSlot, 1);
                 markDirty();
                 // schedule a structure check
                 mUpdated = true;
@@ -212,7 +212,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             ItemStack heldItem = aPlayer.getHeldItem();
             if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, 1));
                 if (getBaseMetaTileEntity().isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();
@@ -303,7 +303,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aStack) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (!checkStructure(true)) {
                 GTUtility.sendChatToPlayer(
@@ -311,7 +312,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aStack);
         }
     }
 
@@ -334,7 +335,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         int builtW;
         int structureTier = stackSize.stackSize + controllerTier - 1;
         if (structureTier > 1) structureTier = 1;
-        built = survivialBuildPiece(
+        built = survivalBuildPiece(
             "mainEcoSphereSimulator" + structureTier,
             stackSize,
             16,
@@ -344,7 +345,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             env,
             false,
             true);
-        builtW = survivialBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
+        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
         if (built >= 0) return built;
         return built + builtW;
 
@@ -657,7 +658,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 
@@ -833,8 +834,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public GTCM_ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+    public TstProcessingLogic createProcessingLogic() {
+        return new TstProcessingLogic() {
 
             @Override
             @Nonnull

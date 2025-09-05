@@ -9,8 +9,10 @@ minecraft {
     extraRunJvmArguments.add("-Xms8G")
 }
 
-configurations.all {
-    resolutionStrategy {
-        force 'com.github.GTNewHorizons:GTNHLib:0.6.0:dev'
-    }
+configurations.configureEach {
+    exclude group: "com.github.GTNewHorizons", module: "Baubles"
+}
+
+test {
+    useJUnitPlatform()
 }

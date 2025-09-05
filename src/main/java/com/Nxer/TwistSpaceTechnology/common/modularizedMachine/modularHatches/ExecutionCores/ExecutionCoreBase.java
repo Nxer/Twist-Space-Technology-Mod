@@ -367,6 +367,11 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     public void setVoidingMode(VoidingMode mode) {}
 
     @Override
+    public List<ItemStack> getVoidOutputSlots() {
+        return Collections.emptyList();
+    }
+
+    @Override
     public List<ItemStack> getItemOutputSlots(ItemStack[] toOutput) {
         if (mainMachine instanceof IVoidable m) {
             return m.getItemOutputSlots(toOutput);
