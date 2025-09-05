@@ -356,6 +356,7 @@ public class Config {
     public static int StandardDimensionID_EyeOfWood = 0;
     public static byte RenderModelDefault_EyeOfWood = 1;
     public static boolean EnableRenderDefault_EyeOfWood = true;
+    public static boolean AllowPersonalSpace_EyeOfWood = false;
 
     // endregion
 
@@ -600,6 +601,7 @@ public class Config {
         StandardDimensionID_EyeOfWood = configuration.getInt("StandardDimensionID_EyeOfWood", EOW, StandardDimensionID_EyeOfWood, -9999, 9999, "Standard dimension the Eye of Wood is allowed in. Default 0 - Overworld. Type: int");
         RenderModelDefault_EyeOfWood = (byte) configuration.getInt("RenderModelDefault_EyeOfWood", EOW, RenderModelDefault_EyeOfWood, 0, 1, "Select Render Model for Eye of Wood. Default 0 - Sweat. 1 - Thinking. Type: int");
         EnableRenderDefault_EyeOfWood = configuration.getBoolean("EnableRenderDefault_EyeOfWood", EOW, EnableRenderDefault_EyeOfWood, "Enable Render for Eye of Wood when placing a new one.");
+        AllowPersonalSpace_EyeOfWood = configuration.getBoolean("AllowPersonalSpace", EOW, AllowPersonalSpace_EyeOfWood, "Set true to allow use Eye of Wood in a Personal Space dimension.");
         // endregion
 
         // region Disassembler
