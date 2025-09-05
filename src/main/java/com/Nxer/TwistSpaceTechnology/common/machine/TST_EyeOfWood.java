@@ -23,7 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -88,6 +88,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     private static final int STANDARD_LAVA_BUCKET = ValueEnum.StandardLavaNeed_EyeOfWood;
     private static final int STANDARD_LAVA_AMOUNT = STANDARD_LAVA_BUCKET * 1000;
     private static final int STANDARD_DIMENSION_ID = ValueEnum.StandardDimensionID_EyeOfWood;
+    private static final boolean ALLOW_PERSONAL_SPACE = Config.AllowPersonalSpace_EyeOfWood;
     private static final double STANDARD_SUBSTRATE = Math
         .pow(2_000_000_000d, 1d / Math.max(STANDARD_WATER_BUCKET, STANDARD_LAVA_BUCKET));
     private int storedWater = 0;
@@ -204,7 +205,15 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     @Override
     public CheckRecipeResult checkProcessing() {
         if (dropMap == null || totalWeight == 0) {
-            TwistSpaceTechnology.LOG.info("WARNING! Eye of Wood dropmap = null when checkProcessing !");
+            IGregTechTileEntity bmte = getBaseMetaTileEntity();
+            TwistSpaceTechnology.LOG.info(
+                "Invalid dropMap for Eye of Wood at {} {} {} (dim: {}), because the dropMap is {}, totalWeight is {}.",
+                bmte.getXCoord(),
+                bmte.getYCoord(),
+                bmte.getZCoord(),
+                bmte.getWorld().provider.dimensionId,
+                dropMap,
+                totalWeight);
             return CheckRecipeResultRegistry.INTERNAL_ERROR;
         }
 
@@ -355,10 +364,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         super.onFirstTick(aBaseMetaTileEntity);
 
         if (aBaseMetaTileEntity.isServerSide()) {
-            World world = aBaseMetaTileEntity.getWorld();
-            int dimID = world.provider.dimensionId;
-
-            if (dimID != STANDARD_DIMENSION_ID) {
+            if (!isWorkableDimension(aBaseMetaTileEntity.getWorld().provider)) {
                 explodeMultiblock();
                 return;
             }
@@ -388,11 +394,39 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     protected void initDropMap() {
         dropMap = new VoidMinerUtility.DropMap();
         extraDropMap = new VoidMinerUtility.DropMap();
-        int id = this.getBaseMetaTileEntity()
-            .getWorld().provider.dimensionId;
-        handleModDimDef(id);
-        handleExtraDrops(id);
+        WorldProvider worldProvider = this.getBaseMetaTileEntity()
+            .getWorld().provider;
+        int dimensionId = worldProvider.dimensionId;
+        if (isPersonalSpace(worldProvider) && ALLOW_PERSONAL_SPACE) {
+            // override to use overworld dimension data.
+            dimensionId = 0;
+        }
+        handleModDimDef(dimensionId);
+        handleExtraDrops(dimensionId);
         totalWeight = dropMap.getTotalWeight() + extraDropMap.getTotalWeight();
+
+        if (totalWeight <= 0) {
+            TwistSpaceTechnology.LOG.warn("Failed to generate the dropMap of dimension {}", dimensionId);
+            dropMap = null;
+            extraDropMap = null;
+        }
+    }
+
+    /**
+     * <a href=
+     * "https://github.com/GTNewHorizons/PersonalSpace/blob/master/src/main/java/me/eigenraven/personalspace/world/PersonalWorldProvider.java">PersonalWorldProvider</a>
+     *
+     * @return {@code true} if the world provider is for Personal Space.
+     */
+    protected static boolean isPersonalSpace(@NotNull WorldProvider worldProvider) {
+        return worldProvider.getClass()
+            .getName()
+            .contains("PersonalWorldProvider");
+    }
+
+    protected static boolean isWorkableDimension(@NotNull WorldProvider worldProvider) {
+        return (worldProvider.dimensionId == STANDARD_DIMENSION_ID)
+            || (ALLOW_PERSONAL_SPACE && isPersonalSpace(worldProvider));
     }
 
     /**
