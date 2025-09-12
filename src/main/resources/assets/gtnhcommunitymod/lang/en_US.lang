@@ -2241,3 +2241,4 @@ TST_LargeSolarBoiler.gui.01=Press to clear the machine
 NameLargeSolarBoiler=Large Solar Boiler
 Author_Faotik=Author: §eFaotik
 Tooltip_Silksong_SilksongReleaseDate=§0Something special when piece reaches 94.
+Tooltip_Starcore_09=Put §b§l§oAstral Array Fabricator§7 into controller slot then machine can further increase ore production.

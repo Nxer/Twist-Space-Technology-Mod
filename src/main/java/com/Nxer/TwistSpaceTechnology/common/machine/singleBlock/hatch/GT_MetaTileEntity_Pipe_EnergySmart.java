@@ -18,7 +18,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Dyes;
@@ -317,7 +316,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
             }
 
             if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart_Focusing) {
-                FMLLog.info("Successful match");
                 if ((findProvider && facingSide == tGTTileEntity.getFrontFacing())
                     || (!findProvider && facingSide != tGTTileEntity.getFrontFacing())) {
                     return aMetaTileEntity;

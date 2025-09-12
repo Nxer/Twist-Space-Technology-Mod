@@ -275,6 +275,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     protected float totalWeight = 0;
     protected boolean isWirelessMode = false;
     protected UUID ownerUUID;
+    protected int oreStackSize = Config.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -317,6 +318,15 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                 }
             } else {
                 lEUt = -Eut_StarcoreMiner;
+            }
+
+            ItemStack controllerSlot = getControllerSlot();
+            if (controllerSlot != null && MiscHelper.ASTRAL_ARRAY_FABRICATOR.isItemEqual(controllerSlot)
+                && controllerSlot.stackSize > 0) {
+                oreStackSize = Config.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner * 2
+                    * (int) Math.ceil(Math.pow(controllerSlot.stackSize, 1.5d));
+            } else {
+                oreStackSize = Config.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
             }
 
             mOutputItems = new ItemStack[ValueEnum.AmountOfOreStackPerMining_StarcoreMiner];
@@ -389,7 +399,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
 
     private ItemStack generateOneStackOre() {
         ItemStack nextOre = nextOre();
-        nextOre.stackSize = ValueEnum.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
+        nextOre.stackSize = oreStackSize;
         return nextOre;
     }
 
@@ -502,6 +512,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             // # The mining access portion of the structure needs to extend at least to a height of 20 below.
             // #zh_CN 结构中采矿通道部分需要至少延伸至高度20以下.
             .addInfo(TextEnums.tr("Tooltip_Starcore_08"))
+            // #tr Tooltip_Starcore_09
+            // # Put §b§l§oAstral Array Fabricator§7 into controller slot then machine can further increase ore production.
+            // #zh_CN 控制器内放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} 可以进一步提高矿石产量.
+            .addInfo(TextEnums.tr("Tooltip_Starcore_09"))
             // #tr Tooltip_Starcore_Crash_20240606
             // # There is a serious bug in the blueprint automatic construction function of borosilicate glass,
             // #zh_CN {\RED}{\BOLD}蓝图自动搭建硼玻璃功能发现严重bug,

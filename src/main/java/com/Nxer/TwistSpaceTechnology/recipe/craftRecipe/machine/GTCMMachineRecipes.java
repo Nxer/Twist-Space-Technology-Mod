@@ -241,27 +241,12 @@ public class GTCMMachineRecipes {
 
         final IRecipeMap assemblyLine = GTRecipeConstants.AssemblyLine;
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
-        ItemStack FarmGear;
-        ItemStack FarmOutput;
-        ItemStack FarmPump;
-        ItemStack FarmController;
-        if (Forestry.isModLoaded()) {
-            FarmGear = GTModHandler.getModItem(Forestry.ID, "ffarm", 1, 2);
-            FarmOutput = GTModHandler.getModItem(Forestry.ID, "ffarm", 1, 3);
-            FarmPump = GTModHandler.getModItem(Forestry.ID, "ffarm", 1, 4);
-            FarmController = GTModHandler.getModItem(Forestry.ID, "ffarm", 1, 5);
-        } else {
-            FarmGear = new ItemStack(Blocks.stonebrick, 1);
-            FarmOutput = new ItemStack(Blocks.stonebrick, 1);
-            FarmPump = new ItemStack(Blocks.stonebrick, 1);
-            FarmController = new ItemStack(Blocks.stonebrick, 1);
-        }
 
         ItemStack ExtraUtilitiesNodeUpgrade2 = Mods.ExtraUtilities.isModLoaded()
             ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "nodeUpgrade", 64, 2)
             : new ItemStack(Items.iron_pickaxe);
         ItemStack CompressCobblestone8 = Mods.ExtraUtilities.isModLoaded()
-            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 64, 7)
+            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7)
             : new ItemStack(Blocks.cobblestone);
 
         // spotless:off
@@ -2905,7 +2890,24 @@ public class GTCMMachineRecipes {
             .duration(20 * 30)
             .addTo(assembler);
 
-            // Casing Farm
+        // Casing Farm
+
+        ItemStack thermionicTubeGold;
+        ItemStack thermionicTubeBronze;
+        ItemStack thermionicTubeLapis;
+        ItemStack thermionicTubeTin;
+        if (Forestry.isModLoaded()) {
+            thermionicTubeGold = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 4);
+            thermionicTubeBronze = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 2);
+            thermionicTubeLapis = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 11);
+            thermionicTubeTin = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 1);
+        } else {
+            thermionicTubeGold = GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Gold, 64);
+            thermionicTubeBronze = GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Bronze, 64);
+            thermionicTubeLapis = GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lapis, 64);
+            thermionicTubeTin = GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Tin, 64);
+        }
+
         TTRecipeAdder.addResearchableAssemblylineRecipe(
             GTCMItemList.ReinforcedStoneBrickCasing.get(1),
             1_000_000,
@@ -2918,10 +2920,10 @@ public class GTCMMachineRecipes {
                 GTOreDictUnificator.get(OrePrefixes.pipeRestrictiveHuge, Materials.BlackPlutonium, 4),
                 ItemList.Casing_Vent.get(1),
 
-                FarmGear,
-                FarmOutput,
-                FarmPump,
-                FarmController,
+                thermionicTubeGold,
+                thermionicTubeBronze,
+                thermionicTubeLapis,
+                thermionicTubeTin,
 
                 GGMaterial.marCeM200.get(OrePrefixes.gearGt, 4),
                 ItemList.Electric_Piston_UV.get(2),
@@ -2938,7 +2940,7 @@ public class GTCMMachineRecipes {
                 MaterialsAlloy.TITANSTEEL.getFluidStack(144)
             },
             GTCMItemList.CompositeFarmCasing.get(1),
-            20*60,
+            20*30,
             (int) RECIPE_UV
         );
 
