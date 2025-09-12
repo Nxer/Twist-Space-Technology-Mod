@@ -322,7 +322,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
             }
 
             if (aMetaTileEntity instanceof GT_MetaTileEntity_Pipe_EnergySmart_Focusing) {
-                FMLLog.info("Successful match");
                 if ((findProvider && facingSide == tGTTileEntity.getFrontFacing())
                     || (!findProvider && facingSide != tGTTileEntity.getFrontFacing())) {
                     return aMetaTileEntity;
