@@ -249,7 +249,7 @@ public class GTCMMachineRecipes {
             ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "nodeUpgrade", 64, 2)
             : new ItemStack(Items.iron_pickaxe);
         ItemStack CompressCobblestone8 = Mods.ExtraUtilities.isModLoaded()
-            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 64, 7)
+            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7)
             : new ItemStack(Blocks.cobblestone);
 
         // spotless:off
