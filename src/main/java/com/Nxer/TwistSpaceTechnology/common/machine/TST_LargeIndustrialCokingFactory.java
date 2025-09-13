@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OV
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockUnlocalizedName;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -174,7 +173,7 @@ I -> ofFrame...(Materials.Steel, ...);
                                                ofCoil(
                                                    TST_LargeIndustrialCokingFactory::setCoilLevel,
                                                    TST_LargeIndustrialCokingFactory::getCoilLevel)))
-                                       .addElement('E', ofBlockUnlocalizedName("dreamcraft", "gt.blockcasingsNH", 2))
+                                       .addElement('E', ofBlock(GregTechAPI.sBlockCasingsNH, 2))
                                        .addElement('F', ofBlock(ModBlocks.blockCasingsMisc, 1))
                                        .addElement('G', ofBlock(ModBlocks.blockCasingsMisc, 3))
                                        .addElement('H', ofFrame(Materials.BlackSteel))
