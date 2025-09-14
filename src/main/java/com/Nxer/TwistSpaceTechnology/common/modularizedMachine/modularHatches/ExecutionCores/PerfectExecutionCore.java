@@ -24,13 +24,12 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class PerfectExecutionCore extends ExecutionCoreBase implements IWirelessEnergyHatchInformation {
+public class PerfectExecutionCore extends ExecutionCoreBase {
 
     public PerfectExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);

@@ -1,5 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
+import static com.Nxer.TwistSpaceTechnology.client.texture.TstMachineTextures.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -12,10 +16,6 @@ import static gregtech.api.GregTechAPI.sBlockMetal6;
 import static gregtech.api.enums.GTValues.V;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputHatch;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PROCESSING_ARRAY_GLOW;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
@@ -62,10 +62,10 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchOutput;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.blocks.BlockCasings1;
@@ -338,7 +338,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
@@ -364,7 +364,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSolarBoiler>builder()
                 .addShape(STRUCTURE_PIECE_MAIN,
                     transpose(shapeMain))
-                .addElement('A', Glasses.chainAllGlasses())
+                .addElement('A', GTStructureUtility.chainAllGlasses())
                 .addElement('J',
                     ofChain(
                         buildHatchAdder(TST_LargeSolarBoiler.class)

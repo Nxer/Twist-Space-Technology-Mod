@@ -218,7 +218,6 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .special(specialStacks)
-            .noOptimize()
             .fake()
             .duration(20 * 5)
             .eut(0)
