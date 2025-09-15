@@ -300,7 +300,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 // Get the right recipe
                 Stream<GTRecipe> base = super.findRecipeMatches(map);
 
-                // Only this recipe will be traversed
+                // Only this recipe will be transformed
                 boolean hasMold = false;
                 if (this.inputItems != null) {
                     for (ItemStack s : this.inputItems) {
