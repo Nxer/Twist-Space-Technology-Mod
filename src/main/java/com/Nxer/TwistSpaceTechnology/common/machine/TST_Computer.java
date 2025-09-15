@@ -1,10 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer.ComputerHatches.ComputationMonitor;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.util.GTUtility.filterValidMTEs;
 import static gtPlusPlus.core.block.ModBlocks.blockCasings3Misc;
 import static net.minecraft.util.StatCollector.translateToLocal;
@@ -14,8 +18,12 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_NEUTRAL;
 import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_OK;
 import static tectech.thing.metaTileEntity.multi.base.LedStatus.STATUS_TOO_LOW;
+import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElement.OutputData;
 import static tectech.util.CommonValues.MULTI_CHECK_AT;
 import static vazkii.botania.common.block.ModBlocks.pylon;
+
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
@@ -34,7 +42,6 @@ import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
 import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
@@ -43,13 +50,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.util.GTStructureUtility;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
@@ -1013,11 +1022,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
             return false;
         }
-        return !mInputHatches.isEmpty() && mMaintenanceHatches.size() == 1
-        // && !eRacks.isEmpty()
-            && realMonitor != null
-            && !eOutputData.isEmpty()
-            && eInputData.isEmpty();
+        return !mInputHatches.isEmpty() && realMonitor != null && !eOutputData.isEmpty() && eInputData.isEmpty();
     }
 
     @Override
@@ -1346,9 +1351,12 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 .addElement('P', ofBlock(sBlockCasingsTT, 2))
                 .addElement(
                     'E',
-                    StructureUtility.ofChain(
-                        GTStructureUtility.ofHatchAdder(TST_Computer::superAddToMachineList, textureOffset + 2, 1),
-                        StructureUtility.ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
+                    HatchElementBuilder.<TST_Computer>builder()
+                        .atLeast(ComputationMonitor, OutputData, InputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_Computer::superAddToMachineList)
+                        .dot(1)
+                        .casingIndex(textureOffset + 2)
+                        .buildAndChain(ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
                 .addElement('Q', ofBlock(sBlockCasingsTT, 3))
                 .build();
         }
@@ -1361,7 +1369,11 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     }
 
     public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        // LOG.info("see you again");
+        return addRackComputationMonitorToMachine(aTileEntity, aBaseCasingIndex)
+            || super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addRackComputationMonitorToMachine(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null) {
             return false;
         }
@@ -1371,15 +1383,32 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         }
         if (aTileEntity.getMetaTileEntity() instanceof GT_Hatch_RackComputationMonitor monitor) {
             if (monitor.isMeanHatch()) {
-                // LOG.info("monitor added");
                 realMonitor = monitor;
                 realMonitor.updateTexture(aBaseCasingIndex);
                 return true;
             }
+        }
+        return false;
+    }
 
+    public enum ComputerHatches implements IHatchElement<TST_Computer> {
+
+        ComputationMonitor;
+
+        @Override
+        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
+            return Collections.singletonList(GT_Hatch_RackComputationMonitor.class);
         }
 
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex);
+        @Override
+        public IGTHatchAdder<? super TST_Computer> adder() {
+            return TST_Computer::addRackComputationMonitorToMachine;
+        }
+
+        @Override
+        public long count(TST_Computer tstComputer) {
+            return tstComputer.realMonitor != null ? 1 : 0;
+        }
     }
 
 }
