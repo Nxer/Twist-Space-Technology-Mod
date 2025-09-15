@@ -121,10 +121,10 @@ public class MaterialFix {
     }
 
     // spotless:on
-    public static void addBlastRecipe(Materials aMaterial, int EUt, int duration, int level, boolean gas, boolean isHot) {
+    public static void addBlastRecipe(Materials aMaterial, int EUt, int duration, int level, boolean gas,
+        boolean isHot) {
         ItemStack input = aMaterial.getDust(1);
-        ItemStack output = isHot ? GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1)
-            : aMaterial.getIngots(1);
+        ItemStack output = isHot ? GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1) : aMaterial.getIngots(1);
         if (gas) {
             GTValues.RA.stdBuilder()
                 .itemInputs(input, GTUtility.getIntegratedCircuit(11))
