@@ -40,7 +40,7 @@ public class MaterialFix {
 
         // Neutronium Alloy
 
-        addBlastRecipe(MaterialsTST.NeutroniumAlloy, (int) TierEU.RECIPE_UIV, 54 * 20, 12500, true);
+        addBlastRecipe(MaterialsTST.NeutroniumAlloy, (int) TierEU.RECIPE_UIV, 54 * 20, 12500, true,true);
         addVacuumFreezerRecipe(MaterialsTST.NeutroniumAlloy,(int)TierEU.RECIPE_UEV,18 * 20);
 
         GTValues.RA.stdBuilder()
@@ -74,7 +74,7 @@ public class MaterialFix {
 
         // Axonis Alloy
 
-        addBlastRecipe(MaterialsTST.AxonisAlloy, (int) TierEU.RECIPE_UMV, 720, 13200, true);
+        addBlastRecipe(MaterialsTST.AxonisAlloy, (int) TierEU.RECIPE_UMV, 720, 13200, true,false);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -109,15 +109,22 @@ public class MaterialFix {
             .duration(45 * 20)
             .addTo(RecipeMaps.transcendentPlasmaMixerRecipes);
 
+        GTValues.RA.stdBuilder()
+            .itemInputs(MaterialsTST.Axonium.getDust(1))
+            .fluidOutputs(MaterialsTST.Axonium.getMolten(144))
+            .eut(TierEU.RECIPE_UHV)
+            .duration(240)
+            .addTo(RecipeMaps.fluidExtractionRecipes);
+
         addGodForgePlasmaRecipes(MaterialsTST.Axonium, 25 * 20, false, 2);
         addGodForgePlasmaRecipes(MaterialsTST.Dubnium, 7 * 20, true, 1);
     }
 
     // spotless:on
-    public static void addBlastRecipe(Materials aMaterial, int EUt, int duration, int level, boolean gas) {
+    public static void addBlastRecipe(Materials aMaterial, int EUt, int duration, int level, boolean gas,
+        boolean isHot) {
         ItemStack input = aMaterial.getDust(1);
-        ItemStack output = level > 1750 ? GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1)
-            : aMaterial.getIngots(1);
+        ItemStack output = isHot ? GTOreDictUnificator.get(OrePrefixes.ingotHot, aMaterial, 1) : aMaterial.getIngots(1);
         if (gas) {
             GTValues.RA.stdBuilder()
                 .itemInputs(input, GTUtility.getIntegratedCircuit(11))
