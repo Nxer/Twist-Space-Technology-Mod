@@ -951,7 +951,7 @@ Tooltip_BallLightning.0.11=§6=== Machine Tier ===
 Tooltip_BallLightning.0.12=The base structure is Tier 1
 Tooltip_BallLightning.0.13=Gravitational Lens in the control slot unlocks Tier 2
 Tooltip_BallLightning.0.14=Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks Tier 3
-Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil unlocks Tier 4
+Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil and then utilizing Teleportation Casing replacing Dimensional Bridge unlock Tier 4
 Tooltip_BallLightning.0.16=§6=== Machine Mode ===
 Tooltip_BallLightning.0.17=§e (Plasma / Electric) Arc Furnace
 Tooltip_BallLightning.0.18=Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
@@ -981,7 +981,7 @@ Tooltip_BallLightning.1.09=§61616 §7xDyson Swarm Energy Receiver Dish Block
 Tooltip_BallLightning.1.10=§6481 §7xDyson Swarm Control Center Toroid Casing
 Tooltip_BallLightning.1.11=§6156 §7xDyson Swarm Energy Receiver Base Casing
 Tooltip_BallLightning.1.12=§666 §7xDyson Swarm Control Center Base Casing
-Tooltip_BallLightning.1.13=§6162 §7xTeleportation Casing
+Tooltip_BallLightning.1.13=§6162 §7xTeleportation Casing (T4) or Dimensional Bridge (T3)
 Tooltip_BallLightning.1.14=§6360 §7xSuperconductor Base UIV Frame Box
 Tooltip_BallLightning.1.15=§6538 §7xNeutronium Frame Box
 BallLightning.modeMsg.0=Electric Arc Furnace
