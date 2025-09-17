@@ -138,8 +138,8 @@ public class Config {
     // region Miracle Door
     public static double secondsOfMiracleDoorProcessingTimeABSMode = 25.6;
     public static double secondsOfMiracleDoorProcessingTimeEBFMode = 64;
-    public static int multiplierOfMiracleDoorEUCostABSMode = 16;
-    public static int multiplierOfMiracleDoorEUCostEBFMode = 64;
+    public static int multiplierOfMiracleDoorEUCostABSMode = 1;
+    public static int multiplierOfMiracleDoorEUCostEBFMode = 2;
 
     // endregion
 

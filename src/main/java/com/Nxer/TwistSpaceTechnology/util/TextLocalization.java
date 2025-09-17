@@ -1345,8 +1345,8 @@ public class TextLocalization {
     public static final String Tooltip_MiracleDoor_03 = TextEnums.tr("Tooltip_MiracleDoor_03");
 
     // #tr Tooltip_MiracleDoor_04
-    // # Power consumption: Alloy Smelter §c1600%% | Stellar Forge §c6400%%
-    // #zh_CN 能量消耗: {\RESET}合金冶炼模式 {\RED}{\BOLD}1600%% {\GRAY}| {\RESET}恒星锻炉模式 {\RED}{\BOLD}6400%%
+    // # Power consumption: Alloy Smelter §c100%% | Stellar Forge §c200%%
+    // #zh_CN 能量消耗: {\RESET}合金冶炼模式 {\RED}{\BOLD}100%% {\GRAY}| {\RESET}恒星锻炉模式 {\RED}{\BOLD}200%%
     public static final String Tooltip_MiracleDoor_04 = TextEnums.tr("Tooltip_MiracleDoor_04");
 
     // #tr Tooltip_MiracleDoor_05
@@ -1386,7 +1386,7 @@ public class TextLocalization {
 
     // #tr Tooltip_MiracleDoor_2_04
     // # Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)
-    // #zh_CN 实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 64 (合金冶炼) 16
+    // #zh_CN 实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 2 (合金冶炼) 1
     public static final String Tooltip_MiracleDoor_2_04 = TextEnums.tr("Tooltip_MiracleDoor_2_04");
 
     // #tr Tooltip_MiracleDoor_2_05
