@@ -2410,18 +2410,18 @@ public class GTCMMachineRecipes {
                 .metadata(RESEARCH_ITEM, GregtechItemList.Casing_Coil_QuantumForceTransformer.get(1))
                 .metadata(RESEARCH_TIME, 24 * HOURS)
                 .itemInputs(
-                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Longasssuperconductornameforuhvwire, 8),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Longasssuperconductornameforuhvwire, 64),
                     GregtechItemList.Casing_Coil_QuantumForceTransformer.get(4),
                     ItemRefer.Compact_Fusion_Coil_T4.get(16),
                     LaserSmartNode.get(16),
 
-                    ItemList.Emitter_UIV.get(64),
-                    ItemList.Sensor_UIV.get(64),
-                    new Object[]{OrePrefixes.circuit.get(Materials.Optical), 32},
-                    new Object[]{OrePrefixes.circuit.get(Materials.Bio), 64},
+                    ItemList.Emitter_UIV.get(6),
+                    ItemList.Sensor_UIV.get(6),
+                    new Object[]{OrePrefixes.circuit.get(Materials.Optical), 12},
+                    new Object[]{OrePrefixes.circuit.get(Materials.Bio), 24},
 
                     ItemRefer.HiC_T5.get(64),
-                    GravitationalLens.get(64),
+                    GravitationalLens.get(8),
                     PerfectLapotronCrystal.get(64),
                     ModItemHandler.EternalSingularity.NitronicSingularity.get(1),
 
@@ -2431,10 +2431,10 @@ public class GTCMMachineRecipes {
                     Laser_Lens_Special.get(4)
                 )
                 .fluidInputs(
-                    Materials.Hydrogen.getPlasma(1000 * 4096),
-                    MaterialsElements.getInstance().CALIFORNIUM.getFluidStack(144 * 256),
+                    Materials.Hydrogen.getPlasma(1000 * 2048),
+                    MaterialsElements.getInstance().CALIFORNIUM.getFluidStack(144 * 64),
                     MaterialsAlloy.QUANTUM.getFluidStack(144 * 256),
-                    MaterialsElements.STANDALONE.RHUGNOR.getFluidStack(144 * 256)
+                    MaterialsElements.STANDALONE.RHUGNOR.getFluidStack(144 * 32)
                 )
                 .itemOutputs(AdvancedHighPowerCoilBlock.get(1))
                 .eut(RECIPE_UIV)
