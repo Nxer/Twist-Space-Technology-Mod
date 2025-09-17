@@ -1022,13 +1022,13 @@ public class GTCMMachineRecipes {
             .metadata(RESEARCH_ITEM, eM_Containment_Field.get(1))
             .metadata(RESEARCH_TIME, 2 * HOURS)
             .itemInputs(
-                eM_Containment_Field.get(4),
-                ItemList.Field_Generator_UIV.get(16),
-                ItemList.Field_Generator_UEV.get(64),
-                SpaceWarper.get(4),
+                eM_Containment_Field.get(2),
+                ItemList.Field_Generator_UIV.get(2),
+                ItemList.Field_Generator_UEV.get(8),
+                SpaceWarper.get(3),
 
-                ItemList.Tesseract.get(32),
-                ItemList.EnergisedTesseract.get(32),
+                ItemList.Tesseract.get(16),
+                ItemList.EnergisedTesseract.get(16),
                 GTOreDictUnificator.get(OrePrefixes.stickLong, MaterialsUEVplus.TranscendentMetal, 32),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.TranscendentMetal, 32),
 
@@ -1039,8 +1039,7 @@ public class GTCMMachineRecipes {
                 new FluidStack(celestialTungsten, 144 * 256),
                 Materials.Infinity.getMolten(144 * 32)
             )
-            .itemOutputs(eM_Ultimate_Containment_Field.get(1))
-
+            .itemOutputs(eM_Ultimate_Containment_Field.get(2))
             .eut(RECIPE_UIV)
             .duration(20 * 180)
             .addTo(AssemblyLine);
