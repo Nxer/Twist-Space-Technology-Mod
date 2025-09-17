@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostABSMode;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
@@ -61,6 +59,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -202,8 +201,8 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
     @Override
     public int getExtraEUCostMultiplier() {
-        return overclockParameter
-            * (machineMode == 1 ? multiplierOfMiracleDoorEUCostEBFMode : multiplierOfMiracleDoorEUCostABSMode);
+        return overclockParameter * (machineMode == 1 ? Config.multiplierOfMiracleDoorEUCostEBFMode
+            : Config.multiplierOfMiracleDoorEUCostABSMode);
     }
 
     @Override
