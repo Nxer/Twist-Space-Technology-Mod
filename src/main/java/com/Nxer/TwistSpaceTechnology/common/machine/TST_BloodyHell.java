@@ -8,7 +8,8 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasin
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAroundController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
@@ -212,9 +213,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addController(textUseBlueprint)
-            .addInputBus(textAnyCasing)
-            .addOutputBus(textAnyCasing)
-            .addInputHatch(textAnyCasing)
+            .addInputBus(textAroundController+" "+getBlueprintWithDot(1))
+            .addOutputBus(textAroundController+" "+getBlueprintWithDot(1))
+            .addInputHatch(textAroundController+" "+getBlueprintWithDot(1))
             .addInfo(TextEnums.Author_Taskeren.getText())
             .addInfo(TextEnums.Author_Goderium.getText())
             .toolTipFinisher(ModName);
