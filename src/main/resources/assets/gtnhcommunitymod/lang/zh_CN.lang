@@ -2242,3 +2242,5 @@ NameLargeSolarBoiler=大型太阳能锅炉
 Author_Faotik=作者: §eFaotik
 Tooltip_Silksong_SilksongReleaseDate=§0层数达到94层后有一些特别的东西.
 Tooltip_Starcore_09=控制器内放入 §b§l§o星阵§7 可以进一步提高矿石产量.
+GT5U.gui.text.press_button_to_set_structure=点击按钮以填充结构
+BloodyHell_setOrClearBlood=填充/清除血液
