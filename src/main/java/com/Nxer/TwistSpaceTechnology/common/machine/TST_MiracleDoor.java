@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostABSMode;
-import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.multiplierOfMiracleDoorEUCostEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeABSMode;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
@@ -39,8 +37,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -59,6 +59,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -107,7 +108,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     // region Processing Logic
 
     private int overclockParameter = 1;
-    protected boolean ingotMode = false;
     private static ItemStack IngotMold;
 
     public static void initStatics() {
@@ -193,21 +193,12 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     protected void prepareProcessing() {
         super.prepareProcessing();
         flushOverclockParameter();
-        checkIngotMode();
-    }
-
-    protected void checkIngotMode() {
-        ingotMode = false;
-        for (ItemStack aStack : getStoredInputs()) if (aStack.isItemEqual(IngotMold)) {
-            ingotMode = true;
-            break;
-        }
     }
 
     @Override
     public int getExtraEUCostMultiplier() {
-        return overclockParameter
-            * (machineMode == 1 ? multiplierOfMiracleDoorEUCostEBFMode : multiplierOfMiracleDoorEUCostABSMode);
+        return overclockParameter * (machineMode == 1 ? Config.multiplierOfMiracleDoorEUCostEBFMode
+            : Config.multiplierOfMiracleDoorEUCostABSMode);
     }
 
     @Override
@@ -295,10 +286,37 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 return OverclockCalculator.ofNoOverclock(recipe);
             }
 
+            @Nonnull
+            @Override
+            protected Stream<GTRecipe> findRecipeMatches(@Nullable RecipeMap<?> map) {
+                if (map == null) return Stream.empty();
+                this.lastRecipe = null;
+
+                // Get the right recipe
+                Stream<GTRecipe> base = super.findRecipeMatches(map);
+
+                // Only this recipe will be transformed
+                boolean hasMold = false;
+                if (this.inputItems != null) {
+                    for (ItemStack s : this.inputItems) {
+                        if (s != null && s.isItemEqual(IngotMold)) {
+                            hasMold = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (hasMold) {
+                    return base.map(TST_MiracleDoor::turnToIngotRecipe);
+                } else {
+                    return base;
+                }
+            }
+
             @NotNull
             @Override
             protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return super.createParallelHelper(ingotMode ? turnToIngotRecipe(recipe) : recipe);
+                return super.createParallelHelper(recipe);
             }
 
         }.setMaxParallel(Integer.MAX_VALUE);

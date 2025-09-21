@@ -387,7 +387,7 @@ Tooltip_MiracleDoor_00=§6§l凡夫俗子根本无法理解我们的进步.
 Tooltip_MiracleDoor_01=奴役群星为我们工作.
 Tooltip_MiracleDoor_02=无论多大的工作量, 都能一次完成.
 Tooltip_MiracleDoor_03=无论多大的工作量, 都需要临界光子启动.
-Tooltip_MiracleDoor_04=能量消耗: §r合金冶炼模式 §c§l1600%% §7| §r恒星锻炉模式 §c§l6400%%
+Tooltip_MiracleDoor_04=能量消耗: §r合金冶炼模式 §c§l100%% §7| §r恒星锻炉模式 §c§l200%%
 Tooltip_MiracleDoor_05=直接从无线EU网络获取能量.
 Tooltip_MiracleDoor_06=警告! 如果尝试在网络内能量不足时启动机器,
 Tooltip_MiracleDoor_07=输入的原料将直接寂灭.
@@ -395,7 +395,7 @@ Tooltip_MiracleDoor_08=在控制器方块内放置编程电路以减少处理时
 Tooltip_MiracleDoor_2_01=每次运行消耗相同的时间, 默认 (恒星锻炉) 64s | (合金冶炼) 25.6s .
 Tooltip_MiracleDoor_2_02=如果在控制器方块输入槽放置编程电路,
 Tooltip_MiracleDoor_2_03=实际处理时间 = 默认耗时 / (编号 * 物品数量)
-Tooltip_MiracleDoor_2_04=实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 64 (合金冶炼) 16
+Tooltip_MiracleDoor_2_04=实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 2 (合金冶炼) 1
 Tooltip_MiracleDoor_2_05=每次运行需要消耗超频次数颗临界光子(默认为1).
 MiracleDoor.modeMsg.0=恒星锻炉:合金冶炼模式
 MiracleDoor.modeMsg.1=恒星锻炉模式
@@ -951,7 +951,7 @@ Tooltip_BallLightning.0.11=§6=== 机器等级 ===
 Tooltip_BallLightning.0.12=基础结构为等级1
 Tooltip_BallLightning.0.13=在主机内放入引力透镜解锁等级2
 Tooltip_BallLightning.0.14=在主机内放入升级芯片且使用2级结构解锁等级3
-Tooltip_BallLightning.0.15=使用进阶高能线圈解锁等级4
+Tooltip_BallLightning.0.15=使用进阶高能线圈, 并使用传输机械方块替换维度桥接方块解锁等级4
 Tooltip_BallLightning.0.16=§6=== 机器模式 ===
 Tooltip_BallLightning.0.17=§e 电弧炉 | 等离子电弧炉
 Tooltip_BallLightning.0.18=并行数 = 2 ^ (聚变线圈等级 * (线圈等级 - 10))
@@ -981,7 +981,7 @@ Tooltip_BallLightning.1.09=§61616 §7x戴森球能量接收天线方块
 Tooltip_BallLightning.1.10=§6481 §7x戴森球控制中心环形机械方块
 Tooltip_BallLightning.1.11=§6156 §7x戴森球能量接收基座机械方块
 Tooltip_BallLightning.1.12=§666 §7x戴森球控制中心基座机械方块
-Tooltip_BallLightning.1.13=§6162 §7x传输机械方块
+Tooltip_BallLightning.1.13=§6162 §7x传输机械方块(T4)或维度桥接方块(T3)
 Tooltip_BallLightning.1.14=§6360 §7xUIV超导粗胚框架
 Tooltip_BallLightning.1.15=§6538 §7x中子框架
 BallLightning.modeMsg.0=电弧炉
@@ -2242,3 +2242,5 @@ NameLargeSolarBoiler=大型太阳能锅炉
 Author_Faotik=作者: §eFaotik
 Tooltip_Silksong_SilksongReleaseDate=§0层数达到94层后有一些特别的东西.
 Tooltip_Starcore_09=控制器内放入 §b§l§o星阵§7 可以进一步提高矿石产量.
+GT5U.gui.text.press_button_to_set_structure=点击按钮以填充结构
+BloodyHell_setOrClearBlood=填充/清除血液

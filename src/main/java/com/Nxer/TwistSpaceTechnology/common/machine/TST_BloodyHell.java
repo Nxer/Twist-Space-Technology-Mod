@@ -8,7 +8,8 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasin
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAroundController;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
@@ -19,11 +20,13 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static net.minecraft.block.Block.getBlockFromName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
@@ -34,6 +37,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -42,6 +46,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.TstProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -60,6 +65,13 @@ import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.drawable.IDrawable;
+import com.gtnewhorizons.modularui.api.screen.ModularWindow;
+import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
+import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
+import com.gtnewhorizons.modularui.api.widget.Widget;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
+import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
 import cpw.mods.fml.relauncher.Side;
@@ -68,6 +80,7 @@ import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -95,6 +108,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
      */
     private int parallel = 1;
     private boolean isBloodChecked = false;
+    private boolean isBloodClear = true;
     private boolean mIsAnimated = true;
     protected boolean mFormed;
 
@@ -200,9 +214,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addController(textUseBlueprint)
-            .addInputBus(textAnyCasing)
-            .addOutputBus(textAnyCasing)
-            .addInputHatch(textAnyCasing)
+            .addInputBus(textAroundController+" "+getBlueprintWithDot(1))
+            .addOutputBus(textAroundController+" "+getBlueprintWithDot(1))
+            .addInputHatch(textAroundController+" "+getBlueprintWithDot(1))
             .addInfo(TextEnums.Author_Taskeren.getText())
             .addInfo(TextEnums.Author_Goderium.getText())
             .toolTipFinisher(ModName);
@@ -258,7 +272,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         if (aTick % 20 == 0) { // for every second
             if (aBaseMetaTileEntity.isServerSide()) {
                 if (!isBloodChecked) { // check blood if it has not been checked yet
-                    checkBlood();
+                    checkBlood(false);
                 }
             }
         }
@@ -399,8 +413,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
 
                 // check structure blood
-                if (!isBloodChecked && !(isBloodChecked = checkBlood()))
-                    return SimpleCheckRecipeResult.ofFailure("no_enough_blood");
+                if (!isBloodChecked) return SimpleCheckRecipeResult.ofFailure("press_button_to_set_structure");
+                // #tr GT5U.gui.text.press_button_to_set_structure
+                // # Click the button to fill up the structure
+                // #zh_CN 点击按钮以填充结构
 
                 // check altar tier
                 int requiredTier = recipe.getMetadataOrDefault(BloodyHellTierKey.INSTANCE, 0);
@@ -438,28 +454,30 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     /**
-     * Check the blood fluids in the structure and place them if not valid and has enough bloods.
+     * Check the blood fluids in the structure and optionally place or clear them.
      * <p>
      * Invoking this in tiers without fluid structures is ok, and always return true.
      *
-     * @return true if the blood is valid, or placed.
+     * @param needPlace true = set block, false = only check structure
+     * @return true if the blood is valid, or successfully placed/cleared.
      */
-    private boolean checkBlood() {
+    private boolean checkBlood(boolean needPlace) {
         if (mTier <= 0) return false; // invalid tiers
         else if (mTier < 3) return true; // no blood needed
+
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] structureDef = mTier > 5 ? STRUCTURE_BLOOD_2 : STRUCTURE_BLOOD_1;
         int bloodAmountNeeded = mTier > 5 ? BLOOD_AMOUNT_NEEDED_2 : BLOOD_AMOUNT_NEEDED_1;
         int offsetX = getOffset(1, mTier, 0);
         int offsetY = getOffset(1, mTier, 1);
         int offsetZ = getOffset(1, mTier, 2);
-        Block blood = blockLifeEssence;
+        Block Blood = blockLifeEssence;
+        Block Air = Blocks.air;
 
         int lengthX = structureDef.length;
         int lengthY = structureDef[0].length;
         int lengthZ = structureDef[0][0].length();
 
-        // BloodMagic has not registered block flowing life essence, so it is necessary to place all fluids at once
         ArrayList<FluidStack> inputFluids = this.getStoredFluids();
         int mBloodAmount = 0;
         for (FluidStack aFluid : inputFluids) {
@@ -467,7 +485,10 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 mBloodAmount += aFluid.amount;
             }
         }
-        if (bloodAmountNeeded > mBloodAmount) return false;
+
+        if (needPlace && bloodAmountNeeded > mBloodAmount) {
+            return false;
+        }
 
         int fixX = 0;
         int fixY = mTier > 5 ? -1 : -24;
@@ -488,29 +509,28 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     aY += aBaseMetaTileEntity.getYCoord();
                     aZ += aBaseMetaTileEntity.getZCoord();
 
-                    boolean isVaildFluid = false;
-                    if (this.getStoredFluids() != null) {
-                        for (FluidStack aFluid : inputFluids) {
-                            if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1)) && aFluid.amount >= 1000) {
-                                aFluid.amount -= 1000;
-                                isVaildFluid = true;
-                                break;
+                    if (needPlace) {
+                        if (isBloodClear) {
+                            for (FluidStack aFluid : inputFluids) {
+                                if (aFluid.isFluidEqual(getLifeEssenceFluidStack(1)) && aFluid.amount >= 1000) {
+                                    aFluid.amount -= 1000;
+                                    break;
+                                }
                             }
+                            aBaseMetaTileEntity.getWorld()
+                                .setBlock(aX, aY, aZ, Blood);
+                        } else {
+                            aBaseMetaTileEntity.getWorld()
+                                .setBlock(aX, aY, aZ, Air);
                         }
                     }
-                    setCount++;
-                    if (isVaildFluid) {
-                        aBaseMetaTileEntity.getWorld()
-                            .setBlock(aX, aY, aZ, blood);
-                    } else {
-                        return false;
-                    }
 
+                    setCount++;
                     if (setCount == bloodAmountNeeded / 1000) break;
                 }
             }
         }
-        isBloodChecked = true;
+
         return true;
     }
 
@@ -519,9 +539,52 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
+    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        super.addUIWidgets(builder, buildContext);
+        builder.widget(createBloodStatusButton(builder));
+
+    }
+
+    public ButtonWidget createBloodStatusButton(IWidgetBuilder<?> builder) {
+
+        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+            if (checkStructure(true) && !this.getBaseMetaTileEntity()
+                .isActive()) if (checkBlood(true)) {
+                    isBloodClear = !isBloodClear;
+                    isBloodChecked = !isBloodClear;
+                }
+        })
+            .setPlayClickSound(true)
+            .setBackground(() -> {
+                List<IDrawable> layers = new ArrayList<>();
+                // Add icons per mode
+                if (!isBloodClear) {
+                    layers.add(GTUITextures.BUTTON_STANDARD);
+                    layers.add(UITextures.SBF_BlazeClear);
+                } else {
+                    layers.add(GTUITextures.BUTTON_STANDARD);
+                    layers.add(UITextures.SBF_BlazeSet);
+                }
+
+                return layers.toArray(new IDrawable[0]);
+            })
+            .attachSyncer(new FakeSyncWidget.BooleanSyncer(() -> isBloodClear, val -> isBloodClear = val), builder)
+            // #tr BloodyHell_setOrClearBlood
+            // # Place / Clear Blood
+            // #zh_CN 填充/清除血液
+            .addTooltip(StatCollector.translateToLocal("BloodyHell_setOrClearBlood"))
+            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+            .setPos(80, 91)
+            .setSize(16, 16);
+
+        return (ButtonWidget) button;
+    }
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setBoolean("isBloodChecked", isBloodChecked);
+        aNBT.setBoolean("isBloodClear", isBloodClear);
         aNBT.setInteger("speedRuneCount", speedRuneCount);
         aNBT.setInteger("tbSpeedRuneCount", tbSpeedRuneCount);
         aNBT.setInteger("mTier", mTier);
@@ -532,6 +595,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         isBloodChecked = aNBT.getBoolean("isBloodChecked");
+        isBloodClear = aNBT.getBoolean("isBloodClear");
         speedRuneCount = aNBT.getInteger("speedRuneCount");
         tbSpeedRuneCount = aNBT.getInteger("tbSpeedRuneCount");
         mTier = aNBT.getInteger("mTier");

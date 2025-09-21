@@ -387,7 +387,7 @@ Tooltip_MiracleDoor_00=§6§lMere mortals can't even begin to understand the pro
 Tooltip_MiracleDoor_01=Enslaving Stellaris to work for us.
 Tooltip_MiracleDoor_02=No matter how large the workload, it can be done in one time.
 Tooltip_MiracleDoor_03=No matter how large the workload, it need one Critical Photon to start.
-Tooltip_MiracleDoor_04=Power consumption: Alloy Smelter §c1600%% | Stellar Forge §c6400%%
+Tooltip_MiracleDoor_04=Power consumption: Alloy Smelter §c100%% | Stellar Forge §c200%%
 Tooltip_MiracleDoor_05=Directly get EU from the Wireless EU Net.
 Tooltip_MiracleDoor_06=Warning! If trying to start machine when Wireless EU Net has not enough EU,
 Tooltip_MiracleDoor_07=the materials will fade.
@@ -951,7 +951,7 @@ Tooltip_BallLightning.0.11=§6=== Machine Tier ===
 Tooltip_BallLightning.0.12=The base structure is Tier 1
 Tooltip_BallLightning.0.13=Gravitational Lens in the control slot unlocks Tier 2
 Tooltip_BallLightning.0.14=Upgrade Chip in the control slot and utilizing Tier 2 structure unlocks Tier 3
-Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil unlocks Tier 4
+Tooltip_BallLightning.0.15=Utilizing Advanced High Power Coil and then utilizing Teleportation Casing replacing Dimensional Bridge unlock Tier 4
 Tooltip_BallLightning.0.16=§6=== Machine Mode ===
 Tooltip_BallLightning.0.17=§e (Plasma / Electric) Arc Furnace
 Tooltip_BallLightning.0.18=Parallel number = 2 ^ (Compact Fusion Coil Tier * (Coil Tier - 10))
@@ -981,7 +981,7 @@ Tooltip_BallLightning.1.09=§61616 §7xDyson Swarm Energy Receiver Dish Block
 Tooltip_BallLightning.1.10=§6481 §7xDyson Swarm Control Center Toroid Casing
 Tooltip_BallLightning.1.11=§6156 §7xDyson Swarm Energy Receiver Base Casing
 Tooltip_BallLightning.1.12=§666 §7xDyson Swarm Control Center Base Casing
-Tooltip_BallLightning.1.13=§6162 §7xTeleportation Casing
+Tooltip_BallLightning.1.13=§6162 §7xTeleportation Casing (T4) or Dimensional Bridge (T3)
 Tooltip_BallLightning.1.14=§6360 §7xSuperconductor Base UIV Frame Box
 Tooltip_BallLightning.1.15=§6538 §7xNeutronium Frame Box
 BallLightning.modeMsg.0=Electric Arc Furnace
@@ -2242,3 +2242,5 @@ NameLargeSolarBoiler=Large Solar Boiler
 Author_Faotik=Author: §eFaotik
 Tooltip_Silksong_SilksongReleaseDate=§0Something special when piece reaches 94.
 Tooltip_Starcore_09=Put §b§l§oAstral Array Fabricator§7 into controller slot then machine can further increase ore production.
+GT5U.gui.text.press_button_to_set_structure=Click the button to fill up the structure
+BloodyHell_setOrClearBlood=Place / Clear Blood
