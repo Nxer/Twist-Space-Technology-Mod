@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.DysonSwarmBlocks;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
@@ -568,10 +567,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                             ne -> ne.fieldGeneratorTier)))
                 .addElement('G', ofBlock(MetaBlockCasing01, 1))
                 .addElement('H', ofBlock(ModBlocks.blockCasingsTieredGTPP, 9))
-                .addElement('I', ofBlock(DysonSwarmBlocks, 1))
-                .addElement('J', ofBlock(DysonSwarmBlocks, 8))
-                .addElement('K', ofBlock(DysonSwarmBlocks, 0))
-                .addElement('L', ofBlock(DysonSwarmBlocks, 5))
+                .addElement('I', ofBlock(GregTechAPI.sBlockCasingsDyson, 1))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 8))
+                .addElement('K', ofBlock(GregTechAPI.sBlockCasingsDyson, 0))
+                .addElement('L', ofBlock(GregTechAPI.sBlockCasingsDyson, 5))
                 .addElement('N', ofFrame(Materials.SuperconductorUIVBase))
                 .addElement('O', ofFrame(Materials.Neutronium))
                 .addElement(

@@ -3,8 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static tectech.thing.CustomItemList.astralArrayFabricator;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,8 +23,6 @@ public class MiscHelper {
     public static Item TerraShatterer;
 
     public static Fluid UnknowWater;
-
-    public static Block DysonSwarmBlocks;
 
     public static void initStatics() {
         ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
@@ -53,16 +49,9 @@ public class MiscHelper {
             TerraShatterer = Items.diamond_pickaxe;
         }
 
-        if (Mods.GalaxySpace.isModLoaded()) {
-            UnknowWater = FluidRegistry.getFluid("unknowwater");
-
-            DysonSwarmBlocks = Block.getBlockFromName("dysonswarmparts");
-
-        } else {
+        UnknowWater = FluidRegistry.getFluid("unknowwater");
+        if (UnknowWater == null) {
             UnknowWater = FluidRegistry.getFluid("water");
-
-            DysonSwarmBlocks = Blocks.wool;
-
         }
 
     }
