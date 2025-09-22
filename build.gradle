@@ -11,6 +11,9 @@ minecraft {
 
 configurations.configureEach {
     exclude group: "com.github.GTNewHorizons", module: "Baubles"
+    resolutionStrategy {
+        force 'com.github.GTNewHorizons:ForestryMC:4.10.17:dev'
+    }
 }
 
 test {
