@@ -61,7 +61,7 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -95,7 +95,7 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
         int horizontalOffSet = offSet.horizontalOffSet;
         int verticalOffSet = offSet.verticalOffSet;
         int depthOffSet = offSet.depthOffSet;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
@@ -109,7 +109,8 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
             GTUtility.sendChatToPlayer(

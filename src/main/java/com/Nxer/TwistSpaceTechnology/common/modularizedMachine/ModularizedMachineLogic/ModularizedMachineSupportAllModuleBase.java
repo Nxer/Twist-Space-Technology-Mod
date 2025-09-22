@@ -87,7 +87,7 @@ public abstract class ModularizedMachineSupportAllModuleBase<T extends Modulariz
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         if (dynamicParallel == Integer.MAX_VALUE || staticParallel == Integer.MAX_VALUE
             || dynamicParallel >= Integer.MAX_VALUE - 1 - staticParallel) {
             return Integer.MAX_VALUE;

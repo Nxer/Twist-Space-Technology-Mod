@@ -33,7 +33,6 @@ public class MaterialFix {
         GTValues.RA.stdBuilder()
             .itemInputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 1))
             .fluidOutputs(MaterialPool.HolmiumGarnet.getMolten(144))
-            .noOptimize()
             .eut(96)
             .duration(72)
             .addTo(RecipeMaps.fluidExtractionRecipes);
@@ -118,6 +117,8 @@ public class MaterialFix {
 
         addGodForgePlasmaRecipes(MaterialsTST.Axonium, 25 * 20, false, 2);
         addGodForgePlasmaRecipes(MaterialsTST.Dubnium, 7 * 20, true, 1);
+
+
     }
 
     // spotless:on
@@ -169,7 +170,6 @@ public class MaterialFix {
             .eut(TierEU.RECIPE_MAX)
             .metadata(FOG_PLASMA_MULTISTEP, isMultistep)
             .metadata(FOG_PLASMA_TIER, tier)
-            .noOptimize()
             .addTo(TecTechRecipeMaps.godforgePlasmaRecipes);
 
         GTValues.RA.stdBuilder()
@@ -179,7 +179,6 @@ public class MaterialFix {
             .eut(TierEU.RECIPE_MAX)
             .metadata(FOG_PLASMA_MULTISTEP, isMultistep)
             .metadata(FOG_PLASMA_TIER, tier)
-            .noOptimize()
             .addTo(TecTechRecipeMaps.godforgePlasmaRecipes);
     }
 

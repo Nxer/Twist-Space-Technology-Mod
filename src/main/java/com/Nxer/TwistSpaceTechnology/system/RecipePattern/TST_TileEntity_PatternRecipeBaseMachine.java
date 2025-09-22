@@ -2,9 +2,6 @@ package com.Nxer.TwistSpaceTechnology.system.RecipePattern;
 
 import java.util.ArrayList;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.util.ForgeDirection;
-
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -41,8 +38,4 @@ public abstract class TST_TileEntity_PatternRecipeBaseMachine extends TTMultiblo
         return false;
     }
 
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
-    }
 }

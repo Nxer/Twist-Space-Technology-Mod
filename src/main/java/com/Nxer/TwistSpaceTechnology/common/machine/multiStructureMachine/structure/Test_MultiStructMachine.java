@@ -58,7 +58,7 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -97,7 +97,7 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
         int horizontalOffSet = offSet.horizontalOffSet;
         int verticalOffSet = offSet.verticalOffSet;
         int depthOffSet = offSet.depthOffSet;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,

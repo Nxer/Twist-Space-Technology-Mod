@@ -17,11 +17,10 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.render.TextureFactory;
 
 // TODO Wireless EU costings
-public class AdvExecutionCore extends ExecutionCoreBase implements IWirelessEnergyHatchInformation {
+public class AdvExecutionCore extends ExecutionCoreBase {
 
     public AdvExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);

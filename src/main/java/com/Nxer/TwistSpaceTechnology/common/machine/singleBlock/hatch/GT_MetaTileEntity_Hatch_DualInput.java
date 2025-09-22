@@ -173,11 +173,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     }
 
     @Override
-    public boolean displaysStackSize() {
-        return true;
-    }
-
-    @Override
     public ITexture[] getTexturesActive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_ME_CRAFTING_INPUT_BUFFER) };
     }
@@ -300,6 +295,11 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
     @Override
     public boolean supportsFluids() {
         return true;
+    }
+
+    @Override
+    public ItemStack[] getSharedItems() {
+        return new ItemStack[0];
     }
 
     @Override

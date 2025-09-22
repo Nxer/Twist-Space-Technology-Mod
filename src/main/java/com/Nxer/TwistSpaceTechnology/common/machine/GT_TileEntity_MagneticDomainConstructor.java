@@ -208,7 +208,7 @@ public class GT_TileEntity_MagneticDomainConstructor
 
         int[] built = new int[stackSize.stackSize + 2];
 
-        built[0] = survivialBuildPiece(
+        built[0] = survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             baseHorizontalOffSet,
@@ -224,7 +224,7 @@ public class GT_TileEntity_MagneticDomainConstructor
         if (ring > 1) {
             int pointer = 1;
             while (pointer < ring) {
-                built[pointer] = survivialBuildPiece(
+                built[pointer] = survivalBuildPiece(
                     STRUCTURE_PIECE_MIDDLE,
                     stackSize,
                     baseHorizontalOffSet,
@@ -238,7 +238,7 @@ public class GT_TileEntity_MagneticDomainConstructor
             }
         }
 
-        built[ring + 1] = survivialBuildPiece(
+        built[ring + 1] = survivalBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             baseHorizontalOffSet,

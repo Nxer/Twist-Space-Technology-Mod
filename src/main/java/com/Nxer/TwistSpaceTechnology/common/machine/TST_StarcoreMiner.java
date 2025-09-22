@@ -38,18 +38,15 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import bartworks.API.BorosilicateGlass;
 import bwcrossmod.galacticgreg.VoidMinerUtility;
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -59,8 +56,7 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 
-public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
-    implements IWirelessEnergyHatchInformation {
+public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> {
 
     // region Class Constructor
     public TST_StarcoreMiner(int aID, String aName, String aNameRegional) {
@@ -148,10 +144,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
                     .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
                     .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
                     .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
-                    .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 0))
-                    .addElement('H', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
+                    .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+                    .addElement('H', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
                     .addElement('I', ofBlock(sBlockCasingsTT, 8))
-                    .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                    .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                     .addElement(
                         'K',
                         ofChain(
@@ -167,7 +163,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
                             .adder(TST_StarcoreMiner::addToMachineList)
                             .dot(1)
                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
-                            .buildAndChain(IGBlocks.SpaceElevatorCasing, 0)
+                            .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
                     )
                     /*
                     Blocks:
@@ -202,7 +198,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        int builtMain = survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain, elementBudget, env, false, true);
+        int builtMain = survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain, elementBudget, env, false, true);
 
         // Construct Pipe Structure
         int piece = stackSize.stackSize - 1;
@@ -212,7 +208,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
 
         if (piece > 0) {
             for (int i=0;i<piece;i++) {
-                builtMiddleCurrent = survivialBuildPiece(STRUCTURE_PIECE_MIDDLE, stackSize, horizontalOffSetMiddle, verticalOffSetMiddle - i, depthOffSetMiddle, elementBudget, env, false, true);
+                builtMiddleCurrent = survivalBuildPiece(STRUCTURE_PIECE_MIDDLE, stackSize, horizontalOffSetMiddle, verticalOffSetMiddle - i, depthOffSetMiddle, elementBudget, env, false, true);
                 if (builtMiddleCurrent != -1) {
                     // if a piece has been built, mark the signal to confirm whether structure has been built complete
                     builtMiddle += builtMiddleCurrent;
@@ -447,7 +443,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner>
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

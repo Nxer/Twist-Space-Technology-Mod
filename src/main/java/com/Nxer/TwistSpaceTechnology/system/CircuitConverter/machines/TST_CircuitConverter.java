@@ -142,7 +142,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
@@ -189,7 +189,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

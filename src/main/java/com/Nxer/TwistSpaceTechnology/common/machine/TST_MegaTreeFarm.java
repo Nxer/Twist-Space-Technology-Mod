@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.UnknowWater;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
@@ -65,7 +66,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import bartworks.API.BorosilicateGlass;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
-import galaxyspace.BarnardsSystem.BRFluids;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
@@ -197,7 +197,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             ItemStack ControllerSlot = this.getControllerSlot();
             if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
                 controllerTier = 1;
-                mInventory[1] = ItemUtils.depleteStack(ControllerSlot);
+                mInventory[1] = ItemUtils.depleteStack(ControllerSlot, ControllerSlot.stackSize);
                 markDirty();
                 // schedule a structure check
                 mUpdated = true;
@@ -212,7 +212,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             ItemStack heldItem = aPlayer.getHeldItem();
             if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem));
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, heldItem.stackSize));
                 if (getBaseMetaTileEntity().isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();
@@ -303,7 +303,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (!checkStructure(true)) {
                 GTUtility.sendChatToPlayer(
@@ -311,7 +312,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
             }
-            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, tool);
         }
     }
 
@@ -334,7 +335,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         int builtW;
         int structureTier = stackSize.stackSize + controllerTier - 1;
         if (structureTier > 1) structureTier = 1;
-        built = survivialBuildPiece(
+        built = survivalBuildPiece(
             "mainEcoSphereSimulator" + structureTier,
             stackSize,
             16,
@@ -344,7 +345,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             env,
             false,
             true);
-        builtW = survivialBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
+        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
         if (built >= 0) return built;
         return built + builtW;
 
@@ -657,7 +658,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 
@@ -882,10 +883,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         RecipeLiquid = FluidRegistry.WATER;
                         break;
                     }
-                    if (aFluid.getFluid()
-                        .equals(BRFluids.UnknowWater) && Mods.GalaxySpace.isModLoaded()) {
+                    if (Mods.GalaxySpace.isModLoaded() && aFluid.getFluid()
+                        .equals(UnknowWater)) {
                         // Normal to BarnardaC`
-                        RecipeLiquid = BRFluids.UnknowWater;
+                        RecipeLiquid = UnknowWater;
                         sapling = GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
                         outputPerMode = queryTreeProduct(sapling);
                         break;

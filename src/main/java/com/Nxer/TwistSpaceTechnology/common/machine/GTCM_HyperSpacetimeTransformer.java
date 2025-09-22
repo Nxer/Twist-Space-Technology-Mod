@@ -113,7 +113,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
             : SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer);
     };
 
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         if (machineMode == 0) return Math.min(
             ValueEnum.MAX_PARALLEL_LIMIT,
             Math.min(SCfieldGeneratorTier * TAfieldGeneratorTier * STfieldGeneratorTier, 512)
@@ -172,7 +172,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
 		int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-		return this.survivialBuildPiece(
+		return this.survivalBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,

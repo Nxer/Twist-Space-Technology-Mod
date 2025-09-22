@@ -59,7 +59,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -75,8 +74,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
 public class MM_IndistinctTentaclePrototypeMK2
-    extends MultiExecutionCoreMachineSupportAllModuleBase<MM_IndistinctTentaclePrototypeMK2>
-    implements IWirelessEnergyHatchInformation {
+    extends MultiExecutionCoreMachineSupportAllModuleBase<MM_IndistinctTentaclePrototypeMK2> {
 
     // region Class Constructor
     public MM_IndistinctTentaclePrototypeMK2(int aID, String aName, String aNameRegional) {
@@ -280,7 +278,7 @@ public class MM_IndistinctTentaclePrototypeMK2
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,

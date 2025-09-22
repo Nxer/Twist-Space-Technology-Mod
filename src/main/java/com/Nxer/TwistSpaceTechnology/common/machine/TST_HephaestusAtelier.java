@@ -55,7 +55,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -69,8 +68,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier>
-    implements IWirelessEnergyHatchInformation {
+public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier> {
 
     // region Class Constructor
     public TST_HephaestusAtelier(int aID, String aName, String aNameRegional) {
@@ -172,7 +170,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                     : super.createOverclockCalculator(recipe);
             }
 
-        }.setMaxParallelSupplier(this::getLimitedMaxParallel)
+        }.setMaxParallelSupplier(this::getTrueParallel)
             .enablePerfectOverclock();
     }
 
@@ -282,13 +280,13 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    protected void startRecipeProcessing() {
+    public void startRecipeProcessing() {
         startRecipeProcessing = true;
         super.startRecipeProcessing();
     }
 
     @Override
-    protected void endRecipeProcessing() {
+    public void endRecipeProcessing() {
         startRecipeProcessing = false;
         super.endRecipeProcessing();
     }
@@ -432,7 +430,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -464,7 +462,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
     }
 
     @Override

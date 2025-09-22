@@ -97,7 +97,6 @@ public class IndustrialMagicMatrixRecipePool {
                 .itemOutputs((Recipe.getOutput()))
                 .fluidInputs()
                 .fluidOutputs()
-                .noOptimize()
                 .duration(200 + Recipe.getInputItem().length * 20 + Math.min(Recipe.getAspectAmount(), 600))
                 .eut(RECIPE_LuV)
                 .addTo(IIM);
@@ -108,7 +107,6 @@ public class IndustrialMagicMatrixRecipePool {
             .itemInputs(new ItemStack(blockCosmeticSolid, 8, 6), new ItemStack(itemShard, 1, 6))
             .itemOutputs(new ItemStack(ModBlocksHandler.BlockCrystalDeep.getLeft(), 8))
             .fluidInputs(Materials.Thaumium.getMolten(144))
-            .noOptimize()
             .duration(20)
             .eut(RECIPE_LV)
             .addTo(RecipeMaps.assemblerRecipes);

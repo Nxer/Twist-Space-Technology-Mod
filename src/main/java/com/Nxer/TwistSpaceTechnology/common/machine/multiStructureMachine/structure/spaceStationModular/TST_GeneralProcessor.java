@@ -55,7 +55,7 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 

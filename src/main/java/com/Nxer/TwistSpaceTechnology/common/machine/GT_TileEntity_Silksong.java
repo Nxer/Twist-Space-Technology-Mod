@@ -171,7 +171,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
         if (this.mMachine) return -1;
         int[] built = new int[stackSize.stackSize + 2];
 
-        built[0] = survivialBuildPiece(
+        built[0] = survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
@@ -185,7 +185,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
         int piece = stackSize.stackSize;
 
         for (int pointer = 1; pointer <= piece; pointer++) {
-            built[pointer] = survivialBuildPiece(
+            built[pointer] = survivalBuildPiece(
                 STRUCTURE_PIECE_MIDDLE,
                 stackSize,
                 horizontalOffSet,
@@ -197,7 +197,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
                 true);
         }
 
-        built[built.length - 1] = survivialBuildPiece(
+        built[built.length - 1] = survivalBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             horizontalOffSet,

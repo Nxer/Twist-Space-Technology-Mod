@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -11,7 +12,7 @@ import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 
 import net.minecraft.item.ItemStack;
 
@@ -96,7 +97,7 @@ public class ModularHatchesRecipes {
             // Normal Execution Core
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, ItemList.Cover_Screen.get(1))
-                .metadata(RESEARCH_TIME, 24 * HOURS)
+                .metadata(SCANNING, scanningLV(24 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UIV.get(1),
                     ItemList.Electric_Motor_UV.get(16),
@@ -128,7 +129,7 @@ public class ModularHatchesRecipes {
             // Advanced Execution Core
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.ExecutionCore.get(1))
-                .metadata(RESEARCH_TIME, 48 * HOURS)
+                .metadata(SCANNING, scanningLV(48 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UMV.get(1),
                     ItemList.Electric_Motor_UMV.get(64),
@@ -162,7 +163,7 @@ public class ModularHatchesRecipes {
             // Perfect Execution Core
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.AdvancedExecutionCore.get(1))
-                .metadata(RESEARCH_TIME, 96 * HOURS)
+                .metadata(SCANNING, scanningLV(96 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UXV.get(1),
                     ItemList.Electric_Motor_UXV.get(64),
@@ -220,7 +221,7 @@ public class ModularHatchesRecipes {
             // perfect overclock
             GTValues.RA.stdBuilder()
                 .metadata(RESEARCH_ITEM, GTCMItemList.LowSpeedPerfectOverclockController.get(1))
-                .metadata(RESEARCH_TIME, 48 * HOURS)
+                .metadata(SCANNING, scanningLV(48 * HOURS))
                 .itemInputs(
                     GTCMItemList.LowSpeedPerfectOverclockController.get(1),
                     GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),

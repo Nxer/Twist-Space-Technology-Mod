@@ -64,7 +64,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
@@ -81,8 +80,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_IndistinctTentacle>
-    implements IWirelessEnergyHatchInformation {
+public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_IndistinctTentacle> {
 
     // region Class Constructor
     public TST_IndistinctTentacle(int aID, String aName, String aNameRegional) {
@@ -258,7 +256,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
                 }
             }
 
-        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
+        }.setMaxParallelSupplier(this::getTrueParallel);
     }
 
     @Override
@@ -296,7 +294,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return wirelessMode ? Integer.MAX_VALUE : ValueEnum.Parallel_Default_IndistinctTentacle;
     }
 
@@ -351,7 +349,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,

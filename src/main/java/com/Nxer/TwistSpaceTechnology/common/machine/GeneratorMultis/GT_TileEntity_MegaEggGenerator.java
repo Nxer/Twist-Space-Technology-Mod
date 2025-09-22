@@ -276,7 +276,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 		if (this.mMachine) return -1;
 		int built = 0;
 
-		built += survivialBuildPiece(
+		built += survivalBuildPiece(
             STRUCTURE_PIECE_BASE,
 			stackSize,
 			horizontalOffSet,
@@ -290,7 +290,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 
 		int piece = stackSize.stackSize;
 		for (int i=1; i<=piece; i++){
-			built += survivialBuildPiece(
+			built += survivalBuildPiece(
 				STRUCTURE_PIECE_MIDDLE,
 				stackSize,
 				horizontalOffSet,
@@ -303,7 +303,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 				true);
 		}
 
-		built += survivialBuildPiece(
+		built += survivalBuildPiece(
             STRUCTURE_PIECE_TOP,
 			stackSize,
 			horizontalOffSet,

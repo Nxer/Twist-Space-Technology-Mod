@@ -84,9 +84,7 @@ import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -94,7 +92,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -109,7 +106,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
 public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO, IWirelessEnergyHatchInformation {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO {
 
     // region Class Constructor
     public TST_DSPReceiver(int aID, String aName, String aNameRegional) {
@@ -559,7 +556,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		return this.survivialBuildPiece(
+		return this.survivalBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
@@ -584,16 +581,16 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                                    .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 8)) // B -> ofBlock...(gt.blockcasings2, 8, ...);
                                    .addElement('C', ofBlock(GregTechAPI.sBlockCasings8, 2)) // C -> ofBlock...(gt.blockcasings8, 2, ...);
                                    .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 10)) // D -> ofBlock...(gt.blockcasings8, 10, ...);
-                                   .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 0)) // E -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                                   .addElement('F', ofBlock(IGBlocks.SpaceElevatorCasing, 1)) // F -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                                   .addElement('G', ofBlock(IGBlocks.SpaceElevatorCasing, 2)) // G -> ofBlock...(gt.blockcasingsSE, 2, ...);
+                                   .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 0)) // E -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                                   .addElement('F', ofBlock(GregTechAPI.sBlockCasingsSE, 1)) // F -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                                   .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 2)) // G -> ofBlock...(gt.blockcasingsSE, 2, ...);
                                    .addElement('H', ofBlock(sBlockCasingsTT, 0)) // H -> ofBlock...(gt.blockcasingsTT, 0, ...);
                                    .addElement('I', ofBlock(sBlockCasingsTT, 6)) // I -> ofBlock...(gt.blockcasingsTT, 6, ...);
                                    .addElement('J', ofBlock(sBlockCasingsTT, 7)) // J -> ofBlock...(gt.blockcasingsTT, 7, ...);
                                    .addElement('K', ofBlock(sBlockCasingsTT, 9)) // K -> ofBlock...(gt.blockcasingsTT, 9, ...);
                                    .addElement('L', ofBlock(ModBlocks.blockCasings4Misc, 4)) // L -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-                                   .addElement('M', ofBlock(GSBlocks.DysonSwarmBlocks, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
-                                   .addElement('N', ofBlock(GSBlocks.DysonSwarmBlocks, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+                                   .addElement('M', ofBlock(GregTechAPI.sBlockCasingsDyson, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
+                                   .addElement('N', ofBlock(GregTechAPI.sBlockCasingsDyson, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
                                    .addElement('O', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // O -> ofBlock...(tile.quantumGlass, 0, ...);
                                    .addElement(
 			                           'P',
@@ -602,7 +599,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 			                                                 .adder(TST_DSPReceiver::addToMachineList)
 			                                                 .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
 			                                                 .dot(1)
-			                                                 .buildAndChain(IGBlocks.SpaceElevatorCasing, 0)
+			                                                 .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
                                    )
                                    .addElement('Q', ofFrame(Materials.NaquadahAlloy))
                                    .addElement('R', ofChain(ofBlock(sBlockCasingsTT, 0), ofBlock(GregTechAPI.sBlockCasings8, 10)))
@@ -700,7 +697,7 @@ Q -> ofFrame...(NaquadahAlloy, ...);
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

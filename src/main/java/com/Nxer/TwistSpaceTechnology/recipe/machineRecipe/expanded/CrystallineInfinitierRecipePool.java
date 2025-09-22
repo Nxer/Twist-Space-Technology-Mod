@@ -73,7 +73,6 @@ public class CrystallineInfinitierRecipePool {
 
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(RecipeMaps.mixerRecipes);
@@ -86,7 +85,6 @@ public class CrystallineInfinitierRecipePool {
 
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(RecipeMaps.mixerRecipes);
@@ -103,7 +101,6 @@ public class CrystallineInfinitierRecipePool {
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(RecipeMaps.mixerRecipes);
@@ -122,7 +119,6 @@ public class CrystallineInfinitierRecipePool {
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(RecipeMaps.mixerRecipes);
@@ -133,7 +129,6 @@ public class CrystallineInfinitierRecipePool {
 
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -146,7 +141,6 @@ public class CrystallineInfinitierRecipePool {
 
             .itemOutputs(MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 8))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 5)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -163,7 +157,6 @@ public class CrystallineInfinitierRecipePool {
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -182,7 +175,6 @@ public class CrystallineInfinitierRecipePool {
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 64),
                 MaterialPool.HolmiumGarnet.get(OrePrefixes.dust, 32))
 
-            .noOptimize()
             .eut(RECIPE_UV)
             .duration(20 * 60)
             .addTo(GTPPRecipeMaps.mixerNonCellRecipes);

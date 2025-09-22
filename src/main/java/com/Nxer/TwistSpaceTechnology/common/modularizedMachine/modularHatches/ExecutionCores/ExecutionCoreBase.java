@@ -18,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IS
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.enums.VoidingMode;
 import gregtech.api.interfaces.ITexture;
@@ -396,6 +397,14 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
             return m.canDumpFluidToME();
         }
         return false;
+    }
+
+    @Override
+    public List<ItemStack> getVoidOutputSlots() {
+        if (mainMachine instanceof IVoidable m) {
+            return m.getVoidOutputSlots();
+        }
+        return TstUtils.EMPTY_ITEMSTACK_LIST;
     }
 
     // endregion

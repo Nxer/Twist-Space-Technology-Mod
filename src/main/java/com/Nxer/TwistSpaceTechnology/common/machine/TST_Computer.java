@@ -6,6 +6,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
+import static gregtech.api.GregTechAPI.sBlockCasingsSE;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputHatch;
@@ -43,7 +44,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.util.Vec3Impl;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -1320,7 +1320,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(MAIN, stackSize, offsetX, offsetY, offsetZ, elementBudget, env, false, true);
+        return survivalBuildPiece(MAIN, stackSize, offsetX, offsetY, offsetZ, elementBudget, env, false, true);
     }
 
     private static IStructureDefinition<TST_Computer> STRUCTURE_DEFINITION = null;
@@ -1332,9 +1332,9 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 .addShape(MAIN, shape)// FRF_Coil_1
                 .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
                 .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
-                .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                // .addElement('E', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
+                .addElement('C', ofBlock(sBlockCasingsSE, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                .addElement('D', ofBlock(sBlockCasingsSE, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                // .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
                 // ...);
                 .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
                 .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
@@ -1356,7 +1356,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                         .adder(TST_Computer::superAddToMachineList)
                         .dot(1)
                         .casingIndex(textureOffset + 2)
-                        .buildAndChain(ofBlock(IGBlocks.SpaceElevatorCasing, 2)))
+                        .buildAndChain(ofBlock(sBlockCasingsSE, 2)))
                 .addElement('Q', ofBlock(sBlockCasingsTT, 3))
                 .build();
         }

@@ -19,6 +19,8 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -45,6 +47,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.objects.GTDualInputPattern;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -55,6 +58,7 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings8;
+import gregtech.common.tileentities.machines.IDualInputInventoryWithPattern;
 
 public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT_TileEntity_PhysicalFormSwitcher> {
 
@@ -115,8 +119,8 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             RecipeMap<?> currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
 
             @Override
-            protected RecipeMap<?> preProcess() {
-                if (machineMode != 0) return super.preProcess();
+            protected RecipeMap<?> getCurrentRecipeMap() {
+                if (machineMode != 0) return super.getCurrentRecipeMap();
 
                 // add tool casting recipes to solidifier mode
                 if (lastRecipeMap != RecipeMaps.fluidSolidifierRecipes
@@ -130,6 +134,33 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                 }
 
                 return currentRecipeMap;
+            }
+
+            @Override
+            public boolean tryCachePossibleRecipesFromPattern(IDualInputInventoryWithPattern inv) {
+                if (!inv.shouldBeCached()) {
+                    return true;
+                }
+
+                if (dualInvWithPatternToRecipeCache.containsKey(inv)) {
+                    activeDualInv = inv;
+                    return true;
+                }
+
+                GTDualInputPattern inputs = inv.getPatternInputs();
+                setInputItems(inputs.inputItems);
+                setInputFluids(inputs.inputFluid);
+                Set<GTRecipe> recipes = findRecipeMatches(RecipeMaps.fluidSolidifierRecipes)
+                    .collect(Collectors.toSet());
+                // this might be able to be safely removed. Ill keep it in. REMOVE IN NEXT MAJOR UPDATE
+                if (recipes.isEmpty())
+                    recipes = findRecipeMatches(GGFabRecipeMaps.toolCastRecipes).collect(Collectors.toSet());
+                if (!recipes.isEmpty()) {
+                    dualInvWithPatternToRecipeCache.put(inv, recipes);
+                    activeDualInv = inv;
+                    return true;
+                }
+                return false;
             }
 
             @NotNull
@@ -181,7 +212,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,

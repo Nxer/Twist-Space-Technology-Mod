@@ -30,8 +30,8 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.chemistry.GenericChem;
 import gtPlusPlus.core.material.MaterialMisc;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class IntensifyChemicalDistorterRecipePool {
@@ -59,7 +59,6 @@ public class IntensifyChemicalDistorterRecipePool {
                 Materials.Nitrogen.getGas(576000),
                 Materials.Oxygen.getGas(2016000))
             .fluidOutputs(Materials.Polybenzimidazole.getMolten(216000), Materials.HydrochloricAcid.getFluid(288000))
-            .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UV)
             .duration(96)
@@ -119,7 +118,6 @@ public class IntensifyChemicalDistorterRecipePool {
                 Materials.Oxygen.getGas(1000*4))
 
             .fluidOutputs(Materials.PhthalicAcid.getFluid(1000))
-            .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_UV)
             .duration(5)
@@ -185,7 +183,6 @@ public class IntensifyChemicalDistorterRecipePool {
             .fluidInputs(Materials.Hydrogen.getGas(12000), Materials.Water.getFluid(3000))
 
             .fluidOutputs(Materials.Silicone.getMolten(1296))
-            .noOptimize()
             .specialValue(400)
             .eut(96)
             .duration(128)
@@ -201,7 +198,6 @@ public class IntensifyChemicalDistorterRecipePool {
             )
             .fluidInputs(Materials.Hydrogen.getGas(12000 * 64), Materials.Water.getFluid(3000 * 64))
             .fluidOutputs(Materials.Silicone.getMolten(1296 * 64))
-            .noOptimize()
             .specialValue(800)
             .eut(96)
             .duration(128 * 64)
@@ -214,7 +210,6 @@ public class IntensifyChemicalDistorterRecipePool {
             .itemInputs(GTUtility.getIntegratedCircuit(11), Materials.Sulfur.getDust(1))
             .fluidInputs(Materials.Benzene.getFluid(1000))
             .fluidOutputs(Materials.PolyphenyleneSulfide.getMolten(1500), Materials.Hydrogen.getGas(2000))
-            .noOptimize()
             .specialValue(400)
             .eut(RECIPE_HV)
             .duration(128)
@@ -224,7 +219,6 @@ public class IntensifyChemicalDistorterRecipePool {
             .itemInputs(GTUtility.getIntegratedCircuit(19), Materials.Sulfur.getDust(64))
             .fluidInputs(Materials.Benzene.getFluid(64000))
             .fluidOutputs(Materials.PolyphenyleneSulfide.getMolten(96000), Materials.Hydrogen.getGas(128000))
-            .noOptimize()
             .specialValue(800)
             .eut(RECIPE_HV)
             .duration(128 * 64)
@@ -240,7 +234,6 @@ public class IntensifyChemicalDistorterRecipePool {
                 Materials.PhosphoricAcid.getFluid(1000),
                 Materials.Water.getFluid(8000))
             .itemOutputs(GTModHandler.getModItem("dreamcraft", "GTNHBioItems", 8, 2))
-            .noOptimize()
             .specialValue(9900)
             .eut(RECIPE_IV)
             .duration(256)
@@ -257,7 +250,6 @@ public class IntensifyChemicalDistorterRecipePool {
             .itemOutputs(
                 GTUtility.copyAmountUnsafe(64 * 8, GTModHandler.getModItem("dreamcraft", "GTNHBioItems", 64, 2))
             )
-            .noOptimize()
             .specialValue(10800)
             .eut(RECIPE_IV)
             .duration(256 * 36)
@@ -312,7 +304,6 @@ public class IntensifyChemicalDistorterRecipePool {
             .itemInputs(GTUtility.getIntegratedCircuit(11), Materials.Carbon.getDust(2 * 9))
             .fluidInputs(Materials.Fluorine.getGas(4000 * 9), Materials.Oxygen.getGas(125000))
             .fluidOutputs(Materials.Polytetrafluoroethylene.getMolten(36000))
-            .noOptimize()
             .specialValue(1800)
             .eut(RECIPE_IV)
             .duration(20 * 12)
@@ -648,7 +639,7 @@ public class IntensifyChemicalDistorterRecipePool {
                 Materials.Oxygen.getGas(1000)
             )
             .itemOutputs(
-                GTUtility.copyAmountUnsafe(12, GenericChem.mPotassiumEthylXanthate)
+                GregtechItemList.PotassiumEthylXanthate.get(12)
             )
             .specialValue(9000)
             .eut(RECIPE_HV)
@@ -670,7 +661,7 @@ public class IntensifyChemicalDistorterRecipePool {
                 Materials.Oxygen.getGas(1000)
             )
             .itemOutputs(
-                GTUtility.copyAmountUnsafe(12, GenericChem.mSodiumEthylXanthate)
+                GregtechItemList.SodiumEthylXanthate.get(12)
             )
             .specialValue(9000)
             .eut(RECIPE_HV)

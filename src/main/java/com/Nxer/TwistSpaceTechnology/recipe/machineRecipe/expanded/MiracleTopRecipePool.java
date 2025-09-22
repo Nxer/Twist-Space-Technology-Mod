@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.removeIntegratedCircuitFromStacks;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
-import static com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
@@ -12,6 +11,7 @@ import static gregtech.api.util.GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes
 import static gregtech.api.util.GTUtility.copyAmount;
 import static gregtech.api.util.GTUtility.copyAmountUnsafe;
 import static gtPlusPlus.core.material.Material.mComponentMap;
+import static gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
 import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
 import java.util.ArrayList;
@@ -521,7 +521,6 @@ public class MiracleTopRecipePool {
             .itemOutputs(aRecipe.mOutputs)
             .eut(aRecipe.mEUt)
             .duration(aRecipe.mDuration)
-            .noOptimize()
             .addTo(MT);
     }
 
@@ -763,7 +762,6 @@ public class MiracleTopRecipePool {
                 MaterialsUEVplus.PrimordialMatter.getFluid(1000 * 114514)
             )
             .itemOutputs(GTCMItemList.ProofOfHeroes.get(1))
-            .noOptimize()
             .specialValue(13500)
             .eut(RECIPE_MAX)
             .duration(20 * 1919810)
@@ -829,7 +827,6 @@ public class MiracleTopRecipePool {
                 MaterialPool.StabiliseVoidMatter.getFluidOrGas(1_000)
             )
             .fluidOutputs(MaterialPool.LiquidStargate.getFluidOrGas(1000))
-            .noOptimize()
             .specialValue(13500)
             .eut(RECIPE_MAX)
             .duration(20 * 99_999_999)
@@ -976,7 +973,6 @@ public class MiracleTopRecipePool {
                 Materials.Iron.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.LvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(32 * 20)
             .addTo(MT);
@@ -1000,7 +996,6 @@ public class MiracleTopRecipePool {
                 Materials.Copper.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.MvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(128 * 20)
             .addTo(MT);
@@ -1024,7 +1019,6 @@ public class MiracleTopRecipePool {
                 Materials.Nickel.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.HvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(512 * 20)
             .addTo(MT);
@@ -1048,7 +1042,6 @@ public class MiracleTopRecipePool {
                 Materials.Titanium.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.EvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(2_048 * 20)
             .addTo(MT);
@@ -1072,7 +1065,6 @@ public class MiracleTopRecipePool {
                 Materials.Tungsten.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.IvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(8_192 * 20)
             .addTo(MT);
@@ -1096,7 +1088,6 @@ public class MiracleTopRecipePool {
                 Materials.Osmium.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.LuvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(32_768 * 20)
             .addTo(MT);
@@ -1120,7 +1111,6 @@ public class MiracleTopRecipePool {
                 Materials.Naquadah.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.ZpmFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(131_072 * 20)
             .addTo(MT);
@@ -1144,7 +1134,6 @@ public class MiracleTopRecipePool {
                 Materials.Neutronium.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.UvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(524_288 * 20)
             .addTo(MT);
@@ -1168,7 +1157,6 @@ public class MiracleTopRecipePool {
                 Materials.Samarium.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.UhvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(2_097_152 * 20)
             .addTo(MT);
@@ -1192,7 +1180,6 @@ public class MiracleTopRecipePool {
                 Materials.Americium.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.UevFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(8_388_608 * 20)
             .addTo(MT);
@@ -1216,7 +1203,6 @@ public class MiracleTopRecipePool {
                 Materials.Thorium.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.UivFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(33_554_432 * 20)
             .addTo(MT);
@@ -1240,7 +1226,6 @@ public class MiracleTopRecipePool {
                 Materials.Plutonium241.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.UmvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(100_000_000 * 20)
             .addTo(MT);
@@ -1264,7 +1249,6 @@ public class MiracleTopRecipePool {
                 Materials.Radon.getPlasma(1_000_000_000)
             )
             .itemOutputs(GTCMItemList.UxvFlask.get(1))
-            .noOptimize()
             .eut(RECIPE_MAX)
             .duration(100_000_000 * 20)
             .addTo(MT);

@@ -44,7 +44,6 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.common.tileentities.machines.MTEHatchOutputBusME;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
@@ -98,7 +97,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         mEfficiency = 0;
         mWrench = false;
         mScrewdriver = false;
-        mSoftHammer = false;
+        mSoftMallet = false;
         mHardHammer = false;
         mSolderingTool = false;
         mCrowbar = false;
@@ -150,11 +149,9 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     public CheckRecipeResult checkProcessing_EM() {
         mEfficiencyIncrease = 100;
 
-        // use the standard overclock mechanism to determine duration and estimate a maximum consumption
-        calculateOverclockedNessMultiInternal(40, 45 * Math.max(1, mHeight - 1), 1, getMaxInputVoltage(), false);
         // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
         // consumption.
-        lEUt /= -10;
+        lEUt = -10;
         if (ePowerPass) {
             mMaxProgresstime = 20;
         } else {
@@ -178,9 +175,10 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 for (var item : c.get(i).mInventory) {
                     if (item != null) {
                         if (item_me) {
-                            item.stackSize -= ((MTEHatchOutputBusME) d.get(0)).store(item);
+                            d.get(0)
+                                .storePartial(item);
                         } else if (d.get(i)
-                            .storeAll(item.copy())) {
+                            .storePartial(item.copy())) {
                                 item.stackSize = 0;
                             }
                     }
@@ -460,11 +458,6 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
     }
 
     @Override

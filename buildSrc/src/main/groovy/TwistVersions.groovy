@@ -13,7 +13,7 @@ class TwistVersions {
 
     static {
         // get the manifest from either cache or fetch online.
-        man = loadOrFetchManifest(new File("build"), "2.7.4")
+        man = loadOrFetchManifest(new File("build"), "2.8.0-rc-1")
 
         // mapping the mods to versions
         versionLookup = new HashMap<>()

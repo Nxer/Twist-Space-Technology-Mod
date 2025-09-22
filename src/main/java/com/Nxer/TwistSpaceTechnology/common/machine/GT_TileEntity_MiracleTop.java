@@ -150,7 +150,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
         int built = 0;
 
-        built = survivialBuildPiece(
+        built = survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             baseHorizontalOffSet,
@@ -166,7 +166,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         int rings = Math.min(14, stackSize.stackSize - 1);
         int pointer = 1;
         while (pointer <= rings) {
-            built += survivialBuildPiece(
+            built += survivalBuildPiece(
                 STRUCTURE_PIECE_MIDDLE,
                 stackSize,
                 baseHorizontalOffSet,
@@ -180,7 +180,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             if (built >= 0) return built;
         }
 
-        built += survivialBuildPiece(
+        built += survivalBuildPiece(
             STRUCTURE_PIECE_END,
             stackSize,
             baseHorizontalOffSet,

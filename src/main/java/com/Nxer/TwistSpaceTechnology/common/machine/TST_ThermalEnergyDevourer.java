@@ -165,7 +165,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         if (wirelessMode) return Integer.MAX_VALUE;
         return machineMode == 1 ? ValueEnum.Parallel_HighParallelMode_ThermalEnergyDevourer
             : ValueEnum.Parallel_HighSpeedMode_ThermalEnergyDevourer;
@@ -202,7 +202,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
     }
     @Override
     public IStructureDefinition<TST_ThermalEnergyDevourer> getStructureDefinition() {

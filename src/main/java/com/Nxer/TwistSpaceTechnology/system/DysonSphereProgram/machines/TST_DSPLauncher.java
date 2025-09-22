@@ -74,17 +74,13 @@ import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
-import com.gtnewhorizons.gtnhintergalactic.tile.multi.elevator.ElevatorUtil;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -92,9 +88,10 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gtnhintergalactic.tile.multi.elevator.ElevatorUtil;
 
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
-    implements IConstructable, ISurvivalConstructable, IDSP_IO, IWirelessEnergyHatchInformation {
+    implements IConstructable, ISurvivalConstructable, IDSP_IO {
 
     // region Class Constructor
     public TST_DSPLauncher(int aID, String aName, String aNameRegional) {
@@ -400,7 +397,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 	@Override
 	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
 		if (this.mMachine) return -1;
-		return this.survivialBuildPiece(
+		return this.survivalBuildPiece(
 			STRUCTURE_PIECE_MAIN,
 			stackSize,
 			horizontalOffSet,
@@ -420,18 +417,18 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 		return IStructureDefinition.<TST_DSPLauncher>builder()
 		                           .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
 		                           .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))// A -> ofBlock...(gt.blockcasings8, 7, ...);
-		                           .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 0))// B -> ofBlock...(gt.blockcasingsSE, 0, ...);
-		                           .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 1))// C -> ofBlock...(gt.blockcasingsSE, 1, ...);
-		                           .addElement('D', ofBlock(IGBlocks.SpaceElevatorCasing, 2))// D -> ofBlock...(gt.blockcasingsSE, 2, ...);
+		                           .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// B -> ofBlock...(gt.blockcasingsSE, 0, ...);
+		                           .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// C -> ofBlock...(gt.blockcasingsSE, 1, ...);
+		                           .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// D -> ofBlock...(gt.blockcasingsSE, 2, ...);
 		                           .addElement('E', // E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...) tiered
 		                                       ofBlocksTiered(
-			                                       ElevatorUtil.motorTierConverter(),
-			                                       ElevatorUtil.getMotorTiers(),
-			                                       0,
-			                                       TST_DSPLauncher::setMotorTier,
-			                                       TST_DSPLauncher::getMotorTier))
+                                                   ElevatorUtil.motorTierConverter(),
+                                                   ElevatorUtil.getMotorTiers(),
+                                                   0,
+                                                   TST_DSPLauncher::setMotorTier,
+                                                   TST_DSPLauncher::getMotorTier))
 		                           .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-		                           .addElement('G', ofBlock(GSBlocks.DysonSwarmBlocks, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+		                           .addElement('G', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
 		                           .addElement(
 						                       'H',
 						                       HatchElementBuilder.<TST_DSPLauncher>builder()
@@ -439,7 +436,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 						                                             .adder(TST_DSPLauncher::addToMachineList)
 						                                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
 						                                             .dot(1)
-						                                             .buildAndChain(IGBlocks.SpaceElevatorCasing, 0))
+						                                             .buildAndChain(GregTechAPI.sBlockCasingsSE, 0))
 		                           .addElement('I', ofFrame(Materials.CosmicNeutronium))
 		                           .build();
 	}
@@ -541,7 +538,7 @@ I -> ofFrame...(NaquadahAlloy);
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return 1;
     }
 

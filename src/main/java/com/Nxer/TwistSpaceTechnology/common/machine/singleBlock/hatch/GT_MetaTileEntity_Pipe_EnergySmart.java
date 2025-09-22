@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
-import static tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_IN_LASER_TT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +32,8 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
-import tectech.thing.metaTileEntity.pipe.MTEPipeEnergy;
-import tectech.thing.metaTileEntity.pipe.MTEPipeEnergyMirror;
+import tectech.thing.metaTileEntity.pipe.MTEPipeLaser;
+import tectech.thing.metaTileEntity.pipe.MTEPipeLaserMirror;
 import tectech.util.CommonValues;
 
 public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock implements IConnectsToEnergyTunnel {
@@ -45,7 +44,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public long actualInputAmperes = 0;
     public long actualOutputAmperes = 0;
     public long lastStoredEU = 0;
-    private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe;
+    public static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe, Facing;
 
     public GT_MetaTileEntity_Pipe_EnergySmart(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
@@ -61,6 +60,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public void registerIcons(IIconRegister aBlockIconRegister) {
         EMCandyActive = new Textures.BlockIcons.CustomIcon("iconsets/EM_CANDY_ACTIVE");
         EMpipe = new Textures.BlockIcons.CustomIcon("iconsets/EM_LASER");
+        Facing = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_ENERGY_IN_LASER");
         super.registerIcons(aBlockIconRegister);
     }
 
@@ -113,7 +113,8 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
-            return new ITexture[] { TextureFactory.of(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
+            return new ITexture[] { TextureFactory.of(EMpipe),
+                TextureFactory.of(Facing, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())),
                 TextureFactory.of(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
         } else {
             return new ITexture[] { TextureFactory.of(EMpipe),
@@ -123,7 +124,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
 
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
-        return new ITexture[0][0][0];
+        return null;
     }
 
     @Override
@@ -158,11 +159,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
 
     @Override
     public boolean isAccessAllowed(EntityPlayer aPlayer) {
-        return true;
-    }
-
-    @Override
-    public boolean isSimpleMachine() {
         return true;
     }
 
@@ -298,7 +294,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
 
             IMetaTileEntity aMetaTileEntity = tGTTileEntity.getMetaTileEntity();
 
-            if (aMetaTileEntity instanceof MTEPipeEnergyMirror tMirror) {
+            if (aMetaTileEntity instanceof MTEPipeLaserMirror tMirror) {
                 ForgeDirection mirrorFacing = tMirror.getBendDirection(facingSide);
                 return findMTE(tMirror.getBaseMetaTileEntity(), color, mirrorFacing, findProvider);
             }
@@ -327,7 +323,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
                 }
             }
 
-            if (aMetaTileEntity instanceof MTEPipeEnergy pipe) {
+            if (aMetaTileEntity instanceof MTEPipeLaser pipe) {
                 if (pipe.connectionCount < 2) {
                     break;
                 } else {

@@ -26,7 +26,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PhysicalFormSw
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_Silksong;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
-import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_StellarMaterialSiphon;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GT_TileEntity_MegaEggGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_LargeSolarBoiler;
@@ -73,7 +72,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure.spaceStationModular.TST_MegaUniversalSpaceStation;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessDynamoHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_InfiniteWirelessMulti;
@@ -201,6 +199,8 @@ public final class MachineLoader {
             new TST_OreProcessingFactory(19017, "NameOreProcessingFactory", TextLocalization.NameOreProcessingFactory));
 
         // Space Station Systems
+        // spotless:off
+        /*
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.megaUniversalSpaceStation.set(
                 new TST_MegaUniversalSpaceStation(
@@ -213,6 +213,8 @@ public final class MachineLoader {
                     "NameStellarMaterialSiphon",
                     TextLocalization.NameStellarMaterialSiphon));
         }
+         */
+        // spotless:on
 
         GTCMItemList.CircuitConverter
             .set(new TST_CircuitConverter(19020, "NameCircuitConverter", TextLocalization.NameCircuitConverter));
