@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
-import static tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_IN_LASER_TT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public long actualInputAmperes = 0;
     public long actualOutputAmperes = 0;
     public long lastStoredEU = 0;
-    private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe;
+    public static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe, Facing;
 
     public GT_MetaTileEntity_Pipe_EnergySmart(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
@@ -61,6 +60,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public void registerIcons(IIconRegister aBlockIconRegister) {
         EMCandyActive = new Textures.BlockIcons.CustomIcon("iconsets/EM_CANDY_ACTIVE");
         EMpipe = new Textures.BlockIcons.CustomIcon("iconsets/EM_LASER");
+        Facing = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_ENERGY_IN_LASER");
         super.registerIcons(aBlockIconRegister);
     }
 
@@ -113,7 +113,8 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
-            return new ITexture[] { TextureFactory.of(EMpipe), OVERLAYS_ENERGY_IN_LASER_TT[mTier],
+            return new ITexture[] { TextureFactory.of(EMpipe),
+                TextureFactory.of(Facing, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())),
                 TextureFactory.of(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())) };
         } else {
             return new ITexture[] { TextureFactory.of(EMpipe),

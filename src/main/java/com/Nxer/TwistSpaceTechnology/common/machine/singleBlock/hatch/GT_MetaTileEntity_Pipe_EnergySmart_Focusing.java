@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
-import static tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_OUT_LASER_TT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
     public long tempActualInputAmpres = 0;
     public long lastStoredEU = 0;
 
-    private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe;
+    public static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe, Facing;
 
     public GT_MetaTileEntity_Pipe_EnergySmart_Focusing(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
@@ -64,6 +63,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
     public void registerIcons(IIconRegister aBlockIconRegister) {
         EMCandyActive = new Textures.BlockIcons.CustomIcon("iconsets/EM_CANDY_ACTIVE");
         EMpipe = new Textures.BlockIcons.CustomIcon("iconsets/EM_LASER");
+        Facing = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_ENERGY_OUT_LASER");
         super.registerIcons(aBlockIconRegister);
     }
 
@@ -118,7 +118,8 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
         ITexture pipe = TextureFactory.of(EMpipe);
         ITexture overlay = TextureFactory.of(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA()));
         if (side == facing) {
-            return new ITexture[] { pipe, OVERLAYS_ENERGY_OUT_LASER_TT[mTier], overlay };
+            return new ITexture[] { pipe,
+                TextureFactory.of(Facing, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())), overlay };
         }
         return new ITexture[] { pipe, overlay };
     }
