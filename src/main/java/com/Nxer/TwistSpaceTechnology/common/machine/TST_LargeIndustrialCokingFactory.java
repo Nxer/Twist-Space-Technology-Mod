@@ -174,7 +174,7 @@ I -> ofFrame...(Materials.Steel, ...);
                                                ofCoil(
                                                    TST_LargeIndustrialCokingFactory::setCoilLevel,
                                                    TST_LargeIndustrialCokingFactory::getCoilLevel)))
-                                       .addElement('E', ofBlockUnlocalizedName("dreamcraft", "gt.blockcasingsNH", 2))
+                                       .addElement('E', ofBlock(GregTechAPI.sBlockCasingsNH, 2))
                                        .addElement('F', ofBlock(ModBlocks.blockCasingsMisc, 1))
                                        .addElement('G', ofBlock(ModBlocks.blockCasingsMisc, 3))
                                        .addElement('H', ofFrame(Materials.BlackSteel))
