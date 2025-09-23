@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
-import static tectech.thing.metaTileEntity.Textures.OVERLAYS_ENERGY_OUT_LASER_TT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +32,8 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.mechanics.pipe.IConnectsToEnergyTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
-import tectech.thing.metaTileEntity.pipe.MTEPipeEnergy;
-import tectech.thing.metaTileEntity.pipe.MTEPipeEnergyMirror;
+import tectech.thing.metaTileEntity.pipe.MTEPipeLaser;
+import tectech.thing.metaTileEntity.pipe.MTEPipeLaserMirror;
 import tectech.util.CommonValues;
 
 public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachineBlock
@@ -48,7 +47,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
     public long tempActualInputAmpres = 0;
     public long lastStoredEU = 0;
 
-    private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe;
+    private static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe, Facing;
 
     public GT_MetaTileEntity_Pipe_EnergySmart_Focusing(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
@@ -64,6 +63,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
     public void registerIcons(IIconRegister aBlockIconRegister) {
         EMCandyActive = new Textures.BlockIcons.CustomIcon("iconsets/EM_CANDY_ACTIVE");
         EMpipe = new Textures.BlockIcons.CustomIcon("iconsets/EM_LASER");
+        Facing = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_ENERGY_OUT_LASER");
         super.registerIcons(aBlockIconRegister);
     }
 
@@ -118,14 +118,15 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
         ITexture pipe = TextureFactory.of(EMpipe);
         ITexture overlay = TextureFactory.of(EMCandyActive, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA()));
         if (side == facing) {
-            return new ITexture[] { pipe, OVERLAYS_ENERGY_OUT_LASER_TT[mTier], overlay };
+            return new ITexture[] { pipe,
+                TextureFactory.of(Facing, Dyes.getModulation(colorIndex, MACHINE_METAL.getRGBA())), overlay };
         }
         return new ITexture[] { pipe, overlay };
     }
 
     @Override
     public ITexture[][][] getTextureSet(ITexture[] aTextures) {
-        return new ITexture[0][0][0];
+        return null;
     }
 
     @Override
@@ -160,11 +161,6 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
 
     @Override
     public boolean isAccessAllowed(EntityPlayer p) {
-        return true;
-    }
-
-    @Override
-    public boolean isSimpleMachine() {
         return true;
     }
 
@@ -299,7 +295,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
             IMetaTileEntity mte = target.getMetaTileEntity();
             if (mte == null) break;
 
-            if (mte instanceof MTEPipeEnergyMirror mirror) {
+            if (mte instanceof MTEPipeLaserMirror mirror) {
                 ForgeDirection nextTravel = mirror.getBendDirection(facingSide);
                 return findMTE(mirror.getBaseMetaTileEntity(), color, nextTravel, findProvider);
             }
@@ -318,7 +314,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
                     return mte;
             }
 
-            if (mte instanceof MTEPipeEnergy pipe) {
+            if (mte instanceof MTEPipeLaser pipe) {
                 if (pipe.connectionCount < 2) break;
                 pipe.markUsed();
             } else {

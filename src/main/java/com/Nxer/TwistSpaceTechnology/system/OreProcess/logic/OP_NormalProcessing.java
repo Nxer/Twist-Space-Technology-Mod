@@ -336,7 +336,6 @@ public class OP_NormalProcessing {
             .itemInputs(input)
             .itemOutputs(output)
             .fluidInputs(Materials.Lubricant.getFluid(1))
-            .noOptimize()
             .eut(OreProcessRecipeEUt)
             .duration(OreProcessRecipeDuration)
             .addTo(GTCMRecipe.OreProcessingRecipes);

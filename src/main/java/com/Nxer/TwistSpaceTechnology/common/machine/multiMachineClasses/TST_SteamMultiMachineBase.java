@@ -47,7 +47,7 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
 
     public void repairMachine() {
         mHardHammer = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mScrewdriver = true;
         mCrowbar = true;
         mSolderingTool = true;
@@ -62,8 +62,7 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
             @Nonnull
             protected OverclockCalculator createOverclockCalculator(@NotNull GTRecipe recipe) {
                 return OverclockCalculator.ofNoOverclock(recipe)
-                    .setEUtDiscount(1.33F)
-                    .setSpeedBoost(1.5F);
+                    .setEUtDiscount(1.33F);
             }
 
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);

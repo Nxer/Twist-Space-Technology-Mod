@@ -7,6 +7,8 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.PacketInformatio
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTimeSpaceShield;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SeedsSpaceTime;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
+import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -17,7 +19,7 @@ import static gregtech.api.enums.ItemList.Circuit_CosmicProcessor;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gregtech.api.util.GTUtility.copyAmount;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN;
@@ -48,7 +50,6 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
 
 public class CosmicProcessorCircuitRecipes {
 
@@ -62,7 +63,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTCMItemList.SiliconBasedNeuron.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUEVBase, 2))
             .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1))
-            .noOptimize()
+
             .eut(RECIPE_UMV)
             .duration(20 * 5)
             .addTo(RecipeMaps.formingPressRecipes);
@@ -73,7 +74,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTCMItemList.SiliconBasedNeuron.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 1))
             .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 2))
-            .noOptimize()
+
             .eut(RECIPE_UMV)
             .duration(20 * 5)
             .addTo(RecipeMaps.formingPressRecipes);
@@ -82,13 +83,12 @@ public class CosmicProcessorCircuitRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                GTUtility.getNaniteAsCatalyst(Materials.Gold),
+                setStackSize(Materials.Gold.getNanite(1), 0),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.InfinityCatalyst, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 22))
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(334))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(16))
-            .noOptimize()
             .eut(RECIPE_UEV)
             .duration(20 * 22)
             .addTo(RecipeMaps.pcbFactoryRecipes);
@@ -96,13 +96,13 @@ public class CosmicProcessorCircuitRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                GTUtility.getNaniteAsCatalyst(Materials.Gold),
+                setStackSize(Materials.Gold.getNanite(1), 0),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GGMaterial.shirabon.get(OrePrefixes.foil, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUMVBase, 22))
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(667))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(64))
-            .noOptimize()
+
             .eut(RECIPE_UEV)
             .duration(20 * 22)
             .addTo(RecipeMaps.pcbFactoryRecipes);
@@ -191,7 +191,7 @@ public class CosmicProcessorCircuitRecipes {
         // InformationHorizonInterventionShell
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.TranscendentMetal, 1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
                 MaterialsUEVplus.TranscendentMetal.getNanite(1),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(64),
@@ -207,7 +207,7 @@ public class CosmicProcessorCircuitRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
-                ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 17, 1),
+                new ItemStack(ModItems.itemStandarParticleBase, 1, 17),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(128),
                 ItemList.EnergisedTesseract.get(4),
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 32))
@@ -436,7 +436,7 @@ public class CosmicProcessorCircuitRecipes {
             .metadata(
                 RESEARCH_ITEM,
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 1))
-            .metadata(RESEARCH_TIME, 24 * HOURS)
+            .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
                 GTCMItemList.SpaceWarper.get(16),

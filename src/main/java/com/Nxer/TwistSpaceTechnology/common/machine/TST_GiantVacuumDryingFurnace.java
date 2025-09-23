@@ -19,6 +19,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
@@ -45,7 +46,6 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
@@ -231,7 +231,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
                 .addShape(STRUCTURE_PIECE_DTM, transpose(shapeDryingTowerMiddle))
                 .addShape(STRUCTURE_PIECE_DTH, transpose(shapeDryingTowerHat))
 
-                .addElement('A', Glasses.chainAllGlasses())
+                .addElement('A', chainAllGlasses())
                 .addElement('S', ofBlock(GregTechAPI.sBlockCasings4, 1))
                 .addElement('G', ofBlock(GregTechAPI.sBlockCasings8, 1))
                 .addElement('V', ofBlock(GregTechAPI.sBlockCasings8, 0))
@@ -319,7 +319,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         int piece = stackSize.stackSize;
 
         // Survival build Vacuum Pump (VP) structure
-        built[0] = survivialBuildPiece(
+        built[0] = survivalBuildPiece(
             STRUCTURE_PIECE_VP,
             stackSize,
             VP_horizontalOffSet,
@@ -331,7 +331,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             true);
 
         // Survival build Main Frame (MF) structure
-        built[1] = survivialBuildPiece(
+        built[1] = survivalBuildPiece(
             STRUCTURE_PIECE_MF,
             stackSize,
             MF_horizontalOffSet,
@@ -343,7 +343,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             true);
 
         // Survival build Drying Tower Base (DTB) structure
-        built[2] = survivialBuildPiece(
+        built[2] = survivalBuildPiece(
             STRUCTURE_PIECE_DTB,
             stackSize,
             DT_horizontalOffSet,
@@ -356,7 +356,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
 
         // Survival build Drying Tower Middle (DTM) structures
         for (int pointer = 0; pointer < piece; pointer++) {
-            built[3 + pointer] = survivialBuildPiece(
+            built[3 + pointer] = survivalBuildPiece(
                 STRUCTURE_PIECE_DTM,
                 stackSize,
                 DT_horizontalOffSet,
@@ -369,7 +369,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         }
 
         // Survival build Drying Tower Hat (DTH) structure
-        built[built.length - 1] = survivialBuildPiece(
+        built[built.length - 1] = survivalBuildPiece(
             STRUCTURE_PIECE_DTH,
             stackSize,
             DT_horizontalOffSet,

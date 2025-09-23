@@ -54,7 +54,6 @@ import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
-import gtPlusPlus.core.util.minecraft.PlayerUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.GTPPMultiBlockBase;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import mcp.mobius.waila.api.IWailaConfigHandler;
@@ -365,7 +364,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public void onModeChangeByScrewdriver(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         setMachineMode(nextMachineMode());
-        PlayerUtils.messagePlayer(
+        GTUtility.sendChatToPlayer(
             aPlayer,
             String.format(StatCollector.translateToLocal("GT5U.MULTI_MACHINE_CHANGE"), getMachineModeName()));
     }
@@ -459,12 +458,17 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     protected IIconContainer getActiveOverlay() {
-        return TexturesGtBlock.oMCAIndustrialMultiMachineActive;
+        return TexturesGtBlock.oMCDIndustrialMixerActive;
+    }
+
+    @Override
+    protected IIconContainer getActiveGlowOverlay() {
+        return TexturesGtBlock.oMCDIndustrialMixerActiveGlow;
     }
 
     @Override
     protected IIconContainer getInactiveOverlay() {
-        return TexturesGtBlock.oMCAIndustrialMultiMachine;
+        return TexturesGtBlock.oMCDIndustrialMixer;
     }
 
     @Override
@@ -520,7 +524,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true);
+        return survivalBuildPiece("main", stackSize, 1, 1, 0, elementBudget, env, false, true);
     }
 
     @Override

@@ -579,7 +579,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 0))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -606,7 +605,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Infinity.getMolten(144 * 2 * 4))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 1))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -633,7 +631,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Infinity.getMolten(144 * 2 * 3))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 2))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -659,7 +656,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 3))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -687,7 +683,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 4))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -713,7 +708,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Soularium.getMolten(144 * 9 * 456))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 5))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -741,7 +735,6 @@ public class FluidSolidifierRecipePool {
                     Materials.Infinity.getMolten(144 * 2 * 2))
                 .itemOutputs(GTModHandler.getModItem("eternalsingularity", "combined_singularity", 1, 6))
 
-                .noOptimize()
                 .eut(RECIPE_UEV)
                 .duration(200)
                 .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
@@ -753,7 +746,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("Avaritia", "Singularity", 1, 4))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -763,7 +755,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 0))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -773,7 +764,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 1))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -783,7 +773,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.vanilla.singularity", 1, 2))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -793,7 +782,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 3))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -803,7 +791,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 8))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -813,7 +800,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 9))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -823,7 +809,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 10))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -835,7 +820,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 16))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -847,7 +831,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(GTModHandler.getModItem("universalsingularities", "universal.general.singularity", 1, 24))
 
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -856,7 +839,6 @@ public class FluidSolidifierRecipePool {
                 .itemInputs(GTOreDictUnificator.get(OrePrefixes.block, Materials.Unstable, 66), MoldSingularity.get(0))
                 .itemOutputs(
                     GTModHandler.getModItem("universalsingularities", "universal.extraUtilities.singularity", 1, 0))
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);
@@ -868,7 +850,6 @@ public class FluidSolidifierRecipePool {
                 .fluidInputs(Materials.Infinity.getMolten(144 * 2))
                 .itemOutputs(
                     GTModHandler.getModItem("universalsingularities", "universal.tinkersConstruct.singularity", 1, 4))
-                .noOptimize()
                 .eut(RECIPE_UHV)
                 .duration(20)
                 .addTo(RecipeMaps.autoclaveRecipes);

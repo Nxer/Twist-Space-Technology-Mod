@@ -37,6 +37,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BloodyHell;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import gregtech.api.enums.GTValues;
@@ -107,6 +108,8 @@ public class TstUtils {
 
     public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     public static final BigInteger INTEGER_MAX_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
+
+    public static final List<ItemStack> EMPTY_ITEMSTACK_LIST = ImmutableList.of();
 
     // region Instance Creator
 
@@ -255,9 +258,9 @@ public class TstUtils {
     }
 
     /**
-     * One method to handle multi survivialBuildPiece at once.
+     * One method to handle multi survivalBuildPiece at once.
      *
-     * @param buildPieces All result of `survivialBuildPiece`.
+     * @param buildPieces All result of `survivalBuildPiece`.
      * @return If all result is -1, return -1. Otherwise, return the sum of all non-negative values.
      * @deprecated replace with {@link #getBuiltBlockCount(int...)}
      */

@@ -22,7 +22,6 @@ public class ChemicalReactorRecipePool {
             .itemInputs(GTUtility.getIntegratedCircuit(2), Materials.Lithium.getDust(1))
             .fluidInputs(Materials.Chlorine.getGas(1000))
             .itemOutputs(GGMaterial.lithiumChloride.get(OrePrefixes.dust, 2))
-            .noOptimize()
             .eut(RECIPE_MV)
             .duration(64)
             .addTo(LCR);
@@ -41,7 +40,6 @@ public class ChemicalReactorRecipePool {
                 Materials.Potassiumdichromate.getDust(64),
                 Materials.Potassiumdichromate.getDust(48))
             .fluidOutputs(Materials.NitricAcid.getFluid(32 * 1000))
-            .noOptimize()
             .eut(RECIPE_ZPM)
             .duration(64)
             .addTo(LCR);
@@ -52,7 +50,6 @@ public class ChemicalReactorRecipePool {
             .fluidInputs(GGMaterial.acidNaquadahEmulsion.getFluidOrGas(4 * 1000))
             .itemOutputs(Materials.AntimonyTrioxide.getDust(1), WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 16))
             .fluidOutputs(GGMaterial.naquadahEmulsion.getFluidOrGas(4 * 1000))
-            .noOptimize()
             .eut(RECIPE_MV)
             .duration(240)
             .addTo(LCR);

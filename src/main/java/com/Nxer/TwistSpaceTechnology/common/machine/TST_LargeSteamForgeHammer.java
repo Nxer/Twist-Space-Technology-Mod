@@ -21,9 +21,9 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
-import gregtech.api.objects.GTRenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_LargeSteamForgeHammer>
@@ -97,7 +97,7 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivialBuildPiece(mName, stackSize, 1, 1, 0, elementBudget, env, false, true);
+        return survivalBuildPiece(mName, stackSize, 1, 1, 0, elementBudget, env, false, true);
     }
 
     protected void updateHatchTexture() {
@@ -165,13 +165,19 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     @Override
-    protected GTRenderedTexture getFrontOverlay() {
-        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER);
+    protected ITexture getFrontOverlay() {
+        return TextureFactory.builder()
+            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER)
+            .extFacing()
+            .build();
     }
 
     @Override
-    protected GTRenderedTexture getFrontOverlayActive() {
-        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE);
+    protected ITexture getFrontOverlayActive() {
+        return TextureFactory.builder()
+            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE)
+            .extFacing()
+            .build();
     }
 
     @Override

@@ -10,6 +10,7 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose
 import static gregtech.api.enums.HatchElement.*;
 import static gregtech.api.enums.TierEU.RECIPE_MV;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Collection;
@@ -56,7 +57,6 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEEnhancedMultiBlockBase;
 import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -114,7 +114,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             STRUCTURE_DEFINITION = StructureDefinition.<TST_LaserMeteorMiner>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape_T1))
                 .addShape(STRUCTURE_PIECE_TIER2, transpose(shape_T2))
-                .addElement('A', Glasses.chainAllGlasses())
+                .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 15)) // Superconducting Coil
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 7)) // Fusion Coil Block
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 2)) // Mining Neutronium Casing
@@ -280,7 +280,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         return stackSize.stackSize < 2
-            ? survivialBuildPiece(
+            ? survivalBuildPiece(
                 STRUCTURE_PIECE_MAIN,
                 stackSize,
                 horizontalOffSet_T1,
@@ -290,7 +290,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 env,
                 false,
                 true)
-            : survivialBuildPiece(
+            : survivalBuildPiece(
                 STRUCTURE_PIECE_TIER2,
                 stackSize,
                 horizontalOffSet_T2,
@@ -482,7 +482,8 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     private boolean stopAllRendering = false;
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
         stopAllRendering = !stopAllRendering;
         // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_off
         // # Rendering off
@@ -531,11 +532,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
     }
 
     @Override

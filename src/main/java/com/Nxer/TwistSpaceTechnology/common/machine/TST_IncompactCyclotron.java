@@ -82,7 +82,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return MaxParallel_IncompactCyclotron;
     }
 
@@ -109,7 +109,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,

@@ -14,7 +14,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.dreammaster.gthandler.CustomItemList;
-import com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
@@ -30,6 +29,7 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
+import gtnhintergalactic.recipe.IGRecipeMaps;
 
 public class LapotronChipRecipes {
 
@@ -147,7 +147,6 @@ public class LapotronChipRecipes {
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64),
                     ItemList.Circuit_Parts_Crystal_Chip_Master.get(64))
-                .noOptimize()
                 .eut(TierEU.RECIPE_UHV)
                 .duration(20 * 15)
                 .addTo(RecipeMaps.laserEngraverRecipes);
@@ -157,7 +156,6 @@ public class LapotronChipRecipes {
             GTValues.RA.stdBuilder()
                 .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1), GTUtility.copyAmountUnsafe(0, itemStack))
                 .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
-                .noOptimize()
                 .eut(TierEU.RECIPE_UV)
                 .duration(20 * 15)
                 .addTo(RecipeMaps.laserEngraverRecipes);
@@ -172,7 +170,6 @@ public class LapotronChipRecipes {
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade7PurifiedWater.getFluid(200))
             .itemOutputs(GTCMItemList.EngravedEnergyExposedChip.get(1))
-            .noOptimize()
             .eut(TierEU.RECIPE_UHV)
             .duration(20 * 120)
             .addTo(RecipeMaps.laserEngraverRecipes);
@@ -185,7 +182,6 @@ public class LapotronChipRecipes {
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade8PurifiedWater.getFluid(100))
             .itemOutputs(GTCMItemList.EngravedEnergyExposedChip.get(2))
-            .noOptimize()
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 60)
             .addTo(RecipeMaps.laserEngraverRecipes);
@@ -207,7 +203,6 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.ExcitedDTEC.getFluid(8000),
                 Materials.Infinity.getMolten(144 * 16))
             .itemOutputs(GTCMItemList.PerfectEngravedEnergyChip.get(1))
-            .noOptimize()
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 60)
             .specialValue(1)
@@ -230,7 +225,6 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.PhononMedium.getFluid(500 * 4),
                 MaterialsUEVplus.Time.getMolten(72 * 8))
             .itemOutputs(GTCMItemList.PerfectEngravedEnergyChip.get(4))
-            .noOptimize()
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
             .specialValue(2)
@@ -253,7 +247,6 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.PhononMedium.getFluid(500 * 8),
                 MaterialsUEVplus.Time.getMolten(72 * 16))
             .itemOutputs(GTCMItemList.PerfectEngravedEnergyChip.get(16))
-            .noOptimize()
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 60)
             .specialValue(2)
@@ -268,7 +261,6 @@ public class LapotronChipRecipes {
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade7PurifiedWater.getFluid(200))
             .itemOutputs(GTCMItemList.EngravedLaptronExposedChip.get(1))
-            .noOptimize()
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 240)
             .addTo(RecipeMaps.laserEngraverRecipes);
@@ -281,7 +273,6 @@ public class LapotronChipRecipes {
                 Laser_Lens_Special.get(0))
             .fluidInputs(Materials.Grade8PurifiedWater.getFluid(100))
             .itemOutputs(GTCMItemList.EngravedLaptronExposedChip.get(2))
-            .noOptimize()
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 120)
             .addTo(RecipeMaps.laserEngraverRecipes);
@@ -303,7 +294,6 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(2000),
                 MaterialsUEVplus.Space.getMolten(72 * 4))
             .itemOutputs(GTCMItemList.PerfectEngravedLaptronChip.get(1))
-            .noOptimize()
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
             .specialValue(2)
@@ -326,7 +316,6 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(4000),
                 MaterialsUEVplus.Space.getMolten(72 * 8))
             .itemOutputs(GTCMItemList.PerfectEngravedLaptronChip.get(4))
-            .noOptimize()
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 60)
             .specialValue(2)
@@ -349,7 +338,6 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(8000),
                 MaterialsUEVplus.Space.getMolten(72 * 16))
             .itemOutputs(GTCMItemList.PerfectEngravedLaptronChip.get(16))
-            .noOptimize()
             .eut(TierEU.RECIPE_UXV)
             .duration(20 * 60)
             .specialValue(2)
@@ -367,7 +355,6 @@ public class LapotronChipRecipes {
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 8))
             .itemOutputs(GTCMItemList.UltimateEnergyFlowCircuit.get(1))
-            .noOptimize()
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 120)
             .addTo(RecipeMaps.circuitAssemblerRecipes);

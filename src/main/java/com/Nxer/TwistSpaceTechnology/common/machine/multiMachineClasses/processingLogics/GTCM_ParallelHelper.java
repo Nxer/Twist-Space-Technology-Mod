@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
+import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.interfaces.tileentity.IRecipeLockable;
 import gregtech.api.interfaces.tileentity.IVoidable;
@@ -398,11 +399,15 @@ public class GTCM_ParallelHelper extends ParallelHelper {
      */
     protected void determineParallel() {
 
+        if (maxParallel <= 0) {
+            return;
+        }
+
         if (itemInputs == null) {
-            itemInputs = new ItemStack[0];
+            itemInputs = GTValues.emptyItemStackArray;
         }
         if (fluidInputs == null) {
-            fluidInputs = new FluidStack[0];
+            fluidInputs = GTValues.emptyFluidStackArray;
         }
 
         if (!consume) {
@@ -416,7 +421,10 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                                                      .setEUtDiscount(eutModifier);
         }
 
-        final int tRecipeEUt = (int) Math.ceil(recipe.mEUt * eutModifier);
+        double heatDiscountMultiplier = calculator.calculateHeatDiscountMultiplier();
+
+        final int tRecipeEUt = (int) Math.ceil(recipe.mEUt * eutModifier * heatDiscountMultiplier);
+
         if (availableEUt < tRecipeEUt) {
             result = CheckRecipeResultRegistry.insufficientPower(tRecipeEUt);
             return;
@@ -424,10 +432,16 @@ public class GTCM_ParallelHelper extends ParallelHelper {
 
         // Save the original max parallel before calculating our overclocking under 1 tick
         int originalMaxParallel = maxParallel;
-        double tickTimeAfterOC = calculator.setParallel(originalMaxParallel)
-                                           .calculateDurationUnderOneTick();
-        if (tickTimeAfterOC < 1) {
-            maxParallel = GTUtility.safeInt((long) (maxParallel / tickTimeAfterOC), 1);
+        calculator.setParallel(originalMaxParallel);
+
+        // If the machine has custom supplier, use old method for giving parallels for overclocking too much, otherwise
+        // use multiplier
+        if (calculator.hasDurationUnderOneTickSupplier()) {
+            if (calculator.getDurationUnderOneTickSupplier() < 1) {
+                maxParallel = GTUtility.safeInt((long) (maxParallel / calculator.getDurationUnderOneTickSupplier()), 0);
+            }
+        } else {
+            maxParallel = GTUtility.safeInt((long) (maxParallel * calculator.calculateMultiplierUnderOneTick()), 0);
         }
 
         int maxParallelBeforeBatchMode = maxParallel;
@@ -466,6 +480,8 @@ public class GTCM_ParallelHelper extends ParallelHelper {
             voidProtectionHelper.setMachine(machine)
                                 .setItemOutputs(truncatedItemOutputs)
                                 .setFluidOutputs(truncatedFluidOutputs)
+                                .setChangeGetter(recipe::getOutputChance)
+                                .setChanceMultiplier(chanceMultiplier)
                                 .setMaxParallel(maxParallel)
                                 .build();
             maxParallel = Math.min(voidProtectionHelper.getMaxParallel(), maxParallel);
@@ -509,12 +525,16 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         }
 
 
-        long eutUseAfterOC = calculator.setCurrentParallel(currentParallel).setParallel(Math.min(currentParallel, originalMaxParallel)).calculate().getConsumption();;
-//        calculator.setParallel(Math.min(currentParallel, originalMaxParallel))
-//                  .calculate();
-        if (currentParallel > originalMaxParallel) {
-            calculator.setRecipeEUt(eutUseAfterOC);
-        }
+//        long eutUseAfterOC = calculator.setCurrentParallel(currentParallel)
+//                                       .setParallel(Math.min(currentParallel, originalMaxParallel))
+//                                       .calculate()
+//                                       .getConsumption();
+//        if (currentParallel > originalMaxParallel) {
+//            calculator.setRecipeEUt(eutUseAfterOC);
+//        }
+        calculator.setParallel(Math.min(currentParallel, originalMaxParallel))
+                  .calculate();
+
         // If Batch Mode is enabled determine how many extra parallels we can get
         if (batchMode && currentParallel > 0 && calculator.getDuration() < MAX_BATCH_MODE_TICK_TIME) {
             int tExtraParallels;
@@ -537,31 +557,17 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         // If we want to calculate outputs we do it here
         if (calculateOutputs && currentParallel > 0) {
             if (recipe.mOutputs != null) {
-                calculateItemOutputs();
+                calculateItemOutputs(truncatedItemOutputs);
             }
             if (recipe.mFluidOutputs != null) {
-                calculateFluidOutputs();
+                calculateFluidOutputs(truncatedFluidOutputs);
             }
         }
         result = CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
-    protected void copyInputs() {
-        ItemStack[] itemInputsToUse;
-        FluidStack[] fluidInputsToUse;
-        itemInputsToUse = new ItemStack[itemInputs.length];
-        for (int i = 0; i < itemInputs.length; i++) {
-            itemInputsToUse[i] = itemInputs[i].copy();
-        }
-        fluidInputsToUse = new FluidStack[fluidInputs.length];
-        for (int i = 0; i < fluidInputs.length; i++) {
-            fluidInputsToUse[i] = fluidInputs[i].copy();
-        }
-        itemInputs = itemInputsToUse;
-        fluidInputs = fluidInputsToUse;
-    }
-
-    protected void calculateItemOutputs() {
+    @Override
+    protected void calculateItemOutputs(ItemStack[] truncatedItemOutputs) {
         if (customItemOutputCalculation != null) {
             itemOutputs = customItemOutputCalculation.apply(currentParallel);
             return;
@@ -604,7 +610,8 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         itemOutputs = toOutput.toArray(new ItemStack[0]);
     }
 
-    protected void calculateFluidOutputs() {
+    @Override
+    protected void calculateFluidOutputs(FluidStack[] truncatedFluidOutputs) {
         if (customFluidOutputCalculation != null) {
             fluidOutputs = customFluidOutputCalculation.apply(currentParallel);
             return;

@@ -54,8 +54,12 @@ public class DeployedNanoCoreRecipePool {
                             InputFluids.add(aCopy);
                         }
 
-                        if (aRecipe.mOutputs != null) for (ItemStack aStack : aRecipe.mOutputs) {
-                            OutputItems.add(copyAmount(aStack.stackSize * Multiplier, aStack));
+                        if (aRecipe.mOutputs != null) {
+                            for (ItemStack aStack : aRecipe.mOutputs) {
+                                if (null != aStack) {
+                                    OutputItems.add(copyAmount(aStack.stackSize * Multiplier, aStack));
+                                }
+                            }
                         }
 
                         GTValues.RA.stdBuilder()

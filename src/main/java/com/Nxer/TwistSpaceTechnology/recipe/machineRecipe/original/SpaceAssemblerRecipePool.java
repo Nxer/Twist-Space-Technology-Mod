@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -16,13 +17,13 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.util.minecraft.ItemUtils;
+import gtnhintergalactic.recipe.IGRecipeMaps;
 
 public class SpaceAssemblerRecipePool {
 
     public static void loadRecipes() {
 
-        final RecipeMap<?> SA = com.gtnewhorizons.gtnhintergalactic.recipe.IGRecipeMaps.spaceAssemblerRecipes;
+        final RecipeMap<?> SA = IGRecipeMaps.spaceAssemblerRecipes;
 
         final Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
             ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
@@ -34,7 +35,7 @@ public class SpaceAssemblerRecipePool {
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(24),
                     Materials.Neutronium.getNanite(1),
-                    ItemUtils.simpleMetaStack(ModItems.itemStandarParticleBase, 0, 3),
+                    new ItemStack(ModItems.itemStandarParticleBase, 3),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.ElectrumFlux, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Lanthanum, 64),

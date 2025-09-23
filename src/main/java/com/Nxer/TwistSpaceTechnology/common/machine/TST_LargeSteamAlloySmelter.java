@@ -26,7 +26,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.objects.GTRenderedTexture;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
@@ -82,7 +81,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivialBuildPiece(mName, stackSize, 2, 1, 0, elementBudget, env, false, true);
+        return survivalBuildPiece(mName, stackSize, 2, 1, 0, elementBudget, env, false, true);
     }
 
     @Override
@@ -115,13 +114,19 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     // region General
     @Override
-    protected GTRenderedTexture getFrontOverlay() {
-        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER);
+    protected ITexture getFrontOverlay() {
+        return TextureFactory.builder()
+            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI)
+            .extFacing()
+            .build();
     }
 
     @Override
-    protected GTRenderedTexture getFrontOverlayActive() {
-        return new GTRenderedTexture(Textures.BlockIcons.OVERLAY_TOP_STEAM_ALLOY_SMELTER_ACTIVE);
+    protected ITexture getFrontOverlayActive() {
+        return TextureFactory.builder()
+            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE)
+            .extFacing()
+            .build();
     }
 
     @Override

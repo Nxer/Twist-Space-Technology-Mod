@@ -96,7 +96,7 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
         }
     }
 
-    private void tryFetchingEnergy() {
+    public void tryFetchingEnergy() {
         long currentEU = getBaseMetaTileEntity().getStoredEU();
         long maxEU = maxEUStore();
         long euToTransfer = maxEU - currentEU;

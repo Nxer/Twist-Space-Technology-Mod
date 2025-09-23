@@ -110,7 +110,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -178,7 +178,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
 
-        int builtBottom = survivialBuildPiece(
+        int builtBottom = survivalBuildPiece(
             STRUCTURE_PIECE_BOTTOM,
             stackSize,
             horizontalOffSetBottom,
@@ -189,7 +189,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
             false,
             false);
 
-        int builtMiddle = survivialBuildPiece(
+        int builtMiddle = survivalBuildPiece(
             STRUCTURE_PIECE_MIDDLE,
             stackSize,
             horizontalOffSetMiddle,

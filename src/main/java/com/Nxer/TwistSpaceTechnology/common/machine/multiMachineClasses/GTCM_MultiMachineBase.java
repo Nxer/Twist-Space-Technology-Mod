@@ -78,7 +78,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     // region new methods
     public void repairMachine() {
         mHardHammer = true;
-        mSoftHammer = true;
+        mSoftMallet = true;
         mScrewdriver = true;
         mCrowbar = true;
         mSolderingTool = true;
@@ -138,7 +138,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 return super.process();
             }
 
-        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
+        }.setMaxParallelSupplier(this::getTrueParallel);
     }
 
     /**
@@ -177,17 +177,8 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The value (or a method to get the value) of Max Parallel (dynamically) .
      */
     @ApiStatus.OverrideOnly
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return maxParallel;
-    }
-
-    /**
-     * Limit the max parallel to prevent overflow.
-     *
-     * @return Limited parallel.
-     */
-    protected int getLimitedMaxParallel() {
-        return getMaxParallelRecipes();
     }
 
     /**
@@ -425,11 +416,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         System.arraycopy(origin, 0, ret, 0, origin.length);
         // #tr MachineInfoData.Parallels
         // # Parallels
-        // #zh_CN 最大并行
+        // #zh_CN 并行
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.Parallels")
             + ": "
             + EnumChatFormatting.GOLD
-            + this.getLimitedMaxParallel();
+            + this.getTrueParallel();
         // #tr MachineInfoData.SpeedMultiplier
         // # Speed multiplier
         // #zh_CN 耗时倍率
@@ -611,14 +602,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
-     * If it explodes when the Component has to be replaced.
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    /**
      * no longer afraid of rain
      */
     @Override
@@ -732,13 +715,14 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (supportsMachineModeSwitch()) {
                 setMachineMode(nextMachineMode());
                 GTUtility.sendChatToPlayer(aPlayer, getMachineModeName());
             } else {
-                super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ);
+                super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, tool);
             }
         }
     }
@@ -762,11 +746,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.hasKey("mode")) {
-            currentTip.add(
-                StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " "
-                    + EnumChatFormatting.WHITE
-                    + getMachineModeName(tag.getInteger("mode"))
-                    + EnumChatFormatting.RESET);
+            currentTip.add("" + EnumChatFormatting.YELLOW +
+            // #tr TST.machines.running_mode
+            // # Running Mode :
+            // #zh_CN 运行模式 :
+                StatCollector.translateToLocal("TST.machines.running_mode")
+                + " "
+                + EnumChatFormatting.WHITE
+                + getMachineModeName(tag.getInteger("mode"))
+                + EnumChatFormatting.RESET);
         }
     }
 

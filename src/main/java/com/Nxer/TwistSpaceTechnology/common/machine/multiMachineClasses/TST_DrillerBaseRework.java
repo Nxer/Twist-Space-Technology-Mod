@@ -211,7 +211,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
 
     @Override
     public boolean onSolderingToolRightClick(ForgeDirection side, ForgeDirection wrenchingSide,
-        EntityPlayer entityPlayer, float aX, float aY, float aZ) {
+        EntityPlayer entityPlayer, float aX, float aY, float aZ, ItemStack tool) {
         if (side == getBaseMetaTileEntity().getFrontFacing()) {
             mChunkLoadingEnabled = !mChunkLoadingEnabled;
             GTUtility.sendChatToPlayer(
@@ -220,7 +220,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
                     : GTUtility.trans("503", "Mining chunk loading disabled"));
             return true;
         }
-        return super.onSolderingToolRightClick(side, wrenchingSide, entityPlayer, aX, aY, aZ);
+        return super.onSolderingToolRightClick(side, wrenchingSide, entityPlayer, aX, aY, aZ, tool);
     }
 
     @Override
@@ -753,7 +753,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 1, 6, 0, elementBudget, env, false, true);
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 1, 6, 0, elementBudget, env, false, true);
     }
 
     @Override
@@ -768,7 +768,7 @@ public abstract class TST_DrillerBaseRework<T extends TST_DrillerBaseRework<T>> 
     }
 
     @Override
-    protected boolean showRecipeTextInGUI() {
+    public boolean showRecipeTextInGUI() {
         return false;
     }
 

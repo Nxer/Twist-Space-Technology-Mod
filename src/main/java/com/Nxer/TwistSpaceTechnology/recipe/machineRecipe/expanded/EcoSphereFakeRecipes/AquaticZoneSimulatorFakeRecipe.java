@@ -130,7 +130,6 @@ public class AquaticZoneSimulatorFakeRecipe {
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
-            .noOptimize()
             .fake()
             .duration(20 * 5)
             .eut(0)

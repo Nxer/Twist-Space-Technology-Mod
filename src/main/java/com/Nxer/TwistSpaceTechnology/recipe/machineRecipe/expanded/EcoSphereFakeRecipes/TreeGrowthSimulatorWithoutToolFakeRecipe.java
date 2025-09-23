@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.UnknowWater;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
@@ -19,7 +20,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
-import galaxyspace.BarnardsSystem.BRFluids;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
@@ -30,7 +30,6 @@ import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MT
 public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
     static FluidStack WaterStack = Materials.Water.getFluid(1000);
-    static FluidStack UnknowWaterStack = new FluidStack(BRFluids.UnknowWater, 1000);
     static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 100);
     static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 1000);
     static FluidStack UUMatterStack = Materials.UUMatter.getFluid(500);
@@ -120,7 +119,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         // Barnarda C
         if (Mods.GalaxySpace.isModLoaded()) addSpecialFakeRecipe(
             GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 1),
-            UnknowWaterStack);
+            new FluidStack(UnknowWater, 1000));
         // Time
         if (Mods.TwilightForest.isModLoaded()) addSpecialFakeRecipe(
             GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5),
@@ -218,7 +217,6 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .special(specialStacks)
-            .noOptimize()
             .fake()
             .duration(20 * 5)
             .eut(0)

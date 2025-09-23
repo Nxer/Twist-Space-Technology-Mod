@@ -103,7 +103,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private final XSTR xstr = new XSTR();
     // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
     private static final String[][] shapePrimordialDisjunctus = new String[][] {
-        { "               ", "               ", "ABA         ABA", "ABA         ABA", "BCB         BCB",
+        { "               ", "               ", "ABA         ABA", "ABA         ABA", "BBB         BBB",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               " },
         { "               ", "ABA         ABA", "               ", "               ", "               ",
@@ -184,7 +184,6 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                             Loaders.essentiaOutputHatch,
                             0),
                         onElementPass(TST_PrimordialDisjunctus::onCasingFound, ofBlock(Loaders.magicCasing, 0))))
-                .addElement('C', ofBlock(Loaders.essentiaHatch, 0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .addElement('E', gregtech.api.enums.HatchElement.Muffler.newAny(CASING_INDEX, 2))
                 .addElement(
@@ -281,7 +280,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
     }
 
     private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {

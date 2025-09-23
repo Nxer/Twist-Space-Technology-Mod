@@ -89,6 +89,7 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.render.ISBRWorldContext;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
@@ -179,7 +180,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return parallel;
     }
 
@@ -364,7 +365,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         if (tier > 6) tier = 6;
         if (mMachine && tier <= mTier) return -1;
 
-        int blocksBuilt = this.survivialBuildPiece(
+        int blocksBuilt = this.survivalBuildPiece(
             "tier" + tier,
             stackSize,
             getOffset(0, tier, 0),
@@ -378,7 +379,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         if (tier < 3) return blocksBuilt;
         else {
             int tierF = tier == 6 ? 2 : 1;
-            int fluidBuilt = this.survivialBuildPiece(
+            int fluidBuilt = this.survivalBuildPiece(
                 "fluid" + tierF,
                 stackSize,
                 getOffset(1, tier, 0),
@@ -449,7 +450,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 return super.process();
             }
-        }.setMaxParallelSupplier(this::getLimitedMaxParallel);
+        }.setMaxParallelSupplier(this::getTrueParallel);
     }
 
     /**
@@ -1059,6 +1060,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
+    public boolean renderInWorld(ISBRWorldContext ctx) {
+        return this.renderInWorld(
+            ctx.getBlockAccess(),
+            ctx.getX(),
+            ctx.getY(),
+            ctx.getZ(),
+            ctx.getBlock(),
+            ctx.getRenderBlocks());
+    }
+
     public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
         if (!isNewStyleRendering() || !mFormed) return false;
         int[] tABCCoord = new int[] { -1, -1, 0 };

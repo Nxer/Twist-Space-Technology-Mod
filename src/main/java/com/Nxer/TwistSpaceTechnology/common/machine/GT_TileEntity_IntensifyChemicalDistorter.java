@@ -151,7 +151,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return machineMode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
             : Parallel_LCRMode_IntensifyChemicalDistorter;
     }
@@ -285,7 +285,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,

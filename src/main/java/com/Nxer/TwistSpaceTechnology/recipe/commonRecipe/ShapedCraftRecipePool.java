@@ -61,10 +61,11 @@ public class ShapedCraftRecipePool {
                     MaterialsAlloy.MARAGING300.getFrameBox(1) });
         }
 
+        // 永远怀念 R.I.P
         // transform existing PA to PA Research
-        addCraftingRecipe(
-            GTCMItemList.ResearchOnAncientPA.get(1),
-            new Object[] { "X", 'X', ItemList.Processing_Array.get(1) });
+        // addCraftingRecipe(
+        // GTCMItemList.ResearchOnAncientPA.get(1),
+        // new Object[] { "X", 'X', ItemList.Processing_Array.get(1) });
 
         // original PA recipe, changed output to PA Research
         // but the machine hull is changed from EV to IV, to prevent recipe dupe, just in case,

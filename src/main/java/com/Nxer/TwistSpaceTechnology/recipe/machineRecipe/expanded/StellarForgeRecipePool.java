@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -154,6 +155,8 @@ public class StellarForgeRecipePool {
             Materials.Argon.mGas,
             Materials.Helium.mGas);
 
+        ItemStack nullItem = new ItemStack(Blocks.fire, 1).setStackDisplayName("Null Item");
+
         for (GTRecipe recipe : RecipeMaps.blastFurnaceRecipes.getAllRecipes()) {
             if (recipe.mOutputs.length == 1 && SpecialRecipeOutputs.contains(TST_ItemID.create(recipe.mOutputs[0])))
                 continue;
@@ -166,6 +169,11 @@ public class StellarForgeRecipePool {
             // process Item input
             byte integrateNum = 0;
             for (ItemStack inputs : recipe.mInputs) {
+
+                if (null == inputs) {
+                    inputItems.add(nullItem);
+                    continue;
+                }
 
                 if (GTUtility.areStacksEqual(inputs, GTUtility.getIntegratedCircuit(1))) {
                     integrateNum = 1;
@@ -182,6 +190,12 @@ public class StellarForgeRecipePool {
 
             // process Item output
             for (ItemStack outputs : recipe.mOutputs) {
+
+                if (null == outputs) {
+                    outputItems.add(nullItem);
+                    continue;
+                }
+
                 TST_ItemID outputItemID = TST_ItemID.createNoNBT(outputs);
                 boolean isRecipeAdded = false;
                 if (IngotHots.contains(outputItemID)) {

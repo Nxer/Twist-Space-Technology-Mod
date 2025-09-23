@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_ROBUST_TUNGSTENSTEEL;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
@@ -9,7 +10,7 @@ import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
-import static gregtech.api.util.GTRecipeConstants.RESEARCH_TIME;
+import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.lang.reflect.Field;
@@ -92,7 +93,6 @@ import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
@@ -127,8 +127,7 @@ import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public class TST_BigBroArray extends TT_MultiMachineBase_EM
-    implements ISurvivalConstructable, IWirelessEnergyHatchInformation {
+public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
 
     private ItemStack machines;
 
@@ -963,7 +962,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(24))
             .fluidOutputs(Materials.UUMatter.getFluid(1))
-            .noOptimize()
+
             .eut(MTEMassfabricator.BASE_EUT)
             .duration(MTEMassfabricator.sDurationMultiplier)
             .addTo(RecipeMaps.massFabFakeRecipes);
@@ -971,7 +970,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
             .itemInputs(GTUtility.getIntegratedCircuit(23))
             .fluidInputs(Materials.UUAmplifier.getFluid(MTEMassfabricator.sUUAperUUM))
             .fluidOutputs(Materials.UUMatter.getFluid(1))
-            .noOptimize()
+
             .eut(MTEMassfabricator.BASE_EUT)
             .duration(MTEMassfabricator.sDurationMultiplier / MTEMassfabricator.sUUASpeedBonus)
             .addTo(RecipeMaps.massFabFakeRecipes);
@@ -1051,8 +1050,10 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     }
 
     public void setCoilTier(HeatingCoilLevel level) {
-        this.coilTier = coilTier != HeatingCoilLevel.None ? (level.getTier() < coilTier.getLevel() ? level : coilTier)
-            : level;
+        coilTier = level;
+        // this.coilTier = coilTier != HeatingCoilLevel.None ? (level.getTier() < coilTier.getLevel() ? level :
+        // coilTier)
+        // : level;
     }
 
     public HeatingCoilLevel getCoilTier() {
@@ -1542,49 +1543,44 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
+        boolean noError = getErrorDisplayID() == 0;
+        boolean isActive = getBaseMetaTileEntity().isActive();
         screenElements
             .widget(
                 new TextWidget(String.format("Generating: %sEU/t", Out_Format.format(outEUt)))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(
-                        widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && getBaseMetaTileEntity().isActive()
-                            && MODE_GENERATOR.equals(mode)))
+                    .setEnabled(widget -> noError && isActive && MODE_GENERATOR.equals(mode)))
             .widget(new FakeSyncWidget.StringSyncer(() -> mode, (mode) -> TST_BigBroArray.this.mode = mode))
             .widget(new FakeSyncWidget.StringSyncer(() -> outEUt.toString(), (l) -> outEUt = new BigInteger(l)))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, (i) -> mMaxProgresstime = i));
 
         screenElements.widget(
             new TextWidget("Machine state: " + mode).setDefaultColor(COLOR_TEXT_WHITE.get())
-                .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()));
+                .setEnabled(widget -> noError && !isActive));
 
         screenElements.widget(
             new TextWidget("Machine type:" + machineType).setDefaultColor(COLOR_TEXT_WHITE.get())
-                .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+                .setEnabled(widget -> getErrorDisplayID() == 0 && !isActive))
             .widget(new FakeSyncWidget.StringSyncer(() -> machineType, (type) -> machineType = type));;
 
         screenElements.widget(
             new TextWidget("Machine tier:" + machineTier).setDefaultColor(COLOR_TEXT_WHITE.get())
-                .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+                .setEnabled(widget -> noError && !isActive))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> machineTier, (tier) -> machineTier = tier));
         screenElements.widget(
             new TextWidget("Provided parallelism:" + actualParallelism).setDefaultColor(0xFFEF00)
-                .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+                .setEnabled(widget -> noError && !isActive))
             .widget(new FakeSyncWidget.LongSyncer(() -> actualParallelism, (p) -> this.actualParallelism = p));
 
-        screenElements.widget(
-            new TextWidget("Speed boost:" + Math.pow(1.5, parallelismTier)).setDefaultColor(COLOR_TEXT_WHITE.get())
-                .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+        screenElements
+            .widget(
+                new TextWidget("Speed boost:" + Math.pow(1.5, parallelismTier)).setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .setEnabled(widget -> noError && !isActive))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> parallelismTier, (tier) -> parallelismTier = tier));
 
         screenElements.widget(
             new TextWidget("Addons attached:" + addonCount).setDefaultColor(COLOR_TEXT_WHITE.get())
-                .setEnabled(
-                    widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0 && !getBaseMetaTileEntity().isActive()))
+                .setEnabled(widget -> noError && !isActive))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> addonCount, (ct) -> addonCount = ct));
     }
 
@@ -1673,20 +1669,20 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         int blockPlacedCount = 0;
         if (!mMachine) {
-            blockPlacedCount += survivialBuildPiece("core", stackSize, 5, 5, 4, elementBudget, env, true);
+            blockPlacedCount += survivalBuildPiece("core", stackSize, 5, 5, 4, elementBudget, env, true);
         } else {
             switch (this.addonCount) {
                 case 0:
-                    blockPlacedCount += survivialBuildPiece("addon0", stackSize, -6, 23, 6, elementBudget, env, true);
+                    blockPlacedCount += survivalBuildPiece("addon0", stackSize, -6, 23, 6, elementBudget, env, true);
                     break;
                 case 1:
-                    blockPlacedCount += survivialBuildPiece("addon1", stackSize, 7, 23, -7, elementBudget, env, true);
+                    blockPlacedCount += survivalBuildPiece("addon1", stackSize, 7, 23, -7, elementBudget, env, true);
                     break;
                 case 2:
-                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, 22, 23, 6, elementBudget, env, true);
+                    blockPlacedCount += survivalBuildPiece("addon2", stackSize, 22, 23, 6, elementBudget, env, true);
                     break;
                 case 3:
-                    blockPlacedCount += survivialBuildPiece("addon2", stackSize, 7, 23, 21, elementBudget, env, true);
+                    blockPlacedCount += survivalBuildPiece("addon2", stackSize, 7, 23, 21, elementBudget, env, true);
                     break;
                 default:
                     break;
@@ -1814,7 +1810,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack aTool) {
         machineType = null;
         startRecipeProcessing();
         int maxTier = (frameTier >= 6 || addonCount == 0) ? 16 : frameTier + 4;
@@ -2006,7 +2003,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 64))
             .fluidInputs(MaterialsAlloy.NITINOL_60.getFluidStack(24576))
             .itemOutputs(GTCMItemList.BigBroArray.get(1))
-            .noOptimize()
+
             .eut(TierEU.RECIPE_IV)
             .duration(20 * 1200)
             .addTo(RecipeMaps.assemblerRecipes);
@@ -2021,14 +2018,14 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(9216))
             .itemOutputs(GTCMItemList.ParallelismCasing0.get(1))
-            .noOptimize()
+
             .eut(6400)
             .duration(20 * 150)
             .addTo(RecipeMaps.assemblerRecipes);
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing0.get(1))
-            .metadata(RESEARCH_TIME, 4 * HOURS)
+            .metadata(SCANNING, scanningLV(4 * HOURS))
             .itemInputs(
                 ItemList.Field_Generator_ZPM.get(2),
                 ItemList.Casing_StableTitanium.get(1),
@@ -2047,7 +2044,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
 
         GTValues.RA.stdBuilder()
             .metadata(RESEARCH_ITEM, GTCMItemList.ParallelismCasing1.get(1))
-            .metadata(RESEARCH_TIME, 8 * HOURS)
+            .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
                 ItemList.Field_Generator_UHV.get(4),
                 ItemList.Casing_CleanStainlessSteel.get(1),
@@ -2103,7 +2100,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM
                 tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier2.get(4), ItemList.Robot_Arm_UXV.get(16),
                 ItemList.Emitter_UXV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
-                com.dreammaster.item.ItemList.QuantumCircuit.getIS(4) },
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 4) },
             new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
             GTCMItemList.ParallelismCasing4.get(1),
             20 * 1200,

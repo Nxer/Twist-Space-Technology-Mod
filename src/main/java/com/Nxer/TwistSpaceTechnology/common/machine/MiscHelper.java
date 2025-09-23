@@ -6,10 +6,13 @@ import static tectech.thing.CustomItemList.astralArrayFabricator;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
 import gregtech.api.enums.Mods;
+import gregtech.api.util.recipe.Scanning;
 
 public class MiscHelper {
 
@@ -18,6 +21,8 @@ public class MiscHelper {
     public static Item PickaxeOfTheCore;
     public static Item BoundPickaxe;
     public static Item TerraShatterer;
+
+    public static Fluid UnknowWater;
 
     public static void initStatics() {
         ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
@@ -43,5 +48,16 @@ public class MiscHelper {
         } else {
             TerraShatterer = Items.diamond_pickaxe;
         }
+
+        UnknowWater = FluidRegistry.getFluid("unknowwater");
+        if (UnknowWater == null) {
+            UnknowWater = FluidRegistry.getFluid("water");
+        }
+
     }
+
+    public static Scanning scanningLV(int tick) {
+        return new Scanning(tick, 30);
+    }
+
 }

@@ -9,8 +9,17 @@ minecraft {
     extraRunJvmArguments.add("-Xms8G")
 }
 
+configurations.configureEach {
+    exclude group: "com.github.GTNewHorizons", module: "Baubles"
+}
+
 configurations.all {
     resolutionStrategy {
-        force 'com.github.GTNewHorizons:GTNHLib:0.6.0:dev'
+        force 'com.github.GTNewHorizons:ForestryMC:4.10.17:dev'
     }
+}
+
+
+test {
+    useJUnitPlatform()
 }

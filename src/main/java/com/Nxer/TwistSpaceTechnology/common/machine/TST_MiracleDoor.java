@@ -64,15 +64,12 @@ import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizons.gtnhintergalactic.block.IGBlocks;
 
-import galaxyspace.core.register.GSBlocks;
 import gregtech.api.GregTechAPI;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.interfaces.tileentity.IWirelessEnergyHatchInformation;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -90,8 +87,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
-public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleDoor>
-    implements IWirelessEnergyHatchInformation {
+public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleDoor> {
 
     // region Class Constructor
     public TST_MiracleDoor(int aID, String aName, String aNameRegional) {
@@ -340,7 +336,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     }
 
     @Override
-    protected int getMaxParallelRecipes() {
+    public int getMaxParallelRecipes() {
         return Integer.MAX_VALUE;
     }
 
@@ -370,7 +366,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        return this.survivialBuildPiece(
+        return this.survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
@@ -389,15 +385,15 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                 .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shapeMainErr))
                 .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 13))
-                .addElement('B', ofBlock(IGBlocks.SpaceElevatorCasing, 1))
-                .addElement('C', ofBlock(IGBlocks.SpaceElevatorCasing, 2))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
                 .addElement('D', ofBlock(sBlockCasingsTT, 4))
                 .addElement('E', ofBlock(sBlockCasingsTT, 6))
                 .addElement('F', ofBlock(sBlockCasingsTT, 9))
                 .addElement('G', ofBlock(sBlockCasingsTT, 10))
                 .addElement('H', ofBlock(sBlockCasingsTT, 12))
                 .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                .addElement('J', ofBlock(GSBlocks.DysonSwarmBlocks, 9))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
                 .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'L',

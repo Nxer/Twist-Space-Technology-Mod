@@ -12,6 +12,7 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
@@ -33,7 +34,6 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.multitileentity.multiblock.casing.Glasses;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.HatchElementBuilder;
@@ -99,7 +99,7 @@ public class MM_LargeNeutronOscillator
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(
+        return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
             horizontalOffSet,
@@ -187,7 +187,7 @@ public class MM_LargeNeutronOscillator
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement('D', ofBlock(sBlockCasingsTT, 0))
                 .addElement('E', ofBlock(Loaders.speedingPipe, 0))
-                .addElement('F', Glasses.chainAllGlasses())
+                .addElement('F', chainAllGlasses())
                 .addElement('G', ofFrame(Materials.NaquadahAlloy))
                 .build();
             /*

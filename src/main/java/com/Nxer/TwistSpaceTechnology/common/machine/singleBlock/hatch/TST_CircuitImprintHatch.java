@@ -53,10 +53,6 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
                 ModNameDesc });
     }
 
-    public TST_CircuitImprintHatch(String aName, int aTier, String aDescription, ITexture[][][] aTextures) {
-        super(aName, aTier, aTier > 5 ? 16 : 4, aDescription, aTextures);
-    }
-
     public TST_CircuitImprintHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aTier > 5 ? 16 : 4, aDescription, aTextures);
     }
@@ -69,11 +65,6 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
     @Override
     public ITexture[] getTexturesInactive(ITexture aBaseTexture) {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_DATA_ACCESS) };
-    }
-
-    @Override
-    public boolean isSimpleMachine() {
-        return true;
     }
 
     @Override
