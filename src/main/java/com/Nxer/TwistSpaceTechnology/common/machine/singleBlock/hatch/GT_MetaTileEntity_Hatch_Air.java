@@ -38,7 +38,11 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
 
     @Override
     public synchronized String[] getDescription() {
-        mDescriptionArray[2] = FluidCapacity + " " + EnumChatFormatting.BLUE + GTUtility.formatNumbers(getCapacity()) + EnumChatFormatting.RESET + " L";
+        mDescriptionArray[2] = FluidCapacity + " "
+            + EnumChatFormatting.BLUE
+            + GTUtility.formatNumbers(getCapacity())
+            + EnumChatFormatting.RESET
+            + " L";
         final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
