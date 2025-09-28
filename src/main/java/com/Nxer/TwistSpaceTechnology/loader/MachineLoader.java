@@ -63,6 +63,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_PrimordialDisjunctus;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ProcessingArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
@@ -618,6 +619,12 @@ public final class MachineLoader {
         // #zh_CN 大型太阳能锅炉
         GTCMItemList.LargeSolarBoiler
             .set(new TST_LargeSolarBoiler(19076, "NameLargeSolarBoiler", TextEnums.tr("NameLargeSolarBoiler")));
+
+        // #tr NameNetherInterface
+        // # Nether Interface
+        // #zh_CN 地狱接口
+        GTCMItemList.NetherInterface
+            .set(new TST_NetherInterface(19077, "NameNetherInterface", TextEnums.tr("NameNetherInterface")));
 
         // endregion
 

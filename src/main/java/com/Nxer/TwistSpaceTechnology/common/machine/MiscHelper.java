@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
@@ -23,10 +24,13 @@ public class MiscHelper {
     public static Item TerraShatterer;
 
     public static Fluid UnknowWater;
+    public static FluidStack water;
+    public static FluidStack distilledWater;
 
     public static void initStatics() {
         ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
         CRITICAL_PHOTON = GTCMItemList.CriticalPhoton.get(1);
+        water = new FluidStack(FluidRegistry.WATER, 1);
 
         ItemStack pickaxeOfTheCore = getModItem(Mods.Thaumcraft.ID, "ItemPickaxeElemental", 1);
         if (pickaxeOfTheCore != null) {
@@ -52,6 +56,11 @@ public class MiscHelper {
         UnknowWater = FluidRegistry.getFluid("unknowwater");
         if (UnknowWater == null) {
             UnknowWater = FluidRegistry.getFluid("water");
+        }
+
+        distilledWater = FluidRegistry.getFluidStack("ic2distilledwater", 1);
+        if (distilledWater == null) {
+            distilledWater = water;
         }
 
     }

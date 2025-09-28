@@ -67,6 +67,7 @@ public class Config {
     public static final String SwelegfyrBlastFurnace = "SwelegfyrBlastFurnace";
     public static final String PrimordialDisjunctus = "PrimordialDisjunctus";
     public static final String LaserMeteorMiner = "LaserMeteorMiner";
+    public static final String NetherInterface = "NetherInterface";
     // endregion
 
     // region General
@@ -531,6 +532,16 @@ public class Config {
     public static boolean Enable_InfusionMaterialDispenser =true ;
     // endregion
 
+    // region Nether Interface
+    public static int CycleTime_NetherInterface = 20 * 60;
+    public static int MaxParallel_NetherInterface = 64;
+    public static int BasicEnergyCost_NetherInterface = 7680;
+    public static int BasicDistilledWaterCost_NetherInterface = 16000;
+    public static int GenerateStackEveryProcessing_NetherInterface = 3;
+    public static int OutputHellishMetalPercent_NetherInterface = 30;
+
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -547,6 +558,15 @@ public class Config {
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
         Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DTPF_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
+        // endregion
+
+        // region NetherInterface
+        CycleTime_NetherInterface = configuration.getInt("CycleTime_NetherInterface", NetherInterface, CycleTime_NetherInterface, 1, Integer.MAX_VALUE, "The fixed time (tick number) of Nether Interface every processing. Type: int");
+        MaxParallel_NetherInterface = configuration.getInt("MaxParallel_NetherInterface", NetherInterface, MaxParallel_NetherInterface, 1, Integer.MAX_VALUE / 64, "Max parallel recipe amount one Nether Interface can handle. Type: int");
+        BasicEnergyCost_NetherInterface = configuration.getInt("BasicEnergyCost_NetherInterface", NetherInterface, BasicEnergyCost_NetherInterface, 1, Integer.MAX_VALUE, "Eu consumption of one parallel in Nether Interface. And machine cost 2x this number for base energy cost. Type: int");
+        BasicDistilledWaterCost_NetherInterface = configuration.getInt("BasicDistilledWaterCost_NetherInterface", NetherInterface, BasicDistilledWaterCost_NetherInterface, 1, Integer.MAX_VALUE, "Distilled water cost of every Nether Interface parallel, and the output amount of nether waste fluid is same as this. Type: int");
+        GenerateStackEveryProcessing_NetherInterface = configuration.getInt("GenerateStackEveryProcessing_NetherInterface", NetherInterface, GenerateStackEveryProcessing_NetherInterface, 1, 32768, "Every processing machine will output multi type of recipe output items, set by this parameter. Type: int");
+        OutputHellishMetalPercent_NetherInterface = configuration.getInt("OutputHellishMetalPercent_NetherInterface", NetherInterface, OutputHellishMetalPercent_NetherInterface, 1, 100, "Output Hellish Metal has a output chance same as this percent number. Type: int");
         // endregion
 
         // region LaserMeteorMiner
