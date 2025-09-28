@@ -119,8 +119,8 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                 // spotless:on
             } else {
                 // #tr Waila.ExecutionCore.IsIdle
-                // # This execution core is idle.
-                // #zh_CN 空闲状态
+                // # This §fExecution Core§7 is idle.
+                // #zh_CN 此§f执行核心§7处于空闲状态
                 currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
             }
         } else {

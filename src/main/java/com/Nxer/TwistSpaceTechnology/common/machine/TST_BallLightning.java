@@ -201,7 +201,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public int getMaxParallelRecipes() {
         if (isWirelessMode || machineMode == 3) return Integer.MAX_VALUE;
         else if (machineMode == 2) return 65536;
-        else return (int) Math.pow(2, compactFusionCoilTier * (coilLevel.getTier() - 10));
+        else return (int) Math.pow(2, compactFusionCoilTier * (coilLevel != null ? coilLevel.getTier() : 1 - 10));
     }
 
     @Override
@@ -612,7 +612,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getInteger("mode") == 2) {
+        if (tag.getInteger("modeTST") == 2) {
             currentTip.add(
                 // #tr Waila.TST_BallLightning.1
                 // # Max Fusion Eu Cost

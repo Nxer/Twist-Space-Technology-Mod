@@ -20,7 +20,7 @@ public class TextLocalization {
     // region general
     public static final String ModName = Tags.MODNAME;
     // #tr ModNameDesc
-    // # Added by {\GREEN}ModName{\GRAY}
+    // # Added by {\GREEN}Twist Space Technology{\GRAY}
     // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加{\RESET}
     public static final String ModNameDesc = TextEnums.tr("ModNameDesc");
 
@@ -141,7 +141,7 @@ public class TextLocalization {
     public static final String Tooltip_DoNotNeedEnergyHatch = TextEnums.tr("Tooltip_DoNotNeedEnergyHatch");
 
     // #tr Mark_TwistSpaceTechnology_TecTech
-    // # {\AQUA}{\BOLD}ModName : {\RESET}CommonValues.TEC_MARK_SHORT
+    // # {\AQUA}{\BOLD}Twist Space Technology : {\RESET}Tech
     // #zh_CN {\AQUA}{\BOLD}Twist Space Technology : {\RESET}{\BLUE}Tec{\DARK_BLUE}Tech
     public static final String Mark_TwistSpaceTechnology_TecTech = TextEnums.tr("Mark_TwistSpaceTechnology_TecTech");
 
