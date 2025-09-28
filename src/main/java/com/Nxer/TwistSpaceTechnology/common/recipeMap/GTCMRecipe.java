@@ -406,4 +406,15 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.DeployedNanoCore.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_ASSEMBLE)
         .build();
+
+    // #tr tst.recipe.NetherInterfaceVisualRecipeMap
+    // # Nether Interface
+    // #zh_CN 地狱接口
+    public static final RecipeMap<TST_RecipeMapBackend> NetherInterfaceVisualRecipeMap = RecipeMapBuilder
+        .of("tst.recipe.NetherInterfaceVisualRecipeMap", TST_RecipeMapBackend::new)
+        .maxIO(0, 6, 1, 2)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.NetherInterface.get(1)))
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .build();
+
 }
