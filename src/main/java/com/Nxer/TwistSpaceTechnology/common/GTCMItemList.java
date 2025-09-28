@@ -225,6 +225,7 @@ public enum GTCMItemList {
     ReinforcedIridiumAlloyCasing,
     BoropheneBasedNanowireCompositeThermalConductiveCasing,
     NeutroniumPipeCasing,
+    MechanicallyEnhancedObsidian,
     Laser_Beacon,
     // endregion
 
@@ -295,6 +296,8 @@ public enum GTCMItemList {
     MeteorMiner,
     UniversalGenerator,
     LargeSolarBoiler,
+    NetherInterface,
+    SuperWaterPurifier,
     // endregion
 
     // region Modularized Machines

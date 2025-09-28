@@ -7,6 +7,8 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -618,6 +620,15 @@ public final class MachineLoader {
         // #zh_CN 大型太阳能锅炉
         GTCMItemList.LargeSolarBoiler
             .set(new TST_LargeSolarBoiler(19076, "NameLargeSolarBoiler", TextEnums.tr("NameLargeSolarBoiler")));
+
+        // #tr NameNetherInterface
+        // # Nether Interface
+        // #zh_CN 地狱接口
+        GTCMItemList.NetherInterface
+            .set(new TST_NetherInterface(19077, "NameNetherInterface", TextEnums.tr("NameNetherInterface")));
+
+        GTCMItemList.SuperWaterPurifier
+            .set(new TST_SuperWaterPurifier(19078, "NameSuperWaterPurifier", TextEnums.tr("NameSuperWaterPurifier")));
 
         // endregion
 
