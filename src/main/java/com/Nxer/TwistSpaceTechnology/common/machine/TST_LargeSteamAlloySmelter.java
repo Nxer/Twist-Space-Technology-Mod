@@ -1,10 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockUnlocalizedName;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW;
@@ -54,7 +52,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     @Override
     public int getMaxParallelRecipes() {
-        return 24;
+        return 48;
     }
 
     @Override
@@ -105,7 +103,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
                             .casingIndex(1090)
                             .dot(1)
                             .build(),
-                        ofBlockUnlocalizedName(NewHorizonsCoreMod.ID, "gt.blockcasingsNH", 2)))
+                        ofBlock(GregTechAPI.sBlockCasingsNH, 2)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
@@ -132,7 +130,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     @Override
     public int getTierRecipes() {
         // todo
-        return 0;
+        return 3;
     }
 
     @Override

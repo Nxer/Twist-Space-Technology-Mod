@@ -263,6 +263,11 @@ public class BlockRegister {
         // #zh_CN 中子管道方块
         GTCMItemList.NeutroniumPipeCasing.set(MetaBlockCasing02.registerVariant(4));
 
+        // #tr tile.MetaBlockCasing02.5.name
+        // # Mechanically Enhanced Obsidian
+        // #zh_CN 机械强化黑曜石
+        GTCMItemList.MechanicallyEnhancedObsidian.set(MetaBlockCasing02.registerVariant(5));
+
         // region SpaceTimeOscillator
 
         // #tr tile.SpaceTimeOscillator.0.name

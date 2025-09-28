@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -37,8 +38,12 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
 
     @Override
     public synchronized String[] getDescription() {
-        mDescriptionArray[1] = FluidCapacity + GTUtility.formatNumbers(getCapacity()) + "L";
-        final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
+        mDescriptionArray[2] = FluidCapacity + " "
+            + EnumChatFormatting.BLUE
+            + GTUtility.formatNumbers(getCapacity())
+            + EnumChatFormatting.RESET
+            + " L";
+        final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
         final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];

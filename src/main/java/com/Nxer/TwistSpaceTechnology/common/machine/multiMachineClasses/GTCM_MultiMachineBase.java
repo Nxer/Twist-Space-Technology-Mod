@@ -736,7 +736,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         if (showModeInWaila()) {
-            tag.setInteger("mode", machineMode);
+            tag.setInteger("modeTST", machineMode);
         }
     }
 
@@ -745,7 +745,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.hasKey("mode")) {
+        if (tag.hasKey("modeTST")) {
             currentTip.add("" + EnumChatFormatting.YELLOW +
             // #tr TST.machines.running_mode
             // # Running Mode :
@@ -753,7 +753,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 StatCollector.translateToLocal("TST.machines.running_mode")
                 + " "
                 + EnumChatFormatting.WHITE
-                + getMachineModeName(tag.getInteger("mode"))
+                + getMachineModeName(tag.getInteger("modeTST"))
                 + EnumChatFormatting.RESET);
         }
     }

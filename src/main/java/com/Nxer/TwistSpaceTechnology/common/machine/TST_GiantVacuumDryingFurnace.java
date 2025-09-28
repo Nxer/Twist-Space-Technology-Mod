@@ -400,7 +400,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // #tr Tooltip_IndustrialAlchemyTower_MachineType
+        // #tr Tooltip_GVDF_MachineType
         // # Vacuum Furnace | Dehydrator
         // #zh_CN 真空干燥炉 | 化学脱水机
         tt.addMachineType(TextEnums.tr("Tooltip_GVDF_MachineType"))
