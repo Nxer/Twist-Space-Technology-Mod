@@ -182,7 +182,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        maxParallel = 2_000_000;
+        maxParallel = 2_000_000_000;
         if (!checkPiece(STRUCTURE_PIECE, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
 
         return this.mCasing >= 45;
@@ -274,11 +274,12 @@ F -> ofBlock...(tile.spatiallyTranscendentGravitationalLens, 0, ...);
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_UniversalGenerator_MachineType)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_00)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_01)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_02)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_03)
+        tt.addMachineType(TextLocalization.Tooltip_SuperwaterPurifier_MachineType)
+            .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_00)
+            .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_01)
+            .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_02)
+            .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_03)
+            .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_04)
             .addInfo(TextEnums.Author_EvgenWarGold.getText())
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addDynamoHatch(TextLocalization.textUseBlueprint, 1)

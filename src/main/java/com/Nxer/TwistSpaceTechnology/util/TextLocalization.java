@@ -2756,6 +2756,15 @@ public class TextLocalization {
     public static final String Tooltip_UniversalGenerator_03 = TextEnums.tr("Tooltip_UniversalGenerator_03");
     // endregion
 
+    // region TST_SuperWaterPurifier
+    public static final String Tooltip_SuperwaterPurifier_MachineType = TextEnums.tr("Tooltip_SuperwaterPurifier_MachineType");
+    public static final String Tooltip_SuperWaterPurifier_00 = TextEnums.tr("Tooltip_SuperWaterPurifier_00");
+    public static final String Tooltip_SuperWaterPurifier_01 = TextEnums.tr("Tooltip_SuperWaterPurifier_01");
+    public static final String Tooltip_SuperWaterPurifier_02 = TextEnums.tr("Tooltip_SuperWaterPurifier_02");
+    public static final String Tooltip_SuperWaterPurifier_03 = TextEnums.tr("Tooltip_SuperWaterPurifier_03");
+    public static final String Tooltip_SuperWaterPurifier_04 = TextEnums.tr("Tooltip_SuperWaterPurifier_04");
+    // endregion
+
 
 }
 // spotless:on
