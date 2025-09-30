@@ -16,11 +16,13 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
+import static thaumcraft.api.aspects.Aspect.EXCHANGE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,6 +41,8 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
+import goodgenerator.blocks.tileEntity.MTEEssentiaHatch;
 import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
 import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
 import goodgenerator.loader.Loaders;
@@ -61,6 +65,8 @@ import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.visnet.VisNetHandler;
 import thaumcraft.common.config.ConfigBlocks;
+import thaumcraft.common.lib.network.PacketHandler;
+import thaumcraft.common.lib.network.fx.PacketFXEssentiaSource;
 
 public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     implements IConstructable, ISurvivalConstructable {
@@ -73,6 +79,11 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
     public AspectList mOutputAspects = new AspectList();
 
+    private final ArrayList<MTEEssentiaHatch> mEssentiaInputHatches = new ArrayList<>();
+    // Just for the addressing of the animation
+    private int[][] cachedEssentiaCoords;
+
+
     protected int mCasing = 0;
     protected double mParallel = 0;
     private int pTier = 0;
@@ -81,6 +92,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     protected int nodePurificationEfficiency = 0;
     private static final int SECOND_IN_TICKS = 20;
     private static final int RECIPE_EUT = 1920;
+    Aspect[] primalsAspect = new Aspect[] {
+        Aspect.AIR, Aspect.EARTH, Aspect.FIRE,
+        Aspect.WATER, Aspect.ORDER, Aspect.ENTROPY
+    };
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private IStructureDefinition<TST_PrimordialDisjunctus> multiDefinition = null;
 
@@ -103,7 +118,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private final XSTR xstr = new XSTR();
     // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
     private static final String[][] shapePrimordialDisjunctus = new String[][] {
-        { "               ", "               ", "ABA         ABA", "ABA         ABA", "BBB         BBB",
+        { "               ", "               ", "ABA         ABA", "ABA         ABA", "BCB         BCB",
             "               ", "               ", "               ", "               ", "               ",
             "               ", "               ", "               ", "               ", "               " },
         { "               ", "ABA         ABA", "               ", "               ", "               ",
@@ -184,6 +199,13 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                             Loaders.essentiaOutputHatch,
                             0),
                         onElementPass(TST_PrimordialDisjunctus::onCasingFound, ofBlock(Loaders.magicCasing, 0))))
+                .addElement(
+                    'C',
+                    ofSpecificTileAdder(
+                        TST_PrimordialDisjunctus::addEssentiaInputHatchToMachineList,
+                        MTEEssentiaHatch.class,
+                        Loaders.essentiaHatch,
+                        0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .addElement('E', gregtech.api.enums.HatchElement.Muffler.newAny(CASING_INDEX, 2))
                 .addElement(
@@ -215,7 +237,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             + " Primal Aspects";
         outInfo[inInfo.length + 1] = EnumChatFormatting.AQUA + "Boost: "
             + EnumChatFormatting.GOLD
-            + this.nodeIncrease
+            + this.nodeIncrease * 100
             + "%";
         outInfo[inInfo.length + 2] = EnumChatFormatting.AQUA + "Purification Efficiency: "
             + EnumChatFormatting.GOLD
@@ -240,6 +262,17 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             }
         }
         aNBT.setTag("Aspects", nbtTagList);
+        if (this.cachedEssentiaCoords != null) {
+            NBTTagList coordsList = new NBTTagList();
+            for (int[] pos : this.cachedEssentiaCoords) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setInteger("x", pos[0]);
+                tag.setInteger("y", pos[1]);
+                tag.setInteger("z", pos[2]);
+                coordsList.appendTag(tag);
+            }
+            aNBT.setTag("CachedCoords", coordsList);
+        }
         super.saveNBTData(aNBT);
     }
 
@@ -255,6 +288,17 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             if (rs.hasKey("key"))
                 this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
         }
+        this.cachedEssentiaCoords = null;
+        if (aNBT.hasKey("CachedCoords")) {
+            NBTTagList coordsList = aNBT.getTagList("CachedCoords", 10);
+            this.cachedEssentiaCoords = new int[coordsList.tagCount()][3];
+            for (int i = 0; i < coordsList.tagCount(); i++) {
+                NBTTagCompound tag = coordsList.getCompoundTagAt(i);
+                this.cachedEssentiaCoords[i][0] = tag.getInteger("x");
+                this.cachedEssentiaCoords[i][1] = tag.getInteger("y");
+                this.cachedEssentiaCoords[i][2] = tag.getInteger("z");
+            }
+        }
         super.loadNBTData(aNBT);
     }
 
@@ -265,13 +309,14 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         this.mCasing = 0;
         this.mParallel = 0;
         this.pTier = 0;
-
+        this.cachedEssentiaCoords = generateCoordinate(this.mMufflerHatches);
         boolean bStructureCheck = checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1);
 
         // Only reset this data if we have an invalid structure check
         if (!bStructureCheck) {
             this.nodeIncrease = 0;
             this.nodePurificationEfficiency = 0;
+            this.cachedEssentiaCoords = null;
         }
 
         return bStructureCheck;
@@ -280,7 +325,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
+        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
     }
 
     private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
@@ -288,6 +333,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             return this.mEssentiaOutputHatches.add(aTileEntity);
         }
         return false;
+    }
+
+    private boolean addEssentiaInputHatchToMachineList(MTEEssentiaHatch te) {
+        return te != null && mEssentiaInputHatches.add(te);
     }
 
     protected void onCasingFound() {
@@ -329,7 +378,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         // Output of each primal (boosted, overclocked UMV) [T1][T2][T3][T4]
         // 2560/s 5120/s 10240/s 20480/s
         this.primalAspectsGenerated = (int) (parallel * STANDARD_PRIMAL_ASPECTS_PER_PARALLEL
-            * (1.0 + (this.nodeIncrease * 0.01 * STANDARD_BOOST_MULTIPLIER)));
+            * (1.0 + (this.nodeIncrease * STANDARD_BOOST_MULTIPLIER)));
 
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
@@ -429,14 +478,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                             * STANDARD_PURIFICATION_GAIN_MULTIPLIER));
             }
 
-            // Loses 5 every post tick, Gains 7 max every post tick
-            this.nodeIncrease = Math.max(0, this.nodeIncrease - STANDARD_BOOST_REDUCTION);
-            if (this.nodeIncrease < 100) {
-                this.nodeIncrease = Math.min(
-                    100,
-                    this.nodeIncrease + (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 125) * 0.024
-                        * STANDARD_BOOST_GAIN_MULTIPLIER));
-            }
+            this.nodeIncrease = Math.max(
+                0,
+                (int) (VisNetHandler.drainVis(WORLD, x, y, z, Aspect.ENTROPY, 640) * 0.025
+                    * STANDARD_BOOST_GAIN_MULTIPLIER));
         }
     }
 
@@ -453,7 +498,6 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                     .getYCoord();
                 int z = mufflerHatch.getBaseMetaTileEntity()
                     .getZCoord();
-
                 ForgeDirection facing = mufflerHatch.getBaseMetaTileEntity()
                     .getFrontFacing();
                 switch (facing) {
@@ -475,11 +519,107 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                 generateFluxGas(WORLD, x, y, z);
             }
         }
+
+        if (this.primalAspectsGenerated > 0) {
+            double p = Math.min(0.5, this.primalAspectsGenerated / 512.0);
+            if (xstr.nextFloat() < p) {
+                Aspect randomAspect = primalsAspect[xstr.nextInt(primalsAspect.length)];
+                transferRandomEssentia(
+                    this.getBaseMetaTileEntity().getWorld(),
+                    randomAspect,
+                    1
+                );
+            }
+        }
         return super.onRunningTick(aStack);
     }
 
+//generateCoordinate(this.mMufflerHatches)
     private void generateFluxGas(World world, int x, int y, int z) {
         world.setBlock(x, y, z, ConfigBlocks.blockFluxGas, 8, 3);
+    }
+
+    public int[][] generateCoordinate(List<MTEHatchMuffler> mufflers) {
+        if (mufflers == null || mufflers.isEmpty()) return new int[0][3];
+
+        int xMin = Integer.MAX_VALUE, xMax = Integer.MIN_VALUE;
+        int zMin = Integer.MAX_VALUE, zMax = Integer.MIN_VALUE;
+        int yLevel = 0;
+
+        for (MTEHatchMuffler muffler : mufflers) {
+            int x = muffler.getBaseMetaTileEntity()
+                .getXCoord();
+            int y = muffler.getBaseMetaTileEntity()
+                .getYCoord();
+            int z = muffler.getBaseMetaTileEntity()
+                .getZCoord();
+
+            if (x < xMin) xMin = x;
+            if (x > xMax) xMax = x;
+            if (z < zMin) zMin = z;
+            if (z > zMax) zMax = z;
+
+            yLevel = y + 1;
+        }
+
+        int[] xs = getMiddleTwo(xMin, xMax);
+        int[] zs = getMiddleTwo(zMin, zMax);
+
+        int[][] sourceCoords = new int[4][3];
+        sourceCoords[0] = new int[] { xs[0], yLevel, zs[0] };
+        sourceCoords[1] = new int[] { xs[0], yLevel, zs[1] };
+        sourceCoords[2] = new int[] { xs[1], yLevel, zs[0] };
+        sourceCoords[3] = new int[] { xs[1], yLevel, zs[1] };
+
+        return sourceCoords;
+    }
+    public static int[] getMiddleTwo(int min, int max) {
+        int mid1 = min + (max - min) / 4;
+        int mid2 = max - (max - min) / 4;
+        return new int[] { mid1, mid2 };
+    }
+
+    public void transferRandomEssentia(World world,  Aspect aspect, int amount) {
+        XSTR xstr = new XSTR();
+
+        int[][] sourceCoords = this.cachedEssentiaCoords;
+
+
+        if (sourceCoords == null || sourceCoords.length == 0) {
+            sourceCoords = generateCoordinate(this.mMufflerHatches);
+            this.cachedEssentiaCoords = (sourceCoords == null || sourceCoords.length == 0) ? null : sourceCoords;
+        }
+
+        int[] from = null;
+        if (sourceCoords != null) {
+            from = sourceCoords[xstr.nextInt(sourceCoords.length)];
+        }
+        int fromX = from[0], fromY = from[1], fromZ = from[2];
+
+        MTEEssentiaHatch targetHatch = mEssentiaInputHatches.get(xstr.nextInt(mEssentiaInputHatches.size()));
+        int toX = targetHatch.xCoord;
+        int toY = targetHatch.yCoord;
+        int toZ = targetHatch.zCoord;
+
+        moveEssentiaFX(world, fromX, fromY, fromZ, toX, toY , toZ, aspect, amount);
+    }
+
+
+
+    public static void moveEssentiaFX(World world, int fromX, int fromY, int fromZ, int toX, int toY, int toZ,
+        Aspect aspect, int amount) {
+        for (int i = 0; i < amount; i++) {
+            PacketHandler.INSTANCE.sendToAllAround(
+                new PacketFXEssentiaSource(
+                    toX,
+                    toY,
+                    toZ,
+                    (byte) (toX - fromX),
+                    (byte) (toY - fromY),
+                    (byte) (toZ - fromZ),
+                    aspect.getColor()),
+                new NetworkRegistry.TargetPoint(world.provider.dimensionId, toX, toY, toZ, 32.0D));
+        }
     }
 
     @Override
@@ -515,9 +655,13 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // #zh_CN 借助科技的力量, 此过程仅需能量, 在1A EV电压下每20秒每个并行产出16单位基础源质.
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_05"))
             // #tr Tooltip_PrimordialDisjunctus_06
-            // # Providing Ordo centi-vis will reduce the flux produced to nothing, flux produced is not affected by muffler tier, while providing Perditio centi-vis will boost primal aspect production up to 200%
-            // #zh_CN 提供秩序vis可将咒波污染降为零(与消声仓等级无关),提供混沌vis可提升源质产量最高200%
+            // # Providing Ordo vis(at least 50) will reduce the flux produced to nothing, flux produced is not affected by muffler tier.
+            // #zh_CN 提供秩序vis(至少50)可将咒波污染降为零(与消声仓等级无关),
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06"))
+            // #tr Tooltip_PrimordialDisjunctus_06_01
+            // # while providing Perditio vis will boost primal aspect production.Every 10 increase the output by 100%. The maximum increase is 16 times.
+            // #zh_CN 提供混沌vis可提升源质产量,每40点增加100%产量,最高16倍.
+            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_01"))
             // #tr Tooltip_PrimordialDisjunctus_07
             // # This machine maxes out at 1 UMV amp anything more will just void power.
             // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
@@ -597,7 +741,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         tag.setInteger("primalAspectsPerCycle", this.primalAspectsGenerated);
-        tag.setInteger("boost", this.nodeIncrease);
+        tag.setInteger("boost", this.nodeIncrease * 100);
         tag.setInteger("purificationEfficiency", this.nodePurificationEfficiency);
     }
 
