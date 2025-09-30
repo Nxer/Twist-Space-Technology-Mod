@@ -147,7 +147,7 @@ public class RuneEngraverRecipePool  {
             .duration(20 * 10)
             .addTo(RE);
         GTValues.RA.stdBuilder()
-            .itemInputs(GTUtility.getIntegratedCircuit(0),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,0),new ItemStack(ModItems.rune,0,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
+            .itemInputs(GTUtility.getIntegratedCircuit(4),Materials.Titanium.getPlates(2),new ItemStack(ModItems.rune,0,0),new ItemStack(ModItems.rune,0,7),MaterialsBotania.ManaDiamond.getGems(4),MaterialsBotania.Livingrock.getPlates(4))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(3000))
             .itemOutputs(new ItemStack(ModItems.rune,3,14))
 
