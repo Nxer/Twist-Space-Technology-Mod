@@ -67,6 +67,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.Silksong;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceWarper;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SuperWaterPurifier;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.TestItem0;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ThermalEnergyDevourer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.VacuumFilterExtractor;
@@ -77,6 +78,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateIt
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeUtils.getCircuits;
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -3609,6 +3611,40 @@ public class GTCMMachineRecipes {
             .eut(TierEU.RECIPE_LuV)
             .duration(20 * 10)
             .addTo(assembler);
+        // endregion
+
+        // region SuperWaterPurifier
+
+        // Controller
+        final int waterGradeCount = 100_000_000;
+        GTValues.RA
+            .stdBuilder()
+            .itemInputs(
+                ItemList.Machine_Multi_PurificationUnitClarifier.get(1),
+                ItemList.Machine_Multi_PurificationUnitOzonation.get(1),
+                ItemList.Machine_Multi_PurificationUnitFlocculator.get(1),
+                ItemList.Machine_Multi_PurificationUnitPhAdjustment.get(1),
+                ItemList.Machine_Multi_PurificationUnitPlasmaHeater.get(1),
+                ItemList.Machine_Multi_PurificationUnitUVTreatment.get(1),
+                ItemList.Machine_Multi_PurificationUnitDegasifier.get(1),
+                ItemList.Machine_Multi_PurificationUnitParticleExtractor.get(1),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1),1_000),
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1), 1_000))
+            .fluidInputs(
+                Materials.Grade1PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade2PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade3PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade4PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade5PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade6PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade7PurifiedWater.getFluid(waterGradeCount),
+                Materials.Grade8PurifiedWater.getFluid(waterGradeCount),
+                Materials.StableBaryonicMatter.getFluid(waterGradeCount / 10))
+            .itemOutputs(SuperWaterPurifier.get(1))
+            .eut(TierEU.RECIPE_UXV)
+            .duration(20 * 36_000)
+            .addTo(MiracleTopRecipes);
+
         // endregion
 
     }
