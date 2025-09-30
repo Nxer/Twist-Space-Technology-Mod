@@ -16,13 +16,11 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static thaumcraft.api.aspects.Aspect.EXCHANGE;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import cpw.mods.fml.common.FMLLog;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,7 +40,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
-import goodgenerator.blocks.tileEntity.MTEEssentiaHatch;
 import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
 import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
 import goodgenerator.loader.Loaders;
@@ -67,6 +64,8 @@ import thaumcraft.api.visnet.VisNetHandler;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.lib.network.PacketHandler;
 import thaumcraft.common.lib.network.fx.PacketFXEssentiaSource;
+import thaumicenergistics.common.blocks.BlockEnum;
+import thaumicenergistics.common.tiles.TileEssentiaProvider;
 
 public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     implements IConstructable, ISurvivalConstructable {
@@ -79,10 +78,9 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
     public AspectList mOutputAspects = new AspectList();
 
-    private final ArrayList<MTEEssentiaHatch> mEssentiaInputHatches = new ArrayList<>();
+    private final ArrayList<TileEssentiaProvider> mEssentiaInputHatches = new ArrayList<>();
     // Just for the addressing of the animation
     private int[][] cachedEssentiaCoords;
-
 
     protected int mCasing = 0;
     protected double mParallel = 0;
@@ -92,10 +90,8 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     protected int nodePurificationEfficiency = 0;
     private static final int SECOND_IN_TICKS = 20;
     private static final int RECIPE_EUT = 1920;
-    Aspect[] primalsAspect = new Aspect[] {
-        Aspect.AIR, Aspect.EARTH, Aspect.FIRE,
-        Aspect.WATER, Aspect.ORDER, Aspect.ENTROPY
-    };
+    Aspect[] primalsAspect = new Aspect[] { Aspect.AIR, Aspect.EARTH, Aspect.FIRE, Aspect.WATER, Aspect.ORDER,
+        Aspect.ENTROPY };
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private IStructureDefinition<TST_PrimordialDisjunctus> multiDefinition = null;
 
@@ -203,8 +199,8 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                     'C',
                     ofSpecificTileAdder(
                         TST_PrimordialDisjunctus::addEssentiaInputHatchToMachineList,
-                        MTEEssentiaHatch.class,
-                        Loaders.essentiaHatch,
+                        TileEssentiaProvider.class,
+                        BlockEnum.ESSENTIA_PROVIDER.getBlock(),
                         0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .addElement('E', gregtech.api.enums.HatchElement.Muffler.newAny(CASING_INDEX, 2))
@@ -325,7 +321,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivialBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
     }
 
     private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
@@ -335,7 +331,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         return false;
     }
 
-    private boolean addEssentiaInputHatchToMachineList(MTEEssentiaHatch te) {
+    private boolean addEssentiaInputHatchToMachineList(TileEssentiaProvider te) {
         return te != null && mEssentiaInputHatches.add(te);
     }
 
@@ -525,16 +521,16 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             if (xstr.nextFloat() < p) {
                 Aspect randomAspect = primalsAspect[xstr.nextInt(primalsAspect.length)];
                 transferRandomEssentia(
-                    this.getBaseMetaTileEntity().getWorld(),
+                    this.getBaseMetaTileEntity()
+                        .getWorld(),
                     randomAspect,
-                    1
-                );
+                    1);
             }
         }
         return super.onRunningTick(aStack);
     }
 
-//generateCoordinate(this.mMufflerHatches)
+    // generateCoordinate(this.mMufflerHatches)
     private void generateFluxGas(World world, int x, int y, int z) {
         world.setBlock(x, y, z, ConfigBlocks.blockFluxGas, 8, 3);
     }
@@ -573,17 +569,17 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
         return sourceCoords;
     }
+
     public static int[] getMiddleTwo(int min, int max) {
         int mid1 = min + (max - min) / 4;
         int mid2 = max - (max - min) / 4;
         return new int[] { mid1, mid2 };
     }
 
-    public void transferRandomEssentia(World world,  Aspect aspect, int amount) {
+    public void transferRandomEssentia(World world, Aspect aspect, int amount) {
         XSTR xstr = new XSTR();
 
         int[][] sourceCoords = this.cachedEssentiaCoords;
-
 
         if (sourceCoords == null || sourceCoords.length == 0) {
             sourceCoords = generateCoordinate(this.mMufflerHatches);
@@ -596,15 +592,13 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         }
         int fromX = from[0], fromY = from[1], fromZ = from[2];
 
-        MTEEssentiaHatch targetHatch = mEssentiaInputHatches.get(xstr.nextInt(mEssentiaInputHatches.size()));
+        TileEssentiaProvider targetHatch = mEssentiaInputHatches.get(xstr.nextInt(mEssentiaInputHatches.size()));
         int toX = targetHatch.xCoord;
         int toY = targetHatch.yCoord;
         int toZ = targetHatch.zCoord;
 
-        moveEssentiaFX(world, fromX, fromY, fromZ, toX, toY , toZ, aspect, amount);
+        moveEssentiaFX(world, fromX, fromY, fromZ, toX, toY, toZ, aspect, amount);
     }
-
-
 
     public static void moveEssentiaFX(World world, int fromX, int fromY, int fromZ, int toX, int toY, int toZ,
         Aspect aspect, int amount) {
@@ -662,6 +656,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             // # while providing Perditio vis will boost primal aspect production.Every 10 increase the output by 100%. The maximum increase is 16 times.
             // #zh_CN 提供混沌vis可提升源质产量,每40点增加100%产量,最高16倍.
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_01"))
+            // #tr Tooltip_PrimordialDisjunctus_06_02
+            // # It should be noted that the supply of VIS is specifically provided through Vis Relay located near the host.
+            // #zh_CN 注意VIS的供应具体来说是通过在主机附近的源质中继器来提供的
+            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_01"))
             // #tr Tooltip_PrimordialDisjunctus_07
             // # This machine maxes out at 1 UMV amp anything more will just void power.
             // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
@@ -671,6 +669,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
+            // #tr Tooltip_PrimordialDisjunctus_EssentiaProvider
+            // # Since EssentiaHatch has been removed and is now replaced by EssentiaProvider, it is still just a decoration and does not require input.
+            // #zh_CN 由于EssentiaHatch被删除现在由EssentiaProvide替代,但仍然只是装饰无需输入.
+            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_EssentiaProvider"))
             // #tr Tooltip_PrimordialDisjunctus_HatchBusInfo
             // # Replace Magic mechanical blocks in any cabin
             // #zh_CN 任何舱室替换魔法机械方块
