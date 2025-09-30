@@ -426,9 +426,7 @@ public class GTCMRecipe {
         .of("tst.recipe.SuperWaterPurifierVisualRecipeMap", TST_RecipeMapBackend::new)
         .maxIO(0, 0, 1, 12)
         .frontend(TST_SuperWaterPurifierFrontend::new)
-        .neiHandlerInfo(
-            builder -> builder.setDisplayStack(GTCMItemList.SuperWaterPurifier.get(1))
-                .setMaxRecipesPerPage(1))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.SuperWaterPurifier.get(1)))
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .build();
 
