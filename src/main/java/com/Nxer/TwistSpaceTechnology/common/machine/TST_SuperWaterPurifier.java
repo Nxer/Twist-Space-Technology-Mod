@@ -1,58 +1,17 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
-import gregtech.api.GregTechAPI;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
-import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.maps.FuelBackend;
-import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTRecipe;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.common.blocks.BlockCasings1;
-import gregtech.common.blocks.BlockCasings10;
-import gtPlusPlus.core.block.ModBlocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
-import tectech.thing.block.BlockGodforgeGlass;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
-
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static gregtech.api.GregTechAPI.sBlockCasings1;
 import static gregtech.api.GregTechAPI.sBlockCasings10;
 import static gregtech.api.GregTechAPI.sBlockCasings8;
-import static gregtech.api.enums.HatchElement.Dynamo;
+import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
+import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
+import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
@@ -61,6 +20,42 @@ import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static tectech.thing.casing.TTCasingsContainer.GodforgeCasings;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.common.api.random.RandomPackageFactory;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
+import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.VoidProtectionHelper;
+import gregtech.common.blocks.BlockCasings10;
+import tectech.thing.block.BlockGodforgeGlass;
 
 public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWaterPurifier> {
 
@@ -77,23 +72,117 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
 
     // region Processing Logic
     private int mCasing = 0;
+    private static RandomPackageFactory<FluidStack> fluidRandomGetter;
+    private final static int amountFluidOutput = 1_000;
+    private static FluidStack UUM;
+    private static FluidStack UUMC;
+    private static long ENERGY_USAGE = 134_217_728L;
 
-    @Override
-    public RecipeMap<FuelBackend> getRecipeMap() {
-        return RecipeMaps.gasTurbineFuels;
+    public static void initStatics() {
+        fluidRandomGetter = RandomPackageFactory.<FluidStack>builder()
+            .add(Materials.Grade1PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade2PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade3PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade4PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade5PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade6PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade7PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.Grade8PurifiedWater.getFluid(amountFluidOutput), 12d)
+            .add(Materials.StableBaryonicMatter.getFluid(amountFluidOutput), 4d)
+            .build(new FluidStack[0]);
+
+        if (UUM == null) UUM = Materials.UUMatter.getFluid(1_000);
+        if (UUMC == null) UUMC = MaterialPool.ConcentratedUUMatter.getFluidOrGas(1_000);
     }
 
-    @NotNull
     @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.gasTurbineFuels, RecipeMaps.dieselFuels);
+    public ProcessingLogic createProcessingLogic() {
+        return new ProcessingLogic() {
+
+            @Override
+            @Nonnull
+            public CheckRecipeResult process() {
+                FluidStack findFluid = null;
+                long inputEut = getMaxInputEu();
+                long fluidAmount = 0;
+                int basicFluidUsage = 1_000;
+                int parallel = (int) Math.min(getTrueParallel(), inputEut / ENERGY_USAGE);
+                if (inputEut < ENERGY_USAGE) {
+                    return CheckRecipeResultRegistry.insufficientPower(ENERGY_USAGE);
+                }
+
+                // Inputs
+                ArrayList<FluidStack> inputFluids = getStoredFluids();
+                if (inputFluids.isEmpty()) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                // Find needed fluid
+                for (FluidStack fluid : inputFluids) {
+                    if (UUM.isFluidEqual(fluid)) {
+                        findFluid = UUM;
+                        break;
+                    }
+
+                    if (UUMC.isFluidEqual(fluid)) {
+                        findFluid = UUMC;
+                        basicFluidUsage /= 10;
+                        break;
+                    }
+                }
+                if (findFluid == null) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                // Get fluid amount
+                for (FluidStack fluid : inputFluids) {
+                    if (findFluid.isFluidEqual(fluid)) {
+                        fluidAmount += fluid.amount;
+                    }
+                }
+
+                parallel = (int) Math.min(parallel, fluidAmount / basicFluidUsage);
+
+                if (parallel <= 0) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                findFluid.amount = parallel * basicFluidUsage;
+                if (!depleteInput(findFluid, true)) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                // Outputs
+                List<FluidStack> outputs = new ArrayList<>();
+                for (int i = 0; i < 3; i++) {
+                    FluidStack t = fluidRandomGetter.getOne()
+                        .copy();
+                    t.amount *= parallel;
+                    outputs.add(t);
+                }
+
+                outputFluids = outputs.toArray(new FluidStack[0]);
+
+                VoidProtectionHelper voidProtection = new VoidProtectionHelper().setMachine(machine)
+                    .setFluidOutputs(outputFluids)
+                    .build();
+
+                if (voidProtection.isFluidFull()) {
+                    return CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
+                }
+
+                depleteInput(findFluid);
+                duration = 1_200;
+                calculatedEut = -ENERGY_USAGE * parallel;
+
+                return SimpleCheckRecipeResult.ofSuccess("success");
+            }
+        };
     }
 
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.SuperWaterPurifierVisualRecipeMap;
+    }
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-
+        maxParallel = 2_000_000;
         if (!checkPiece(STRUCTURE_PIECE, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
 
         return this.mCasing >= 45;
@@ -133,12 +222,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                     'A',
                     ofChain(
                         buildHatchAdder(TST_SuperWaterPurifier.class)
-                            .atLeast(Dynamo)
-                            .casingIndex(mainTextureID)
-                            .dot(1)
-                            .build(),
-                        buildHatchAdder(TST_SuperWaterPurifier.class)
-                            .atLeast(InputHatch)
+                            .atLeast(InputHatch, InputBus, OutputBus, OutputHatch, Energy, ExoticEnergy)
                             .casingIndex(mainTextureID)
                             .dot(1)
                             .build(),
@@ -203,33 +287,13 @@ F -> ofBlock...(tile.spatiallyTranscendentGravitationalLens, 0, ...);
     }
 
     @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_SuperWaterPurifier(this.mName);
     }
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean aActive, boolean aRedstone) {
+        int colorIndex, boolean aActive, boolean aRedstone) {
         if (side == facing) {
             if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID),
                 TextureFactory.builder()

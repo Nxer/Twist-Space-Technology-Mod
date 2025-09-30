@@ -2251,5 +2251,6 @@ NameNetherInterface=地狱接口
 Tooltip_NetherInterface_MachineType=异界传送器
 Tooltip_NetherInterface_01=§l古老文明被囚禁的灵魂现在为你效命.
 tst.recipe.NetherInterfaceVisualRecipeMap=地狱接口
+tst.recipe.SuperWaterPurifierVisualRecipeMap=Super Water Purifier
 Tooltip_NetherInterface_02=构建传送门, 并将地狱那些肮脏但有用的资源传送回来.
 Tooltip_NetherInterface_03=需要消耗 2A IV 维持传送器, 并且每个并行消耗1A IV.

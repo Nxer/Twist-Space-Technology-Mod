@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_Rap
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidHeatExchangeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StellarForgeFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_StrangeMatterAggregatorFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_SuperWaterPurifierFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_TreeGrowthSimulatorFrontend;
 
 import goodgenerator.client.GUI.GGUITextures;
@@ -414,6 +415,20 @@ public class GTCMRecipe {
         .of("tst.recipe.NetherInterfaceVisualRecipeMap", TST_RecipeMapBackend::new)
         .maxIO(0, 6, 1, 2)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.NetherInterface.get(1)))
+        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
+        .build();
+
+    // #tr tst.recipe.SuperWaterPurifierVisualRecipeMap
+    // # Super Water Purifier
+    // #zh_CN
+
+    public static final RecipeMap<TST_RecipeMapBackend> SuperWaterPurifierVisualRecipeMap = RecipeMapBuilder
+        .of("tst.recipe.SuperWaterPurifierVisualRecipeMap", TST_RecipeMapBackend::new)
+        .maxIO(0, 0, 1, 12)
+        .frontend(TST_SuperWaterPurifierFrontend::new)
+        .neiHandlerInfo(
+            builder -> builder.setDisplayStack(GTCMItemList.SuperWaterPurifier.get(1))
+                .setMaxRecipesPerPage(1))
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .build();
 

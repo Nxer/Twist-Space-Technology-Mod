@@ -7,8 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -65,12 +63,14 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_PrimordialDisjunctus;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ProcessingArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SkypiercerTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
