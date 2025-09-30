@@ -116,26 +116,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
-            RecipeMap<?> currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
-
-            @Override
-            protected RecipeMap<?> getCurrentRecipeMap() {
-                if (machineMode != 0) return super.getCurrentRecipeMap();
-
-                // add tool casting recipes to solidifier mode
-                if (lastRecipeMap != RecipeMaps.fluidSolidifierRecipes
-                    && lastRecipeMap != GGFabRecipeMaps.toolCastRecipes) {
-                    lastRecipe = null;
-                    lastRecipeMap = currentRecipeMap;
-                }
-
-                if (maxParallelSupplier != null) {
-                    maxParallel = maxParallelSupplier.get();
-                }
-
-                return currentRecipeMap;
-            }
-
             @Override
             public boolean tryCachePossibleRecipesFromPattern(IDualInputInventoryWithPattern inv) {
                 if (!inv.shouldBeCached()) {
@@ -163,20 +143,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                 return false;
             }
 
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                if (machineMode != 0) return super.process();
-
-                currentRecipeMap = RecipeMaps.fluidSolidifierRecipes;
-                CheckRecipeResult result = super.process();
-                if (result.wasSuccessful()) return result;
-
-                currentRecipeMap = GGFabRecipeMaps.toolCastRecipes;
-                return super.process();
-            }
-
             @Override
             protected @NotNull CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
                 if (glassTier < 12 && glassTier < GTUtility.getTier(recipe.mEUt)) {
@@ -198,10 +164,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(
-            RecipeMaps.fluidExtractionRecipes,
-            RecipeMaps.fluidSolidifierRecipes,
-            GGFabRecipeMaps.toolCastRecipes);
+        return Arrays.asList(RecipeMaps.fluidExtractionRecipes, RecipeMaps.fluidSolidifierRecipes);
     }
 
     @Override
