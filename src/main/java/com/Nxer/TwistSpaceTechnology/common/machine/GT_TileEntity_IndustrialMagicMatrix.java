@@ -16,6 +16,7 @@ import static goodgenerator.loader.Loaders.magicCasing;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.enums.Mods.EtFuturumRequiem;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
@@ -36,6 +37,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -76,6 +78,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -2988,7 +2991,14 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addElement('5', ofBlock(blockStoneDevice, 11))
                 .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
                 .addElement('7', ofBlock(blockStoneDevice, 1))
-                .addElement('8', ofBlockAnyMeta(Blocks.beacon, 1))
+                .addElement(
+                    '8',
+                    ofChain(
+                        EtFuturumRequiem.isModLoaded()
+                            ? ofBlockAnyMeta(
+                                Block.getBlockFromItem(
+                                    (GTModHandler.getModItem(EtFuturumRequiem.ID, "beacon", 1)).getItem()))
+                            : ofBlockAnyMeta(Blocks.beacon)))
                 .build();
         }
         return STRUCTURE_DEFINITION;
