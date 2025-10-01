@@ -94,21 +94,21 @@ public class QFTRecipePool {
         // .addTo(QFT);
 
         // FeTiO3
-        GTValues.RA.stdBuilder()
-            .metadata(QFT_CATALYST, GregtechItemList.TitaTungstenIndiumCatalyst.get(0))
-            .itemInputs(Materials.Ilmenite.getDust(32))
-            .itemOutputs(
-                Materials.Iron.getDust(64),
-                Materials.Titanium.getDust(64),
-                Materials.Niobium.getDust(64),
-                Materials.Tantalum.getDust(64),
-                Materials.Manganese.getDust(64),
-                Materials.Magnesium.getDust(64))
-            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
-            .specialValue(1)
-            .eut(RECIPE_UV)
-            .duration(400)
-            .addTo(QFT);
+//        GTValues.RA.stdBuilder()
+//            .metadata(QFT_CATALYST, GregtechItemList.TitaTungstenIndiumCatalyst.get(0))
+//            .itemInputs(Materials.Ilmenite.getDust(32))
+//            .itemOutputs(
+//                Materials.Iron.getDust(64),
+//                Materials.Titanium.getDust(64),
+//                Materials.Niobium.getDust(64),
+//                Materials.Tantalum.getDust(64),
+//                Materials.Manganese.getDust(64),
+//                Materials.Magnesium.getDust(64))
+//            .outputChances(1667, 1667, 1667, 1667, 1667, 1667)
+//            .specialValue(1)
+//            .eut(RECIPE_UV)
+//            .duration(400)
+//            .addTo(QFT);
 
         // Samarium
         GTValues.RA.stdBuilder()
