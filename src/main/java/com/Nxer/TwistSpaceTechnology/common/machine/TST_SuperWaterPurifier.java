@@ -47,6 +47,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -79,7 +80,6 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
     private final static int amountFluidOutput = 1_000;
     private static FluidStack UUM;
     private static FluidStack UUMC;
-    private static long ENERGY_USAGE = 134_217_728L;
 
     public static void initStatics() {
         fluidRandomGetter = RandomPackageFactory.<FluidStack>builder()
@@ -109,10 +109,10 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                 long inputEut = getMaxInputEu();
                 long fluidAmount = 0;
                 int basicFluidUsage = 1_000;
-                int parallel = (int) Math.min(getTrueParallel(), inputEut / ENERGY_USAGE);
+                int parallel = (int) Math.min(getTrueParallel(), inputEut / TierEU.RECIPE_UMV);
                 boolean useUUMC = false;
-                if (inputEut < ENERGY_USAGE) {
-                    return CheckRecipeResultRegistry.insufficientPower(ENERGY_USAGE);
+                if (inputEut < TierEU.RECIPE_UMV) {
+                    return CheckRecipeResultRegistry.insufficientPower(TierEU.RECIPE_UMV);
                 }
 
                 // Inputs
@@ -191,7 +191,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
 
                 depleteInput(findFluid);
                 duration = 1_200;
-                calculatedEut = -ENERGY_USAGE * parallel;
+                calculatedEut = -TierEU.RECIPE_UMV * parallel;
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
