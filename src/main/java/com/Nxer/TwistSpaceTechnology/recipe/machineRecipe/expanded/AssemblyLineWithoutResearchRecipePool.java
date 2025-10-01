@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.google.common.math.LongMath.pow;
+import static gregtech.api.enums.ItemList.DysonSwarmModule;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
@@ -296,7 +297,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
                 .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(GTUtility.copyAmountUnsafe(8192, getModItem(GalaxySpace.ID, "item.DysonSwarmParts", 1)))
+                .itemOutputs(DysonSwarmModule.get(16384))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
