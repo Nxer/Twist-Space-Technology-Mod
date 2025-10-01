@@ -844,14 +844,12 @@ public class GTCMMachineRecipes {
         // region Infinity Air Intake Hatch
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(10),
-                Hatch_Air_Intake_Extreme.get(4),
-                ItemList.Electric_Pump_UHV.get(16),
-                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 8},
-                GTOreDictUnificator.get(OrePrefixes.plate, Materials.DraconiumAwakened, 16))
-            .fluidInputs(Materials.CosmicNeutronium.getMolten(144 * 16))
+                Hatch_Air_Intake_Extreme.get(1),
+                ItemList.Electric_Pump_UHV.get(1),
+                new Object[]{OrePrefixes.circuit.get(Materials.Infinite), 1},
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.DraconiumAwakened, 4))
             .itemOutputs(InfiniteAirHatch.get(1))
-
-            .eut(RECIPE_UHV)
+            .eut(RECIPE_UV)
             .duration(20 * 30)
             .addTo(assembler);
         // endregion
