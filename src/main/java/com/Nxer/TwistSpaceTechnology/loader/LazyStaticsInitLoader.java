@@ -4,8 +4,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.NetherInterfaceVisualRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.SuperWaterPurifierVisualRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_ArtificialStar;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPLauncher;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
@@ -27,6 +29,8 @@ public class LazyStaticsInitLoader {
         TST_MiracleDoor.initStatics();
 
         NetherInterfaceVisualRecipePool.loadRecipes();
+        SuperWaterPurifierVisualRecipePool.loadRecipes();
         TST_NetherInterface.initStatics();
+        TST_SuperWaterPurifier.initStatics();
     }
 }

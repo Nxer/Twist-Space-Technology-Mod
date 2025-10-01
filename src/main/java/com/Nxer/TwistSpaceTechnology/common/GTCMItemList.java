@@ -297,6 +297,7 @@ public enum GTCMItemList {
     UniversalGenerator,
     LargeSolarBoiler,
     NetherInterface,
+    SuperWaterPurifier,
     // endregion
 
     // region Modularized Machines

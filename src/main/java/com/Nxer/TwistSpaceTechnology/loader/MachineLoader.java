@@ -70,6 +70,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_Scavenger;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SkypiercerTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
@@ -625,6 +626,9 @@ public final class MachineLoader {
         // #zh_CN 地狱接口
         GTCMItemList.NetherInterface
             .set(new TST_NetherInterface(19077, "NameNetherInterface", TextEnums.tr("NameNetherInterface")));
+
+        GTCMItemList.SuperWaterPurifier
+            .set(new TST_SuperWaterPurifier(19078, "NameSuperWaterPurifier", TextEnums.tr("NameSuperWaterPurifier")));
 
         // endregion
 
