@@ -2,8 +2,6 @@ package com.Nxer.TwistSpaceTechnology.system.SolarSystem;
 
 import net.minecraftforge.fluids.FluidStack;
 
-import gregtech.api.enums.Materials;
-
 public class GalaxySystemProperties {
 
     // region Properties

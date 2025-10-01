@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.system.SolarSystem;
 
-import gregtech.api.enums.Materials;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import gregtech.api.enums.Materials;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 /**
  * GalaxySystem - Enumeration-based system for managing dimension parameters in Minecraft.
@@ -16,20 +16,23 @@ import java.util.Map;
  * <p>
  * <b>Key Features:</b>
  * <ul>
- *   <li>Centralized storage of dimension parameters</li>
- *   <li>Flexible configuration using Builder pattern</li>
- *   <li>Fast dimension lookup by ID</li>
- *   <li>Extensible parameter system</li>
+ * <li>Centralized storage of dimension parameters</li>
+ * <li>Flexible configuration using Builder pattern</li>
+ * <li>Fast dimension lookup by ID</li>
+ * <li>Extensible parameter system</li>
  * </ul>
  * <p>
  * <b>Usage Example:</b>
- * <pre>{@code
+ * 
+ * <pre>
+ * {@code
  * new GalaxySystemProperties.Builder(dimensionId, dimensionName)
  *     .withGas(fluid)
  *     .withGravity(0.5f)
  *     .withTemperature(300)
  *     .build()
- * }</pre>
+ * }
+ * </pre>
  * <p>
  * <b>Extending Parameters:</b>
  * To add new dimension parameters, extend {@link GalaxySystemProperties.Builder}
@@ -267,7 +270,10 @@ public enum GalaxySystem {
     static {
         Map<Integer, GalaxySystem> dimensionsMap = new HashMap<>();
         for (GalaxySystem system : values()) {
-            dimensionsMap.put(system.getProperties().getId(), system);
+            dimensionsMap.put(
+                system.getProperties()
+                    .getId(),
+                system);
         }
         DIMENSIONS = Collections.unmodifiableMap(dimensionsMap);
     }
@@ -276,6 +282,7 @@ public enum GalaxySystem {
     // region Getters
     /**
      * Gets the galaxy system properties
+     * 
      * @return the galaxy system properties
      */
     public GalaxySystemProperties getProperties() {
@@ -288,6 +295,7 @@ public enum GalaxySystem {
 
     /**
      * Gets GalaxySystem by dimensionId
+     * 
      * @param dimensionId the dimension ID
      * @return corresponding GalaxySystem or null if not found
      */
@@ -297,6 +305,7 @@ public enum GalaxySystem {
 
     /**
      * Gets GalaxySystem by BaseMetaTileEntity
+     * 
      * @param mBaseTileEntity the base meta tile entity
      * @return corresponding GalaxySystem or null if not found
      */
@@ -310,6 +319,7 @@ public enum GalaxySystem {
 
     /**
      * Gets all registered GalaxySystem entries
+     * 
      * @return unmodifiable map of dimension ID to GalaxySystem
      */
     public static Map<Integer, GalaxySystem> getAllDimensions() {
