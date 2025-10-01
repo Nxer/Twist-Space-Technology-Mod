@@ -78,7 +78,6 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -2994,10 +2993,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addElement(
                     '8',
                     ofChain(
-                        EtFuturumRequiem.isModLoaded()
-                            ? ofBlockAnyMeta(
-                                Block.getBlockFromItem(
-                                    (GTModHandler.getModItem(EtFuturumRequiem.ID, "beacon", 1)).getItem()))
+                        EtFuturumRequiem.isModLoaded() ? ofBlockAnyMeta(Block.getBlockFromName("etfuturum:beacon"))
                             : ofBlockAnyMeta(Blocks.beacon)))
                 .build();
         }
