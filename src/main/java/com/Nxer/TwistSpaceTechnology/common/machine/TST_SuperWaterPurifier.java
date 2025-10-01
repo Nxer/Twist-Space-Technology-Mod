@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
@@ -22,12 +23,15 @@ import static tectech.thing.casing.TTCasingsContainer.GodforgeCasings;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.random.RandomPackageFactory;
@@ -50,7 +54,6 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.VoidProtectionHelper;
@@ -107,6 +110,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                 long fluidAmount = 0;
                 int basicFluidUsage = 1_000;
                 int parallel = (int) Math.min(getTrueParallel(), inputEut / ENERGY_USAGE);
+                boolean useUUMC = false;
                 if (inputEut < ENERGY_USAGE) {
                     return CheckRecipeResultRegistry.insufficientPower(ENERGY_USAGE);
                 }
@@ -120,13 +124,14 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                 // Find needed fluid
                 for (FluidStack fluid : inputFluids) {
                     if (UUM.isFluidEqual(fluid)) {
-                        findFluid = UUM;
+                        findFluid = UUM.copy();
                         break;
                     }
 
                     if (UUMC.isFluidEqual(fluid)) {
-                        findFluid = UUMC;
-                        basicFluidUsage /= 10;
+                        findFluid = UUMC.copy();
+                        basicFluidUsage /= 1000;
+                        useUUMC = true;
                         break;
                     }
                 }
@@ -148,11 +153,30 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
 
                 // Outputs
                 List<FluidStack> outputs = new ArrayList<>();
-                for (int i = 0; i < 3; i++) {
-                    FluidStack t = fluidRandomGetter.getOne()
-                        .copy();
+                int outputStack = useUUMC ? 6 : 3;
+                Map<Fluid, Long> cacheOutputs = new HashMap<>();
+                for (int i = 0; i < outputStack; i++) {
+                    FluidStack t = fluidRandomGetter.getOne();
+                    cacheOutputs.merge(t.getFluid(), (long) parallel * t.amount, Long::sum);
                     t.amount *= parallel;
-                    outputs.add(t);
+                }
+
+                // safe over 2.1G output
+                for (Map.Entry<Fluid, Long> o : cacheOutputs.entrySet()) {
+                    FluidStack f = new FluidStack(o.getKey(), 1);
+                    long amount = o.getValue();
+                    if (amount <= Integer.MAX_VALUE) {
+                        f.amount = (int) amount;
+                        outputs.add(f);
+                    } else {
+                        while (amount > Integer.MAX_VALUE) {
+                            outputs.add(setStackSize(f.copy(), Integer.MAX_VALUE));
+                            amount -= Integer.MAX_VALUE;
+                        }
+                        if (amount > 0) {
+                            outputs.add(setStackSize(f.copy(), (int) amount));
+                        }
+                    }
                 }
 
                 outputFluids = outputs.toArray(new FluidStack[0]);
@@ -169,7 +193,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                 duration = 1_200;
                 calculatedEut = -ENERGY_USAGE * parallel;
 
-                return SimpleCheckRecipeResult.ofSuccess("success");
+                return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         };
     }

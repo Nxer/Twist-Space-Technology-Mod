@@ -28,7 +28,7 @@ public class SuperWaterPurifierVisualRecipePool {
             .addTo(SuperWaterPurifierVisualRecipeMap);
 
         GTValues.RA.stdBuilder()
-            .fluidInputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(100))
+            .fluidInputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
             .fluidOutputs(
                 Materials.Grade1PurifiedWater.getFluid(1_000),
                 Materials.Grade2PurifiedWater.getFluid(1_000),
