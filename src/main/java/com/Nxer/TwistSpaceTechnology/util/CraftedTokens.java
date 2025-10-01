@@ -10,7 +10,8 @@ public enum CraftedTokens {
     Horoboros_Koneko("Horoboros & Koneko", EnumChatFormatting.RED),
     Monroth_HyperCreep("Monroth & HyperCreep", EnumChatFormatting.AQUA),
     Tuna("Tuna", EnumChatFormatting.AQUA),
-    AdmiralGUMI_MAIM0_LKOperan("Admiral_GUMI & MAIM0 & LK_Operan", EnumChatFormatting.GREEN);
+    AdmiralGUMI_MAIM0_LKOperan("Admiral_GUMI & MAIM0 & LK_Operan", EnumChatFormatting.GREEN),
+    Komart("Komart", EnumChatFormatting.RED);
 
     private final String name;
     private final EnumChatFormatting color;
