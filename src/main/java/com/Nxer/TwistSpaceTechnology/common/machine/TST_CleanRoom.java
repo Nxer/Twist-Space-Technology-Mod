@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.gtnewhorizon.gtnhlib.capability.Capabilities;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -147,7 +148,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing_EM() {
-        mEfficiencyIncrease = 100;
+        mEfficiency = 10000;
 
         // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
         // consumption.
@@ -197,7 +198,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         }
 
         return ePowerPass ? SimpleCheckRecipeResult.ofSuccess("routing")
-            : SimpleCheckRecipeResult.ofFailure("running fine");
+            : SimpleCheckRecipeResult.ofSuccess("running fine");
     }
 
     @Override
@@ -359,14 +360,14 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 }
             }
         }
-        if (this.mMaintenanceHatches.size() != 1 || this.mEnergyHatches.size() != 1
-            || mDoorCount > 4
-            || mHullCount > 10) {
-            if (debugCleanroom) {
-                GTLog.out.println("Cleanroom: Incorrect number of doors, hulls, or hatches.");
-            }
-            return false;
-        }
+        // if (this.mEnergyHatches.size() != 1
+        // || mDoorCount > 4
+        // || mHullCount > 10) {
+        // if (debugCleanroom) {
+        // GTLog.out.println("Cleanroom: Incorrect number of doors, hulls, or hatches.");
+        // }
+        // return false;
+        // }
         if (mPlascreteCount < 20) {
             if (debugCleanroom) {
                 GTLog.out.println("Cleanroom: Could not find 20 Plascrete.");
@@ -411,9 +412,18 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         for (int dX = -x + 1; dX <= x - 1; dX++) {
             for (int dZ = -z + 1; dZ <= z - 1; dZ++) for (int dY = -1; dY >= y + 1; dY--) {
                 TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
+                if (tTileEntity == null) {
+                    continue;
+                }
                 if (tTileEntity instanceof ICleanroomReceiver receiver) {
                     receiver.setCleanroom(this);
                     cleanroomReceivers.add(receiver);
+                } else { // new cleanroom system with Capabilities
+                    ICleanroomReceiver receiver = Capabilities.getCapability(tTileEntity, ICleanroomReceiver.class);
+                    if (receiver != null) {
+                        receiver.setCleanroom(this);
+                        cleanroomReceivers.add(receiver);
+                    }
                 }
             }
         }
