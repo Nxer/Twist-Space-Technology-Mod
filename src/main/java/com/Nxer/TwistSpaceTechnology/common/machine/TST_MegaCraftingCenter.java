@@ -93,6 +93,7 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import scala.actors.migration.pattern;
@@ -991,8 +992,21 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     public ArrayList<TST_PatternAccessHatch> mPatternAccessHatch = new ArrayList<TST_PatternAccessHatch>();
 
     public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (refuseCrib(aTileEntity)) return false;
         if (addAccessHatchToMachineList(aTileEntity, aBaseCasingIndex)) return true;
         return super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public final boolean refuseCrib(IGregTechTileEntity aTileEntity) {
+        if (aTileEntity == null) {
+            return true;
+        }
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) {
+            return true;
+        }
+
+        return aMetaTileEntity instanceof IDualInputHatch;
     }
 
     public final boolean addAccessHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
@@ -1010,6 +1024,26 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             pa.updateTexture(aBaseCasingIndex);
             return true;
         }
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
         return false;
     }
 
