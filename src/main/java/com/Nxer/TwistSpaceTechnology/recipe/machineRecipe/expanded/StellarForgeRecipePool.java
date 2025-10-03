@@ -459,6 +459,16 @@ public class StellarForgeRecipePool {
             20 * 10,
             GTCMRecipe.StellarForgeRecipes);
 
+        // Single Mellion
+        addToMiracleDoorRecipes(
+            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
+            null,
+            null,
+            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144) },
+            (int) RECIPE_UMV,
+            20 * 5,
+            GTCMRecipe.StellarForgeRecipes);
+
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;
