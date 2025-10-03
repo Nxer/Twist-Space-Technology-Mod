@@ -230,7 +230,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings1, 11))))
                 .addElement('B',ofBlock(GregTechAPI.sBlockCasings2, 3))
-                .addElement('C',ofBlock(ModBlocks.blockCasingsMisc,2))
+                .addElement('C',ofBlock(GregTechAPI.sBlockCasings3,13))
                 .addElement('D', ofFrame(Materials.Steel))
                 .addElement('E', ofBlock(GregTechAPI.sBlockMetal6, 13))
                 .addElement('F',ofBlock(GregTechAPI.sBlockTintedGlass, 0))
