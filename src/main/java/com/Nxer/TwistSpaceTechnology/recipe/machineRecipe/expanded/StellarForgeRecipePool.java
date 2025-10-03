@@ -451,12 +451,12 @@ public class StellarForgeRecipePool {
 
         // Mellion and Creon
         addToMiracleDoorRecipes(
-            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(11) },
+            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(1) },
             new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
             null,
             new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
             (int) RECIPE_UMV,
-            20 * 30,
+            20 * 10,
             GTCMRecipe.StellarForgeRecipes);
 
     }
