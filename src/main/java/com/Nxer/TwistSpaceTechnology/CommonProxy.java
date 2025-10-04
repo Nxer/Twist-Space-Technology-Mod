@@ -31,6 +31,7 @@ import com.Nxer.TwistSpaceTechnology.nei.NEIHandler;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
+import com.Nxer.TwistSpaceTechnology.system.SolarSystem.GalaxySystem;
 import com.Nxer.TwistSpaceTechnology.util.LanguageManager;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
@@ -118,6 +119,7 @@ public class CommonProxy {
         TST_BigBroArray.initializeMaterials();
         TST_BigBroArray.initializeStructure();
         TST_BigBroArray.addRecipes();
+        GalaxySystem.initProperties();
 
         if (Config.Enable_ProcessingArray) {
             PAHelper.initStatics();

@@ -21,7 +21,14 @@ import twilightforest.TwilightForestMod;
  * <p>
  * This system provides a centralized approach to configure custom properties for different
  * dimensions using the Builder pattern. Each dimension can be configured with various
- * parameters like atmospheric gases, gravity, temperature, etc.
+ * environmental and atmospheric parameters.
+ * <p>
+ * <b>Architecture:</b>
+ * <ul>
+ * <li><b>GalaxySystem</b> (this class) - contains dimension enumeration and methods for working with dimensions</li>
+ * <li><b>GalaxySystemProperties</b> - stores dimension parameters (gases, gravity, temperature, etc.)</li>
+ * <li><b>GalaxySystemProperties.Builder</b> - builder pattern for parameter configuration</li>
+ * </ul>
  * <p>
  * <b>Key Features:</b>
  * <ul>
@@ -29,23 +36,40 @@ import twilightforest.TwilightForestMod;
  * <li>Flexible configuration using Builder pattern</li>
  * <li>Fast dimension lookup by ID</li>
  * <li>Extensible parameter system</li>
+ * <li>Automatic dimension ID initialization from mod configurations</li>
  * </ul>
+ * <p>
+ * <b>Workflow:</b>
+ * <ol>
+ * <li>Call {@link #initStatics()} to initialize dimension IDs from mod configs</li>
+ * <li>Call {@link #initProperties()} to configure parameters for each dimension</li>
+ * <li>Use getter methods to retrieve dimension information</li>
+ * </ol>
+ * <p>
+ * <b>Adding New Parameters:</b>
+ * To declare new system parameters, you need to:
+ * <ol>
+ * <li>Add field in {@link GalaxySystemProperties}</li>
+ * <li>Add configuration method in {@link GalaxySystemProperties.Builder}</li>
+ * <li>Configure values in {@link #initProperties()} method for relevant dimensions</li>
+ * </ol>
  * <p>
  * <b>Usage Example:</b>
  *
  * <pre>
  * {@code
- * new GalaxySystemProperties.Builder(dimensionId, dimensionName)
- *     .withGas(fluid)
- *     .withGravity(0.5f)
- *     .withTemperature(300)
- *     .build()
+ * // Getting dimension properties
+ * GalaxySystem system = GalaxySystem.getGalaxySystemById(0);
+ * GalaxySystemProperties properties = system.getProperties();
+ *
+ * // Configuration in initProperties()
+ * OVERWORLD.properties = new GalaxySystemProperties.Builder()
+ *     .withGas(Materials.Air.getGas(1))
+ *     .withGravity(1.0f)
+ *     .withTemperature(293)
+ *     .build();
  * }
  * </pre>
- * <p>
- * <b>Extending Parameters:</b>
- * To add new dimension parameters, extend {@link GalaxySystemProperties.Builder}
- * with additional configuration methods.
  *
  * @author EvgenWarGold
  * @since 1.0
@@ -56,170 +80,66 @@ public enum GalaxySystem {
 
     // region Dimensions
     // spotless:off
-    OVERWORLD(0, "Overworld", new GalaxySystemProperties.Builder()
-        .withGas(Materials.Air.getFluid(1))
-        .build()),
-    NETHER(-1, "Nether", new GalaxySystemProperties.Builder()
-        .withGas(Materials.NetherAir.getFluid(1))
-        .build()),
-    THE_END(1, "The End", new GalaxySystemProperties.Builder()
-        .withGas(null)
-        .build()),
-    SPECTRE_WORLD(2, "SpectreWorld", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    TWILIGHT_FOREST(7, "Twilight Forest", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MAKEMAKE(25, "Makemake", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MOON(-28, "Moon", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MARS(29, "Mars", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    ASTEROIDS(30, "Asteroids", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    CENTAURI_BB(31,"Centauri Bb", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    BARNARDA_C(32, "Barnarda C", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    KUIPER_BELT(33, "Kuiper Belt", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    EUROPA(35, "Europa", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    IO(36, "Io", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MERCURY(37, "Mercury", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    PHOBOS(38, "Phobos", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    VENUS(39, "Venus", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    DEIMOS(40, "Deimos", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    ENCELADUS(41, "Enceladus", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    CERES(42, "Ceres", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    GANYMEDE(43, "Ganymede", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    TITAN(44, "Titan", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    CALISTO(45, "Calisto", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    OBERON(46, "Oberon", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    PROTEUS(47, "Proteus", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    TRITON(48, "Triton", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    PLUTO(49, "Pluto", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    THE_OUTER_LANDS(50, "The Outer Lands", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    URANUS(51, "Uranus", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    SPIRIT_WORLD(55, "Spirit World", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    TORMENT(56, "Torment", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    BEDROCK(60, "Bedrock", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    ROSS128BA(63, "Ross128ba", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    ROSS128B(64, "Ross128b", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    POCKET_PLANE(69, "Pocket Plane", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MIRROR(70, "Mirror", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    JUPITER(71, "Jupiter", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    NEPTUNE(74, "Neptune", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    SATURN(77, "Saturn", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    BARNARDA_E(81, "Barnarda E", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    BARNARDA_F(82, "Barnarda F", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    HAUMEA(83, "Haumea", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    VEGA_B(84, "Vega B", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    T_CETI_E(85, "T Ceti E", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MIRANDA(86, "Miranda", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    NEPER(90, "Neper", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    MAAHES(91, "Maahes", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    ANUBIS(92, "Anubis", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    HORUS(93, "Horus", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    SETH(94, "Seth", new GalaxySystemProperties.Builder()
-            .build()
-    ),
-    THE_LAST_MILLENIUM(112, "The Last Millenium", new GalaxySystemProperties.Builder()
-            .build()
-    ),
+    OVERWORLD(0, "Overworld", null),
+    NETHER(-1, "Nether", null),
+    THE_END(1, "The End", null),
+    SPECTRE_WORLD(2, "SpectreWorld", null),
+    TWILIGHT_FOREST(7, "Twilight Forest", null),
+    MAKEMAKE(25, "Makemake", null),
+    MOON(-28, "Moon", null),
+    MARS(29, "Mars", null),
+    ASTEROIDS(30, "Asteroids", null),
+    CENTAURI_BB(31,"Centauri Bb", null),
+    BARNARDA_C(32, "Barnarda C", null),
+    KUIPER_BELT(33, "Kuiper Belt", null),
+    EUROPA(35, "Europa", null),
+    IO(36, "Io", null),
+    MERCURY(37, "Mercury", null),
+    PHOBOS(38, "Phobos", null),
+    VENUS(39, "Venus", null),
+    DEIMOS(40, "Deimos", null),
+    ENCELADUS(41, "Enceladus", null),
+    CERES(42, "Ceres", null),
+    GANYMEDE(43, "Ganymede", null),
+    TITAN(44, "Titan", null),
+    CALISTO(45, "Calisto", null),
+    OBERON(46, "Oberon", null),
+    PROTEUS(47, "Proteus", null),
+    TRITON(48, "Triton", null),
+    PLUTO(49, "Pluto", null),
+    THE_OUTER_LANDS(50, "The Outer Lands", null),
+    URANUS(51, "Uranus", null),
+    SPIRIT_WORLD(55, "Spirit World", null),
+    TORMENT(56, "Torment", null),
+    BEDROCK(60, "Bedrock", null),
+    ROSS128BA(63, "Ross128ba", null),
+    ROSS128B(64, "Ross128b", null ),
+    POCKET_PLANE(69, "Pocket Plane", null),
+    MIRROR(70, "Mirror", null),
+    JUPITER(71, "Jupiter", null),
+    NEPTUNE(74, "Neptune", null),
+    SATURN(77, "Saturn", null),
+    BARNARDA_E(81, "Barnarda E", null),
+    BARNARDA_F(82, "Barnarda F", null),
+    HAUMEA(83, "Haumea", null),
+    VEGA_B(84, "Vega B", null),
+    T_CETI_E(85, "T Ceti E", null),
+    MIRANDA(86, "Miranda", null),
+    NEPER(90, "Neper", null),
+    MAAHES(91, "Maahes", null),
+    ANUBIS(92, "Anubis", null),
+    HORUS(93, "Horus", null),
+    SETH(94, "Seth", null),
+    THE_LAST_MILLENIUM(112, "The Last Millenium", null),
     // ToxicEverglades
-    DIMENSION_DARK_WORLD(227, "dimensionDarkWorld", new GalaxySystemProperties.Builder()
-            .build()
-    );
+    DIMENSION_DARK_WORLD(227, "dimensionDarkWorld", null);
     // spotless:on
     // endregion
 
     // region Variables
     private int id;
     private final String name;
-    private final GalaxySystemProperties properties;
+    private GalaxySystemProperties properties;
     // endregion
 
     // region Constructor
@@ -237,7 +157,124 @@ public enum GalaxySystem {
     }
     // endregion
 
-    // region initStatics method
+    // region init Properties
+    /**
+     * Initializes galaxy system properties for all dimensions
+     * This method should be called during mod initialization to set up
+     * atmospheric and environmental properties for various celestial bodies
+     * and dimensions from different mod configurations
+     */
+    public static void initProperties() {
+        // spotless:off
+        OVERWORLD.properties = new GalaxySystemProperties.Builder().withGas(Materials.Air.getGas(1))
+            .build();
+        NETHER.properties = new GalaxySystemProperties.Builder().withGas(Materials.NetherAir.getFluid(1))
+            .build();
+        THE_END.properties = new GalaxySystemProperties.Builder().withGas(null)
+            .build();
+        SPECTRE_WORLD.properties = new GalaxySystemProperties.Builder()
+            .build();
+        TWILIGHT_FOREST.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MAKEMAKE.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MOON.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MARS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        ASTEROIDS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        CENTAURI_BB.properties = new GalaxySystemProperties.Builder()
+            .build();
+        BARNARDA_C.properties = new GalaxySystemProperties.Builder()
+            .build();
+        KUIPER_BELT.properties = new GalaxySystemProperties.Builder()
+            .build();
+        EUROPA.properties = new GalaxySystemProperties.Builder()
+            .build();
+        IO.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MERCURY.properties = new GalaxySystemProperties.Builder()
+            .build();
+        PHOBOS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        VENUS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        DEIMOS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        ENCELADUS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        CERES.properties = new GalaxySystemProperties.Builder()
+            .build();
+        GANYMEDE.properties = new GalaxySystemProperties.Builder()
+            .build();
+        TITAN.properties = new GalaxySystemProperties.Builder()
+            .build();
+        CALISTO.properties = new GalaxySystemProperties.Builder()
+            .build();
+        OBERON.properties = new GalaxySystemProperties.Builder()
+            .build();
+        PROTEUS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        TRITON.properties = new GalaxySystemProperties.Builder()
+            .build();
+        PLUTO.properties = new GalaxySystemProperties.Builder()
+            .build();
+        THE_OUTER_LANDS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        URANUS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        SPIRIT_WORLD.properties = new GalaxySystemProperties.Builder()
+            .build();
+        TORMENT.properties = new GalaxySystemProperties.Builder()
+            .build();
+        BEDROCK.properties = new GalaxySystemProperties.Builder()
+            .build();
+        ROSS128BA.properties = new GalaxySystemProperties.Builder()
+            .build();
+        ROSS128B.properties = new GalaxySystemProperties.Builder()
+            .build();
+        POCKET_PLANE.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MIRROR.properties = new GalaxySystemProperties.Builder()
+            .build();
+        JUPITER.properties = new GalaxySystemProperties.Builder()
+            .build();
+        NEPTUNE.properties = new GalaxySystemProperties.Builder()
+            .build();
+        SATURN.properties = new GalaxySystemProperties.Builder()
+            .build();
+        BARNARDA_E.properties = new GalaxySystemProperties.Builder()
+            .build();
+        BARNARDA_F.properties = new GalaxySystemProperties.Builder()
+            .build();
+        HAUMEA.properties = new GalaxySystemProperties.Builder()
+            .build();
+        VEGA_B.properties = new GalaxySystemProperties.Builder()
+            .build();
+        T_CETI_E.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MIRANDA.properties = new GalaxySystemProperties.Builder()
+            .build();
+        NEPER.properties = new GalaxySystemProperties.Builder()
+            .build();
+        MAAHES.properties = new GalaxySystemProperties.Builder()
+            .build();
+        ANUBIS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        HORUS.properties = new GalaxySystemProperties.Builder()
+            .build();
+        SETH.properties = new GalaxySystemProperties.Builder()
+            .build();
+        THE_LAST_MILLENIUM.properties = new GalaxySystemProperties.Builder()
+            .build();
+        DIMENSION_DARK_WORLD.properties = new GalaxySystemProperties.Builder()
+            .build();
+        // spotless:on
+    }
+    // endregion
+
+    // region init Id
     /**
      * Initializes static dimension IDs based on loaded mod configurations
      * This method should be called during mod initialization to set up
