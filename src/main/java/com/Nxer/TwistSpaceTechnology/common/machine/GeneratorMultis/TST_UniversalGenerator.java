@@ -55,7 +55,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings1;
-import gtPlusPlus.core.block.ModBlocks;
 
 public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalGenerator> {
 
