@@ -22,7 +22,7 @@ import twilightforest.TwilightForestMod;
  * <p>
  * This system provides a centralized approach to configure custom properties for different
  * dimensions using the Builder pattern. Each dimension can be configured with various
- * environmental and atmospheric parameters.
+ * parameters like atmospheric gases, gravity, temperature, etc.
  * <p>
  * <b>Architecture:</b>
  * <ul>
