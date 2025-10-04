@@ -16,6 +16,7 @@ import micdoodle8.mods.galacticraft.planets.asteroids.ConfigManagerAsteroids;
 import micdoodle8.mods.galacticraft.planets.mars.ConfigManagerMars;
 import twilightforest.TwilightForestMod;
 
+// spotless:off
 /**
  * GalaxySystem - Enumeration-based system for managing dimension parameters in Minecraft.
  * <p>
@@ -76,6 +77,7 @@ import twilightforest.TwilightForestMod;
  * @see GalaxySystemProperties
  * @see GalaxySystemProperties.Builder
  */
+// spotless:on
 public enum GalaxySystem {
 
     // region Dimensions
