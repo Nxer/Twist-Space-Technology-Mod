@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooCo
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
@@ -16,7 +15,6 @@ import static goodgenerator.loader.Loaders.magicCasing;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
-import static gregtech.api.enums.Mods.EtFuturumRequiem;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
@@ -37,14 +35,16 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockBeacon;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -61,7 +61,10 @@ import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
+import com.gtnewhorizon.structurelib.StructureLibAPI;
+import com.gtnewhorizon.structurelib.structure.AutoPlaceEnvironment;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
@@ -2990,11 +2993,45 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addElement('5', ofBlock(blockStoneDevice, 11))
                 .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
                 .addElement('7', ofBlock(blockStoneDevice, 1))
-                .addElement(
-                    '8',
-                    ofChain(
-                        EtFuturumRequiem.isModLoaded() ? ofBlockAnyMeta(Block.getBlockFromName("etfuturum:beacon"))
-                            : ofBlockAnyMeta(Blocks.beacon)))
+                .addElement('8', new IStructureElement<>() {
+
+                    private final BlocksToPlace cached = BlocksToPlace.create(Blocks.beacon, 0);
+
+                    public boolean check(GT_TileEntity_IndustrialMagicMatrix GTTT_IMM, World world, int x, int y,
+                        int z) {
+                        // in fact, we only need it is a beacon
+                        // so it also can be chisel's beacon...?
+                        return world.getBlock(x, y, z) instanceof BlockBeacon
+                            && world.getTileEntity(x, y, z) instanceof TileEntityBeacon;
+                    }
+
+                    public boolean couldBeValid(GT_TileEntity_IndustrialMagicMatrix GTTT_IMM, World world, int x, int y,
+                        int z, ItemStack trigger) {
+                        // no side effect
+                        return check(GTTT_IMM, world, x, y, z);
+                    }
+
+                    @Override
+                    public boolean spawnHint(GT_TileEntity_IndustrialMagicMatrix GTTT_IMM, World world, int x, int y,
+                        int z, ItemStack trigger) {
+                        StructureLibAPI.hintParticle(world, x, y, z, Blocks.beacon, 0);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean placeBlock(GT_TileEntity_IndustrialMagicMatrix GTTT_IMM, World world, int x, int y,
+                        int z, ItemStack trigger) {
+                        world.setBlock(x, y, z, Blocks.beacon, 0, 2);
+                        if (check(GTTT_IMM, world, x, y, z)) return true;
+                        else return world.setBlockToAir(x, y, z);
+                    }
+
+                    @Override
+                    public BlocksToPlace getBlocksToPlace(GT_TileEntity_IndustrialMagicMatrix GTTT_IMM, World world,
+                        int x, int y, int z, ItemStack trigger, AutoPlaceEnvironment env) {
+                        return cached;
+                    }
+                })
                 .build();
         }
         return STRUCTURE_DEFINITION;
