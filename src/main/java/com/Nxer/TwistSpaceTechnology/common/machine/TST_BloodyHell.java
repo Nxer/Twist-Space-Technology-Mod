@@ -4,6 +4,7 @@ import static WayofTime.alchemicalWizardry.ModBlocks.blockLifeEssence;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedDiamondBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedGlowstone;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.ChiselBeacon_1;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -21,7 +22,6 @@ import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
-import static net.minecraft.block.Block.getBlockFromName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +55,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
@@ -323,8 +324,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addElement('L', ofBlock(BloodInfusedDiamondBlock.getLeft(), BloodInfusedDiamondBlock.getRight()))
                 .addElement(
                     'M',
-                    Mods.Chisel.isModLoaded() ? ofBlock(getBlockFromName("chisel:beacon"), 1)
-                        : ofBlockAnyMeta(Blocks.beacon))
+                    Mods.Chisel.isModLoaded() ? ofBlock(ChiselBeacon_1.getLeft(), ChiselBeacon_1.getRight())
+                        : TSTStructureUtility.CommonElements.BlockBeacon.get())
                 .addElement(
                     'N',
                     ofChain(

@@ -58,7 +58,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -72,12 +71,14 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureUtility;
 
 import emt.tile.TileElectricCloud;
 import gregtech.api.interfaces.ITexture;
@@ -415,7 +416,6 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                 .addElement('J', ofBlock(blockMetalDevice, 3))
                 .addElement('K', ofBlock(blockMetalDevice, 9))
                 .addElement('L', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
-                // .addElement('M', ofBlock(BlockBrickTranslucent.getLeft(), BlockBrickTranslucent.getRight()))
                 .addElement('M', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
                 .addElement('N', ofVariableBlock(channel, BlockArcane_1.getLeft(), BlockArcane_1.getRight(), list))
                 .addElement('O', ofVariableBlock(channel, BlockArcane_4.getLeft(), BlockArcane_4.getRight(), list))
@@ -431,9 +431,9 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                     'W',
                     ofChain(
                         ofTileAdder(TST_IndustrialAlchemyTower::addNodeEnergized, blockAiry, 0),
-                        ofBlock(Blocks.air, 0)))
+                        StructureUtility.isAir()))
                 .addElement('X', ofAccurateTile(TileElectricCloud.class, electricCloud, 0))
-                .addElement('Y', ofAccurateTile(TileEntityBeacon.class, Blocks.beacon, 0))
+                .addElement('Y', TSTStructureUtility.CommonElements.BlockBeacon.get())
                 .addElement('Z', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
                 .build();
         }

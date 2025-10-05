@@ -5,7 +5,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooCo
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofTileAdder;
@@ -16,7 +15,6 @@ import static goodgenerator.loader.Loaders.magicCasing;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
-import static gregtech.api.enums.Mods.EtFuturumRequiem;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
@@ -37,7 +35,6 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -58,6 +55,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.ImmutableList;
@@ -2990,11 +2988,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addElement('5', ofBlock(blockStoneDevice, 11))
                 .addElement('6', ofChain(ofBlock(blockCosmeticSolid, 7), ofBlock(blockStoneDevice, 7)))
                 .addElement('7', ofBlock(blockStoneDevice, 1))
-                .addElement(
-                    '8',
-                    ofChain(
-                        EtFuturumRequiem.isModLoaded() ? ofBlockAnyMeta(Block.getBlockFromName("etfuturum:beacon"))
-                            : ofBlockAnyMeta(Blocks.beacon)))
+                .addElement('8', TSTStructureUtility.CommonElements.BlockBeacon.get())
                 .build();
         }
         return STRUCTURE_DEFINITION;
