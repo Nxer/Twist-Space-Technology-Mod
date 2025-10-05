@@ -156,7 +156,8 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                 int outputStack = useUUMC ? 6 : 3;
                 Map<Fluid, Long> cacheOutputs = new HashMap<>();
                 for (int i = 0; i < outputStack; i++) {
-                    FluidStack t = fluidRandomGetter.getOne();
+                    FluidStack t = fluidRandomGetter.getOne()
+                        .copy();
                     cacheOutputs.merge(t.getFluid(), (long) parallel * t.amount, Long::sum);
                     t.amount *= parallel;
                 }
@@ -206,7 +207,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        maxParallel = 2_000_000_000;
+        maxParallel = 2_000_000;
         if (!checkPiece(STRUCTURE_PIECE, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
 
         return this.mCasing >= 45;

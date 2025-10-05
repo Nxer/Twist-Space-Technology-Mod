@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static cofh.lib.util.helpers.FluidHelper.isFluidEqual;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MV;
+import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
@@ -27,6 +28,7 @@ import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
@@ -118,6 +120,7 @@ public class StellarForgeRecipePool {
         SpecialRecipeOutputs.add(TST_ItemID.create(WerkstoffLoader.CubicZirconia.get(OrePrefixes.gemFlawed, 1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricIron.getIngots(1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(Materials.MeteoricSteel.getIngots(1)));
+        SpecialRecipeOutputs.add(TST_ItemID.create(ItemList.Harmonic_Compound.get(1)));
         SpecialRecipeOutputs.add(TST_ItemID.create(GTModHandler.getModItem("gregtech", "gt.metaitem.01", 1, 12129)));
 
         // generate molten fluid to ingot map
@@ -444,6 +447,26 @@ public class StellarForgeRecipePool {
             new FluidStack[] { Materials.Neutronium.getMolten(144) },
             (int) RECIPE_UV,
             20 * 112,
+            GTCMRecipe.StellarForgeRecipes);
+
+        // Mellion and Creon
+        addToMiracleDoorRecipes(
+            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(1) },
+            new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
+            null,
+            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
+            (int) RECIPE_UMV,
+            20 * 10,
+            GTCMRecipe.StellarForgeRecipes);
+
+        // Single Mellion
+        addToMiracleDoorRecipes(
+            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
+            null,
+            null,
+            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144) },
+            (int) RECIPE_UMV,
+            20 * 5,
             GTCMRecipe.StellarForgeRecipes);
 
     }

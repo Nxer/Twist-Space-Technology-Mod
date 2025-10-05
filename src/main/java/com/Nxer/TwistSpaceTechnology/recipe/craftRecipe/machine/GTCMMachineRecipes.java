@@ -2891,7 +2891,7 @@ public class GTCMMachineRecipes {
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.Stone, 1)
             )
             .fluidInputs(
-                new FluidStack(FluidRegistry.getFluid("concrete"), 36000)
+                Materials.Concrete.getMolten(144 * 64)
             )
             .itemOutputs(GTCMItemList.ReinforcedStoneBrickCasing.get(1))
             .eut(RECIPE_EV)

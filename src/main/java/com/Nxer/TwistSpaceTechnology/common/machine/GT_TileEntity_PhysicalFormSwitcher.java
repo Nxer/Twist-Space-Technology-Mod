@@ -118,6 +118,11 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
             @Override
             public boolean tryCachePossibleRecipesFromPattern(IDualInputInventoryWithPattern inv) {
+
+                if (machineMode != 0) {
+                    return super.tryCachePossibleRecipesFromPattern(inv);
+                }
+
                 if (!inv.shouldBeCached()) {
                     return true;
                 }
