@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.google.common.collect.ImmutableList;
 
 import gregtech.api.logic.ProcessingLogic;
@@ -56,7 +57,7 @@ public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineB
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
 
             @Override
             @Nonnull
