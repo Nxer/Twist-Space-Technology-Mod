@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
@@ -24,6 +25,7 @@ import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.MaterialsGTNH;
 import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
@@ -1008,7 +1010,28 @@ public class IntensifyChemicalDistorterRecipePool {
 
         // endregion
 
-        // region Prismarion
+        // region Prismarion PrismaticAcid
+        TST_RecipeBuilder
+            .builder()
+            .itemInputs(
+                setStackSize(GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Strontium, 1), 0),
+                GTOreDictUnificator.get(OrePrefixes.shard, MaterialsGTNH.Prismarine, 8),
+                Materials.Carbon.getDust(24),
+                Materials.CrystallineAlloy.getDust(4)
+            )
+            .fluidInputs(
+                Materials.Hydrogen.getGas(36000),
+                Materials.Oxygen.getGas(24000),
+                Materials.Boron.getPlasma(800),
+                Materials.Nitrogen.getGas(28000)
+            )
+            .fluidOutputs(
+                Materials.PrismaticAcid.getFluid(32000)
+            )
+            .specialValue(11700)
+            .eut(RECIPE_UHV)
+            .duration(20 * 120)
+            .addTo(ICD);
         // endregion
 
 
