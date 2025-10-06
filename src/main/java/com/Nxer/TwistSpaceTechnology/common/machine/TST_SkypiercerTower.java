@@ -48,6 +48,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.google.common.collect.ImmutableList;
@@ -245,7 +246,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                 .addElement(
                     'L',
                     ofChain(ofAccurateTileAdder(TST_SkypiercerTower::addTileElectricCloud, electricCloud, 0)))
-                .addElement('M', ofBlockAnyMeta(Blocks.beacon, 1))
+                .addElement('M', TSTStructureUtility.CommonElements.BlockBeacon.get())
                 .addElement('N', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
                 .addElement(
                     'N',

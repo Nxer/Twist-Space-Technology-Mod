@@ -7,11 +7,14 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBeacon;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -34,6 +37,59 @@ import com.gtnewhorizon.structurelib.structure.adders.ITileAdder;
 import com.gtnewhorizon.structurelib.util.ItemStackPredicate;
 
 public class TSTStructureUtility {
+
+    public enum CommonElements {
+
+        BlockBeacon(new IStructureElement<>() {
+
+            private final BlocksToPlace cached = BlocksToPlace.create(Blocks.beacon, 0);
+
+            @Override
+            public boolean check(Object o, World world, int x, int y, int z) {
+                // in fact, we only need it is a beacon
+                // so it also can be chisel's beacon...?
+                return world.getBlock(x, y, z) instanceof BlockBeacon
+                    && world.getTileEntity(x, y, z) instanceof TileEntityBeacon;
+            }
+
+            @Override
+            public boolean couldBeValid(Object o, World world, int x, int y, int z, ItemStack trigger) {
+                // no side effect
+                return check(o, world, x, y, z);
+            }
+
+            @Override
+            public boolean spawnHint(Object o, World world, int x, int y, int z, ItemStack trigger) {
+                StructureLibAPI.hintParticle(world, x, y, z, Blocks.beacon, 0);
+                return true;
+            }
+
+            @Override
+            public boolean placeBlock(Object o, World world, int x, int y, int z, ItemStack trigger) {
+                world.setBlock(x, y, z, Blocks.beacon, 0, 2);
+                if (check(o, world, x, y, z)) return true;
+                else return world.setBlockToAir(x, y, z);
+            }
+
+            @Override
+            public @Nullable BlocksToPlace getBlocksToPlace(Object o, World world, int x, int y, int z,
+                ItemStack trigger, AutoPlaceEnvironment env) {
+                return cached;
+            }
+        });
+
+        private final IStructureElement<?> element;
+
+        @SuppressWarnings("unchecked")
+        public <T> IStructureElement<T> get() {
+            return (IStructureElement<T>) this.element;
+        }
+
+        CommonElements(IStructureElement<?> element) {
+            this.element = element;
+        }
+
+    }
 
     private TSTStructureUtility() {}
 
@@ -71,10 +127,18 @@ public class TSTStructureUtility {
         }
         return new IStructureElement<>() {
 
+            private final BlocksToPlace cached = BlocksToPlace.create(block, meta);
+
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
                 // Gets the meta value of a block in the real world
                 return meta == world.getBlockMetadata(x, y, z) && block == world.getBlock(x, y, z);
+            }
+
+            @Override
+            public boolean couldBeValid(T t, World world, int x, int y, int z, ItemStack trigger) {
+                // no side effect
+                return check(t, world, x, y, z);
             }
 
             @Override
@@ -93,7 +157,7 @@ public class TSTStructureUtility {
             @Override
             public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
                 AutoPlaceEnvironment env) {
-                return BlocksToPlace.create(block, meta);
+                return cached;
             }
         };
     }
@@ -123,11 +187,18 @@ public class TSTStructureUtility {
         return new IStructureElement<>() {
 
             private final ItemStack blockStack = TstUtils.newItemWithMeta(block, meta);
+            private final BlocksToPlace cached = BlocksToPlace.create(block, meta);
 
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
                 // Gets the meta value of a block in the real world
                 return meta == world.getBlockMetadata(x, y, z) && block == world.getBlock(x, y, z);
+            }
+
+            @Override
+            public boolean couldBeValid(T t, World world, int x, int y, int z, ItemStack trigger) {
+                // no side effect, therefore no need to assume this
+                return check(t, world, x, y, z);
             }
 
             @Override
@@ -146,7 +217,7 @@ public class TSTStructureUtility {
             @Override
             public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
                 AutoPlaceEnvironment env) {
-                return BlocksToPlace.create(block, meta);
+                return cached;
             }
 
             @Override
@@ -186,10 +257,19 @@ public class TSTStructureUtility {
         }
         return new IStructureElement<>() {
 
+            private final BlocksToPlace cached = BlocksToPlace.create(block, meta);
+
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
                 // Gets the meta value of a block in the real world
                 return iBlockAdder.apply(t, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z));
+            }
+
+            @Override
+            public boolean couldBeValid(T t, World world, int x, int y, int z, ItemStack trigger) {
+                // calling adder can potentially modify external state
+                // therefore we assume this can always be valid.
+                return true;
             }
 
             @Override
@@ -208,7 +288,7 @@ public class TSTStructureUtility {
             @Override
             public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
                 AutoPlaceEnvironment env) {
-                return BlocksToPlace.create(block, meta);
+                return cached;
             }
         };
     }
@@ -231,10 +311,18 @@ public class TSTStructureUtility {
         final ItemStack blockStack = TstUtils.newItemWithMeta(specificBlock, specificMeta);
         return new IStructureElement<>() {
 
+            private final BlocksToPlace cached = BlocksToPlace.create(variableStacks.toArray(new ItemStack[0]));
+
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
                 // Gets the meta value of a block in the real world
                 return specificMeta == world.getBlockMetadata(x, y, z) && specificBlock == world.getBlock(x, y, z);
+            }
+
+            @Override
+            public boolean couldBeValid(T t, World world, int x, int y, int z, ItemStack trigger) {
+                // no side effect, therefore no need to assume this
+                return check(t, world, x, y, z);
             }
 
             @Override
@@ -254,7 +342,7 @@ public class TSTStructureUtility {
             public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
                 AutoPlaceEnvironment env) {
                 // only for nei preview the variable block array.
-                return BlocksToPlace.create(variableStacks.toArray(new ItemStack[0]));
+                return cached;
             }
 
             @Override
@@ -314,6 +402,7 @@ public class TSTStructureUtility {
     // endregion
 
     // region TileAdder
+
     /**
      * Overload method, similar to {@link #ofAccurateTile(Class, Block, int, Block, int)}
      * The hitBlock used block instead, hitMeta used meta instead.
@@ -359,10 +448,19 @@ public class TSTStructureUtility {
 
         return new IStructureElement<>() {
 
+            private final BlocksToPlace cached = BlocksToPlace.create(tileBlock, tileBlockMeta);
+
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
                 TileEntity tileEntity = world.getTileEntity(x, y, z);
                 return iTileAdder.apply(t, tileEntity);
+            }
+
+            @Override
+            public boolean couldBeValid(T t, World world, int x, int y, int z, ItemStack trigger) {
+                // calling adder can potentially modify external state
+                // therefore we assume this can always be valid.
+                return true;
             }
 
             @Override
@@ -380,7 +478,7 @@ public class TSTStructureUtility {
             @Override
             public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
                 AutoPlaceEnvironment env) {
-                return BlocksToPlace.create(tileBlock, tileBlockMeta);
+                return cached;
             }
         };
     }
@@ -440,11 +538,19 @@ public class TSTStructureUtility {
         return new IStructureElement<>() {
 
             private final ItemStack blockStack = new ItemStack(tileBlock, 1, tileBlockMeta);
+            private final BlocksToPlace cached = BlocksToPlace.create(tileBlock, tileBlockMeta);
 
             @Override
             public boolean check(T t, World world, int x, int y, int z) {
                 TileEntity tileEntity = world.getTileEntity(x, y, z);
                 return iTileAdder.apply(t, tileEntity);
+            }
+
+            @Override
+            public boolean couldBeValid(T t, World world, int x, int y, int z, ItemStack trigger) {
+                // calling adder can potentially modify external state
+                // therefore we assume this can always be valid.
+                return true;
             }
 
             @Override
@@ -462,7 +568,7 @@ public class TSTStructureUtility {
             @Override
             public BlocksToPlace getBlocksToPlace(T t, World world, int x, int y, int z, ItemStack trigger,
                 AutoPlaceEnvironment env) {
-                return BlocksToPlace.create(blockStack);
+                return cached;
             }
 
             @Override
