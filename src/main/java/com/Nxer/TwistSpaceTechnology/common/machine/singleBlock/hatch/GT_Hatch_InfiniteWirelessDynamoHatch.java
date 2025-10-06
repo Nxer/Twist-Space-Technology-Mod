@@ -27,7 +27,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEWirelessDynamo {
 
     @Override
     public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_Hatch_InfiniteWirelessDynamoHatch(mName, (byte) 14, new String[] { "" }, mTextures);
+        return new GT_Hatch_InfiniteWirelessDynamoHatch(mName, mTier, new String[] { "" }, mTextures);
     }
 
     // endregion
