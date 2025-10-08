@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nullable;
 
@@ -146,8 +147,8 @@ public class DimensionSystem {
     private final int mId;
     private final String mName;
     private final FluidStack mGenerateGas;
-    private static final Map<Integer, DimensionSystem> DIMENSIONS_MAP = new HashMap<>();
-    private static final Map<String, DimensionSystem> DIMENSIONS_BY_NAME = new HashMap<>();
+    private static final Map<Integer, DimensionSystem> DIMENSIONS_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, DimensionSystem> DIMENSIONS_BY_NAME = new ConcurrentHashMap<>();
     // endregion
 
     // region Constructor
