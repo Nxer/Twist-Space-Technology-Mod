@@ -111,7 +111,7 @@ public class DimensionSystemInit {
     private static DimensionSystem loadTheOuterLands() {
         return new DimensionBuilder()
             .setId(Mods.Thaumcraft.isModLoaded() ? thaumcraft.common.config.Config.dimensionOuterId : 50)
-            .setName("Bedrock")
+            .setName("The Outer Lands")
             .constructDimension();
     }
     // endregion
@@ -137,7 +137,7 @@ public class DimensionSystemInit {
     private static DimensionSystem loadPocketPlane() {
         return new DimensionBuilder()
             .setId(69)
-            .setName("Bedrock")
+            .setName("Pocket Plane")
             .constructDimension();
     }
     // endregion
