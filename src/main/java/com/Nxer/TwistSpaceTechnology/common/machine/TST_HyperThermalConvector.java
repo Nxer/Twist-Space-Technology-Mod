@@ -89,8 +89,26 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private static final int baseVerticalOffSet = 6;
     private static final int baseDepthOffSet = 2;
     private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final String STRUCTURE_PIECE_OLD = "old";
     // spotless:off
     private static final String[][] shapeMain = new String[][]{
+        {"                     ","                     ","                     ","       HHGGGHH       ","      HHHHHHHHH      ","     JGHHHHHHHGJ     ","    JGGGGGGGGGGGJ    ","    JGIIIIIIIIIGJ    ","    JGGGGGGGGGGGJ    ","     JGHHHHHHHGJ     ","      HHHHHHHHH      ","       HHHHHHH       ","                     ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HEEEEEEEH      ","     EECCCCCCCEE     ","  EEEGCCCCCCCCCGEEE  "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE ","  EEEGCCCCCCCCCGEEE  ","     EECCCCCCCEE     ","      HEEEEEEEH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLQQQLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLQQQLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GRGCCLLNNNLLCCGTG  "," GPFPPPPBOOOAPPPPFPG "," GPFFFFPBOOOAPFFFFPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     GECCCCCCCEG     ","  GGGCCLLNNNLLCCGGG  "," GPPPPPPBOOOAPPPPPPG "," GPPPPFPBOOOAPFPPPPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     EECCCCCCCEE     ","  EEECCLLNNNLLCCEEE  "," EQQQPPPBOOOAPPPQQQE "," EQQQPFPBOOOAPFPQQQE "," EQQQPPPBOOOAPPPQQQE ","  EEECCLLNNNLLCCEEE  ","     EECCCCCCCEE     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","      HGGG~GGGH      ","     HKDDDDDDDKH     ","     DDCCCCCCCDD     ","  DDDCCLLNNNLLCCDDD  "," DCCCPPPBOOOAPPPCCCD "," DCCCPFPBOOOAPFPCCCD "," DCCCPPPBOOOAPPPCCCD ","  DDDCCLLNNNLLCCDDD  ","     DDCCCCCCCDD     ","     HKDDDDDDDEH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     EECCCCCCCEE     ","  EEECCLLNNNLLCCEEE  "," EQQQPPPBOOOAPPPQQQE "," EQQQPFPBOOOAPFPQQQE "," EQQQPPPBOOOAPPPQQQE ","  EEECCLLNNNLLCCEEE  ","     EECCCCCCCEE     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","      HGGGGGGGH      ","     HKDDDDDDDKH     ","     GECCCCCCCEG     ","  GGGCCLLNNNLLCCGGG  "," GPPPPPPBOOOAPPPPPPG "," GPPPPFPBOOOAPFPPPPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","     HKDDDDDDDKH     ","      HGGGGGGGH      ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GSGCCLLNNNLLCCGUG  "," GPFPPPPBOOOAPPPPFPG "," GPFFFFPBOOOAPFFFFPG "," GPPPPPPBOOOAPPPPPPG ","  GGGCCLLNNNLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLQQQLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLQQQLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
+        {"                     ","                     ","       HGGGGGH       ","      HEEEEEEEH      ","     EECCCCCCCEE     ","  EEEGCCCCCCCCCGEEE  "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE ","  EEEGCCCCCCCCCGEEE  ","     EECCCCCCCEE     ","      HEEEEEEEH      ","       HGGGGGH       ","                     ","                     "},
+        {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMHHGGGHHMMMMMM ","MMMMMMHHHHHHHHHMMMMMM","MMMMMGGHHHHHHHGGMMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMMGGHHHHHHHGGMMMMM","MMMMMMHHHHHHHHHMMMMMM"," MMMMMMHHHHHHHMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "},
+        {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMMMMMMMMMMMMMM ","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM"," MMMMMMMMMMMMMMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "}
+    };
+    // old structure (to be deprecated on future version)
+    private static final String[][] shapeOld = new String[][]{
         {"                     ","                     ","                     ","       HHGGGHH       ","      HHHHHHHHH      ","     JGHHHHHHHGJ     ","    JGGGGGGGGGGGJ    ","    JGIIIIIIIIIGJ    ","    JGGGGGGGGGGGJ    ","     JGHHHHHHHGJ     ","      HHHHHHHHH      ","       HHHHHHH       ","                     ","                     ","                     "},
         {"                     ","                     ","       HGGGGGH       ","      HEEEEEEEH      ","     EECCCCCCCEE     ","  EEEGCCCCCCCCCGEEE  "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE "," EGGGCCCCCCCCCCCGGGE ","  EEEGCCCCCCCCCGEEE  ","     EECCCCCCCEE     ","      HEEEEEEEH      ","       HGGGGGH       ","                     ","                     "},
         {"                     ","                     ","       HGGGGGH       ","      HDDDDDDDH      ","     GECCCCCCCEG     ","  GGGCCLLQQQLLCCGGG  "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG "," GPPPPPPLNNNLPPPPPPG ","  GGGCCLLQQQLLCCGGG  ","     GECCCCCCCEG     ","      HDDDDDDDH      ","       HGGGGGH       ","                     ","                     "},
@@ -114,6 +132,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_HyperThermalConvector>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addShape(STRUCTURE_PIECE_OLD, transpose(shapeOld))
                 .addElement(
                     'A',
                     ofBlock(
@@ -211,7 +230,9 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         mSteamHatch = null;
         mColdFluidHatch = null;
         dedicatedHatches.clear();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
+            && !checkPiece(STRUCTURE_PIECE_OLD, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
+            return false;
         Collections.addAll(dedicatedHatches, mHotFluidHatch, mDistilledWaterHatch);
         return mHotFluidHatch != null && mColdFluidHatch != null;
     }
