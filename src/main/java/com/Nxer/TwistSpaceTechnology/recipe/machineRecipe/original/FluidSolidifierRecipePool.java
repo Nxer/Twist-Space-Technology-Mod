@@ -726,7 +726,7 @@ public class FluidSolidifierRecipePool {
                     Materials.Bedrockium.getMolten(144 * 9 * 4),
                     Materials.VibrantAlloy.getMolten(144 * 9 * 145),
                     Materials.Electrotine.getMolten(144 * 9 * 1215),
-                    FluidRegistry.getFluidStack("aluminumbrass.molten", 144 * 9 * 1824),
+                    Materials.RoseGold.getMolten(144 * 9 * 1824),
                     Materials.Aluminium.getMolten(144 * 9 * 1824),
                     Materials.Alumite.getMolten(144 * 9 * 229),
                     Materials.Ardite.getMolten(144 * 9 * 304),
