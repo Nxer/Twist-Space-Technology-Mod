@@ -2143,22 +2143,22 @@ public class GTCMMachineRecipes {
                 .metadata(RESEARCH_ITEM, WirelessDataInputHatch.get(1))
                 .metadata(SCANNING, scanningLV(720000))
                 .itemInputs(
-                    GTUtility.copyAmountUnsafe(64, quantumCard),
-                    GTUtility.copyAmountUnsafe(64, quantumCard),
-                    GTUtility.copyAmountUnsafe(64, quantumCard),
-                    GTUtility.copyAmountUnsafe(64, quantumCard),
+                    quantumCard,
+                    quantumCard,
+                    quantumCard,
+                    quantumCard,
 
                     WirelessDataOutputHatch.get(8),
                     WirelessDataInputHatch.get(8),
                     ItemList.Field_Generator_UMV.get(64),
-                    ItemList.Wireless_Dynamo_Energy_UMV.get(8),
+                    ItemList.Wireless_Hatch_Energy_UMV.get(8),
 
                     Machine_Multi_Switch.get(64),
                     Machine_Multi_Switch.get(64),
                     Machine_Multi_Switch.get(64),
                     Machine_Multi_Switch.get(64)
                 )
-                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getMolten(5000000))
+                .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(144 * 200), Materials.UUMatter.getFluid(20480000), Materials.SuperconductorUIVBase.getMolten(144*9216))
                 .itemOutputs(WirelessUpdateItem.get(1))
                 .eut(RECIPE_UMV)
                 .duration(800)
