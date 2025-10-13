@@ -627,6 +627,9 @@ public final class MachineLoader {
         GTCMItemList.NetherInterface
             .set(new TST_NetherInterface(19077, "NameNetherInterface", TextEnums.tr("NameNetherInterface")));
 
+        // #tr NameSuperWaterPurifier
+        // # Super Water Purifier
+        // #zh_CN 超净水生成器
         GTCMItemList.SuperWaterPurifier
             .set(new TST_SuperWaterPurifier(19078, "NameSuperWaterPurifier", TextEnums.tr("NameSuperWaterPurifier")));
 
