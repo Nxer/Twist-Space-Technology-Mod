@@ -229,11 +229,12 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         mDistilledWaterHatch = null;
         mSteamHatch = null;
         mColdFluidHatch = null;
-        dedicatedHatches.clear();
+        Arrays.fill(dedicatedHatches, null);
         if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
             && !checkPiece(STRUCTURE_PIECE_OLD, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
             return false;
-        Collections.addAll(dedicatedHatches, mHotFluidHatch, mDistilledWaterHatch);
+        dedicatedHatches[0] = mHotFluidHatch;
+        dedicatedHatches[1] = mDistilledWaterHatch;
         return mHotFluidHatch != null && mColdFluidHatch != null;
     }
 
@@ -243,7 +244,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private MTEHatchOutput mSteamHatch;
     private MTEHatchInput mHotFluidHatch;
     private MTEHatchOutput mColdFluidHatch;
-    List<MTEHatchInput> dedicatedHatches = new ArrayList<>();
+    private final MTEHatchInput[] dedicatedHatches = new MTEHatchInput[2];
     static Fluid distilledWater;
 
     @Override
@@ -398,6 +399,22 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
 
         endRecipeProcessing();
         return result;
+    }
+
+    @NotNull
+    @Override
+    protected CheckRecipeResult checkRecipeForCustomHatches(CheckRecipeResult lastResult) {
+        if (lastResult != CheckRecipeResultRegistry.NO_RECIPE) {
+            return lastResult;
+        }
+
+        processingLogic.setInputFluids(getStoredFluids());
+
+        CheckRecipeResult foundResult = processingLogic.process();
+        if (foundResult.wasSuccessful()) {
+            return foundResult;
+        }
+        return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
     @Override
