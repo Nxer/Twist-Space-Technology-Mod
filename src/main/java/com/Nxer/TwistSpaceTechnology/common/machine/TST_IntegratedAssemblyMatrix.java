@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.DataHatchElement.DataAccess;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.SpecialHatchElement.DataAccess;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.SpecialHatchElement.NaniteBus;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -15,6 +16,7 @@ import static gregtech.api.util.GTUtility.validMTEList;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,6 +44,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
@@ -51,6 +54,7 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchDataAccess;
 import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
+import gregtech.api.metatileentity.implementations.MTEHatchNanite;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -84,6 +88,19 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     protected final Collection<TST_ItemID> allowedRecipes = new HashSet<>();
     protected int cachedData;
     protected long maxVoltage;
+    protected long silverNanite;
+    protected long goldNanite;
+    static TST_ItemID GOLD_NANITE;
+    static TST_ItemID SILVER_NANITE;
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (GOLD_NANITE == null) {
+            GOLD_NANITE = TST_ItemID.createNoNBT(Materials.Gold.getNanite(1));
+            SILVER_NANITE = TST_ItemID.createNoNBT(Materials.Silver.getNanite(1));
+        }
+    }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -121,6 +138,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
         // check data
         if (!flushData()) return CheckRecipeResultRegistry.NO_DATA_STICKS;
+        // check nanites
+        prepareProcessing();
 
         // general processing
         setupProcessingLogic(processingLogic);
@@ -169,6 +188,50 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         return !allowedRecipes.isEmpty();
     }
 
+    protected void prepareProcessing() {
+        silverNanite = 0;
+        goldNanite = 0;
+        speedBonus = (float) Config.TimeCostMultiplier_IntegratedAssemblyMatrix;
+        maxParallel = Config.Parallel_IntegratedAssemblyMatrix;
+        if (naniteBuses.isEmpty()) return;
+
+        for (MTEHatchNanite naniteBus : naniteBuses) {
+            if (null == naniteBus) continue;
+            ItemStack storedNanites = naniteBus.getItemStack();
+            if (GOLD_NANITE.equalItemStack(storedNanites)) {
+                goldNanite += naniteBus.getItemCount();
+            } else if (SILVER_NANITE.equalItemStack(storedNanites)) {
+                silverNanite += naniteBus.getItemCount();
+            }
+        }
+
+        if (silverNanite == 0 && goldNanite == 0) return;
+
+        double fastest;
+        if (silverNanite > 0) {
+            // silver nanites boost
+            fastest = 1d / Config.FastestSilverNanitesSpeed_IntegratedAssemblyMatrix;
+            if (silverNanite >= Config.MaxSilverNanites_IntegratedAssemblyMatrix) {
+                speedBonus = (float) fastest;
+                return;
+            }
+            speedBonus = (float) (fastest + (Config.TimeCostMultiplier_IntegratedAssemblyMatrix - fastest)
+                * (Config.MaxSilverNanites_IntegratedAssemblyMatrix - silverNanite)
+                / Config.MaxSilverNanites_IntegratedAssemblyMatrix);
+        } else {
+            fastest = 1d / Config.FastestGoldNanitesSpeed_IntegratedAssemblyMatrix;
+            maxParallel *= 2;
+            if (goldNanite >= Config.MaxGoldNanites_IntegratedAssemblyMatrix) {
+                speedBonus = (float) fastest;
+                return;
+            }
+            speedBonus = (float) (fastest + (Config.TimeCostMultiplier_IntegratedAssemblyMatrix - fastest)
+                * (Config.MaxGoldNanites_IntegratedAssemblyMatrix - goldNanite)
+                / Config.MaxGoldNanites_IntegratedAssemblyMatrix);
+        }
+
+    }
+
     @Override
     public RecipeMap<?> getRecipeMap() {
         return GTCMRecipe.AssemblyLineWithoutResearchRecipe;
@@ -191,10 +254,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
         // get voltage limitation
         checkEnergyLimitation();
-        speedBonus = (float) Config.TimeCostMultiplier_IntegratedAssemblyMatrix;
-        maxParallel = Config.Parallel_IntegratedAssemblyMatrix;
 
-        return dataAccessHatches.size() == 1;
+        return dataAccessHatches.size() == 1 && naniteBuses.size() <= 1;
     }
 
     public void checkEnergyLimitation() {
@@ -249,7 +310,14 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
                 .addElement(
                     'E',
                     HatchElementBuilder.<TST_IntegratedAssemblyMatrix>builder()
-                        .atLeast(DataAccess, InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
+                        .atLeast(
+                            DataAccess,
+                            NaniteBus,
+                            InputBus,
+                            OutputBus,
+                            InputHatch,
+                            OutputHatch,
+                            Energy.or(ExoticEnergy))
                         .adder(TST_IntegratedAssemblyMatrix::addToMachineList)
                         .dot(1)
                         .casingIndex(1024)
@@ -324,8 +392,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
             // #zh_CN 空间隔离技术则带来更高的批量生产能力.
             .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_02"))
             // #tr Tooltip_IntegratedAssemblyMatrix_1_03
-            // # The cost is {\RED}{\BOLD}4{\RESET}{\GRAY} times the time.
-            // #zh_CN 代价是{\RED}{\BOLD}4{\RESET}{\GRAY}倍耗时.
+            // # The cost is {\RED}{\BOLD}1.5{\RESET}{\GRAY} times the base time.
+            // #zh_CN 代价是{\RED}{\BOLD}1.5{\RESET}{\GRAY}倍基础耗时.
             .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_03"))
             // #tr Tooltip_IntegratedAssemblyMatrix_1_04
             // # Still need to use the data access hatch to provide data stick.
@@ -335,10 +403,26 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
             // # The energy hatch tier limits the voltage tier at which recipes can be executed.
             // #zh_CN 能源仓等级限制了可执行配方电压等级.
             .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_05"))
+            // #tr Tooltip_IntegratedAssemblyMatrix_1_06
+            // # Nanite Containment Bus can be installed and provided with silver nanites or gold nanites to increase the running speed.
+            // #zh_CN 可以安装纳米蜂群收容总线并提供银纳米蜂群或金纳米蜂群提高运行速度.
+            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_06"))
+            // #tr Tooltip_IntegratedAssemblyMatrix_1_07
+            // # Up to {\WHITE}256 Silver Nanites{\GRAY} will increase the running speed to 100% of normal speed.
+            // #zh_CN 最多{\WHITE}256银纳米蜂群{\GRAY}将运行速度提高到正常{\WHITE}100%{\GRAY}速度.
+            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_07"))
+            // #tr Tooltip_IntegratedAssemblyMatrix_1_08
+            // # Or up to {\YELLOW}256 Silver Nanites{\GRAY} will increase the running speed to 200% of normal speed,
+            // #zh_CN 或最多{\YELLOW}1024金纳米蜂群{\GRAY}将运行速度提高到正常的{\YELLOW}200%{\GRAY}速度,
+            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_08"))
+            // #tr Tooltip_IntegratedAssemblyMatrix_1_09
+            // # And {\YELLOW}double{\GRAY} the parallelism.
+            // #zh_CN 并{\YELLOW}翻倍{\GRAY}并行数量.
+            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_09"))
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(15, 16, 3, false)
+            .beginStructureBlock(9, 9, 52, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
@@ -349,8 +433,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
                 TextLocalization.textUseBlueprint,
                 1)
             // #tr Tooltips_IntegratedAssemblyMatrix_DataHatchLimit
-            // # Only allow {\GOLD}1{\GRAY} Data Access Hatch
-            // #zh_CN 只允许安装{\GOLD}1{\GRAY}个数据访问仓
+            // # Only allow {\GOLD}1{\GRAY} Data Access Hatch and {\GOLD}1{\GRAY} Nanites Bus
+            // #zh_CN 只允许安装{\GOLD}1{\GRAY}个数据访问仓和{\GOLD}1{\GRAY}个纳米蜂群仓
             .addStructureInfo(tr("Tooltips_IntegratedAssemblyMatrix_DataHatchLimit"))
             .toolTipFinisher(TextLocalization.ModName);
         // spotless:on
@@ -362,24 +446,43 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     // region Data Hatch
 
     public final List<MTEHatchDataAccess> dataAccessHatches = new ArrayList<>();
+    public final List<MTEHatchNanite> naniteBuses = new ArrayList<>();
 
-    protected enum DataHatchElement implements IHatchElement<TST_IntegratedAssemblyMatrix> {
+    protected enum SpecialHatchElement implements IHatchElement<TST_IntegratedAssemblyMatrix> {
 
-        DataAccess;
+        NaniteBus(TST_IntegratedAssemblyMatrix::addNaniteBusToMachineList, MTEHatchNanite.class) {
+
+            @Override
+            public long count(TST_IntegratedAssemblyMatrix gtMetaTileEntityPCBFactory) {
+                return gtMetaTileEntityPCBFactory.naniteBuses.size();
+            }
+        },
+
+        DataAccess(TST_IntegratedAssemblyMatrix::addDataAccessToMachineList, MTEHatchDataAccess.class) {
+
+            @Override
+            public long count(TST_IntegratedAssemblyMatrix gtMetaTileEntityPCBFactory) {
+                return gtMetaTileEntityPCBFactory.dataAccessHatches.size();
+            }
+        };
+
+        private final List<Class<? extends IMetaTileEntity>> mteClasses;
+        private final IGTHatchAdder<TST_IntegratedAssemblyMatrix> adder;
+
+        @SafeVarargs
+        SpecialHatchElement(IGTHatchAdder<TST_IntegratedAssemblyMatrix> adder,
+            Class<? extends IMetaTileEntity>... mteClasses) {
+            this.mteClasses = Collections.unmodifiableList(Arrays.asList(mteClasses));
+            this.adder = adder;
+        }
 
         @Override
         public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
-            return Collections.singletonList(MTEHatchDataAccess.class);
+            return mteClasses;
         }
 
-        @Override
-        public IGTHatchAdder<TST_IntegratedAssemblyMatrix> adder() {
-            return TST_IntegratedAssemblyMatrix::addDataAccessToMachineList;
-        }
-
-        @Override
-        public long count(TST_IntegratedAssemblyMatrix t) {
-            return t.dataAccessHatches.size();
+        public IGTHatchAdder<? super TST_IntegratedAssemblyMatrix> adder() {
+            return adder;
         }
     }
 
@@ -394,9 +497,21 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         return false;
     }
 
+    public boolean addNaniteBusToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
+        if (tileEntity == null) return false;
+        IMetaTileEntity metaTileEntity = tileEntity.getMetaTileEntity();
+        if (metaTileEntity instanceof MTEHatchNanite naniteBus) {
+            naniteBus.updateTexture(baseCasingIndex);
+            this.naniteBuses.add(naniteBus);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addDataAccessToMachineList(aTileEntity, aBaseCasingIndex)
+            || addNaniteBusToMachineList(aTileEntity, aBaseCasingIndex)
             || super.addToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
@@ -404,6 +519,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     public void clearHatches() {
         super.clearHatches();
         dataAccessHatches.clear();
+        naniteBuses.clear();
     }
     // endregion
 

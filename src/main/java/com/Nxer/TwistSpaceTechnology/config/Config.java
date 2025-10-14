@@ -544,8 +544,13 @@ public class Config {
     // endregion
 
     // region Integrated Assembly Matrix
-    public static double TimeCostMultiplier_IntegratedAssemblyMatrix = 4;
-    public static int Parallel_IntegratedAssemblyMatrix = 64;
+    public static double TimeCostMultiplier_IntegratedAssemblyMatrix = 1.5d;
+    public static int Parallel_IntegratedAssemblyMatrix = 128;
+    public static int MaxSilverNanites_IntegratedAssemblyMatrix = 256;
+    public static int MaxGoldNanites_IntegratedAssemblyMatrix = 1024;
+    public static int FastestSilverNanitesSpeed_IntegratedAssemblyMatrix = 1;
+    public static int FastestGoldNanitesSpeed_IntegratedAssemblyMatrix = 2;
+
     // endregion
 
     public static void synchronizeConfiguration(File configFile) {
@@ -567,8 +572,12 @@ public class Config {
         // endregion
 
         // region Integrated Assembly Matrix
-        TimeCostMultiplier_IntegratedAssemblyMatrix = configuration.get("TimeCostMultiplier_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, TimeCostMultiplier_IntegratedAssemblyMatrix, "Time multiplier of Integrated Assembly Matrix. Machine actual processing time is recipe's multiply this number. Type: double").getDouble();
+        TimeCostMultiplier_IntegratedAssemblyMatrix = configuration.get(IntegratedAssemblyMatrix, "TimeCostMultiplier_IntegratedAssemblyMatrix", TimeCostMultiplier_IntegratedAssemblyMatrix, "Time multiplier of Integrated Assembly Matrix. Machine actual processing time is recipe's multiply this number. Type: double", 1d, 10d).getDouble();
         Parallel_IntegratedAssemblyMatrix = configuration.getInt("Parallel_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, Parallel_IntegratedAssemblyMatrix, 1, Integer.MAX_VALUE, "Max parallel of Integrated Assembly Matrix. Type: int");
+        MaxSilverNanites_IntegratedAssemblyMatrix = configuration.getInt("MaxSilverNanites_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, MaxSilverNanites_IntegratedAssemblyMatrix, 1, Integer.MAX_VALUE, "Max silver nanites using amount of Integrated Assembly Matrix. Type: int");
+        MaxGoldNanites_IntegratedAssemblyMatrix = configuration.getInt("MaxGoldNanites_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, MaxGoldNanites_IntegratedAssemblyMatrix, 1, Integer.MAX_VALUE, "Max gold nanites using amount of Integrated Assembly Matrix. Type: int");
+        FastestSilverNanitesSpeed_IntegratedAssemblyMatrix = configuration.getInt("FastestSilverNanitesSpeed_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, FastestSilverNanitesSpeed_IntegratedAssemblyMatrix, 1, 1024, "The fastest speed when silver nanites achieve max limitation. Type: int");
+        FastestGoldNanitesSpeed_IntegratedAssemblyMatrix = configuration.getInt("FastestGoldNanitesSpeed_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, FastestGoldNanitesSpeed_IntegratedAssemblyMatrix, 1, 1024, "The fastest speed when gold nanites achieve max limitation. Type: int");
         // endregion
 
         // region NetherInterface
