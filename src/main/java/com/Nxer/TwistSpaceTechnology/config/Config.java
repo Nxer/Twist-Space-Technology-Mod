@@ -68,6 +68,7 @@ public class Config {
     public static final String PrimordialDisjunctus = "PrimordialDisjunctus";
     public static final String LaserMeteorMiner = "LaserMeteorMiner";
     public static final String NetherInterface = "NetherInterface";
+    public static final String IntegratedAssemblyMatrix = "IntegratedAssemblyMatrix";
     // endregion
 
     // region General
@@ -542,6 +543,11 @@ public class Config {
 
     // endregion
 
+    // region Integrated Assembly Matrix
+    public static double TimeCostMultiplier_IntegratedAssemblyMatrix = 4;
+    public static int Parallel_IntegratedAssemblyMatrix = 64;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -558,6 +564,11 @@ public class Config {
         // region Recipe
         Registry_DragonBlood_ExtraRecipe = configuration.getBoolean("Registry_DragonBlood_ExtraRecipe", RECIPE, Registry_DragonBlood_ExtraRecipe, "Registry Dragon Blood Extra Recipes.");
         Registry_DTPF_ExtraRecipe = configuration.getBoolean("Registry_DTPF_ExtraRecipe", RECIPE, Registry_DTPF_ExtraRecipe, "Enable Registry of DTPF Extra Recipes about Infinity Hypogen and SpaceTime.");
+        // endregion
+
+        // region Integrated Assembly Matrix
+        TimeCostMultiplier_IntegratedAssemblyMatrix = configuration.get("TimeCostMultiplier_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, TimeCostMultiplier_IntegratedAssemblyMatrix, "Time multiplier of Integrated Assembly Matrix. Machine actual processing time is recipe's multiply this number. Type: double").getDouble();
+        Parallel_IntegratedAssemblyMatrix = configuration.getInt("Parallel_IntegratedAssemblyMatrix", IntegratedAssemblyMatrix, Parallel_IntegratedAssemblyMatrix, 1, Integer.MAX_VALUE, "Max parallel of Integrated Assembly Matrix. Type: int");
         // endregion
 
         // region NetherInterface
