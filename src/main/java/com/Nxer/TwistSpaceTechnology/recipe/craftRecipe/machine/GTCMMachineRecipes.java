@@ -128,6 +128,7 @@ import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gregtech.api.util.GTUtility.copyAmount;
+import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.COMET_Cyclotron;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_AdvancedVacuum;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Casing_Cyclotron_Coil;
@@ -217,7 +218,6 @@ import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.item.ModItems;
-import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.core.recipe.common.CI;
@@ -1669,7 +1669,7 @@ public class GTCMMachineRecipes {
                 hatch_CreativeMaintenance.get(1),
                 ItemList.Tool_DataOrb.get(1)
             )
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
+            .fluidInputs(MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
             .itemOutputs(DebugUncertaintyHatch.get(1))
             .eut(RECIPE_UEV)
             .duration(20 * 120)
@@ -1683,7 +1683,7 @@ public class GTCMMachineRecipes {
                 ItemList.Tool_DataOrb.get(1),
                 ItemList.Timepiece.get(1)
             )
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
+            .fluidInputs(MUTATED_LIVING_SOLDER.getFluidStack(144 * 128))
             .itemOutputs(DebugUncertaintyHatch.get(16))
             .eut(RECIPE_UXV)
             .duration(20 * 120)
@@ -1699,7 +1699,7 @@ public class GTCMMachineRecipes {
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio), 1},
                 ItemList.Hatch_Energy_UHV.get(1)
             )
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144))
+            .fluidInputs(MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(LaserSmartNode.get(1))
             .eut(RECIPE_UHV)
             .duration(20 * 5)
@@ -1716,7 +1716,7 @@ public class GTCMMachineRecipes {
                 new Object[]{OrePrefixes.circuit.get(Materials.Bio), 1},
                 ItemList.Hatch_Dynamo_UHV.get(1)
             )
-            .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144))
+            .fluidInputs(MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(LaserFocusedSmartNode.get(1))
             .eut(RECIPE_UHV)
             .duration(20 * 5)
@@ -3310,7 +3310,7 @@ public class GTCMMachineRecipes {
                     MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFoil(64),
                 },
                 new FluidStack[]{
-                    MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
+                    MUTATED_LIVING_SOLDER.getFluidStack(144 * 16),
                     MaterialsAlloy.ABYSSAL.getFluidStack(144 * 64),
                     new FluidStack(TFFluids.fluidPyrotheum, 1000 * 4096)
                 },
@@ -3643,6 +3643,46 @@ public class GTCMMachineRecipes {
             .duration(20 * 36_000)
             .addTo(MiracleTopRecipes);
 
+        // endregion
+
+        // region Integrated Assembly Matrix
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GGItemList.AdvAssLine.get(1),
+            64_000,
+            32,
+            800_000,
+            4,
+            new Object[]{
+                GGItemList.AdvAssLine.get(16),
+                ItemList.Electric_Pump_UHV.get(64),
+                ItemList.Robot_Arm_UHV.get(64),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 64),
+
+                HighEnergyFlowCircuit.get(64),
+                ItemList.Field_Generator_UHV.get(64),
+                ItemList.Field_Generator_UHV.get(64),
+                HighEnergyFlowCircuit.get(64),
+
+                ItemList.Conveyor_Module_UHV.get(64),
+                eM_Hollow.get(64),
+                eM_Hollow.get(64),
+                ItemList.Conveyor_Module_UHV.get(64),
+
+                GTOreDictUnificator.get(OrePrefixes.plate, RadoxPolymer, 64),
+                ItemList.Circuit_Chip_Biocell.get(64),
+                ItemList.Circuit_Chip_Biocell.get(64),
+                GTOreDictUnificator.get(OrePrefixes.plate, RadoxPolymer, 64)
+            },
+            new FluidStack[]{
+                MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
+                GGMaterial.preciousMetalAlloy.getMolten(144 * 128),
+                Materials.SuperCoolant.getFluid(1000 * 512),
+                Materials.UUMatter.getFluid(1000 * 512)
+            },
+            GTCMItemList.IntegratedAssemblyMatrix.get(1),
+            20 * 1800,
+            (int) RECIPE_UEV
+        );
         // endregion
 
     }
