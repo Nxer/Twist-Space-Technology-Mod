@@ -186,7 +186,7 @@ public class LapotronChipRecipes {
             .duration(20 * 60)
             .addTo(RecipeMaps.laserEngraverRecipes);
 
-        TST_RecipeBuilder.builder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EngravedEnergyExposedChip.get(1),
                 Materials.Gold.getNanite(1),
@@ -203,12 +203,12 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.ExcitedDTEC.getFluid(8000),
                 Materials.Infinity.getMolten(144 * 16))
             .itemOutputs(GTCMItemList.PerfectEngravedEnergyChip.get(1))
-            .eut(TierEU.RECIPE_UEV)
+            .eut(TierEU.RECIPE_UHV)
             .duration(20 * 60)
-            .specialValue(1)
+            .metadata(IGRecipeMaps.MODULE_TIER, 1)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
-        TST_RecipeBuilder.builder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EngravedEnergyExposedChip.get(4),
                 Materials.Gold.getNanite(4),
@@ -227,10 +227,10 @@ public class LapotronChipRecipes {
             .itemOutputs(GTCMItemList.PerfectEngravedEnergyChip.get(4))
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
-            .specialValue(2)
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
-        TST_RecipeBuilder.builder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EngravedEnergyExposedChip.get(16),
                 Materials.Gold.getNanite(16),
@@ -247,9 +247,9 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.PhononMedium.getFluid(500 * 8),
                 MaterialsUEVplus.Time.getMolten(72 * 16))
             .itemOutputs(GTCMItemList.PerfectEngravedEnergyChip.get(16))
-            .eut(TierEU.RECIPE_UMV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
-            .specialValue(2)
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         // Perfect Lapotron Chip
@@ -277,7 +277,7 @@ public class LapotronChipRecipes {
             .duration(20 * 120)
             .addTo(RecipeMaps.laserEngraverRecipes);
 
-        TST_RecipeBuilder.builder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EngravedLaptronExposedChip.get(1),
                 MaterialsUEVplus.TranscendentMetal.getNanite(1),
@@ -296,10 +296,10 @@ public class LapotronChipRecipes {
             .itemOutputs(GTCMItemList.PerfectEngravedLaptronChip.get(1))
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
-            .specialValue(2)
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
-        TST_RecipeBuilder.builder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EngravedLaptronExposedChip.get(4),
                 MaterialsUEVplus.TranscendentMetal.getNanite(4),
@@ -316,12 +316,12 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(4000),
                 MaterialsUEVplus.Space.getMolten(72 * 8))
             .itemOutputs(GTCMItemList.PerfectEngravedLaptronChip.get(4))
-            .eut(TierEU.RECIPE_UMV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
-            .specialValue(2)
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
-        TST_RecipeBuilder.builder()
+        GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.EngravedLaptronExposedChip.get(16),
                 MaterialsUEVplus.TranscendentMetal.getNanite(16),
@@ -338,9 +338,9 @@ public class LapotronChipRecipes {
                 MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(8000),
                 MaterialsUEVplus.Space.getMolten(72 * 16))
             .itemOutputs(GTCMItemList.PerfectEngravedLaptronChip.get(16))
-            .eut(TierEU.RECIPE_UXV)
+            .eut(TierEU.RECIPE_UIV)
             .duration(20 * 60)
-            .specialValue(2)
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
             .addTo(IGRecipeMaps.spaceAssemblerRecipes);
 
         // UltimateEnergyFlowCircuit
