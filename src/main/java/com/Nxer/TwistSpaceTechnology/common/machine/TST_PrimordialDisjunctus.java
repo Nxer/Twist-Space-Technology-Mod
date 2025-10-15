@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -197,11 +198,11 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                         onElementPass(TST_PrimordialDisjunctus::onCasingFound, ofBlock(Loaders.magicCasing, 0))))
                 .addElement(
                     'C',
-                    ofSpecificTileAdder(
-                        TST_PrimordialDisjunctus::addEssentiaInputHatchToMachineList,
-                        TileEssentiaProvider.class,
-                        BlockEnum.ESSENTIA_PROVIDER.getBlock(),
-                        0))
+                    ofChain(
+                        ofAccurateTileAdder(
+                            TST_PrimordialDisjunctus::addEssentiaInputHatchToMachineList,
+                            BlockEnum.ESSENTIA_PROVIDER.getBlock(),
+                            0)))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))
                 .addElement('E', gregtech.api.enums.HatchElement.Muffler.newAny(CASING_INDEX, 2))
                 .addElement(
@@ -331,8 +332,11 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         return false;
     }
 
-    private boolean addEssentiaInputHatchToMachineList(TileEssentiaProvider te) {
-        return te != null && mEssentiaInputHatches.add(te);
+    private boolean addEssentiaInputHatchToMachineList(TileEntity te) {
+        if (te instanceof TileEssentiaProvider provider) {
+            return mEssentiaInputHatches.add(provider);
+        }
+        return false;
     }
 
     protected void onCasingFound() {
