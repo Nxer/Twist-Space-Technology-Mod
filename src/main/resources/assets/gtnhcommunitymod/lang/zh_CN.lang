@@ -870,7 +870,7 @@ tst.computer.desc.2=冷却液：§60.001§7，超级冷却液：§60.01§7
 tst.computer.desc.3=如果安装了星辉魔法，则星能液提供额外的10倍率。
 tst.computer.desc.4=每次运算将会消耗掉当前输入仓中所有输入的液体。如果输入多种冷却液会生效随机一种。
 tst.computer.desc.5=超频公式 倍率=§61+LOG(1.0 + 流体数量*倍率*当前热量)§7
-tst.computer.desc.6=在控制器中摆放一个无线量子升级芯片来开启无线模式！
+tst.computer.desc.6=在控制器中摆放一个无线算力网络升级芯片来开启无线模式！
 tst.computer.desc.7=警告：多个星规阵列同时开启无线模式会导致量子退相干使得无线网络紊乱。请不要这么做
 tst.computer.desc.8=无需给无线光学主接口与副接口涂色
 tst.computer.desc.11=右键给无线光学副接口设置算力需求。
@@ -2235,7 +2235,7 @@ TST_LargeSolarBoiler.tooltip.08=运行
 TST_LargeSolarBoiler.tooltip.09=小时之后机器将逐渐发生钙化, 直到将蒸汽产出率降低至原产出的:
 TST_LargeSolarBoiler.tooltip.10=大约需要
 TST_LargeSolarBoiler.tooltip.11=小时达到最大钙化程度. 在GUI内手动点击按钮清除机器的钙化.
-TST_LargeSolarBoiler.tooltip.17=使用§b蒸馏室§7不会提高钙化程度.
+TST_LargeSolarBoiler.tooltip.17=使用§b蒸馏水§7不会提高钙化程度.
 TST_LargeSolarBoiler.tooltip.16=当温度达到50%后再加水会引起§c爆炸§7.
 TST_LargeSolarBoiler.tooltip.12=拥有两个等级: §6青铜§7 | §8钢§7
 TST_LargeSolarBoiler.tooltip.13=最大蒸汽产速:
