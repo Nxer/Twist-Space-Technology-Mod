@@ -599,7 +599,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             .addInfo(
                 // #tr TST_LargeSolarBoiler.tooltip.17
                 // # Use §bdistilled water§7 to prevent calcification.
-                // #zh_CN 使用§b蒸馏室§7不会提高钙化程度.
+                // #zh_CN 使用§b蒸馏水§7不会提高钙化程度.
                 TextEnums.tr("TST_LargeSolarBoiler.tooltip.17"))
             .addSeparator()
             .addInfo(
