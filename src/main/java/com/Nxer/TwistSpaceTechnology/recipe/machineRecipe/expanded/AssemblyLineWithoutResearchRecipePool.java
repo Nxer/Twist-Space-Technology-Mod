@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -291,12 +292,12 @@ public class AssemblyLineWithoutResearchRecipePool {
                 .itemInputs(
                     GTCMItemList.SolarSail.get(16),
                     GTCMItemList.StellarConstructionFrameMaterial.get(4),
-                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 24),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 24),
                     ItemList.Circuit_Wafer_QPIC.get(32),
                     ItemList.Emitter_UMV.get(4),
                     ItemList.Sensor_UMV.get(4))
                 .fluidInputs(new FluidStack(solderUEV, 144 * 256))
-                .itemOutputs(DysonSwarmModule.get(16384))
+                .itemOutputs(setStackSize(DysonSwarmModule.get(1), 16384))
                 .eut(100000000)
                 .duration(20 * 50)
                 .addTo(MASL);
