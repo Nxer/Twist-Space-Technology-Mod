@@ -93,7 +93,7 @@ public class IndustrialMagicMatrixRecipePool {
                 .clearInvalid()
                 .special(Essence)
                 .metadata(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, i)
-                .itemInputsUnified(checkInputSpecial(Recipe.getInputItem()))
+                .itemInputs(checkInputSpecial(Recipe.getInputItem()))
                 .itemOutputs((Recipe.getOutput()))
                 .fluidInputs()
                 .fluidOutputs()
