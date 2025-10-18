@@ -404,7 +404,7 @@ F -> ofBlock...(gt.blockframes, 305, ...);
                         + TextEnums.tr("TST_UniversalGenerator.gui.06")
                         + " "
                         + EnumChatFormatting.GOLD
-                        + numberFormat.format(fuelBurning)
+                        + numberFormat.format(1000.0 / fuelBurning)
                         + EnumChatFormatting.WHITE
                         // #tr TST_SteamBasicGenerator.gui.02
                         // # /s
