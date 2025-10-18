@@ -129,9 +129,10 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
         int outputFluidAmount = parallel * Config.BasicDistilledWaterCost_NetherInterface;
 
         int waterToCost = outputFluidAmount;
+        if (waterToCost <= 0) return CheckRecipeResultRegistry.NO_RECIPE;
         for (FluidStack f : distilledWaters) {
             if (f.amount >= waterToCost) {
-                f.amount -= (int) waterAmount;
+                f.amount -= waterToCost;
                 break;
             } else {
                 waterToCost -= f.amount;
