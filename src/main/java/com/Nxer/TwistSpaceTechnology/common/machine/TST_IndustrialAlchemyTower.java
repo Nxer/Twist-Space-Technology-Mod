@@ -201,7 +201,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         }
                     }
 
-                    if (aspectMaxParallel.get(aspect) == 0) {
+                    if (aspectMaxParallel.getOrDefault(aspect, 0) == 0) {
                         return Essentia_InsentiaL;
                     }
                 }
