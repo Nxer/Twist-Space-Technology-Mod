@@ -1154,7 +1154,10 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             else if (coolant != null && coolant.getFluid() == fluid.getFluid()) coolant.amount += fluid.amount;
         }
         // LOG.info("coolant is null?" + (coolant == null));
-        if (coolant == null) return prevHeat;
+        if (coolant == null || coolant.amount <= 0) {
+            multiplier = 1.0;
+            return prevHeat;
+        }
         double maxHeatCanCool = validCoolant(coolant) * coolant.amount;
         multiplier = 1.0 + Math.log10(1.0 + maxHeatCanCool * prevHeat);
         long realHeatCanCool = (int) Math.min(maxHeatCanCool, (prevHeat - (prevHeat / (multiplier * multiplier))));
