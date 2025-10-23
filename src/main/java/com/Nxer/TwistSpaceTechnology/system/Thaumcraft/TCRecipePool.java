@@ -311,7 +311,7 @@ public class TCRecipePool {
                         .merge(Aspect.MAGIC, 32)
                         .merge(Aspect.SOUL, 32),
                     DISCRETIZER.stack(),
-                    new ItemStack[] { new ItemStack(itemZombieBrain, 1), ItemList.Conveyor_Module_IV.get(1),
+                    new ItemStack[] { new ItemStack(itemZombieBrain, 1), new ItemStack(blockMetalDevice, 1, 9),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
         }

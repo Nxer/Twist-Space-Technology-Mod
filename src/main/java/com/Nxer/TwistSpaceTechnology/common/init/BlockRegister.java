@@ -94,12 +94,6 @@ public class BlockRegister {
         GameRegistry.registerTileEntity(TileEntityLaserBeacon.class, "MeteorMinerRenderer");
         GameRegistry.registerBlock(BlockLargeSolarBoilerRender, BlockLargeSolarBoilerRender.unlocalizedName);
         GameRegistry.registerTileEntity(TileLargeSolarBoilerRender.class, "TileLargeSolarBoilerRender");
-        // GameRegistry.registerBlock(
-        // TstBlocks.BlockEssentiaDiscretizer,
-        // BlockEssentiaDiscretizer.ItemBlockEssentiaDiscretizer.class,
-        // BlockEssentiaDiscretizer.NAME
-        // );
-        // GameRegistry.registerTileEntity(TileEssentiaDiscretizer.class, BlockEssentiaDiscretizer.NAME);
         GameRegistry.registerBlock(TstBlocks.TimeBendingSpeedRune, "TimeBendingSpeedRune");
     }
 
