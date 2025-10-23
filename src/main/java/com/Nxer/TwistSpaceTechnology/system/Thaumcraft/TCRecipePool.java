@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.BloodArsenal;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
+import static com.glodblock.github.loader.ItemAndBlockHolder.DISCRETIZER;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static goodgenerator.loader.Loaders.huiCircuit;
 import static gregtech.api.enums.ItemList.Automation_ChestBuffer_IV;
@@ -17,11 +18,13 @@ import static kubatech.api.enums.ItemList.ExtremeIndustrialGreenhouse;
 import static net.minecraft.init.Items.diamond_sword;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
+import static thaumcraft.common.config.ConfigItems.itemZombieBrain;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
@@ -56,6 +59,7 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipePrimordialDisjunctus;
     public static InfusionRecipe infusionRecipeSkypiercerTower;
     public static InfusionRecipe infusionRecipeInfusionMaterialDispenser;
+    public static InfusionRecipe infusionRecipeEssentiaDiscretizer;
     public static CrucibleRecipe crucibleRecipeArcaneHole;
 
     public static void loadRecipes() {
@@ -207,7 +211,7 @@ public class TCRecipePool {
                         ItemList.Hatch_Input_IV.get(1),
                         new ItemStack[] { new ItemStack(WayofTime.alchemicalWizardry.ModItems.weakBloodOrb),
                             new ItemStack(WayofTime.alchemicalWizardry.ModItems.sacrificialDagger),
-                            new ItemStack(ConfigItems.itemZombieBrain), new ItemStack(ConfigItems.itemZombieBrain), });
+                            new ItemStack(itemZombieBrain), new ItemStack(itemZombieBrain), });
                 }
                 infusionRecipeTimeBendingSpeedRune = ThaumcraftApi.addInfusionCraftingRecipe(
                     "TIME_BENDING_SPEED_RUNE",
@@ -294,9 +298,20 @@ public class TCRecipePool {
                         .merge(Aspect.EXCHANGE, 32)
                         .merge(Aspect.MAN, 32),
                     Automation_ChestBuffer_IV.get(1),
-                    new ItemStack[] { new ItemStack(ConfigItems.itemWandCasting, 1),
-                        new ItemStack(ConfigItems.itemWandCasting, 1), new ItemStack(ConfigItems.itemWandCasting, 1),
-                        ItemList.Conveyor_Module_IV.get(1),
+                    new ItemStack[] { new ItemStack(ConfigItems.itemWandCasting, 1), ItemList.Conveyor_Module_IV.get(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
+            }
+            if (Config.Enable_EssentiaDiscretizer) {
+                infusionRecipeEssentiaDiscretizer = ThaumcraftApi.addInfusionCraftingRecipe(
+                    "ESSENTIA_DISCRETIZER",
+                    BlockEssentiaDiscretizer.stack(),
+                    6,
+                    new AspectList().merge(Aspect.MECHANISM, 32)
+                        .merge(Aspect.MAN, 32)
+                        .merge(Aspect.MAGIC, 32)
+                        .merge(Aspect.SOUL, 32),
+                    DISCRETIZER.stack(),
+                    new ItemStack[] { new ItemStack(itemZombieBrain, 1), ItemList.Conveyor_Module_IV.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
         }

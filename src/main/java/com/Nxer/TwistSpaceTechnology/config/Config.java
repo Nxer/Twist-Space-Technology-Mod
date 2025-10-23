@@ -533,6 +533,10 @@ public class Config {
     public static boolean Enable_InfusionMaterialDispenser =true ;
     // endregion
 
+    // region Infusion Material Dispenser
+    public static boolean Enable_EssentiaDiscretizer =true ;
+    // endregion
+
     // region Nether Interface
     public static int CycleTime_NetherInterface = 20 * 60;
     public static int MaxParallel_NetherInterface = 64;

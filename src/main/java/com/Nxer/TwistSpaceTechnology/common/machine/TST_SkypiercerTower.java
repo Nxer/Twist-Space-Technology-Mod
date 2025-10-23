@@ -3,7 +3,12 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_1;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BlockArcane_4;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerRing_SkypiercerTower;
+import static com.Nxer.TwistSpaceTechnology.util.AspectLevelCalculator.BASE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.util.AspectLevelCalculator.computeAspectLevel;
+import static com.Nxer.TwistSpaceTechnology.util.AspectLevelCalculator.computeAspectSynthesisTime;
+import static com.Nxer.TwistSpaceTechnology.util.ItemEssentiaHelper.createCrystal;
+import static com.Nxer.TwistSpaceTechnology.util.ItemEssentiaHelper.findCombinedAspectCached;
+import static com.Nxer.TwistSpaceTechnology.util.ItemEssentiaHelper.readAspectFromCrystal;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTile;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileExt;
@@ -46,8 +51,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import org.jetbrains.annotations.NotNull;
-
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
@@ -72,12 +76,15 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
+import journeymap.shadow.org.jetbrains.annotations.NotNull;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -109,9 +116,11 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     private static int RECIPE_DURATION = 32;
     private static final int RECIPE_EUT = 1920;
     private static final int SECOND_IN_TICKS = 20;
+
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_RINGS = "rings";
     private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
+    private static int MachineMode = 0;
 
     @Override
     protected void clearHatches_EM() {
@@ -221,7 +230,9 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                             .atLeast(
                                 gregtech.api.enums.HatchElement.Energy,
                                 gregtech.api.enums.HatchElement.InputBus,
-                                gregtech.api.enums.HatchElement.OutputBus)
+                                gregtech.api.enums.HatchElement.OutputBus,
+                                gregtech.api.enums.HatchElement.InputHatch,
+                                gregtech.api.enums.HatchElement.OutputHatch)
                             .casingIndex(176)
                             .dot(1)
                             .build(),
@@ -428,17 +439,211 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
 
     // wtf, why is AspectList a LinkHashMap that I find out after I write it, so there's no way to check the aspects in
     // full order.
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.SkypiercerTower;
+    }
+
+    // createProcessingLogic hava some bizarre problems which I can't solve.
+    // So, in reality, recipesPool doesn't work.
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return super.createProcessingLogic();
+    };
+
     @Override
     public @NotNull CheckRecipeResult checkProcessing_EM() {
         RECIPE_DURATION = 0;
         ResetOutputs();
-
-        // Check for any requested aspect
         ArrayList<ItemStack> tItemsList = getStoredInputs();
+
+        // === [CHALLENGE MODE] ===
+        MachineMode = 0;
+        if (getControllerSlot() != null && getControllerSlot().getDisplayName() != null) {
+            String name = getControllerSlot().getDisplayName()
+                .toUpperCase();
+            if (name.contains("NORMAL")) {
+                MachineMode = 1;
+            }
+            if (name.contains("CHALLENGE")) {
+                MachineMode = 2;
+            }
+        }
+
+        if (MachineMode == 2) {
+            if (mTileInfusionProvider.isEmpty()) {
+                return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("No Infusion Provider found.");
+            }
+            // I can't stand it anymore. Having too many providers will make the code complicated unnecessarily . Here,
+            // only one is allowed to simplify the code.
+            if (mTileInfusionProvider.size() > 1) {
+                return SimpleCheckRecipeResult
+                    .ofFailurePersistOnShutdown("Multiple Infusion Providers found. Please connect only one.");
+            }
+            TileInfusionProvider provider = mTileInfusionProvider.get(0);
+            // Count all Aspects and their quantities in the supply.
+            Map<Aspect, Integer> aspectsInNetwork = new HashMap<>();
+            for (Aspect aspect : Aspect.aspects.values()) {
+                int amount = (int) provider.getAspectAmountInNetwork(aspect);
+                if (amount > 0) {
+                    aspectsInNetwork.put(aspect, amount);
+                }
+            }
+
+            // Find any Aspects that can be combined.
+            Aspect compA = null, compB = null, resultAspect = null;
+            outer: for (Aspect a : aspectsInNetwork.keySet()) {
+                for (Aspect b : aspectsInNetwork.keySet()) {
+                    if (a == b) continue;
+                    Aspect cached = findCombinedAspectCached(a, b);
+                    if (cached != null) {
+                        compA = a;
+                        compB = b;
+                        resultAspect = cached;
+                        break outer;
+                    }
+                }
+            }
+
+            if (resultAspect == null) {
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+
+            // Determine parallel synthesis count
+            int parallel = Math.max(ringCount * 16, 1);
+            int availableA = aspectsInNetwork.getOrDefault(compA, 0);
+            int availableB = aspectsInNetwork.getOrDefault(compB, 0);
+            parallel = Math.min(parallel, Math.min(availableA, availableB));
+
+            // Consume aspects
+            boolean takenA = provider.takeFromContainer(compA, parallel);
+            boolean takenB = provider.takeFromContainer(compB, parallel);
+
+            if (!takenA || !takenB) {
+                return SimpleCheckRecipeResult.ofFailure("Failed to consume aspects from Infusion Provider.");
+            }
+
+            // Prepare output
+            AspectList outputAspects = new AspectList().add(resultAspect, parallel);
+            this.mOutputAspects.add(outputAspects);
+            this.mOutputAspectNames = new String[] { resultAspect.getName() };
+            this.mOutputAspectAmounts = new Integer[] { parallel };
+
+            // Calculate processing times and power
+            RECIPE_DURATION = BASE_DURATION * computeAspectSynthesisTime(resultAspect);
+            this.mEfficiencyIncrease = 10000;
+
+            OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
+                .setEUt(getMaxInputEu())
+                .setDuration(SECOND_IN_TICKS * RECIPE_DURATION)
+                .setDurationDecreasePerOC(4)
+                .calculate();
+
+            useLongPower = true;
+            lEUt = -calculator.getConsumption();
+            mMaxProgresstime = calculator.getDuration();
+
+            this.updateSlots();
+            return CheckRecipeResultRegistry.SUCCESSFUL;
+        }
+
+        // === [NORMAL MODE] ===
+        if (MachineMode == 1) {
+            ArrayList<ItemStack> inputs = getStoredInputs();
+            if (inputs.size() < 2) {
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+
+            Aspect resultAspect = null;
+            ItemStack first = null, second = null;
+            int availableFirst = 0, availableSecond = 0;
+
+            outer: for (int i = 0; i < inputs.size(); i++) {
+                ItemStack aStack = inputs.get(i);
+                if (aStack == null) continue;
+                Aspect aspectA = readAspectFromCrystal(aStack);
+                if (aspectA == null) continue;
+
+                for (int j = i + 1; j < inputs.size(); j++) {
+                    ItemStack bStack = inputs.get(j);
+                    if (bStack == null) continue;
+                    Aspect aspectB = readAspectFromCrystal(bStack);
+                    if (aspectB == null) continue;
+                    Aspect candidate = findCombinedAspectCached(aspectA, aspectB);
+                    if (candidate != null) {
+                        resultAspect = candidate;
+                        first = aStack;
+                        second = bStack;
+                        availableFirst = aStack.stackSize;
+                        availableSecond = bStack.stackSize;
+                        break outer;
+                    }
+                }
+            }
+
+            if (resultAspect == null) {
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+
+            int parallel = Math.max(ringCount * 16, 1);
+            parallel = Math.min(parallel, Math.min(availableFirst, availableSecond));
+
+            int remainingFirst = parallel;
+            int remainingSecond = parallel;
+            for (int i = 0; i < inputs.size(); i++) {
+                ItemStack s = inputs.get(i);
+                if (s == null) continue;
+
+                if (s == first && remainingFirst > 0) {
+                    int deduct = Math.min(s.stackSize, remainingFirst);
+                    s.stackSize -= deduct;
+                    remainingFirst -= deduct;
+                    if (s.stackSize <= 0) inputs.set(i, null);
+                }
+
+                if (s == second && remainingSecond > 0) {
+                    int deduct = Math.min(s.stackSize, remainingSecond);
+                    s.stackSize -= deduct;
+                    remainingSecond -= deduct;
+                    if (s.stackSize <= 0) inputs.set(i, null);
+                }
+
+                if (remainingFirst <= 0 && remainingSecond <= 0) break;
+            }
+
+            ItemStack outputCrystal = createCrystal(resultAspect, parallel);
+            this.mOutputItems = new ItemStack[] { outputCrystal };
+
+            AspectList outputAspects = new AspectList().add(resultAspect, parallel);
+            this.mOutputAspects.add(outputAspects);
+            this.mOutputAspectNames = new String[] { resultAspect.getName() };
+            this.mOutputAspectAmounts = new Integer[] { parallel };
+
+            this.updateSlots();
+
+            RECIPE_DURATION = BASE_DURATION * computeAspectSynthesisTime(resultAspect);
+            this.mEfficiencyIncrease = 10000;
+
+            OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
+                .setEUt(getMaxInputEu())
+                .setDuration(
+                    (int) (RECIPE_DURATION * SECOND_IN_TICKS / (ringCount == 0 ? 1 : Math.pow(1.2, ringCount))))
+                .calculate();
+
+            useLongPower = true;
+            lEUt = -calculator.getConsumption();
+            mMaxProgresstime = calculator.getDuration();
+
+            this.updateSlots();
+            return CheckRecipeResultRegistry.SUCCESSFUL;
+
+        }
+
+        // === [OLD MODE] ===
         if (tItemsList.isEmpty()) {
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
-
         // Max-heap is used to store preprocessing aspects0
         AspectList outputAspects = new AspectList();
         PriorityQueue<Map.Entry<Integer, AspectList>> PreprocessedAspectMaxHeap = new PriorityQueue<>(
@@ -558,8 +763,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             Aspect aspect = synthesisOrder.getAspects()[i];
             int amount = synthesisOrder.getAmount(aspect);
             int aspectLevel = computeAspectLevel(aspect);
-            int baseDuration = 2;
-            RECIPE_DURATION += amount * baseDuration * aspectLevel;
+            RECIPE_DURATION += amount * BASE_DURATION * aspectLevel;
         }
 
         // Aspect output and state quantity restoration
@@ -585,7 +789,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
             .setDuration((int) Math.ceil(SECOND_IN_TICKS * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
-            .setDurationDecreasePerOC(2)
+            .setDurationDecreasePerOC(4)
             .calculate();
 
         // The time coefficient of 20 comes from: Base synthesis time = 1 second (set 10)
@@ -756,28 +960,40 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
             // #tr Tooltip_SkypiercerTower_03
             // #en_US Synthesizes aspects from primal aspects. At 1A EV, an aspect takes its tier amount of seconds to synthesize.
-            // #zh_CN 从初等要素合成复合要素,至少1A EV,一个要素合成最少需要2s.
+            // #zh_CN 由初等要素合成复合要素,至少1A EV,一个要素合成最少需要2s.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
-            // #tr Tooltip_SkypiercerTower_04
-            // #en_US You can find the base synthesize time for each aspect on the research page in the Thaumonomicon.
-            // #zh_CN 你可以在魔导手册上查询各个要素的合成时间.
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_04"))
             // #tr Tooltip_SkypiercerTower_05
             // #en_US This machine is controlled using renamed items following this format 'AspectValue(+AspectValue+...)'. Where 'Aspect' is the aspect and 'Value' is the number requested per cycle. The '+' is an optional way to request multiple aspects from a single item.
             // #zh_CN 这台机器采用重命名的物体驱动,格式'AspectValue(+AspectValue+...)'即可制取Value数目的Aspect,而+可以继续书写多个请求要素.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
             // #tr Tooltip_SkypiercerTower_06
-            // #en_US Min voltage 1A EV, standard overclocks
-            // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
+            // #en_US Yes, the above is the old mode. You can still use it, but we recommend using the new mode instead.Specifically, it is necessary to insert the renamed paper into the controller.
+            // #zh_CN 是的,上面是旧模式,你仍然可以使用它,但是我们推荐使用新模式.具体来说需要在控制器内放入重命名的纸
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
             // #tr Tooltip_SkypiercerTower_07
-            // #en_US Each ring segment grants a 1600% speed boost that stacks additively.
-            // #zh_CN 每个环部增加16并行，但由于这台机器是单任务系统，对应的并行能力将转化为速度加成，即提供1600%的速度提升。
+            // #en_US Rename the paper 'NORMAL'.it is the Item Mode. Two CrystalEssences enter the input bus and be synthesized, then pop out onto the output bus. Each ring segment increases by 4 parallels and increases processing speed by 120%, with multiplicative stacking.
+            // #zh_CN 重命名为'Normal',此时为普通模式,两个晶化源质从输入总线进入合成后弹出至输出总线,每个环部增加4并行,并且处理速度提升至120%,叠乘计算.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
             // #tr Tooltip_SkypiercerTower_08
-            // #en_US TotalProcessingTime = ((AmountOfAspects * BaseSynthesizeTimeAspects) / (NumberOfRings * 16 or Minimum value 1)) / 2^NumberOfOverclocks
-            // #zh_CN 总处理时间 = ((要素数量 × 基础合成时间) / max(环数量 × 16, 1)) / 2^超频次数
+            // #en_US Rename the paper 'Challenge'.it is the Challenge Mode.The Infusion Provider supplies essentia, which is output through the Essentia Output Bus. Each ring adds 16 parallel operations and use prefect overclocks.
+            // #zh_CN 重命名为'Challenge',此时为挑战模式,由注魔供应器提供源质,源质输出仓输出,每个环部将增加16并行,并开启无损超频.
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_08"))
+            // #tr Tooltip_SkypiercerTower_09
+            // #en_US Min voltage 1A EV, standard overclocks
+            // #zh_CN 至少是EV电压,使用4/2超频,即每提升一次电压加工时间减半
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_09"))
+            // #tr Tooltip_SkypiercerTower_010
+            // #en_US If you are really unsure about how to complete the challenge without using the input/output bus to achieve higher efficiency, you can refer to the Thaumonomicon for hints.
+            // #zh_CN 如果你实在不清楚如何在不使用输入输出总线的情况下完成挑战以获取更高的产能,可以翻看魔导手册以获取提示.
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_010"))
+            // #tr Tooltip_SkypiercerTower_011
+            // #en_US Finally, whether bus or priveder, the blocking mode should be enabled, which means only one Essence should be synthesized at a time
+            // #zh_CN 最后无论是输入总线或者注魔供应器,都应该开启阻挡模式,也就是一次只进行一种源质的合成
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_011"))
+            // #tr Tooltip_SkypiercerTower_012
+            // #en_US To avoid interference in the synthesis or other unexpected situations caused by the code (These processing logic are handwritten, so they are not as complete as the original code. For instance, they do not support color storage and do not support parallel processing across formulas..).
+            // #zh_CN 以避免合成干扰或者因为代码而出现的额外情况(这些处理逻辑是手写的,因此不像原版的代码健壮,譬如不支持染色仓,也没有跨配方并行).
+            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_012"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
@@ -791,10 +1007,14 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             // #tr Tooltip_SkypiercerTower_EnergyHatch
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            .addEnergyHatch(TextEnums.tr("Tooltip_SkypiercerTower_EnergyHatch"))
-            // #tr Tooltip_SkypiercerTower_InfusionProvider
+            .addOutputBus(TextEnums.tr("Tooltip_SkypiercerTower_InputBusInfo"))
+            // #tr Tooltip_SkypiercerTower_EnergyHatch
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
+            .addEnergyHatch(TextEnums.tr("Tooltip_SkypiercerTower_EnergyHatch"))
+            // #tr Tooltip_SkypiercerTower_InfusionProvider
+            // #en_US Replace any chemically inert machine casing.Only one is allowed.
+            // #zh_CN 任何舱室替换化学惰性方块,只允许有一个.
             // #tr Tooltip.InfusionProvider
             // # Infusion Provider
             // #zh_CN 注魔供应器
