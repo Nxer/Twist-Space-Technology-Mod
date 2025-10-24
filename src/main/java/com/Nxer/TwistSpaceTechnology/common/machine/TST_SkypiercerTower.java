@@ -472,208 +472,194 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         }
 
         if (MachineMode == 2) {
-            if (mTileInfusionProvider.isEmpty()) {
-                return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("No Infusion Provider found.");
-            }
-            // I can't stand it anymore. Having too many providers will make the code complicated unnecessarily . Here,
-            // only one is allowed to simplify the code.
-            if (mTileInfusionProvider.size() > 1) {
-                return SimpleCheckRecipeResult
-                    .ofFailurePersistOnShutdown("Multiple Infusion Providers found. Please connect only one.");
-            }
-            TileInfusionProvider provider = mTileInfusionProvider.get(0);
-            // Count all Aspects and their quantities in the supply.
-            Map<Aspect, Integer> aspectsInNetwork = new HashMap<>();
-            for (Aspect aspect : Aspect.aspects.values()) {
-                int amount = (int) provider.getAspectAmountInNetwork(aspect);
-                if (amount > 0) {
-                    aspectsInNetwork.put(aspect, amount);
-                }
-            }
+            return processChallengeMode();
+        } else if (MachineMode == 1) {
+            return processNormalMode();
+        } else {
+            return processOldMode(tItemsList);
+        }
+    }
 
-            // Find any Aspects that can be combined.
-            Aspect compA = null, compB = null, resultAspect = null;
-            outer: for (Aspect a : aspectsInNetwork.keySet()) {
-                for (Aspect b : aspectsInNetwork.keySet()) {
-                    if (a == b) continue;
-                    Aspect cached = findCombinedAspectCached(a, b);
-                    if (cached != null) {
-                        compA = a;
-                        compB = b;
-                        resultAspect = cached;
-                        break outer;
-                    }
-                }
-            }
-
-            if (resultAspect == null) {
-                return CheckRecipeResultRegistry.NO_RECIPE;
-            }
-
-            // Determine parallel synthesis count
-            int parallel = Math.max(ringCount * 16, 1);
-            int availableA = aspectsInNetwork.getOrDefault(compA, 0);
-            int availableB = aspectsInNetwork.getOrDefault(compB, 0);
-            parallel = Math.min(parallel, Math.min(availableA, availableB));
-
-            // Consume aspects
-            boolean takenA = provider.takeFromContainer(compA, parallel);
-            boolean takenB = provider.takeFromContainer(compB, parallel);
-
-            if (!takenA || !takenB) {
-                return SimpleCheckRecipeResult.ofFailure("Failed to consume aspects from Infusion Provider.");
-            }
-
-            // Prepare output
-            AspectList outputAspects = new AspectList().add(resultAspect, parallel);
-            this.mOutputAspects.add(outputAspects);
-            this.mOutputAspectNames = new String[] { resultAspect.getName() };
-            this.mOutputAspectAmounts = new Integer[] { parallel };
-
-            // Calculate processing times and power
-            RECIPE_DURATION = BASE_DURATION * computeAspectSynthesisTime(resultAspect);
-            this.mEfficiencyIncrease = 10000;
-
-            OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
-                .setEUt(getMaxInputEu())
-                .setDuration(SECOND_IN_TICKS * RECIPE_DURATION)
-                .setDurationDecreasePerOC(4)
-                .calculate();
-
-            useLongPower = true;
-            lEUt = -calculator.getConsumption();
-            mMaxProgresstime = calculator.getDuration();
-
-            this.updateSlots();
-            return CheckRecipeResultRegistry.SUCCESSFUL;
+    /**
+     * === [MODE 2: CHALLENGE MODE] ===
+     */
+    private @NotNull CheckRecipeResult processChallengeMode() {
+        if (mTileInfusionProvider.isEmpty()) {
+            return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("No Infusion Provider found.");
+        }
+        if (mTileInfusionProvider.size() > 1) {
+            return SimpleCheckRecipeResult
+                .ofFailurePersistOnShutdown("Multiple Infusion Providers found. Please connect only one.");
         }
 
-        // === [NORMAL MODE] ===
-        if (MachineMode == 1) {
-            ArrayList<ItemStack> inputs = getStoredInputs();
-            if (inputs.size() < 2) {
-                return CheckRecipeResultRegistry.NO_RECIPE;
-            }
-
-            Aspect resultAspect = null;
-            ItemStack first = null, second = null;
-            int availableFirst = 0, availableSecond = 0;
-
-            outer: for (int i = 0; i < inputs.size(); i++) {
-                ItemStack aStack = inputs.get(i);
-                if (aStack == null) continue;
-                Aspect aspectA = readAspectFromCrystal(aStack);
-                if (aspectA == null) continue;
-
-                for (int j = i + 1; j < inputs.size(); j++) {
-                    ItemStack bStack = inputs.get(j);
-                    if (bStack == null) continue;
-                    Aspect aspectB = readAspectFromCrystal(bStack);
-                    if (aspectB == null) continue;
-                    Aspect candidate = findCombinedAspectCached(aspectA, aspectB);
-                    if (candidate != null) {
-                        resultAspect = candidate;
-                        first = aStack;
-                        second = bStack;
-                        availableFirst = aStack.stackSize;
-                        availableSecond = bStack.stackSize;
-                        break outer;
-                    }
-                }
-            }
-
-            if (resultAspect == null) {
-                return CheckRecipeResultRegistry.NO_RECIPE;
-            }
-
-            int parallel = Math.max(ringCount * 16, 1);
-            parallel = Math.min(parallel, Math.min(availableFirst, availableSecond));
-
-            int remainingFirst = parallel;
-            int remainingSecond = parallel;
-            for (int i = 0; i < inputs.size(); i++) {
-                ItemStack s = inputs.get(i);
-                if (s == null) continue;
-
-                if (s == first && remainingFirst > 0) {
-                    int deduct = Math.min(s.stackSize, remainingFirst);
-                    s.stackSize -= deduct;
-                    remainingFirst -= deduct;
-                    if (s.stackSize <= 0) inputs.set(i, null);
-                }
-
-                if (s == second && remainingSecond > 0) {
-                    int deduct = Math.min(s.stackSize, remainingSecond);
-                    s.stackSize -= deduct;
-                    remainingSecond -= deduct;
-                    if (s.stackSize <= 0) inputs.set(i, null);
-                }
-
-                if (remainingFirst <= 0 && remainingSecond <= 0) break;
-            }
-
-            ItemStack outputCrystal = createCrystal(resultAspect, parallel);
-            this.mOutputItems = new ItemStack[] { outputCrystal };
-
-            AspectList outputAspects = new AspectList().add(resultAspect, parallel);
-            this.mOutputAspects.add(outputAspects);
-            this.mOutputAspectNames = new String[] { resultAspect.getName() };
-            this.mOutputAspectAmounts = new Integer[] { parallel };
-
-            this.updateSlots();
-
-            RECIPE_DURATION = BASE_DURATION * computeAspectSynthesisTime(resultAspect);
-            this.mEfficiencyIncrease = 10000;
-
-            OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
-                .setEUt(getMaxInputEu())
-                .setDuration(
-                    (int) (RECIPE_DURATION * SECOND_IN_TICKS / (ringCount == 0 ? 1 : Math.pow(1.2, ringCount))))
-                .calculate();
-
-            useLongPower = true;
-            lEUt = -calculator.getConsumption();
-            mMaxProgresstime = calculator.getDuration();
-
-            this.updateSlots();
-            return CheckRecipeResultRegistry.SUCCESSFUL;
-
+        TileInfusionProvider provider = mTileInfusionProvider.get(0);
+        Map<Aspect, Integer> aspectsInNetwork = new HashMap<>();
+        for (Aspect aspect : Aspect.aspects.values()) {
+            int amount = (int) provider.getAspectAmountInNetwork(aspect);
+            if (amount > 0) aspectsInNetwork.put(aspect, amount);
         }
 
-        // === [OLD MODE] ===
-        if (tItemsList.isEmpty()) {
+        Aspect compA = null, compB = null, resultAspect = null;
+        outer: for (Aspect a : aspectsInNetwork.keySet()) {
+            for (Aspect b : aspectsInNetwork.keySet()) {
+                if (a == b) continue;
+                Aspect cached = findCombinedAspectCached(a, b);
+                if (cached != null) {
+                    compA = a;
+                    compB = b;
+                    resultAspect = cached;
+                    break outer;
+                }
+            }
+        }
+
+        if (resultAspect == null) return CheckRecipeResultRegistry.NO_RECIPE;
+
+        int parallel = Math.max(ringCount * 16, 1);
+        int availableA = aspectsInNetwork.getOrDefault(compA, 0);
+        int availableB = aspectsInNetwork.getOrDefault(compB, 0);
+        parallel = Math.min(parallel, Math.min(availableA, availableB));
+
+        boolean takenA = provider.takeFromContainer(compA, parallel);
+        boolean takenB = provider.takeFromContainer(compB, parallel);
+        if (!takenA || !takenB) {
+            return SimpleCheckRecipeResult.ofFailure("Failed to consume aspects from Infusion Provider.");
+        }
+
+        AspectList outputAspects = new AspectList().add(resultAspect, parallel);
+        this.mOutputAspects.add(outputAspects);
+        this.mOutputAspectNames = new String[] { resultAspect.getName() };
+        this.mOutputAspectAmounts = new Integer[] { parallel };
+
+        RECIPE_DURATION = BASE_DURATION * computeAspectSynthesisTime(resultAspect);
+        this.mEfficiencyIncrease = 10000;
+
+        OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
+            .setEUt(getMaxInputEu())
+            .setDuration(SECOND_IN_TICKS * RECIPE_DURATION)
+            .setDurationDecreasePerOC(4)
+            .calculate();
+
+        useLongPower = true;
+        lEUt = -calculator.getConsumption();
+        mMaxProgresstime = calculator.getDuration();
+        this.updateSlots();
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    /**
+     * === [MODE 1: NORMAL MODE] ===
+     */
+    private @NotNull CheckRecipeResult processNormalMode() {
+        ArrayList<ItemStack> inputs = getStoredInputs();
+        if (inputs.size() < 2) {
             return CheckRecipeResultRegistry.NO_RECIPE;
         }
-        // Max-heap is used to store preprocessing aspects0
+
+        Aspect resultAspect = null;
+        ItemStack first = null, second = null;
+        int availableFirst = 0, availableSecond = 0;
+
+        outer: for (int i = 0; i < inputs.size(); i++) {
+            ItemStack aStack = inputs.get(i);
+            if (aStack == null) continue;
+            Aspect aspectA = readAspectFromCrystal(aStack);
+            if (aspectA == null) continue;
+            for (int j = i + 1; j < inputs.size(); j++) {
+                ItemStack bStack = inputs.get(j);
+                if (bStack == null) continue;
+                Aspect aspectB = readAspectFromCrystal(bStack);
+                if (aspectB == null) continue;
+                Aspect candidate = findCombinedAspectCached(aspectA, aspectB);
+                if (candidate != null) {
+                    resultAspect = candidate;
+                    first = aStack;
+                    second = bStack;
+                    availableFirst = aStack.stackSize;
+                    availableSecond = bStack.stackSize;
+                    break outer;
+                }
+            }
+        }
+
+        if (resultAspect == null) return CheckRecipeResultRegistry.NO_RECIPE;
+
+        int parallel = Math.max(ringCount * 16, 1);
+        parallel = Math.min(parallel, Math.min(availableFirst, availableSecond));
+
+        int remainingFirst = parallel;
+        int remainingSecond = parallel;
+        for (int i = 0; i < inputs.size(); i++) {
+            ItemStack s = inputs.get(i);
+            if (s == null) continue;
+            if (s == first && remainingFirst > 0) {
+                int deduct = Math.min(s.stackSize, remainingFirst);
+                s.stackSize -= deduct;
+                remainingFirst -= deduct;
+                if (s.stackSize <= 0) inputs.set(i, null);
+            }
+            if (s == second && remainingSecond > 0) {
+                int deduct = Math.min(s.stackSize, remainingSecond);
+                s.stackSize -= deduct;
+                remainingSecond -= deduct;
+                if (s.stackSize <= 0) inputs.set(i, null);
+            }
+            if (remainingFirst <= 0 && remainingSecond <= 0) break;
+        }
+
+        ItemStack outputCrystal = createCrystal(resultAspect, parallel);
+        this.mOutputItems = new ItemStack[] { outputCrystal };
+
+        AspectList outputAspects = new AspectList().add(resultAspect, parallel);
+        this.mOutputAspects.add(outputAspects);
+        this.mOutputAspectNames = new String[] { resultAspect.getName() };
+        this.mOutputAspectAmounts = new Integer[] { parallel };
+        this.updateSlots();
+
+        RECIPE_DURATION = BASE_DURATION * computeAspectSynthesisTime(resultAspect);
+        this.mEfficiencyIncrease = 10000;
+
+        OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
+            .setEUt(getMaxInputEu())
+            .setDuration((int) (RECIPE_DURATION * SECOND_IN_TICKS / (ringCount == 0 ? 1 : Math.pow(1.2, ringCount))))
+            .calculate();
+
+        useLongPower = true;
+        lEUt = -calculator.getConsumption();
+        mMaxProgresstime = calculator.getDuration();
+        this.updateSlots();
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    /**
+     * === [MODE 0: OLD MODE] ===
+     */
+    private @NotNull CheckRecipeResult processOldMode(ArrayList<ItemStack> tItemsList) {
+        if (tItemsList.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+
         AspectList outputAspects = new AspectList();
         PriorityQueue<Map.Entry<Integer, AspectList>> PreprocessedAspectMaxHeap = new PriorityQueue<>(
             (entry1, entry2) -> Integer.compare(entry2.getKey(), entry1.getKey()));
 
-        // Add all the requested aspects
         for (ItemStack itemStack : tItemsList) {
             String localizedName = itemStack.getDisplayName()
                 .toUpperCase();
-
             String[] parts = localizedName.split("\\+");
-
             for (String part : parts) {
                 String aspectName = part.replaceAll("[^A-Za-z]", "");
                 if (aspectName.isEmpty()) {
                     return SimpleCheckRecipeResult.ofFailure(
                         "Invalid request [" + localizedName + "] Couldn't find aspect name in part [" + part + "]");
                 }
-
                 String literalAmount = part.replaceAll("[^0-9]", "");
                 if (literalAmount.isEmpty()) {
                     return SimpleCheckRecipeResult.ofFailure(
                         "Invalid request [" + localizedName + "] Couldn't find amount in part [" + literalAmount + "]");
                 }
-
                 Aspect aspect = getAspectByName(aspectName);
                 if (aspect == null) {
                     return SimpleCheckRecipeResult.ofFailure("Unknown aspect name: " + aspectName);
                 }
-
                 int amount = Integer.parseInt(literalAmount) * itemStack.stackSize;
                 outputAspects.add(aspect, amount);
                 PreprocessedAspectMaxHeap.add(
@@ -681,12 +667,10 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             }
         }
 
-        // Check if the Infusion Provider exists
         if (mTileInfusionProvider.isEmpty()) {
             return SimpleCheckRecipeResult.ofFailurePersistOnShutdown("No Infusion Provider found.");
         }
 
-        // Get a copy of the primal aspect within the network
         Map<Aspect, Integer> aspectsInNetwork = new HashMap<>();
         for (Aspect primalAspect : Aspect.getPrimalAspects()) {
             int totalAmount = mTileInfusionProvider.stream()
@@ -695,15 +679,11 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             aspectsInNetwork.put(primalAspect, totalAmount);
         }
 
-        // SynthesisOrder is stored for computing the processing time
-        // consumptionSteps to eliminate the intrinsic Aspects of the network
-        // shortageAspects count the cases where the Primal Aspect is insufficient
         AspectList synthesisOrder = new AspectList();
         AspectList consumptionSteps = new AspectList();
         AspectList shortageAspects = new AspectList();
         Boolean primalAspectShortage = false;
 
-        // The synthesis process is simulated and the Aspect is calculated to be sufficient
         while (!PreprocessedAspectMaxHeap.isEmpty()) {
             Map.Entry<Integer, AspectList> entry = PreprocessedAspectMaxHeap.poll();
             AspectList aspectList = entry.getValue();
@@ -711,6 +691,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             int required = aspectList.getAmount(currentAspect);
             int available = aspectsInNetwork.getOrDefault(currentAspect, 0);
             int remaining = available - required;
+
             if (remaining >= 0) {
                 aspectsInNetwork.put(currentAspect, remaining);
                 consumptionSteps.add(currentAspect, required);
@@ -720,14 +701,12 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                 if (available > 0) {
                     consumptionSteps.add(currentAspect, available);
                 }
-
                 synthesisOrder.add(currentAspect, deficit);
                 if (currentAspect.isPrimal()) {
                     primalAspectShortage = true;
                     shortageAspects.add(currentAspect, deficit);
                     continue;
                 }
-
                 for (Aspect component : currentAspect.getComponents()) {
                     PreprocessedAspectMaxHeap
                         .add(new AbstractMap.SimpleEntry<>(deficit, new AspectList().add(component, deficit)));
@@ -735,7 +714,6 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             }
         }
 
-        // Determine whether the network Aspect are sufficient
         if (primalAspectShortage) {
             StringBuilder errorMessage = new StringBuilder("Missing Aspects: ");
             for (Aspect aspect : shortageAspects.getAspects()) {
@@ -748,17 +726,13 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                     .trim());
         }
 
-        // Consume network aspect correctly
         for (Aspect aspect : consumptionSteps.getAspects()) {
             int amount = consumptionSteps.getAmount(aspect);
             for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                if (hatch.takeFromContainer(aspect, amount)) {
-                    break;
-                }
+                if (hatch.takeFromContainer(aspect, amount)) break;
             }
         }
 
-        // Calculate the original machining time
         for (int i = 0; i < synthesisOrder.size(); i++) {
             Aspect aspect = synthesisOrder.getAspects()[i];
             int amount = synthesisOrder.getAmount(aspect);
@@ -766,7 +740,6 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             RECIPE_DURATION += amount * BASE_DURATION * aspectLevel;
         }
 
-        // Aspect output and state quantity restoration
         this.mOutputAspects.add(outputAspects);
         this.mOutputAspectNames = new String[outputAspects.aspects.size()];
         this.mOutputAspectAmounts = new Integer[outputAspects.aspects.size()];
@@ -785,22 +758,16 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         outputAspects.aspects.clear();
 
         this.mEfficiencyIncrease = 10000;
-
         OverclockCalculator calculator = new OverclockCalculator().setRecipeEUt(RECIPE_EUT)
             .setEUt(getMaxInputEu())
             .setDuration((int) Math.ceil(SECOND_IN_TICKS * RECIPE_DURATION / (mParallel != 0 ? mParallel : 1)))
             .setDurationDecreasePerOC(4)
             .calculate();
 
-        // The time coefficient of 20 comes from: Base synthesis time = 1 second (set 10)
-        // ×2 adjustment for unexpected EV overclocking effects halving the duration.This serves as a compensation
-        // factor.
         useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
-
         this.updateSlots();
-
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
