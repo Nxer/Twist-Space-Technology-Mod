@@ -94,7 +94,6 @@ public class BlockRegister {
         GameRegistry.registerTileEntity(TileEntityLaserBeacon.class, "MeteorMinerRenderer");
         GameRegistry.registerBlock(BlockLargeSolarBoilerRender, BlockLargeSolarBoilerRender.unlocalizedName);
         GameRegistry.registerTileEntity(TileLargeSolarBoilerRender.class, "TileLargeSolarBoilerRender");
-
         GameRegistry.registerBlock(TstBlocks.TimeBendingSpeedRune, "TimeBendingSpeedRune");
     }
 

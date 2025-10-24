@@ -21,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BOTRecipe.Run
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.BloodyHellRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CircuitAssemblyLineWithoutImprintRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CokingFactoryRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystalEssentiaRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineInfinitierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
@@ -133,6 +134,7 @@ public class RecipeLoader {
         DeployedNanoCoreRecipePool.loadRecipes();
         SimpleFurnaceFuelPool.loadRecipes();
         TCResearches.register();
+        CrystalEssentiaRecipePool.loadRecipes();
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
