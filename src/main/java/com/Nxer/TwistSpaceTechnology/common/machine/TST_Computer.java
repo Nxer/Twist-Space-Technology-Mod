@@ -31,6 +31,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -60,8 +62,6 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import ic2.core.init.BlocksItems;
-import ic2.core.init.InternalName;
 import tectech.mechanics.dataTransport.QuantumDataPacket;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataInput;
@@ -1177,7 +1177,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     }
 
     public static double validCoolant(FluidStack fluid) {
-        if (fluid.getFluid() == BlocksItems.getFluid(InternalName.fluidCoolant)) return 0.001;
+        if (fluid.getFluid() == FluidRegistry.getFluid("ic2coolant")) return 0.001;
         if (fluid.getFluid() == Materials.SuperCoolant.mFluid) return 0.01;
         return -100;
     }
