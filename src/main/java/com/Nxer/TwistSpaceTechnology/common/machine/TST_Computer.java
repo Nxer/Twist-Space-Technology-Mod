@@ -1181,6 +1181,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     public static double validCoolant(FluidStack fluid) {
         if (fluid.getFluid() == FluidRegistry.getFluid("ic2coolant")) return 0.001;
         if (fluid.getFluid() == Materials.SuperCoolant.mFluid) return 0.01;
+        if (fluid.getFluid() == Materials.Cryotheum.mFluid) return 0.1;
         return -100;
     }
 
