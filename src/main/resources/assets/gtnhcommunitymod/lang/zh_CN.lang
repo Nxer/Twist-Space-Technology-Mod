@@ -866,7 +866,7 @@ NameWirelessDataOutputHatch=无线主光学接口
 NameAstralComputingArray=星规阵列
 tst.computer.desc.0=星规阵列 籍星辰以规万物
 tst.computer.desc.1=常规热量将会得到超级冷却液/冷却液/极寒之凛冰的有效冷却，具体如下：
-tst.computer.desc.2=冷却液：§60.001§7，超级冷却液：§60.01§7
+tst.computer.desc.2=冷却液：§60.001§7，超级冷却液：§60.01§7，极寒之凛冰：§60.1§7
 tst.computer.desc.3=如果安装了星辉魔法，则星能液提供额外的10倍率。
 tst.computer.desc.4=每次运算将会消耗掉当前输入仓中所有输入的液体。如果输入多种冷却液会生效随机一种。
 tst.computer.desc.5=超频公式 倍率=§61+LOG(1.0 + 流体数量*倍率*当前热量)§7
