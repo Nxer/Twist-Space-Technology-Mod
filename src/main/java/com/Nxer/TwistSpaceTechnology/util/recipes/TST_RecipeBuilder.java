@@ -1,9 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.util.recipes;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.metadata.IRecipeMetadataStorage;
 import gregtech.api.util.GTRecipe;
 
 public class TST_RecipeBuilder {
@@ -20,6 +23,8 @@ public class TST_RecipeBuilder {
     private int eut = 0;
     private int duration = 0;
     private int specialValue = 0;
+    @Nullable
+    protected IRecipeMetadataStorage metadataStorage;
 
     public TST_RecipeBuilder() {}
 
@@ -73,10 +78,6 @@ public class TST_RecipeBuilder {
 
     public TST_RecipeBuilder specialValue(int specialValue) {
         this.specialValue = specialValue;
-        return this;
-    }
-
-    public TST_RecipeBuilder noOptimize() {
         return this;
     }
 

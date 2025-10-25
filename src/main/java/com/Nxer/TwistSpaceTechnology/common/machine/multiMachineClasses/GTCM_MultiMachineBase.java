@@ -190,13 +190,13 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
-     * Prevent overflow during power consumption calculation.
+     * Remove machine efficiency.
      *
      * @return Eu consumption per tick.
      */
     @Override
     protected long getActualEnergyUsage() {
-        return (long) (-this.lEUt * (10000.0 / Math.max(1000, mEfficiency)));
+        return -this.lEUt;
     }
 
     /**

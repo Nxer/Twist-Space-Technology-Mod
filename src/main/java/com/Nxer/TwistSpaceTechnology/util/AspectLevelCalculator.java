@@ -7,7 +7,9 @@ import thaumcraft.api.aspects.Aspect;
 
 public class AspectLevelCalculator {
 
+    public static int BASE_DURATION = 2;
     static Map<String, Integer> aspectLevels = new HashMap<>();
+    private static final Map<Aspect, Integer> SYNTHESIS_TIME_CACHE = new HashMap<>();
 
     public static int computeAspectLevel(Aspect aspect) {
         String aspectName = aspect.getTag();
@@ -36,4 +38,28 @@ public class AspectLevelCalculator {
         aspectLevels.put(aspectName, finalLevel);
         return aspectLevels.get(aspectName);
     }
+
+    public static int computeAspectSynthesisTime(Aspect aspect) {
+        if (aspect.isPrimal()) {
+            return 0;
+        }
+
+        if (SYNTHESIS_TIME_CACHE.containsKey(aspect)) {
+            return SYNTHESIS_TIME_CACHE.get(aspect);
+        }
+
+        int synthesisTime = 0;
+        synthesisTime += computeAspectLevel(aspect) * BASE_DURATION;
+
+        Aspect[] components = aspect.getComponents();
+        if (components != null && components.length == 2) {
+            synthesisTime += computeAspectSynthesisTime(components[0]) * BASE_DURATION;
+            synthesisTime += computeAspectSynthesisTime(components[1]) * BASE_DURATION;
+        }
+
+        SYNTHESIS_TIME_CACHE.put(aspect, synthesisTime);
+
+        return synthesisTime;
+    }
+
 }

@@ -51,6 +51,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndistinctTentacle;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialAlchemyTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_IndustrialMagnetarSeparator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_InfusionMaterialDispenser;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeCanner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeIndustrialCokingFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_LargeSteamAlloySmelter;
@@ -627,9 +628,20 @@ public final class MachineLoader {
         GTCMItemList.NetherInterface
             .set(new TST_NetherInterface(19077, "NameNetherInterface", TextEnums.tr("NameNetherInterface")));
 
+        // #tr NameSuperWaterPurifier
+        // # Super Water Purifier
+        // #zh_CN 超净水生成器
         GTCMItemList.SuperWaterPurifier
             .set(new TST_SuperWaterPurifier(19078, "NameSuperWaterPurifier", TextEnums.tr("NameSuperWaterPurifier")));
 
+        // #tr NameIntegratedAssemblyMatrix
+        // # Integrated Assembly Matrix
+        // #zh_CN 集成装配矩阵
+        GTCMItemList.IntegratedAssemblyMatrix.set(
+            new TST_IntegratedAssemblyMatrix(
+                19079,
+                "NameIntegratedAssemblyMatrix",
+                TextEnums.tr("NameIntegratedAssemblyMatrix")));
         // endregion
 
         // region Single block Machine

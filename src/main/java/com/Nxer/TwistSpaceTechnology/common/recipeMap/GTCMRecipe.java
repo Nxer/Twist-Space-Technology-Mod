@@ -430,4 +430,12 @@ public class GTCMRecipe {
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .build();
 
+    // #tr tst.recipe.TST_SkypiercerTowerRecipes
+    // # Skypiercer Tower
+    // #zh_CN 穿云尖塔
+    public static final RecipeMap<TST_RecipeMapBackend> SkypiercerTower = RecipeMapBuilder
+        .of("tst.recipe.TST_SkypiercerTowerRecipes", TST_RecipeMapBackend::new)
+        .maxIO(2, 1, 0, 0)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.SkypiercerTower.get(1)))
+        .build();
 }
