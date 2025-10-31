@@ -18,6 +18,9 @@ import static gregtech.api.util.GTUtility.validMTEList;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,6 +55,10 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.common.tileentities.machines.MTEHatchCraftingInputME;
+import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchCategoryList;
+import thaumcraft.api.research.ResearchItem;
 import thaumcraft.common.Thaumcraft;
 import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileInfusionMatrix;
@@ -72,8 +79,12 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     private ArrayList<TilePedestal> subPedestals = new ArrayList<>();
 
     public FakePlayer fakePlayer = null;
+    public FakePlayer fakePlayer1 = null;
     public String playerName = null;
     // The names of the items inside the controller should be named after the real players' names.
+
+    private final Set<String> cachedResearches = new HashSet<>();
+    private String cachedPlayerName = null;
 
     public static final int STATE_IDLE = 0;
     public static final int STATE_INFUSING = 1;
@@ -82,15 +93,28 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setInteger("infusionState", this.infusionState);
         super.saveNBTData(aNBT);
+        aNBT.setInteger("infusionState", this.infusionState);
+        aNBT.setString("cachedPlayerName", this.cachedPlayerName != null ? this.cachedPlayerName : "");
+        NBTTagCompound researchNBT = new NBTTagCompound();
+        int i = 0;
+        for (String key : cachedResearches) {
+            researchNBT.setString("research_" + i++, key);
+        }
+        aNBT.setTag("cachedResearches", researchNBT);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
         this.infusionState = aNBT.getInteger("infusionState");
         this.subPedestals.clear();
-        super.loadNBTData(aNBT);
+        this.cachedPlayerName = aNBT.getString("cachedPlayerName");
+        this.cachedResearches.clear();
+        NBTTagCompound researchNBT = aNBT.getCompoundTag("cachedResearches");
+        for (String key : researchNBT.func_150296_c()) {
+            cachedResearches.add(researchNBT.getString(key));
+        }
     }
 
     // logic region
@@ -143,11 +167,18 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                 // # {\RED}The controller should contain a piece of paper with the player's name on it.
                 // #zh_CN {\RED}控制器内应当放置一张带有玩家名称的纸张
                 return SimpleCheckRecipeResult.ofFailure("no_paper_in_controller");
+            // use CachedResearches
             playerName = getControllerSlot().getDisplayName();
-            this.fakePlayer = FakePlayerFactory
-                .get((WorldServer) world, new GameProfile(UUID.randomUUID(), "[TST_InfusionFakePlayer]"));
-            Thaumcraft.proxy.getCompletedResearch()
-                .put(this.fakePlayer.getCommandSenderName(), ResearchManager.getResearchForPlayerSafe(playerName));
+            String fakeName1 = "[TST_InfusionFakePlayer_1_" + playerName + "]";
+            this.fakePlayer = FakePlayerFactory.get((WorldServer) world, new GameProfile(UUID.randomUUID(), fakeName1));
+            updateCachedResearches(this.fakePlayer);
+            // use ture player data
+            String fakeName2 = "[TST_InfusionFakePlayer_2_" + playerName + "]";
+            this.fakePlayer1 = FakePlayerFactory
+                .get((WorldServer) world, new GameProfile(UUID.randomUUID(), fakeName2));
+            Map<String, ArrayList<String>> completedResearch = Thaumcraft.proxy.getCompletedResearch();
+            completedResearch.put(fakePlayer1.getCommandSenderName(), ResearchManager.getResearchForPlayer(playerName));
+
         }
 
         // The two states can be mutually transferred.
@@ -177,6 +208,8 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                     }
                     // This might not work because the research has not been finished.
                     targetMatrix.craftingStart(fakePlayer);
+                    targetMatrix.craftingStart(fakePlayer1);
+
                     infusionState = STATE_INFUSING;
                     // The immediate return here is to enable the machine to start this function immediately and then
                     // enter the processing stage.
@@ -210,6 +243,25 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         // # {\RED}Unknown problem
         // #zh_CN {\RED}未知问题
         return SimpleCheckRecipeResult.ofFailure("unknown_problem");
+    }
+
+    public void updateCachedResearches(EntityPlayer player) {
+        if (player == null) return;
+        String name = player.getCommandSenderName();
+        if (!name.equals(cachedPlayerName)) {
+            cachedResearches.clear();
+            cachedPlayerName = name;
+        }
+
+        for (ResearchCategoryList category : ResearchCategories.researchCategories.values()) {
+            for (ResearchItem research : category.research.values()) {
+                try {
+                    if (ThaumcraftApiHelper.isResearchComplete(player.getCommandSenderName(), research.key)) {
+                        cachedResearches.add(research.key);
+                    }
+                } catch (Throwable ignored) {}
+            }
+        }
     }
 
     // Make the fake player be null, so that it will indirectly affect the progress of the research during the
