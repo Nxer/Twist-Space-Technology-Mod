@@ -95,6 +95,7 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.dreammaster.gthandler.CustomItemList.PicoWafer;
+import static com.dreammaster.item.NHItemList.CircuitUIV;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.ItemList.ArcFurnaceUEV;
@@ -2040,8 +2041,8 @@ public class GTCMMachineRecipes {
                     Machine_Multi_Computer.get(64),
                     HiC_T5.get(64),
                     HiC_T5.get(64),
-                    ItemList.Circuit_OpticalMainframe.get(64),
-                    ItemList.Circuit_OpticalMainframe.get(64),
+                    GTOreDictUnificator.get(CircuitUIV,64),
+                    GTOreDictUnificator.get(CircuitUIV,64),
                     ItemList.Sensor_UEV.get(64),
                     ItemList.Field_Generator_UEV.get(64),
                     Materials.Silver.getNanite(64),
