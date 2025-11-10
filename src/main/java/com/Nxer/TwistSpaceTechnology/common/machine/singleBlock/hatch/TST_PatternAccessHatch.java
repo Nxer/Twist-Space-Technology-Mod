@@ -421,15 +421,15 @@ public class TST_PatternAccessHatch extends MTEHatch
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        getProxy().writeToNBT(aNBT);
         aNBT.setBoolean("additionalConnection", additionalConnection);
+        getProxy().writeToNBT(aNBT);
         super.saveNBTData(aNBT);
     }
 
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
-        getProxy().readFromNBT(aNBT);
         additionalConnection = aNBT.getBoolean("additionalConnection");
+        getProxy().readFromNBT(aNBT);
         super.loadNBTData(aNBT);
     }
 }
