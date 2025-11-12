@@ -13,6 +13,9 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import gregtech.api.enums.SoundResource;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -178,7 +181,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
             if (Math.random() <= successRate) {
                 IBee bee = beeRoot.getMember(itemStack);
-                mOutputItems = new ItemStack[] { beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal()) };
+                mOutputItems = new ItemStack[]{beeRoot.getMemberStack(bee.copy(), EnumBeeType.PRINCESS.ordinal())};
             }
 
             mEfficiencyIncrease = 10000;
@@ -201,9 +204,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     // spotless:off
     protected final String[][] STRUCTURE = new String[][]{
-        {"CCC","CCC","CCC"},
-        {"C~C","C C","CCC"},
-        {"CCC","CCC","CCC"}
+        {"CCC", "CCC", "CCC"},
+        {"C~C", "C C", "CCC"},
+        {"CCC", "CCC", "CCC"}
     };
     // spotless:on
 
@@ -276,9 +279,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
+                                 int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
-            if (active) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
+            if (active) return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
                 TextureFactory.builder()
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
                     .extFacing()
@@ -287,8 +290,8 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
                     .extFacing()
                     .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX), TextureFactory.builder()
+                    .build()};
+            return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX), TextureFactory.builder()
                 .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
                 .extFacing()
                 .build(),
@@ -296,9 +299,15 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                     .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
                     .extFacing()
                     .glow()
-                    .build() };
+                    .build()};
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
+        return new ITexture[]{Textures.BlockIcons.getCasingTextureForId(CASING_INDEX)};
     }
 
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected SoundResource getActivitySoundLoop() {
+        return SoundResource.GT_MACHINES_MEGA_INDUSTRIAL_APIARY_LOOP;
+    }
 }
