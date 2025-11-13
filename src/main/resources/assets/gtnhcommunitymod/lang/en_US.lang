@@ -714,6 +714,10 @@ Tooltips_AdvancedMegaOilCracker_MachineType=Cracker
 Tooltips_AdvancedMegaOilCracker_Controller=Controller block for the Advanced Mega Oil Cracker
 Tooltips_AdvancedMegaOilCracker_01=§oFreedom as a basis for self-government.
 Tooltips_AdvancedMegaOilCracker_02=As the Mega Oil Cracker do.
+Tooltips_AdvancedMegaOilCracker_03=Chamber placement no longer has restrictions.
+Tooltips_AdvancedMegaOilCracker_04=Operates §b50%§7 faster than the Mega Oil Cracker.
+Tooltips_AdvancedMegaOilCracker_05=Power Loss Reduction = §b100%§7 / §fCoil Tier§7.
+Tooltips_AdvancedMegaOilCracker_06=Hypogen coil (or better) enable §dLossless Overclocking§7.
 tst.recipe.AssemblyLineWithoutResearchRecipe=Mega Assembly Line
 NameIndistinctTentacle=§l§8Indistinct Tentacle
 Waila.TST_IndistinctTentacle.1=Wireless Mode
