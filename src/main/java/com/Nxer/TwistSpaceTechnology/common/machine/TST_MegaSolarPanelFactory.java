@@ -1,28 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
-import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
-import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import gregtech.api.GregTechAPI;
-import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
-import gregtech.api.util.HatchElementBuilder;
-import gregtech.api.util.MultiblockTooltipBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.Collections;
-
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -36,24 +13,51 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static tectech.thing.casing.TTCasingsContainer.GodforgeCasings;
 
+import java.util.Collection;
+import java.util.Collections;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.util.ForgeDirection;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
+import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+
+import gregtech.api.GregTechAPI;
+import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.render.TextureFactory;
+import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.MultiblockTooltipBuilder;
+
 public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSolarPanelFactory> {
 
     // region Class Constructor
 
     public TST_MegaSolarPanelFactory(int aID, String aName, String aNameRegional) {
-        super(aID, aName , aNameRegional);
+        super(aID, aName, aNameRegional);
     }
 
-    public TST_MegaSolarPanelFactory(String aName) { super(aName); }
+    public TST_MegaSolarPanelFactory(String aName) {
+        super(aName);
+    }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaSolarPanelFactory(mName);
     }
 
-    //endregion
+    // endregion
 
-    //region Logic
+    // region Logic
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.solarFactoryRecipes;
     }
@@ -61,19 +65,22 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-            return Collections.singleton(RecipeMaps.solarFactoryRecipes);
+        return Collections.singleton(RecipeMaps.solarFactoryRecipes);
     }
+
     @Override
-    protected boolean isEnablePerfectOverclock() { return true;}
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
 
     @Override
     public int getMaxParallelRecipes() {
         return 1;
     }
 
-    //endregion
+    // endregion
 
-    //region Structure
+    // region Structure
 
     protected static final int horizontalOffSet = 10;
     protected static final int verticalOffSet = 7;
@@ -112,10 +119,10 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaSolarPanelFactory>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                //A -> ofBlock...(BW_GlasBlocks2, 0, ...);
-                //B -> ofBlock...(gt.blockcasings10, 11, ...);
-                //C -> ofBlock...(gt.godforgecasing, 0, ...);
-                //D -> ofBlock...(tile.MetaBlockCasing02, 2, ...);
+                // A -> ofBlock...(BW_GlasBlocks2, 0, ...);
+                // B -> ofBlock...(gt.blockcasings10, 11, ...);
+                // C -> ofBlock...(gt.godforgecasing, 0, ...);
+                // D -> ofBlock...(tile.MetaBlockCasing02, 2, ...);
 
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings10, 11))
@@ -123,12 +130,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                 .addElement(
                     'D',
                     HatchElementBuilder.<TST_MegaSolarPanelFactory>builder()
-                        .atLeast(
-                            InputBus,
-                            OutputBus,
-                            InputHatch,
-                            OutputHatch,
-                            Energy.or(ExoticEnergy))
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_MegaSolarPanelFactory::addToMachineList)
                         .dot(1)
                         .casingIndex(1024)
@@ -156,14 +158,13 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     };
     // spotless:on
 
-    //region General
+    // region General
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side,
-                                 ForgeDirection forgeDirection, int aColorIndex, boolean aActive, boolean aRedstone) {
+        ForgeDirection forgeDirection, int aColorIndex, boolean aActive, boolean aRedstone) {
         if (side == forgeDirection) {
-            if (aActive) return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(181),
+            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181),
                 TextureFactory.builder()
                     .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_ACTIVE)
                     .extFacing()
@@ -173,20 +174,17 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                     .extFacing()
                     .glow()
                     .build() };
-            return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(181),
-                TextureFactory.builder()
-                    .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER)
-                    .extFacing()
-                    .build(),
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181), TextureFactory.builder()
+                .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER)
+                .extFacing()
+                .build(),
                 TextureFactory.builder()
                     .addIcon(Textures.BlockIcons.OVERLAY_FRONT_HEAT_EXCHANGER_GLOW)
                     .extFacing()
                     .glow()
                     .build() };
         }
-        return new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(181) };
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181) };
     }
 
     @Override
@@ -194,7 +192,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         final MultiblockTooltipBuilder tttt = new MultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_MegaSolarPanelFactory
-        // # SolarPanelFactory
+        // # Solar Panel Factory
         // #zh_CN 太阳能板制作厂
         tttt.addMachineType(tr("Tooltip_MegaSolarPanelFactory_MachineType"))
             // #tr Tooltip_MegaSolarPanelFactory_1_00
