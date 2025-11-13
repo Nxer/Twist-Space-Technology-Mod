@@ -1652,7 +1652,7 @@ public class TextLocalization {
     public static final String Tooltips_AdvancedMegaOilCracker_05 = TextEnums.tr("Tooltips_AdvancedMegaOilCracker_05");
 
     // #tr Tooltips_AdvancedMegaOilCracker_06
-    // # Hypogen coil (or better) enable {\LIGHT_PURPLE}Lossless Overclocking{\GRAY}.
+    // # Hypogen coil (or better) enable {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
     // #zh_CN 海珀珍及以上等级线圈解锁{\LIGHT_PURPLE}无损超频{\GRAY}.
     public static final String Tooltips_AdvancedMegaOilCracker_06 = TextEnums.tr("Tooltips_AdvancedMegaOilCracker_06");
 
