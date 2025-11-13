@@ -25,10 +25,13 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import forestry.api.apiculture.EnumBeeType;
 import forestry.api.apiculture.IBee;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -201,9 +204,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     // spotless:off
     protected final String[][] STRUCTURE = new String[][]{
-        {"CCC","CCC","CCC"},
-        {"C~C","C C","CCC"},
-        {"CCC","CCC","CCC"}
+        {"CCC", "CCC", "CCC"},
+        {"C~C", "C C", "CCC"},
+        {"CCC", "CCC", "CCC"}
     };
     // spotless:on
 
@@ -301,4 +304,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected SoundResource getActivitySoundLoop() {
+        return SoundResource.GT_MACHINES_MEGA_INDUSTRIAL_APIARY_LOOP;
+    }
 }
