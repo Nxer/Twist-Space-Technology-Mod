@@ -193,7 +193,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         // spotless:off
         // #tr Tooltip_MegaSolarPanelFactory
         // # Solar Panel Factory
-        // #zh_CN 太阳能板制作厂
+        // #zh_CN 太阳能板制造厂
         tttt.addMachineType(tr("Tooltip_MegaSolarPanelFactory_MachineType"))
             // #tr Tooltip_MegaSolarPanelFactory_1_00
             // # {\BOLD}bigger is better!
