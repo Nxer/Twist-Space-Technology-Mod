@@ -171,6 +171,7 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static tectech.thing.CustomItemList.rack_Hatch;
 
+import com.dreammaster.item.NHItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -2041,8 +2042,8 @@ public class GTCMMachineRecipes {
                     Machine_Multi_Computer.get(64),
                     HiC_T5.get(64),
                     HiC_T5.get(64),
-                    GTOreDictUnificator.get(CircuitUIV,64),
-                    GTOreDictUnificator.get(CircuitUIV,64),
+                    NHItemList.CircuitUIV.getIS(64),
+                    NHItemList.CircuitUIV.getIS(64),
                     ItemList.Sensor_UEV.get(64),
                     ItemList.Field_Generator_UEV.get(64),
                     Materials.Silver.getNanite(64),
