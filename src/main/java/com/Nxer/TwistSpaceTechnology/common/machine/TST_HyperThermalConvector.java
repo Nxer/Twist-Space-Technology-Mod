@@ -245,8 +245,8 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private MTEHatchInput mHotFluidHatch;
     private MTEHatchOutput mColdFluidHatch;
     private final MTEHatchInput[] dedicatedHatches = new MTEHatchInput[2];
-    私有静态流体水；   
-    private static Fluid distilledWater ;   
+    private static Fluid water;
+    private static Fluid distilledWater;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -460,7 +460,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 for (FluidStack tFluid : multiInputHatch.getStoredFluid()) {
                     if (tFluid == null) continue;
 
-                    if (isWaterHatch && isNotWater(tFluid.getFluid())) {
+                    if (isWaterHatch && isNotAcceptableWater(tFluid.getFluid())) {
                         continue;
                     }
                     rList.add(tFluid);
@@ -471,7 +471,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 for (FluidStack fluidStack : meHatch.getStoredFluids()) {
                     if (fluidStack == null) continue;
 
-                    if (isWaterHatch && isNotWater(fluidStack.getFluid())) {
+                    if (isWaterHatch && isNotAcceptableWater(fluidStack.getFluid())) {
                         continue;
                     }
 
@@ -483,7 +483,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 FluidStack fillableStack = tHatch.getFillableStack();
                 if (fillableStack != null) {
 
-                    if (isWaterHatch && isNotWater(fillableStack.getFluid())) {
+                    if (isWaterHatch && isNotAcceptableWater(fillableStack.getFluid())) {
                         continue;
                     }
                     rList.add(fillableStack);
@@ -515,7 +515,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             || stack.isFluidEqual(Materials.DenseSuperheatedSteam.getGas(1)));
     }
 
-    private boolean isNotWater(Fluid fluid) {
+    private boolean isNotAcceptableWater(Fluid fluid) {
         return fluid != null && fluid != distilledWater && fluid != water;
     }
 
