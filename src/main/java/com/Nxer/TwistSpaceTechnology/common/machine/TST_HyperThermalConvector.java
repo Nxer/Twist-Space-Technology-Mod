@@ -245,6 +245,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private MTEHatchInput mHotFluidHatch;
     private MTEHatchOutput mColdFluidHatch;
     private final MTEHatchInput[] dedicatedHatches = new MTEHatchInput[2];
+    static Fluid water;
     static Fluid distilledWater;
 
     @Override
@@ -289,6 +290,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
+        if (water == null) water = FluidRegistry.getFluid("water");
         if (distilledWater == null) distilledWater = FluidRegistry.getFluid("ic2distilledwater");
     }
 
@@ -458,7 +460,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 for (FluidStack tFluid : multiInputHatch.getStoredFluid()) {
                     if (tFluid == null) continue;
 
-                    if (isWaterHatch && isNotDistilledWater(tFluid.getFluid())) {
+                    if (isWaterHatch && isNotWater(tFluid.getFluid())) {
                         continue;
                     }
                     rList.add(tFluid);
@@ -469,7 +471,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 for (FluidStack fluidStack : meHatch.getStoredFluids()) {
                     if (fluidStack == null) continue;
 
-                    if (isWaterHatch && isNotDistilledWater(fluidStack.getFluid())) {
+                    if (isWaterHatch && isNotWater(fluidStack.getFluid())) {
                         continue;
                     }
 
@@ -481,7 +483,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                 FluidStack fillableStack = tHatch.getFillableStack();
                 if (fillableStack != null) {
 
-                    if (isWaterHatch && isNotDistilledWater(fillableStack.getFluid())) {
+                    if (isWaterHatch && isNotWater(fillableStack.getFluid())) {
                         continue;
                     }
                     rList.add(fillableStack);
@@ -513,8 +515,8 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             || stack.isFluidEqual(Materials.DenseSuperheatedSteam.getGas(1)));
     }
 
-    private boolean isNotDistilledWater(Fluid fluid) {
-        return fluid != null && fluid != distilledWater;
+    private boolean isNotWater(Fluid fluid) {
+        return fluid != null && fluid != distilledWater && fluid != water;
     }
 
     @Override
