@@ -25,6 +25,7 @@ public class BlockEssentiaDiscretizer extends Block {
 
     public static final String MODID = "gtnhcommunitymod";
     public static final String NAME = "essentia_discretizer";
+    public static final String RNAME = "tst_essentia_discretizer";
 
     public BlockEssentiaDiscretizer() {
         super(Material.iron);
@@ -37,8 +38,8 @@ public class BlockEssentiaDiscretizer extends Block {
     }
 
     public BlockEssentiaDiscretizer register() {
-        GameRegistry.registerBlock(this, ItemBlockEssentiaDiscretizer.class, NAME);
-        GameRegistry.registerTileEntity(TileEssentiaDiscretizer.class, NAME);
+        GameRegistry.registerBlock(this, ItemBlockEssentiaDiscretizer.class, RNAME);
+        GameRegistry.registerTileEntity(TileEssentiaDiscretizer.class, RNAME);
         return this;
     }
 
