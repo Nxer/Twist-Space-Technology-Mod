@@ -95,7 +95,6 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UXV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_ZPM;
 import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
 import static com.dreammaster.gthandler.CustomItemList.PicoWafer;
-import static com.dreammaster.item.NHItemList.CircuitUIV;
 import static goodgenerator.util.ItemRefer.Component_Assembly_Line;
 import static goodgenerator.util.ItemRefer.HiC_T5;
 import static gregtech.api.enums.ItemList.ArcFurnaceUEV;
@@ -171,7 +170,6 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static tectech.thing.CustomItemList.rack_Hatch;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -189,6 +187,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.item.NHItemList;
 
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
