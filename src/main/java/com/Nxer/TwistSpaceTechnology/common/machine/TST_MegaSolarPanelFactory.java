@@ -11,6 +11,7 @@ import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
+import static java.lang.Integer.MAX_VALUE;
 import static tectech.thing.casing.TTCasingsContainer.GodforgeCasings;
 
 import java.util.Collection;
@@ -21,7 +22,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -32,8 +36,10 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -57,7 +63,25 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
 
     // endregion
 
-    // region Logic
+    // region Processing Logic
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclockType(OverclockType.PerfectOverclock);
+                return super.process();
+            }
+
+        }.setMaxParallel(MAX_VALUE);
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.solarFactoryRecipes;
     }
@@ -69,13 +93,18 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     }
 
     @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+    }
+
+    @Override
     protected boolean isEnablePerfectOverclock() {
         return true;
     }
 
     @Override
     public int getMaxParallelRecipes() {
-        return 1;
+        return MAX_VALUE;
     }
 
     // endregion
@@ -133,7 +162,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_MegaSolarPanelFactory::addToMachineList)
                         .dot(1)
-                        .casingIndex(1024)
+                        .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(MetaBlockCasing02, 2))
                 .build();
         }
@@ -148,7 +177,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
         {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
         {"BBBB             BBBB", " B                 B ", "                     ", " B                 B ", "                     ", "       DDDDDDD       ", " CC     DDDDD     CC ", "       DDDDDDD       ", "                     ", " B                 B ", "                     ", " B                 B ", "BBBB             BBBB"},
-        {"DDD               DDD", "                     ", "                     ", " B                 B ", "                     ", " CC    AAAAAAA     CC", " CCCCCC       CCCCCC ", " CC    AAAAAAA    CC ", "                     ", " B                 B ", "                     ", "                     ", "DDD               DDD"},
+        {"DDD               DDD", "                     ", "                     ", " B                 B ", "                     ", " CC    AAAAAAA    CC ", " CCCCCC       CCCCCC ", " CC    AAAAAAA    CC ", "                     ", " B                 B ", "                     ", "                     ", "DDD               DDD"},
         {"BBBB             BBBB", " B                 B ", "                     ", " B                 B ", "                     ", "       DDD~DDD       ", " CC     DDDDD     CC ", "       DDDDDDD       ", "                     ", " B                 B ", "                     ", " B                 B ", "BBBB             BBBB"},
         {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
         {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
