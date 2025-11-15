@@ -2276,6 +2276,12 @@ Tooltip_IntegratedAssemblyMatrix_1_06=可以安装纳米蜂群收容总线并提
 Tooltip_IntegratedAssemblyMatrix_1_07=最多§f256银纳米蜂群§7将运行速度提高到正常§f100%§7速度.
 Tooltip_IntegratedAssemblyMatrix_1_08=或最多§e1024金纳米蜂群§7将运行速度提高到正常的§e200%§7速度,
 Tooltip_IntegratedAssemblyMatrix_1_09=并§e翻倍§7并行数量.
+NameMegaSolarPanelFactory=巨型太阳能板工厂
+Tooltip_MegaSolarPanelFactory=太阳能板制造厂
+Tooltip_MegaSolarPanelFactory_MachineType=太阳能板制造厂
+Tooltip_MegaSolarPanelFactory_1_00=§l大就是好！
+Tooltip_MegaSolarPanelFactory_1_01=执行§d无损超频§7.
+Tooltip_MegaSolarPanelFactory_1_02=耗时倍率 = 100% / 部件装配线外壳等级.
 tile.essentia_discretizer.name=源质离散器
 tile.essentia.discretizer.tooltip.0=将源质转为物品.
 tile.essentia.discretizer.tooltip.1=确保插入的源质元件空间充足,否则插入至物品元件的晶化源质将彻底变为物品,无法被注魔供应器识别为源质.

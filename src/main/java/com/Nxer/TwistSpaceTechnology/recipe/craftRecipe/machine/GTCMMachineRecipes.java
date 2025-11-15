@@ -3684,6 +3684,35 @@ public class GTCMMachineRecipes {
             20 * 1800,
             (int) RECIPE_UEV
         );
+
+        // endregion
+
+        // region Mega Solar Panel Factory
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            ItemList.SolarFactory.get(1),
+            6_400_000,
+            32000,
+            1_600_000,
+            4,
+            new Object[]{
+                ItemList.SolarFactory.get(64),
+                ItemList.SolarFactory.get(64),
+                DysonSphereFrameComponent.get(32),
+                Materials.Gold.getNanite(64),
+
+                eM_Ultimate_Containment.get(32),
+                eM_Spacetime.get(4),
+                ItemList.Field_Generator_UMV.get(64),
+                NHItemList.CircuitUMV.getIS(32)
+            },
+            new FluidStack[]{
+                MUTATED_LIVING_SOLDER.getFluidStack(144 * 12800),
+                MaterialPool.ConcentratedUUMatter.getFluidOrGas(144),
+            },
+            GTCMItemList.MegaSolarPanelFactory.get(1),
+            20 * 1800,
+            (int) RECIPE_UMV
+        );
         // endregion
 
     }
