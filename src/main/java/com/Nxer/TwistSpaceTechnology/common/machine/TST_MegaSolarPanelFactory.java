@@ -3,7 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -13,24 +15,31 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static java.lang.Integer.MAX_VALUE;
 import static tectech.thing.casing.TTCasingsContainer.GodforgeCasings;
+import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -39,10 +48,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.util.GTRecipe;
+import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OverclockCalculator;
 
 public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSolarPanelFactory> {
 
@@ -64,21 +75,20 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     // endregion
 
     // region Processing Logic
+    private int casingTier = 0;
+    private double speedBonus;
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
+        return new ProcessingLogic() {
 
             @NotNull
             @Override
-            public CheckRecipeResult process() {
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                setOverclockType(OverclockType.PerfectOverclock);
-                return super.process();
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                speedBonus = 1D / (casingTier + 1);
+                return super.createOverclockCalculator(recipe).setDurationModifier(speedBonus);
             }
-
-        }.setMaxParallel(MAX_VALUE);
+        };
     }
 
     @Override
@@ -86,15 +96,29 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         return RecipeMaps.solarFactoryRecipes;
     }
 
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Collections.singleton(RecipeMaps.solarFactoryRecipes);
-    }
-
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
+    }
+
+    @Override
+    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
+        float aX, float aY, float aZ, ItemStack aTool) {
+        if (aPlayer.isSneaking()) {
+            batchMode = !batchMode;
+            if (batchMode) {
+                GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOn"));
+            } else {
+                GTUtility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOff"));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
     }
 
     @Override
@@ -107,24 +131,45 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         return MAX_VALUE;
     }
 
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = TstSharedLocalization.MachineInfo.componentTier(this.casingTier + 1);
+
+        return ret;
+    }
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("casingTier", casingTier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+    }
     // endregion
 
     // region Structure
 
-    protected static final int horizontalOffSet = 10;
-    protected static final int verticalOffSet = 7;
-    protected static final int depthOffSet = 5;
+    protected static final int horizontalOffSet = 6;
+    protected static final int verticalOffSet = 14;
+    protected static final int depthOffSet = 0;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<TST_MegaSolarPanelFactory> STRUCTURE_DEFINITION;
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+        casingTier = 0;
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
@@ -148,16 +193,31 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaSolarPanelFactory>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                // A -> ofBlock...(BW_GlasBlocks2, 0, ...);
-                // B -> ofBlock...(gt.blockcasings10, 11, ...);
-                // C -> ofBlock...(gt.godforgecasing, 0, ...);
-                // D -> ofBlock...(tile.MetaBlockCasing02, 2, ...);
+                // A -> ofBlock...(BW_GlasBlocks, 0, ...);
+                // B -> ofBlock...(componentAssemblyLineCasing, 0, ...);
+                // C -> ofBlock...(gt.blockcasings10, 11, ...);
+                // D -> ofBlock...(gt.blockcasingsTT, 9, ...);
+                // E -> ofBlock...(gt.godforgecasing, 0, ...);
+                // F -> ofBlock...(tile.MetaBlockCasing02, 2, ...);
 
                 .addElement('A', chainAllGlasses())
-                .addElement('B', ofBlock(GregTechAPI.sBlockCasings10, 11))
-                .addElement('C', ofBlock(GodforgeCasings, 0))
                 .addElement(
-                    'D',
+                    'B',
+                    withChannel(
+                        "component",
+                        ofBlocksTiered(
+                            (block, meta) -> block == Loaders.componentAssemblylineCasing ? meta : 0,
+                            IntStream.range(0, 14)
+                                .mapToObj(i -> Pair.of(Loaders.componentAssemblylineCasing, i))
+                                .collect(Collectors.toList()),
+                            0,
+                            (t, meta) -> t.casingTier = meta,
+                            t -> t.casingTier)))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings10, 11))
+                .addElement('D', ofBlock(sBlockCasingsTT, 9))
+                .addElement('E', ofBlock(GodforgeCasings, 0))
+                .addElement(
+                    'F',
                     HatchElementBuilder.<TST_MegaSolarPanelFactory>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_MegaSolarPanelFactory::addToMachineList)
@@ -171,20 +231,25 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
 
     // spotless:off
     protected static final String[][] shape = new String[][]{
-        {"                     ", "                     ", "                     ", " B                 B ", " B                 B ", "BBBB             BBBB", "DDD               DDD", "BBBB             BBBB", " B                 B ", " B                 B ", "                     ", "                     ", "                     "},
-        {"                     ", "                     ", "BBB               BBB", "                     ", "                     ", " B                 B ", "                     ", " B                 B ", "                     ", "                     ", "BBB               BBB", "                     ", "                     "},
-        {"                     ", "BBB               BBB", "                     ", "                     ", "                     ", " B                 B ", "                     ", " B                 B ", "                     ", "                     ", "                     ", "BBB               BBB", "                     "},
-        {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
-        {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
-        {"BBBB             BBBB", " B                 B ", "                     ", " B                 B ", "                     ", "       DDDDDDD       ", " CC     DDDDD     CC ", "       DDDDDDD       ", "                     ", " B                 B ", "                     ", " B                 B ", "BBBB             BBBB"},
-        {"DDD               DDD", "                     ", "                     ", " B                 B ", "                     ", " CC    AAAAAAA    CC ", " CCCCCC       CCCCCC ", " CC    AAAAAAA    CC ", "                     ", " B                 B ", "                     ", "                     ", "DDD               DDD"},
-        {"BBBB             BBBB", " B                 B ", "                     ", " B                 B ", "                     ", "       DDD~DDD       ", " CC     DDDDD     CC ", "       DDDDDDD       ", "                     ", " B                 B ", "                     ", " B                 B ", "BBBB             BBBB"},
-        {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
-        {" B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B ", "                     ", "                     ", "                     ", " B                 B "},
-        {"                     ", "BBB               BBB", "                     ", "                     ", "                     ", " B                 B ", "                     ", " B                 B ", "                     ", "                     ", "                     ", "BBB               BBB", "                     "},
-        {"                     ", "                     ", "BBB               BBB", "                     ", "                     ", " B                 B ", "                     ", " B                 B ", "                     ", "                     ", "BBB               BBB", "                     ", "                     "},
-        {"                     ", "                     ", "                     ", " B                 B ", " B                 B ", "BBBB             BBBB", "DDD               DDD", "BBBB             BBBB", " B                 B ", " B                 B ", "                     ", "                     ", "                     "}
+        {"     CFC     ","  CCCCCCCCC  "," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","CCCCCEEECCCCC","FCCCCEEECCCCF","CCCCCEEECCCCC"," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","  CCCCCCCCC  ","     CFC     "},
+        {"   CCCFCCC   ","  CBBC CBBC  "," CB       BC ","CB F     F BC","CB   ACA   BC","CC  A   A  CC","F   C D C   F","CC  A   A  CC","CB   ACA   BC","CB F     F BC"," CB       BC ","  CBBC CBBC  ","   CCCFCCC   "},
+        {"     CFC     ","  C       C  "," C         C ","   F     F   ","     ACA     ","C   A   A   C","F   C D C   F","C   A   A   C","     ACA     ","   F     F   "," C         C ","  C       C  ","     CFC     "},
+        {"     C C     ","             ","             ","   F     F   ","     ACA     ","C   A   A   C","    C D C    ","C   A   A   C","     ACA     ","   F     F   ","             ","             ","     C C     "},
+        {"             ","             ","             ","   F     F   ","     ACA     ","    A   A    ","    C D C    ","    A   A    ","     ACA     ","   F     F   ","             ","             ","             "},
+        {"             ","             ","             ","             ","     CCC     ","    C   C    ","    C D C    ","    C   C    ","     CCC     ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","             ","             ","      D      ","             ","             ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","     FFF     ","    F   F    ","    F   F    ","    F   F    ","     FFF     ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","     FFF     ","    F   F    ","    F   F    ","    F   F    ","     FFF     ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","             ","             ","      D      ","             ","             ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","     CCC     ","    C   C    ","    C D C    ","    C   C    ","     CCC     ","             ","             ","             ","             "},
+        {"             ","             ","             ","   F     F   ","     ACA     ","    A   A    ","    C D C    ","    A   A    ","     ACA     ","   F     F   ","             ","             ","             "},
+        {"     C C     ","             ","             ","   F     F   ","     ACA     ","C   A   A   C","    C D C    ","C   A   A   C","     ACA     ","   F     F   ","             ","             ","     C C     "},
+        {"     CFC     ","  C       C  "," C         C ","   F     F   ","     ACA     ","C   A   A   C","F   C D C   F","C   A   A   C","     ACA     ","   F     F   "," C         C ","  C       C  ","     CFC     "},
+        {"   CCC~CCC   ","  CBBC CBBC  "," CB       BC ","CB F     F BC","CB   ACA   BC","CC  A   A  CC","F   C D C   F","CC  A   A  CC","CB   ACA   BC","CB F     F BC"," CB       BC ","  CBBC CBBC  ","   CCCFCCC   "},
+        {"     CFC     ","  CCCCCCCCC  "," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","CCCCCEEECCCCC","FCCCCEEECCCCF","CCCCCEEECCCCC"," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","  CCCCCCCCC  ","     CFC     "}
     };
+
+
     // spotless:on
 
     // region General
@@ -221,7 +286,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         final MultiblockTooltipBuilder tttt = new MultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_MegaSolarPanelFactory
-        // # Solar Panel Factory
+        // # Solar Factory
         // #zh_CN 太阳能板制造厂
         tttt.addMachineType(tr("Tooltip_MegaSolarPanelFactory_MachineType"))
             // #tr Tooltip_MegaSolarPanelFactory_1_00
@@ -229,13 +294,17 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             // #zh_CN {\BOLD}大就是好！
             .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_00"))
             // #tr Tooltip_MegaSolarPanelFactory_1_01
-            // # {\LIGHT_PURPLE}Perfect overclocking{\GRAY},that's all
-            // #zh_CN {\LIGHT_PURPLE}无损超频{\GRAY},仅仅如此.
+            // # {\LIGHT_PURPLE}Perfect overclocking{\GRAY}.
+            // #zh_CN 执行{\LIGHT_PURPLE}无损超频{\GRAY}.
             .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_01"))
+            // #tr Tooltip_MegaSolarPanelFactory_1_02
+            // # Recipe Time Multiplier = 100% / Component Assembly Line Casing Tier.
+            // #zh_CN 耗时倍率 = 100% / 部件装配线外壳等级.
+            .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_02"))
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(21, 13, 13, false)
+            .beginStructureBlock(13, 16, 13, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
