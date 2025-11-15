@@ -1642,8 +1642,8 @@ public class TextLocalization {
     public static final String Tooltips_AdvancedMegaOilCracker_03 = TextEnums.tr("Tooltips_AdvancedMegaOilCracker_03");
 
     // #tr Tooltips_AdvancedMegaOilCracker_04
-    // # Operates {\AQUA}200%{\GRAY} faster than the Mega Oil Cracker.
-    // #zh_CN 运行速度比巨型石油裂化机快{\AQUA}200%.
+    // # Operates {\AQUA}100%{\GRAY} faster than the Mega Oil Cracker.
+    // #zh_CN 运行速度比巨型石油裂化机快{\AQUA}100%.
     public static final String Tooltips_AdvancedMegaOilCracker_04 = TextEnums.tr("Tooltips_AdvancedMegaOilCracker_04");
 
     // #tr Tooltips_AdvancedMegaOilCracker_05
