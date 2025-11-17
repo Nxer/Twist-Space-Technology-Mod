@@ -20,8 +20,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.annotation.Nonnull;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +27,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -49,11 +46,9 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.api.util.OverclockCalculator;
 
 public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSolarPanelFactory> {
 
@@ -75,20 +70,11 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     // endregion
 
     // region Processing Logic
-    private int casingTier = 0;
-    private double speedBonus;
+    private int casingTier = -2;
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
-        return new ProcessingLogic() {
-
-            @NotNull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                speedBonus = 1D / (casingTier + 1);
-                return super.createOverclockCalculator(recipe).setDurationModifier(speedBonus);
-            }
-        };
+        return super.createProcessingLogic();
     }
 
     @Override
@@ -150,6 +136,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        casingTier = aNBT.getInteger("casingTier");
     }
     // endregion
 
@@ -164,8 +151,11 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        casingTier = 0;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        this.casingTier = -2;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        this.speedBonus = 1F / (casingTier + 1);
+        return true;
+
     }
 
     @Override
@@ -206,11 +196,11 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                     withChannel(
                         "component",
                         ofBlocksTiered(
-                            (block, meta) -> block == Loaders.componentAssemblylineCasing ? meta : 0,
+                            (block, meta) -> block == Loaders.componentAssemblylineCasing ? meta : -1,
                             IntStream.range(0, 14)
                                 .mapToObj(i -> Pair.of(Loaders.componentAssemblylineCasing, i))
                                 .collect(Collectors.toList()),
-                            0,
+                            -2,
                             (t, meta) -> t.casingTier = meta,
                             t -> t.casingTier)))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings10, 11))
