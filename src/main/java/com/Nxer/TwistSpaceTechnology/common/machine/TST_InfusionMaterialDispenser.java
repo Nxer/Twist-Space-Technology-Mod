@@ -530,6 +530,14 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // # The controller is located in the upper square of the infusion matrix. Also,remember to open InterfaceBlockingMode for the input bus.
             // #zh_CN 控制器在注魔矩阵的上面,另外输入总线记得开阻挡模式.
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_05"))
+            // #tr Tooltip_InfusionMaterialDispenser_06
+            // # You can use it together with the Essentia Terminal for more precise automation. The specific method is left to the reader as a challenge to their understanding of AE.
+            // #zh_CN 可以搭配源质终端进行更加精细的自动化,具体的方法作为对AE理解的一种挑战留给读者.
+            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_06"))
+            // #tr Tooltip_InfusionMaterialDispenser_07
+            // # Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
+            // #zh_CN 当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
+            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_07"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
