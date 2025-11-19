@@ -73,7 +73,7 @@ public class ItemPartEssentiaPatternTerminalEx extends net.minecraft.item.Item i
         // spotless:off
         // #tr item.essentia.pattern.terminal.tooltip.0
         // #en_US Craft Through Fun™ — TST Pattern Terminal
-        // #zh_CN 欢乐就是塔斯汀牌终端
+        // #zh_CN 欢乐就是TST牌终端
         list.add(EnumChatFormatting.GOLD + TextEnums.tr("item.essentia.pattern.terminal.tooltip.0"));
         // #tr item.essentia.pattern.terminal.tooltip.1
         // #en_US Functions identically to the Fluid Pattern Terminal Ex, but additionally provides the ability to replace certain items in a pattern with their corresponding Crystal Essentia.
