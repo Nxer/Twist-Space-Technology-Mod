@@ -67,6 +67,7 @@ public class SingleItemRecipes {
             .specialValue(3)
             .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
 
+        //Essentia Pattern Terminal Ex
         TST_RecipeBuilder.builder()
             .itemInputs(
                 new ItemStack(FLUID_TERMINAL_EX, 1)
