@@ -13,6 +13,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemNamedCircuit;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemPartEssentiaPatternTerminalEx;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemProofOfHeroes;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.item.TSTGeneratedItem;
@@ -24,6 +25,7 @@ public class TstItems {
     public static final ItemAdderIzumik MetaItemIzumik = new ItemAdderIzumik();
     public static final ItemAdderFlask MetaItemFlask = new ItemAdderFlask();
     public static final ItemNamedCircuit MetaItemNamedCircuit = new ItemNamedCircuit();
+    public static final ItemPartEssentiaPatternTerminalEx EssentiaPatternTerminalEx = new ItemPartEssentiaPatternTerminalEx();
 
     // #tr item.ProofOfHeroes.name
     // # 英雄の証
