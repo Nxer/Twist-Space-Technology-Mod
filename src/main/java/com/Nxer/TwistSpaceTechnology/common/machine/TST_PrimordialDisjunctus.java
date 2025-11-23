@@ -662,8 +662,8 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_01"))
             // #tr Tooltip_PrimordialDisjunctus_06_02
             // # It should be noted that the supply of VIS is specifically provided through Vis Relay located near the host.
-            // #zh_CN 注意VIS的供应,具体来说是通过在主机附近的源质中继器来提供的
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_02"))
+            // #zh_CN 注意VIS的供应具体来说是通过在主机附近的源质中继器来提供的
+            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_01"))
             // #tr Tooltip_PrimordialDisjunctus_07
             // # This machine maxes out at 1 UMV amp anything more will just void power.
             // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.

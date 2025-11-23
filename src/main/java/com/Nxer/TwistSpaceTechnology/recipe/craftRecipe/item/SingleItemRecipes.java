@@ -1,9 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EssentiaPatternTerminalEx;
-import static com.glodblock.github.loader.ItemAndBlockHolder.FLUID_TERMINAL_EX;
-
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -66,16 +62,6 @@ public class SingleItemRecipes {
             .duration(20 * 10)
             .specialValue(3)
             .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
-
-        //Essentia Pattern Terminal Ex
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                new ItemStack(FLUID_TERMINAL_EX, 1)
-            )
-            .itemOutputs(new ItemStack(EssentiaPatternTerminalEx, 1))
-            .eut(TierEU.RECIPE_HV)
-            .duration(20 * 10)
-            .addTo(RecipeMaps.assemblerRecipes);
     }
     // spotless:on
 }
