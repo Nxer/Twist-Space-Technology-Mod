@@ -525,8 +525,12 @@ public class TCResearches {
                     // #tr tc.research_text.INFUSION_MATERIAL_DISPENSER.1
                     // # Many have been confounded by such mechanisms. To those who delight in the art of automation, they are challenges to be mastered, not removed. Yet some, restrained by their craft, can no longer tread the path of Thaumic automation, their mystical experience thus diminished. This device was forged to aid those who struggle with the intricacies of automated infusion.
                     // #zh_CN 常常有人被这些东西难住,对于享受自动化的玩家来说这是一种挑战,不应当剥夺他们的乐趣,然而也不乏玩家受限于水平因而对神秘自动化再也无法踏足,进一步导致对神秘体验的下降,此机器旨在帮助自动化较为困难的玩家进行辅助注魔.
-                    // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.1")),
+                    // #tr tc.research_text.INFUSION_MATERIAL_DISPENSER.2
+                    // # {\BOLD}Automation Tips:{\RESET}<BR><BR>Similar to the Skypiercer Tower, but this time the pattern itself contains items that will be consumed during infusion. Because of this, the subnet must include a Storage Bus attached to the Infusion Dispenser’s input bus. After the crystallized Essentia is converted back into Essentia by the Essentia Discretizer, the remaining items will naturally be stored into the input bus — exactly the behavior we want.<BR><BR>Furthermore, since the types of Essentia required for infusion are no longer limited to only two, Essentia Cells should be used within the subnet. Accordingly, an CardAdvancedBlocking must be inserted into the subnet’s fluid_interface and configured to {\BOLD}AdvancedBlockingModeAll{\RESET}.
+                    // #zh_CN {\BOLD}自动化提示:{\RESET}<BR><BR>与穿云尖塔的情形类似.不过这次由于样板里含有被用于注魔的物品,所以需要子网配有一个存储总线贴到注魔分配器的输入总线.这样在晶化源质被注魔离散器转为真正源质后剩余物品自然被存储到了输入总线——这正是我们所需要的。<BR><BR>此外，注魔所需的源质种类不再只局限于两种，因此这次应当使用源质元件,对应的需要在子网的二合一接口额外插入一张阻挡卡并设置为{\BOLD}严格阻挡模式{\RESET}。
+                    // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.2")),
                     new ResearchPage(infusionRecipeInfusionMaterialDispenser))
                     .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
