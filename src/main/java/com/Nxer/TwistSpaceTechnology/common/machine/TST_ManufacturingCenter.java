@@ -459,17 +459,17 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     protected IIconContainer getActiveOverlay() {
-        return TexturesGtBlock.oMCDIndustrialMixerActive;
+        return TexturesGtBlock.oMCACokeOvenActive;
     }
 
     @Override
     protected IIconContainer getActiveGlowOverlay() {
-        return TexturesGtBlock.oMCDIndustrialMixerActiveGlow;
+        return TexturesGtBlock.oMCACokeOvenActiveGlow;
     }
 
     @Override
     protected IIconContainer getInactiveOverlay() {
-        return TexturesGtBlock.oMCDIndustrialMixer;
+        return TexturesGtBlock.oMCACokeOven;
     }
 
     @Override
