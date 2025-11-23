@@ -16,6 +16,7 @@ import static gregtech.api.enums.Mods.GregTech;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.enums.Mods.SuperSolarPanels;
 import static gregtech.api.util.GTModHandler.getModItem;
+import static gregtech.api.util.GTRecipeBuilder.INGOTS;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gtPlusPlus.core.material.MaterialMisc.MUTATED_LIVING_SOLDER;
@@ -452,6 +453,21 @@ public class AssemblyLineWithoutResearchRecipePool {
                 .itemOutputs(GTUtility.copyAmountUnsafe(2048, ItemRefer.Advanced_Radiation_Protection_Plate.get(1)))
                 .eut(RECIPE_UXV)
                 .duration(20 * 10)
+                .addTo(MASL);
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(10),
+                    ItemRefer.Radiation_Protection_Plate.get(2),
+                    Materials.ElectrumFlux.getPlates(4),
+                    Materials.Trinium.getPlates(4),
+                    Materials.NaquadahAlloy.getPlates(4),
+                    Materials.Osmiridium.getPlates(4),
+                    Materials.VibrantAlloy.getPlates(4),
+                    ItemList.Radiation_Proof_Prismatic_Naquadah_Composite_Sheet.get(4))
+                .fluidInputs(MaterialsAlloy.INDALLOY_140.getFluidStack(8 * INGOTS))
+                .itemOutputs(ItemRefer.Advanced_Radiation_Protection_Plate.get(1))
+                .eut(RECIPE_ZPM / 2)
+                .duration(50*SECONDS)
                 .addTo(MASL);
         }
 
