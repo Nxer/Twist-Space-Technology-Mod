@@ -595,7 +595,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                 .fluidInputs(MaterialsAlloy.INDALLOY_140.getFluidStack(8 * INGOTS))
                 .itemOutputs(ItemRefer.Advanced_Radiation_Protection_Plate.get(1))
                 .eut(RECIPE_ZPM / 2)
-                .duration(50*SECONDS)
+                .duration(50 * SECONDS)
                 .addTo(MASL);
         }
 
