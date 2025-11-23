@@ -312,6 +312,27 @@ public class AssemblyLineWithoutResearchRecipePool {
                 .addTo(MASL);
             TST_RecipeBuilder.builder()
                 .itemInputs(
+                    GTUtility.getIntegratedCircuit(10),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Tritanium, 2),
+                    ItemList.Circuit_Wetwaresupercomputer.get(2),
+                    ItemList.Circuit_Parts_InductorASMD.get(16),
+                    ItemList.Circuit_Parts_CapacitorASMD.get(16),
+                    ItemList.Circuit_Parts_ResistorASMD.get(16),
+                    ItemList.Circuit_Parts_TransistorASMD.get(16),
+                    ItemList.Circuit_Parts_DiodeASMD.get(16),
+                    ItemList.Circuit_Chip_Ram.get(48),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 16),
+                    GTOreDictUnificator.get(OrePrefixes.foil, Materials.Silicone, 64))
+                .fluidInputs(
+                    MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 20),
+                    new FluidStack(ic2coolant, 10000),
+                    Materials.Radon.getGas(2500))
+                .itemOutputs(ItemList.Circuit_Wetwaremainframe.get(1))
+                .eut(300000)
+                .duration(20 * 100)
+                .addTo(MASL);
+            TST_RecipeBuilder.builder()
+                .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Tritanium, 2),
                     ItemList.Circuit_Wetwaresupercomputer.get(2),
                     ItemList.Circuit_Parts_InductorXSMD.get(4),
@@ -319,6 +340,27 @@ public class AssemblyLineWithoutResearchRecipePool {
                     ItemList.Circuit_Parts_ResistorXSMD.get(4),
                     ItemList.Circuit_Parts_TransistorXSMD.get(4),
                     ItemList.Circuit_Parts_DiodeXSMD.get(4),
+                    ItemList.Circuit_Chip_Ram.get(48),
+                    GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 16),
+                    GTOreDictUnificator.get(OrePrefixes.foil, Materials.StyreneButadieneRubber, 64))
+                .fluidInputs(
+                    MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 20),
+                    new FluidStack(ic2coolant, 10000),
+                    Materials.Radon.getGas(2500))
+                .itemOutputs(ItemList.Circuit_Wetwaremainframe.get(1))
+                .eut(300000)
+                .duration(20 * 100)
+                .addTo(MASL);
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(10),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Tritanium, 2),
+                    ItemList.Circuit_Wetwaresupercomputer.get(2),
+                    ItemList.Circuit_Parts_InductorASMD.get(16),
+                    ItemList.Circuit_Parts_CapacitorASMD.get(16),
+                    ItemList.Circuit_Parts_ResistorASMD.get(16),
+                    ItemList.Circuit_Parts_TransistorASMD.get(16),
+                    ItemList.Circuit_Parts_DiodeASMD.get(16),
                     ItemList.Circuit_Chip_Ram.get(48),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 16),
                     GTOreDictUnificator.get(OrePrefixes.foil, Materials.StyreneButadieneRubber, 64))
