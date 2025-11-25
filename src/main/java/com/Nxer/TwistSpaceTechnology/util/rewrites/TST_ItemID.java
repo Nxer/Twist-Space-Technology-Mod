@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.util.rewrites;
 
 import java.util.Objects;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,6 +47,26 @@ public class TST_ItemID extends GTUtility.ItemId {
     public static TST_ItemID create(ItemStack itemStack) {
         if (null == itemStack) return NULL;
         return new TST_ItemID(itemStack.getItem(), itemStack.getItemDamage(), itemStack.getTagCompound());
+    }
+
+    public static TST_ItemID create(Item item) {
+        if (null == item) return NULL;
+        return new TST_ItemID(item, 0);
+    }
+
+    public static TST_ItemID create(Item item, int metaData) {
+        if (null == item) return NULL;
+        return new TST_ItemID(item, metaData);
+    }
+
+    public static TST_ItemID create(Block block) {
+        if (null == block) return NULL;
+        return create(new ItemStack(block));
+    }
+
+    public static TST_ItemID create(Block block, int metaData) {
+        if (null == block) return NULL;
+        return create(new ItemStack(block, 1, metaData));
     }
 
     public static TST_ItemID createNoNBT(ItemStack itemStack) {
