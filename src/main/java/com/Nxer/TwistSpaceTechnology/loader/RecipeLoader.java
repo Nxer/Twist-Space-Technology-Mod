@@ -163,7 +163,7 @@ public class RecipeLoader {
         StellarForgeRecipePool.loadOnServerStarted();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {
-            IndustrialMagicMatrixRecipePool.loadRecipes();
+            new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
     }
 

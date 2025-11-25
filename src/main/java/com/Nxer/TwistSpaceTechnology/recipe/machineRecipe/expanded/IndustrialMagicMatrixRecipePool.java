@@ -9,6 +9,7 @@ import static thaumcraft.common.config.ConfigItems.itemJarNode;
 import static thaumcraft.common.config.ConfigItems.itemShard;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GTValues;
@@ -27,28 +29,44 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTUtility;
+import gregtech.api.util.GTOreDictUnificator;
 import thaumcraft.common.items.ItemEssence;
 
 public class IndustrialMagicMatrixRecipePool {
 
-    protected static ItemStack[] itemsUnconsumed = new ItemStack[] { new ItemStack(bigPearl) };
+    protected Collection<TST_ItemID> itemsUnconsumed = new HashSet<>();
 
-    protected static ItemStack[] checkInputSpecial(ItemStack... itemStacks) {
-        baseLoop: for (ItemStack i : itemStacks) {
-            for (ItemStack u : itemsUnconsumed) {
-                if (GTUtility.areStacksEqual(i, u)) {
-                    i.stackSize = 0;
-                    break baseLoop;
-                }
-            }
-        }
-        return itemStacks;
+    protected void prepare() {
+        itemsUnconsumed.add(TST_ItemID.create(new ItemStack(bigPearl)));
     }
 
-    protected static Set<Item> skips;
+    /**
+     * Turn input item list to correct items for IMM recipe.
+     * 
+     * @param origin Itemstacks from TC Infusion Matrix recipe.
+     * @return Items for IMM recipes.
+     */
+    protected ItemStack[] checkInputSpecial(ItemStack... origin) {
+        for (int i = 0; i < origin.length; i++) {
 
-    protected static boolean shouldSkip(Item item) {
+            // check something should be set a unconsumed tag
+            if (itemsUnconsumed.contains(TST_ItemID.create(origin[i]))) {
+                origin[i].stackSize = 0;
+            }
+
+            // check gt materials
+            ItemStack g = GTOreDictUnificator.get(origin[i]);
+            if (g != null) {
+                origin[i] = g;
+            }
+
+        }
+        return origin;
+    }
+
+    protected Set<Item> skips;
+
+    protected boolean shouldSkip(Item item) {
         if (null == skips) {
             skips = new HashSet<>();
             skips.add(itemJarNode);
@@ -69,8 +87,9 @@ public class IndustrialMagicMatrixRecipePool {
         return skips.contains(item);
     }
 
-    public static void loadRecipes() {
+    public void loadRecipes() {
         TCRecipeTools.getInfusionCraftingRecipe();
+        prepare();
 
         final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipe;
         ArrayList<TCRecipeTools.InfusionCraftingRecipe> icr = TCRecipeTools.ICR;

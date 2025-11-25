@@ -58,6 +58,7 @@ import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -100,8 +101,8 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     private double mSpeedBonus;
     private double Mean;
     private double Variance;
-    private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
-    private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
+    private final TST_ItemID EssentiaCell_Creative = TST_ItemID
+        .create(EnumEssentiaStorageTypes.Type_Creative.getCell());
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
     protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
     protected ArrayList<String> Research = new ArrayList<>();
@@ -162,11 +163,9 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     return Research_not_completed;
                 }
 
-                if (!(getControllerSlot() == null)) {
-                    if (getControllerSlot().isItemEqual(EssentiaCell_Creative)
-                        || getControllerSlot().isItemEqual(ProofOfHeroes)) {
-                        return CheckRecipeResultRegistry.SUCCESSFUL;
-                    }
+                if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())
+                    || EssentiaCell_Creative.equalItemStack(getControllerSlot())) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
 
                 aspectProvider.clear();
@@ -229,12 +228,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
-        // If no logic is found, try legacy checkRecipe
-        if (processingLogic == null) {
-            return checkRecipe(mInventory[1]) ? CheckRecipeResultRegistry.SUCCESSFUL
-                : CheckRecipeResultRegistry.NO_RECIPE;
-        }
-
         setupProcessingLogic(processingLogic);
 
         CheckRecipeResult result = doCheckRecipe();
@@ -243,13 +236,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         updateSlots();
         if (!result.wasSuccessful()) return result;
 
-        mEfficiency = (10000 - (getIdealStatus() - getRepairStatus()) * 1000);
+        mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
-        if (getControllerSlot() == null) {
-            mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
-        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
+
+        if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
             mMaxProgresstime = 1;
-        } else mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
+        } else {
+            mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
+        }
+
         setEnergyUsage(processingLogic);
         ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
         int size = 0;
@@ -385,11 +380,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     public int getMaxParallelRecipes() {
-        if (getControllerSlot() == null) {
-            return this.mParallel;
-        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
+        if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
             return Integer.MAX_VALUE;
-        } else return this.mParallel;
+        } else {
+            return this.mParallel;
+        }
     }
     // end region
 
