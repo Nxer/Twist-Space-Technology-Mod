@@ -590,7 +590,6 @@ public class AssemblyLineWithoutResearchRecipePool {
 
             // Bioware Mainframe
 
-
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(10),
