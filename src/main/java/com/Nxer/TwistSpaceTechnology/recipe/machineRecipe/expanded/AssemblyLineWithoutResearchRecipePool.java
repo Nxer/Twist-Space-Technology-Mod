@@ -505,7 +505,6 @@ public class AssemblyLineWithoutResearchRecipePool {
             TST_RecipeBuilder.builder()
                 .itemInputs(
                     GTUtility.getIntegratedCircuit(10),
-                    GTUtility.getIntegratedCircuit(10),
                     ItemList.Circuit_Board_Bio_Ultra.get(2),
                     ItemList.Circuit_Biowarecomputer.get(2),
                     ItemList.Circuit_Parts_TransistorASMD.get(16),
