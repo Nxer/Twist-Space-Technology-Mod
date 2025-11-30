@@ -34,6 +34,10 @@
  * For more details, see https://docs.gradle.org/8.0.1/userguide/java_library_plugin.html#sec:java_library_configurations_graph
  */
 dependencies {
+    elytraModpackVersion {
+        setGtnhVersion("2.8.0")
+    }
+
     implementation(gtnh("GT5-Unofficial"))
     implementation(gtnh("GTNHLib"))
     implementation(gtnh("AE2FluidCraft-Rework"))
@@ -108,7 +112,7 @@ dependencies {
  * @param classifier the classifier
  * @return the generated notation
  */
-static String gtnh(String name, String classifier = "dev") {
+String gtnh(String name, String classifier = "dev") {
     // com.github.GTNewHorizons:{name}:{version of name}:{classifier}
-    return "com.github.GTNewHorizons:${name}:${TwistVersions[name]}:${classifier}"
+    return project.elytraModpackVersion.gtnhdev(name)
 }

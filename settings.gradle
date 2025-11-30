@@ -12,6 +12,10 @@ pluginManagement {
         }
         gradlePluginPortal()
         mavenCentral()
+        maven {
+            name "Jitpack"
+            url "https://jitpack.io"
+        }
         mavenLocal()
     }
 }
