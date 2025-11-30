@@ -33,6 +33,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IndustrialAlc
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IndustrialMagicMatrixRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.IntensifyChemicalDistorterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MassFabricatorGenesisRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaSolarPanelFactoryRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaStoneBreakerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaUniversalSpaceStationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MicroSpaceTimeFabricatorioRecipePool;
@@ -135,6 +136,7 @@ public class RecipeLoader {
         SimpleFurnaceFuelPool.loadRecipes();
         TCResearches.register();
         CrystalEssentiaRecipePool.loadRecipes();
+        MegaSolarPanelFactoryRecipePool.loadRecipes();
 
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
