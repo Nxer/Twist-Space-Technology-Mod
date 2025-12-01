@@ -9,10 +9,12 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialsElements;
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class StarKernelForgeRecipePool {
 
@@ -139,6 +141,36 @@ public class StarKernelForgeRecipePool {
             Materials.Cadmium.getDust(1),
             Materials.Cadmium.getPlasma(144),
             GTUtility.getPlasmaFuelValueInEUPerLiterFromMaterial(Materials.Cadmium) * 144);
+
+        // Rhodium
+        addRecipe(
+            WerkstoffLoader.Rhodium.get(OrePrefixes.dust, 1),
+            new FluidStack(MaterialsElements.getInstance().RHODIUM.getPlasma(), 144),
+            2_013_265_912);
+
+        // Thorium232
+        addRecipe(
+            WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 1),
+            new FluidStack(MaterialsElements.getInstance().THORIUM232.getPlasma(), 144),
+            2_013_265_912);
+
+        // Zirconium
+        addRecipe(
+            WerkstoffLoader.Zirconium.get(OrePrefixes.dust, 1),
+            new FluidStack(MaterialsElements.getInstance().ZIRCONIUM.getPlasma(), 144),
+            2_013_265_912);
+
+        // Hafnium
+        addRecipe(
+            WerkstoffMaterialPool.Hafnium.get(OrePrefixes.dust, 1),
+            new FluidStack(MaterialsElements.getInstance().HAFNIUM.getPlasma(), 144),
+            2_013_265_912);
+
+        // Ruthenium
+        addRecipe(
+            WerkstoffLoader.Ruthenium.get(OrePrefixes.dust, 1),
+            new FluidStack(MaterialsElements.getInstance().RUTHENIUM.getPlasma(), 144),
+            2_013_265_912);
 
     }
 
