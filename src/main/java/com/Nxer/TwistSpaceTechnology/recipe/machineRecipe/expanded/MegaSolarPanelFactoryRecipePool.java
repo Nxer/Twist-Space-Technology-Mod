@@ -173,7 +173,7 @@ public class MegaSolarPanelFactoryRecipePool {
             Materials.Uranium.getMolten(144*64),
             Materials.Iridium.getMolten(144*32),
             Materials.Sunnarium.getMolten(144*76))
-        .itemOutputs(NHItemList.IrradiantReinforcedNeutroniumPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedBedrockiumPlate.getIS(16))
         .eut(UIV)
         .duration(40*SECONDS)
         .addTo(MSPF);
