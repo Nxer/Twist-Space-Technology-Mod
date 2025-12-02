@@ -2308,3 +2308,4 @@ item.essentia.pattern.terminal.tooltip.2=主要包括两类物品,第一类为�
 Tooltip_InfusionMaterialDispenser_06=可以搭配源质终端进行更加精细的自动化,具体的方法作为对AE理解的一种挑战留给读者.
 Tooltip_InfusionMaterialDispenser_07=当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
 tc.research_text.INFUSION_MATERIAL_DISPENSER.2=§l自动化提示:§r<BR><BR>与穿云尖塔的情形类似.不过这次由于样板里含有被用于注魔的物品,所以需要子网配有一个存储总线贴到注魔分配器的输入总线.这样在晶化源质被注魔离散器转为真正源质后剩余物品自然被存储到了输入总线——这正是我们所需要的。<BR><BR>此外，注魔所需的源质种类不再只局限于两种，因此这次应当使用源质元件,对应的需要在子网的二合一接口额外插入一张阻挡卡并设置为§l严格阻挡模式§r。
+tst.recipe.TST_MegaSolarPanelRecipes=巨型太阳能板工厂

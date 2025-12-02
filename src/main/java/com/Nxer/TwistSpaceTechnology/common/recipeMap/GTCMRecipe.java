@@ -438,4 +438,14 @@ public class GTCMRecipe {
         .maxIO(2, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.SkypiercerTower.get(1)))
         .build();
+
+    // #tr tst.recipe.TST_MegaSolarPanelRecipes
+    // # Mega Solar Panel Factory
+    // #zh_CN 巨型太阳能板工厂
+    public static final RecipeMap<TST_RecipeMapBackend> MegaSolarPanelFactoryRecpies = RecipeMapBuilder
+        .of("tst.recipe.TST_MegaSolarPanelRecipes", TST_RecipeMapBackend::new)
+        .maxIO(16, 16, 16, 0)
+        .frontend(TST_GeneralFrontend::new)
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaSolarPanelFactory.get(1)))
+        .build();
 }
