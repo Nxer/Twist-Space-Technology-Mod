@@ -12,7 +12,9 @@ public enum CraftedTokens {
     Tuna("Tuna", EnumChatFormatting.AQUA),
     AdmiralGUMI_MAIM0_LKOperan("Admiral_GUMI & MAIM0 & LK_Operan", EnumChatFormatting.GREEN),
     RandomPotato10_Nebniloc_Ablazing("RandomPotato10 & Nebniloc & Ablazing", EnumChatFormatting.YELLOW),
-    Komart("Komart", EnumChatFormatting.RED);
+    Komart("Komart", EnumChatFormatting.RED),
+    Huhmps_Josh012("Huhmps & Josh_012", EnumChatFormatting.AQUA),
+    CRIMSTAL_PIGEO("CRIMSTAL & PIGEO", EnumChatFormatting.DARK_PURPLE);
 
     private final String name;
     private final EnumChatFormatting color;
