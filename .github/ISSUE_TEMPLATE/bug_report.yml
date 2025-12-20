@@ -1,0 +1,61 @@
+name: Bug report
+description: |
+  You found a bug or encountered a crash? Please report it here.
+  发现 bug 或者遇到问题了？在这里反馈。
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Provide a summary of the issue in the Title above.
+        在标题里提供一个对问题的简短描述。
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: |
+        Please describe as best as possible.
+        请尽可能详细的描述。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce the bug
+      description: |
+        Please provide the steps to reproduce it, otherwise we might not be able to fix it.
+        请提供复现问题的步骤，不然我们可能无法修复这个问题。
+    validations:
+      required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional details
+      description: |
+        In case you want to optionally provide further informations, which will not fit anywhere else.
+        在这里补充其他你想要告诉我们的信息。
+  - type: textarea
+    id: version
+    attributes:
+      label: Which mod/modpack versions are you using?
+      description: |
+        Please provide the versions of mod and modpack you're using.
+        请提供你正在使用的模组/模组包版本。
+      placeholder: |
+        GTNH: 2.x.y
+        TST:  0.a.b
+        And the mods that may cause this issue.
+        以及其他可能导致这个问题的模组。
+      validations:
+        required: true
+    validations:
+      required: true
+  - type: input
+    id: crashlog
+    attributes:
+      label: Crash log
+      description: |
+        Provide a link to a crashlog or the latest log (fml-client-latest.log). E.g. on [Gist](https://gist.github.com/), [pastebin](https://pastebin.com/), or similar.
+        请提供一个崩溃日志或最后运行日志（fml-client-latest.log）的链接。例如使用 [Gist](https://gist.github.com/)，[pastebin](https://pastebin.com/)，或其他相似功能的服务。
+    validations:
+      required: true
