@@ -42,8 +42,8 @@ body:
         Please provide the versions of mod and modpack you're using.
         请提供你正在使用的模组/模组包版本。
       placeholder: |
-        GTNH: 2.x.x
-        TST:  1.a.b
+        GTNH: 2.x.y
+        TST:  0.a.b
         And the mods that may cause this issue.
         以及其他可能导致这个问题的模组。
       validations:
