@@ -28,13 +28,6 @@ body:
     validations:
       required: true
   - type: textarea
-    id: additional
-    attributes:
-      label: Additional details
-      description: |
-        In case you want to optionally provide further informations, which will not fit anywhere else.
-        在这里补充其他你想要告诉我们的信息。
-  - type: textarea
     id: version
     attributes:
       label: Which mod/modpack versions are you using?
@@ -46,8 +39,6 @@ body:
         TST:  0.a.b
         And the mods that may cause this issue.
         以及其他可能导致这个问题的模组。
-      validations:
-        required: true
     validations:
       required: true
   - type: input
@@ -59,3 +50,10 @@ body:
         请提供一个崩溃日志或最后运行日志（fml-client-latest.log）的链接。例如使用 [Gist](https://gist.github.com/)，[pastebin](https://pastebin.com/)，或其他相似功能的服务。
     validations:
       required: true
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional details
+      description: |
+        In case you want to optionally provide further informations, which will not fit anywhere else.
+        在这里补充其他你想要告诉我们的信息。
