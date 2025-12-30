@@ -331,7 +331,7 @@ public class GTCMMachineRecipes {
                 ItemList.Emitter_LV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 3),
                 ItemList.Field_Generator_LV.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Basic), 4},
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 4),
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 2))
             .itemOutputs(PhotonControllerUpgradeLV.get(1))
@@ -348,7 +348,7 @@ public class GTCMMachineRecipes {
                 ItemList.Emitter_MV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 6),
                 ItemList.Field_Generator_MV.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Good), 4},
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 4),
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 8))
             .itemOutputs(PhotonControllerUpgradeMV.get(1))
@@ -365,7 +365,7 @@ public class GTCMMachineRecipes {
                 ItemList.Emitter_HV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 12),
                 ItemList.Field_Generator_HV.get(1),
-                new Object[]{OrePrefixes.circuit.get(Materials.Advanced), 4},
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 4),
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(Materials.SolderingAlloy.getMolten(144 * 32))
             .itemOutputs(PhotonControllerUpgradeHV.get(1))
