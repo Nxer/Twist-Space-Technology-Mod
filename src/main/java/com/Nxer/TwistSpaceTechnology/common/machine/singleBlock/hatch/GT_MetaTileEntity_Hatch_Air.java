@@ -11,12 +11,12 @@ import net.minecraftforge.fluids.Fluid;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
@@ -70,8 +70,15 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
 
     @Override
     public Fluid getFluidToGenerate() {
-        return FluidUtils.getAir(1)
-            .getFluid();
+        int id = this.getBaseMetaTileEntity()
+            .getWorld().provider.dimensionId;
+
+        if (id == -1) {
+            return Materials.NetherAir.mFluid;
+        } else {
+            return Materials.Air.getGas(1)
+                .getFluid();
+        }
     }
 
     @Override
