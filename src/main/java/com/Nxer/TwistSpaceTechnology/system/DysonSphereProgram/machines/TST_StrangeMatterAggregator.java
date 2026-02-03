@@ -140,6 +140,12 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     protected static TST_ItemID StellarFrame;
     protected static Fluid HydrogenPlasma;
 
+    private enum RingType {
+        OSCILLATOR,
+        CONSTRAINTOR,
+        MERGER
+    }
+
     public static void initStatics() {
         // spotless:off
         SpaceTimeMaintenanceConsumablesFluids = new Fluid[] {
@@ -1059,49 +1065,66 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
     @Override
     public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        this.oscillatorTier = 0;
-        this.oscillatorPiece = 0;
-        this.constraintorTier = 0;
-        this.constraintorPiece = 0;
-        this.mergerTier = 0;
-        this.mergerPiece = 0;
-        this.rings = 0;
-        this.SpaceTimeMaintenanceConsumablesInputHatch = null;
-        this.CoreElementInputBus = null;
+
+        oscillatorTier = 0;
+        oscillatorPiece = 0;
+        constraintorTier = 0;
+        constraintorPiece = 0;
+        mergerTier = 0;
+        mergerPiece = 0;
+        rings = 0;
 
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_main, verticalOffSet_main, depthOffSet_main)) {
             return false;
         }
 
         while (true) {
-            if (checkPiece(
+            int depth = depthOffSet_ring_first - rings * depthOffSet_ring_distance;
+
+            int tempOPieces = oscillatorPiece;
+            int tempCPieces = constraintorPiece;
+            int tempMPieces = mergerPiece;
+
+            boolean isOscillator = checkRingWithTierVerification(
                 STRUCTURE_PIECE_RING_O,
                 horizontalOffSet_ring,
                 verticalOffSet_ring,
-                depthOffSet_ring_first - rings * depthOffSet_ring_distance)) {
+                depth,
+                RingType.OSCILLATOR);
 
-                oscillatorPiece++;
+            boolean isConstraintor = false;
+            if (!isOscillator) {
+                isConstraintor = checkRingWithTierVerification(
+                    STRUCTURE_PIECE_RING_C,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depth,
+                    RingType.CONSTRAINTOR);
+            }
 
-            } else if (checkPiece(
-                STRUCTURE_PIECE_RING_C,
-                horizontalOffSet_ring,
-                verticalOffSet_ring,
-                depthOffSet_ring_first - rings * depthOffSet_ring_distance)) {
-
-                    constraintorPiece++;
-
-                } else if (checkPiece(
+            boolean isMerger = false;
+            if (!isOscillator && !isConstraintor) {
+                isMerger = checkRingWithTierVerification(
                     STRUCTURE_PIECE_RING_M,
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
-                    depthOffSet_ring_first - rings * depthOffSet_ring_distance)) {
+                    depth,
+                    RingType.MERGER);
+            }
 
-                        mergerPiece++;
+            if (!isOscillator && !isConstraintor && !isMerger) {
+                break;
+            }
 
-                    } else break;
+            if (isOscillator) {
+                oscillatorPiece = tempOPieces + 1;
+            } else if (isConstraintor) {
+                constraintorPiece = tempCPieces + 1;
+            } else {
+                mergerPiece = tempMPieces + 1;
+            }
 
             rings++;
-
         }
 
         if (oscillatorPiece < 1 || constraintorPiece < 1 || mergerPiece < 1) {
@@ -1117,8 +1140,40 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         }
 
         calculateParametersWithStructure();
-
         return wirelessMode || getMaxInputEu() >= Config.PowerConsume_StrangeMatterAggregator;
+    }
+
+    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type) {
+        int savedOTier = oscillatorTier;
+        int savedCTier = constraintorTier;
+        int savedMTier = mergerTier;
+
+        boolean result = checkPiece(pieceName, x, y, z);
+        if (!result) return false;
+
+        boolean tierValid;
+        switch (type) {
+            case OSCILLATOR:
+                tierValid = oscillatorTier >= 1 && oscillatorTier <= 3;
+                break;
+            case CONSTRAINTOR:
+                tierValid = constraintorTier >= 1 && constraintorTier <= 3;
+                break;
+            case MERGER:
+                tierValid = mergerTier >= 1 && mergerTier <= 3;
+                break;
+            default:
+                tierValid = false;
+        }
+
+        if (!tierValid) {
+            oscillatorTier = savedOTier;
+            constraintorTier = savedCTier;
+            mergerTier = savedMTier;
+            return false;
+        }
+
+        return true;
     }
 
     // endregion
@@ -1319,7 +1374,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     withChannel(
                         "constraintor",
                         ofBlocksTiered(
-                            TST_StrangeMatterAggregator::getSpaceTimeConstraintor,
+                            TST_StrangeMatterAggregator::getSpaceTimeConstraintorTier,
                             ImmutableList.of(
                                 Pair.of(TstBlocks.SpaceTimeConstraintor, 0),
                                 Pair.of(TstBlocks.SpaceTimeConstraintor, 1),
@@ -1332,7 +1387,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     withChannel(
                         "merger",
                         ofBlocksTiered(
-                            TST_StrangeMatterAggregator::getSpaceTimeMerger,
+                            TST_StrangeMatterAggregator::getSpaceTimeMergerTier,
                             ImmutableList.of(
                                 Pair.of(TstBlocks.SpaceTimeMerger, 0),
                                 Pair.of(TstBlocks.SpaceTimeMerger, 1),
@@ -1351,12 +1406,12 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return m + 1;
     }
 
-    public static int getSpaceTimeConstraintor(Block b, int m) {
+    public static int getSpaceTimeConstraintorTier(Block b, int m) {
         if (b != TstBlocks.SpaceTimeConstraintor) return 0;
         return m + 1;
     }
 
-    public static int getSpaceTimeMerger(Block b, int m) {
+    public static int getSpaceTimeMergerTier(Block b, int m) {
         if (b != TstBlocks.SpaceTimeMerger) return 0;
         return m + 1;
     }
