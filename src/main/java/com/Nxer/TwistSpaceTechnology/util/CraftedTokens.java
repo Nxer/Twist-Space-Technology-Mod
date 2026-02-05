@@ -16,9 +16,9 @@ public enum CraftedTokens {
     Huhmps_Josh012("Huhmps & Josh_012", EnumChatFormatting.AQUA),
     CRIMSTAL_PIGEO("CRIMSTAL & PIGEO", EnumChatFormatting.DARK_PURPLE),
     MRSIB("MrSiB", EnumChatFormatting.WHITE),
-    Thenextelement_Nathngo_Scooobygreenbelt("Thenextelement & Nathngo & Scoobygreenbelt", EnumChatFormatting.DARK_PURPLE),
-    Maekt("Mae_kt", EnumChatFormatting.GREEN)
-    ;
+    Thenextelement_Nathngo_Scooobygreenbelt("Thenextelement & Nathngo & Scoobygreenbelt",
+        EnumChatFormatting.DARK_PURPLE),
+    Maekt("Mae_kt", EnumChatFormatting.GREEN);
 
     private final String name;
     private final EnumChatFormatting color;
