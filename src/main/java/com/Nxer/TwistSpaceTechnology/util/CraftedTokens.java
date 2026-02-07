@@ -14,7 +14,11 @@ public enum CraftedTokens {
     RandomPotato10_Nebniloc_Ablazing("RandomPotato10 & Nebniloc & Ablazing", EnumChatFormatting.YELLOW),
     Komart("Komart", EnumChatFormatting.RED),
     Huhmps_Josh012("Huhmps & Josh_012", EnumChatFormatting.AQUA),
-    CRIMSTAL_PIGEO("CRIMSTAL & PIGEO", EnumChatFormatting.DARK_PURPLE);
+    CRIMSTAL_PIGEO("CRIMSTAL & PIGEO", EnumChatFormatting.DARK_PURPLE),
+    MRSIB("MrSiB", EnumChatFormatting.WHITE),
+    Thenextelement_Nathngo_Scooobygreenbelt("Thenextelement & Nathngo & Scoobygreenbelt",
+        EnumChatFormatting.DARK_PURPLE),
+    Maekt("Mae_kt", EnumChatFormatting.GREEN);
 
     private final String name;
     private final EnumChatFormatting color;
