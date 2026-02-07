@@ -1785,7 +1785,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         if (addonCount > 0) {
             long infinity = 2147483647L << casingMultiplier;
             return parallelismTier >= 5 ? (infinity / 5) * (1 + this.addonCount)
-                : (64L << ((parallelismTier) * 2)) * (1 + this.addonCount);
+                : (64L << ((casingMultiplier) * 2)) * (1 + this.addonCount);
         } else {
             return 64;
         }
