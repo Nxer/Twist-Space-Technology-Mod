@@ -412,7 +412,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
             // #zh_CN 最多{\WHITE}256银纳米蜂群{\GRAY}将运行速度提高到正常{\WHITE}100%{\GRAY}速度.
             .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_07"))
             // #tr Tooltip_IntegratedAssemblyMatrix_1_08
-            // # Or up to {\YELLOW}256 Gold Nanites{\GRAY} will increase the running speed to 200% of normal speed,
+            // # Or up to {\YELLOW}1024 Gold Nanites{\GRAY} will increase the running speed to 200% of normal speed,
             // #zh_CN 或最多{\YELLOW}1024金纳米蜂群{\GRAY}将运行速度提高到正常的{\YELLOW}200%{\GRAY}速度,
             .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_08"))
             // #tr Tooltip_IntegratedAssemblyMatrix_1_09
