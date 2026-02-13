@@ -424,7 +424,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
 		                                       ofBlocksTiered(
                                                    ElevatorUtil.motorTierConverter(),
                                                    ElevatorUtil.getMotorTiers(),
-                                                   0,
+                                                   -1,
                                                    TST_DSPLauncher::setMotorTier,
                                                    TST_DSPLauncher::getMotorTier))
 		                           .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);

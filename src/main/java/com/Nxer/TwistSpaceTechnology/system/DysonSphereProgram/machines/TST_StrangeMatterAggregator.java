@@ -1366,7 +1366,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                                 Pair.of(TstBlocks.SpaceTimeOscillator, 0),
                                 Pair.of(TstBlocks.SpaceTimeOscillator, 1),
                                 Pair.of(TstBlocks.SpaceTimeOscillator, 2)),
-                            0,
+                            -1,
                             (m, t) -> m.oscillatorTier = t,
                             m -> m.oscillatorTier)))
                 .addElement(
@@ -1379,7 +1379,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                                 Pair.of(TstBlocks.SpaceTimeConstraintor, 0),
                                 Pair.of(TstBlocks.SpaceTimeConstraintor, 1),
                                 Pair.of(TstBlocks.SpaceTimeConstraintor, 2)),
-                            0,
+                            -1,
                             (m, t) -> m.constraintorTier = t,
                             m -> m.constraintorTier)))
                 .addElement(
@@ -1392,7 +1392,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                                 Pair.of(TstBlocks.SpaceTimeMerger, 0),
                                 Pair.of(TstBlocks.SpaceTimeMerger, 1),
                                 Pair.of(TstBlocks.SpaceTimeMerger, 2)),
-                            0,
+                            -1,
                             (m, t) -> m.mergerTier = t,
                             m -> m.mergerTier)))
                 .build();

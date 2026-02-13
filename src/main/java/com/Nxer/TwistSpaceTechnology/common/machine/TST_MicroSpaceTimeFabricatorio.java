@@ -234,7 +234,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         if (block == StabilisationFieldGenerators && meta <= 8) {
             return meta + 2;
         }
-        return -1;
+        return 0;
     }
 
     public static int getBlockTranscendentCasingTier(Block block, int meta) {
@@ -330,19 +330,19 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             IStructureElement<TST_MicroSpaceTimeFabricatorio> tra = ofBlocksTiered(
                 TST_MicroSpaceTimeFabricatorio::getBlockTranscendentCasingTier,
                 ImmutableList.of(Pair.of(sBlockCasings1, 12), Pair.of(sBlockCasingsBA0, 11)),
-                0,
+                -1,
                 (m, t) -> m.transcendentCasingTier = t,
                 m -> m.transcendentCasingTier);
             IStructureElement<TST_MicroSpaceTimeFabricatorio> inj = ofBlocksTiered(
                 TST_MicroSpaceTimeFabricatorio::getBlockInjectionCasingTier,
                 ImmutableList.of(Pair.of(sBlockCasings1, 13), Pair.of(sBlockCasingsBA0, 12)),
-                0,
+                -1,
                 (m, t) -> m.injectionCasingTier = t,
                 m -> m.injectionCasingTier);
             IStructureElement<TST_MicroSpaceTimeFabricatorio> bri = ofBlocksTiered(
                 TST_MicroSpaceTimeFabricatorio::getBlockBridgeCasingTier,
                 ImmutableList.of(Pair.of(sBlockCasings1, 14), Pair.of(sBlockCasingsTT, 10)),
-                0,
+                -1,
                 (m, t) -> m.bridgeCasingTier = t,
                 m -> m.bridgeCasingTier);
 
@@ -394,7 +394,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                             Pair.of(TTCasingsContainer.StabilisationFieldGenerators, 6),
                             Pair.of(TTCasingsContainer.StabilisationFieldGenerators, 7),
                             Pair.of(TTCasingsContainer.StabilisationFieldGenerators, 8)),
-                        0,
+                        -1,
                         (m, t) -> m.fieldTier = t,
                         m -> m.fieldTier))
                 .addElement(

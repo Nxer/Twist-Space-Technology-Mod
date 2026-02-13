@@ -383,7 +383,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                                 Pair.of(essentiaCell, 1),
                                 Pair.of(essentiaCell, 2),
                                 Pair.of(essentiaCell, 3)),
-                            0,
+                            -1,
                             (x, y) -> x.essentiaCellTier = y,
                             x -> x.essentiaCellTier)))
                 .addElement(
