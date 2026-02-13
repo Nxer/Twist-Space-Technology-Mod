@@ -512,7 +512,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                                     Pair.of(sBlockCasingsTT, 14),
                                     Pair.of(sBlockCasingsTT, 10)
                                 ),
-                                0,
+                                -1,
                                 (m, t) -> m.coilTier = t,
                                 m -> m.coilTier
                             )

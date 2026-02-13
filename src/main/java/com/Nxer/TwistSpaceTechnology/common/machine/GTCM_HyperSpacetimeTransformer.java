@@ -233,7 +233,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                                                               Pair.of(SpacetimeCompressionFieldGenerators, 7),
                                                                               Pair.of(SpacetimeCompressionFieldGenerators, 8)
                                                                           ),
-                                                                          0,
+                                                                          -1,
                                                                           (m, t) -> m.SCfieldGeneratorTier = t,
                                                                           m -> m.SCfieldGeneratorTier))
                                                       ).addElement(
@@ -252,7 +252,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                         Pair.of(StabilisationFieldGenerators, 7),
                                         Pair.of(StabilisationFieldGenerators, 8)
                                     ),
-                                    0,
+                                    -1,
                                     (m, t) -> m.STfieldGeneratorTier = t,
                                     m -> m.STfieldGeneratorTier))
                 ).addElement(
@@ -271,7 +271,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                         Pair.of(TimeAccelerationFieldGenerator, 7),
                                         Pair.of(TimeAccelerationFieldGenerator, 8)
                                     ),
-                                    0,
+                                    -1,
                                     (m, t) -> m.TAfieldGeneratorTier = t,
                                     m -> m.TAfieldGeneratorTier))
                 ).addElement(
@@ -288,7 +288,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                         Pair.of(ModBlocks.blockCasings5Misc, 9),
                                         Pair.of(ModBlocks.blockCasings5Misc, 10)
                                     ),
-                                    0,
+                                    -1,
                                     (m, t) -> m.mCraftingTier = t,
                                     m -> m.mCraftingTier))
                 ).addElement(
@@ -302,7 +302,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                         Pair.of(ModBlocks.blockCasings5Misc, 13),
                                         Pair.of(ModBlocks.blockCasings5Misc, 14)
                                     ),
-                                    0,
+                                    -1,
                                     (m, t) -> m.mFocusingTier = t,
                                     m -> m.mFocusingTier))
                 ).addElement(

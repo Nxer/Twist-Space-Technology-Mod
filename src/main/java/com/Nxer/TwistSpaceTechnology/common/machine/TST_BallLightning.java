@@ -527,7 +527,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                                 Pair.of(compactFusionCoil, 3),
                                 Pair.of(compactFusionCoil, 4),
                                 Pair.of(MetaBlockCasing01, 2)),
-                            0,
+                            -1,
                             (me, m) -> me.compactFusionCoilTier = m,
                             me -> me.compactFusionCoilTier)))
                 .addElement(
@@ -537,7 +537,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         ofBlocksTiered(
                             TST_BallLightning::getDimensionBlockTier,
                             ImmutableList.of(Pair.of(GregTechAPI.sBlockCasings1, 14), Pair.of(sBlockCasingsTT, 10)),
-                            0,
+                            -1,
                             (ne, n) -> ne.dimensionBlockTier = n,
                             ne -> ne.dimensionBlockTier)))
                 .addElement(
@@ -562,7 +562,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                                 Pair.of(StabilisationFieldGenerators, 6),
                                 Pair.of(StabilisationFieldGenerators, 7),
                                 Pair.of(StabilisationFieldGenerators, 8)),
-                            0,
+                            -1,
                             (ne, n) -> ne.fieldGeneratorTier = n,
                             ne -> ne.fieldGeneratorTier)))
                 .addElement('G', ofBlock(MetaBlockCasing01, 1))

@@ -295,7 +295,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
                                                                               Pair.of(StabilisationFieldGenerators, 7),
                                                                               Pair.of(StabilisationFieldGenerators, 8)
                                                                           ),
-                                                                          0,
+                                                                          -1,
                                                                           (m, t) -> m.fieldGeneratorTier = t,
                                                                           m -> m.fieldGeneratorTier))
                                                       )

@@ -2905,7 +2905,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                                 Pair.of(essentiaCell, 1),
                                 Pair.of(essentiaCell, 2),
                                 Pair.of(essentiaCell, 3)),
-                            0,
+                            -1,
                             (x, y) -> x.mParallel = y,
                             x -> x.mParallel)))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))

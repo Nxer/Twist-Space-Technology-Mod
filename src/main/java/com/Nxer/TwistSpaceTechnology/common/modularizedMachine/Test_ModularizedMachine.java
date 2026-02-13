@@ -212,7 +212,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
 
                         // Method third input :
                         // If check a block not in tier list, return this value.
-                        0,
+                        -1,
                         // --------------------------------------------------------
 
                         // Method fourth input :

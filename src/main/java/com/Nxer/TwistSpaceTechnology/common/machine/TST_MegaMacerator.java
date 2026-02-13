@@ -230,7 +230,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                                 Pair.of(GregTechAPI.sBlockMetal2, 9),
                                 Pair.of(GregTechAPI.sBlockMetal5, 2),
                                 Pair.of(GregTechAPI.sBlockMetal9, 8)),
-                            0,
+                            -1,
                             (m, t) -> m.mBlockTier = t,
                             m -> m.mBlockTier)))
 
