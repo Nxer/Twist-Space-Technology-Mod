@@ -118,7 +118,6 @@ import static gregtech.api.enums.Mods.AppliedEnergistics2;
 import static gregtech.api.enums.Mods.EnderIO;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
-import static gregtech.api.enums.Mods.GalaxySpace;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTModHandler.getModItem;
@@ -1938,7 +1937,7 @@ public class GTCMMachineRecipes {
             new Object[]{
                 LegendTarget.get(1),
                 getModItem(GoodGenerator.ID, "compactFusionCoil", 1, 4),
-                getModItem(GalaxySpace.ID, "dysonswarmparts", 1, 4),
+                new ItemStack(GregTechAPI.sBlockCasingsDyson, 1),
                 tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
 
                 tectech.thing.CustomItemList.eM_Power.get(64),
