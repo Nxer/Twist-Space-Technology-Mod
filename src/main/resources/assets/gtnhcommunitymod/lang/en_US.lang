@@ -2285,7 +2285,7 @@ Tooltip_MegaSolarPanelFactory=Solar Factory
 Tooltip_MegaSolarPanelFactory_MachineType=Solar Factory
 Tooltip_MegaSolarPanelFactory_1_00=§lbigger is better!
 Tooltip_MegaSolarPanelFactory_1_01=§dPerfect overclocking§7.
-Tooltip_MegaSolarPanelFactory_1_02=Recipe Time Multiplier = 100% / Component Assembly Line Casing Tier.
+Tooltip_MegaSolarPanelFactory_1_02=Recipe Time Multiplier = 100% / Component Casing Tier.
 tile.essentia_discretizer.name=Essentia Discretizer
 tile.essentia.discretizer.tooltip.0=Discretizes essentia into fluid forms.
 tile.essentia.discretizer.tooltip.1=Ensure essentia cell is sufficient,otherwise,inserted CrystalEssence will be thorough item and will not be recognized by the infusion provider supplier as essentia.
@@ -2309,3 +2309,5 @@ Tooltip_InfusionMaterialDispenser_06=You can use it together with the Essentia T
 Tooltip_InfusionMaterialDispenser_07=Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
 tc.research_text.INFUSION_MATERIAL_DISPENSER.2=§lAutomation Tips:§r<BR><BR>Similar to the Skypiercer Tower, but this time the pattern itself contains items that will be consumed during infusion. Because of this, the subnet must include a Storage Bus attached to the Infusion Dispenser’s input bus. After the crystallized Essentia is converted back into Essentia by the Essentia Discretizer, the remaining items will naturally be stored into the input bus — exactly the behavior we want.<BR><BR>Furthermore, since the types of Essentia required for infusion are no longer limited to only two, Essentia Cells should be used within the subnet. Accordingly, an CardAdvancedBlocking must be inserted into the subnet’s fluid_interface and configured to §lAdvancedBlockingModeAll§r.
 tst.recipe.TST_MegaSolarPanelRecipes=Mega Solar Panel Factory
+Waila.TST_MegaSolarPanelFactory.1=§aBatch mode is ON
+Waila.TST_MegaSolarPanelFactory.2=§aCurrent Speed Bonus

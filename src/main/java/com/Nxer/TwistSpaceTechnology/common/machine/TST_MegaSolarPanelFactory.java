@@ -17,13 +17,18 @@ import static java.lang.Integer.MAX_VALUE;
 import static tectech.thing.casing.TTCasingsContainer.GodforgeCasings;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -31,6 +36,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -49,6 +55,8 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSolarPanelFactory> {
 
@@ -138,6 +146,43 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         super.loadNBTData(aNBT);
         casingTier = aNBT.getInteger("casingTier");
     }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("batchMode")) {
+            currentTip.add(EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.1"));
+            // #tr Waila.TST_MegaSolarPanelFactory.1
+            // # {\GREEN}Batch mode is ON
+            // #zh_CN {\GREEN}批处理已开启
+        }
+        float speedBonus = tag.getFloat("speedBonus");
+        if (speedBonus > -1) {
+            currentTip.add(
+                EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.2")
+                    + "="
+                    + EnumChatFormatting.GOLD
+                    + GTUtility.formatNumbers(tag.getFloat("speedBonus"))
+                    + "%");
+            // #tr Waila.TST_MegaSolarPanelFactory.2
+            // # {\GREEN}Current Speed Bonus
+            // #zh_CN {\GREEN}当前速度加成
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setBoolean("batchMode", batchMode);
+            tag.setFloat("speedBonus", casingTier * 100);
+        }
+    }
+
     // endregion
 
     // region Structure
@@ -288,7 +333,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             // #zh_CN 执行{\LIGHT_PURPLE}无损超频{\GRAY}.
             .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_01"))
             // #tr Tooltip_MegaSolarPanelFactory_1_02
-            // # Recipe Time Multiplier = 100% / Component Assembly Line Casing Tier.
+            // # Recipe Time Multiplier = 100% / Component Casing Tier.
             // #zh_CN 耗时倍率 = 100% / 部件装配线外壳等级.
             .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_02"))
             .addSeparator()
