@@ -119,10 +119,12 @@ import static gregtech.api.enums.Mods.EnderIO;
 import static gregtech.api.enums.Mods.Forestry;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GoodGenerator;
+import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
+import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
@@ -1757,6 +1759,22 @@ public class GTCMMachineRecipes {
         // endregion
 
         // region Eye of Wood
+
+        // Garden of grind recipies for field generator
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.EnderPearl, 1),
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 4),
+                GTUtility.getIntegratedCircuit(1))
+            .itemOutputs(ItemList.Field_Generator_LV.get(1)).fluidInputs(Materials.BlueSteel.getMolten(288))
+            .duration(30 * SECONDS).eut(TierEU.RECIPE_LV).addTo(assemblerRecipes);
+
+        GTModHandler.addCraftingRecipe(
+            ItemList.Field_Generator_LV.get(1L),
+            GTModHandler.RecipeBits.NOT_REMOVABLE | GTModHandler.RecipeBits.REVERSIBLE,
+            new Object[] { "WCW", "CGC", "WCW", 'G', OrePrefixes.plate.get(Materials.EnderPearl), 'C',
+                OrePrefixes.circuit.get(Materials.HV), 'W', OrePrefixes.plate.get(Materials.BlueSteel) });
+
         GTValues.RA
             .stdBuilder()
             .itemInputs(
