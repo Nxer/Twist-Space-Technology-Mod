@@ -8,7 +8,6 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.ParticleTrapTime
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SeedsSpaceTime;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.SpaceTimeSuperconductingInlaidMotherboard;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UEV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UIV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -18,6 +17,7 @@ import static gregtech.api.enums.ItemList.Circuit_CosmicComputer;
 import static gregtech.api.enums.ItemList.Circuit_CosmicProcessor;
 import static gregtech.api.enums.Materials.RadoxPolymer;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
+import static gregtech.api.util.GTRecipeConstants.PCB_NANITE_MATERIAL;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
 import static gregtech.api.util.GTUtility.copyAmount;
@@ -45,6 +45,7 @@ import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
+import gregtech.api.recipe.metadata.PCBFactoryTierKey;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
@@ -74,7 +75,6 @@ public class CosmicProcessorCircuitRecipes {
                 GTCMItemList.SiliconBasedNeuron.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 1))
             .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 2))
-
             .eut(RECIPE_UMV)
             .duration(20 * 5)
             .addTo(RecipeMaps.formingPressRecipes);
@@ -83,12 +83,13 @@ public class CosmicProcessorCircuitRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                setStackSize(Materials.Gold.getNanite(1), 0),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.InfinityCatalyst, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 22))
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(334))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(16))
+            .metadata(PCBFactoryTierKey.INSTANCE, 2)
+            .metadata(PCB_NANITE_MATERIAL, Materials.Gold)
             .eut(RECIPE_UEV)
             .duration(20 * 22)
             .addTo(RecipeMaps.pcbFactoryRecipes);
@@ -96,13 +97,13 @@ public class CosmicProcessorCircuitRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
-                setStackSize(Materials.Gold.getNanite(1), 0),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GGMaterial.shirabon.get(OrePrefixes.foil, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUMVBase, 22))
             .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(667))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(64))
-
+            .metadata(PCBFactoryTierKey.INSTANCE, 3)
+            .metadata(PCB_NANITE_MATERIAL, Materials.Gold)
             .eut(RECIPE_UEV)
             .duration(20 * 22)
             .addTo(RecipeMaps.pcbFactoryRecipes);
