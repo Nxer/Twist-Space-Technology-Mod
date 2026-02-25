@@ -15,6 +15,7 @@ import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
@@ -138,7 +139,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                             {"Z"}
                         }
                     )
-                    .addElement('A', BorosilicateGlass.ofBoroGlassAnyTier())
+                    .addElement('A', chainAllGlasses())
                     .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 11))
                     .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
                     .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))

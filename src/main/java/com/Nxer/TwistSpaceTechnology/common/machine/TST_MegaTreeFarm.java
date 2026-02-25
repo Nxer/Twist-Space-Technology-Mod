@@ -17,6 +17,7 @@ import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
 import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
@@ -63,7 +64,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import forestry.api.arboriculture.ITree;
 import forestry.api.arboriculture.TreeManager;
 import gregtech.api.GregTechAPI;
@@ -366,7 +366,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
                 .addShape(STRUCTURE_PIECE_WATER, transpose(water))
-                .addElement('A', BorosilicateGlass.ofBoroGlassAnyTier())
+                .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(MetaBlockCasing01, 9))
                 .addElement('C', ofBlock(MetaBlockCasing01, 10))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 10))

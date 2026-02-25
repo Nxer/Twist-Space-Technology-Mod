@@ -26,6 +26,7 @@ import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
@@ -73,7 +74,6 @@ import com.gtnewhorizons.modularui.api.widget.Widget;
 import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
-import bartworks.API.BorosilicateGlass;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
@@ -223,28 +223,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addShape(STRUCTURE_PIECE_Blaze_T1, transpose(shapeBlazeT1))
                 .addShape(STRUCTURE_PIECE_Blaze_T2, transpose(shapeBlazeT2))
                 .addElement('-', isAir())
-                .addElement(
-                    'A',
-                    withChannel(
-                        "glass",
-                        BorosilicateGlass.ofBoroGlass(
-                            (byte) 0,
-                            (byte) 1,
-                            Byte.MAX_VALUE,
-                            (te, t) -> te.glassTier = t,
-                            te -> te.glassTier)))
-                .addElement(
-                    'a',
-                    ofChain(
-                        withChannel(
-                            "glass",
-                            BorosilicateGlass.ofBoroGlass(
-                                (byte) 0,
-                                (byte) 1,
-                                Byte.MAX_VALUE,
-                                (te, t) -> te.glassTier = t,
-                                te -> te.glassTier)),
-                        isAir()))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
+                .addElement('a', ofChain(chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier), isAir()))
                 .addElement('B', ofBlock(GameRegistry.findBlock(Mods.IndustrialCraft2.ID, "blockFenceIron"), 0))
                 .addElement('C', ofBlock(compactFusionCoil, 0))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 11))
@@ -349,6 +329,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         recipeHeatLimitation = 0;
+        glassTier = -1;
 
         // Check all tier to render properly in nei
         if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
@@ -380,7 +361,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     // region Processing Logic
-    byte glassTier = 0;
+    int glassTier = -1;
     byte controllerTier = 1;
     boolean isBlazeFinishSet = false;
     boolean isBlazeFinishClear = true;
@@ -948,7 +929,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mTier", controllerTier);
-        aNBT.setByte("mGlass", glassTier);
+        aNBT.setInteger("mGlass", glassTier);
         aNBT.setByte("mMode", (byte) machineMode);
         aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
         aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
@@ -968,7 +949,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
         controllerTier = aNBT.getByte("mTier");
-        glassTier = aNBT.getByte("mGlass");
+        glassTier = aNBT.getInteger("mGlass");
         machineMode = aNBT.getByte("mMode");
         mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
         isBlazeFinishSet = aNBT.getBoolean("isBlazeFinishSet");

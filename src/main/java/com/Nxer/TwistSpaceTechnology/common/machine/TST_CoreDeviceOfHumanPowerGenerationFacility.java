@@ -13,11 +13,11 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COM
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COMPRESSOR_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -29,7 +29,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
@@ -64,9 +63,9 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     // endregion
 
     // region Processing Logic
-    private byte glassTier = 0;
+    private int glassTier = -1;
     private String glassTierName = "NONE";
-    private HeatingCoilLevel coilLevel;
+    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
 
     @Override
     public String[] getInfoData() {
@@ -82,18 +81,6 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
             + EnumChatFormatting.GOLD
             + this.glassTierName;
         return ret;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("glassTier", glassTier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        glassTier = aNBT.getByte("glassTier");
     }
 
     public int getCoilTier() {
@@ -131,10 +118,10 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        glassTier = 0;
+        glassTier = -1;
         coilLevel = HeatingCoilLevel.None;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (glassTier == 0 || coilLevel == HeatingCoilLevel.None) return false;
+        if (glassTier <= 0 || coilLevel == HeatingCoilLevel.None) return false;
         if (glassTier < 12) {
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
@@ -198,15 +185,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
                               })
                     )
                     .addElement(
-                        'A', // BW Glasses
-                        withChannel("glass",
-                                    BorosilicateGlass.ofBoroGlass(
-                                        (byte) 0,
-                                        (byte) 1,
-                                        Byte.MAX_VALUE,
-                                        (te, t) -> te.glassTier = t,
-                                        te -> te.glassTier
-                                    ))
+                        'A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier)
                     )
                     .addElement(
                         'B', // gt.blockcasings, 11 : Fluid IO Hatches

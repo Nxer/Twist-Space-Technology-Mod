@@ -19,6 +19,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static tectech.thing.casing.TTCasingsContainer.StabilisationFieldGenerators;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
@@ -45,7 +46,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -80,8 +80,8 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     // endregion
 
     // region Processing Logic
-    public byte glassTier = 0;
-    private int fieldGeneratorTier = 0;
+    public int glassTier = -1;
+    private int fieldGeneratorTier = -1;
 
     @Override
     public int totalMachineMode() {
@@ -120,7 +120,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         super.saveNBTData(aNBT);
 
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
-        aNBT.setByte("glassTier", glassTier);
+        aNBT.setInteger("glassTier", glassTier);
         aNBT.setByte("mode", (byte) machineMode);
     }
 
@@ -129,7 +129,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         super.loadNBTData(aNBT);
 
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
-        glassTier = aNBT.getByte("glassTier");
+        glassTier = aNBT.getInteger("glassTier");
         machineMode = aNBT.getByte("mode");
     }
 
@@ -181,8 +181,8 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.fieldGeneratorTier = 0;
-        this.glassTier = 0;
+        this.fieldGeneratorTier = -1;
+        this.glassTier = -1;
         boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
         if (this.fieldGeneratorTier == 0 || this.glassTier <= 0) {
             return false;
@@ -225,21 +225,18 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 			true);
 	}
 
-	public static int getBlockFieldGeneratorTier(Block block, int meta){
+	public static Integer getBlockFieldGeneratorTier(Block block, int meta){
 		if (block == sBlockCasingsTT){
-			switch (meta) {
-				case 6:
-					return 1;
-				case 14:
-					return 2;
-				default:
-					return 0;
-			}
+			return switch (meta) {
+				case 6 -> 1;
+				case 14 -> 2;
+				default -> null;
+			};
 		}
 		if (block == StabilisationFieldGenerators){
 			return meta + 3;
 		}
-		return 0;
+		return null;
 	}
 	private static final String STRUCTURE_PIECE_MAIN = "mainCrystallineInfinitier";
 	private final int horizontalOffSet = 15;
@@ -253,14 +250,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
                                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                                                       .addElement(
                                                           'A',
-                                                          withChannel("glass",
-                                                                      BorosilicateGlass.ofBoroGlass(
-                                                                          (byte) 0,
-                                                                          (byte) 1,
-                                                                          Byte.MAX_VALUE,
-                                                                          (te, t) -> te.glassTier = t,
-                                                                          te -> te.glassTier
-                                                                      )))
+                                                          chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                                                       .addElement(
                                                           'B',
                                                           HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()

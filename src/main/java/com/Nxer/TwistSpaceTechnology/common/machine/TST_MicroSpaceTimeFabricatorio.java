@@ -82,10 +82,10 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         SeedSpaceTime = TST_ItemID.createNoNBT(GTCMItemList.SeedsSpaceTime.get(1));
     }
 
-    protected int transcendentCasingTier = 0;
-    protected int injectionCasingTier = 0;
-    protected int bridgeCasingTier = 0;
-    protected int fieldTier = 0;
+    protected int transcendentCasingTier = -1;
+    protected int injectionCasingTier = -1;
+    protected int bridgeCasingTier = -1;
+    protected int fieldTier = -1;
     protected MTEHatchInputBus specialInputBus;
 
     @Override
@@ -191,10 +191,10 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         specialInputBus = null;
-        transcendentCasingTier = 0;
-        injectionCasingTier = 0;
-        bridgeCasingTier = 0;
-        fieldTier = 0;
+        transcendentCasingTier = -1;
+        injectionCasingTier = -1;
+        bridgeCasingTier = -1;
+        fieldTier = -1;
         enablePerfectOverclock = false;
         speedBonus = 1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
@@ -227,44 +227,44 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<TST_MicroSpaceTimeFabricatorio> STRUCTURE_DEFINITION = null;
 
-    public static int getBlockFieldTier(Block block, int meta) {
+    public static Integer getBlockFieldTier(Block block, int meta) {
         if (block == sBlockCasingsTT && meta == 14) {
             return 1;
         }
         if (block == StabilisationFieldGenerators && meta <= 8) {
             return meta + 2;
         }
-        return 0;
+        return null;
     }
 
-    public static int getBlockTranscendentCasingTier(Block block, int meta) {
+    public static Integer getBlockTranscendentCasingTier(Block block, int meta) {
         if (block == sBlockCasings1 && meta == 12) {
             return 1;
         }
         if (block == sBlockCasingsBA0 && meta == 11) {
             return 2;
         }
-        return 0;
+        return null;
     }
 
-    public static int getBlockInjectionCasingTier(Block block, int meta) {
+    public static Integer getBlockInjectionCasingTier(Block block, int meta) {
         if (block == sBlockCasings1 && meta == 13) {
             return 1;
         }
         if (block == sBlockCasingsBA0 && meta == 12) {
             return 2;
         }
-        return 0;
+        return null;
     }
 
-    public static int getBlockBridgeCasingTier(Block block, int meta) {
+    public static Integer getBlockBridgeCasingTier(Block block, int meta) {
         if (block == sBlockCasings1 && meta == 14) {
             return 1;
         }
         if (block == sBlockCasingsTT && meta == 10) {
             return 2;
         }
-        return 0;
+        return null;
     }
 
     public boolean addSpecialInputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {

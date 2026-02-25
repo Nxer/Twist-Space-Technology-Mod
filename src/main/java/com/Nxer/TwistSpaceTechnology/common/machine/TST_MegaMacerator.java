@@ -23,6 +23,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.block.Block;
@@ -41,7 +42,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -82,7 +82,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     // region Processing Logic
     private int mBlockTier = 0;
     public int mRecipeTier = 1;
-    public byte glassTier;
+    public int glassTier;
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -133,15 +133,15 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        mBlockTier = 0;
-        glassTier = 0;
+        mBlockTier = -1;
+        glassTier = -1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         return true;
     }
 
-    public static int getTierOfBlock(Block block, int meta) {
+    public static Integer getTierOfBlock(Block block, int meta) {
         if (block == null) {
-            return -1;
+            return null;
         }
         if (block == GregTechAPI.sBlockMetal2 && meta == 9) {
             return 1; // Damascus Steel
@@ -152,7 +152,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         if (block == GregTechAPI.sBlockMetal9 && meta == 8) {
             return 3; // Universium
         }
-        return -1;
+        return null;
     }
 
     // region Structure
@@ -189,16 +189,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaMacerator>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement(
-                    'A',
-                    withChannel(
-                        "glass",
-                        BorosilicateGlass.ofBoroGlass(
-                            (byte) 0,
-                            (byte) 1,
-                            Byte.MAX_VALUE,
-                            (te, t) -> te.glassTier = t,
-                            te -> te.glassTier)))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement(
                     'B',
                     HatchElementBuilder.<TST_MegaMacerator>builder()

@@ -21,6 +21,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
@@ -40,7 +41,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
@@ -79,7 +79,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
      * <li>3 = Forge Hammer
      */
 
-    public byte glassTier;
+    public int glassTier;
     public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -143,7 +143,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.glassTier = 0;
+        this.glassTier = -1;
         this.coilLevel = HeatingCoilLevel.None;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (this.glassTier <= 0) return false;
@@ -226,14 +226,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                        .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                                        .addElement(
                                            'A',
-                                           withChannel("glass",
-                                                       BorosilicateGlass.ofBoroGlass(
-                                                           (byte) 0,
-                                                           (byte) 1,
-                                                           Byte.MAX_VALUE,
-                                                           (te, t) -> te.glassTier = t,
-                                                           te -> te.glassTier
-                                                       ))
+                                           chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier)
                                        )
                                        .addElement('B', ofBlock(compactFusionCoil,0))
                                        .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))

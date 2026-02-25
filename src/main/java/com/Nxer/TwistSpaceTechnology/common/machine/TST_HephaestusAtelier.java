@@ -89,7 +89,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     // region Processing Logic
     protected static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
         .valueOf(Config.ConsumeEuPerSmelting_HephaestusAtelier);
-    protected int coilTier = 0;
+    protected int coilTier = -1;
     protected int maxProcessNormalModeFurnace = 0;
     protected long maxEut = 0;
     protected UUID ownerUUID;
@@ -437,7 +437,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        coilTier = 0;
+        coilTier = -1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (coilTier == 0) return false;
         if (coilTier == 1 && mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty()) return false;
@@ -528,16 +528,16 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         return STRUCTURE_DEFINITION;
     }
 
-    private static int getBlockTier(Block block, int meta) {
+    private static Integer getBlockTier(Block block, int meta) {
         if (sBlockCasingsTT == block) {
             return switch (meta) {
                 case 7 -> 1;
                 case 14 -> 2;
                 case 10 -> 3;
-                default -> 0;
+                default -> null;
             };
         } else {
-            return 0;
+            return null;
         }
     }
 

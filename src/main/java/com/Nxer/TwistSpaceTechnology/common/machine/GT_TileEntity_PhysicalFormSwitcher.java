@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static goodgenerator.loader.Loaders.MAR_Casing;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
@@ -15,6 +14,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
@@ -38,7 +38,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import ggfab.api.GGFabRecipeMaps;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
@@ -74,7 +73,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     // endregion
 
     // region Processing Logic
-    public byte glassTier;
+    public int glassTier;
 
     @Override
     public int totalMachineMode() {
@@ -99,7 +98,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.glassTier = 0;
+        this.glassTier = -1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
             return false;
         }
@@ -230,15 +229,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                                        .<GT_TileEntity_PhysicalFormSwitcher>builder()
                                        .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                                        .addElement(
-                                           'A',
-                                           withChannel("glass",
-                                                       BorosilicateGlass.ofBoroGlass(
-                                                           (byte) 0,
-                                                           (byte) 1,
-                                                           Byte.MAX_VALUE,
-                                                           (te, t) -> te.glassTier = t,
-                                                           te -> te.glassTier
-                                                       )))
+                                           'A',chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                                        .addElement('B', ofBlock(MAR_Casing,0))
                                        .addElement('C', ofBlock(GregTechAPI.sBlockCasings2,8))
                                        .addElement('D', ofBlock(GregTechAPI.sBlockCasings2,15))

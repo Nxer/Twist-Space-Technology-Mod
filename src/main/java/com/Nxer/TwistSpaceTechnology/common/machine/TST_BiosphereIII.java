@@ -5,7 +5,6 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -17,6 +16,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_DISTILLATION_TOWER_GLOW;
 import static gregtech.api.util.GTRecipeConstants.GLASS;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.GTStructureUtility.ofHatchAdder;
 
@@ -42,7 +42,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import bartworks.API.recipe.BartWorksRecipeMaps;
 import bartworks.common.configs.Configuration;
 import bartworks.common.tileentities.tiered.MTERadioHatch;
@@ -89,7 +88,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     // endregion
 
     // region Processing Logic
-    private byte mGlassTier = 0;
+    private int mGlassTier = 0;
     private int mNeededGlassTier = 0;
     private int mSievert = 0;
     private int mNeededSievert = 0;
@@ -280,7 +279,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         mRadHatches.clear();
-        mGlassTier = 0;
+        mGlassTier = -1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         if (this.mGlassTier <= 0) return false;
         if (mRadHatches.size() > 1 && mOutputHatches.size() > 1) return false;
@@ -347,15 +346,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_BiosphereIII>builder()
                                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                                                       .addElement(
-                                                          'A',
-                                                          withChannel(
-                                                              "glass",
-                                                              BorosilicateGlass.ofBoroGlass(
-                                                                  (byte) 0,
-                                                                  (byte) 1,
-                                                                  Byte.MAX_VALUE,
-                                                                  (te, t) -> te.mGlassTier = t,
-                                                                  te -> te.mGlassTier)))
+                                                          'A',chainAllGlasses(-1, (te, t) -> te.mGlassTier = t, te -> te.mGlassTier))
                                                       .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 15))
                                                       .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 1))
                                                       .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 0))

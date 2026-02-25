@@ -78,7 +78,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     // endregion
 
     // region Processing Logic
-    private int casingTier = -2;
+    private int casingTier = -1;
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -196,7 +196,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.casingTier = -2;
+        this.casingTier = -1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
         this.speedBonus = 1F / (casingTier + 1);
         return true;
@@ -245,7 +245,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                             IntStream.range(0, 14)
                                 .mapToObj(i -> Pair.of(Loaders.componentAssemblylineCasing, i))
                                 .collect(Collectors.toList()),
-                            -2,
+                            -1,
                             (t, meta) -> t.casingTier = meta,
                             t -> t.casingTier)))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings10, 11))
