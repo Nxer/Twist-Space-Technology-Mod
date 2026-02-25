@@ -80,7 +80,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     // endregion
 
     // region Processing Logic
-    private int fieldGeneratorTier = 0;
+    private int fieldGeneratorTier = -1;
     private int multiplier = 1;
 
     @Override
@@ -289,7 +289,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.fieldGeneratorTier = 0;
+        this.fieldGeneratorTier = -1;
         boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
         if (this.fieldGeneratorTier < 1) {
             return false;
@@ -327,21 +327,18 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     private final int verticalOffSet = 15;
     private final int depthOffSet = 0;
     private static IStructureDefinition<GT_TileEntity_SpaceScaler> STRUCTURE_DEFINITION = null;
-    public static int getBlockFieldGeneratorTier(Block block, int meta){
+    public static Integer getBlockFieldGeneratorTier(Block block, int meta){
         if (block == sBlockCasingsTT){
-            switch (meta) {
-                case 6:
-                    return 1;
-                case 14:
-                    return 2;
-                default:
-                    return 0;
-            }
+	        return switch (meta) {
+		        case 6 -> 1;
+		        case 14 -> 2;
+		        default -> null;
+	        };
         }
         if (block == StabilisationFieldGenerators){
             return meta + 3;
         }
-        return 0;
+        return null;
     }
 
     @Override
@@ -386,7 +383,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                                        Pair.of(StabilisationFieldGenerators, 7),
                                                        Pair.of(StabilisationFieldGenerators, 8)
                                                    ),
-                                                   0,
+                                                   -1,
                                                    (m, t) -> m.fieldGeneratorTier = t,
                                                    m -> m.fieldGeneratorTier))
                                )

@@ -23,6 +23,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.GTUtility.getCasingTextureIndex;
@@ -65,7 +66,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
@@ -109,10 +109,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     // region default value
 
     public int mRecipeTierModeFusion = 1;
-    public byte glassTier;
-    private int fieldGeneratorTier = 0;
-    private int compactFusionCoilTier = 0;
-    private int dimensionBlockTier = 0;
+    public int glassTier = -1;
+    private int fieldGeneratorTier = -1;
+    private int compactFusionCoilTier = -1;
+    private int dimensionBlockTier = -1;
     private UUID ownerUUID;
     public byte mMachineTier = 1;
     private byte mStructureTier = 0;
@@ -122,7 +122,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     private String costingWirelessEU = "0";
     private int extraEuCostMultiplier = 1;
 
-    private static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
+    public static final BigInteger NEGATIVE_ONE = BigInteger.valueOf(-1);
     // end region
 
     @Override
@@ -213,32 +213,32 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         };
     }
 
-    public static int getBlockFieldGeneratorTier(Block block, int meta) {
+    public static Integer getBlockFieldGeneratorTier(Block block, int meta) {
         if (block == sBlockCasingsTT) {
             return meta - 7;
         }
         if (block == StabilisationFieldGenerators) {
             return meta + 3;
         }
-        return 0;
+        return null;
     }
 
-    public static int getcompactFusionCoilTier(Block block, int meta) {
+    public static Integer getcompactFusionCoilTier(Block block, int meta) {
         if (block == compactFusionCoil) {
             return meta + 1;
         }
         if (block == MetaBlockCasing01 && meta == 2) return 6;
-        return 0;
+        return null;
     }
 
-    public static int getDimensionBlockTier(Block block, int meta) {
+    public static Integer getDimensionBlockTier(Block block, int meta) {
         if (block == sBlockCasingsTT && meta == 10) {
             return 2;
         }
         if (block == GregTechAPI.sBlockCasings1 && meta == 14) {
             return 1;
         }
-        return 0;
+        return null;
     }
 
     public static int getFusionRecipeTier(int StartUp, int RecipeTier) {
@@ -408,10 +408,10 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.glassTier = 0;
-        this.fieldGeneratorTier = 0;
-        this.compactFusionCoilTier = 0;
-        this.dimensionBlockTier = 0;
+        this.glassTier = -1;
+        this.fieldGeneratorTier = -1;
+        this.compactFusionCoilTier = -1;
+        this.dimensionBlockTier = -1;
         this.coilLevel = HeatingCoilLevel.None;
         this.mStructureTier = 0;
 
@@ -504,16 +504,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             STRUCTURE_DEFINITION = StructureDefinition.<TST_BallLightning>builder()
                 .addShape(STRUCTURE_PIECE_MK1, transpose(shapeMK1))
                 .addShape(STRUCTURE_PIECE_MK2, transpose(shapeMK2))
-                .addElement(
-                    'A',
-                    withChannel(
-                        "glass",
-                        BorosilicateGlass.ofBoroGlass(
-                            (byte) 0,
-                            (byte) 1,
-                            Byte.MAX_VALUE,
-                            (te, t) -> te.glassTier = t,
-                            te -> te.glassTier)))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement(
                     'B',
                     withChannel(
@@ -713,7 +704,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         aNBT.setFloat("speedBonus", speedBonus);
         aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
         aNBT.setInteger("compactFusionCoilTier", compactFusionCoilTier);
-        aNBT.setByte("glassTier", glassTier);
+        aNBT.setInteger("glassTier", glassTier);
         aNBT.setString("costingWirelessEU", costingWirelessEU);
         aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
     }
@@ -728,7 +719,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         speedBonus = aNBT.getFloat("speedBonus");
         fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
         compactFusionCoilTier = aNBT.getInteger("compactFusionCoilTier");
-        glassTier = aNBT.getByte("glassTier");
+        glassTier = aNBT.getInteger("glassTier");
         costingWirelessEU = aNBT.getString("costingWirelessEU");
         extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
     }

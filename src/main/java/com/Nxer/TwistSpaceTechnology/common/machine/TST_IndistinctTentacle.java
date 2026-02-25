@@ -20,6 +20,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
@@ -56,7 +57,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
@@ -104,7 +104,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
 
     // region Processing Logic
     public int tierComponentCasing = -2;
-    public byte glassTier = 0;
+    public int glassTier = -1;
     private int extraEuCostMultiplier = 1;
     protected boolean hasAstralArray = false;
 
@@ -200,7 +200,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         aNBT.setByte("mode", (byte) machineMode);
         aNBT.setBoolean("hasAstralArray", hasAstralArray);
         aNBT.setInteger("tierComponentCasing", tierComponentCasing);
-        aNBT.setByte("glassTier", glassTier);
+        aNBT.setInteger("glassTier", glassTier);
         aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
     }
 
@@ -210,7 +210,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         machineMode = aNBT.getByte("mode");
         hasAstralArray = aNBT.getBoolean("hasAstralArray");
         tierComponentCasing = aNBT.getInteger("tierComponentCasing");
-        glassTier = aNBT.getByte("glassTier");
+        glassTier = aNBT.getInteger("glassTier");
         extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
     }
 
@@ -301,8 +301,8 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        tierComponentCasing = -2;
-        glassTier = 0;
+        tierComponentCasing = -1;
+        glassTier = -1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
 
         // trans metal allow use wireless mode
@@ -421,16 +421,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_IndistinctTentacle>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                .addElement(
-                    'A',
-                    withChannel(
-                        "glass",
-                        BorosilicateGlass.ofBoroGlass(
-                            (byte) 0,
-                            (byte) 1,
-                            Byte.MAX_VALUE,
-                            (te, t) -> te.glassTier = t,
-                            te -> te.glassTier)))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement(
                     'B',
                     withChannel(
@@ -440,7 +431,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
                             IntStream.range(0, 14)
                                 .mapToObj(i -> Pair.of(Loaders.componentAssemblylineCasing, i))
                                 .collect(Collectors.toList()),
-                            -2,
+                            -1,
                             (t, meta) -> t.tierComponentCasing = meta,
                             t -> t.tierComponentCasing)))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))

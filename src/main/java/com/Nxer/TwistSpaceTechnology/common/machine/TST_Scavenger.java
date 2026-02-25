@@ -22,6 +22,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -148,7 +148,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                         .adder(TST_Scavenger::addToMachineList)
                         .dot(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
-                        .buildAndChain(BorosilicateGlass.ofBoroGlassAnyTier(), ofBlock(GregTechAPI.sBlockCasings4, 14)))
+                        .buildAndChain(chainAllGlasses(), ofBlock(GregTechAPI.sBlockCasings4, 14)))
                 .addElement(
                     'D',
                     HatchElementBuilder.<TST_Scavenger>builder()

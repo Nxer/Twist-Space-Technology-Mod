@@ -17,7 +17,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBotto
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textScrewdriverChangeMode;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -29,6 +28,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
+import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
@@ -51,7 +51,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import bartworks.API.BorosilicateGlass;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -81,7 +80,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     // endregion
 
     // region Processing Logic
-    private byte glassTier = 0;
+    private int glassTier = -1;
     private int piece = 1;
 
     @Override
@@ -136,7 +135,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.glassTier = 0;
+        this.glassTier = -1;
         this.piece = 1;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
             return false;
@@ -239,14 +238,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
                                                       .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
                                                       .addShape(STRUCTURE_PIECE_END, shapeEnd)
                                                       .addElement('A',
-                                                                  withChannel("glass",
-                                                                              BorosilicateGlass.ofBoroGlass(
-                                                                                  (byte) 0,
-                                                                                  (byte) 1,
-                                                                                  Byte.MAX_VALUE,
-                                                                                  (te, t) -> te.glassTier = t,
-                                                                                  te -> te.glassTier
-                                                                              )))
+                                                                  chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                                                       .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 15))
                                                       .addElement('C', ofBlock(GregTechAPI.sBlockCasings4, 14))
                                                       .addElement('D',
