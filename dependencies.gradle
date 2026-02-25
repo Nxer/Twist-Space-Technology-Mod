@@ -35,7 +35,7 @@
  */
 dependencies {
     elytraModpackVersion {
-        setGtnhVersion("2.8.0")
+        setGtnhVersion("2.8.4")
     }
 
     implementation(gtnh("GT5-Unofficial"))
