@@ -126,7 +126,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     private String ownerName; // init when loading world
     private UUID ownerUUID; // init when loading world
     private int dimID; // init when loading world
-    private int motorTier = 0;
+    private int motorTier = -1;
     private long overloadTime = 0;
     private boolean wirelessMode = true;
     private DSP_DataCell dspDataCell; // init when loading world
@@ -378,7 +378,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
-        this.motorTier = 0;
+        this.motorTier = -1;
         boolean flag = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
         wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         if (this.motorTier < 1) return false;

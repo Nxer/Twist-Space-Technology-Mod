@@ -213,11 +213,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // endregion
 
     // region Structure Parameters
-    protected int oscillatorTier = 0;
+    protected int oscillatorTier = -1;
     protected int oscillatorPiece = 0;
-    protected int constraintorTier = 0;
+    protected int constraintorTier = -1;
     protected int constraintorPiece = 0;
-    protected int mergerTier = 0;
+    protected int mergerTier = -1;
     protected int mergerPiece = 0;
     protected int rings = 0;
     protected boolean wirelessMode = false;
@@ -1401,18 +1401,18 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return STRUCTURE_DEFINITION;
     }
 
-    public static int getSpaceTimeOscillatorTier(Block b, int m) {
-        if (b != TstBlocks.SpaceTimeOscillator) return 0;
+    public static Integer getSpaceTimeOscillatorTier(Block b, int m) {
+        if (b != TstBlocks.SpaceTimeOscillator) return null;
         return m + 1;
     }
 
-    public static int getSpaceTimeConstraintorTier(Block b, int m) {
-        if (b != TstBlocks.SpaceTimeConstraintor) return 0;
+    public static Integer getSpaceTimeConstraintorTier(Block b, int m) {
+        if (b != TstBlocks.SpaceTimeConstraintor) return null;
         return m + 1;
     }
 
-    public static int getSpaceTimeMergerTier(Block b, int m) {
-        if (b != TstBlocks.SpaceTimeMerger) return 0;
+    public static Integer getSpaceTimeMergerTier(Block b, int m) {
+        if (b != TstBlocks.SpaceTimeMerger) return null;
         return m + 1;
     }
 
