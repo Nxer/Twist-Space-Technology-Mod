@@ -578,14 +578,16 @@ public class GTCM_ParallelHelper extends ParallelHelper {
             ItemStack origin = recipe.getOutput(i).copy();
             if (outputChance < 10000) {
                 // parameter of this item final amount
-                long outputs = (long) currentParallel * origin.stackSize * outputChance / 10000;
-                long remain = (long) currentParallel * origin.stackSize * outputChance % 10000;
+                long outputsParallel = (long) currentParallel * outputChance / 10000;
+                long remain = (long) currentParallel * outputChance % 10000;
 
                 if (remain > 0) {
                     if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
-                        outputs ++;
+                        outputsParallel ++;
                     }
                 }
+
+                long outputs = outputsParallel * origin.stackSize;
 
                 while (outputs >= Integer.MAX_VALUE) {
                     toOutput.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, origin));
