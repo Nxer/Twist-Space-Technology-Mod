@@ -583,7 +583,7 @@ public class GTCM_ParallelHelper extends ParallelHelper {
 
                 if (remain > 0) {
                     if (remain > XSTR.XSTR_INSTANCE.nextInt(10000)) {
-                        outputs += origin.stackSize;
+                        outputs ++;
                     }
                 }
 
@@ -602,7 +602,10 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                     toOutput.add(GTUtility.copyAmountUnsafe(Integer.MAX_VALUE, origin));
                     outputs -= Integer.MAX_VALUE;
                 }
-                toOutput.add(GTUtility.copyAmountUnsafe((int) outputs, origin));
+
+                if (outputs > 0) {
+                    toOutput.add(GTUtility.copyAmountUnsafe((int) outputs, origin));
+                }
             }
 
         }
