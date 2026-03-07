@@ -320,7 +320,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void clearHatches() {
         super.clearHatches();
-        this.glassTier = 0;
+        this.glassTier = -1;
         this.mBlazeHatch = null;
         this.setCoilLevel(HeatingCoilLevel.None);
     }
