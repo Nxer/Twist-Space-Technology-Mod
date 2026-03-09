@@ -111,7 +111,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     // region default value
     private double mSpeedBonus;
-    private int essentiaCellTier = 0;
+    private int essentiaCellTier = -1;
     private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
     private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
@@ -669,7 +669,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        essentiaCellTier = 0;
+        essentiaCellTier = -1;
         mNodeEnergized.clear();
         repairMachine();
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
