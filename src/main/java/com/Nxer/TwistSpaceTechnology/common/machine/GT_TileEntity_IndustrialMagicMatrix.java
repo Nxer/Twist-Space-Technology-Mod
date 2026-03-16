@@ -2899,7 +2899,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     withChannel(
                         "essentia_cell",
                         ofBlocksTiered(
-                            (a, b) -> a == essentiaCell ? (b + 1) << 3 : 0,
+                            (a, b) -> a == essentiaCell ? (b + 1) << 3 : -1,
                             ImmutableList.of(
                                 Pair.of(essentiaCell, 0),
                                 Pair.of(essentiaCell, 1),
@@ -2907,7 +2907,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                                 Pair.of(essentiaCell, 3)),
                             -1,
                             (x, y) -> x.mParallel = y,
-                            x -> x.mParallel)))
+                            x -> x.mParallel == 0 ? -1 : x.mParallel)))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))
                 .addElement('C', ofBlock(GregTechAPI.sBlockMetal4, 10))
                 .addElement(
