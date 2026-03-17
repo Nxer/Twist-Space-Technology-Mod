@@ -13,7 +13,6 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import appeng.api.AEApi;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsBotania;
 import gregtech.api.enums.OreDictNames;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
@@ -42,7 +41,7 @@ public class ShapedCraftRecipePool {
         addCraftingRecipe(
             GTCMItemList.ManaHatch.get(1),
             new Object[] { "ABA", "ACA", "ADA", 'A',
-                GTOreDictUnificator.get(OrePrefixes.plate, MaterialsBotania.ElvenElementium, 1), 'B',
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.ElvenElementium, 1), 'B',
                 new ItemStack(spark), 'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
 
         if (Config.Enable_IndustrialMagnetarSeparator) {
