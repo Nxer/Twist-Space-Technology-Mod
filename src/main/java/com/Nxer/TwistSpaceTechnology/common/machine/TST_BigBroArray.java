@@ -86,7 +86,6 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
@@ -2101,7 +2100,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 ItemList.Emitter_UXV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 4) },
-            new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
+            new FluidStack[] { Materials.SpaceTime.getMolten(9216) },
             GTCMItemList.ParallelismCasing4.get(1),
             20 * 1200,
             503316480);
