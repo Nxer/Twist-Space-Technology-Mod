@@ -38,7 +38,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -83,9 +83,9 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     protected static final long tick_decrease_per_tick = 24;
 
     // Valid fuels which the discount will get applied to.
-    protected static final FluidStack[] valid_fuels = { MaterialsUEVplus.ExcitedDTEC.getFluid(1L),
-        MaterialsUEVplus.ExcitedDTRC.getFluid(1L), MaterialsUEVplus.ExcitedDTPC.getFluid(1L),
-        MaterialsUEVplus.ExcitedDTCC.getFluid(1L), MaterialsUEVplus.ExcitedDTSC.getFluid(1L) };
+    protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
+        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L),
+        Materials.ExcitedDTCC.getFluid(1L), Materials.ExcitedDTSC.getFluid(1L) };
 
     // endregion
 
