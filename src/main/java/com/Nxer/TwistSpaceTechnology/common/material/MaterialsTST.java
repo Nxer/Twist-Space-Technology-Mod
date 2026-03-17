@@ -8,7 +8,7 @@ import goodgenerator.util.CharExchanger;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Element;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialBuilder;
+//import gregtech.api.enums.MaterialBuilder;
 import gregtech.api.enums.SubTag;
 import gregtech.api.enums.TCAspects;
 import gregtech.api.enums.TextureSet;
