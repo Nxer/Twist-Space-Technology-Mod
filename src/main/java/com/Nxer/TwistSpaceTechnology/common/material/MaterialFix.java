@@ -11,7 +11,6 @@ import net.minecraftforge.fluids.FluidStack;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.metatileentity.implementations.MTECable;
@@ -80,7 +79,7 @@ public class MaterialFix {
                 GTUtility.getIntegratedCircuit(6),
                 MaterialsElements.STANDALONE.DRAGON_METAL.getDust(5),
                 MaterialsElements.STANDALONE.HYPOGEN.getDust(3),
-                MaterialsUEVplus.Creon.getDust(2),
+                Materials.Creon.getDust(2),
                 Materials.Ichorium.getDust(1),
                 Materials.Terbium.getDust(1),
                 GGMaterial.shirabon.get(OrePrefixes.dust,1))
@@ -98,11 +97,11 @@ public class MaterialFix {
             .fluidInputs(
                 new FluidStack( MaterialsElements.STANDALONE.DRAGON_METAL.getPlasma(),5000),
                 new FluidStack( MaterialsElements.STANDALONE.HYPOGEN.getPlasma(),3000),
-                MaterialsUEVplus.Creon.getPlasma(2000),
+                Materials.Creon.getPlasma(2000),
                 Materials.Ichorium.getPlasma(1000),
                 Materials.Terbium.getPlasma(1000),
                 GGMaterial.shirabon.getMolten(1000),
-                MaterialsUEVplus.PrimordialMatter.getFluid(1000))
+                Materials.PrimordialMatter.getFluid(1000))
             .fluidOutputs(MaterialsTST.Axonium.getPlasma(120000))
             .eut(TierEU.RECIPE_MAX)
             .duration(45 * 20)
