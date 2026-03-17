@@ -53,7 +53,7 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        parallel = aNBT.getByte("parallel");
+        parallel = aNBT.getInteger("parallel");
     }
 
     @Override
