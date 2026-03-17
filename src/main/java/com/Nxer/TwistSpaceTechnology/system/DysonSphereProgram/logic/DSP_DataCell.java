@@ -13,7 +13,7 @@ import net.minecraft.util.EnumChatFormatting;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
-import gregtech.api.util.GTUtility;
+import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 // spotless:off
 public class DSP_DataCell implements Serializable {
@@ -292,11 +292,11 @@ public class DSP_DataCell implements Serializable {
                    + " , amountDSPNode:"
                    + amountDSPNode
                    + " , maxDSPPowerPoint:"
-                   + (useBigInteger ? GTUtility.formatNumbers(maxDSPPowerPoint_BigInteger) : maxDSPPowerPoint)
+                   + (useBigInteger ? GTUtility.formatNumber(maxDSPPowerPoint_BigInteger) : maxDSPPowerPoint)
                    + " , usedDSPPowerPoint:"
-                   + (useBigInteger ? GTUtility.formatNumbers(usedDSPPowerPoint_BigInteger) : usedDSPPowerPoint)
+                   + (useBigInteger ? GTUtility.formatNumber(usedDSPPowerPoint_BigInteger) : usedDSPPowerPoint)
                    + " , PowerPointCanUse: "
-                   + (useBigInteger ? GTUtility.formatNumbers(getDSPPowerPointCanUseBigInteger())  : getDSPPowerPointCanUse())
+                   + (useBigInteger ? GTUtility.formatNumber(getDSPPowerPointCanUseBigInteger())  : getDSPPowerPointCanUse())
                    + (useBigInteger ? " , "+EnumChatFormatting.RED+"Using Big Integer Calculation"+EnumChatFormatting.RESET : "")
                    + " }";
     }
