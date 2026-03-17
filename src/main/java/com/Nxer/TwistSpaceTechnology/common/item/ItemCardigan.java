@@ -44,7 +44,7 @@ import gregtech.api.metatileentity.BaseMetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEBasicMachine;
 import gregtech.api.metatileentity.implementations.MTEMultiBlockBase;
 import gregtech.api.util.GTModHandler;
-import gregtech.api.util.GTUtility;
+import com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import ic2.api.item.IElectricItem;
 import ic2.core.init.InternalName;
 import ic2.core.item.armor.ItemArmorElectric;
@@ -196,8 +196,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             // #zh_CN {\GRAY}充能: {\GREEN}%s{\GRAY}/{\GREEN}%s
             String s = StatCollector.translateToLocalFormatted(
                 "tst.cardigan.tooltip.power",
-                GTUtility.formatNumbers(current),
-                GTUtility.formatNumbers(max));
+                GTUtility.formatNumber(current),
+                GTUtility.formatNumber(max));
             tooltips.add(s);
         } else {
             // #tr tst.cardigan.tooltip.error
