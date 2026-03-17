@@ -5,7 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableB
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
-import static gregtech.api.enums.Textures.BlockIcons;
+import gregtech.api.enums.Textures.BlockIcons;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
 import java.util.ArrayList;
