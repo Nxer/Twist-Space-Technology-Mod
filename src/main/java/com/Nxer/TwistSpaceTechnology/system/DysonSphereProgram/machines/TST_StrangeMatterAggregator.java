@@ -1066,11 +1066,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     @Override
     public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
 
-        oscillatorTier = 0;
+        oscillatorTier = -1;
         oscillatorPiece = 0;
-        constraintorTier = 0;
+        constraintorTier = -1;
         constraintorPiece = 0;
-        mergerTier = 0;
+        mergerTier = -1;
         mergerPiece = 0;
         rings = 0;
 
@@ -1125,6 +1125,10 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             }
 
             rings++;
+        }
+
+        if (oscillatorTier < 1 || constraintorTier < 1 || mergerTier < 1) {
+            return false;
         }
 
         if (oscillatorPiece < 1 || constraintorPiece < 1 || mergerPiece < 1) {

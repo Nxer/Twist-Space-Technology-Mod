@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.tile;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -29,6 +29,17 @@ public class PartEssentiaPatternTerminalEx extends PartFluidPatternTerminalEx {
     private static final FCPartsTexture FRONT_DARK_ICON = FCPartsTexture.PartFluidPatternTerminal_Colored;
     private static final FCPartsTexture FRONT_COLORED_ICON = FCPartsTexture.PartFluidPatternTerminal_Dark;
 
+    // Cache reflection result to avoid performance overhead from repeated Class.forName calls
+    private static Class<?> NEI_ITEM_ASPECT_CLASS;
+    static {
+        try {
+            NEI_ITEM_ASPECT_CLASS = Class.forName("com.djgiannuzz.thaumcraftneiplugin.items.ItemAspect");
+        } catch (ClassNotFoundException ignored) {}
+    }
+
+    // Guard flag to prevent infinite recursion during inventory updates
+    private boolean isUpdating = false;
+
     public PartEssentiaPatternTerminalEx(ItemStack is) {
         super(is);
         this.crafting = new BiggerAppEngInventory(this, 32);
@@ -43,162 +54,161 @@ public class PartEssentiaPatternTerminalEx extends PartFluidPatternTerminalEx {
 
     @Override
     public void onChangeInventory(final IInventory inv, final int slot, final InvOperation mc,
-                                  final ItemStack removedStack, final ItemStack newStack) {
+        final ItemStack removedStack, final ItemStack newStack) {
+        if (isUpdating) return;
 
+        // CORE FIX: Detect changes in the crafting grid (e.g., NEI recipe ghost-fill)
+        // and immediately convert virtual aspect items into crystallized essentia.
+        if (inv == this.crafting) {
+            if (newStack != null) {
+                checkAndConvertSlot(slot);
+            }
+        }
+
+        // Handle pattern encoding/decoding logic when a pattern is placed in the slot
         if (inv == this.pattern && slot == 1) {
             final ItemStack is = inv.getStackInSlot(1);
-            if (is != null && is.getItem() instanceof final ICraftingPatternItem craftingPatternItem) {
-                final ICraftingPatternDetails details =
-                    craftingPatternItem.getPatternForItem(is, this.getHost().getTile().getWorldObj());
+            if (is != null && is.getItem() instanceof ICraftingPatternItem) {
+                ICraftingPatternItem craftingPatternItem = (ICraftingPatternItem) is.getItem();
+                final ICraftingPatternDetails details = craftingPatternItem.getPatternForItem(
+                    is,
+                    this.getHost()
+                        .getTile()
+                        .getWorldObj());
 
                 if (details != null) {
-
-                    // Obtain the original input (provided by AE2)
-                    final IAEItemStack[] inItems = details.getInputs();
-
-                    //// Scan the inputs and convert them into crystallized Essentia when generating the pattern
-                    ItemStack[] converted = convertEssentiaInputs(inItems);
-
-
-                    // Clear the crafting slots and write in the converted items
-                    for (int i = 0; i < this.crafting.getSizeInventory(); i++) {
-                        this.crafting.setInventorySlotContents(i, null);
-                    }
-
-                    for (int i = 0; i < converted.length && i < this.crafting.getSizeInventory(); i++) {
-                        if (converted[i] != null) {
-                            this.crafting.setInventorySlotContents(i, converted[i]);
-                        }
-                    }
-                    // Original logic: output slots and various flags, including inverted / combine / substitute
-                    // Note: In practice, all infusion recipes cannot contain fluid substitutions
-                    final IAEItemStack[] outItems = details.getOutputs();
-                    int inputsCount = 0;
-                    int outputCount = 0;
-
-                    for (IAEItemStack in : inItems) if (in != null) inputsCount++;
-                    for (IAEItemStack out : outItems) if (out != null) outputCount++;
-
-                    this.setSubstitution(details.canSubstitute());
-                    if (newStack != null) {
-                        NBTTagCompound data = newStack.getTagCompound();
-                        this.setCombineMode(data.getInteger("combine") == 1);
-                        this.setBeSubstitute(details.canBeSubstitute());
-                    }
-
-                    this.setInverted(inputsCount <= 8 && outputCount > 8);
-                    this.setActivePage(0);
-
-                    for (int i = 0; i < this.output.getSizeInventory(); i++) {
-                        this.output.setInventorySlotContents(i, null);
-                    }
-
-                    if (inverted) {
-                        for (int i = 0; i < this.output.getSizeInventory() && i < outItems.length; i++) {
-                            final IAEItemStack item = outItems[i];
-                            if (item != null) {
-                                if (item.getItem() instanceof ItemFluidDrop) {
-                                    ItemStack packet = ItemFluidPacket
-                                        .newStack(ItemFluidDrop.getFluidStack(item.getItemStack()));
-                                    this.output.setInventorySlotContents(i, packet);
-                                } else {
-                                    this.output.setInventorySlotContents(i, item.getItemStack());
-                                }
-                            }
-                        }
-                    } else {
-                        for (int i = 0; i < outItems.length && i < 8; i++) {
-                            final IAEItemStack item = outItems[i];
-                            if (item != null) {
-                                ItemStack put = (item.getItem() instanceof ItemFluidDrop)
-                                    ? ItemFluidPacket.newStack(ItemFluidDrop.getFluidStack(item.getItemStack()))
-                                    : item.getItemStack();
-                                this.output.setInventorySlotContents(i >= 4 ? 12 + i : i, put);
-                            }
-                        }
+                    this.isUpdating = true;
+                    try {
+                        updateGridFromPattern(details, is);
+                    } finally {
+                        this.isUpdating = false;
                     }
                 }
             }
         }
-        this.getHost().markForSave();
+        this.getHost()
+            .markForSave();
     }
 
     /**
-     * Converts AE2 input items into crystallized essentia for crafting patterns.
-     * - Preserves the original order of non-essentia items at the beginning.
-     * - Accumulates identical aspects from multiple items to avoid duplicate crystal entries.
-     * - Ensures that the total number of output ItemStacks does not exceed the original input array size.
+     * Inspects a specific slot and converts any detected essentia-providing items
+     * into actual Crystallized Essentia items.
      */
-    private ItemStack[] convertEssentiaInputs(IAEItemStack[] inputItems) {
-        ItemStack[] result = new ItemStack[inputItems.length];
-        Map<Aspect, Integer> tempCrystals = new LinkedHashMap<>();
-        int insertPos = 0;
-        for (int i = 0; i < inputItems.length; i++) {
-            IAEItemStack ae = inputItems[i];
-            if (ae == null) continue;
+    private void checkAndConvertSlot(int slot) {
+        if (slot < 0 || slot >= this.crafting.getSizeInventory()) return;
 
-            ItemStack stack = ae.getItemStack();
-            if (stack == null) continue;
+        ItemStack stack = this.crafting.getStackInSlot(slot);
+        AspectList aspects = extractAspects(stack);
 
-            AspectList aspects = extractAspects(stack);
-
-            if (aspects == null || aspects.size() == 0) {
-                result[insertPos++] = stack;
-                continue;
-            }
-            for (Aspect asp : aspects.getAspects()) {
-                int amt = aspects.getAmount(asp);
-                tempCrystals.put(asp, tempCrystals.getOrDefault(asp, 0) + amt);
+        if (aspects != null && aspects.size() > 0) {
+            this.isUpdating = true; // Lock to prevent setInventorySlotContents from re-triggering this method
+            try {
+                // NEI aspect items usually represent a single aspect type
+                Aspect asp = aspects.getAspects()[0];
+                int amount = aspects.getAmount(asp) * stack.stackSize;
+                this.crafting.setInventorySlotContents(slot, ItemEssentiaHelper.createCrystal(asp, amount));
+            } finally {
+                this.isUpdating = false;
             }
         }
-
-        for (Map.Entry<Aspect, Integer> entry : tempCrystals.entrySet()) {
-            if (insertPos >= result.length) break;
-            result[insertPos++] = ItemEssentiaHelper.createCrystal(entry.getKey(), entry.getValue());
-        }
-
-        return result;
     }
 
-    private AspectList extractAspects(ItemStack stack) {
-        if (stack == null) return null;
+    /**
+     * Synchronizes the GUI grids with the data stored inside an encoded pattern.
+     */
+    private void updateGridFromPattern(ICraftingPatternDetails details, ItemStack patternStack) {
+        // Clear existing grid contents
+        for (int i = 0; i < this.crafting.getSizeInventory(); i++) {
+            this.crafting.setInventorySlotContents(i, null);
+        }
 
+        IAEItemStack[] inItems = details.getInputs();
+        List<ItemStack> convertedInputs = new ArrayList<>();
+
+        // Process inputs: Convert aspects and preserve regular items
+        for (IAEItemStack ae : inItems) {
+            if (ae == null) continue;
+            ItemStack is = ae.getItemStack();
+            AspectList al = extractAspects(is);
+            if (al != null && al.size() > 0) {
+                for (Aspect asp : al.getAspects()) {
+                    convertedInputs.add(ItemEssentiaHelper.createCrystal(asp, al.getAmount(asp)));
+                }
+            } else {
+                convertedInputs.add(is);
+            }
+        }
+
+        // Populate crafting grid
+        for (int i = 0; i < convertedInputs.size() && i < this.crafting.getSizeInventory(); i++) {
+            this.crafting.setInventorySlotContents(i, convertedInputs.get(i));
+        }
+
+        // Process output logic and pattern flags (substitution, combine mode, etc.)
+        IAEItemStack[] outItems = details.getOutputs();
+        this.setSubstitution(details.canSubstitute());
+
+        if (patternStack != null && patternStack.hasTagCompound()) {
+            NBTTagCompound tag = patternStack.getTagCompound();
+            this.setCombineMode(tag.getInteger("combine") == 1);
+            this.setBeSubstitute(details.canBeSubstitute());
+        }
+
+        // Clear and populate output grid
+        for (int i = 0; i < this.output.getSizeInventory(); i++) {
+            this.output.setInventorySlotContents(i, null);
+        }
+
+        for (int i = 0; i < outItems.length && i < this.output.getSizeInventory(); i++) {
+            IAEItemStack item = outItems[i];
+            if (item != null) {
+                ItemStack outStack = item.getItemStack();
+                // Convert FluidDrops to FluidPackets for better UI representation
+                if (outStack.getItem() instanceof ItemFluidDrop) {
+                    outStack = ItemFluidPacket.newStack(ItemFluidDrop.getFluidStack(outStack));
+                }
+                this.output.setInventorySlotContents(i, outStack);
+            }
+        }
+    }
+
+    /**
+     * Utility method to extract Thaumcraft Aspects from various item types (TST Essence or NEI Plugin).
+     */
+    private AspectList extractAspects(ItemStack stack) {
+        if (stack == null || stack.getItem() == null) return null;
         AspectList result = new AspectList();
 
-        // Supports TST's ItemEssence, which may contain multiple Aspects
+        // 1. Support for TwistSpaceTechnology's ItemEssence
         if (stack.getItem() instanceof ItemEssence) {
             try {
                 AspectList al = ((ItemEssence) stack.getItem()).getAspects(stack);
-                if (al != null && al.size() > 0) {
+                if (al != null) {
                     for (Aspect asp : al.getAspects()) {
-                        int amt = al.getAmount(asp);
-                        result.add(asp, amt);
+                        result.add(asp, al.getAmount(asp));
                     }
                 }
-            } catch (Throwable ignored) {}
+            } catch (Exception ignored) {}
         }
 
-        // Supports thaumcraft-nei-plugin's ItemAspect (This mod is actually not open source.)
-        try {
-            Class<?> itemAspectClass = Class.forName("com.djgiannuzz.thaumcraftneiplugin.items.ItemAspect");
-            if (itemAspectClass.isInstance(stack.getItem())) {
-                java.lang.reflect.Method method = itemAspectClass.getMethod("getAspects", ItemStack.class);
-                method.setAccessible(true);
+        // 2. Support for thaumcraft-nei-plugin's ItemAspect via reflection
+        if (NEI_ITEM_ASPECT_CLASS != null && NEI_ITEM_ASPECT_CLASS.isInstance(stack.getItem())) {
+            try {
+                java.lang.reflect.Method method = NEI_ITEM_ASPECT_CLASS.getMethod("getAspects", ItemStack.class);
                 AspectList al = (AspectList) method.invoke(null, stack);
-                if (al != null && al.size() > 0) {
-                    int stackSize = stack.stackSize;
+                if (al != null) {
                     for (Aspect asp : al.getAspects()) {
-                        result.add(asp, stackSize);
+                        result.add(asp, stack.stackSize);
                     }
                 }
-            }
-        } catch (Throwable ignored) {}
+            } catch (Exception ignored) {}
+        }
 
         return result.size() > 0 ? result : null;
     }
 
     @Override
-    public void setCraftingRecipe(final boolean craftingMode) {
+    public void setCraftingRecipe(boolean craftingMode) {
         this.craftingMode = false;
     }
 
