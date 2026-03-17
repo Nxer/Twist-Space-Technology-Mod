@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults;
 
-import static gregtech.api.util.GTUtility.formatNumbers;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import java.util.Objects;
 
@@ -37,7 +37,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
             StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_fluid",
                 stack.getLocalizedName(),
-                formatNumbers(stack.amount)));
+                formatNumber(stack.amount)));
         this.persistsOnShutdown = persistsOnShutdown;
     }
 
@@ -47,7 +47,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
             StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_item",
                 stack.getDisplayName(),
-                formatNumbers(stack.stackSize)));
+                formatNumber(stack.stackSize)));
         this.persistsOnShutdown = persistsOnShutdown;
     }
 
