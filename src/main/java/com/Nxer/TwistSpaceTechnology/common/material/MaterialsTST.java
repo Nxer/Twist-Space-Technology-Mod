@@ -14,16 +14,34 @@ import gregtech.api.enums.TCAspects;
 import gregtech.api.enums.TextureSet;
 import gregtech.api.enums.TierEU;
 import gregtech.common.render.items.InfinityRenderer;
+import gregtech.api.interfaces.IMaterialHandler;
 
 /**
  * Register new material here by Gregtech Material System
  */
-public class MaterialsTST {
+public class MaterialsTST implements IMaterialHandler {
 
     static final int offsetID = 260;
     // ID form 2242 ~ 2298 is available
 
-    public static Materials loadNeutroniumAlloy() {
+    public static Materials NeutroniumAlloy;
+    public static Materials AxonisAlloy;
+    public static Materials Axonium;
+    public static Materials Dubnium;
+
+    public MaterialsTST() {
+        Materials.add(this);
+    }
+
+    @Override
+    public void onMaterialsInit() {
+        MaterialsTST.NeutroniumAlloy = loadNeutroniumAlloy();
+        MaterialsTST.AxonisAlloy = loadAxonisAlloy();
+        MaterialsTST.Axonium = loadAxonium();
+        MaterialsTST.Dubnium = loadDubnium();
+    }
+
+    private static Materials loadNeutroniumAlloy() {
         return new MaterialBuilder().setName("Neutronium Alloy")
             .setDefaultLocalName("Neutronium Alloy")
             .setChemicalFormula("Nt\u2087Du\u2082Fl҉?")
@@ -52,7 +70,7 @@ public class MaterialsTST {
             
             
 
-    public static Materials loadAxonisAlloy() {
+    private static Materials loadAxonisAlloy() {
         return new MaterialBuilder().setName("Axonis Alloy")
             .setDefaultLocalName("Axonis Alloy")
             .setChemicalFormula("۞\u2085(Hy⚶)\u2083⸎\u2082(IcMa)TbSh" + CharExchanger.shifter(9191))
@@ -77,7 +95,7 @@ public class MaterialsTST {
     }
             
 
-    public static Materials loadAxonium() {
+    private static Materials loadAxonium() {
         return new MaterialBuilder().setName("Axonium")
             .setDefaultLocalName("Axonium")
             .setChemiclFormula("A☀")
@@ -104,7 +122,7 @@ public class MaterialsTST {
             .constructMaterial();
     }
 
-    public static Materials loadDubnium() {
+    private static Materials loadDubnium() {
         return new MaterialBuilder().setName("Dubnium")
             .setDefaultLocalName("Dubnium")
             .setElement(Element.Db)
