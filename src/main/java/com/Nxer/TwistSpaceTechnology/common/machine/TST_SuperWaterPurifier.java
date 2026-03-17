@@ -46,7 +46,6 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
@@ -255,7 +254,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings10, 9))))
                 .addElement('B',ofBlock(sBlockCasings8, 14))
                 .addElement('C',ofBlock(sBlockCasingsTT,10))
-                .addElement('D', ofFrame(MaterialsUEVplus.SixPhasedCopper))
+                .addElement('D', ofFrame(Materials.SixPhasedCopper))
                 .addElement('E', ofBlock(GodforgeCasings, 3))
                 .addElement('F',ofBlock(BlockGodforgeGlass.INSTANCE, 0))
 
