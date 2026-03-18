@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 import com.google.common.collect.Sets;
 
 import galaxyspace.core.register.GSItems;
@@ -78,7 +78,7 @@ public class TST_DisassemblerRecipeHandler {
                     .setOutputItems(
                         getModItem(PamsHarvestCraft.ID, "wovencottonItem", 8, 0, missing),
                         GTOreDictUnificator.get(OrePrefixes.foil, Materials.Aluminium, 8),
-                        CustomItemList.MeteoricIronString.get(8))
+                        NHItemList.MeteoricIronString.get(8))
                     .setOutputFluids(Materials.Silicone.getMolten(144))
                     .setEut(256)
                     .setTier(GTUtility.getTier(256)));
@@ -92,45 +92,45 @@ public class TST_DisassemblerRecipeHandler {
                     .setOutputItems(
                         new ItemStack(AsteroidsItems.basicItem, 1, 7),
                         GTOreDictUnificator.get(OrePrefixes.foil, Materials.Titanium, 8),
-                        CustomItemList.TungstenString.get(8))
+                        NHItemList.TungstenString.get(8))
                     .setEut(1024)
                     .setTier(GTUtility.getTier(1024)));
 
             // 1080k Space Cell
             DisassemblerRecipeMap.put(
-                TST_ItemID.createNoNBT(CustomItemList.Empty1080SpCell.get(1)),
+                TST_ItemID.createNoNBT(NHItemList.Empty1080SpCell.get(1)),
                 new TST_SimpleDisassemblyRecipe()
-                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.Empty1080SpCell.get(1)))
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(NHItemList.Empty1080SpCell.get(1)))
                     .setItemAmount(1)
-                    .setOutputItems(CustomItemList.Empty180SpCell.get(6))
+                    .setOutputItems(NHItemList.Empty180SpCell.get(6))
                     .setEut(1024)
                     .setTier(GTUtility.getTier(1024)));
 
             // 540k Space Cell
             DisassemblerRecipeMap.put(
-                TST_ItemID.createNoNBT(CustomItemList.Empty540SpCell.get(1)),
+                TST_ItemID.createNoNBT(NHItemList.Empty540SpCell.get(1)),
                 new TST_SimpleDisassemblyRecipe()
-                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.Empty540SpCell.get(1)))
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(NHItemList.Empty540SpCell.get(1)))
                     .setItemAmount(1)
-                    .setOutputItems(CustomItemList.Empty180SpCell.get(3))
+                    .setOutputItems(NHItemList.Empty180SpCell.get(3))
                     .setEut(480)
                     .setTier(GTUtility.getTier(480)));
 
             // 360k Space Cell
             DisassemblerRecipeMap.put(
-                TST_ItemID.createNoNBT(CustomItemList.Empty360SpCell.get(1)),
+                TST_ItemID.createNoNBT(NHItemList.Empty360SpCell.get(1)),
                 new TST_SimpleDisassemblyRecipe()
-                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.Empty360SpCell.get(1)))
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(NHItemList.Empty360SpCell.get(1)))
                     .setItemAmount(1)
-                    .setOutputItems(CustomItemList.Empty180SpCell.get(2))
+                    .setOutputItems(NHItemList.Empty180SpCell.get(2))
                     .setEut(480)
                     .setTier(GTUtility.getTier(480)));
 
             // 60k Cell
             DisassemblerRecipeMap.put(
-                TST_ItemID.createNoNBT(CustomItemList.SixtyKCell.get(1)),
+                TST_ItemID.createNoNBT(NHItemList.SixtyKCell.get(1)),
                 new TST_SimpleDisassemblyRecipe()
-                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.SixtyKCell.get(1)))
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(NHItemList.SixtyKCell.get(1)))
                     .setItemAmount(1)
                     .setOutputItems(ItemList.Cell_Empty.get(6))
                     .setEut(60)
@@ -138,9 +138,9 @@ public class TST_DisassemblerRecipeHandler {
 
             // 30k Cell
             DisassemblerRecipeMap.put(
-                TST_ItemID.createNoNBT(CustomItemList.ThirtyKCell.get(1)),
+                TST_ItemID.createNoNBT(NHItemList.ThirtyKCell.get(1)),
                 new TST_SimpleDisassemblyRecipe()
-                    .setItemToDisassemble(TST_ItemID.createNoNBT(CustomItemList.ThirtyKCell.get(1)))
+                    .setItemToDisassemble(TST_ItemID.createNoNBT(NHItemList.ThirtyKCell.get(1)))
                     .setItemAmount(1)
                     .setOutputItems(ItemList.Cell_Empty.get(3))
                     .setEut(60)
