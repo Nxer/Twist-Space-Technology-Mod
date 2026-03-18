@@ -10,8 +10,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 //import ic2.api.crops.CropCard;
 //import ic2.api.crops.ICropTile;
 //import speiger.src.crops.api.ICropCardInfo;
-import com.gtnhewhorizon.cropsnh.api.CropCard;
-import com.gtnewhorizon.cropsnh.api.ICropStickTile;
+import cropsnh.api.CropCard;
+import cropsnh.api.ICropStickTile;
 
 public abstract class AbstractTstCrop extends CropCard {//implements ICropCardInfo {
 
