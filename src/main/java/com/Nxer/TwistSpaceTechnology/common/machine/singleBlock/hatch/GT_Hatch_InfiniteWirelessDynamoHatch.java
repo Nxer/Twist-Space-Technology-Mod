@@ -11,7 +11,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
-import gregtech.api.metatileentity.hatch.MTEHatchWirelessDynamoMulti;
+import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessDynamoMulti;
 
 public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamoMulti {
 
