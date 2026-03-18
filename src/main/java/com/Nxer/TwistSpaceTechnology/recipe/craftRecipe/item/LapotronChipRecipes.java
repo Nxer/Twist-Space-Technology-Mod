@@ -13,7 +13,7 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
@@ -61,10 +61,10 @@ public class LapotronChipRecipes {
 
         GTValues.RA.stdBuilder()
             .itemInputs(
-                CustomItemList.RawLapotronCrystal.get(16),
-                CustomItemList.LapotronDust.get(64),
-                CustomItemList.LapotronDust.get(64),
-                CustomItemList.LapotronDust.get(64))
+                NHItemList.RawLapotronCrystal.get(16),
+                NHItemList.LapotronDust.get(64),
+                NHItemList.LapotronDust.get(64),
+                NHItemList.LapotronDust.get(64))
             .fluidInputs(MaterialPool.HolmiumGarnet.getMolten(144 * 256))
             .itemOutputs(GTCMItemList.LapotronShard.get(1))
             .outputChances(999)
@@ -154,7 +154,7 @@ public class LapotronChipRecipes {
         for (ItemStack itemStack : OreDictionary.getOres("craftingLensRed")) {
             GTValues.RA.stdBuilder()
                 .itemInputs(GTCMItemList.PerfectEnergyCrystal.get(1), GTUtility.copyAmountUnsafe(0, itemStack))
-                .itemOutputs(CustomItemList.EngravedEnergyChip.get(64), CustomItemList.EngravedEnergyChip.get(64))
+                .itemOutputs(NHItemList.EngravedEnergyChip.get(64), NHItemList.EngravedEnergyChip.get(64))
                 .eut(TierEU.RECIPE_UV)
                 .duration(20 * 15)
                 .addTo(RecipeMaps.laserEngraverRecipes);
