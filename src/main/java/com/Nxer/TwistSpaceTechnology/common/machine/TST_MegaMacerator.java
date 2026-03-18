@@ -80,7 +80,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     // end region
 
     // region Processing Logic
-    private int mBlockTier = 0;
+    protected int mBlockTier = 0;
     public int mRecipeTier = 1;
     public int glassTier;
 
@@ -135,7 +135,9 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         repairMachine();
         mBlockTier = -1;
         glassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
+            return checkPiece(STRUCTURE_PIECE_OLD, horizontalOffSet, verticalOffSet, depthOffSet);
+        }
         return true;
     }
 
@@ -157,11 +159,12 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     // region Structure
 
-    private final int horizontalOffSet = 8;
-    private final int verticalOffSet = 25;
-    private final int depthOffSet = 1;
-    private static final String STRUCTURE_PIECE_MAIN = "mainMegaMacerator";
-    private static IStructureDefinition<TST_MegaMacerator> STRUCTURE_DEFINITION = null;
+    protected final int horizontalOffSet = 8;
+    protected final int verticalOffSet = 25;
+    protected final int depthOffSet = 1;
+    protected static final String STRUCTURE_PIECE_MAIN = "mainMegaMacerator";
+    protected static final String STRUCTURE_PIECE_OLD = "oldMegaMacerator";
+    protected static IStructureDefinition<TST_MegaMacerator> STRUCTURE_DEFINITION = null;
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -189,6 +192,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaMacerator>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addShape(STRUCTURE_PIECE_OLD, transpose(shapeOld))
                 .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
                 .addElement(
                     'B',
@@ -246,7 +250,38 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
      * H -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
      * I -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
      */
-    private final String[][] shape = new String[][]{
+    protected static final String[][] shape = new String[][]{
+        {"                 ","                 ","                 ","                 ","                 ","      FFFFF      ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","      FFFFF      ","                 ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","      FFFFF      ","    FFFFFFFFF    ","   FFFFFFFFFFF   ","   FFF     FFF   ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","   FFF     FFF   ","   FFFFFFFFFFF   ","    FFFFFFFFF    ","      FFFFF      ","                 ","                 "},
+        {"      FFFFF      ","    FFFFFFFFF    ","   FFFCCCCCFFF   ","  FFCC     CCFF  "," FFC         CFF "," FFC         CFF ","FFC           CFF","FFC           CFF","FFC           CFF","FFC           CFF","FFC           CFF"," FFC         CFF "," FFC         CFF ","  FFCC     CCFF  ","   FFFCCCCCFFF   ","    FFFFFFFFF    ","      FFFFF      "},
+        {"                 ","      DbbbD      ","    IbbbbbbbI    ","   bbb     bbb   ","  Ib         bI  ","  bb         bb  "," bb    EEE    bb "," bb   ECCCE   bb "," bb   ECCCE   bb "," bb   ECCCE   bb "," bb    EEE    bb ","  bb         bb  ","  Ib         bI  ","   bbb     bbb   ","    IbbbbbbbI    ","      DbbbD      ","                 "},
+        {"      DDDDD      ","    DDDDDDDDD    ","   DDDDDDDDDDD   ","  DDDDDDDDDDDDD  "," DDDDDDDDDDDDDDD "," DDDDDDDDDDDDDDD ","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDCDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD"," DDDDDDDDDDDDDDD "," DDDDDDDDDDDDDDD ","  DDDDDDDDDDDDD  ","   DDDDDDDDDDD   ","    DDDDDDDDD    ","      DDDDD      "},
+        {"                 ","      FFFFF      ","    FF     FF    ","   F         F   ","  F           F  ","  F           F  "," F             F "," F             F "," F      C      F "," F             F "," F             F ","  F           F  ","  F           F  ","   F         F   ","    FF     FF    ","      FFFFF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H       G   H  "," F   GG   G    F "," A     G G     A "," A      C      A "," A     G G     A "," F    G   GG   F ","  H   G       H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D      G  D   ","  F       G   F  ","  H  GG   GG  H  "," F GGGGG  GG   F "," A     GGGG    A "," A     GCG     A "," A    GGGG     A "," F   GG  GGGGG F ","  H  GG   GG  H  ","  F   G       F  ","   D  G      D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH    GHF    ","   D      G  D   ","  F       GG  F  ","  H GGG  GGG  H  "," FGGGGGG GGG   F "," A   GGGGGG    A "," A     GCG     A "," A    GGGGGG   A "," F   GGG GGGGGGF ","  H  GGG  GGG H  ","  F  GG       F  ","   D  G      D   ","    FHG    HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D      G  D   ","  F       G   F  ","  H  GG   GG  H  "," F GGGGG  GG   F "," A     GGGG    A "," A     GCG     A "," A    GGGG     A "," F   GG  GGGGG F ","  H  GG   GG  H  ","  F   G       F  ","   D  G      D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H       G   H  "," F   GG   G    F "," A     G G     A "," A      C      A "," A     G G     A "," F    G   GG   F ","  H   G       H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H           H  "," F             F "," A             A "," A      C      A "," A             A "," F             F ","  H           H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H       G   H  "," F   GG   G    F "," A     G G     A "," A      C      A "," A     G G     A "," F    G   GG   F ","  H   G       H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D      G  D   ","  F       G   F  ","  H  GG   GG  H  "," F GGGGG  GG   F "," A     GGGG    A "," A     GCG     A "," A    GGGG     A "," F   GG  GGGGG F ","  H  GG   GG  H  ","  F   G       F  ","   D  G      D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH    GHF    ","   D      G  D   ","  F       GG  F  ","  H GGG  GGG  H  "," FGGGGGG GGG   F "," A   GGGGGG    A "," A     GCG     A "," A    GGGGGG   A "," F   GGG GGGGGGF ","  H  GGG  GGG H  ","  F  GG       F  ","   D  G      D   ","    FHG    HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D      G  D   ","  F       G   F  ","  H  GG   GG  H  "," F GGGGG  GG   F "," A     GGGG    A "," A     GCG     A "," A    GGGG     A "," F   GG  GGGGG F ","  H  GG   GG  H  ","  F   G       F  ","   D  G      D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H       G   H  "," F   GG   G    F "," A     G G     A "," A      C      A "," A     G G     A "," F    G   GG   F ","  H   G       H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H  C     C  H  "," F             F "," A             A "," A      C      A "," A             A "," F             F ","  H  C     C  H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   DGGG   GGGD   ","  FGGGGG GGGGGF  ","  HGGCGG GGCGGH  "," F GGGGG GGGGG F "," A  GGG   GGG  A "," A      C      A "," A  GGG   GGG  A "," F GGGGG GGGGG F ","  HGGCGG GGCGGH  ","  FGGGGG GGGGGF  ","   DGGG   GGGD   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H  C     C  H  "," F     GGG     F "," A    GGGGG    A "," A    GGCGG    A "," A    GGGGG    A "," F     GGG     F ","  H  C     C  H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   DGGG   GGGD   ","  FGGGGG GGGGGF  ","  HGGCGG GGCGGH  "," F GGGGG GGGGG F "," A  GGG   GGG  A "," A      C      A "," A  GGG   GGG  A "," F GGGGG GGGGG F ","  HGGCGG GGCGGH  ","  FGGGGG GGGGGF  ","   DGGG   GGGD   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FAAAF      ","    FH     HF    ","   D         D   ","  F           F  ","  H  C     C  H  "," F     GGG     F "," A    GGGGG    A "," A    GGCGG    A "," A    GGGGG    A "," F     GGG     F ","  H  C     C  H  ","  F           F  ","   D         D   ","    FH     HF    ","      FAAAF      ","                 "},
+        {"                 ","      FFFFF      ","    FF     FF    ","   DGGG   GGGD   ","  FGGGGG GGGGGF  ","  FGGCGG GGCGGF  "," F GGGGG GGGGG F "," F  GGG   GGG  F "," F      C      F "," F  GGG   GGG  F "," F GGGGG GGGGG F ","  FGGCGG GGCGGF  ","  FGGGGG GGGGGF  ","   DGGG   GGGD   ","    FF     FF    ","      FFFFF      ","                 "},
+        {"      DDDDD      ","    DDDDDDDDD    ","   DDDDDDDDDDD   ","  DDDDDDDDDDDDD  "," DDDDDDDDDDDDDDD "," DDDDCDDDDDCDDDD ","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDCDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD"," DDDDCDDDDDCDDDD "," DDDDDDDDDDDDDDD ","  DDDDDDDDDDDDD  ","   DDDDDDDDDDD   ","    DDDDDDDDD    ","      DDDDD      "},
+        {"                 ","      DBBBD      ","    HBBBBBBBH    ","   BBBEEEEEBBB   ","  HBEEEEEEEEEBH  ","  BBECEEEEECEBB  "," DBEEEEEEEEEEEBD "," BBEEEECCCEEEEBB ","  BEEEECCCEEEEB  "," BBEEEECCCEEEEBB "," DBEEEEEEEEEEEBD ","  BBECEEEEECEBB  ","  HBEEEEEEEEEBH  ","   BBBEEEEEBBB   ","    HBBBBBBBH    ","      DB BD      ","                 "},
+        {"                 ","      DB~BD      ","    HBBBBBBBH    ","   BBB     BBB   ","  HBFFF   FFFBH  ","  BBFCFFFFFCFBB  "," DB FFFEEEFFF BD "," BB  FEEEEEF  BB ","  B  FEECEEF  B  "," BB  FEEEEEF  BB "," DB FFFEEEFFF BD ","  BBFCFFFFFCFBB  ","  HBFFF   FFFBH  ","   BBB     BBB   ","    HBBBBBBBH    ","      DB BD      ","                 "},
+        {"                 ","      DBBBD      ","    HBBBBBBBH    ","   BBB     BBB   ","  HBFFF   FFFBH  ","  BBFCFFFFFCFBB  "," DB FFFCCCFFF BD "," BB  FCCCCCF  BB ","  B  FCCCCCF  B  "," BB  FCCCCCF  BB "," DB FFFCCCFFF BD ","  BBFCFFFFFCFBB  ","  HBFFF   FFFBH  ","   BBB     BBB   ","    HBBBBBBBH    ","      DB BD      ","                 "},
+        {"      DDDDD      ","    DDDDDDDDD    ","  DDDDDDDDDDDDD  ","  DDDDDDDDDDDDD  "," DDDDDDDDDDDDDDD "," DDDDDDDDDDDDDDD ","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD"," DDDDDDDDDDDDDDD "," DDDDDDDDDDDDDDD ","  DDDDDDDDDDDDD  ","  DDDDDDDDDDDDD  ","    DDDDDDDDD    ","      DDDDD      "}
+    };
+
+    protected static final String[][] shapeOld = new String[][]{
         {"                 ","                 ","                 ","                 ","                 ","      FFFFF      ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","      FFFFF      ","                 ","                 ","                 ","                 ","                 "},
         {"                 ","                 ","      FFFFF      ","    FFFFFFFFF    ","   FFFFFFFFFFF   ","   FFF     FFF   ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","   FFF     FFF   ","   FFFFFFFFFFF   ","    FFFFFFFFF    ","      FFFFF      ","                 ","                 "},
         {"      FFFFF      ","    FFFFFFFFF    ","   FFFCCCCCFFF   ","  FFCC     CCFF  "," FFC         CFF "," FFC         CFF ","FFC           CFF","FFC           CFF","FFC           CFF","FFC           CFF","FFC           CFF"," FFC         CFF "," FFC         CFF ","  FFCC     CCFF  ","   FFFCCCCCFFF   ","    FFFFFFFFF    ","      FFFFF      "},
