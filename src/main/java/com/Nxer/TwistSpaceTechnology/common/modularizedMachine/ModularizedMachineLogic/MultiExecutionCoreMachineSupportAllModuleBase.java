@@ -46,7 +46,7 @@ public abstract class MultiExecutionCoreMachineSupportAllModuleBase<T extends Mu
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setInteger("OverclockTypeTimeReduction", overclockType.timeReduction);
-        aNBT.setInteger("OverclockTypePowerIncrease", overclockType.timeReduction);
+        aNBT.setInteger("OverclockTypePowerIncrease", overclockType.powerIncrease);
         aNBT.setInteger("staticParallel", staticParallel);
         aNBT.setInteger("dynamicParallel", dynamicParallel);
         aNBT.setFloat("staticPowerConsumptionMultiplier", staticPowerConsumptionMultiplier);
