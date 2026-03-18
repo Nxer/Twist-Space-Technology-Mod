@@ -7,11 +7,13 @@ import net.minecraft.util.IIcon;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ic2.api.crops.CropCard;
-import ic2.api.crops.ICropTile;
-import speiger.src.crops.api.ICropCardInfo;
+//import ic2.api.crops.CropCard;
+//import ic2.api.crops.ICropTile;
+//import speiger.src.crops.api.ICropCardInfo;
+import com.gtnhewhorizon.cropsnh.api.CropCard;
+import com.gtnewhorizon.cropsnh.api.ICropStickTile;
 
-public abstract class AbstractTstCrop extends CropCard implements ICropCardInfo {
+public abstract class AbstractTstCrop extends CropCard {//implements ICropCardInfo {
 
     @SideOnly(Side.CLIENT)
     public void registerSprites(IIconRegister iconRegister) {
@@ -29,22 +31,22 @@ public abstract class AbstractTstCrop extends CropCard implements ICropCardInfo 
     }
 
     @Override
-    public boolean canCross(ICropTile crop) {
+    public boolean canCross(ICropStickTile crop) {
         return crop.getSize() == maxSize();
     }
 
     @Override
-    public boolean canBeHarvested(ICropTile crop) {
+    public boolean canBeHarvested(ICropStickTile crop) {
         return crop.getSize() == maxSize();
     }
 
     @Override
-    public int getOptimalHavestSize(ICropTile crop) {
+    public int getOptimalHavestSize(ICropStickTile crop) {
         return maxSize();
     }
 
     @Override
-    public int getrootslength(ICropTile crop) {
+    public int getrootslength(ICropStickTile crop) {
         return 5;
     }
 
