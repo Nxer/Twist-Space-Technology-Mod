@@ -11,14 +11,13 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.Werkstoff;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTRecipeConstants;
@@ -140,7 +139,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 maxMaterials[0].get(OrePrefixes.bolt),
                 maxMaterials[0].get(OrePrefixes.wireGt16),
                 GGMaterial.shirabon.get(OrePrefixes.plate, 64))
-            .fluidInputs(MaterialsUEVplus.Universium.getFluid(1440))
+            .fluidInputs(Materials.Universium.getFluid(1440))
             .itemOutputs(processor)
 
             .eut(RECIPE_UMV)
@@ -155,7 +154,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 processor,
                 GTCMItemList.Antimatter.get(64),
                 GTCMItemList.AnnihilationConstrainer.get(64),
-                MaterialsUEVplus.Universium.getNanite(64))
+                Materials.Universium.getNanite(64))
             .fluidInputs(
                 MaterialPool.entropyReductionProcess.getBridgeMaterial()
                     .getFluid(1440))
@@ -171,7 +170,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 highDimensionalItem[2],
                 highDimensionalItem[4],
                 assembly,
-                MaterialsUEVplus.DimensionallyTranscendentStellarCatalyst.getPlates(64),
+                Materials.DimensionallyTranscendentStellarCatalyst.getPlates(64),
                 MaterialPool.entropyReductionProcess.getBridgeMaterial()
                     .getNanite(64),
                 MaterialPool.realSingularity.getBridgeMaterial()
@@ -198,8 +197,8 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.EventHorizonNanoSwarm.get(8),
                 ItemList.Circuit_ExoticComputer.get(2))
             .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 16),
-                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 16),
+                Materials.SpaceTime.getMolten(144 * 8 * 16),
+                Materials.TranscendentMetal.getMolten(144 * 8 * 16),
                 Materials.Neutronium.getMolten(144 * 8 * 16 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 16 * 144))
             .itemOutputs(ItemList.Circuit_ExoticMainframe.get(1))
@@ -225,8 +224,8 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.EventHorizonNanoSwarm.get(2),
                 GTCMItemList.Self_adaptiveAI1.get(16))
             .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 6),
-                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 6),
+                Materials.SpaceTime.getMolten(144 * 8 * 6),
+                Materials.TranscendentMetal.getMolten(144 * 8 * 6),
                 Materials.Neutronium.getMolten(144 * 8 * 6 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 6 * 144))
             .itemOutputs(ItemList.Circuit_CosmicProcessor.get(1))
@@ -249,8 +248,8 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.Self_adaptiveAI3.get(16),
                 ItemList.Circuit_CosmicProcessor.get(2))
             .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 6),
-                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 6),
+                Materials.SpaceTime.getMolten(144 * 8 * 6),
+                Materials.TranscendentMetal.getMolten(144 * 8 * 6),
                 Materials.Neutronium.getMolten(144 * 8 * 6 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 6 * 144))
             .itemOutputs(ItemList.Circuit_CosmicAssembly.get(1))
@@ -272,8 +271,8 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.EventHorizonNanoSwarm.get(6),
                 ItemList.Circuit_CosmicAssembly.get(2))
             .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 12),
-                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 12),
+                Materials.SpaceTime.getMolten(144 * 8 * 12),
+                Materials.TranscendentMetal.getMolten(144 * 8 * 12),
                 Materials.Neutronium.getMolten(144 * 8 * 12 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 12 * 144))
             .itemOutputs(ItemList.Circuit_CosmicComputer.get(1))
@@ -295,7 +294,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.MicroDimensionOutput.get(16),
                 GTCMItemList.EntropyReductionMaterialNanoswarm.get(16),
                 ItemList.Circuit_CosmicComputer.get(2))
-            .fluidInputs(MaterialsUEVplus.Time.getMolten(1000 * 16), MaterialsUEVplus.Space.getMolten(1000 * 16))
+            .fluidInputs(Materials.Time.getMolten(1000 * 16), Materials.Space.getMolten(1000 * 16))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(1))
 
             .eut(RECIPE_MAX)
@@ -319,7 +318,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.RealSingularityNanoSwarm.get(4),
                 GTCMItemList.CoreOfT800.get(2))
             .fluidInputs(
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(144),
+                Materials.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(144),
                 MaterialPool.entropyReductionProcess.getMolten(1440),
                 MaterialPool.eventHorizonDiffusers.getMolten(1440),
                 MaterialPool.realSingularity.getMolten(144))
@@ -343,8 +342,8 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.EventHorizonNanoSwarm.get(4),
                 ItemList.Circuit_TranscendentProcessor.get(2))
             .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 12),
-                MaterialsUEVplus.TranscendentMetal.getMolten(144 * 8 * 12),
+                Materials.SpaceTime.getMolten(144 * 8 * 12),
+                Materials.TranscendentMetal.getMolten(144 * 8 * 12),
                 Materials.Neutronium.getMolten(144 * 8 * 12 * 144),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 12 * 144))
             .itemOutputs(ItemList.Circuit_TranscendentAssembly.get(1))
@@ -368,7 +367,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 ItemList.Circuit_TranscendentAssembly.get(2),
                 GTCMItemList.CoreOfT800.get(16))
             .fluidInputs(
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 8 * 20),
+                Materials.SpaceTime.getMolten(144 * 8 * 20),
                 MaterialPool.entropyReductionProcess.getMolten(1440000),
                 MaterialPool.eventHorizonDiffusers.getMolten(1440000),
                 Materials.CosmicNeutronium.getMolten(144 * 8 * 20 * 144))
@@ -394,7 +393,7 @@ public class MegaUniversalSpaceStationRecipePool {
                 GTCMItemList.RealSingularityNanoSwarm.get(8),
                 ItemList.Circuit_TranscendentComputer.get(2))
             .fluidInputs(
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(144000),
+                Materials.MagnetohydrodynamicallyConstrainedStarMatter.getFluid(144000),
                 MaterialPool.entropyReductionProcess.getMolten(14400000),
                 MaterialPool.eventHorizonDiffusers.getMolten(14400000),
                 MaterialPool.realSingularity.getMolten(144000))
@@ -590,11 +589,11 @@ public class MegaUniversalSpaceStationRecipePool {
             .itemInputs(
                 ItemList.Circuit_OpticalMainframe.get(64),
                 ItemList.Circuit_OpticalMainframe.get(64),
-                CustomItemList.StargateFramePart.get(64),
-                CustomItemList.StargateShieldingFoil.get(64),
-                CustomItemList.StargateFramePart.get(64),
+                NHItemList.StargateFramePart.get(64),
+                NHItemList.StargateShieldingFoil.get(64),
+                NHItemList.StargateFramePart.get(64),
                 // GT_material.TestMaterial.getPlates(64),
-                CustomItemList.StargateChevron.get(64),
+                NHItemList.StargateChevron.get(64),
                 tectech.thing.CustomItemList.Machine_Multi_EyeOfHarmony.get(64),
                 tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
                 tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
@@ -645,7 +644,7 @@ public class MegaUniversalSpaceStationRecipePool {
                     Materials.SuperconductorUMV.getPlates(64)
 
                 )
-                .fluidInputs(MaterialsUEVplus.TranscendentMetal.getFluid(1440 * i))
+                .fluidInputs(Materials.TranscendentMetal.getFluid(1440 * i))
                 .itemOutputs(spaceStationStructureBlock[i])
 
                 .eut((long) (Math.pow(16, i)))
