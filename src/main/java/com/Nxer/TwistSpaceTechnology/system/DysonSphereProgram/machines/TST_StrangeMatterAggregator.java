@@ -66,7 +66,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -149,15 +148,15 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     public static void initStatics() {
         // spotless:off
         SpaceTimeMaintenanceConsumablesFluids = new Fluid[] {
-            MaterialsUEVplus.SpaceTime.getMolten(576).getFluid(),
-            MaterialsUEVplus.Universium.getMolten(96).getFluid(),
-            MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(16) .getFluid()
+            Materials.SpaceTime.getMolten(576).getFluid(),
+            Materials.Universium.getMolten(96).getFluid(),
+            Materials.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(16) .getFluid()
         };
 
         ByproductFluids = new Fluid[][] {
             new Fluid[] { Materials.Infinity.getMolten(1).getFluid(), HYPOGEN.getFluid() },
-            new Fluid[] { MaterialsUEVplus.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
-            new Fluid[] { MaterialsUEVplus.Universium.getMolten(1).getFluid() }
+            new Fluid[] { Materials.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
+            new Fluid[] { Materials.Universium.getMolten(1).getFluid() }
         };
 
         CoreElement = TST_ItemID.create(GTCMItemList.CoreElement.get(1));
