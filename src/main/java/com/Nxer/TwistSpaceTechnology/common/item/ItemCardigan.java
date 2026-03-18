@@ -197,8 +197,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             // #zh_CN {\GRAY}充能: {\GREEN}%s{\GRAY}/{\GREEN}%s
             String s = StatCollector.translateToLocalFormatted(
                 "tst.cardigan.tooltip.power",
-                GTUtility.formatNumber(current),
-                GTUtility.formatNumber(max));
+                formatNumber(current),
+                formatNumber(max));
             tooltips.add(s);
         } else {
             // #tr tst.cardigan.tooltip.error
