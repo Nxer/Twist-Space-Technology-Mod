@@ -30,7 +30,6 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTModHandler;
@@ -220,7 +219,7 @@ public class TCRecipePool {
                     new AspectList().merge(Aspect.LIFE, 64)
                         .merge(Aspect.MOTION, 256)
                         .merge((Mods.MagicBees.isModLoaded() ? Aspect.getAspect("tempus") : Aspect.AIR), 64),
-                    MaterialsUEVplus.SpaceTime.getBlocks(1),
+                    Materials.SpaceTime.getBlocks(1),
                     new ItemStack[] { ItemList.AcceleratorZPM.get(1), ItemList.AcceleratorZPM.get(1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), // Rune of Acceleration
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.bloodRune, 1, 5), });
