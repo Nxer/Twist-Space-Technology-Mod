@@ -20,14 +20,13 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
@@ -45,9 +44,9 @@ public class ModularHatchesRecipes {
         if (!Config.EnableModularizedMachineSystem) return;
 
         Materials[] materials = new Materials[] { Materials.NaquadahAlloy, Materials.Neutronium,
-            Materials.CosmicNeutronium, Materials.Infinity, MaterialsUEVplus.TranscendentMetal,
-            MaterialsUEVplus.SpaceTime, MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter,
-            MaterialsUEVplus.MagMatter };
+            Materials.CosmicNeutronium, Materials.Infinity, Materials.TranscendentMetal,
+            Materials.SpaceTime, Materials.MagnetohydrodynamicallyConstrainedStarMatter,
+            Materials.MagMatter };
 
         ItemStack[] hulls = new ItemStack[] { ItemList.Hull_ZPM.get(1), ItemList.Hull_UV.get(1),
             ItemList.Hull_MAX.get(1), ItemList.Hull_UEV.get(1), ItemList.Hull_UIV.get(1), ItemList.Hull_UMV.get(1),
@@ -109,7 +108,7 @@ public class ModularHatchesRecipes {
                     ItemList.Sensor_UV.get(1),
                     new Object[] { OrePrefixes.circuit.get(Materials.SuperconductorUHV), 2 },
 
-                    CustomItemList.HighEnergyFlowCircuit.get(36),
+                    NHItemList.HighEnergyFlowCircuit.get(36),
                     GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Infinity, 32),
                     GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.Neutronium, 6),
                     GTOreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Neutronium, 16),
@@ -141,15 +140,15 @@ public class ModularHatchesRecipes {
                     ItemList.Sensor_UMV.get(8),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 64),
 
-                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    NHItemList.HighEnergyFlowCircuit.get(64),
                     ItemList.EnergisedTesseract.get(64),
-                    GTOreDictUnificator.get(OrePrefixes.gearGt, MaterialsUEVplus.SpaceTime, 16),
-                    GTOreDictUnificator.get(OrePrefixes.gearGtSmall, MaterialsUEVplus.SpaceTime, 64),
+                    GTOreDictUnificator.get(OrePrefixes.gearGt, Materials.SpaceTime, 16),
+                    GTOreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.SpaceTime, 64),
 
-                    GTOreDictUnificator.get(OrePrefixes.stickLong, MaterialsUEVplus.SpaceTime, 64),
-                    GTOreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.SpaceTime, 64),
-                    GTOreDictUnificator.get(OrePrefixes.plateDense, MaterialsUEVplus.SpaceTime, 64),
-                    GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.SpaceTime, 64))
+                    GTOreDictUnificator.get(OrePrefixes.stickLong, Materials.SpaceTime, 64),
+                    GTOreDictUnificator.get(OrePrefixes.screw, Materials.SpaceTime, 64),
+                    GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.SpaceTime, 64),
+                    GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.SpaceTime, 64))
                 .fluidInputs(
                     MaterialsElements.STANDALONE.HYPOGEN.getFluidStack(144 * 64 * 64 * 4),
                     MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFluidStack(144 * 64 * 64 * 4),
@@ -175,20 +174,20 @@ public class ModularHatchesRecipes {
                     ItemList.Sensor_UXV.get(16),
                     GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 64),
 
-                    MaterialsUEVplus.Eternity.getNanite(64),
-                    MaterialsUEVplus.Eternity.getNanite(64),
-                    MaterialsUEVplus.Eternity.getNanite(64),
-                    MaterialsUEVplus.Eternity.getNanite(64),
+                    Materials.Eternity.getNanite(64),
+                    Materials.Eternity.getNanite(64),
+                    Materials.Eternity.getNanite(64),
+                    Materials.Eternity.getNanite(64),
 
-                    MaterialsUEVplus.Universium.getNanite(64),
-                    MaterialsUEVplus.Universium.getNanite(64),
-                    MaterialsUEVplus.Universium.getNanite(64),
-                    MaterialsUEVplus.Universium.getNanite(64))
+                    Materials.Universium.getNanite(64),
+                    Materials.Universium.getNanite(64),
+                    Materials.Universium.getNanite(64),
+                    Materials.Universium.getNanite(64))
                 .fluidInputs(
-                    MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64 * 64 * 6),
-                    MaterialsUEVplus.Universium.getMolten(144 * 64 * 64 * 12),
-                    MaterialsUEVplus.Eternity.getMolten(144 * 64 * 64 * 24),
-                    MaterialsUEVplus.SpaceTime.getMolten(144 * 64 * 64))
+                    Materials.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64 * 64 * 6),
+                    Materials.Universium.getMolten(144 * 64 * 64 * 12),
+                    Materials.Eternity.getMolten(144 * 64 * 64 * 24),
+                    Materials.SpaceTime.getMolten(144 * 64 * 64))
                 .itemOutputs(GTCMItemList.PerfectExecutionCore.get(1))
                 .eut(RECIPE_UXV)
                 .duration(20 * 3600)
@@ -204,7 +203,7 @@ public class ModularHatchesRecipes {
                 .itemInputs(
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 2),
                     tectech.thing.CustomItemList.Machine_Multi_Transformer.get(1),
-                    CustomItemList.HighEnergyFlowCircuit.get(64),
+                    NHItemList.HighEnergyFlowCircuit.get(64),
 
                     GregtechItemList.Casing_Coil_QuantumForceTransformer.get(32),
                     ItemList.UHV_Coil.get(64),
@@ -224,7 +223,7 @@ public class ModularHatchesRecipes {
                 .metadata(SCANNING, scanningLV(48 * HOURS))
                 .itemInputs(
                     GTCMItemList.LowSpeedPerfectOverclockController.get(1),
-                    GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 16),
+                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.SpaceTime, 16),
                     ItemRefer.Compact_Fusion_Coil_T4.get(64),
                     Materials.Gold.getNanite(64),
 
@@ -243,8 +242,8 @@ public class ModularHatchesRecipes {
                     GGMaterial.shirabon.get(OrePrefixes.plateDense, 64))
                 .fluidInputs(
                     RadoxPolymer.getMolten(144 * 64 * 64),
-                    MaterialsUEVplus.Space.getMolten(144 * 320),
-                    MaterialsUEVplus.Time.getMolten(144 * 320),
+                    Materials.Space.getMolten(144 * 320),
+                    Materials.Time.getMolten(144 * 320),
                     GGMaterial.shirabon.getMolten(144 * 640))
                 .itemOutputs(GTCMItemList.PerfectOverclockController.get(1))
                 .eut(RECIPE_UMV)
@@ -259,19 +258,19 @@ public class ModularHatchesRecipes {
                     GTUtility.copyAmountUnsafe(4096, ItemList.Field_Generator_UXV.get(1)),
                     GTUtility.copyAmountUnsafe(
                         6144,
-                        GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 1)),
+                        GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Eternity, 1)),
 
-                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.Universium.getNanite(1)),
-                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.Eternity.getNanite(1)),
-                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.BlackDwarfMatter.getNanite(1)),
-                    GTUtility.copyAmountUnsafe(8192, MaterialsUEVplus.WhiteDwarfMatter.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, Materials.Universium.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, Materials.Eternity.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, Materials.BlackDwarfMatter.getNanite(1)),
+                    GTUtility.copyAmountUnsafe(8192, Materials.WhiteDwarfMatter.getNanite(1)),
 
                     GTUtility.copyAmountUnsafe(65536, ItemList.Timepiece.get(1)),
                     GTUtility.copyAmountUnsafe(131072, GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1)))
                 .fluidInputs(
                     Materials.DarkIron.getMolten(144 * 16384),
                     Materials.Force.getMolten(144 * 65536),
-                    MaterialsUEVplus.Universium.getMolten(144 * 131072))
+                    Materials.Universium.getMolten(144 * 131072))
                 .itemOutputs(GTCMItemList.SingularityPerfectOverclockController.get(1))
                 .eut(RECIPE_MAX)
                 .duration(20 * 3600 * 24 * 64)
