@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
-import static com.dreammaster.gthandler.CustomItemList.HighEnergyFlowCircuit;
+import static com.dreammaster.item.NHItemList.HighEnergyFlowCircuit;
 import static gregtech.api.enums.TierEU.RECIPE_LuV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 
