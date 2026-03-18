@@ -13,8 +13,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsBotania;
-import gregtech.api.enums.MaterialsGTNH;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
@@ -31,9 +29,9 @@ public class ElvenWorkshopRecipePool  {
         final IRecipeMap EW = GTCMRecipe.ElvenWorkshopRecipes;
         //terrastrial recipe
         GTValues.RA.stdBuilder()
-            .itemInputs(GTUtility.getIntegratedCircuit(1), MaterialsBotania.Manasteel.getIngots(1), MaterialsBotania.ManaDiamond.getGems(1), new ItemStack(ModItems.manaResource, 1, 1))
+            .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Manasteel.getIngots(1), Materials.ManaDiamond.getGems(1), new ItemStack(ModItems.manaResource, 1, 1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(50000))
-            .itemOutputs(MaterialsBotania.Terrasteel.getIngots(1))
+            .itemOutputs(Materials.Terrasteel.getIngots(1))
             .eut(RECIPE_HV)
             .duration(20 * 1)
             .addTo(EW);
@@ -42,7 +40,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Steel.getIngots(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(300))
-            .itemOutputs(MaterialsBotania.Manasteel.getIngots(1))
+            .itemOutputs(Materials.Manasteel.getIngots(1))
             .eut(RECIPE_LV)
             .duration(20 * 1)
             .addTo(EW);
@@ -50,7 +48,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Steel.getBlocks(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(2700))
-            .itemOutputs(MaterialsBotania.Manasteel.getBlocks(1))
+            .itemOutputs(Materials.Manasteel.getBlocks(1))
             .eut(RECIPE_LV)
             .duration(20 * 9)
             .addTo(EW);
@@ -58,7 +56,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Thaumium.getIngots(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(150))
-            .itemOutputs(MaterialsBotania.Manasteel.getIngots(1))
+            .itemOutputs(Materials.Manasteel.getIngots(1))
             .eut(RECIPE_LV)
             .duration(20 * 1)
             .addTo(EW);
@@ -66,7 +64,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Thaumium.getBlocks(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(1350))
-            .itemOutputs(MaterialsBotania.Manasteel.getBlocks(1))
+            .itemOutputs(Materials.Manasteel.getBlocks(1))
             .eut(RECIPE_LV)
             .duration(20 * 9)
             .addTo(EW);
@@ -74,7 +72,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Diamond.getGems(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(4000))
-            .itemOutputs(MaterialsBotania.ManaDiamond.getGems(1))
+            .itemOutputs(Materials.ManaDiamond.getGems(1))
             .eut(RECIPE_LV)
             .duration(20 * 1)
             .addTo(EW);
@@ -82,7 +80,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Diamond.getBlocks(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(36000))
-            .itemOutputs(MaterialsBotania.ManaDiamond.getBlocks(1))
+            .itemOutputs(Materials.ManaDiamond.getBlocks(1))
             .eut(RECIPE_LV)
             .duration(20 * 9)
             .addTo(EW);
@@ -161,7 +159,7 @@ public class ElvenWorkshopRecipePool  {
         GTValues.RA.stdBuilder()
             .itemInputs(new ItemStack(alchemyCatalyst, 0), Materials.Quartz.getGems(1))
             .fluidInputs(MaterialPool.LiquidMana.getFluidOrGas(100))
-            .itemOutputs(GTOreDictUnificator.get(OrePrefixes.shard, MaterialsGTNH.Prismarine, 1))
+            .itemOutputs(GTOreDictUnificator.get(OrePrefixes.shard, Materials.Prismarine, 1))
             .eut(RECIPE_HV)
             .duration(20)
             .addTo(EW);
