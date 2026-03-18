@@ -96,12 +96,13 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     // region default value
 
-    private int mParallel;
-    private int ExtraTime;
-    private double mSpeedBonus;
-    private double Mean;
-    private double Variance;
-    private final TST_ItemID EssentiaCell_Creative = TST_ItemID
+    protected int mParallel;
+    protected int blockTier;
+    protected int ExtraTime;
+    protected double mSpeedBonus;
+    protected double Mean;
+    protected double Variance;
+    protected final TST_ItemID EssentiaCell_Creative = TST_ItemID
         .create(EnumEssentiaStorageTypes.Type_Creative.getCell());
     protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
     protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
@@ -297,7 +298,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         return (float) mSpeedBonus;
     }
 
-    private void countSpeedBonus() {
+    protected void countSpeedBonus() {
         int penalize = 0;
         ArrayList<Double> MaxAmount = new ArrayList<>();
         AspectList aspectList = new AspectList();
@@ -354,7 +355,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         return sum / n;
     }
 
-    private static double calculateMean(List<Double> data) {
+    protected static double calculateMean(List<Double> data) {
         int n = data.size();
         double sum = 0.0;
 
@@ -365,7 +366,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         return sum / n;
     }
 
-    private Aspect getMaxAspect(@Nonnull AspectList aspectList) {
+    protected Aspect getMaxAspect(@Nonnull AspectList aspectList) {
         Aspect maxAspect = null;
         int max = 0;
         for (Aspect aspect : aspectList.getAspects()) {
@@ -413,15 +414,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     // region Structure
 
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final String STRUCTURE_PIECE_MAIN_ERR = "mainErr";
-    private final int horizontalOffSet = 22;
-    private final int verticalOffSet = 35;
-    private final int depthOffSet = 20;
+    protected static final String STRUCTURE_PIECE_MAIN = "main";
+    protected static final String STRUCTURE_PIECE_MAIN_ERR = "mainErr";
+    protected static final int horizontalOffSet = 22;
+    protected static final int verticalOffSet = 35;
+    protected static final int depthOffSet = 20;
 
     // spotless:off
 
-    private static final String[][] shape = new String[][] {
+    protected static final String[][] shape = new String[][] {
             { "                                             ", "                                             ",
                     "                                             ", "                                             ",
                     "                                             ", "                                             ",
@@ -1642,7 +1643,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     "                                             ", "                                             ",
                     "                                             " } };
 
-    private static final String[][] shapeErr = new String[][] {
+    protected static final String[][] shapeErr = new String[][] {
             { "                                             ", "                                             ",
                     "                                             ", "                                             ",
                     "                                             ", "                                             ",
@@ -2879,7 +2880,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             true);
     }
 
-    private static IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> STRUCTURE_DEFINITION = null;
+    protected static IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> STRUCTURE_DEFINITION = null;
 
     @Override
     public IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> getStructureDefinition() {
@@ -2899,15 +2900,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                     withChannel(
                         "essentia_cell",
                         ofBlocksTiered(
-                            (a, b) -> a == essentiaCell ? (b + 1) << 3 : -1,
+                            (a, b) -> a == essentiaCell ? (b + 1) : null,
                             ImmutableList.of(
                                 Pair.of(essentiaCell, 0),
                                 Pair.of(essentiaCell, 1),
                                 Pair.of(essentiaCell, 2),
                                 Pair.of(essentiaCell, 3)),
                             -1,
-                            (x, y) -> x.mParallel = y,
-                            x -> x.mParallel == 0 ? -1 : x.mParallel)))
+                            (x, y) -> x.blockTier = y,
+                            x -> x.blockTier)))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings8, 8))
                 .addElement('C', ofBlock(GregTechAPI.sBlockMetal4, 10))
                 .addElement(
@@ -3161,6 +3162,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             list.appendTag(tag);
         }
         aNBT.setInteger("mParallel", this.mParallel);
+        aNBT.setInteger("blockTier", this.blockTier);
         aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
         aNBT.setTag("Research", list);
         super.saveNBTData(aNBT);
@@ -3181,14 +3183,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             }
         }
         this.mParallel = aNBT.getInteger("mParallel");
+        this.blockTier = aNBT.getInteger("blockTier");
         this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
         super.loadNBTData(aNBT);
     }
 
     @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
         if (aTick % 100 == 0) {
-            super.onPreTick(aBaseMetaTileEntity, aTick);
             if (aBaseMetaTileEntity.isServerSide()) {
                 ArrayList<String> list = getResearchForPlayer(getPlayName());
                 if ((this.Research == null && list != null)
@@ -3203,10 +3206,16 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         repairMachine();
         this.mParallel = 0;
+        this.blockTier = -1;
         this.mNodeEnergized.clear();
         this.mTileInfusionProvider.clear();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
-            || checkPiece(STRUCTURE_PIECE_MAIN_ERR, horizontalOffSet, verticalOffSet, depthOffSet);
+        if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
+            || checkPiece(STRUCTURE_PIECE_MAIN_ERR, horizontalOffSet, verticalOffSet, depthOffSet)) {
+            if (blockTier > 0) {
+                mParallel = blockTier << 3;
+            } else return false;
+        }
+        return false;
     }
 
     @Override
