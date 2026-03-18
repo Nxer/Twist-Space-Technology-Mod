@@ -8,7 +8,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
@@ -31,7 +31,7 @@ public class SingleItemRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.Silver, 1),
-                CustomItemList.ChromaticLens.get(0))
+                NHItemList.ChromaticLens.get(0))
             .fluidInputs(Materials.Boron.getPlasma(144 * 32))
             .itemOutputs(GTCMItemList.BoropheneFoil.get(1))
             .outputChances(2500)
