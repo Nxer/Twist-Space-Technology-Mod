@@ -12,7 +12,6 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
@@ -27,15 +26,15 @@ public class MicroSpaceTimeFabricatorioRecipePool {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
-                GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.Eternity, 1),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Eternity, 1),
                 GTCMItemList.SeedsSpaceTime.get(1),
                 Laser_Lens_Special.get(16),
                 MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getFoil(64))
             .fluidInputs(
-                MaterialsUEVplus.ExcitedDTSC.getFluid(1000),
+                Materials.ExcitedDTSC.getFluid(1000),
                 MaterialsElements.STANDALONE.ASTRAL_TITANIUM.getFluidStack(144 * 64))
             .itemOutputs(GTUtility.copyAmountUnsafe(512, ItemList.Tesseract.get(1)))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(3000))
+            .fluidOutputs(Materials.DimensionallyTranscendentResidue.getFluid(3000))
             .eut(RECIPE_UXV)
             .duration(20 * 60)
             .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
@@ -51,7 +50,7 @@ public class MicroSpaceTimeFabricatorioRecipePool {
                 GTCMItemList.Antimatter.get(1))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000))
             .itemOutputs(Laser_Lens_Special.get(64))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(500))
+            .fluidOutputs(Materials.DimensionallyTranscendentResidue.getFluid(500))
             .eut(RECIPE_UIV)
             .duration(20 * 60)
             .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
