@@ -138,7 +138,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                     HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_Scavenger::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
@@ -146,7 +146,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                     HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_Scavenger::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(chainAllGlasses(), ofBlock(GregTechAPI.sBlockCasings4, 14)))
                 .addElement(
@@ -154,7 +154,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                     HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_Scavenger::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(14))
                         .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                 .addElement('E', ofFrame(Materials.Osmiridium))

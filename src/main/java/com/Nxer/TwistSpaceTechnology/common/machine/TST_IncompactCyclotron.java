@@ -143,13 +143,13 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
                     buildHatchAdder(TST_IncompactCyclotron.class)
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(BorosilicateGlass.ofBoroGlass(10)))
                 .addElement(
                     'F',
                     buildHatchAdder(TST_IncompactCyclotron.class).atLeast(Energy.or(ExoticEnergy))
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 11))
                 .build();
         }

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.Nxer.TwistSpaceTechnology.util.ItemEssentiaHelper;
-import com.glodblock.github.crossmod.thaumcraft.AspectUtil;
+//import com.glodblock.github.crossmod.thaumcraft.AspectUtil;
 
 import appeng.api.AEApi;
 import appeng.api.config.Actionable;
@@ -289,7 +289,7 @@ public class TileEssentiaDiscretizer extends AENetworkTile implements IPriorityH
                 return input;
             }
 
-            try {
+            /*try {
                 if (craftingGrid instanceof CraftingGridCache) {
                     if (AspectUtil.isEssentiaGas(input.getFluidStack())) {
                         IAEItemStack asItem = ItemEssentiaHelper.newAeStack(input);
@@ -307,7 +307,7 @@ public class TileEssentiaDiscretizer extends AENetworkTile implements IPriorityH
             } catch (Throwable t) {
                 // FMLLog.warning("FluidCraftingInventory.injectItems error: %s", t.getMessage());
                 return input;
-            }
+            }*/
             return input;
         }
 

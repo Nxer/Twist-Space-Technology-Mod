@@ -2917,7 +2917,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                             .atLeast(InputBus, OutputBus, Energy)
                             .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
                             .casingIndex(1536)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofBlock(magicCasing, 0),
                         ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))

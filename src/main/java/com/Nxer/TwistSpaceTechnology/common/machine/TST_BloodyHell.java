@@ -313,9 +313,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                     'G',
                     ofChain(
                         ofBlockAnyMeta(ModBlocks.bloodRune),
-                        onElementPass((x) -> { x.speedRuneCount += 1; }, ofBlockAnyMeta(ModBlocks.speedRune)),
+                        onElementPass(x -> x.speedRuneCount++, ofBlockAnyMeta(ModBlocks.speedRune)),
                         onElementPass(
-                            (x) -> { x.tbSpeedRuneCount += 1; },
+                            (x -> x.tbSpeedRuneCount++,
                             ofBlockAnyMeta(TstBlocks.TimeBendingSpeedRune))))
                 .addElement('H', ofBlockAnyMeta(ModBlocks.largeBloodStoneBrick))
                 .addElement('I', ofBlock(BloodInfusedIronBlock.getLeft(), BloodInfusedIronBlock.getRight()))
@@ -333,7 +333,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, OutputBus, InputHatch)
                             .adder(TST_BloodyHell::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
                             .buildAndChain(MetaBlockCasing02, 0)))
                 .addElement('Z', ofBlock(blockLifeEssence, 0))

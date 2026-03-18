@@ -235,7 +235,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                            HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
                                                                  .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                                                                 .dot(1)
+                                                                 .hint(1)
                                                                  .casingIndex(62)
                                                                  .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                                        .addElement(
@@ -249,7 +249,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                            HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
                                                                  .atLeast(Energy.or(ExoticEnergy))
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                                                                 .dot(2)
+                                                                 .hint(2)
                                                                  .casingIndex(183)
                                                                  .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                        .build();

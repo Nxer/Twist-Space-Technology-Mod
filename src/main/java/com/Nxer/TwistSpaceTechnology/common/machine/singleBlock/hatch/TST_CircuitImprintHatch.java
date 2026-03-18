@@ -14,7 +14,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
+//import bartworks.system.material.CircuitGeneration.BWMetaItems;
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -156,11 +156,11 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
         IGregTechTileEntity te = getBaseMetaTileEntity();
         for (int i = 0; i < te.getSizeInventory(); ++i) {
             ItemStack slot = te.getStackInSlot(i);
-            if (slot != null && slot.isItemEqual(
+            /*if (slot != null && slot.isItemEqual(
                 BWMetaItems.getCircuitParts()
                     .getStack(0, 0))) {
                 circuitType.add(slot.stackTagCompound);
-            }
+            }*/
         }
     }
 

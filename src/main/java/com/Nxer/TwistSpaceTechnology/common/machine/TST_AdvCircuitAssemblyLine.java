@@ -45,7 +45,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.recipe.BartWorksRecipeMaps;
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
+//import bartworks.system.material.CircuitGeneration.BWMetaItems;
 import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
@@ -108,21 +108,21 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputBus, OutputBus, InputHatch)
                         .adder(TST_AdvCircuitAssemblyLine::addToMachineList)
                         .casingIndex(16)
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(GregTechAPI.sBlockCasings2, 0))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
                 .addElement(
                     'D',
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(Energy.or(ExoticEnergy))
                         .casingIndex(16)
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(GregTechAPI.sBlockCasings2, 6))
                 .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
                 .addElement('F', ofBlock(GregTechAPI.sBlockCasings3, 10))
                 .addElement(
                     'G',
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(42)
                         .buildAndChain(GregTechAPI.sBlockCasings3, 10))
                 .build();
@@ -194,12 +194,12 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
     HashSet<NBTTagCompound> circuitType = new HashSet<>();
 
-    @Override
+    /*@Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         if (circuitImprint == null) circuitImprint = BWMetaItems.getCircuitParts()
             .getStack(0, 0);
-    }
+    }*/
 
     @Override
     protected boolean isEnablePerfectOverclock() {

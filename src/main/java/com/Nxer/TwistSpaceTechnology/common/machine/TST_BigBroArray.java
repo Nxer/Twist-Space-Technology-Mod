@@ -1115,7 +1115,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                         gregtech.api.enums.HatchElement.OutputBus.or(gregtech.api.enums.HatchElement.OutputHatch),
                         gregtech.api.enums.HatchElement.Muffler)
                     .adder(TST_BigBroArray::addToMachineList)
-                    .dot(1)
+                    .hint(1)
                     .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(0))
                     .buildAndChain(GregTechAPI.sBlockCasings4, 0))
             .addElement(
@@ -1144,7 +1144,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                         HatchElement.DynamoMulti.or(gregtech.api.enums.HatchElement.ExoticEnergy)
                             .or(gregtech.api.enums.HatchElement.Dynamo))
                     .adder(TST_BigBroArray::addToMachineList)
-                    .dot(2)
+                    .hint(2)
                     .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(1))
                     .buildAndChain(GregTechAPI.sBlockCasings4, 1))
             .addElement(

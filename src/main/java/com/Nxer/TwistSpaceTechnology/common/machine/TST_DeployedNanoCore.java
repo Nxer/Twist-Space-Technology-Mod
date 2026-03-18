@@ -230,7 +230,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
                     HatchElementBuilder.<TST_DeployedNanoCore>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_DeployedNanoCore::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .build();

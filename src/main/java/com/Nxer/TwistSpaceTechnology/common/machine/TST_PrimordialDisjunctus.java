@@ -188,7 +188,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                                 gregtech.api.enums.HatchElement.InputBus,
                                 gregtech.api.enums.HatchElement.InputHatch)
                             .casingIndex(CASING_INDEX)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofSpecificTileAdder(
                             TST_PrimordialDisjunctus::addEssentiaOutputHatchToMachineList,

@@ -503,7 +503,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
                             HatchElement.Maintenance,
                             HatchElement.Muffler)
                         .casingIndex(getTextureIndex())
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(
                             onElementPass((te) -> te.casingCount++, ofBlock(ModBlocks.blockCasings3Misc, 2))))
                 .addElement(

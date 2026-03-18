@@ -235,7 +235,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                                                    HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
                                                                          .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                                                                          .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
-                                                                         .dot(1)
+                                                                         .hint(1)
                                                                          .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                                                                          .buildAndChain(GregTechAPI.sBlockCasings8,10))
                                        .addElement('F', ofFrame(Materials.NaquadahAlloy))

@@ -351,7 +351,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
                                                          .atLeast(Energy.or(ExoticEnergy))
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .dot(1)
+                                                         .hint(1)
                                                          .casingIndex(1024)
                                                          .buildAndChain(sBlockCasingsTT, 0))
                                .addElement('B', ofBlock(sBlockCasingsTT, 4))
@@ -362,7 +362,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
                                                          .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .dot(2)
+                                                         .hint(2)
                                                          .casingIndex(1028)
                                                          .buildAndChain(sBlockCasingsTT, 4))
                                .addElement(

@@ -194,7 +194,7 @@ import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
+//import bartworks.system.material.CircuitGeneration.BWMetaItems;
 import bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import fox.spiteful.avaritia.items.LudicrousItems;
@@ -3084,7 +3084,8 @@ public class GTCMMachineRecipes {
 
                 ItemList.Sensor_LuV.get(2),
                 ItemList.Conveyor_Module_LuV.get(4),
-                BWMetaItems.getCircuitParts().getStack(3,8),
+                ItemList.ImprintBoard.get(8),
+                //BWMetaItems.getCircuitParts().getStack(3,8),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UV,8)
             )
@@ -3105,7 +3106,8 @@ public class GTCMMachineRecipes {
 
                 ItemList.Sensor_UHV.get(4),
                 ItemList.Conveyor_Module_UHV.get(16),
-                BWMetaItems.getCircuitParts().getStack(3,32),
+                ItemList.ImprintBoard.get(32),
+                //BWMetaItems.getCircuitParts().getStack(3,32),
 
                 GTOreDictUnificator.get(OrePrefixes.circuit,Materials.UEV,32)
             )

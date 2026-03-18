@@ -226,7 +226,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
                             .<TST_NetherInterface>builder()
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                             .adder(TST_NetherInterface::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(16)
                             .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 0))
                     )

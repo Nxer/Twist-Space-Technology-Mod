@@ -91,14 +91,14 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
                     'M',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
                         .atLeast(Maintenance)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .addElement(
                     'H',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .build();

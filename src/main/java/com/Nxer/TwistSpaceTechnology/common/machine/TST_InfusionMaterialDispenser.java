@@ -491,7 +491,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                         buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
                             .adder(TST_InfusionMaterialDispenser::addToMachineList)
                             .casingIndex(1536)
-                            .dot(1)
+                            .hint(1)
                             .buildAndChain(magicCasing, 0)))
                 .build();
         }

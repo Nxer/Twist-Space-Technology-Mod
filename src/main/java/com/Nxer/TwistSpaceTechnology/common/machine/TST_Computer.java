@@ -1357,7 +1357,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                     HatchElementBuilder.<TST_Computer>builder()
                         .atLeast(ComputationMonitor, OutputData, InputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_Computer::superAddToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(textureOffset + 2)
                         .buildAndChain(ofBlock(sBlockCasingsSE, 2)))
                 .addElement('Q', ofBlock(sBlockCasingsTT, 3))

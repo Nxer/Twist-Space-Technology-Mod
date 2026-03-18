@@ -73,16 +73,16 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     public int totalMachineMode() {
         /*
          * 0 - Cutting Machine
-         * 1 - Slicer
-         * 2 - Lathe
+         * NA - Slicer //Slicer has been removed
+         * 1 - Lathe
          */
-        return 3;
+        return 2;
     }
 
     @Override
     public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CUTTING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);//These should be changed later to be better
+        //machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
     }
 
@@ -115,9 +115,9 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     @Override
     public RecipeMap<?> getRecipeMap() {
         switch (machineMode) {
+            /*case 1:
+                return RecipeMaps.slicerRecipes;*/
             case 1:
-                return RecipeMaps.slicerRecipes;
-            case 2:
                 return RecipeMaps.latheRecipes;
             default:
                 return RecipeMaps.cutterRecipes;
@@ -127,7 +127,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.slicerRecipes, RecipeMaps.latheRecipes, RecipeMaps.cutterRecipes);
+        return Arrays.asList(/*RecipeMaps.slicerRecipes, */RecipeMaps.latheRecipes, RecipeMaps.cutterRecipes);
     }
 
     @Override
@@ -235,7 +235,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
                                                                   HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
                                                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                         .adder(GT_TileEntity_HolySeparator::addToMachineList)
-                                                                                        .dot(1)
+                                                                                        .hint(1)
                                                                                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                                                                                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                                       .addElement('B',ofBlock(GregTechAPI.sBlockCasings8, 10))

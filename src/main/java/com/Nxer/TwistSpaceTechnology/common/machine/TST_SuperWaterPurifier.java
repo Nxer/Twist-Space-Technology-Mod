@@ -249,7 +249,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                         buildHatchAdder(TST_SuperWaterPurifier.class)
                             .atLeast(InputHatch, InputBus, OutputBus, OutputHatch, Energy, ExoticEnergy)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings10, 9))))
                 .addElement('B',ofBlock(sBlockCasings8, 14))

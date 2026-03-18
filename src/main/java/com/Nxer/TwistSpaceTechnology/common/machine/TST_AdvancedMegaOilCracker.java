@@ -208,7 +208,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
                     HatchElementBuilder.<TST_AdvancedMegaOilCracker>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_AdvancedMegaOilCracker::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(49)
                         .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement('F', ofFrame(Materials.Vanadium))

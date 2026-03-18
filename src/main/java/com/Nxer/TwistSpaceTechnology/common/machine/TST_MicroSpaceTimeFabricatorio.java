@@ -402,7 +402,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                     HatchElementBuilder.<TST_MicroSpaceTimeFabricatorio>builder()
                         .atLeast(InputBus)
                         .adder(TST_MicroSpaceTimeFabricatorio::addSpecialInputBusToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1024 + 12)
                         .buildAndChain(tra))
                 .addElement(
@@ -410,7 +410,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                     HatchElementBuilder.<TST_MicroSpaceTimeFabricatorio>builder()
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_MicroSpaceTimeFabricatorio::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(inj))
                 .build();

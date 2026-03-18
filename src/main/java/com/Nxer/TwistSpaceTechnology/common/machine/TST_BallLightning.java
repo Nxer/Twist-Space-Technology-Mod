@@ -570,7 +570,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(1))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
@@ -578,7 +578,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(getCasingTextureIndex(GregTechAPI.sBlockCasings8, 5))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 5))
                 .build();
         }

@@ -142,7 +142,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
                                                           HatchElementBuilder.<GT_TileEntity_MagneticMixer>builder()
                                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                 .adder(GT_TileEntity_MagneticMixer::addToMachineList)
-                                                                                .dot(1)
+                                                                                .hint(1)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 2))
                                                       .addElement(
@@ -150,7 +150,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
                                                           HatchElementBuilder.<GT_TileEntity_MagneticMixer>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GT_TileEntity_MagneticMixer::addToMachineList)
-                                                                                .dot(2)
+                                                                                .hint(2)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                                                       .addElement(
@@ -158,7 +158,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
                                                           HatchElementBuilder.<GT_TileEntity_MagneticMixer>builder()
                                                                                 .atLeast(Maintenance)
                                                                                 .adder(GT_TileEntity_MagneticMixer::addToMachineList)
-                                                                                .dot(3)
+                                                                                .hint(3)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                                                       .addElement('E', ofBlock(ModBlocks.blockCasings3Misc, 11))

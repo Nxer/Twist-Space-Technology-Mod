@@ -405,7 +405,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
                 .addElement(
@@ -415,7 +415,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(MetaBlockCasing01.getTextureIndex(13))
                             .build()))
                 .addElement(
@@ -425,7 +425,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
-                            .dot(2)
+                            .hint(2)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
                 .addElement(
@@ -435,7 +435,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         HatchElementBuilder.<TST_MegaTreeFarm>builder()
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_MegaTreeFarm::addToMachineList)
-                            .dot(2)
+                            .hint(2)
                             .casingIndex(MetaBlockCasing01.getTextureIndex(13))
                             .build()))
                 .addElement('S', ofFrame(Materials.Mytryl))

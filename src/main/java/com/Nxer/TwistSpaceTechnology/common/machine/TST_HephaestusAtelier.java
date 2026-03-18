@@ -495,7 +495,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                             .<TST_HephaestusAtelier>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy) )
                             .adder(TST_HephaestusAtelier::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(11)
                             .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                     .addElement('B', ofBlock(sBlockCasingsTT, 4))

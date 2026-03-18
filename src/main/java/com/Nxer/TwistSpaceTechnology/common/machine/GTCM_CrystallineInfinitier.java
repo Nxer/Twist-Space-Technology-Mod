@@ -256,7 +256,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
                                                           HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GTCM_CrystallineInfinitier::addToMachineList)
-                                                                                .dot(1)
+                                                                                .hint(1)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                                                       .addElement(
@@ -264,7 +264,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
                                                           HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
                                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                 .adder(GTCM_CrystallineInfinitier::addToMachineList)
-                                                                                .dot(2)
+                                                                                .hint(2)
                                                                                 .casingIndex(1028)
                                                                                 .buildAndChain(sBlockCasingsTT, 4))
                                                       .addElement(

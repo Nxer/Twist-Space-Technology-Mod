@@ -105,12 +105,12 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
                     'B',
                     ofChain(
                         buildSteamInput(TST_LargeSteamAlloySmelter.class).casingIndex(1090)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         buildHatchAdder(TST_LargeSteamAlloySmelter.class)
                             .atLeast(SteamHatchElement.InputBus_Steam, SteamHatchElement.OutputBus_Steam)
                             .casingIndex(1090)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofBlock(GregTechAPI.sBlockCasingsNH, 2)))
                 .build();

@@ -104,7 +104,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
                     HatchElementBuilder.<TST_LargeCanner>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_LargeCanner::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(48)
                         .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                 .build();

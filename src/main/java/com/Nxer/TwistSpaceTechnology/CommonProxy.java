@@ -12,7 +12,7 @@ import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
-import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
+//import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
@@ -46,7 +46,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.common.render.GTTextureBuilder;
+import gregtech.common.render.GTBlockTextureBuilder;
 
 public class CommonProxy {
 
@@ -93,7 +93,7 @@ public class CommonProxy {
         TstUtils.registerTexture(
             31,
             0,
-            new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
+            new GTBlockTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
                 .build());
 
         LazyStaticsInitLoader.initStaticsOnInit();
@@ -132,7 +132,7 @@ public class CommonProxy {
         MachineLoader.loadMachinePostInit();
         RecipeLoader.loadRecipesPostInit();
 
-        CropInfo.registerAllCropInfo();
+        //CropInfo.registerAllCropInfo();
 
         TCLoader.postInit();
         NEIHandler.IMCSender();

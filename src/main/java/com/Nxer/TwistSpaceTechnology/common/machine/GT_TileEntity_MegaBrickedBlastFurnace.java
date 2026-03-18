@@ -636,7 +636,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
                     'b',
                     buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
                         .casingIndex(BRONZE_PLATED_BRICKS_INDEX)
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings1, BRONZE_PLATED_BRICKS_INDEX)))
                 .addElement('N', ofBlock(GregTechAPI.sBlockCasings4, FIREBRICK_METAID))
                 .addElement('s', ofBlock(Blocks.brick_block, 0))

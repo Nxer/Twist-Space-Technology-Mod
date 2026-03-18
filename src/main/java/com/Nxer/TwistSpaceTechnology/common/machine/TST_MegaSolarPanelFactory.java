@@ -256,7 +256,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                     HatchElementBuilder.<TST_MegaSolarPanelFactory>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_MegaSolarPanelFactory::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(MetaBlockCasing02, 2))
                 .build();

@@ -234,7 +234,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                                 gregtech.api.enums.HatchElement.InputHatch,
                                 gregtech.api.enums.HatchElement.OutputHatch)
                             .casingIndex(176)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofAccurateTileAdder(
                             TST_SkypiercerTower::addInfusionProvider,

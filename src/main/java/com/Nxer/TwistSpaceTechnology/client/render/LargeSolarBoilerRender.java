@@ -17,6 +17,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gtPlusPlus.core.util.minecraft.FluidUtils;
+import gregtech.api.enums.Materials;
 
 @SideOnly(Side.CLIENT)
 public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
@@ -36,10 +37,14 @@ public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GL11.glDisable(GL11.GL_LIGHTING);
 
-        Fluid water = FluidUtils.getWater(1)
-            .getFluid();
-        Fluid steam = FluidUtils.getSteam(1)
-            .getFluid();
+        //Fluid water = FluidUtils.getWater(1)
+        //    .getFluid();
+        //Fluid steam = FluidUtils.getSteam(1)
+        //    .getFluid();
+
+        Fluid water = Materials.Water.getFluid(1).getFluid();
+        Fluid steam = Materials.Steam.getGas(1).getFluid();
+
 
         GL11.glPushMatrix();
         GL11.glTranslated(x - 1, y, z - 1);

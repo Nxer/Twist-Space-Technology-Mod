@@ -400,7 +400,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                     HatchElementBuilder.<TST_MiracleDoor>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                         .adder(TST_MiracleDoor::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024 + 12)
                         .buildAndChain(sBlockCasingsTT, 12))
                 .build();

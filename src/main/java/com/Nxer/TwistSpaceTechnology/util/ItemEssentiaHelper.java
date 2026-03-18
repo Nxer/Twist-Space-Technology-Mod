@@ -15,8 +15,8 @@ import appeng.util.item.AEItemStack;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.items.ItemCrystalEssence;
-import thaumicenergistics.common.fluids.GaseousEssentia;
-import thaumicenergistics.common.integration.tc.EssentiaConversionHelper;
+//import thaumicenergistics.common.fluids.GaseousEssentia;
+//import thaumicenergistics.common.integration.tc.EssentiaConversionHelper;
 
 public class ItemEssentiaHelper {
 
@@ -38,12 +38,12 @@ public class ItemEssentiaHelper {
             return null;
         }
         Aspect asp = aspects.getAspects()[0];
-        GaseousEssentia gas = GaseousEssentia.getGasFromAspect(asp);
+        //GaseousEssentia gas = GaseousEssentia.getGasFromAspect(asp);
         if (gas == null) return null;
 
-        int fluidPerEssentia = (int) EssentiaConversionHelper.INSTANCE.convertEssentiaAmountToFluidAmount(1);
-        if (fluidPerEssentia <= 0) return null;
-        long totalFluidLong = (long) fluidPerEssentia * (long) stack.stackSize;
+        //int fluidPerEssentia = (int) EssentiaConversionHelper.INSTANCE.convertEssentiaAmountToFluidAmount(1);
+        //if (fluidPerEssentia <= 0) return null;
+        //long totalFluidLong = (long) fluidPerEssentia * (long) stack.stackSize;
         int totalFluid = totalFluidLong > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) totalFluidLong;
 
         return AEFluidStack.create(new net.minecraftforge.fluids.FluidStack(gas, totalFluid));
@@ -51,11 +51,11 @@ public class ItemEssentiaHelper {
 
     @Nullable
     public static IAEItemStack newAeStack(IAEFluidStack fluid) {
-        if (fluid == null || fluid.getFluid() == null || !(fluid.getFluid() instanceof GaseousEssentia)) {
+        if (fluid == null || fluid.getFluid() == null ){//|| !(fluid.getFluid() instanceof GaseousEssentia)) {
             return null;
         }
 
-        GaseousEssentia gas = (GaseousEssentia) fluid.getFluid();
+        //GaseousEssentia gas = (GaseousEssentia) fluid.getFluid();
         Aspect asp = gas.getAspect();
 
         ItemStack crystal = new ItemStack(thaumcraft.common.config.ConfigItems.itemCrystalEssence, 1);
@@ -65,12 +65,12 @@ public class ItemEssentiaHelper {
         // tag.setString("AspectTag", asp.getTag());
         crystal.setTagCompound(tag);
 
-        int fluidPerEssentia = (int) EssentiaConversionHelper.INSTANCE.convertEssentiaAmountToFluidAmount(1);
-        if (fluidPerEssentia <= 0) {
-            IAEItemStack aeStackFallback = AEItemStack.create(crystal);
-            aeStackFallback.setStackSize(1);
-            return aeStackFallback;
-        }
+        //int fluidPerEssentia = (int) EssentiaConversionHelper.INSTANCE.convertEssentiaAmountToFluidAmount(1);
+        //if (fluidPerEssentia <= 0) {
+        //    IAEItemStack aeStackFallback = AEItemStack.create(crystal);
+        //    aeStackFallback.setStackSize(1);
+        //    return aeStackFallback;
+        //}
 
         if (fluid.getStackSize() >= Integer.MAX_VALUE || fluid.getStackSize() <= 0) {
             IAEItemStack aeStack = AEItemStack.create(crystal);
@@ -108,15 +108,15 @@ public class ItemEssentiaHelper {
             return null;
         }
         Aspect asp = aspects.getAspects()[0];
-        GaseousEssentia gas = GaseousEssentia.getGasFromAspect(asp);
-        if (gas == null) return null;
-        int fluidPerEssentia = (int) EssentiaConversionHelper.INSTANCE.convertEssentiaAmountToFluidAmount(1);
-        if (fluidPerEssentia <= 0) return null;
+        //GaseousEssentia gas = GaseousEssentia.getGasFromAspect(asp);
+        //if (gas == null) return null;
+        //int fluidPerEssentia = (int) EssentiaConversionHelper.INSTANCE.convertEssentiaAmountToFluidAmount(1);
+        //if (fluidPerEssentia <= 0) return null;
 
-        long totalFluidLong = (long) fluidPerEssentia * (long) stack.getStackSize();
-        int totalFluid = totalFluidLong > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) totalFluidLong;
+        //long totalFluidLong = (long) fluidPerEssentia * (long) stack.getStackSize();
+        //int totalFluid = totalFluidLong > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) totalFluidLong;
 
-        return AEFluidStack.create(new net.minecraftforge.fluids.FluidStack(gas, totalFluid));
+        return AEFluidStack.create(new net.minecraftforge.fluids.FluidStack(gas, 1 /*totalFluid*/));
     }
 
     @Nullable

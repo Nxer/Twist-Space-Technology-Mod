@@ -163,7 +163,7 @@ I -> ofFrame...(Materials.Steel, ...);
                                                .<TST_LargeIndustrialCokingFactory>builder()
                                                .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
-                                               .dot(1)
+                                               .hint(1)
                                                .casingIndex(48)
                                                .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                                        .addElement(

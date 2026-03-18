@@ -220,12 +220,12 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         buildHatchAdder(TST_UniversalGenerator.class)
                             .atLeast(Dynamo)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         buildHatchAdder(TST_UniversalGenerator.class)
                             .atLeast(InputHatch)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings1, 11))))
                 .addElement('B',ofBlock(GregTechAPI.sBlockCasings2, 3))

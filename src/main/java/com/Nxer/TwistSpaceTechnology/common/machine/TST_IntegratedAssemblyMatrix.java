@@ -319,7 +319,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
                             OutputHatch,
                             Energy.or(ExoticEnergy))
                         .adder(TST_IntegratedAssemblyMatrix::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsTT, 0))
                 .addElement('F', ofBlock(sBlockCasingsTT, 4))

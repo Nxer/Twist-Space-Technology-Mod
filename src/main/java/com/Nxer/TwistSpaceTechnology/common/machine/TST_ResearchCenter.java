@@ -105,7 +105,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
             buildHatchAdder(TST_ResearchCenter.class)
                 .atLeast(Energy.or(HatchElement.EnergyMulti), Maintenance, HatchElement.InputData)
                 .casingIndex(textureOffset + 1)
-                .dot(1)
+                .hint(1)
                 .buildAndChain(ofBlock(sBlockCasingsTT, 1)))
         .addElement('E', HolderHatchElement.INSTANCE.newAny(textureOffset + 3, 2))
         .build();

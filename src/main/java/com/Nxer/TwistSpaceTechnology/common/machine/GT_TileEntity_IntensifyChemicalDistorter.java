@@ -240,7 +240,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(InputHatch, OutputHatch)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(176)/* index of stainless steal casing */
-                        .dot(1)/* preview channel of blueprint */
+                        .hint(1)/* preview channel of blueprint */
                         .buildAndChain(GregTechAPI.sBlockCasings8, 0))
                 .addElement(
                     'b',
@@ -248,7 +248,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(InputBus, OutputBus)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(49)/* index of chem inert casing */
-                        .dot(2)/* preview channel of blueprint */
+                        .hint(2)/* preview channel of blueprint */
                         .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement(
                     'e',
@@ -256,7 +256,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(11)
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                 .build();
         }

@@ -34,6 +34,8 @@ import gregtech.api.util.OverclockCalculator;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMultiMachineBase<T>>
     extends GTCM_MultiMachineBase<T> {
 
@@ -158,7 +160,7 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
 
         updateSlots();
         if (!succeeded) return finalResult;
-        costingEUText = GTUtility.formatNumbers(costingEU);
+        costingEUText = formatNumber(costingEU);
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;

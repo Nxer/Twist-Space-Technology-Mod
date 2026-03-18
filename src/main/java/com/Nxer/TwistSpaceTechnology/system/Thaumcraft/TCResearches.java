@@ -6,7 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodyHell;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereSimulator;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeElvenWorkshop;
-import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEssentiaDiscretizer;
+//import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEssentiaDiscretizer;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeFontOfEcology;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
+//import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -411,7 +411,7 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.PRIMORDIAL_DISJUNCTUS.1")),
                     new ResearchPage(infusionRecipePrimordialDisjunctus))
-                    .setParents("ESSENTIA_DISCRETIZER")
+                    .setParents("TST_WELCOME")
                     .registerResearchItem();
         }
         if (Config.Enable_SkypiercerTower) {
@@ -499,7 +499,7 @@ public class TCResearches {
                     // #en_US {\BOLD}Tier 8 Compound Aspects{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 seconds<BR>{\BOLD}Ira:{\RESET} 82 seconds
                     // #zh_CN {\BOLD}八级复合要素{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 秒<BR>{\BOLD}Ira:{\RESET} 82 秒
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.16")))
-                    .setParents("ESSENTIA_DISCRETIZER")
+                    .setParents("TST_WELCOME")
                     .registerResearchItem();
             // spotless:on
         }
@@ -532,10 +532,10 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.2")),
                     new ResearchPage(infusionRecipeInfusionMaterialDispenser))
-                    .setParents("ESSENTIA_DISCRETIZER")
+                    .setParents("TST_WELCOME")
                     .registerResearchItem();
         }
-        if (Config.Enable_EssentiaDiscretizer) {
+        /*if (Config.Enable_EssentiaDiscretizer) {
             // #tr tc.research_name.ESSENTIA_DISCRETIZER
             // # Essentia Discretizer
             // #zh_CN 源质离散器
@@ -566,6 +566,6 @@ public class TCResearches {
                     new ResearchPage(infusionRecipeEssentiaDiscretizer))
                     .setParents("TST_WELCOME")
                     .registerResearchItem();
-        }
+        }*/
     }
 }

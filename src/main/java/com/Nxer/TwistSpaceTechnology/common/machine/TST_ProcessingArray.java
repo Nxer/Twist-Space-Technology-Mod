@@ -289,7 +289,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
                     HatchElementBuilder.<TST_ProcessingArray>builder()
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_ProcessingArray::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(48)
                         .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                 .build();

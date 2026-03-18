@@ -80,7 +80,7 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
                     .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                     .adder(GTCM_TestMultiMachine::addToMachineList)
                     .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(0))
-                    .dot(1)
+                    .hint(1)
                     .buildAndChain(TstBlocks.MetaBlockCasing01, 0))
             .build();
     }

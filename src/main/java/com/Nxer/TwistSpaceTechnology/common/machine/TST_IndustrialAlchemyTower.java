@@ -392,7 +392,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                         buildHatchAdder(TST_IndustrialAlchemyTower.class).atLeast(InputBus, OutputBus, Energy)
                             .adder(TST_IndustrialAlchemyTower::addToMachineList)
                             .casingIndex(1536)
-                            .dot(1)
+                            .hint(1)
                             .buildAndChain(magicCasing, 0),
                         ofAccurateTileAdder(
                             TST_IndustrialAlchemyTower::addInfusionProvider,

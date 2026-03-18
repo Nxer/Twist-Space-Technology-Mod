@@ -220,7 +220,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                     HatchElementBuilder.<TST_BeeEngineer>builder()
                         .atLeast(InputBus, InputHatch, OutputBus)
                         .adder(TST_BeeEngineer::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(CASING_INDEX)
                         .buildAndChain(GregTechAPI.sBlockCasings1, 10))
                 .build();

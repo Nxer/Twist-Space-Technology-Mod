@@ -250,7 +250,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
@@ -258,7 +258,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
@@ -266,7 +266,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     buildHatchAdder(TST_SwelegfyrBlastFurnace.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_SwelegfyrBlastFurnace::addBlazeHatch)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement('Z', ofBlock(TFFluids.fluidPyrotheum.getBlock(), 0))
                 .build();

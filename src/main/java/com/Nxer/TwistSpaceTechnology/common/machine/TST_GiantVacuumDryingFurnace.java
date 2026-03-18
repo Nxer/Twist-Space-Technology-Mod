@@ -251,7 +251,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
                     HatchElementBuilder.<TST_GiantVacuumDryingFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy), InputHatch, OutputBus)
                         .adder(TST_GiantVacuumDryingFurnace::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 2))
                 .build();

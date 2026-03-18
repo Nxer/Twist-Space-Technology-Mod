@@ -130,20 +130,20 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     'W',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'Y',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(InputBus)
                         .adder(TST_LaserMeteorMiner::addInjector)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'X',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 2)))
                 .addElement('Z', ofBlock(LaserBeaconRender, 0))
                 .build();

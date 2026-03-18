@@ -582,7 +582,7 @@ F -> ofBlock...(tile.wood, 0, ...);
                             .<TST_EyeOfWood>builder()
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                             .adder(TST_EyeOfWood::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(10)
                             .buildAndChain(GregTechAPI.sBlockCasings1, 10))
                     .addElement('B', ofBlock(Blocks.lapis_block, 0))

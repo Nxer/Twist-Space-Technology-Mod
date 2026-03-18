@@ -1,18 +1,53 @@
 package com.Nxer.TwistSpaceTechnology.common.ic2Crop.crops;
 
 import net.minecraft.item.ItemStack;
+import java.awt.Color;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.ic2Crop.AbstractTstCrop;
+//import com.Nxer.TwistSpaceTechnology.common.ic2Crop.AbstractTstCrop;
 
-import ic2.api.crops.ICropTile;
+import com.gtnewhorizon.cropsnh.crops.abstracts.NHCropCard;
+import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
+import com.gtnewhorizon.cropsnh.api.ISeedShape;
+import com.gtnewhorizon.cropsnh.api.SeedShape;
+import com.gtnewhorizon.cropsnh.utility.ModUtils;
 
-public class PurpleMagnoliaCrop extends AbstractTstCrop {
+//import ic2.api.crops.ICropTile;
+
+public class PurpleMagnoliaCrop extends NHCropCard {
 
     public PurpleMagnoliaCrop() {
-        super();
+        super("PurpleMagnoliaCrop", new Color(0x710fa9), new Color(0xc163f6));
+
+        this.addDrop(GTCMItemList.PurpleMagnoliaPetal.get(1), 100_00);
+        this.addAlternateSeed(GTCMItemList.PurpleMagnoliaSapling.get(1));
     }
 
+    @Override
+    public String getCreator() {
+        return "TwistSpaceTechnology";
+    }
+
+    @Override
+    public ISeedShape getSeedShape() {
+        return SeedShape.flower;
+    }
+
+    @Override
+    public int getTier() {
+        return 3;
+    }
+
+    @Override
+    public int getMaxGrowthStage() {
+        return 5;
+    }
+
+    @Override
+    public int getGrowthDuration() {
+        return 1000;
+    }
+    /*
     @Override
     public int tier() {
         return 5;
@@ -71,5 +106,6 @@ public class PurpleMagnoliaCrop extends AbstractTstCrop {
     public ItemStack getGain(ICropTile crop) {
         return GTCMItemList.PurpleMagnoliaPetal.get(1);
     }
-
+*/
 }
+

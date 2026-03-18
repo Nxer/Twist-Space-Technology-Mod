@@ -57,6 +57,7 @@ import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Textures;
+import gregtech.api.enums.Materials;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -99,7 +100,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     private static final long explosionPower = V[1];
 
-    private static final FluidStack waterFluid = FluidUtils.getWater(1);
+    private static final FluidStack waterFluid = Materials.Water.getFluid(1);
     private static final FluidStack distilledWaterFluid = FluidUtils.getDistilledWater(1);
 
     private double heat = 0; // min - 0, max - 1
@@ -163,14 +164,14 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
                 FluidStack liquidToDeplete;
                 if (hasWater) {
-                    liquidToDeplete = FluidUtils.getWater(consumedWater);
+                    liquidToDeplete = Materials.Water.getFluid(consumedWater);
                 } else {
                     liquidToDeplete = FluidUtils.getDistilledWater(consumedWater);
                 }
 
                 if (super.depleteInput(liquidToDeplete)) {
                     super.mOutputFluids = new FluidStack[] {
-                        FluidUtils.getSteam(consumedWater * GTValues.STEAM_PER_WATER) };
+                        Materials.Steam.getGas(consumedWater * GTValues.STEAM_PER_WATER) };
                     super.mMaxProgresstime = 20;
                     super.mEfficiency = getMaxEfficiency(null);
                     runningTicks += 20;
@@ -370,7 +371,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         buildHatchAdder(TST_LargeSolarBoiler.class)
                             .atLeast(InputHatch)
                             .casingIndex(getCasingTextureID())
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofBlocksTiered(
                             TST_LargeSolarBoiler::getMachineCasingTier,
@@ -386,7 +387,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         buildHatchAdder(TST_LargeSolarBoiler.class)
                             .atLeast(OutputHatch)
                             .casingIndex(getCasingTextureID())
-                            .dot(2)
+                            .hint(2)
                             .build(),
                         ofBlocksTiered(
                             TST_LargeSolarBoiler::getMachineCasingTier,

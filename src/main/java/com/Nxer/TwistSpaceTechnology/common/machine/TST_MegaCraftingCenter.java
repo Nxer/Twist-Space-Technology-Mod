@@ -933,7 +933,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                         .atLeast(InputBus, OutputBus, AccessHatchElement)
                         .adder(TST_MegaCraftingCenter::superAddToMachineList)
                         .casingIndex(textureOffset + 12)
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 4)))
                 .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .build();

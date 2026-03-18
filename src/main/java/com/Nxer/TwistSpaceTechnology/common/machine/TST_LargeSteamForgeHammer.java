@@ -136,13 +136,13 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
                     'C',
                     ofChain(
                         buildSteamInput(TST_LargeSteamForgeHammer.class).casingIndex(10)
-                            .dot(1)
+                            .hint(1)
                             .build(),
 
                         buildHatchAdder(TST_LargeSteamForgeHammer.class)
                             .atLeast(SteamHatchElement.InputBus_Steam, SteamHatchElement.OutputBus_Steam)
                             .casingIndex(10)
-                            .dot(1)
+                            .hint(1)
                             .build(),
 
                         ofBlocksTiered(

@@ -136,7 +136,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                                                           HatchElementBuilder.<GTCM_ElvenWorkshop>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch)
                                                                                 .adder(GTCM_ElvenWorkshop::addToMachineList)
-                                                                                .dot(1)
+                                                                                .hint(1)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                                                                                 .buildAndChain(GregTechAPI.sBlockStones, 7))
                                                       .addElement('B',ofBlock(ModBlocks.storage, 4))

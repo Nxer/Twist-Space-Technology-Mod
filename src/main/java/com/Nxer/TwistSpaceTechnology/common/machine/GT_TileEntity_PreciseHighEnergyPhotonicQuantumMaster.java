@@ -111,21 +111,21 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                     'M',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Maintenance)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(183)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'I',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(183)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'X',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Energy.or(ExoticEnergy))
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsTT, 0))
                 .addElement(

@@ -176,7 +176,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .dot(1)
+                                               .hint(1)
                                                .casingIndex(((BlockCasings4)GregTechAPI.sBlockCasings4).getTextureIndex(10))
                                                .buildAndChain(GregTechAPI.sBlockCasings4, 10))
                                        .addElement(
@@ -185,7 +185,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(Energy.or(ExoticEnergy))
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .dot(2)
+                                               .hint(2)
                                                .casingIndex(((BlockCasings8)GregTechAPI.sBlockCasings8).getTextureIndex(3))
                                                .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                                        .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 0))

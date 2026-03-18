@@ -284,7 +284,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement(
@@ -292,7 +292,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
@@ -300,7 +300,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(OutputBus, OutputHatch)
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement('F', ofFrame(Materials.NaquadahAlloy))

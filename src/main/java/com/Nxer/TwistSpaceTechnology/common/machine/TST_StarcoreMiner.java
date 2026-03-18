@@ -162,7 +162,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                             .<TST_StarcoreMiner>builder()
                             .atLeast(InputBus, InputHatch, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_StarcoreMiner::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
                             .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
                     )

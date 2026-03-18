@@ -53,6 +53,8 @@ import gtnhintergalactic.client.IGTextures;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import tectech.thing.casing.TTCasingsContainer;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 public class GT_TileEntity_StellarMaterialSiphon
     extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_StellarMaterialSiphon> implements IChunkLoader {
 
@@ -589,7 +591,7 @@ public class GT_TileEntity_StellarMaterialSiphon
     public String[] getInfoData() {
         return new String[] { LIGHT_PURPLE + "Operational Data:" + RESET, "Depth: " + YELLOW + depth + RESET,
             "Fluid: " + YELLOW + fluid.amount + RESET + "L/s " + BLUE + fluid.getLocalizedName() + RESET,
-            "EU/t required: " + YELLOW + GTUtility.formatNumbers(-mEUt) + RESET + " EU/t",
+            "EU/t required: " + YELLOW + formatNumber(-mEUt) + RESET + " EU/t",
             "Maintenance Status: " + (getRepairStatus() == getIdealStatus() ? GREEN + "Working perfectly" + RESET
                 : RED + "Has problems" + RESET),
             "---------------------------------------------" };

@@ -359,7 +359,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
                                                               HatchElementBuilder.<TST_BiosphereIII>builder()
                                                                                     .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                     .adder(TST_BiosphereIII::addToMachineList)
-                                                                                    .dot(1)
+                                                                                    .hint(1)
                                                                                     .casingIndex(STAINLESS_STEEL_CASING_INDEX)
                                                                                     .buildAndChain(GregTechAPI.sBlockCasings4, 1)))
                                                       .addElement('I', isAir())

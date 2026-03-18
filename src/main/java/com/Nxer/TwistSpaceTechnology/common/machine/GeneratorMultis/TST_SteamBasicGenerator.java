@@ -138,12 +138,12 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                             .atLeast(Dynamo)
                             .hatchItemFilterAnd(t -> filterByMTETier(1, 1))
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         buildHatchAdder(TST_SteamBasicGenerator.class)
                             .atLeast(InputHatch)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings2, 0))))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 14))

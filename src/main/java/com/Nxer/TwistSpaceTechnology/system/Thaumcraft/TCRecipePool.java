@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.Thaumcraft;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.BloodArsenal;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
-import static com.glodblock.github.loader.ItemAndBlockHolder.DISCRETIZER;
+//import static com.glodblock.github.loader.ItemAndBlockHolder.DISCRETIZER;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static goodgenerator.loader.Loaders.huiCircuit;
 import static gregtech.api.enums.ItemList.Automation_ChestBuffer_IV;
@@ -24,7 +24,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
+//import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
@@ -58,7 +58,7 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipePrimordialDisjunctus;
     public static InfusionRecipe infusionRecipeSkypiercerTower;
     public static InfusionRecipe infusionRecipeInfusionMaterialDispenser;
-    public static InfusionRecipe infusionRecipeEssentiaDiscretizer;
+    //public static InfusionRecipe infusionRecipeEssentiaDiscretizer;
     public static CrucibleRecipe crucibleRecipeArcaneHole;
 
     public static void loadRecipes() {
@@ -300,7 +300,7 @@ public class TCRecipePool {
                     new ItemStack[] { new ItemStack(ConfigItems.itemWandCasting, 1), ItemList.Conveyor_Module_IV.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
             }
-            if (Config.Enable_EssentiaDiscretizer) {
+            /*if (Config.Enable_EssentiaDiscretizer) {
                 infusionRecipeEssentiaDiscretizer = ThaumcraftApi.addInfusionCraftingRecipe(
                     "ESSENTIA_DISCRETIZER",
                     BlockEssentiaDiscretizer.stack(),
@@ -312,7 +312,7 @@ public class TCRecipePool {
                     DISCRETIZER.stack(),
                     new ItemStack[] { new ItemStack(itemZombieBrain, 1), new ItemStack(blockMetalDevice, 1, 9),
                         GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
-            }
+            }*/
         }
     }
 }

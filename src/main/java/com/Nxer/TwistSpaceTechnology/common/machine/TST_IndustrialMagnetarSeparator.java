@@ -133,7 +133,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
                     HatchElementBuilder.<TST_IndustrialMagnetarSeparator>builder()
                         .atLeast(InputBus, OutputBus, Maintenance, Muffler, Energy)
                         .adder(TST_IndustrialMagnetarSeparator::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(8))
                         .buildAndChain(onElementPass(x -> ++x.mCasing, ofBlock(TstBlocks.MetaBlockCasing01, 8))))
                 .build();

@@ -86,8 +86,8 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     @Override
     public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CUTTING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING); //These should be changed later to be better
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                                           'A',HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
                                                                                     .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                     .adder(GTCM_HyperSpacetimeTransformer::addToMachineList)
-                                                                                    .dot(1)
+                                                                                    .hint(1)
                                                                                     .casingIndex(1028)
                                                                                     .buildAndChain(sBlockCasingsBA0, 11))
                                                       .addElement(

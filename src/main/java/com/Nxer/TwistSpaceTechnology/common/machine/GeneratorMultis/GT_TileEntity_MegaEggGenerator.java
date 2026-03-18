@@ -348,7 +348,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
                                        .atLeast(Dynamo.or(DynamoMulti))
                            .adder(GT_TileEntity_MegaEggGenerator::addToMachineList)
                                        .casingIndex(1536)
-                                       .dot(1)
+                                       .hint(1)
                                        .buildAndChain(Loaders.magicCasing, 0))
 			       .addElement('B',ofFrame(Materials.Trinium))
 			       .addElement('C',ofBlock(Loaders.essentiaCell, 0))

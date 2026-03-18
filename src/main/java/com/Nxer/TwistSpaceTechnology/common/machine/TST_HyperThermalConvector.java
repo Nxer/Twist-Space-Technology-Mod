@@ -166,28 +166,28 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                     'R',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HyperThermalConvector::addHotFluidInputHatch)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'S',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HyperThermalConvector::addColdFluidOutputHatch)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'T',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HyperThermalConvector::addSteamOutputHatch)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'U',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HyperThermalConvector::addDistilledWaterInputHatch)
-                        .dot(4)
+                        .hint(4)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .build();
