@@ -21,7 +21,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
@@ -49,7 +48,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 GTUtility.getIntegratedCircuit(10))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 64), Materials.SuperconductorUEVBase.getMolten(16 * 144))
             .itemOutputs(SpaceWarper.get(1))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
+            .fluidOutputs(Materials.SpaceTime.getMolten(36))
             .eut(RECIPE_UIV)
             .duration(512 * 20)
             .addTo(PhC);
@@ -65,7 +64,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 GTUtility.getIntegratedCircuit(11))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUIVBase.getMolten(8 * 144))
             .itemOutputs(SpaceWarper.get(2))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
+            .fluidOutputs(Materials.SpaceTime.getMolten(36))
             .eut(RECIPE_UMV)
             .duration(256 * 20)
             .addTo(PhC);
@@ -81,7 +80,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 GTUtility.getIntegratedCircuit(12))
             .fluidInputs(new FluidStack(solderPlasma, 144 * 32), Materials.SuperconductorUMVBase.getMolten(4 * 144))
             .itemOutputs(SpaceWarper.get(4))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(36))
+            .fluidOutputs(Materials.SpaceTime.getMolten(36))
             .eut(RECIPE_UXV)
             .duration(128 * 20)
             .addTo(PhC);
@@ -96,10 +95,10 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
                 Laser_Lens_Special.get(2),
                 GTUtility.getIntegratedCircuit(13))
             .fluidInputs(
-                MaterialsUEVplus.PrimordialMatter.getFluid(144 * 16),
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64),
-                MaterialsUEVplus.Time.getMolten(144 * 32),
-                MaterialsUEVplus.Space.getMolten(144 * 32))
+                Materials.PrimordialMatter.getFluid(144 * 16),
+                Materials.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(144 * 64),
+                Materials.Time.getMolten(144 * 32),
+                Materials.Space.getMolten(144 * 32))
             .itemOutputs(SpaceWarper.get(128))
             .fluidOutputs(Materials.Hydrogen.getPlasma(1000 * 128))
             .eut(RECIPE_MAX)
