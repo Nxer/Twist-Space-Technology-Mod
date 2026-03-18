@@ -10,7 +10,6 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.util.GTRecipe;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
@@ -92,14 +91,14 @@ public class RapidHeatExchangeRecipePool {
             // Creon plasma
             {
                 TST_RecipeBuilder.builder()
-                    .fluidInputs(MaterialsUEVplus.Creon.getPlasma(1), Materials.Water.getFluid(2000))
-                    .fluidOutputs(copyAmount(DenseSupercriticalSteam, 320), MaterialsUEVplus.Creon.getMolten(1))
+                    .fluidInputs(Materials.Creon.getPlasma(1), Materials.Water.getFluid(2000))
+                    .fluidOutputs(copyAmount(DenseSupercriticalSteam, 320), Materials.Creon.getMolten(1))
                     .duration(20)
                     .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
 
                 TST_RecipeBuilder.builder()
-                    .fluidInputs(MaterialsUEVplus.Creon.getPlasma(1))
-                    .fluidOutputs(MaterialsUEVplus.Creon.getMolten(1))
+                    .fluidInputs(Materials.Creon.getPlasma(1))
+                    .fluidOutputs(Materials.Creon.getMolten(1))
                     .duration(20)
                     .addTo(GTCMRecipe.RapidCoolingDownRecipes);
             }
