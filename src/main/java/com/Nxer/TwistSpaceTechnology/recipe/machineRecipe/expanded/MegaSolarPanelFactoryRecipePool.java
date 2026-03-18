@@ -16,7 +16,6 @@ import crazypants.enderio.material.Material;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTModHandler;
@@ -274,7 +273,7 @@ public class MegaSolarPanelFactoryRecipePool {
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 4))
         .fluidInputs(
             Materials.Infinity.getMolten(2 * 144),
-            MaterialsKevlar.Kevlar.getMolten(4 * 144))
+            Materials.Kevlar.getMolten(4 * 144))
         .itemOutputs(GTUtility.copyAmountUnsafe(16384,ItemList.Cover_SolarPanel_ZPM.get(1)))
         .eut(UIV)
         .duration(40*SECONDS)
@@ -290,7 +289,7 @@ public class MegaSolarPanelFactoryRecipePool {
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 4))
         .fluidInputs(
             Materials.Infinity.getMolten(4 * 144),
-            MaterialsKevlar.Kevlar.getMolten(8 * 144),
+            Materials.Kevlar.getMolten(8 * 144),
             Materials.Knightmetal.getMolten(2 * 144))
         .itemOutputs(GTUtility.copyAmountUnsafe(16384,ItemList.Cover_SolarPanel_UV.get(1)))
         .eut(UIV)
