@@ -18,15 +18,13 @@ import net.minecraftforge.fluids.FluidRegistry;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsGTNH;
-import gregtech.api.enums.MaterialsKevlar;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTModHandler;
@@ -293,7 +291,7 @@ public class IntensifyChemicalDistorterRecipePool {
                 Materials.Hydrogen.getGas(1000 * 5292),
                 Materials.Chlorine.getGas(1000 * 87),
                 Materials.Nitrogen.getGas(1000 * 450))
-            .fluidOutputs(MaterialsKevlar.PolyurethaneResin.getFluid(1000 * 45))
+            .fluidOutputs(Materials.PolyurethaneResin.getFluid(1000 * 45))
             .specialValue(11700)
             .eut(RECIPE_UIV)
             .duration(20 * 64)
@@ -677,7 +675,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.PTMetallicPowder.get(OrePrefixes.dust, 28)
             )
             .fluidInputs(
@@ -698,7 +696,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.PDMetallicPowder.get(OrePrefixes.dust, 28),
                 Materials.Carbon.getDust(10)
             )
@@ -719,7 +717,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 GTUtility.copyAmountUnsafe(220, WerkstoffLoader.PTResidue.get(OrePrefixes.dust, 1)),
                 Materials.Sulfur.getDust(52),
                 GTUtility.copyAmountUnsafe(570, Materials.Saltpeter.getDust(1))
@@ -742,7 +740,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 GTUtility.copyAmountUnsafe(100, WerkstoffLoader.CrudeRhMetall.get(OrePrefixes.dust, 1)),
                 Materials.Sodium.getDust(50)
             )
@@ -766,7 +764,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.SodiumRuthenate.get(OrePrefixes.dust, 5)
             )
             .fluidInputs(
@@ -788,7 +786,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.IrOsLeachResidue.get(OrePrefixes.dust, 20)
             )
             .fluidInputs(
@@ -812,7 +810,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1)),
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1)),
                 WerkstoffLoader.IrLeachResidue.get(OrePrefixes.dust, 10)
             )
             .fluidInputs(
@@ -835,7 +833,7 @@ public class IntensifyChemicalDistorterRecipePool {
         TST_RecipeBuilder
             .builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(0, CustomItemList.RadoxPolymerLens.get(1))
+                GTUtility.copyAmountUnsafe(0, NHItemList.RadoxPolymerLens.get(1))
             )
             .fluidInputs(
                 WerkstoffLoader.AcidicOsmiumSolution.getFluidOrGas(10000),
@@ -1015,7 +1013,7 @@ public class IntensifyChemicalDistorterRecipePool {
             .builder()
             .itemInputs(
                 setStackSize(GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Strontium, 1), 0),
-                GTOreDictUnificator.get(OrePrefixes.shard, MaterialsGTNH.Prismarine, 8),
+                GTOreDictUnificator.get(OrePrefixes.shard, Materials.Prismarine, 8),
                 Materials.Carbon.getDust(24),
                 Materials.CrystallineAlloy.getDust(4)
             )
