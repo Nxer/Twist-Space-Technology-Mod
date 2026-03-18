@@ -32,7 +32,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import appeng.items.materials.MaterialType;
 import bartworks.API.recipe.BartWorksRecipeMaps;
@@ -324,7 +324,7 @@ public class CosmicProcessorCircuitRecipes {
                 EnergyFluctuationSelfHarmonizer.get(1),
                 InformationHorizonInterventionShell.get(2),
                 PacketInformationTranslationArray.get(4),
-                CustomItemList.PicoWafer.get(4),
+                NHItemList.PicoWafer.get(4),
                 ItemList.Tesseract.get(1),
                 ItemList.EnergisedTesseract.get(1))
             .fluidInputs(
@@ -451,7 +451,7 @@ public class CosmicProcessorCircuitRecipes {
                 ItemList.Field_Generator_UIV.get(16),
                 ItemList.Emitter_UIV.get(16),
                 ItemList.Sensor_UIV.get(16),
-                CustomItemList.HighEnergyFlowCircuit.get(16),
+                NHItemList.HighEnergyFlowCircuit.get(16),
 
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
