@@ -15,7 +15,6 @@ import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -37,12 +36,12 @@ public class DTPFRecipePool {
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(1),
 
-                MaterialsUEVplus.Space.getMolten(144),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500),
-                MaterialsUEVplus.ExcitedDTPC.getFluid(1000))
+                Materials.Space.getMolten(144),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(500),
+                Materials.ExcitedDTPC.getFluid(1000))
             .fluidOutputs(
                 MaterialPool.EntropicFlux.getFluidOrGas(500),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(250))
+                Materials.DimensionallyTranscendentResidue.getFluid(250))
             .specialValue(10800)
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 30)
@@ -55,12 +54,12 @@ public class DTPFRecipePool {
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(10),
 
-                MaterialsUEVplus.Space.getMolten(144 * 2),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500 * 2),
-                MaterialsUEVplus.ExcitedDTRC.getFluid(2000))
+                Materials.Space.getMolten(144 * 2),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 2),
+                Materials.ExcitedDTRC.getFluid(2000))
             .fluidOutputs(
                 MaterialPool.EntropicFlux.getFluidOrGas(500 * 4),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(1000))
+                Materials.DimensionallyTranscendentResidue.getFluid(1000))
             .specialValue(11700)
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 25)
@@ -73,12 +72,12 @@ public class DTPFRecipePool {
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(100),
 
-                MaterialsUEVplus.Space.getMolten(144 * 4),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500 * 4),
-                MaterialsUEVplus.ExcitedDTEC.getFluid(4000))
+                Materials.Space.getMolten(144 * 4),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 4),
+                Materials.ExcitedDTEC.getFluid(4000))
             .fluidOutputs(
                 MaterialPool.EntropicFlux.getFluidOrGas(500 * 16),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(4000))
+                Materials.DimensionallyTranscendentResidue.getFluid(4000))
             .specialValue(12600)
             .eut(TierEU.RECIPE_UXV)
             .duration(20 * 20)
@@ -91,12 +90,12 @@ public class DTPFRecipePool {
                 GGMaterial.extremelyUnstableNaquadah.getMolten(144 * 12 * 2 * 3 * 4),
                 MaterialPool.ConcentratedUUMatter.getFluidOrGas(1000),
 
-                MaterialsUEVplus.Space.getMolten(144 * 8),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(500 * 8),
-                MaterialsUEVplus.ExcitedDTSC.getFluid(8000))
+                Materials.Space.getMolten(144 * 8),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 8),
+                Materials.ExcitedDTSC.getFluid(8000))
             .fluidOutputs(
                 MaterialPool.EntropicFlux.getFluidOrGas(500 * 64),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(16000))
+                Materials.DimensionallyTranscendentResidue.getFluid(16000))
             .specialValue(13500)
             .eut(TierEU.RECIPE_MAX)
             .duration(20 * 15)
@@ -119,8 +118,8 @@ public class DTPFRecipePool {
         final int[] Coils = { awakened_heat, infinity_heat, hypogen_heat, eternal_heat };
 
         // Catalyst
-        final Materials[] Catalysts = { MaterialsUEVplus.ExcitedDTCC, MaterialsUEVplus.ExcitedDTPC,
-            MaterialsUEVplus.ExcitedDTRC, MaterialsUEVplus.ExcitedDTEC, MaterialsUEVplus.ExcitedDTSC };
+        final Materials[] Catalysts = { Materials.ExcitedDTCC, Materials.ExcitedDTPC,
+            Materials.ExcitedDTRC, Materials.ExcitedDTEC, Materials.ExcitedDTSC };
 
         final int[] multiply = { 1, 2, 4, 8 };
 
@@ -153,7 +152,7 @@ public class DTPFRecipePool {
                         Materials.Neutronium.getMolten(1_152 / multiply[i]))
                     .fluidOutputs(
                         Materials.Infinity.getMolten(Infinity_amount[i]),
-                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 2))
+                        Materials.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 2))
                     .duration(Infinity_time[i] * 20)
                     .eut(Infinity_eut[i])
                     .metadata(COIL_HEAT, Coils[i])
@@ -173,7 +172,7 @@ public class DTPFRecipePool {
                         Materials.Neutronium.getMolten(1_152 / multiply[i] / 2))
                     .fluidOutputs(
                         Materials.Infinity.getMolten(Infinity_amount[i]),
-                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 4))
+                        Materials.DimensionallyTranscendentResidue.getFluid(Infinity_catalyst[i] / 4))
                     .duration(Infinity_time[i] * 10)
                     .eut(Infinity_eut[i])
                     .metadata(COIL_HEAT, Coils[i])
@@ -192,7 +191,7 @@ public class DTPFRecipePool {
                     Catalysts[i + 1].getFluid(1_000))
                 .fluidOutputs(
                     new FluidStack(MaterialsElements.STANDALONE.HYPOGEN.getFluid(), Hypogen_amount[i]),
-                    MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(500))
+                    Materials.DimensionallyTranscendentResidue.getFluid(500))
                 .duration(Hypogen_time[i] * 20)
                 .eut(Hypogen_eut[i])
                 .metadata(COIL_HEAT, Coils[i])
@@ -203,10 +202,10 @@ public class DTPFRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(ItemList.EnergisedTesseract.get(1))
             .fluidInputs(
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(10_000),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(1_152),
+                Materials.DimensionallyTranscendentResidue.getFluid(10_000),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(1_152),
                 Materials.Infinity.getMolten(9_608))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(2_304))
+            .fluidOutputs(Materials.SpaceTime.getMolten(2_304))
             .duration(20 * 20)
             .eut(1_000_000_000)
             .metadata(COIL_HEAT, hypogen_heat)
@@ -215,10 +214,10 @@ public class DTPFRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(ItemList.NaquadriaSupersolid.get(0))
             .fluidInputs(
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(20_000),
-                MaterialsUEVplus.DimensionallyShiftedSuperfluid.getFluid(576),
+                Materials.DimensionallyTranscendentResidue.getFluid(20_000),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(576),
                 Materials.Infinity.getMolten(9_608))
-            .fluidOutputs(MaterialsUEVplus.SpaceTime.getMolten(2_304))
+            .fluidOutputs(Materials.SpaceTime.getMolten(2_304))
             .duration(5 * 20)
             .eut(2_000_000_000)
             .metadata(COIL_HEAT, hypogen_heat)
