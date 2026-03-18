@@ -10,7 +10,6 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gtPlusPlus.core.material.MaterialsElements;
@@ -52,7 +51,7 @@ public class FusionReactorRecipePool {
         // AxonisAlloy + Protomatter = Axonium
 
         GTValues.RA.stdBuilder()
-            .fluidInputs(MaterialsTST.AxonisAlloy.getMolten(144), MaterialsUEVplus.Protomatter.getFluid(1000))
+            .fluidInputs(MaterialsTST.AxonisAlloy.getMolten(144), Materials.Protomatter.getFluid(1000))
             .fluidOutputs(MaterialsTST.Axonium.getMolten(144))
             .eut(TierEU.RECIPE_UEV)
             .duration(20 * 20)
