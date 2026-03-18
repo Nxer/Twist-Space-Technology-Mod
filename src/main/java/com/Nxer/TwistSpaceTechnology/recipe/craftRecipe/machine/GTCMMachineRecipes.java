@@ -222,7 +222,6 @@ import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
-import gtPlusPlus.core.recipe.common.CI;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import gtnhintergalactic.item.ItemMiningDrones;
@@ -2800,9 +2799,9 @@ public class GTCMMachineRecipes {
         if (Config.Enable_LightningSpire){
             GTValues.RA.stdBuilder()
                 .itemInputs(
-                    CI.getTieredGTPPMachineCasing(5,1),
-                    CI.getEnergyCore(4,4),
-                    CI.getTransmissionComponent(5,2),
+                    GregtechItemList.GTPP_Casing_IV.get(1),
+                    GregtechItemList.Energy_Core_EV.get(4),
+                    GregtechItemList.TransmissionComponent_IV(2),
                     ItemList.Field_Generator_HV.get(4),
                     MaterialsAlloy.NITINOL_60.getGear(4),
                     MaterialsElements.getInstance().GERMANIUM.getBolt(16),
