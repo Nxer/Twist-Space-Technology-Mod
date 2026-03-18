@@ -58,6 +58,8 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSolarPanelFactory> {
 
     // region Class Constructor
@@ -164,7 +166,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
                 EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.2")
                     + "="
                     + EnumChatFormatting.GOLD
-                    + GTUtility.formatNumbers(tag.getFloat("speedBonus"))
+                    + formatNumber(tag.getFloat("speedBonus"))
                     + "%");
             // #tr Waila.TST_MegaSolarPanelFactory.2
             // # {\GREEN}Current Speed Bonus

@@ -145,9 +145,9 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     public int totalMachineMode() {
         /*
          * 0 - Canner
-         * 1 - Fluid Canner
+         * 1 - Fluid Canner //Fluid Canner is gone
          */
-        return 2;
+        return 1;
     }
 
     @Override
@@ -163,13 +163,13 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return machineMode == 1 ? RecipeMaps.fluidCannerRecipes : RecipeMaps.cannerRecipes;
+        return /*machineMode == 1 ? RecipeMaps.fluidCannerRecipes :*/ RecipeMaps.cannerRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.fluidCannerRecipes, RecipeMaps.cannerRecipes);
+        return Arrays.asList(/*RecipeMaps.fluidCannerRecipes,*/ RecipeMaps.cannerRecipes);
     }
 
     @Override

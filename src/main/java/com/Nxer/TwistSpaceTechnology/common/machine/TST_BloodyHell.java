@@ -315,7 +315,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         ofBlockAnyMeta(ModBlocks.bloodRune),
                         onElementPass(x -> x.speedRuneCount++, ofBlockAnyMeta(ModBlocks.speedRune)),
                         onElementPass(
-                            (x -> x.tbSpeedRuneCount++,
+                            x -> x.tbSpeedRuneCount++,
                             ofBlockAnyMeta(TstBlocks.TimeBendingSpeedRune))))
                 .addElement('H', ofBlockAnyMeta(ModBlocks.largeBloodStoneBrick))
                 .addElement('I', ofBlock(BloodInfusedIronBlock.getLeft(), BloodInfusedIronBlock.getRight()))

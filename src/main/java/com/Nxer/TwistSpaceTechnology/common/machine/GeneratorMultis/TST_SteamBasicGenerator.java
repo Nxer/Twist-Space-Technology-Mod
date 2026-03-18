@@ -67,7 +67,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     private static final int EU_PER_TICK = 32;
     private long DYNAMO_AMP = 0;
     private int mCasing = 0;
-    public FluidStack steamFluid = FluidUtils.getSteam(1);
+    public FluidStack steamFluid = Materials.Steam.getGas(1);
 
     @Nonnull
     @Override

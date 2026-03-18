@@ -88,6 +88,8 @@ import gtPlusPlus.core.block.ModBlocks;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> {
 
     // region Class Constructor
@@ -382,7 +384,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 .multiply(BigInteger.valueOf(processingLogic.getDuration()))
                 .multiply(BigInteger.valueOf(Math.round((extraEuCostMultiplier * speedBonus))))
                 .divide(BigInteger.valueOf((long) (1 / euModifier)));
-            costingWirelessEU = GTUtility.formatNumbers(costingWirelessEUTemp);
+            costingWirelessEU = formatNumber(costingWirelessEUTemp);
             if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
             }
@@ -655,7 +657,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setString("FusionMaxEut", GTUtility.formatNumbers(FusionMaxEut));
+            tag.setString("FusionMaxEut", formatNumber(FusionMaxEut));
             tag.setBoolean("isWirelessMode", isWirelessMode);
             tag.setString("costingWirelessEU", costingWirelessEU);
             tag.setInteger("extraEuCostMultiplier", Math.round(extraEuCostMultiplier * speedBonus));

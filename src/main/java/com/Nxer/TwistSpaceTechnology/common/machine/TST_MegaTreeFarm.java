@@ -96,6 +96,8 @@ import kubatech.tileentity.gregtech.multiblock.MTEExtremeIndustrialGreenhouse;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // region Class Constructor
@@ -297,7 +299,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         if (tag.hasKey("tier")) {
             currentTip.add(
                 "Tier: " + EnumChatFormatting.YELLOW
-                    + GTUtility.formatNumbers(tag.getInteger("tier"))
+                    + formatNumber(tag.getInteger("tier"))
                     + EnumChatFormatting.RESET);
         }
     }

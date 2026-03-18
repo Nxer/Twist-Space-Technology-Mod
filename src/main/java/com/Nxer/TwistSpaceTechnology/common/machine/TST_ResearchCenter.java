@@ -62,6 +62,8 @@ import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 import tectech.util.CommonValues;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 @SuppressWarnings("unchecked")
 public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
 
@@ -236,23 +238,23 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
         }
 
         return new String[] { translateToLocalFormatted("tt.keyphrase.Energy_Hatches", clientLocale) + ":",
-            EnumChatFormatting.GREEN + GTUtility.formatNumbers(storedEnergy)
+            EnumChatFormatting.GREEN + formatNumber(storedEnergy)
                 + EnumChatFormatting.RESET
                 + " EU / "
                 + EnumChatFormatting.YELLOW
-                + GTUtility.formatNumbers(maxEnergy)
+                + formatNumber(maxEnergy)
                 + EnumChatFormatting.RESET
                 + " EU",
             (mEUt <= 0 ? translateToLocalFormatted("tt.keyphrase.Probably_uses", clientLocale) + ": "
                 : translateToLocalFormatted("tt.keyphrase.Probably_makes", clientLocale) + ": ")
                 + EnumChatFormatting.RED
-                + GTUtility.formatNumbers(Math.abs(mEUt))
+                + formatNumber(Math.abs(mEUt))
                 + EnumChatFormatting.RESET
                 + " EU/t "
                 + translateToLocalFormatted("tt.keyword.at", clientLocale)
                 + " "
                 + EnumChatFormatting.RED
-                + GTUtility.formatNumbers(eAmpereFlow)
+                + formatNumber(eAmpereFlow)
                 + EnumChatFormatting.RESET
                 + " A",
             translateToLocalFormatted("tt.keyphrase.Tier_Rating", clientLocale) + ": "
@@ -267,7 +269,7 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
                 + translateToLocalFormatted("tt.keyphrase.Amp_Rating", clientLocale)
                 + ": "
                 + EnumChatFormatting.GREEN
-                + GTUtility.formatNumbers(eMaxAmpereFlow)
+                + formatNumber(eMaxAmpereFlow)
                 + EnumChatFormatting.RESET
                 + " A",
             translateToLocalFormatted("tt.keyword.Problems", clientLocale) + ": "
@@ -292,18 +294,18 @@ public class TST_ResearchCenter extends TT_MultiMachineBase_EM implements ISurvi
                 + eSafeVoid,
             translateToLocalFormatted("tt.keyphrase.Computation_Available", clientLocale) + ": "
                 + EnumChatFormatting.GREEN
-                + GTUtility.formatNumbers(eAvailableData)
+                + formatNumber(eAvailableData)
                 + EnumChatFormatting.RESET
                 + " / "
                 + EnumChatFormatting.YELLOW
-                + GTUtility.formatNumbers(eRequiredData)
+                + formatNumber(eRequiredData)
                 + EnumChatFormatting.RESET,
             translateToLocalFormatted("tt.keyphrase.Computation_Remaining", clientLocale) + ":",
-            EnumChatFormatting.GREEN + GTUtility.formatNumbers(computationRemaining / 20L)
+            EnumChatFormatting.GREEN + formatNumber(computationRemaining / 20L)
                 + EnumChatFormatting.RESET
                 + " / "
                 + EnumChatFormatting.YELLOW
-                + GTUtility.formatNumbers(computationRequired / 20L) };
+                + formatNumber(computationRequired / 20L) };
     }
 
     @Override

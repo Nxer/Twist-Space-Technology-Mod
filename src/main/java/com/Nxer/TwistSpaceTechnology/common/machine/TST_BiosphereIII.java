@@ -69,6 +69,8 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.ParallelHelper;
 import gregtech.api.util.recipe.Sievert;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
 
     // region Class Constructor
@@ -491,7 +493,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :
             // Bio Vat
-            (EnumChatFormatting.GREEN + GTUtility.formatNumbers(efficiency) + EnumChatFormatting.RESET + "x"));
+            (EnumChatFormatting.GREEN + formatNumber(efficiency) + EnumChatFormatting.RESET + "x"));
         return ret;
     }
 }
