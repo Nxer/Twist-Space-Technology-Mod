@@ -3213,6 +3213,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
             || checkPiece(STRUCTURE_PIECE_MAIN_ERR, horizontalOffSet, verticalOffSet, depthOffSet)) {
             if (blockTier > 0) {
                 mParallel = blockTier << 3;
+                return true;
             } else return false;
         }
         return false;
