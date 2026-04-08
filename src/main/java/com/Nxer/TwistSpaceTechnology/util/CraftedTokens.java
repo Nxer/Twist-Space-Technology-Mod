@@ -13,12 +13,15 @@ public enum CraftedTokens {
     AdmiralGUMI_MAIM0_LKOperan("Admiral_GUMI & MAIM0 & LK_Operan", EnumChatFormatting.GREEN),
     RandomPotato10_Nebniloc_Ablazing("RandomPotato10 & Nebniloc & Ablazing", EnumChatFormatting.YELLOW),
     Komart("Komart", EnumChatFormatting.RED),
+    DuneRun("Hollow Wings & Pendragon & Darth plagis the wise", EnumChatFormatting.AQUA),
     Huhmps_Josh012("Huhmps & Josh_012", EnumChatFormatting.AQUA),
     CRIMSTAL_PIGEO("CRIMSTAL & PIGEO", EnumChatFormatting.DARK_PURPLE),
     MRSIB("MrSiB", EnumChatFormatting.WHITE),
     Thenextelement_Nathngo_Scooobygreenbelt("Thenextelement & Nathngo & Scoobygreenbelt",
         EnumChatFormatting.DARK_PURPLE),
-    Maekt("Mae_kt", EnumChatFormatting.GREEN);
+    Maekt("Mae_kt", EnumChatFormatting.GREEN),
+    FreekTeam("EvgenWarGold & Crazer & Faotik", EnumChatFormatting.DARK_RED),
+    Vindrake_CatsCozyGames("Vindrake & CatsCozyGames", EnumChatFormatting.DARK_PURPLE);
 
     private final String name;
     private final EnumChatFormatting color;
