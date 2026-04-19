@@ -41,6 +41,7 @@ public class Config {
     public static final String MEG = "TowerOFAbstraction";
     public static final String BeeEngineer = "BeeEngineer";
     public static final String MegaMacerator = "HouseholdCellFragmentizer";
+    public static final String MegaNqGenerator = "MegaNqGenerator";
     public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
@@ -282,6 +283,10 @@ public class Config {
     public static int MEG_Efficiency_Lost = 500;
     public static double MEG_Overall_Multiply = 1.0D;
     public static boolean MEG_Rotation = false;
+    // endregion
+
+    // region MegaNqGenerator
+    public static int Parallel_MegaNqGenerator = 1000;
     // endregion
 
     // region ThermalEnergyDevourer
@@ -693,6 +698,10 @@ public class Config {
         Parallel_HighSpeedMode_ThermalEnergyDevourer = configuration.getInt("Parallel_HighSpeedMode_ThermalEnergyDevourer", ThermalEnergyDevourer, Parallel_HighSpeedMode_ThermalEnergyDevourer, 1, Integer.MAX_VALUE, "Max Parallel of Thermal Energy Devourer high speed mode. Type: int");
         Parallel_HighParallelMode_ThermalEnergyDevourer = configuration.getInt("Parallel_HighParallelMode_ThermalEnergyDevourer", ThermalEnergyDevourer, Parallel_HighParallelMode_ThermalEnergyDevourer, 1, Integer.MAX_VALUE, "Max Parallel of Thermal Energy Devourer high parallel mode. Type: int");
         TickPerProgressing_WirelessMode_ThermalEnergyDevourer = configuration.getInt("TickPerProgressing_WirelessMode_ThermalEnergyDevourer", ThermalEnergyDevourer, TickPerProgressing_WirelessMode_ThermalEnergyDevourer, 1, 16384, "How many ticks per progressing cost in Wireless mode of Thermal Energy Devourer. Type: int");
+        // endregion
+
+        // region MegaNqGenerator
+        Parallel_MegaNqGenerator = configuration.getInt("Parallel_MegaNqGenerator", MegaNqGenerator, Parallel_MegaNqGenerator, 1, Integer.MAX_VALUE, "Max parallel of Mega Naquadah Generator. Type: int");
         // endregion
 
         // region IndistinctTentacle

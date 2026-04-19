@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.config.Config.ParallelOfParallelCont
 import static com.Nxer.TwistSpaceTechnology.config.Config.PowerConsumptionMultiplierOfPowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplierOfSpeedController;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_MegaNqGenerator;
 import net.minecraft.entity.EntityList;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
@@ -652,6 +653,16 @@ public final class MachineLoader {
                 19080,
                 "NameMegaSolarPanelFactory",
                 TextEnums.tr("NameMegaSolarPanelFactory")));
+
+        // #tr NameMegaNqGenerator
+        // # Mega Naquada Generator
+        // #zh_CN 巨型硅岩反应堆
+        GTCMItemList.MegaNqGenerator.set(
+            new TST_MegaNqGenerator(
+                19081,
+                "NameMegaNqGenerator",
+                TextEnums.tr("NameMegaNqGenerator")));
+
         // endregion
 
         // region Single block Machine
