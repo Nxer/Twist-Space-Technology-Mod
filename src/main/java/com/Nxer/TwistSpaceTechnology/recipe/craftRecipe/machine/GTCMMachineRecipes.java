@@ -39,6 +39,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MechanicallyEnhancedObsidian;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaMacerator;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaNqGenerator;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.NetherInterface;
@@ -3730,6 +3731,41 @@ public class GTCMMachineRecipes {
             20 * 1800,
             (int) RECIPE_UMV
         );
+        // endregion
+
+        // region MegaNqGenerator
+        GTValues.RA
+            .stdBuilder()
+            .metadata(RESEARCH_ITEM, ItemRefer.Large_Naquadah_Reactor.get(1))
+            .metadata(SCANNING, scanningLV(24 * HOURS))
+            .itemInputs(
+                ItemRefer.Large_Naquadah_Reactor.get(64),
+                ItemRefer.Large_Naquadah_Reactor.get(64),
+                ItemRefer.Large_Naquadah_Reactor.get(64),
+                ItemRefer.Large_Naquadah_Reactor.get(64),
+
+                new Object[] { OrePrefixes.circuit.get(Materials.UIV), 16 },
+                new Object[] { OrePrefixes.circuit.get(Materials.UIV), 16 },
+                new Object[] { OrePrefixes.circuit.get(Materials.UIV), 16 },
+                new Object[] { OrePrefixes.circuit.get(Materials.UIV), 16 },
+
+                Laser_Lens_Special.get(16),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Duranium, 1),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Duranium, 1),
+                Laser_Lens_Special.get(16),
+
+                new ItemStack(GregTechAPI.sBlockCasings8, 64, 3),
+                new ItemStack(GregTechAPI.sBlockCasings8, 64, 3),
+                new ItemStack(GregTechAPI.sBlockCasings8, 64, 3),
+                new ItemStack(GregTechAPI.sBlockCasings8, 64, 3))
+            .fluidInputs(
+                Materials.StableBaryonicMatter.getFluid(256_000),
+                MUTATED_LIVING_SOLDER.getFluidStack(32_000),
+                new FluidStack(MaterialsElements.STANDALONE.HYPOGEN.getFluid(), 1_000))
+            .itemOutputs(MegaNqGenerator.get(1))
+            .eut(RECIPE_UIV)
+            .duration(20 * 400)
+            .addTo(AssemblyLine);
         // endregion
 
     }
