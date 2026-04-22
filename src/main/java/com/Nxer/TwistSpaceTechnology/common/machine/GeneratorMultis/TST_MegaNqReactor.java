@@ -14,11 +14,15 @@ import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -71,30 +75,37 @@ import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
  * 最大并行可在配置文件中调整
  * 持续运行降低激发流体/冷却液消耗（机制类似于超维度等离子锻炉）。
  */
-public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements IConstructable, ISurvivalConstructable {
+public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstructable, ISurvivalConstructable {
 
     // region Constants & tier caches
 
-    private static final int LIQUID_AIR_PER_SECOND = 2400;
-    private static final int TICKS_PER_SECOND = 20;
-    private static final int[] COOLANT_EFFICIENCY = { 500, 275, 150, 105 };
-    private static final int[] EXCITED_LIQUID_COEFF = { 64, 16, 4, 3, 2 };
+    protected static final int LIQUID_AIR_PER_SECOND = 2400;
+    protected static final int TICKS_PER_SECOND = 20;
+    protected static final int[] COOLANT_EFFICIENCY = { 500, 275, 150, 105 };
+    protected static final int[] EXCITED_LIQUID_COEFF = { 64, 16, 4, 3, 2 };
 
-    private static final long TICKS_TO_MAX_DISCOUNT = 24L * 60 * 60 * TICKS_PER_SECOND;
-    private static final long DECAY_PER_IDLE_TICK = 20L;
-    private static final int MAX_DISCOUNT_PERCENT = 50;
-    private static final int DEFAULT_COOLANT_EFFICIENCY = 100;
+    protected static final long TICKS_TO_MAX_DISCOUNT = 24L * 60 * 60 * TICKS_PER_SECOND;
+    protected static final long DECAY_PER_IDLE_TICK = 20L;
+    protected static final int MAX_DISCOUNT_PERCENT = 50;
+    protected static final int DEFAULT_COOLANT_EFFICIENCY = 100;
 
-    private static List<Pair<FluidStack, Integer>> excitedTiers;
+    protected static final Map<String, Class<?>> CLASS_CACHE = new ConcurrentHashMap<>();
+    protected static final Set<String> MISSING_CLASSES = ConcurrentHashMap.newKeySet();
+    protected static final Map<String, Field> FIELD_CACHE = new ConcurrentHashMap<>();
+    protected static final Set<String> MISSING_FIELDS = ConcurrentHashMap.newKeySet();
+    protected static final Map<String, Method> METHOD_CACHE = new ConcurrentHashMap<>();
+    protected static final Set<String> MISSING_METHODS = ConcurrentHashMap.newKeySet();
 
-    private static List<Pair<FluidStack, Integer>> coolantTiers;
+    protected static List<Pair<FluidStack, Integer>> excitedTiers;
+
+    protected static List<Pair<FluidStack, Integer>> coolantTiers;
 
     // endregion
 
     // region Material & fluid resolution
 
     @Nullable
-    private static FluidStack fluidStackFromMaterial(@Nullable Materials mat, int amount) {
+    protected static FluidStack fluidStackFromMaterial(@Nullable Materials mat, int amount) {
         if (mat == null) {
             return null;
         }
@@ -107,7 +118,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     }
 
     @Nullable
-    private static FluidStack optionalMaterialsFluid(String materialsFieldName, int amount) {
+    protected static FluidStack optionalMaterialsFluid(String materialsFieldName, int amount) {
         FluidStack fs = optionalMaterialsField(Materials.class, materialsFieldName, amount);
         if (fs != null) {
             return fs;
@@ -120,10 +131,9 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     }
 
     @Nullable
-    private static FluidStack optionalMaterialsField(Class<?> holder, String fieldName, int amount) {
+    protected static FluidStack optionalMaterialsField(Class<?> holder, String fieldName, int amount) {
         try {
-            Object raw = holder.getField(fieldName)
-                .get(null);
+            Object raw = getStaticFieldValueCached(holder, fieldName);
             return fluidStackFromMaterialLike(raw, amount);
         } catch (ReflectiveOperationException | ClassCastException ignored) {
             return null;
@@ -131,16 +141,16 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     }
 
     @Nullable
-    private static FluidStack optionalMaterialsField(String className, String fieldName, int amount) {
-        try {
-            return optionalMaterialsField(Class.forName(className), fieldName, amount);
-        } catch (ClassNotFoundException | LinkageError ignored) {
+    protected static FluidStack optionalMaterialsField(String className, String fieldName, int amount) {
+        Class<?> holder = getOptionalClassCached(className);
+        if (holder == null) {
             return null;
         }
+        return optionalMaterialsField(holder, fieldName, amount);
     }
 
     @Nullable
-    private static FluidStack optionalMaterialsFluidRegistryFallback(String fieldName, int amount) {
+    protected static FluidStack optionalMaterialsFluidRegistryFallback(String fieldName, int amount) {
         String key = fieldName.toLowerCase(Locale.ROOT);
         String[] names = { "molten." + key, key };
         for (String name : names) {
@@ -152,7 +162,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     }
 
     @Nullable
-    private static FluidStack fluidStackFromMaterialLike(@Nullable Object mat, int amount) {
+    protected static FluidStack fluidStackFromMaterialLike(@Nullable Object mat, int amount) {
         if (mat == null) {
             return null;
         }
@@ -163,15 +173,18 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     }
 
     @Nullable
-    private static FluidStack fluidStackFromReflectiveMaterial(Object mat, int amount) {
+    protected static FluidStack fluidStackFromReflectiveMaterial(Object mat, int amount) {
         long asLong = amount;
         String[] methodNames = { "getFluid", "getMolten" };
         Class<?>[] numericTypes = { long.class, int.class };
+        Class<?> materialClass = mat.getClass();
         for (String methodName : methodNames) {
             for (Class<?> numType : numericTypes) {
+                Method m = getMethodCached(materialClass, methodName, numType);
+                if (m == null) {
+                    continue;
+                }
                 try {
-                    Method m = mat.getClass()
-                        .getMethod(methodName, numType);
                     Object arg = numType == long.class ? asLong : amount;
                     Object r = m.invoke(mat, arg);
                     if (r instanceof FluidStack) {
@@ -180,8 +193,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
                             return fs.copy();
                         }
                     }
-                } catch (NoSuchMethodException ignored) {} catch (IllegalAccessException
-                    | InvocationTargetException ignored) {
+                } catch (IllegalAccessException | InvocationTargetException ignored) {
                     return null;
                 }
             }
@@ -189,7 +201,65 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         return null;
     }
 
-    private static void ensureTierLists() {
+    @Nullable
+    protected static Class<?> getOptionalClassCached(String className) {
+        Class<?> cached = CLASS_CACHE.get(className);
+        if (cached != null) {
+            return cached;
+        }
+        if (MISSING_CLASSES.contains(className)) {
+            return null;
+        }
+        try {
+            Class<?> resolved = Class.forName(className);
+            CLASS_CACHE.put(className, resolved);
+            return resolved;
+        } catch (ClassNotFoundException | LinkageError ignored) {
+            MISSING_CLASSES.add(className);
+            return null;
+        }
+    }
+
+    protected static Object getStaticFieldValueCached(Class<?> holder, String fieldName) throws ReflectiveOperationException {
+        String key = holder.getName() + '#' + fieldName;
+        Field field = FIELD_CACHE.get(key);
+        if (field != null) {
+            return field.get(null);
+        }
+        if (MISSING_FIELDS.contains(key)) {
+            throw new NoSuchFieldException(fieldName);
+        }
+        try {
+            Field resolved = holder.getField(fieldName);
+            FIELD_CACHE.put(key, resolved);
+            return resolved.get(null);
+        } catch (NoSuchFieldException e) {
+            MISSING_FIELDS.add(key);
+            throw e;
+        }
+    }
+
+    @Nullable
+    protected static Method getMethodCached(Class<?> holder, String methodName, Class<?> argType) {
+        String key = holder.getName() + '#' + methodName + '(' + argType.getName() + ')';
+        Method method = METHOD_CACHE.get(key);
+        if (method != null) {
+            return method;
+        }
+        if (MISSING_METHODS.contains(key)) {
+            return null;
+        }
+        try {
+            Method resolved = holder.getMethod(methodName, argType);
+            METHOD_CACHE.put(key, resolved);
+            return resolved;
+        } catch (NoSuchMethodException ignored) {
+            MISSING_METHODS.add(key);
+            return null;
+        }
+    }
+
+    protected static void ensureTierLists() {
         if (excitedTiers != null) {
             return;
         }
@@ -216,7 +286,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         coolantTiers = Collections.unmodifiableList(cool);
     }
 
-    private static ArrayList<FluidStack> mergeFluidStacks(List<FluidStack> raw) {
+    protected static ArrayList<FluidStack> mergeFluidStacks(List<FluidStack> raw) {
         ArrayList<FluidStack> merged = new ArrayList<>();
         for (FluidStack stack : raw) {
             if (stack == null || stack.amount <= 0) {
@@ -254,17 +324,17 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
 
     // region Class Constructor
 
-    public TST_MegaNqGenerator(int id, String name, String nameRegional) {
+    public TST_MegaNqReactor(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
     }
 
-    public TST_MegaNqGenerator(String name) {
+    public TST_MegaNqReactor(String name) {
         super(name);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_MegaNqGenerator(this.mName);
+        return new TST_MegaNqReactor(this.mName);
     }
 
     // endregion
@@ -348,7 +418,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         Pair<FluidStack, Integer> excitedInfo = getExcited(fluidArray, false);
         int coefficient = excitedInfo == null ? 1 : excitedInfo.getValue();
         FluidStack fuelInput = tRecipe.mFluidInputs[0];
-        int maxParallel = Config.Parallel_MegaNqGenerator;
+        int maxParallel = Config.Parallel_MegaNqReactor;
         for (FluidStack fs : mergedFluids) {
             if (fs != null && fs.isFluidEqual(fuelInput)) {
                 maxParallel = Math.min(maxParallel, fs.amount / fuelInput.amount);
@@ -371,7 +441,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         return CheckRecipeResultRegistry.GENERATING;
     }
 
-    private void updateRunTimeDiscountState(boolean isRunning) {
+    protected void updateRunTimeDiscountState(boolean isRunning) {
         if (isRunning) {
             runTimeTicks = Math.min(runTimeTicks + 1, TICKS_TO_MAX_DISCOUNT);
         } else if (wasRunning) {
@@ -380,7 +450,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         wasRunning = isRunning;
     }
 
-    private boolean tickGenerationSecond() {
+    protected boolean tickGenerationSecond() {
         startRecipeProcessing();
         FluidStack[] input = getStoredFluids().toArray(new FluidStack[0]);
         int timeMultiplier = 1;
@@ -407,7 +477,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         return true;
     }
 
-    private void clearPowerState() {
+    protected void clearPowerState() {
         this.lEUt = 0;
         this.setPowerFlow(0);
         this.trueEff = 0;
@@ -476,7 +546,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         return null;
     }
 
-    private int consumeCoolantDiscounted(FluidStack[] input, int count) {
+    protected int consumeCoolantDiscounted(FluidStack[] input, int count) {
         ensureTierLists();
         for (Pair<FluidStack, Integer> tier : coolantTiers) {
             FluidStack template = tier.getKey();
@@ -509,15 +579,15 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
 
     // region Power output (dynamo)
 
-    private static boolean canAcceptPower(MTEHatchDynamoMulti hatch, long outputPower) {
+    protected static boolean canAcceptPower(MTEHatchDynamoMulti hatch, long outputPower) {
         return (long) hatch.maxEUOutput() * hatch.maxAmperesOut() >= outputPower;
     }
 
-    private static boolean canAcceptPower(MTEHatchDynamo hatch, long outputPower) {
+    protected static boolean canAcceptPower(MTEHatchDynamo hatch, long outputPower) {
         return (long) hatch.maxEUOutput() * hatch.maxAmperesOut() >= outputPower;
     }
 
-    private static void chargeDynamoMulti(MTEHatchDynamoMulti hatch, long outputPower) {
+    protected static void chargeDynamoMulti(MTEHatchDynamoMulti hatch, long outputPower) {
         long cap = Math.min(
             hatch.maxEUStore(),
             hatch.getBaseMetaTileEntity()
@@ -525,7 +595,7 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
         hatch.setEUVar(cap);
     }
 
-    private static void chargeDynamo(MTEHatchDynamo hatch, long outputPower) {
+    protected static void chargeDynamo(MTEHatchDynamo hatch, long outputPower) {
         long cap = Math.min(
             hatch.maxEUStore(),
             hatch.getBaseMetaTileEntity()
@@ -556,13 +626,13 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
 
     // region Structure
 
-    private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_MNG";
-    private final int hOffset = 15, vOffset = 25, dOffset = 1;
-    private static IStructureDefinition<TST_MegaNqGenerator> STRUCTURE_DEFINITION = null;
+    protected static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_MNG";
+    protected final int hOffset = 15, vOffset = 25, dOffset = 1;
+    protected static IStructureDefinition<TST_MegaNqReactor> STRUCTURE_DEFINITION = null;
 
     // spotless:off
     // structure by Tuna
-    private static final String[][] SHAPE_MAIN = new String[][]{{
+    protected static final String[][] SHAPE_MAIN = new String[][]{{
     "                               ",
     "    FFFFFFF         FFFFFFF    ",
     "   FDDDDDDDF       FDDDDDDDF   ",
@@ -1457,14 +1527,14 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     // spotless:on
 
     @Override
-    public IStructureDefinition<TST_MegaNqGenerator> getStructure_EM() {
+    public IStructureDefinition<TST_MegaNqReactor> getStructure_EM() {
         if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaNqGenerator>builder()
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaNqReactor>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
                 .addElement(
                     'D',
                     ofChain(
-                        buildHatchAdder(TST_MegaNqGenerator.class)
+                        buildHatchAdder(TST_MegaNqReactor.class)
                             .atLeast(
                                 TTMultiblockBase.HatchElement.DynamoMulti.or(Dynamo),
                                 TTMultiblockBase.HatchElement.EnergyMulti.or(gregtech.api.enums.HatchElement.Energy),
@@ -1547,11 +1617,11 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(tr("Tooltip_MegaNqGenerator_MachineType"))
-            .addInfo(tr("Tooltip_MegaNqGenerator_01"))
-            .addInfo(tr("Tooltip_MegaNqGenerator_02"))
-            .addInfo(tr("Tooltip_MegaNqGenerator_03"))
-            .addInfo(tr("Tooltip_MegaNqGenerator_04"))
+        tt.addMachineType(tr("Tooltip_MegaNqReactor_MachineType"))
+            .addInfo(tr("Tooltip_MegaNqReactor_01"))
+            .addInfo(tr("Tooltip_MegaNqReactor_02"))
+            .addInfo(tr("Tooltip_MegaNqReactor_03"))
+            .addInfo(tr("Tooltip_MegaNqReactor_04"))
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
@@ -1572,38 +1642,38 @@ public class TST_MegaNqGenerator extends TT_MultiMachineBase_EM implements ICons
     @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
-        // #tr GUI.MegaNqGenerator.RunningTime
+        // #tr GUI.MegaNqReactor.RunningTime
         // # Running Time:
         // #zh_CN 持续运行时间:
         screenElements
             .widget(
                 new TextWidget()
-                    .setStringSupplier(() -> tr("GUI.MegaNqGenerator.RunningTime") + formatRunTime(runTimeTicks))
+                    .setStringSupplier(() -> tr("GUI.MegaNqReactor.RunningTime") + formatRunTime(runTimeTicks))
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> runTimeTicks, val -> runTimeTicks = val))
             .widget(
                 new TextWidget()
-                    // #tr GUI.MegaNqGenerator.ConsumptionDiscount
+                    // #tr GUI.MegaNqReactor.ConsumptionDiscount
                     // # Consumption Discount:
                     // #zh_CN 消耗减免:
                     .setStringSupplier(
-                        () -> tr("GUI.MegaNqGenerator.ConsumptionDiscount") + getConsumptionDiscount() + "%")
+                        () -> tr("GUI.MegaNqReactor.ConsumptionDiscount") + getConsumptionDiscount() + "%")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(
                 new TextWidget()
-                    // #tr GUI.MegaNqGenerator.CurrentOutput
+                    // #tr GUI.MegaNqReactor.CurrentOutput
                     // # Current Output:
                     // #zh_CN 当前输出:
                     .setStringSupplier(
-                        () -> tr("GUI.MegaNqGenerator.CurrentOutput") + GTUtility.formatNumbers(trueOutput) + " EU/t")
+                        () -> tr("GUI.MegaNqReactor.CurrentOutput") + GTUtility.formatNumbers(trueOutput) + " EU/t")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> trueOutput, val -> trueOutput = val));
     }
 
-    private static String formatRunTime(long ticks) {
+    protected static String formatRunTime(long ticks) {
         long seconds = ticks / TICKS_PER_SECOND;
         long hours = seconds / 3600;
         long minutes = (seconds % 3600) / 60;

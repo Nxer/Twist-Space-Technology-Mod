@@ -39,7 +39,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MagneticMixer;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MechanicallyEnhancedObsidian;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaBrickedBlastFurnace;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaMacerator;
-import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaNqGenerator;
+import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MegaNqReactor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MiracleDoor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.NetherInterface;
@@ -3733,7 +3733,7 @@ public class GTCMMachineRecipes {
         );
         // endregion
 
-        // region MegaNqGenerator
+        // region MegaNqReactor
         GTValues.RA
             .stdBuilder()
             .metadata(RESEARCH_ITEM, ItemRefer.Large_Naquadah_Reactor.get(1))
@@ -3762,7 +3762,7 @@ public class GTCMMachineRecipes {
                 Materials.StableBaryonicMatter.getFluid(256_000),
                 MUTATED_LIVING_SOLDER.getFluidStack(32_000),
                 new FluidStack(MaterialsElements.STANDALONE.HYPOGEN.getFluid(), 1_000))
-            .itemOutputs(MegaNqGenerator.get(1))
+            .itemOutputs(MegaNqReactor.get(1))
             .eut(RECIPE_UIV)
             .duration(20 * 400)
             .addTo(AssemblyLine);

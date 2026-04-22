@@ -41,7 +41,7 @@ public class Config {
     public static final String MEG = "TowerOFAbstraction";
     public static final String BeeEngineer = "BeeEngineer";
     public static final String MegaMacerator = "HouseholdCellFragmentizer";
-    public static final String MegaNqGenerator = "MegaNqGenerator";
+    public static final String MegaNqReactor = "MegaNqReactor";
     public static final String HephaestusAtelier = "HephaestusAtelier";
     public static final String DeployedNanoCore = "DeployedNanoCore";
     public static final String CoreDeviceOfHumanPowerGenerationFacility = "CoreDeviceOfHumanPowerGenerationFacility";
@@ -285,8 +285,8 @@ public class Config {
     public static boolean MEG_Rotation = false;
     // endregion
 
-    // region MegaNqGenerator
-    public static int Parallel_MegaNqGenerator = 1000;
+    // region MegaNqReactor
+    public static int Parallel_MegaNqReactor = 1000;
     // endregion
 
     // region ThermalEnergyDevourer
@@ -700,8 +700,8 @@ public class Config {
         TickPerProgressing_WirelessMode_ThermalEnergyDevourer = configuration.getInt("TickPerProgressing_WirelessMode_ThermalEnergyDevourer", ThermalEnergyDevourer, TickPerProgressing_WirelessMode_ThermalEnergyDevourer, 1, 16384, "How many ticks per progressing cost in Wireless mode of Thermal Energy Devourer. Type: int");
         // endregion
 
-        // region MegaNqGenerator
-        Parallel_MegaNqGenerator = configuration.getInt("Parallel_MegaNqGenerator", MegaNqGenerator, Parallel_MegaNqGenerator, 1, Integer.MAX_VALUE, "Max parallel of Mega Naquadah Generator. Type: int");
+        // region MegaNqReactor
+        Parallel_MegaNqReactor = configuration.getInt("Parallel_MegaNqReactor", MegaNqReactor, Parallel_MegaNqReactor, 1, Integer.MAX_VALUE, "Max parallel of Mega Naquadah Reactor. Type: int");
         // endregion
 
         // region IndistinctTentacle

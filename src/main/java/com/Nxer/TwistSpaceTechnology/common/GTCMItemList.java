@@ -300,7 +300,7 @@ public enum GTCMItemList {
     SuperWaterPurifier,
     IntegratedAssemblyMatrix,
     MegaSolarPanelFactory,
-    MegaNqGenerator,
+    MegaNqReactor,
     // endregion
 
     // region Modularized Machines

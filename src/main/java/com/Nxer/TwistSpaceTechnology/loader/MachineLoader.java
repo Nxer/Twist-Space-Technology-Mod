@@ -29,7 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_SpaceScaler;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GTCM_LightningSpire;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.GT_TileEntity_MegaEggGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_LargeSolarBoiler;
-import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_MegaNqGenerator;
+import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_MegaNqReactor;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_SteamBasicGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_UniversalGenerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_AdvCircuitAssemblyLine;
@@ -654,11 +654,11 @@ public final class MachineLoader {
                 "NameMegaSolarPanelFactory",
                 TextEnums.tr("NameMegaSolarPanelFactory")));
 
-        // #tr NameMegaNqGenerator
-        // # Mega Naquada Generator
+        // #tr NameMegaNqReactor
+        // # Mega Naquadah Reactor
         // #zh_CN 巨型硅岩反应堆
-        GTCMItemList.MegaNqGenerator
-            .set(new TST_MegaNqGenerator(19081, "NameMegaNqGenerator", TextEnums.tr("NameMegaNqGenerator")));
+        GTCMItemList.MegaNqReactor
+            .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TextEnums.tr("NameMegaNqReactor")));
 
         // endregion
 
