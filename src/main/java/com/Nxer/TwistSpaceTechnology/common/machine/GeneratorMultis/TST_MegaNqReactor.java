@@ -13,8 +13,8 @@ import static gregtech.api.enums.Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRON
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -220,7 +220,8 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstr
         }
     }
 
-    protected static Object getStaticFieldValueCached(Class<?> holder, String fieldName) throws ReflectiveOperationException {
+    protected static Object getStaticFieldValueCached(Class<?> holder, String fieldName)
+        throws ReflectiveOperationException {
         String key = holder.getName() + '#' + fieldName;
         Field field = FIELD_CACHE.get(key);
         if (field != null) {
