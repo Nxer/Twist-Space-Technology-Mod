@@ -44,7 +44,6 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.RapidHeatExch
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StarKernelForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CentrifugeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ChemicalReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CircuitAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.CompressorRecipePool;
@@ -94,7 +93,6 @@ public class RecipeLoader {
         ExtractorRecipePool.loadRecipes();
         CompressorRecipePool.loadRecipes();
         LanthanidesRecipePool.loadRecipes();
-        CentrifugeRecipePool.loadRecipes();
         ShapedCraftRecipePool.loadRecipes();
         MixerRecipePool.loadRecipes();
         QFTRecipePool.loadRecipes();
