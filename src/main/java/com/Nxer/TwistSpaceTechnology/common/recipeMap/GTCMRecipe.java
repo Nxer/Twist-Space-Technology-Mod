@@ -349,7 +349,7 @@ public class GTCMRecipe {
     // #zh_CN 巨型碎石机
     public static final RecipeMap<TST_RecipeMapBackend> MegaStoneBreakerRecipes = RecipeMapBuilder
         .of("tst.recipe.MegaStoneBreakerRecipes", TST_RecipeMapBackend::new)
-        .maxIO(2, 1, 0, 0)
+        .maxIO(3, 1, 0, 0)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaStoneBreaker.get(1)))
         .build();
 
