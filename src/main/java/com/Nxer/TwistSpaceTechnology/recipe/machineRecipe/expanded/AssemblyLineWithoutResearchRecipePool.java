@@ -84,6 +84,7 @@ import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.LanthItemList;
+import gtnhlanth.common.register.WerkstoffMaterialPool;
 import wanion.avaritiaddons.block.chest.infinity.BlockInfinityChest;
 
 public class AssemblyLineWithoutResearchRecipePool {
@@ -147,7 +148,7 @@ public class AssemblyLineWithoutResearchRecipePool {
             tectech.thing.CustomItemList.eM_energyTunnel9_UXV.get(1),
             tectech.thing.CustomItemList.eM_dynamoTunnel9_UXV.get(1),
             new ItemStack(LanthItemList.FOCUS_MANIPULATION_CASING),
-            new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING) };
+            new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING), LanthItemList.LUV_BEAMLINE_INPUT_HATCH };
 
         // start check assembly line recipes
         checkRecipe: for (var recipe : GTRecipe.RecipeAssemblyLine.sAssemblylineRecipes) {
@@ -281,6 +282,24 @@ public class AssemblyLineWithoutResearchRecipePool {
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Tungsten, 2))
                 .itemOutputs(new ItemStack(LanthItemList.TARGET_RECEPTACLE_CASING))
                 .duration(60 * GTRecipeBuilder.SECONDS)
+                .eut(TierEU.RECIPE_LuV)
+                .addTo(MASL);
+
+            TST_RecipeBuilder.builder()
+                .fluidInputs(
+                    Materials.SolderingAlloy.getMolten(64 * INGOTS),
+                    Materials.Argon.getGas(1_000),
+                    Materials.Helium.getGas(2_000))
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(1),
+                    ItemList.Hull_LuV.get(1),
+                    GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 2),
+                    new ItemStack(LanthItemList.CAPILLARY_EXCHANGE, 2),
+                    ItemList.Electric_Pump_LuV.get(1),
+                    LanthItemList.BEAMLINE_PIPE,
+                    WerkstoffMaterialPool.MuMetal.get(OrePrefixes.plate, 4))
+                .itemOutputs(LanthItemList.LUV_BEAMLINE_INPUT_HATCH)
+                .duration(2 * GTRecipeBuilder.MINUTES)
                 .eut(TierEU.RECIPE_LuV)
                 .addTo(MASL);
 
