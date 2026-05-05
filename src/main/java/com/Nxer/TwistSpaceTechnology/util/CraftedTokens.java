@@ -13,7 +13,8 @@ public enum CraftedTokens {
     AdmiralGUMI_MAIM0_LKOperan("Admiral_GUMI & MAIM0 & LK_Operan", EnumChatFormatting.GREEN),
     RandomPotato10_Nebniloc_Ablazing("RandomPotato10 & Nebniloc & Ablazing", EnumChatFormatting.YELLOW),
     Komart("Komart", EnumChatFormatting.RED),
-    DuneRun("Hollow Wings & Pendragon & Darth plagis the wise", EnumChatFormatting.AQUA),
+    OrangeCreamsicle_ValueTown("Orange Creamsicle & ValueTown", EnumChatFormatting.GOLD),
+    DuneRun("Hollow Wings & Annie Pendragon & Darth", EnumChatFormatting.AQUA),
     Huhmps_Josh012("Huhmps & Josh_012", EnumChatFormatting.AQUA),
     CRIMSTAL_PIGEO("CRIMSTAL & PIGEO", EnumChatFormatting.DARK_PURPLE),
     MRSIB("MrSiB", EnumChatFormatting.WHITE),
@@ -21,7 +22,9 @@ public enum CraftedTokens {
         EnumChatFormatting.DARK_PURPLE),
     Maekt("Mae_kt", EnumChatFormatting.GREEN),
     FreekTeam("EvgenWarGold & Crazer & Faotik", EnumChatFormatting.DARK_RED),
-    Vindrake_CatsCozyGames("Vindrake & CatsCozyGames", EnumChatFormatting.DARK_PURPLE);
+    Vindrake_CatsCozyGames("Vindrake & CatsCozyGames", EnumChatFormatting.DARK_PURPLE),
+    SoulEater("Soul Eater", EnumChatFormatting.DARK_RED),
+    Golter_MangusWtf("Golter & MangusWtf", EnumChatFormatting.DARK_PURPLE);
 
     private final String name;
     private final EnumChatFormatting color;
