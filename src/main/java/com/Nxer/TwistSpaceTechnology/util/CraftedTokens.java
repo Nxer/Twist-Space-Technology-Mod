@@ -24,6 +24,7 @@ public enum CraftedTokens {
     FreekTeam("EvgenWarGold & Crazer & Faotik", EnumChatFormatting.DARK_RED),
     Vindrake_CatsCozyGames("Vindrake & CatsCozyGames", EnumChatFormatting.DARK_PURPLE),
     SoulEater("Soul Eater", EnumChatFormatting.DARK_RED),
+    Rubigon("Rubigon", EnumChatFormatting.GREEN),
     Golter_MangusWtf("Golter & MangusWtf", EnumChatFormatting.DARK_PURPLE);
 
     private final String name;
