@@ -121,5 +121,36 @@ public class MegaStoneBreakerRecipePool {
             .eut(6)
             .duration(20)
             .addTo(MegaStoneBreakerRecipes);
+
+        TST_RecipeBuilder.builder()
+            .itemInputs(
+                GTUtility.getIntegratedCircuit(21),
+                GTOreDictUnificator.get(OrePrefixes.dust, Materials.Glowstone, 1))
+            .itemOutputs(new ItemStack(Blocks.netherrack))
+            .eut(6)
+            .duration(20)
+            .addTo(MegaStoneBreakerRecipes);
+
+        if (Mods.EtFuturumRequiem.isModLoaded()) {
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(22),
+                    GTModHandler.getModItem(Mods.EtFuturumRequiem.ID, "blue_ice", 0, 0),
+                    new ItemStack(Blocks.soul_sand, 0))
+                .itemOutputs(GTOreDictUnificator.get(OrePrefixes.stone, Materials.Basalt, 1L))
+                .eut(6)
+                .duration(20)
+                .addTo(MegaStoneBreakerRecipes);
+
+            TST_RecipeBuilder.builder()
+                .itemInputs(
+                    GTUtility.getIntegratedCircuit(23),
+                    GTModHandler.getModItem(Mods.EtFuturumRequiem.ID, "magma", 0, 0),
+                    new ItemStack(Blocks.soul_sand, 0))
+                .itemOutputs(GTModHandler.getModItem(Mods.EtFuturumRequiem.ID, "cobbled_deepslate", 1, 0))
+                .eut(6)
+                .duration(20)
+                .addTo(MegaStoneBreakerRecipes);
+        }
     }
 }
