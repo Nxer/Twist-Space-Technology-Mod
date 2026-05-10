@@ -26,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -69,6 +70,9 @@ import gregtech.api.util.shutdown.ShutDownReasonRegistry;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * 可使用的激发流体/冷却液与大型硅岩反应堆一致
@@ -321,6 +325,14 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstr
     protected long runTimeTicks = 0;
     protected boolean wasRunning = false;
 
+    /**
+     * 客户端 flame 球心世界坐标 (coreFxX, coreFxY, coreFxZ)。<br>
+     * 由 {@link #updateCoreFxCenter()} 写入；偏移见 {@link #CORE_CENTER_OFFSET_X} 等。
+     */
+    protected double coreFxX;
+    protected double coreFxY;
+    protected double coreFxZ;
+
     // endregion
 
     // region Class Constructor
@@ -487,9 +499,9 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstr
 
     @Override
     public boolean onRunningTick(ItemStack stack) {
+        boolean isRunning = mMaxProgresstime != 0;
         if (this.getBaseMetaTileEntity()
             .isServerSide()) {
-            boolean isRunning = mMaxProgresstime != 0;
             updateRunTimeDiscountState(isRunning);
 
             if (isRunning && mProgresstime % TICKS_PER_SECOND == 0) {
@@ -498,8 +510,48 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstr
                 }
             }
             addAutoEnergy(this.lEUt);
+        } else if (mMachine && isRunning) {
+            spawnCoreFlameSphere();
         }
         return true;
+    }
+
+    /**
+     * 球心：主机方块中心 {@code (x+0.5, y+0.5, z+0.5)} 再加世界轴偏移 {@link #CORE_CENTER_OFFSET_X}/{@link #CORE_CENTER_OFFSET_Y}/{@link #CORE_CENTER_OFFSET_Z}。
+     */
+    protected void updateCoreFxCenter() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base == null) {
+            return;
+        }
+        coreFxX = base.getXCoord() + 0.5D + CORE_CENTER_OFFSET_X;
+        coreFxY = base.getYCoord() + 0.5D + CORE_CENTER_OFFSET_Y;
+        coreFxZ = base.getZCoord() + 0.5D + CORE_CENTER_OFFSET_Z;
+    }
+
+    /**
+     * 以球心为原点、半径 {@link #CORE_FLAME_SPHERE_RADIUS}，在球面上均匀撒 {@link #CORE_FLAME_SPHERE_COUNT} 个原版 {@code flame}；周期见 {@link #CORE_FLAME_SPAWN_INTERVAL_TICKS}。
+     */
+    @SideOnly(Side.CLIENT)
+    protected void spawnCoreFlameSphere() {
+        World world = getBaseMetaTileEntity().getWorld();
+        if (world == null || !world.isRemote) {
+            return;
+        }
+        if (world.getTotalWorldTime() % CORE_FLAME_SPAWN_INTERVAL_TICKS != 0L) {
+            return;
+        }
+        for (int i = 0; i < CORE_FLAME_SPHERE_COUNT; i++) {
+            double u = world.rand.nextDouble();
+            double v = world.rand.nextDouble();
+            double theta = 2.0D * Math.PI * u;
+            double phi = Math.acos(2.0D * v - 1.0D);
+            double sinPhi = Math.sin(phi);
+            double px = coreFxX + CORE_FLAME_SPHERE_RADIUS * sinPhi * Math.cos(theta);
+            double py = coreFxY + CORE_FLAME_SPHERE_RADIUS * Math.cos(phi);
+            double pz = coreFxZ + CORE_FLAME_SPHERE_RADIUS * sinPhi * Math.sin(theta);
+            world.spawnParticle("flame", px, py, pz, 0.0D, 0.0D, 0.0D);
+        }
     }
 
     public boolean consumeFuel(@Nullable FluidStack target, FluidStack[] input) {
@@ -629,6 +681,21 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstr
 
     protected static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_MNG";
     protected final int hOffset = 15, vOffset = 25, dOffset = 1;
+
+    /**
+     * 中央 flame 球：几何数据（含相对主机位置）。<br>
+     * <b>球心相对主机（控制器方块中心）</b>：世界轴偏移 {@code (+CORE_CENTER_OFFSET_X, +CORE_CENTER_OFFSET_Y, +CORE_CENTER_OFFSET_Z)}（方块）。<br>
+     * <b>球面</b>：半径 {@link #CORE_FLAME_SPHERE_RADIUS}；均匀抽样 {@code θ=2πu}，{@code φ=acos(2v-1)}，{@code p=球心+R*(sinφ·cosθ, cosφ, sinφ·sinθ)}。<br>
+     * <b>刷新</b>：每 {@link #CORE_FLAME_SPAWN_INTERVAL_TICKS} tick 一批，每批 {@link #CORE_FLAME_SPHERE_COUNT} 个 {@code flame}（{@code spawnParticle(...,0,0,0)}）。<br>
+     * 与结构检测 {@link #hOffset}/{@link #vOffset}/{@link #dOffset} 无关。
+     */
+    protected static final double CORE_CENTER_OFFSET_X = 15.0D;
+    protected static final double CORE_CENTER_OFFSET_Y = 13.0D;
+    /** 未约定 Z 向偏移时为 0；若需随朝向改心，可再改 {@link #updateCoreFxCenter()}。 */
+    protected static final double CORE_CENTER_OFFSET_Z = 0.0D;
+    protected static final double CORE_FLAME_SPHERE_RADIUS = 6.0D;
+    protected static final int CORE_FLAME_SPHERE_COUNT = 320;
+    protected static final int CORE_FLAME_SPAWN_INTERVAL_TICKS = 20;
     protected static IStructureDefinition<TST_MegaNqReactor> STRUCTURE_DEFINITION = null;
 
     // spotless:off
@@ -1559,7 +1626,11 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM implements IConstr
 
     @Override
     public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
+        boolean formed = structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
+        if (formed) {
+            updateCoreFxCenter();
+        }
+        return formed;
     }
 
     @Override
