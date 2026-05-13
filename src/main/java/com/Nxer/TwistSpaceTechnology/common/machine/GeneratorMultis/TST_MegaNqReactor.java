@@ -80,8 +80,8 @@ import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 /**
  * 可使用的激发流体/冷却液与大型硅岩反应堆一致
- * 最大并行可在配置文件中调整
- * 持续运行降低激发流体/冷却液消耗（机制类似于超维度等离子锻炉）。
+ * 最大并行可在配置文件中调整。
+ * 消耗减免按配方开始时刻的累计运行时间计算。
  */
 public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     implements IConstructable, ISurvivalConstructable, IMTERenderer {
@@ -249,6 +249,21 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         return left != null && GTUtility.areFluidsEqual(left, right, true);
     }
 
+    protected static int recipeSecondsFromDurationTicks(int durationTicks) {
+        if (durationTicks <= 0) {
+            return 0;
+        }
+        return (durationTicks + TICKS_PER_SECOND - 1) / TICKS_PER_SECOND;
+    }
+
+    protected static int safeMulFluidAmount(long a, long b) {
+        long p = a * b;
+        if (p <= 0L || p > (long) Integer.MAX_VALUE) {
+            return -1;
+        }
+        return (int) p;
+    }
+
     // endregion
 
     // region Instance state
@@ -258,6 +273,8 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     protected int basicOutput;
     protected int parallel = 1;
     protected long runTimeTicks = 0;
+    protected int cachedCoolantEfficiency = DEFAULT_COOLANT_EFFICIENCY;
+    protected int cachedTimeMultiplier = 1;
 
     protected double coreFxX;
     protected double coreFxY;
@@ -385,6 +402,10 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         } else {
             this.lockedFluid = null;
         }
+        this.cachedCoolantEfficiency = aNBT.hasKey("mCachedCoolantEff")
+            ? aNBT.getInteger("mCachedCoolantEff")
+            : DEFAULT_COOLANT_EFFICIENCY;
+        this.cachedTimeMultiplier = aNBT.hasKey("mCachedTimeMult") ? aNBT.getInteger("mCachedTimeMult") : 1;
         super.loadNBTData(aNBT);
     }
 
@@ -401,6 +422,8 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
             aNBT.removeTag("mLockedFluidName");
             aNBT.removeTag("mLockedFluidAmount");
         }
+        aNBT.setInteger("mCachedCoolantEff", this.cachedCoolantEfficiency);
+        aNBT.setInteger("mCachedTimeMult", this.cachedTimeMultiplier);
         super.saveNBTData(aNBT);
     }
 
@@ -453,23 +476,101 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         if (maxParallel <= 0) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
-        int consumedFuelAmount = fuelInput.amount * maxParallel;
+        long consumedFuelLong = (long) fuelInput.amount * maxParallel;
+        if (consumedFuelLong > Integer.MAX_VALUE) {
+            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+        }
+        int consumedFuelAmount = (int) consumedFuelLong;
         if (!fluidView.hasAtLeast(fuelInput, consumedFuelAmount)) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
-        if (!consumeFluidStacks(fuelInput, consumedFuelAmount)) {
+
+        int recipeTicks = tRecipe.mDuration;
+        int recipeSeconds = recipeSecondsFromDurationTicks(recipeTicks);
+        int efficiencyForRun = DEFAULT_COOLANT_EFFICIENCY;
+        int timeMultForRun = 1;
+
+        ArrayList<FluidStack> requirements = new ArrayList<>(6);
+        FluidStack fuelReq = copyFluid(fuelInput, consumedFuelAmount);
+        if (fuelReq == null) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
+        requirements.add(fuelReq);
+
+        if (recipeSeconds > 0 && maxParallel > 0) {
+            long airTotalLong = (long) LIQUID_AIR_PER_SECOND * maxParallel * recipeSeconds;
+            if (airTotalLong > Integer.MAX_VALUE) {
+                return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+            }
+            int airAmount = (int) airTotalLong;
+            if (airAmount > 0) {
+                FluidStack liquidAir = Materials.LiquidAir.getFluid(airAmount);
+                if (!fluidView.hasAtLeast(liquidAir, airAmount)) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                requirements.add(liquidAir);
+            }
+        }
+
+        Pair<FluidStack, Integer> coolantSelection = selectCoolant(fluidView, maxParallel);
+        if (coolantSelection != null) {
+            efficiencyForRun = coolantSelection.getValue();
+            if (recipeSeconds > 0) {
+                FluidStack oneSecondCoolant = coolantSelection.getKey();
+                int totalCoolantAmt = safeMulFluidAmount((long) oneSecondCoolant.amount, recipeSeconds);
+                if (totalCoolantAmt < 0) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                FluidStack fullCoolant = copyFluid(oneSecondCoolant, totalCoolantAmt);
+                if (fullCoolant == null) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                if (!fluidView.hasAtLeast(fullCoolant, totalCoolantAmt)) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                requirements.add(fullCoolant);
+            }
+        }
+
+        FluidStack lockedForRun = null;
+        if (excitedInfo != null) {
+            lockedForRun = excitedInfo.getKey()
+                .copy();
+            timeMultForRun = coefficient;
+            if (recipeSeconds > 0) {
+                long perSecondExcited = (long) getDiscountedAmount(lockedForRun.amount) * maxParallel;
+                int totalExcitedAmt = safeMulFluidAmount(perSecondExcited, recipeSeconds);
+                if (totalExcitedAmt < 0) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                FluidStack excitedReq = copyFluid(lockedForRun, totalExcitedAmt);
+                if (excitedReq == null) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                if (!fluidView.hasAtLeast(excitedReq, totalExcitedAmt)) {
+                    return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+                }
+                requirements.add(excitedReq);
+            }
+        }
+
+        startRecipeProcessing();
+        if (!consumeFluidRequirements(getStoredFluids(), requirements)) {
+            endRecipeProcessing();
+            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+        }
+        endRecipeProcessing();
+
         basicOutput = tRecipe.mSpecialValue;
-        lEUt = 0;
         times = coefficient;
         parallel = maxParallel;
-        lockedFluid = excitedInfo == null ? null
-            : excitedInfo.getKey()
-            .copy();
-        mMaxProgresstime = tRecipe.mDuration;
+        lockedFluid = lockedForRun;
+        mMaxProgresstime = recipeTicks;
         mEfficiencyIncrease = 10000;
         mOutputFluids = copyFluidOutputs(tRecipe.mFluidOutputs, maxParallel);
+        cachedCoolantEfficiency = efficiencyForRun;
+        cachedTimeMultiplier = timeMultForRun;
+        lEUt = (long) basicOutput * cachedCoolantEfficiency * cachedTimeMultiplier / 100L * maxParallel;
         return CheckRecipeResultRegistry.GENERATING;
     }
 
@@ -479,46 +580,6 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         } else {
             runTimeTicks = Math.max(0, runTimeTicks - DECAY_PER_IDLE_TICK);
         }
-    }
-
-    @Nullable
-    protected ShutDownReason tickGenerationSecond() {
-        startRecipeProcessing();
-        FluidInventoryView fluidView = createFluidInventoryView(getStoredFluids());
-        int timeMultiplier = 1;
-        int efficiency = DEFAULT_COOLANT_EFFICIENCY;
-        ArrayList<FluidStack> requirements = new ArrayList<>(3);
-        int airRequired = LIQUID_AIR_PER_SECOND * parallel;
-        FluidStack liquidAir = Materials.LiquidAir.getFluid(airRequired);
-        if (airRequired > 0 && !fluidView.hasAtLeast(liquidAir, airRequired)) {
-            endRecipeProcessing();
-            return ShutDownReasonRegistry.outOfFluid(liquidAir);
-        }
-        if (airRequired > 0) {
-            requirements.add(liquidAir);
-        }
-        Pair<FluidStack, Integer> coolantSelection = selectCoolant(fluidView, parallel);
-        if (coolantSelection != null) {
-            requirements.add(coolantSelection.getKey());
-            efficiency = coolantSelection.getValue();
-        }
-        if (lockedFluid != null) {
-            int discountedAmount = getDiscountedAmount(lockedFluid.amount) * parallel;
-            FluidStack requiredExcitedFluid = copyFluid(lockedFluid, discountedAmount);
-            if (requiredExcitedFluid != null && fluidView.hasAtLeast(requiredExcitedFluid, discountedAmount)) {
-                requirements.add(requiredExcitedFluid);
-                timeMultiplier = times;
-            }
-        }
-        if (!consumeFluidRequirements(getStoredFluids(), requirements)) {
-            endRecipeProcessing();
-            FluidStack failedRequirement = requirements.isEmpty() ? Materials.LiquidAir.getFluid(1)
-                : requirements.get(0);
-            return ShutDownReasonRegistry.outOfFluid(failedRequirement);
-        }
-        this.lEUt = (long) basicOutput * efficiency * timeMultiplier / 100L * parallel;
-        endRecipeProcessing();
-        return null;
     }
 
     @Override
@@ -539,14 +600,6 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         if (this.getBaseMetaTileEntity()
             .isServerSide()) {
             updateRunTimeDiscountState(isRunning);
-
-            if (isRunning && mProgresstime % TICKS_PER_SECOND == 0) {
-                ShutDownReason shutDownReason = tickGenerationSecond();
-                if (shutDownReason != null) {
-                    stopMachine(shutDownReason);
-                    return true;
-                }
-            }
         }
         return super.onRunningTick(stack);
     }
@@ -561,6 +614,8 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     @Override
     public void stopMachine(@Nonnull ShutDownReason reason) {
         lEUt = 0;
+        cachedCoolantEfficiency = DEFAULT_COOLANT_EFFICIENCY;
+        cachedTimeMultiplier = 1;
         super.stopMachine(reason);
     }
 
