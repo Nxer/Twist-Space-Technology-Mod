@@ -171,7 +171,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     protected boolean consumeFluidStacks(List<FluidStack> storedFluids, @Nullable FluidStack template,
-                                         int requiredAmount) {
+        int requiredAmount) {
         FluidStack requiredFluid = copyFluid(template, requiredAmount);
         if (requiredFluid == null) {
             return false;
@@ -402,8 +402,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         } else {
             this.lockedFluid = null;
         }
-        this.cachedCoolantEfficiency = aNBT.hasKey("mCachedCoolantEff")
-            ? aNBT.getInteger("mCachedCoolantEff")
+        this.cachedCoolantEfficiency = aNBT.hasKey("mCachedCoolantEff") ? aNBT.getInteger("mCachedCoolantEff")
             : DEFAULT_COOLANT_EFFICIENCY;
         this.cachedTimeMultiplier = aNBT.hasKey("mCachedTimeMult") ? aNBT.getInteger("mCachedTimeMult") : 1;
         super.loadNBTData(aNBT);
@@ -1671,7 +1670,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-                                 int colorIndex, boolean aActive, boolean redstoneLevel) {
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
         final ITexture baseCasingTexture = getCasingTextureForId(
             GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3));
         if (side == facing) {
