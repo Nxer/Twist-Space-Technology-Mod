@@ -1706,6 +1706,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
             .addInfo(tr("Tooltip_MegaNqReactor_02"))
             .addInfo(tr("Tooltip_MegaNqReactor_03"))
             .addInfo(tr("Tooltip_MegaNqReactor_04"))
+            .addInfo(tr("Tooltip_MegaNqReactor_05"))
             .addSeparator()
             .addInfo(TextLocalization.StructureTooComplex)
             .addInfo(TextLocalization.BLUE_PRINT_INFO)
