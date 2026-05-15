@@ -470,16 +470,17 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         Pair<FluidStack, Integer> excitedInfo = getExcited(fluidView);
         int coefficient = excitedInfo == null ? 1 : excitedInfo.getValue();
         FluidStack fuelInput = tRecipe.mFluidInputs[0];
+        int perParallelFuel = fuelInput.amount;
+        if (perParallelFuel <= 0) {
+            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+        }
         int fuelAmount = fluidView.getAmount(fuelInput);
-        int maxParallel = Math.min(Config.Parallel_MegaNqReactor, fuelAmount / fuelInput.amount);
+        int intLimitCap = Integer.MAX_VALUE / perParallelFuel;
+        int maxParallel = Math.min(Math.min(Config.Parallel_MegaNqReactor, fuelAmount / perParallelFuel), intLimitCap);
         if (maxParallel <= 0) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
-        long consumedFuelLong = (long) fuelInput.amount * maxParallel;
-        if (consumedFuelLong > Integer.MAX_VALUE) {
-            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
-        }
-        int consumedFuelAmount = (int) consumedFuelLong;
+        int consumedFuelAmount = perParallelFuel * maxParallel;
         if (!fluidView.hasAtLeast(fuelInput, consumedFuelAmount)) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
