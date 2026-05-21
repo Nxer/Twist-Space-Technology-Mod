@@ -7,11 +7,12 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIV
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
 import static gregtech.api.util.GTUtility.filterValidMTEs;
+import static gregtech.api.util.GlassTier.getGlassBlockTier;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -20,7 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -32,7 +32,6 @@ import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.GregTechAPI;
-import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.ICleanroom;
 import gregtech.api.interfaces.ICleanroomReceiver;
 import gregtech.api.interfaces.ISecondaryDescribable;
@@ -49,19 +48,54 @@ import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
 
-    private static final int maxX = 63;
-    private static final int maxY = 64;
-    private static final int maxZ = 63;
+    private static final int MAX_WIDTH = 63;
+    private static final int MAX_HEIGHT = 64;
 
-    // private static long bufferedEU = 0;
+    private static final int MIN_GLASS_TIER = 4; // EV
+    private static final int CASING_INDEX = 210;
 
     private final Set<ICleanroomReceiver> cleanroomReceivers = new HashSet<>();
     private int mHeight = -1;
 
+    // region Block type system
+
+    private enum BlockType {
+        CASING,
+        FILTER,
+        GLASS,
+        OTHER,
+        DOOR,
+        HATCH,
+        INVALID
+    }
+
+    private static final int MASK_CASING = 1;
+    private static final int MASK_FILTER = 1 << 1;
+    private static final int MASK_GLASS = 1 << 2;
+    private static final int MASK_OTHER = 1 << 3;
+    private static final int MASK_DOOR = 1 << 4;
+    private static final int MASK_HATCH = 1 << 5;
+
+    private static final int MASK_CEILING_INTERNAL = MASK_FILTER;
+    private static final int MASK_CEILING_EDGE = MASK_CASING | MASK_GLASS | MASK_OTHER | MASK_HATCH;
+    private static final int MASK_WALL_INTERNAL = MASK_CASING | MASK_GLASS | MASK_OTHER | MASK_DOOR | MASK_HATCH;
+    private static final int MASK_WALL_EDGE = MASK_CASING | MASK_GLASS | MASK_OTHER | MASK_HATCH;
+    private static final int MASK_FLOOR_INTERNAL = MASK_CASING | MASK_GLASS | MASK_OTHER | MASK_HATCH;
+    private static final int MASK_FLOOR_EDGE = MASK_CASING | MASK_GLASS | MASK_OTHER | MASK_HATCH;
+
+    // endregion
+
+    // region Cached structure dimensions
+
+    protected int dxMin = 0, dxMax = 0, dzMin = 0, dzMax = 0, dyMin = 0;
+    protected int casingCount;
+    protected int otherCount;
+    protected boolean isDoorOpen;
+
+    // endregion
+
     public TST_CleanRoom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        // GT_MetaTileEntity_Cleanroom
-
     }
 
     public TST_CleanRoom(String aName) {
@@ -121,21 +155,19 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         tt.addSeparator();
         tt.addInfo(translateToLocal("StructureTooComplex"));
         tt.addInfo(translateToLocal("BLUE_PRINT_INFO"));
-        tt.beginVariableStructureBlock(3, 15, 4, 15, 3, 15, true);
-        tt.addController("Top center");
-        tt.addCasingInfoRange("Plascrete", 20, 1007, false);
+        tt.beginVariableStructureBlock(3, MAX_WIDTH, 4, MAX_HEIGHT, 3, MAX_WIDTH, true);
+        tt.addController(translateToLocal("Tooltip_TST_CleanRoom_Controller"));
+        tt.addCasingInfoRange(translateToLocal("Tooltip_TST_CleanRoom_Plascrete"), 20, 19592, false);
         tt.addStructureInfo(
-            GTValues.cleanroomGlass
-                + "% of the Plascrete can be replaced with Reinforced Glass (not counting the top layer)");
-        tt.addStructureInfo(
-            "Other material can be used in place of Plascrete, even in higher percentages. See config for detail");
-        tt.addOtherStructurePart("Filter Machine Casing", "Top besides controller and edges");
-        tt.addEnergyHatch("Any casing except top layer. Exactly one.");
-        tt.addStructureInfo("0-2x Reinforced Door (keep closed or efficiency will reduce)");
-        tt.addStructureInfo("Up to 1 Elevator, Rotating Elevator, and Travel Anchor each");
-        tt.addStructureInfo("Up to 10 Machine Hulls for Item & Energy transfer through walls");
-        tt.addStructureInfo("You can also use Diodes for more power");
-        tt.addStructureInfo("Diodes also count towards 10 Machine Hulls count limit");
+            String.format(translateToLocal("Tooltip_TST_CleanRoom_ReplaceLimit"), maxReplacementPercentage));
+        tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_GlassInfo"));
+        tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_ConfigInfo"));
+        tt.addOtherStructurePart(
+            translateToLocal("Tooltip_TST_CleanRoom_FilterCasing"),
+            translateToLocal("Tooltip_TST_CleanRoom_FilterCasingPos"));
+        tt.addEnergyHatch(translateToLocal("Tooltip_TST_CleanRoom_EnergyHatch"));
+        tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_Door"));
+        tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_Hull"));
         tt.toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
@@ -201,225 +233,326 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
             : SimpleCheckRecipeResult.ofSuccess("running fine");
     }
 
-    @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        repairMachine();
-        // Cleanroom
-        int x = 1;
-        int z = 1;
-        int y = 1;
-        int mDoorCount = 0;
-        int mHullCount = 0;
-        int mPlascreteCount = 0;
-        final HashMap<String, Integer> otherBlocks = new HashMap<>();
-        boolean doorState = false;
-        this.mUpdate = 100;
-        cleanroomReceivers.forEach(r -> r.setCleanroom(null));
-        cleanroomReceivers.clear();
-        debugCleanroom = true;
-        if (debugCleanroom) {
-            GTLog.out.println("Cleanroom: Checking machine");
-        }
-        for (int i = 1; i <= maxX / 2; i++) {
-            final Block tBlock = aBaseMetaTileEntity.getBlockOffset(i, 0, 0);
-            final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(i, 0, 0);
-            if (tBlock != GregTechAPI.sBlockCasings3 || tMeta != 11) {
-                if (tBlock == GregTechAPI.sBlockReinforced || tMeta == 2) {
-                    x = i;
-                    break;
-                } else {
-                    if (debugCleanroom) {
-                        GTLog.out.println("Cleanroom: Unable to detect room X edge?");
-                    }
-                    return false;
-                }
-            }
-        }
-        for (int i = 1; i <= maxZ / 2; i++) {
-            final Block tBlock = aBaseMetaTileEntity.getBlockOffset(0, 0, i);
-            final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(0, 0, i);
-            if (tBlock != GregTechAPI.sBlockCasings3 || tMeta != 11) {
-                if (tBlock == GregTechAPI.sBlockReinforced || tMeta == 2) {
-                    z = i;
-                    break;
-                } else {
-                    if (debugCleanroom) {
-                        GTLog.out.println("Cleanroom: Unable to detect room Z edge?");
-                    }
-                    return false;
-                }
-            }
-        }
-        // detect rectangular area of filters
-        for (int i = -x + 1; i < x; i++) {
-            for (int j = -z + 1; j < z; j++) {
-                if (i == 0 && j == 0) continue;
-                final Block tBlock = aBaseMetaTileEntity.getBlockOffset(i, 0, j);
-                final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(i, 0, j);
-                if (tBlock != GregTechAPI.sBlockCasings3 && tMeta != 11) {
-                    if (debugCleanroom) {
-                        GTLog.out.println("Cleanroom: This is not a filter.");
-                    }
-                    return false;
-                }
-            }
-        }
-        for (int i = -1; i > -maxY; i--) {
-            final Block tBlock = aBaseMetaTileEntity.getBlockOffset(x, i, z);
-            final int tMeta = aBaseMetaTileEntity.getMetaIDOffset(x, i, z);
-            if (tBlock != GregTechAPI.sBlockReinforced || tMeta != 2) {
-                y = i + 1;
-                break;
+    // region Block identification
 
-            }
+    private boolean isPlascrete(Block block, int meta) {
+        return block == GregTechAPI.sBlockReinforced && meta == 2;
+    }
+
+    private boolean isFilter(Block block, int meta) {
+        return block == GregTechAPI.sBlockCasings3 && meta == 11;
+    }
+
+    private boolean isInAllowedList(Block block, int meta) {
+        return allowedBlocks.contains(block.getUnlocalizedName() + ":" + meta)
+            || allowedBlocks.contains(block.getUnlocalizedName());
+    }
+
+    /**
+     * Identify the type of block at the given offset. Only checks types permitted by allowedMask.
+     * This method has no side effects (does not add hatches or modify counts).
+     */
+    private BlockType getBlockType(IGregTechTileEntity base, int dx, int dy, int dz, int allowedMask) {
+        Block block = base.getBlockOffset(dx, dy, dz);
+        int meta = base.getMetaIDOffset(dx, dy, dz);
+
+        if ((allowedMask & MASK_CASING) != 0 && isPlascrete(block, meta)) return BlockType.CASING;
+
+        if ((allowedMask & MASK_FILTER) != 0 && isFilter(block, meta)) return BlockType.FILTER;
+
+        if ((allowedMask & MASK_GLASS) != 0) {
+            Integer glassTier = getGlassBlockTier(block, meta);
+            if (glassTier != null && glassTier >= MIN_GLASS_TIER) return BlockType.GLASS;
         }
-        if (y > -2) {
-            if (debugCleanroom) {
-                GTLog.out.println("Cleanroom: Room not tall enough?");
-            }
-            return false;
-        }
-        for (int dX = -x; dX <= x; dX++) {
-            for (int dZ = -z; dZ <= z; dZ++) {
-                for (int dY = 0; dY >= y; dY--) {
-                    if (dX == -x || dX == x || dY == 0 || dY == y || dZ == -z || dZ == z) {
-                        Block tBlock = aBaseMetaTileEntity.getBlockOffset(dX, dY, dZ);
-                        int tMeta = aBaseMetaTileEntity.getMetaIDOffset(dX, dY, dZ);
-                        if (dY == 0) { // TOP
-                            if (dX == -x || dX == x || dZ == -z || dZ == z) { // Top Border
-                                if (tBlock != GregTechAPI.sBlockReinforced || tMeta != 2) {
-                                    if (debugCleanroom) {
-                                        GTLog.out.println("Cleanroom: Non reinforced block on top edge? tMeta != 2");
-                                    }
-                                    return false;
-                                }
-                            } else if (dX != 0 || dZ != 0) { // Top Inner exclude center
-                                if (tBlock != GregTechAPI.sBlockCasings3 || tMeta != 11) {
-                                    if (debugCleanroom) {
-                                        GTLog.out.println(
-                                            "Cleanroom: Non reinforced block on top face interior? tMeta != 11");
-                                    }
-                                    return false;
-                                }
-                            }
-                        } else if (tBlock == GregTechAPI.sBlockReinforced && tMeta == 2) {
-                            mPlascreteCount++;
-                        } else {
-                            final IGregTechTileEntity tTileEntity = aBaseMetaTileEntity
-                                .getIGregTechTileEntityOffset(dX, dY, dZ);
-                            if (!this.addToMachineList(tTileEntity, 210)) {
-                                if (tBlock instanceof ic2.core.block.BlockIC2Door) {
-                                    if ((tMeta & 8) == 0) {
-                                        // let's not fiddle with bits anymore.
-                                        if (Math.abs(dZ) < z) // on side parallel to z axis
-                                            doorState = tMeta == 1 || tMeta == 3 || tMeta == 4 || tMeta == 6;
-                                        else if (Math.abs(dX) < x) // on side parallel to x axis
-                                            doorState = tMeta == 0 || tMeta == 2 || tMeta == 5 || tMeta == 7;
-                                        // corners ignored
-                                    }
-                                    mDoorCount++;
-                                } else {
-                                    if (tTileEntity != null) {
-                                        final IMetaTileEntity aMetaTileEntity = tTileEntity.getMetaTileEntity();
-                                        if (aMetaTileEntity == null) {
-                                            if (debugCleanroom) {
-                                                GTLog.out.println("Cleanroom: Missing block? Not a aMetaTileEntity");
-                                            }
-                                            return false;
-                                        }
-                                        if (aMetaTileEntity instanceof MTEBasicHull) {
-                                            mHullCount++;
-                                        } else {
-                                            if (debugCleanroom) {
-                                                GTLog.out.println(
-                                                    "Cleanroom: Incorrect GT block? " + tBlock.getUnlocalizedName());
-                                            }
-                                            return false;
-                                        }
-                                    } else {
-                                        String key = tBlock.getUnlocalizedName() + ":" + tMeta;
-                                        if (config.containsKey(key)) { // check with meta first
-                                            otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
-                                        } else {
-                                            key = tBlock.getUnlocalizedName();
-                                            if (config.containsKey(key)) {
-                                                otherBlocks.compute(key, (k, v) -> v == null ? 1 : v + 1);
-                                            } else {
-                                                if (debugCleanroom) {
-                                                    GTLog.out.println(
-                                                        "Cleanroom: not allowed block " + tBlock.getUnlocalizedName());
-                                                }
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+
+        if ((allowedMask & MASK_OTHER) != 0 && isInAllowedList(block, meta)) return BlockType.OTHER;
+
+        if ((allowedMask & MASK_DOOR) != 0 && block instanceof ic2.core.block.BlockIC2Door) {
+            if (!isDoorOpen && (meta & 8) == 0) {
+                if (dz == dzMin || dz == dzMax) {
+                    // Door on Z-boundary wall (runs parallel to X axis)
+                    isDoorOpen = meta == 0 || meta == 2 || meta == 5 || meta == 7;
+                } else if (dx == dxMin || dx == dxMax) {
+                    // Door on X-boundary wall (runs parallel to Z axis)
+                    isDoorOpen = meta == 1 || meta == 3 || meta == 4 || meta == 6;
                 }
             }
+            return BlockType.DOOR;
         }
-        // if (this.mEnergyHatches.size() != 1
-        // || mDoorCount > 4
-        // || mHullCount > 10) {
-        // if (debugCleanroom) {
-        // GTLog.out.println("Cleanroom: Incorrect number of doors, hulls, or hatches.");
-        // }
-        // return false;
-        // }
-        if (mPlascreteCount < 20) {
-            if (debugCleanroom) {
-                GTLog.out.println("Cleanroom: Could not find 20 Plascrete.");
-            }
-            return false;
+
+        if ((allowedMask & MASK_HATCH) != 0) {
+            IGregTechTileEntity te = base.getIGregTechTileEntityOffset(dx, dy, dz);
+            if (te != null && te.getMetaTileEntity() != null) return BlockType.HATCH;
         }
-        final float ratio = (((float) mPlascreteCount) / 100f);
-        for (Map.Entry<String, Integer> e : otherBlocks.entrySet()) {
-            final ConfigEntry ce = config.get(e.getKey());
-            if (ce.allowedCount > 0) { // count has priority
-                if (e.getValue() > ce.allowedCount) {
-                    if (debugCleanroom) {
-                        GTLog.out.println("Cleanroom: Absolute count too high for a block.");
-                    }
-                    return false;
+
+        return BlockType.INVALID;
+    }
+
+    /**
+     * Add a structure block at the given offset. Identifies the block type, updates counts,
+     * and registers hatches. Returns false if the block is invalid for this position.
+     */
+    private boolean addStructureBlock(IGregTechTileEntity base, int dx, int dy, int dz, int allowedMask) {
+        BlockType type = getBlockType(base, dx, dy, dz, allowedMask);
+        switch (type) {
+            case CASING:
+                casingCount++;
+                return true;
+            case FILTER:
+                return true;
+            case GLASS:
+            case OTHER:
+            case DOOR:
+                otherCount++;
+                return true;
+            case HATCH:
+                IGregTechTileEntity te = base.getIGregTechTileEntityOffset(dx, dy, dz);
+                if (this.addToMachineList(te, CASING_INDEX)) {
+                    otherCount++;
+                    return true;
                 }
-            } else if (e.getValue() > ratio * ce.percentage) {
+                IMetaTileEntity mte = te.getMetaTileEntity();
+                if (mte instanceof MTEBasicHull) {
+                    otherCount++;
+                    return true;
+                }
                 if (debugCleanroom) {
-                    GTLog.out.println("Cleanroom: Relative count too high for a block.");
+                    GTLog.out.println("Cleanroom: Incorrect GT block at offset (" + dx + ", " + dy + ", " + dz + ").");
                 }
                 return false;
+            case INVALID:
+            default:
+                if (debugCleanroom) {
+                    GTLog.out.println("Cleanroom: Invalid block at offset (" + dx + ", " + dy + ", " + dz + ").");
+                }
+                return false;
+        }
+    }
+
+    // endregion
+
+    // region Structure checks
+
+    /**
+     * Find the horizontal size of the cleanroom by scanning in both directions from the controller.
+     * Supports both odd and even widths. For even widths, the controller can be in either of the
+     * two middle positions.
+     */
+    private boolean checkSize(IGregTechTileEntity base) {
+        // Scan -X direction
+        for (dxMin = -1; dxMin >= -MAX_WIDTH / 2; --dxMin) {
+            if (getBlockType(base, dxMin, 0, 0, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
+        }
+        if (dxMin < -MAX_WIDTH / 2) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (x-axis).");
+            return false;
+        }
+        // Scan +X direction
+        for (dxMax = 1; dxMax <= MAX_WIDTH / 2; ++dxMax) {
+            if (getBlockType(base, dxMax, 0, 0, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
+        }
+        if (dxMax > MAX_WIDTH / 2) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (x-axis).");
+            return false;
+        }
+        // Controller must be centered (or off by 1 for even widths)
+        if (Math.abs(dxMin + dxMax) > 1) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Controller not centered (x-axis).");
+            return false;
+        }
+
+        // Scan -Z direction
+        for (dzMin = -1; dzMin >= -MAX_WIDTH / 2; --dzMin) {
+            if (getBlockType(base, 0, 0, dzMin, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
+        }
+        if (dzMin < -MAX_WIDTH / 2) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (z-axis).");
+            return false;
+        }
+        // Scan +Z direction
+        for (dzMax = 1; dzMax <= MAX_WIDTH / 2; ++dzMax) {
+            if (getBlockType(base, 0, 0, dzMax, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
+        }
+        if (dzMax > MAX_WIDTH / 2) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (z-axis).");
+            return false;
+        }
+        if (Math.abs(dzMin + dzMax) > 1) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Controller not centered (z-axis).");
+            return false;
+        }
+
+        if (debugCleanroom) GTLog.out
+            .println("Cleanroom: dxMin=" + dxMin + ", dxMax=" + dxMax + ", dzMin=" + dzMin + ", dzMax=" + dzMax);
+        return true;
+    }
+
+    /**
+     * Verify the ceiling layer: edges must be valid edge blocks, interior must be filters.
+     */
+    private boolean checkCeiling(IGregTechTileEntity base) {
+        for (int dx = dxMin; dx <= dxMax; ++dx) {
+            for (int dz = dzMin; dz <= dzMax; ++dz) {
+                if (dx == 0 && dz == 0) continue; // controller position
+                if (dx == dxMin || dx == dxMax || dz == dzMin || dz == dzMax) {
+                    // Edge
+                    if (!addStructureBlock(base, dx, 0, dz, MASK_CEILING_EDGE)) return false;
+                } else {
+                    // Interior - must be filter
+                    if (!addStructureBlock(base, dx, 0, dz, MASK_CEILING_INTERNAL)) return false;
+                }
             }
-        }
-
-        setCleanroomReceivers(x, y, z, aBaseMetaTileEntity);
-
-        if (doorState) {
-            this.mEfficiency = Math.max(0, this.mEfficiency - 200);
-        }
-        for (final ForgeDirection tSide : ForgeDirection.VALID_DIRECTIONS) {
-            final byte t = (byte) Math.max(1, (byte) (15 / (10000f / this.mEfficiency)));
-            aBaseMetaTileEntity.setInternalOutputRedstoneSignal(tSide, t);
-        }
-        this.mHeight = -y;
-        if (debugCleanroom) {
-            GTLog.out.println("Cleanroom: Check successful.");
         }
         return true;
     }
 
-    private void setCleanroomReceivers(int x, int y, int z, IGregTechTileEntity aBaseMetaTileEntity) {
-        for (int dX = -x + 1; dX <= x - 1; dX++) {
-            for (int dZ = -z + 1; dZ <= z - 1; dZ++) for (int dY = -1; dY >= y + 1; dY--) {
-                TileEntity tTileEntity = aBaseMetaTileEntity.getTileEntityOffset(dX, dY, dZ);
-                if (tTileEntity == null) {
-                    continue;
+    /**
+     * Check one horizontal layer of walls. Doors are only allowed on wall internals, not edges.
+     */
+    private boolean checkWall(IGregTechTileEntity base, int dy) {
+        // Wall internals (allow doors)
+        for (int dx = dxMin + 1; dx <= dxMax - 1; ++dx) {
+            if (!addStructureBlock(base, dx, dy, dzMin, MASK_WALL_INTERNAL)) return false;
+            if (!addStructureBlock(base, dx, dy, dzMax, MASK_WALL_INTERNAL)) return false;
+        }
+        for (int dz = dzMin + 1; dz <= dzMax - 1; ++dz) {
+            if (!addStructureBlock(base, dxMin, dy, dz, MASK_WALL_INTERNAL)) return false;
+            if (!addStructureBlock(base, dxMax, dy, dz, MASK_WALL_INTERNAL)) return false;
+        }
+        // Wall edges/corners (no doors)
+        if (!addStructureBlock(base, dxMin, dy, dzMin, MASK_WALL_EDGE)) return false;
+        if (!addStructureBlock(base, dxMin, dy, dzMax, MASK_WALL_EDGE)) return false;
+        if (!addStructureBlock(base, dxMax, dy, dzMin, MASK_WALL_EDGE)) return false;
+        if (!addStructureBlock(base, dxMax, dy, dzMax, MASK_WALL_EDGE)) return false;
+        return true;
+    }
+
+    /**
+     * Try to interpret a layer as the floor. Only checks interior blocks first (no side effects
+     * on failure). If valid, commits the interior blocks and returns true.
+     */
+    private boolean checkFloor(IGregTechTileEntity base, int dy) {
+        int addedCasings = 0;
+        int addedOther = 0;
+        ArrayList<IGregTechTileEntity> hatchTiles = new ArrayList<>();
+
+        // Check interior blocks without committing
+        for (int dx = dxMin + 1; dx <= dxMax - 1; ++dx) {
+            for (int dz = dzMin + 1; dz <= dzMax - 1; ++dz) {
+                BlockType type = getBlockType(base, dx, dy, dz, MASK_FLOOR_INTERNAL);
+                switch (type) {
+                    case CASING:
+                        addedCasings++;
+                        break;
+                    case GLASS:
+                    case OTHER:
+                        addedOther++;
+                        break;
+                    case HATCH:
+                        IGregTechTileEntity te = base.getIGregTechTileEntityOffset(dx, dy, dz);
+                        hatchTiles.add(te);
+                        addedOther++;
+                        break;
+                    case INVALID:
+                        return false; // not a floor at this level
+                    default:
+                        break;
                 }
-                if (tTileEntity instanceof ICleanroomReceiver receiver) {
-                    receiver.setCleanroom(this);
-                    cleanroomReceivers.add(receiver);
-                } else { // new cleanroom system with Capabilities
-                    ICleanroomReceiver receiver = Capabilities.getCapability(tTileEntity, ICleanroomReceiver.class);
+            }
+        }
+
+        // Register hatches first; abort without modifying counts if any fails
+        for (IGregTechTileEntity te : hatchTiles) {
+            if (!this.addToMachineList(te, CASING_INDEX)) {
+                IMetaTileEntity mte = te.getMetaTileEntity();
+                if (!(mte instanceof MTEBasicHull)) {
+                    if (debugCleanroom) GTLog.out.println("Cleanroom: Incorrect GT block on floor.");
+                    return false;
+                }
+            }
+        }
+
+        // All valid, commit counts
+        casingCount += addedCasings;
+        otherCount += addedOther;
+        return true;
+    }
+
+    // endregion
+
+    @Override
+    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+        repairMachine();
+
+        this.mUpdate = 100;
+        cleanroomReceivers.forEach(r -> r.setCleanroom(null));
+        cleanroomReceivers.clear();
+
+        casingCount = 0;
+        otherCount = 0;
+        isDoorOpen = false;
+
+        if (debugCleanroom) GTLog.out.println("Cleanroom: Starting structure check.");
+
+        // Step 1: Detect size & verify ceiling.
+        // Optimization: try cached size first, only re-detect if ceiling check fails.
+        if (dyMin == 0 || !checkCeiling(aBaseMetaTileEntity)) {
+            casingCount = 0;
+            otherCount = 0;
+            if (!checkSize(aBaseMetaTileEntity)) return false;
+            if (!checkCeiling(aBaseMetaTileEntity)) return false;
+        }
+
+        // Step 2: Scan downward. Each level is either a wall or the floor.
+        for (dyMin = -1; dyMin >= -(MAX_HEIGHT - 1); --dyMin) {
+            if (dyMin < -2 && checkFloor(aBaseMetaTileEntity, dyMin)) {
+                // Found valid floor interior. Now check floor edges.
+                for (int dx = dxMin; dx <= dxMax; ++dx) {
+                    if (!addStructureBlock(aBaseMetaTileEntity, dx, dyMin, dzMin, MASK_FLOOR_EDGE)) return false;
+                    if (!addStructureBlock(aBaseMetaTileEntity, dx, dyMin, dzMax, MASK_FLOOR_EDGE)) return false;
+                }
+                for (int dz = dzMin + 1; dz <= dzMax - 1; ++dz) {
+                    if (!addStructureBlock(aBaseMetaTileEntity, dxMin, dyMin, dz, MASK_FLOOR_EDGE)) return false;
+                    if (!addStructureBlock(aBaseMetaTileEntity, dxMax, dyMin, dz, MASK_FLOOR_EDGE)) return false;
+                }
+                break;
+            } else {
+                // Not floor, check as wall layer
+                if (!checkWall(aBaseMetaTileEntity, dyMin)) return false;
+            }
+        }
+        if (dyMin < -(MAX_HEIGHT - 1)) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Too tall.");
+            return false;
+        }
+        mHeight = -dyMin + 1;
+
+        if (debugCleanroom) GTLog.out.println(
+            "Cleanroom: Structure complete. Found " + casingCount + " casings, " + otherCount + " other blocks.");
+
+        // Step 3: Validate totals
+        if (casingCount < 20) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Could not find 20 Plascrete.");
+            return false;
+        }
+        if (casingCount + otherCount > 0
+            && (otherCount * 100) / (casingCount + otherCount) > maxReplacementPercentage) {
+            if (debugCleanroom) GTLog.out.println("Cleanroom: Too many non-plascrete blocks.");
+            return false;
+        }
+
+        // Step 4: Register cleanroom receivers inside the room
+        for (int dy = dyMin + 1; dy < 0; ++dy) {
+            for (int dx = dxMin + 1; dx <= dxMax - 1; ++dx) {
+                for (int dz = dzMin + 1; dz <= dzMax - 1; ++dz) {
+                    TileEntity te = aBaseMetaTileEntity.getTileEntityOffset(dx, dy, dz);
+                    if (te == null) continue;
+                    ICleanroomReceiver receiver;
+                    if (te instanceof ICleanroomReceiver r) {
+                        receiver = r;
+                    } else { // new cleanroom system with Capabilities
+                        receiver = Capabilities.getCapability(te, ICleanroomReceiver.class);
+                    }
                     if (receiver != null) {
                         receiver.setCleanroom(this);
                         cleanroomReceivers.add(receiver);
@@ -427,6 +560,18 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
                 }
             }
         }
+
+        // Step 5: Apply door penalty and redstone output
+        if (isDoorOpen) {
+            this.mEfficiency = Math.max(0, this.mEfficiency - 200);
+        }
+        for (final ForgeDirection tSide : ForgeDirection.VALID_DIRECTIONS) {
+            final byte t = (byte) Math.max(1, (byte) (15 / (10000f / this.mEfficiency)));
+            aBaseMetaTileEntity.setInternalOutputRedstoneSignal(tSide, t);
+        }
+
+        if (debugCleanroom) GTLog.out.println("Cleanroom: Check successful.");
+        return true;
     }
 
     @Override
@@ -472,7 +617,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
 
     @Override
     public void construct(ItemStack itemStack, boolean b) {
-        int i = Math.min(itemStack.stackSize, maxX / 2);
+        int i = Math.min(itemStack.stackSize, MAX_WIDTH / 2);
         IGregTechTileEntity baseEntity = this.getBaseMetaTileEntity();
         World world = baseEntity.getWorld();
         int x = baseEntity.getXCoord();
@@ -491,92 +636,36 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         }
     }
 
-    // @Override
-    // public void loadNBTData(NBTTagCompound aNBT) {
-    // aNBT.getLong("bufferedEU");
-    // super.loadNBTData(aNBT);
-    // }
+    // region Config
 
-    // @Override
-    // public void saveNBTData(NBTTagCompound aNBT) {
-    //// aNBT.setLong("bufferedEU", bufferedEU);
-    // super.saveNBTData(aNBT);
-    // }
+    private static final HashSet<String> allowedBlocks = new HashSet<>();
+    private static int maxReplacementPercentage = 30;
 
-    private static class ConfigEntry {
+    private static final String CONFIG_CATEGORY = "tst_cleanroom";
 
-        final int percentage;
-        final int allowedCount;
-
-        ConfigEntry(int percentage, int count) {
-            this.percentage = percentage;
-            this.allowedCount = count;
-        }
-    }
-
-    private static final HashMap<String, ConfigEntry> config = new HashMap<>();
-    private static final String category = "cleanroom_allowed_blocks";
-
-    private static void setDefaultConfigValues(Configuration cfg) {
-        cfg.get("cleanroom_allowed_blocks.manaGlass", "Name", "tile.manaGlass");
-        cfg.get("cleanroom_allowed_blocks.manaGlass", "Percentage", 50);
-        cfg.get("cleanroom_allowed_blocks.elfGlass", "Name", "tile.elfGlass");
-        cfg.get("cleanroom_allowed_blocks.elfGlass", "Percentage", 50);
-        cfg.get("cleanroom_allowed_blocks.reinforced_glass", "Name", "blockAlloyGlass");
-        cfg.get("cleanroom_allowed_blocks.reinforced_glass", "Percentage", 5);
-        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Name", "BW_GlasBlocks");
-        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Percentage", 50);
-        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass_0", "Meta", 0);
-        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass", "Name", "BW_GlasBlocks");
-        cfg.get("cleanroom_allowed_blocks.bw_reinforced_glass", "Percentage", 100);
-        cfg.get("cleanroom_allowed_blocks.elevator", "Name", "tile.openblocks.elevator");
-        cfg.get("cleanroom_allowed_blocks.elevator", "Count", 1);
-        cfg.get("cleanroom_allowed_blocks.travel_anchor", "Name", "tile.blockTravelAnchor");
-        cfg.get("cleanroom_allowed_blocks.travel_anchor", "Count", 1);
-        cfg.get("cleanroom_allowed_blocks.warded_glass", "Name", "tile.blockCosmeticOpaque");
-        cfg.get("cleanroom_allowed_blocks.warded_glass", "Meta", 2);
-        cfg.get("cleanroom_allowed_blocks.warded_glass", "Percentage", 50);
-        cfg.get("cleanroom_allowed_blocks.ethereal_glass", "Name", "tile.extrautils:etherealglass");
-        cfg.get("cleanroom_allowed_blocks.ethereal_glass", "Percentage", 50);
-    }
+    private static final String[] DEFAULT_ALLOWED_BLOCKS = { "BW_GlasBlocks", "tile.openblocks.elevator",
+        "tile.openblocks.elevator_rotating", "tile.blockTravelAnchor", "tile.blockCosmeticOpaque:2",
+        "tile.extrautils:etherealglass", };
 
     public static void loadConfig(Configuration cfg) {
-        if (!cfg.hasCategory(category)) setDefaultConfigValues(cfg);
-        for (ConfigCategory cc : cfg.getCategory(category)
-            .getChildren()) {
-            final String name = cc.get("Name")
-                .getString();
-            if (cc.containsKey("Count")) {
-                if (cc.containsKey("Meta")) config.put(
-                    name + ":"
-                        + cc.get("Meta")
-                            .getInt(),
-                    new ConfigEntry(
-                        0,
-                        cc.get("Count")
-                            .getInt()));
-                else config.put(
-                    name,
-                    new ConfigEntry(
-                        0,
-                        cc.get("Count")
-                            .getInt()));
-            } else if (cc.containsKey("Percentage")) {
-                if (cc.containsKey("Meta")) config.put(
-                    name + ":"
-                        + cc.get("Meta")
-                            .getInt(),
-                    new ConfigEntry(
-                        cc.get("Percentage")
-                            .getInt(),
-                        0));
-                else config.put(
-                    name,
-                    new ConfigEntry(
-                        cc.get("Percentage")
-                            .getInt(),
-                        0));
-            }
-        }
+        maxReplacementPercentage = cfg.getInt(
+            "maxReplacementPercentage",
+            CONFIG_CATEGORY,
+            30,
+            0,
+            100,
+            "Maximum percentage of plascrete blocks that can be replaced by other valid blocks (glass, doors, hatches, etc.).");
+
+        String[] blockList = cfg.getStringList(
+            "allowedBlocks",
+            CONFIG_CATEGORY,
+            DEFAULT_ALLOWED_BLOCKS,
+            "Additional blocks allowed in the cleanroom walls. Format: <unlocalized name> or <unlocalized name>:<meta>. "
+                + "Note: EV+ tier glass (as registered in GlassTier) is always allowed regardless of this list.");
+
+        allowedBlocks.clear();
+        Collections.addAll(allowedBlocks, blockList);
     }
+
+    // endregion
 }
