@@ -2316,6 +2316,7 @@ Tooltip_MegaNqReactor_01=§aHuman resource Friendly!
 Tooltip_MegaNqReactor_02=Similar to §5LNR§7, Maximum of§b 1,000 §7parallels
 Tooltip_MegaNqReactor_03=§aContinuous operation reduces coolant/excited liquid consumption
 Tooltip_MegaNqReactor_04=Up to §550%§7. Max in 24h, decays when idle.
+Tooltip_MegaNqReactor_05=§cEnsure sufficient dynamo size, or the machine will shut down.§7
 GUI.MegaNqReactor.RunningTime=Running Time:
 GUI.MegaNqReactor.ConsumptionDiscount=Consumption Discount:
 GUI.MegaNqReactor.CurrentOutput=Current Output:
