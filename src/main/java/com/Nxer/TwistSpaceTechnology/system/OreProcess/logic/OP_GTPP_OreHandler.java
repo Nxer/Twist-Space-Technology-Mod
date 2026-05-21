@@ -21,6 +21,7 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import gregtech.api.enums.Materials;
 import gtPlusPlus.core.material.Material;
 import gtPlusPlus.core.material.MaterialsOres;
+import gtPlusPlus.core.material.nuclear.MaterialsFluorides;
 
 public class OP_GTPP_OreHandler {
 
@@ -50,6 +51,8 @@ public class OP_GTPP_OreHandler {
     }
 
     public static void processGTPPOreRecipes() {
+        processGTPPSpecialOre();
+
         for (Material ore : addSpecials(getGTPPOreMaterials())) {
             TST_RecipeBuilder.builder()
                 .itemInputs(ore.getOre(1))
@@ -71,6 +74,23 @@ public class OP_GTPP_OreHandler {
             }
 
         }
+    }
+
+    public static void processGTPPSpecialOre() {
+        TST_RecipeBuilder.builder()
+            .itemInputs(MaterialsFluorides.FLUORITE.getOre(1))
+            .itemOutputs(MaterialsFluorides.FLUORITE.getDust(64))
+            .fluidInputs(Materials.Lubricant.getFluid(1))
+            .eut(OreProcessRecipeEUt)
+            .duration(OreProcessRecipeDuration)
+            .addTo(GTCMRecipe.OreProcessingRecipes);
+        TST_RecipeBuilder.builder()
+            .itemInputs(MaterialsFluorides.FLUORITE.getRawOre(1))
+            .itemOutputs(MaterialsFluorides.FLUORITE.getDust(64))
+            .fluidInputs(Materials.Lubricant.getFluid(1))
+            .eut(OreProcessRecipeEUt)
+            .duration(OreProcessRecipeDuration)
+            .addTo(GTCMRecipe.OreProcessingRecipes);
     }
 
 }
