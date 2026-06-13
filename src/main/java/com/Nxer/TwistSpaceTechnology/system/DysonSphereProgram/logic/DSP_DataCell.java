@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailCanHoldPerNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailPowerPoint;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData.markDataDirty;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import java.io.Serializable;
 import java.math.BigInteger;

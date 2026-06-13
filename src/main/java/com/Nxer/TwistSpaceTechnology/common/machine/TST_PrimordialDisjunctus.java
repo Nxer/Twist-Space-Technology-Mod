@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -301,23 +302,23 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     }
 
     @Override
-    protected boolean checkMachine(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack, List<StructureError> errors) {
 
         // This data is set through the structure check so we reset it here
         this.mCasing = 0;
         this.mParallel = 0;
         this.pTier = 0;
         this.cachedEssentiaCoords = generateCoordinate(this.mMufflerHatches);
-        boolean bStructureCheck = checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1);
 
-        // Only reset this data if we have an invalid structure check
-        if (!bStructureCheck) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1, errors)) {
             this.nodeIncrease = 0;
             this.nodePurificationEfficiency = 0;
             this.cachedEssentiaCoords = null;
+            return;
         }
 
-        return bStructureCheck;
+        // Only reset this data if we have an invalid structure check
+
     }
 
     @Override
@@ -350,7 +351,7 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     }
 
     @Override
-    public @NotNull CheckRecipeResult checkProcessing_EM() {
+    public @NotNull CheckRecipeResult checkProcessing() {
         int parallel = (int) this.mParallel;
         if (parallel <= 0) {
             return CheckRecipeResultRegistry.NO_RECIPE;
@@ -387,7 +388,6 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
             .setDurationDecreasePerOC(2)
             .calculate();
 
-        useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
 
@@ -418,8 +418,8 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     }
 
     @Override
-    protected void addClassicOutputs_EM() {
-        super.addClassicOutputs_EM();
+    protected void outputAfterRecipe() {
+        super.outputAfterRecipe();
         fillEssentiaOutputHatch();
     }
 
@@ -709,38 +709,13 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        structureBuild_EM(STRUCTURE_PIECE_MAIN, 7, 16, 1, stackSize, hintsOnly);
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 7, 16, 1);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
 
         return new TST_PrimordialDisjunctus(this.mName);
-    }
-
-    @Override
-    public final boolean shouldCheckMaintenance() {
-        return false;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public boolean doRandomMaintenanceDamage() {
-        return true;
-    }
-
-    @Override
-    public boolean willExplodeInRain() {
-        return false;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
     }
 
     @Override

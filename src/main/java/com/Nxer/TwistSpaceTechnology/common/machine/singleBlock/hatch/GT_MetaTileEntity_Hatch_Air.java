@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfi
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;

@@ -20,8 +20,8 @@ public class TSTGeneratedItem extends MetaGeneratedItemX32 {
     private void registerAllSubTypes() {
         ResearchOnAncientPA = addItem(
             0,
-            "Research on Ancient Processing Array",
-            "People found an ancient machine called Processing Array, and done researches on it, to find a way to replicate it.");
+            $ -> "Research on Ancient Processing Array",
+            $ -> "People found an ancient machine called Processing Array, and done researches on it, to find a way to replicate it.");
         GTCMItemList.ResearchOnAncientPA.set(ResearchOnAncientPA);
     }
 }

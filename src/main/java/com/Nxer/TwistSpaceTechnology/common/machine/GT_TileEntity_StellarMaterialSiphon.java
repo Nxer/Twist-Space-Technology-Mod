@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAntiGravityBlock;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationStructureBlock;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static net.minecraft.util.EnumChatFormatting.BLUE;
 import static net.minecraft.util.EnumChatFormatting.DARK_PURPLE;

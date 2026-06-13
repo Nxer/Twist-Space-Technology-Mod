@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+import gregtech.common.tileentities.machines.multi.MTETreeFarm;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -18,7 +19,6 @@ import gregtech.common.gui.modularui.UIHelper;
 import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;
-import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm;
 
 public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 

@@ -252,7 +252,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             return;
         }
 
-        return false;
     }
 
     private void updateHatchTexture() {

@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
@@ -121,8 +122,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
 
     @Override
     public Fluid getFluidToGenerate() {
-        return FluidUtils.getFluidStack(AlchemicalWizardry.lifeEssenceFluid, 1)
-            .getFluid();
+        return AlchemicalWizardry.lifeEssenceFluid;
     }
 
     @Override
@@ -164,8 +164,8 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_INACTIVE) };
     }
 
-    @Override
-    public boolean addFluidToHatch(long aTick) {
+
+    public boolean addFluidToHatchNow() {
         if (!getBaseMetaTileEntity().isServerSide()) { // I don't know where to check if remote. :(
             return false;
         }
@@ -184,7 +184,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         int maxDrainAmount = MathUtils.clamp(getCapacity() - getFluidAmount(), 0, getMaxCanDrainFromOrb());
         int drainedAmount = drainFromOrb(maxDrainAmount);
         if (drainedAmount > 0) {
-            super.fill(FluidUtils.getFluidStack(getFluidToGenerate(), drainedAmount), true);
+            super.fill(new FluidStack(getFluidToGenerate(), drainedAmount), true);
             return true;
         }
 
@@ -220,7 +220,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
                 if (this.getOrbItemStack() == null) { // remove the remaining bloods if the orb is not present
                     this.mFluid = null;
                 } else { // canTankBeFilled() will always be true, ignored
-                    this.addFluidToHatch(aTick);
+                    this.addFluidToHatchNow();
                 }
                 this.mProgresstime = 0;
             }
@@ -231,6 +231,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             this.mMaxProgresstime = 0;
         }
     }
+
 
     @Override
     public boolean isValidSlot(final int aIndex) {

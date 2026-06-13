@@ -170,18 +170,20 @@ public class EGSArtificialGreenHouseOutputBucket {
     private void createMoreSeeds(@NotNull TST_MegaTreeFarm greenhouse) {
         greenhouse.getControllerSlot().stackSize = 64;
 
-        if (ItemList.IC2_Crop_Seeds.isStackEqual(greenhouse.getControllerSlot(), true, true)) {
-            if (greenhouse.getControllerSlot()
-                .hasTagCompound()) {
-                NBTTagCompound nbt = greenhouse.getControllerSlot()
-                    .getTagCompound();
-                if (nbt.hasKey("growth") && nbt.hasKey("gain") && nbt.hasKey("resistance")) {
-                    nbt.setInteger("growth", 31);
-                    nbt.setInteger("gain", 31);
-                    nbt.setInteger("resistance", 1);
-                }
-            }
-        }
+//        if (ItemList.IC2_Crop_Seeds.isStackEqual(greenhouse.getControllerSlot(), true, true)) {
+//            if (greenhouse.getControllerSlot()
+//                .hasTagCompound()) {
+//                NBTTagCompound nbt = greenhouse.getControllerSlot()
+//                    .getTagCompound();
+//                if (nbt.hasKey("growth") && nbt.hasKey("gain") && nbt.hasKey("resistance")) {
+//                    nbt.setInteger("growth", 31);
+//                    nbt.setInteger("gain", 31);
+//                    nbt.setInteger("resistance", 1);
+//                }
+//            }
+//        }
+
+
     }
 
     /**
@@ -238,7 +240,8 @@ public class EGSArtificialGreenHouseOutputBucket {
         Item item = seed.getItem();
 
         // Ic2 check
-        if (ItemList.IC2_Crop_Seeds.isStackEqual(seed, true, true)) {
+//        if (ItemList.IC2_Crop_Seeds.isStackEqual(seed, true, true)) {
+        if (false) {
             if (seed.hasTagCompound()) {
                 NBTTagCompound nbt = seed.getTagCompound();
                 if (nbt.hasKey("growth") && nbt.hasKey("gain") && nbt.hasKey("resistance")) {
@@ -413,12 +416,15 @@ public class EGSArtificialGreenHouseOutputBucket {
     }
 
     public boolean isSeedSupported() {
+        return false;
+
         if (seed == null) {
             return false;
         }
 
         // Ic2 check
-        if (ItemList.IC2_Crop_Seeds.isStackEqual(seed, true, true)) {
+//        if (ItemList.IC2_Crop_Seeds.isStackEqual(seed, true, true)) {
+        if (false) {
             if (seed.hasTagCompound()) {
                 NBTTagCompound nbt = seed.getTagCompound();
                 if (nbt.hasKey("growth") && nbt.hasKey("gain") && nbt.hasKey("resistance")) {

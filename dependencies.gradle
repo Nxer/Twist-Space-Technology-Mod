@@ -58,6 +58,7 @@ dependencies {
     implementation(gtnh("EnderCore"))
     implementation(gtnh("Galaxy-Space-GTNH"))
     implementation(gtnh("ForestryMC"))
+//    implementation(gtnh("CropsNH"))
     compileOnly(deobfCurse('witchery-69673:2234410'))
     compileOnly(gtnh("amunra"))
     compileOnly(gtnh("twilightforest"))
@@ -95,6 +96,12 @@ dependencies {
     implementation('com.google.auto.value:auto-value-annotations:1.10.1')
     annotationProcessor('com.google.auto.value:auto-value:1.10.1')
     //These 2 deps are for mixin
+
+    // jvmDowngrader
+    compileOnly("javax.xml.bind:jaxb-api:2.3.1")
+    compileOnly("org.jetbrains:annotations:26.0.1")
+    compileOnly("org.projectlombok:lombok:1.18.42") { transitive = false }
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
 
 }
 

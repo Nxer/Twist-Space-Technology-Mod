@@ -10,6 +10,11 @@ public class SimpleStructureErrors {
     // #zh_CN 代码存在结构定义错误
     public static TranslatableStructureError internal_structure_issue = StructureErrors.of("TST.SimpleStructureErrors.internal_structure_issue");
 
+    // #tr TST.SimpleStructureErrors.simple_structure_issue
+    // # Structure is wrong.
+    // #zh_CN 机器结构存在错误
+    public static TranslatableStructureError simple_structure_issue = StructureErrors.of("TST.SimpleStructureErrors.simple_structure_issue");
+
     // #tr TST.SimpleStructureErrors.tiered_structure_issue
     // # Something wrong with tiered blocks.
     // #zh_CN 等级方块存在放置错误

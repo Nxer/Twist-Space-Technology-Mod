@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.extremeCraftRecipesMap;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.visualExtremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -26,6 +27,8 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -96,11 +99,14 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import org.joml.Math;
 import scala.actors.migration.pattern;
+import scala.collection.mutable.StringBuilder;
+import scala.tools.nsc.doc.model.Object;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
-public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
+public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCraftingCenter>
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
 
     // region Class Constructor
@@ -112,6 +118,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected TST_MegaCraftingCenter(String aName) {
         super(aName);
     }
+
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -721,7 +728,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    protected @NotNull CheckRecipeResult checkProcessing_EM() {
+    public @NotNull CheckRecipeResult checkProcessing() {
 
         if (toReturnPatterns) {
             toReturnPatterns = false;
@@ -822,8 +829,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick_EM(aBaseMetaTileEntity);
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
         getProxy().onReady();
     }
 
@@ -859,17 +866,19 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         mPatternAccessHatch.clear();
         maintenance_EM();
-        if (structureCheck_EM("MAIN", 3, 3, 0)) {
-            if (mPatternAccessHatch.size() > 1) {
-                mPatternAccessHatch.clear();
-                return false;
-            }
-            return !mOutputBusses.isEmpty();
+        if (!checkPiece("MAIN", 3, 3, 0, errors)) return;
+
+        if (mPatternAccessHatch.size() > 1) {
+            mPatternAccessHatch.clear();
+            errors.add(special_hatch_amount_wrong);
+            return;
         }
-        return false;
+
+        checkHasOutputBus(errors);
+
     }
 
     protected void maintenance_EM() {
@@ -910,8 +919,9 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     // region Structure
     protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
 
+
     @Override
-    public IStructureDefinition<TST_MegaCraftingCenter> getStructure_EM() {
+    public IStructureDefinition<TST_MegaCraftingCenter> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaCraftingCenter>builder()
                 .addShape(

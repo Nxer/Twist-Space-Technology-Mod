@@ -4,10 +4,13 @@ import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Dynamo;
+import static gregtech.api.enums.HatchElement.ExoticDynamo;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.ItemList.Machine_HV_LightningRod;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static net.minecraftforge.common.util.ForgeDirection.EAST;
 import static net.minecraftforge.common.util.ForgeDirection.NORTH;
@@ -21,6 +24,9 @@ import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElem
 import java.util.ArrayList;
 import java.util.List;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -68,18 +74,17 @@ import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
-public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements IConstructable, ISurvivalConstructable {
+public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire> implements IConstructable, ISurvivalConstructable {
 
     // region Construct
     public GTCM_LightningSpire(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
-        super.useLongPower = true;
     }
 
     public GTCM_LightningSpire(String name) {
         super(name);
-        super.useLongPower = true;
     }
+
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -119,8 +124,9 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     };
     //spotless:on
 
+
     @Override
-    public IStructureDefinition<GTCM_LightningSpire> getStructure_EM() {
+    public IStructureDefinition<GTCM_LightningSpire> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GTCM_LightningSpire>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
@@ -130,7 +136,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                 .addElement(
                     'B',
                     buildHatchAdder(GTCM_LightningSpire.class)
-                        .atLeast(Dynamo.or(DynamoMulti), InputBus, InputHatch, OutputBus)
+                        .atLeast(Dynamo.or(ExoticDynamo), InputBus, InputHatch, OutputBus)
                         .hint(1)
                         .casingIndex(textureOffset + 16 + 6)
                         .buildAndChain(sBlockCasingsBA0, 6))
@@ -140,16 +146,15 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors)) return;
         setLightningPosition(getBaseMetaTileEntity().getFrontFacing());
-        return true;
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        structureBuild_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, stackSize, hintsOnly);
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
     }
 
     @Override
@@ -185,7 +190,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
     private int aZ;
 
     @Override
-    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         if (aBaseMetaTileEntity.isServerSide()) {
             if (null == MOLTEN_IRON) {
                 MOLTEN_IRON = Materials.Iron.getMolten(1)
@@ -236,7 +241,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
 
     @Override
     @NotNull
-    public CheckRecipeResult checkProcessing_EM() {
+    public CheckRecipeResult checkProcessing() {
 
         if (OperatingMode == 0 && tRods > 0) {
             List<FluidStack> tFluids = getStoredFluids();
@@ -367,7 +372,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                 }
             }
 
-            for (MTEHatchDynamoMulti eDynamo : eDynamoMulti) {
+            for (MTEHatch eDynamo : mExoticDynamoHatches) {
                 if (eDynamo == null || !eDynamo.isValid()) {
                     continue;
                 }
@@ -424,7 +429,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
         int colorIndex, boolean active, boolean redstoneLevel) {
         if (side == facing) {
             return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][16 + 6],
-                new TTRenderedExtendedFacingTexture(active ? TTMultiblockBase.ScreenON : TTMultiblockBase.ScreenOFF) };
+                new TTRenderedExtendedFacingTexture(active ? OVERLAY_DTPF_ON : OVERLAY_DTPF_OFF) };
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][16 + 6] };
     }
@@ -535,16 +540,6 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
             GTUtility.sendChatToPlayer(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
             return true;
         }
-        return false;
-    }
-
-    @Override
-    public boolean isPowerPassButtonEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isSafeVoidButtonEnabled() {
         return false;
     }
 

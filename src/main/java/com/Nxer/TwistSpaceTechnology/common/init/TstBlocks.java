@@ -50,7 +50,7 @@ public class TstBlocks {
     public static final SpaceStationStructureCasing SpaceStationStructureBlock = new SpaceStationStructureCasing();
 
     public static final SpaceStationAntiGravityCasing SpaceStationAntiGravityBlock = new SpaceStationAntiGravityCasing();
-    public static Block MetalBlock;
+//    public static Block MetalBlock;
     public static final Block BlockStar = new BlockStar();
     public static final Block BlockEyeOfWoodRender = new BlockEyeOfWoodRender();
     public static final Block NuclearReactorBlock = new BlockNuclearReactor();

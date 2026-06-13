@@ -63,10 +63,10 @@ public class TstMetaBlockItem extends ItemBlock {
     // -----------------------
     // region Member Variables
 
-    public final String mNoMobsToolTip = GTLanguageManager
-        .addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
-    public final String mNoTileEntityToolTip = GTLanguageManager
-        .addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
+    public static final String mNoMobsToolTip = GTLanguageManager
+        .getTranslation("gt.nomobspawnsonthisblock");
+    public static final String mNoTileEntityToolTip = GTLanguageManager
+        .getTranslation("gt.notileentityinthisblock");
 
     // endregion
     // -----------------------

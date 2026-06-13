@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static gregtech.api.enums.GTValues.V;
 
 import java.util.List;

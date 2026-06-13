@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

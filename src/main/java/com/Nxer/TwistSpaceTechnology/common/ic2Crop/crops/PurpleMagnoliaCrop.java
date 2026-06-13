@@ -52,7 +52,6 @@ public class PurpleMagnoliaCrop extends AbstractTstCrop {
         return 5;
     }
 
-    @Override
     public ItemStack getDisplayItem() {
         return GTCMItemList.PurpleMagnoliaPetal.get(1);
     }

@@ -10,6 +10,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -19,8 +20,8 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
-import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
+import static gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
+import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +34,8 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -174,7 +177,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     @Override
     public boolean canButtonSwitchMode() {
-        return checkStructure(true);
+        return checkStructure(true, getBaseMetaTileEntity());
     }
 
     @Override
@@ -306,7 +309,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
-            if (!checkStructure(true)) {
+            if (!checkStructure(true, getBaseMetaTileEntity())) {
                 GTUtility.sendChatToPlayer(
                     aPlayer,
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
@@ -355,8 +358,15 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         // setDebugEnabled(true);
-        return checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7)
-            & checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9);
+        if (!checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7, errors)) {
+            return;
+        }
+        if (!checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9, errors)) {
+            // #tr TST_MegaTreeFarm.StructureErrors.no_water_block
+            // # Place a water block at the specific location on the top of the machine structure.
+            // #zh_CN 在机器结构顶部的特定位置放置水方块
+            errors.add(StructureErrors.of("TST_MegaTreeFarm.StructureErrors.no_water_block"));
+        }
     }
 
     @Override

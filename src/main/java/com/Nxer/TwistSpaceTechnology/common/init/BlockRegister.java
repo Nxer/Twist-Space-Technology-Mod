@@ -455,16 +455,16 @@ public class BlockRegister {
         // end region
 
         // MaterialBlock
-        TstBlocks.MetalBlock = new BlockMetal(
-            "tst.blockmetal01",
-            new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium,
-                MaterialsTST.Dubnium },
-            OrePrefixes.block,
-            new IIconContainer[] { Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockNeutroniumAlloy"),
-                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonisAlloy"),
-                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonium"),
-                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockDubnium") });
-
+        // spotless:off
+//        TstBlocks.MetalBlock = new BlockMetal(
+//            "tst.blockmetal01",
+//            new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium, MaterialsTST.Dubnium },
+//            OrePrefixes.block,
+//            new IIconContainer[] { Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockNeutroniumAlloy"),
+//                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonisAlloy"),
+//                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonium"),
+//                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockDubnium") });
+        // spotless:on
         // region PhotonControllerUpgrade
 
         // #tr tile.PhotonControllerUpgrades.0.name

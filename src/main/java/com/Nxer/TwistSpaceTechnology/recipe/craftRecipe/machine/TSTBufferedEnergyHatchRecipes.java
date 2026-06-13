@@ -44,13 +44,13 @@ public class TSTBufferedEnergyHatchRecipes {
 
     public static void loadRecipes() {
         final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),

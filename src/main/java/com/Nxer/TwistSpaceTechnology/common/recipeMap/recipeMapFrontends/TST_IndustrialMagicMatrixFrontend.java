@@ -24,7 +24,7 @@ public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(uiPropertiesBuilder, neiPropertiesBuilder);
         this.itemRowCount = getItemRowCount();
-        neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount * 18));
+//        neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount * 18));
     }
 
     @Override

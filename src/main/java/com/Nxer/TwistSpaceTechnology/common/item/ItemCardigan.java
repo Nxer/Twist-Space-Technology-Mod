@@ -49,6 +49,8 @@ import ic2.api.item.IElectricItem;
 import ic2.core.init.InternalName;
 import ic2.core.item.armor.ItemArmorElectric;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 @EventBusSubscriber
 public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 

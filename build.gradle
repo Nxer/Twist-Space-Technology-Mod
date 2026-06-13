@@ -16,7 +16,7 @@ configurations.configureEach {
 
 configurations.all {
     resolutionStrategy {
-        force 'com.github.GTNewHorizons:ForestryMC:4.10.17:dev'
+        force 'com.github.GTNewHorizons:GTNHLib:0.11.11:dev'
     }
 }
 

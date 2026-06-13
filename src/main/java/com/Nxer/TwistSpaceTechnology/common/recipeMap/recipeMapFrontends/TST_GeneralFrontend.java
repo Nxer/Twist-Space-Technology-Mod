@@ -20,7 +20,7 @@ public class TST_GeneralFrontend extends RecipeMapFrontend {
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(uiPropertiesBuilder.logoPos(new Pos2d(79, 7)), neiPropertiesBuilder);
         this.itemRowCount = getItemRowCount();
-        neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount + getFluidRowCount()) * 18);
+//        neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount + getFluidRowCount()) * 18);
     }
 
     private int getItemRowCount() {
