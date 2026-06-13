@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -535,6 +534,8 @@ public class TCResearches {
                     .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
         }
+
+        /*
         if (Config.Enable_EssentiaDiscretizer) {
             // #tr tc.research_name.ESSENTIA_DISCRETIZER
             // # Essentia Discretizer
@@ -566,6 +567,11 @@ public class TCResearches {
                     new ResearchPage(infusionRecipeEssentiaDiscretizer))
                     .setParents("TST_WELCOME")
                     .registerResearchItem();
-        }
+        }*/
+
+
+
+
+
     }
 }

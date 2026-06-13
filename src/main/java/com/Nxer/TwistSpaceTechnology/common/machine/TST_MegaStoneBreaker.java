@@ -20,9 +20,11 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.ParallelHelper.addItemsLong;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -185,9 +187,9 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // region Structure
 
@@ -236,7 +238,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
                     HatchElementBuilder.<TST_MegaStoneBreaker>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_MegaStoneBreaker::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TAE.getIndexFromPage(1, 0))
                         .buildAndChain(ModBlocks.blockCasings2Misc, 0))
                 .addElement(
@@ -244,14 +246,14 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
                     buildHatchAdder(TST_MegaStoneBreaker.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_MegaStoneBreaker::addLavaHatch)
                         .casingIndex(TAE.getIndexFromPage(1, 0))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(ModBlocks.blockCasings2Misc, 0))
                 .addElement(
                     'W',
                     buildHatchAdder(TST_MegaStoneBreaker.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_MegaStoneBreaker::addWaterHatch)
                         .casingIndex(TAE.getIndexFromPage(1, 0))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(ModBlocks.blockCasings2Misc, 0))
                 .build();
         }

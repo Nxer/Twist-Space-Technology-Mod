@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.hatch_tier_incompatible;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
@@ -17,10 +18,12 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -143,27 +146,28 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        Object[][] pieces = {
-            // Gas shape 1 tier
-            { STRUCTURE_PIECE_GAS, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, 1 },
-            // Fuel shape 2 tier
-            { STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, 2 } };
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        clearHatches();
 
-        for (Object[] piece : pieces) {
-            clearHatches();
-            if (checkPiece((String) piece[0], (int) piece[1], (int) piece[2], (int) piece[3])) {
-                mSetTier = (int) piece[4];
-                break;
-            }
+        if (checkPiece(STRUCTURE_PIECE_GAS, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, errors)) {
+            mSetTier = 1;
+        } else if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
+            mSetTier = 2;
         }
 
-        if (mSetTier == 0) return false;
+        if (mSetTier == 0) return;
 
         DYNAMO_AMP = getDynamoAmperage();
         DYNAMO_TIER = getTierDynamo();
 
-        return (this.mCasing >= 45 && checkCountDynamo(2) && !checkMixedDynamo() && setDynamoTier(3, false));
+        checkHasInputHatch(errors);
+        checkCasingMin(errors, mCasing, 45);
+        checkHatchMin(errors, Dynamo, 1);
+        checkHatchMax(errors, Dynamo, 2);
+        if (checkMixedDynamo() || (!setDynamoTier(3, false))) {
+            errors.add(hatch_tier_incompatible);
+        }
+
     }
 
     // endregion
@@ -220,12 +224,12 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         buildHatchAdder(TST_UniversalGenerator.class)
                             .atLeast(Dynamo)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         buildHatchAdder(TST_UniversalGenerator.class)
                             .atLeast(InputHatch)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings1, 11))))
                 .addElement('B',ofBlock(GregTechAPI.sBlockCasings2, 3))

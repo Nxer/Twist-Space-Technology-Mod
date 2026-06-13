@@ -25,7 +25,9 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -240,7 +242,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(InputHatch, OutputHatch)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(176)/* index of stainless steal casing */
-                        .dot(1)/* preview channel of blueprint */
+                        .hint(1)/* preview channel of blueprint */
                         .buildAndChain(GregTechAPI.sBlockCasings8, 0))
                 .addElement(
                     'b',
@@ -248,7 +250,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(InputBus, OutputBus)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(49)/* index of chem inert casing */
-                        .dot(2)/* preview channel of blueprint */
+                        .hint(2)/* preview channel of blueprint */
                         .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement(
                     'e',
@@ -256,7 +258,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(11)
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                 .build();
         }
@@ -313,57 +315,13 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      * @param aStack
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         coilLevel = HeatingCoilLevel.None;
         // this.casingAmountActual = 0; // re-init counter
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
-    /**
-     * Gets the maximum Efficiency that spare Part can get (0 - 10000)
-     *
-     * @param aStack
-     */
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    /**
-     * Gets the damage to the ItemStack, usually 0 or 1.
-     *
-     * @param aStack
-     */
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    /**
-     * If it explodes when the Component has to be replaced.
-     *
-     * @param aStack
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
-    }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {

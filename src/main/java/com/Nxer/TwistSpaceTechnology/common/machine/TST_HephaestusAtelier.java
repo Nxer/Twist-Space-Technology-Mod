@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeDura
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutPerParallel_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -26,10 +27,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -435,16 +438,20 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         coilTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (coilTier == 0) return false;
-        if (coilTier == 1 && mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty()) return false;
-        maxEut = (long) (15d / 16 * getMaxInputEu());
-        maxProcessNormalModeFurnace = (int) Math
-            .min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
-        return true;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (coilTier < 1) {
+            errors.add(tiered_structure_issue);
+            return;
+        }
+        if (coilTier == 1) {
+            checkHasAnyEnergy(errors);
+            maxEut = (long) (15d / 16 * getMaxInputEu());
+            maxProcessNormalModeFurnace = (int) Math.min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
+        }
+
     }
     // endregion
 
@@ -495,7 +502,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                             .<TST_HephaestusAtelier>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy) )
                             .adder(TST_HephaestusAtelier::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(11)
                             .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                     .addElement('B', ofBlock(sBlockCasingsTT, 4))

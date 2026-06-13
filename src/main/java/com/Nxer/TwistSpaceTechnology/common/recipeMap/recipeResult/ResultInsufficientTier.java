@@ -92,7 +92,7 @@ public class ResultInsufficientTier implements CheckRecipeResult {
         return StatCollector.translateToLocalFormatted(
             "tst.gui.text.insufficient_tier",
             StatCollector.translateToLocalFormatted("tst.gui.text.insufficient_tier." + typeRequired),
-            GTUtility.formatNumbers(tierRequired));
+            formatNumber(tierRequired));
     }
 
     @NotNull

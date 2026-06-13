@@ -24,6 +24,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -168,10 +169,10 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         maxParallel = Config.MaxParallel_NetherInterface;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     // endregion
@@ -226,7 +227,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
                             .<TST_NetherInterface>builder()
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                             .adder(TST_NetherInterface::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(16)
                             .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 0))
                     )

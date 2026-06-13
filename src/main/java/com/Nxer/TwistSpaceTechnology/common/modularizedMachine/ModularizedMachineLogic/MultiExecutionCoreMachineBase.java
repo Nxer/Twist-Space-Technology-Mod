@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -136,8 +137,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        if (!super.checkMachine(aBaseMetaTileEntity, aStack)) return false;
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
+        if (!errors.isEmpty()) return;
 
         // 2.5% for wire loss
         maxEutCanUse = (long) (0.975d * getMaxInputEu());
@@ -172,7 +174,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             }
         }
 
-        return true;
     }
 
     @Override

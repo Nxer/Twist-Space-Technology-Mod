@@ -16,7 +16,9 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -104,7 +106,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
                     HatchElementBuilder.<TST_LargeCanner>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_LargeCanner::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(48)
                         .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                 .build();
@@ -113,9 +115,9 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override
@@ -141,35 +143,10 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     // region end
 
     // process
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Canner
-         * 1 - Fluid Canner
-         */
-        return 2;
-    }
-
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    }
-
-    @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("LargeCanner.modeMsg." + mode);
-    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return machineMode == 1 ? RecipeMaps.fluidCannerRecipes : RecipeMaps.cannerRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.fluidCannerRecipes, RecipeMaps.cannerRecipes);
+        return RecipeMaps.cannerRecipes;
     }
 
     @Override

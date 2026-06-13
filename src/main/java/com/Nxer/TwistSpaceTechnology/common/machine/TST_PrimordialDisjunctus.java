@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,7 +43,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
-import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
@@ -68,7 +68,7 @@ import thaumcraft.common.lib.network.fx.PacketFXEssentiaSource;
 import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileEssentiaProvider;
 
-public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
+public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_PrimordialDisjunctus>
     implements IConstructable, ISurvivalConstructable {
 
     public TST_PrimordialDisjunctus(int aID, String aName, String aNameRegional) {
@@ -107,8 +107,8 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private static final int STANDARD_BOOST_REDUCTION = ValueEnum.BoostReduction_PrimordialDisjunctus;
 
     @Override
-    protected void clearHatches_EM() {
-        super.clearHatches_EM();
+    public void clearHatches() {
+        super.clearHatches();
         mEssentiaOutputHatches.clear();
     }
 
@@ -173,8 +173,9 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
         super(mName);
     }
 
+
     @Override
-    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
+    public IStructureDefinition<TST_PrimordialDisjunctus> getStructureDefinition() {
         if (multiDefinition == null) {
             this.multiDefinition = StructureDefinition.<TST_PrimordialDisjunctus>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapePrimordialDisjunctus))
@@ -188,7 +189,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                                 gregtech.api.enums.HatchElement.InputBus,
                                 gregtech.api.enums.HatchElement.InputHatch)
                             .casingIndex(CASING_INDEX)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofSpecificTileAdder(
                             TST_PrimordialDisjunctus::addEssentiaOutputHatchToMachineList,
@@ -300,7 +301,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     @Override
-    protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    protected boolean checkMachine(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
 
         // This data is set through the structure check so we reset it here
         this.mCasing = 0;

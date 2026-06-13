@@ -13,6 +13,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -220,7 +221,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
                     HatchElementBuilder.<TST_BeeEngineer>builder()
                         .atLeast(InputBus, InputHatch, OutputBus)
                         .adder(TST_BeeEngineer::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(CASING_INDEX)
                         .buildAndChain(GregTechAPI.sBlockCasings1, 10))
                 .build();
@@ -272,9 +273,9 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
+        checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
     }
 
     @Override

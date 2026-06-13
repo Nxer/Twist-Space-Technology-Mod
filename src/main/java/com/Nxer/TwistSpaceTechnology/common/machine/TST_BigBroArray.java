@@ -6,6 +6,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
+import static gregtech.api.structure.error.StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
@@ -28,6 +29,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.dreammaster.item.NHItemList;
+import gregtech.api.enums.HatchElement;
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,13 +57,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.dreammaster.gthandler.CustomItemList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -86,7 +92,6 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
@@ -125,9 +130,8 @@ import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
+public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> implements ISurvivalConstructable {
 
     private ItemStack machines;
 
@@ -886,8 +890,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                     int level = itemStack.getItemDamage();
                     return Pair.of(Block.getBlockFromItem(itemStack.getItem()), level);
                 } catch (Exception ex) {
-                    ItemStack itemStack = CustomItemList.valueOf(name)
-                        .get(1);
+                    ItemStack itemStack = NHItemList.valueOf(name)
+                                                    .get(1);
                     int level = itemStack.getItemDamage();
                     return Pair.of(Block.getBlockFromItem(itemStack.getItem()), level);
                 } catch (IllegalAccessError error) {
@@ -1116,7 +1120,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                         gregtech.api.enums.HatchElement.OutputBus.or(gregtech.api.enums.HatchElement.OutputHatch),
                         gregtech.api.enums.HatchElement.Muffler)
                     .adder(TST_BigBroArray::addToMachineList)
-                    .dot(1)
+                    .hint(1)
                     .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(0))
                     .buildAndChain(GregTechAPI.sBlockCasings4, 0))
             .addElement(
@@ -1142,10 +1146,10 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 'F',
                 HatchElementBuilder.<TST_BigBroArray>builder()
                     .atLeast(
-                        HatchElement.DynamoMulti.or(gregtech.api.enums.HatchElement.ExoticEnergy)
+                        HatchElement.ExoticDynamo.or(gregtech.api.enums.HatchElement.ExoticEnergy)
                             .or(gregtech.api.enums.HatchElement.Dynamo))
                     .adder(TST_BigBroArray::addToMachineList)
-                    .dot(2)
+                    .hint(2)
                     .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(1))
                     .buildAndChain(GregTechAPI.sBlockCasings4, 1))
             .addElement(
@@ -1244,10 +1248,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         }
         String front = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE", overlay);
         String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE_GLOW", overlay);
-        Textures.BlockIcons.CustomIcon frontIcon = new Textures.BlockIcons.CustomIcon(front);
-        frontIcon.run();
-        Textures.BlockIcons.CustomIcon frontGlowIcon = new Textures.BlockIcons.CustomIcon(frontGlow);
-        frontGlowIcon.run();
+        IIconContainer frontIcon = Textures.BlockIcons.custom(front);
+        IIconContainer frontGlowIcon = Textures.BlockIcons.custom(frontGlow);
         return new ITexture[] { TextureFactory.builder()
             .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
             .build(),
@@ -1261,8 +1263,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     @Override
-    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick_EM(aBaseMetaTileEntity);
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
     }
 
@@ -1277,10 +1279,8 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         }
         String front = String.format("basicmachines/%s/OVERLAY_FRONT", overlay);
         String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_GLOW", overlay);
-        Textures.BlockIcons.CustomIcon frontIcon = new Textures.BlockIcons.CustomIcon(front);
-        frontIcon.run();
-        Textures.BlockIcons.CustomIcon frontGlowIcon = new Textures.BlockIcons.CustomIcon(frontGlow);
-        frontGlowIcon.run();
+        IIconContainer frontIcon = Textures.BlockIcons.custom(front);
+        IIconContainer frontGlowIcon = Textures.BlockIcons.custom(frontGlow);
         return new ITexture[] { TextureFactory.builder()
             .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
             .build(),
@@ -1360,16 +1360,15 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     public TST_BigBroArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        this.useLongPower = true;
     }
 
     public TST_BigBroArray(String aName) {
         super(aName);
-        this.useLongPower = true;
     }
 
+
     @Override
-    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
+    public IStructureDefinition<TST_BigBroArray> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
     }
 
@@ -1401,16 +1400,15 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     private GTRecipe getNaquadahFuelRecipe(ItemStack stack) {
         if (GTUtility.isStackInvalid(stack) || getRecipeMap() == null) return null;
 
-        GTRecipe tFuel = getRecipeMap().findRecipeQuery()
-            .items(stack)
-            .fluids()
-            .specialSlot(null)
-            .voltage(Long.MAX_VALUE)
-            .cachedRecipe(null)
-            .notUnificated(false)
-            .dontCheckStackSizes(false)
-            .find();
-        return tFuel;
+        return getRecipeMap().findRecipeQuery()
+                             .items(stack)
+                             .fluids()
+                             .specialSlot(null)
+                             .voltage(Long.MAX_VALUE)
+                             .cachedRecipe(null)
+                             .notUnificated(false)
+                             .dontCheckStackSizes(false)
+                             .find();
     }
 
     void consumeFuel(String machineType, FluidStack storedFluid, long liquidFuelValue) {
@@ -1424,11 +1422,11 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
 
     @NotNull
     @Override
-    public CheckRecipeResult checkProcessing_EM() {
+    public CheckRecipeResult checkProcessing() {
         startRecipeProcessing();
         CheckRecipeResult result;
         if (MODE_PROCESSOR.equals(mode)) {
-            result = super.checkProcessing_EM();
+            result = super.checkProcessing();
         } else if (MODE_GENERATOR.equals(mode)) {
             mMaxProgresstime = 20;
             if ("ASP_Solar".equals(machineType) || "EMT_Solar".equals(machineType)) {
@@ -1590,7 +1588,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
             energy -= drain;
             dynamo.setEUVar(dynamo.getEUVar() + drain);
         }
-        for (MTEHatchDynamoMulti dynamo : eDynamoMulti) {
+        for (MTEHatch dynamo : mExoticDynamoHatches) {
             long drain = Math.min(energy, dynamo.maxEUStore() - dynamo.getEUVar());
             energy -= drain;
             dynamo.setEUVar(dynamo.getEUVar() + drain);
@@ -1604,7 +1602,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
     }
 
     @Override
-    protected MultiblockTooltipBuilder getTooltip() {
+    protected MultiblockTooltipBuilder createTooltip() {
         MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new MultiblockTooltipBuilder()
             .addMachineType(TextEnums.BigBroArrayType.toString())
             .addInfo(TextEnums.BigBroArrayName.toString())
@@ -1691,81 +1689,81 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         return blockPlacedCount;
     }
 
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        return getTooltip();
-    }
 
     @Override
-    protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
 
         this.casingTier = -1;
         this.glassTier = -2;
         this.coilTier = HeatingCoilLevel.None;
         this.frameTier = -1;
-        boolean checkPiece = checkPiece("core", 5, 5, 4);
-        if (!checkPiece) return false;
+        if (!checkPiece("core", 5, 5, 4, errors)) return;
         // dynamo hatch level follows casing level
-        if (mDynamoHatches.isEmpty() && eDynamoMulti.isEmpty() && casingTier >= 12) {
+        if (mDynamoHatches.isEmpty() && mExoticDynamoHatches.isEmpty() && casingTier >= 12) {
             isWirelessMode = true;
         } else {
-            for (MTEHatchDynamo mDynamoHatch : mDynamoHatches) {
-                if (casingTier >= 12) {
-                    continue;
+            if (casingTier < 12) {
+                for (MTEHatchDynamo mDynamoHatch : mDynamoHatches) {
+                    if (mDynamoHatch.mTier > casingTier) {
+                        // #tr TST_BigbroArray.hatch_tier_too_large
+                        // # Hatch tier too high.
+                        // #zh_CN 仓室等级过高
+                        errors.add(StructureErrors.of("TST_BigbroArray.hatch_tier_too_large"));
+                        return;
+                    }
                 }
-                if (mDynamoHatch.mTier > casingTier) {
-                    return false;
+                for (MTEHatch gt_metaTileEntity_hatch_dynamoMulti : mExoticDynamoHatches) {
+                    if (gt_metaTileEntity_hatch_dynamoMulti.mTier > casingTier
+                            || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
+                        return;
+                    }
                 }
             }
-            for (MTEHatchDynamoMulti gt_metaTileEntity_hatch_dynamoMulti : eDynamoMulti) {
-                if (casingTier >= 12) {
-                    continue;
-                }
-                if (gt_metaTileEntity_hatch_dynamoMulti.mTier > casingTier
-                    || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
-                    return false;
-                }
-            }
+
         }
+
         // energy hatch level follows glass level
+
+
         for (MTEHatchEnergy mEnergyHatch : mEnergyHatches) {
             if (mEnergyHatch.mTier > glassTier) {
-                return false;
+                errors.add(ENERGY_TIER_EXCEED_GLASS);
+                return;
             }
         }
-        for (MTEHatchEnergyMulti gt_metaTileEntity_hatch_energyMulti : eEnergyMulti) {
+        for (MTEHatch gt_metaTileEntity_hatch_energyMulti : mExoticEnergyHatches) {
             if (Math.min(gt_metaTileEntity_hatch_energyMulti.mTier, 12) > glassTier
                 || (gt_metaTileEntity_hatch_energyMulti instanceof MTEHatchEnergyTunnel && glassTier < 6)) {
-                return false;
+                errors.add(ENERGY_TIER_EXCEED_GLASS);
+
+                return;
             }
         }
 
         this.addonCount = 0;
         int p = 5;
         this.parallelismTier = 0;
-        if (checkPiece("addon0", -6, 23, 6)) {
+        if (checkPiece("addon0", -6, 23, 6, errors)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon1", 7, 23, -7)) {
+        if (checkPiece("addon1", 7, 23, -7, errors)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon2", 22, 23, 6)) {
+        if (checkPiece("addon2", 22, 23, 6, errors)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
         this.parallelismTier = 0;
-        if (checkPiece("addon3", 7, 23, 21)) {
+        if (checkPiece("addon3", 7, 23, 21, errors)) {
             this.addonCount += 1;
             p = Math.min(this.parallelismTier, p);
         }
-        if (mMufflerHatches.size() <= 0) {
-            return false;
-        }
+        checkOneMufflerHatch(errors);
         if (this.addonCount > 0) {
             this.parallelismTier = p;
         } else {
@@ -1778,7 +1776,6 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         this.actualParallelism = calculateParallelismByAddonTier();
         processingLogic.setSpeedBonus((float) Math.pow(0.66, parallelismTier));
         processingLogic.setEuModifier((float) Math.pow(0.9, Math.max(0, coilTier.getTier())));
-        return checkPiece;
     }
 
     private long calculateMaxParallelismByAddonTier() {
@@ -1925,7 +1922,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
         } else {
             hint = MachineHintMessages.MACHINE_TO_OUTPUT;
             // clear
-            addOutput(machines);
+            addOutputPartial(machines);
             machines = null;
             generatorTE = null;
             mode = null;
@@ -2015,7 +2012,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 ItemList.Robot_Arm_IV.get(16),
                 ItemList.Emitter_IV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 8),
-                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 4))
+                GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 4))
             .fluidInputs(Materials.SolderingAlloy.getMolten(9216))
             .itemOutputs(GTCMItemList.ParallelismCasing0.get(1))
 
@@ -2033,7 +2030,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 ItemList.Robot_Arm_ZPM.get(16),
                 ItemList.Emitter_ZPM.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 8),
-                new Object[] { OrePrefixes.circuit.get(Materials.Ultimate), 4 })
+                new Object[] { OrePrefixes.circuit.get(Materials.UV), 4 })
             .itemOutputs(GTCMItemList.ParallelismCasing1.get(1))
             .fluidInputs(
                 Materials.SolderingAlloy.getMolten(9216),
@@ -2052,7 +2049,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 ItemList.Robot_Arm_UHV.get(16),
                 ItemList.Emitter_UHV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 8),
-                new Object[] { OrePrefixes.circuit.get(Materials.Infinite), 4 })
+                new Object[] { OrePrefixes.circuit.get(Materials.UHV), 4 })
             .itemOutputs(GTCMItemList.ParallelismCasing2.get(1))
             .fluidInputs(
                 new FluidStack(MaterialsAlloy.INDALLOY_140.getFluid(), 9216),
@@ -2079,7 +2076,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 GTCMItemList.SolarSail.get(64), ItemList.Casing_FrostProof.get(1),
                 GTCMItemList.ParallelismCasing2.get(16), ItemList.Robot_Arm_UIV.get(16), ItemList.Emitter_UIV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUIV, 64),
-                new Object[] { OrePrefixes.circuit.get(Materials.Optical), 8 } },
+                new Object[] { OrePrefixes.circuit.get(Materials.UIV), 8 } },
             new FluidStack[] { new FluidStack(solderUEV, 9216) },
             GTCMItemList.ParallelismCasing3.get(1),
             20 * 1200,
@@ -2101,7 +2098,7 @@ public class TST_BigBroArray extends TT_MultiMachineBase_EM implements ISurvival
                 ItemList.Emitter_UXV.get(16),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUMV, 8),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 4) },
-            new FluidStack[] { MaterialsUEVplus.SpaceTime.getMolten(9216) },
+            new FluidStack[] { Materials.SpaceTime.getMolten(9216) },
             GTCMItemList.ParallelismCasing4.get(1),
             20 * 1200,
             503316480);

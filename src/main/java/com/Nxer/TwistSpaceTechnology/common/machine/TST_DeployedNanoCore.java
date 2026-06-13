@@ -15,6 +15,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -46,6 +47,8 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.common.blocks.BlockCasings8;
+
+import java.util.List;
 
 public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_DeployedNanoCore> {
 
@@ -128,15 +131,15 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!(checkPiece(STRUCTURE_PIECE_BOTTOM, horizontalOffSetBottom, verticalOffSetBottom, depthOffSetBottom)
-            && checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle, depthOffSetMiddle))) {
+        if (!(checkPiece(STRUCTURE_PIECE_BOTTOM, horizontalOffSetBottom, verticalOffSetBottom, depthOffSetBottom, errors)
+            && checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle, depthOffSetMiddle, errors))) {
             //
-            return false;
+            return;
         }
+
         wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
-        return true;
     }
     // endregion
 
@@ -230,7 +233,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
                     HatchElementBuilder.<TST_DeployedNanoCore>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_DeployedNanoCore::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .build();

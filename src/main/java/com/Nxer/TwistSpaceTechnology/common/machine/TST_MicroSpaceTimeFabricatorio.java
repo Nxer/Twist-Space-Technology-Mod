@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_MicroSpaceTimeFabricatorio;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Safe_Calamity_MicroSpaceTimeFabricatorio;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -18,6 +20,8 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
@@ -188,7 +192,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         specialInputBus = null;
         transcendentCasingTier = -1;
@@ -197,12 +201,18 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         fieldTier = -1;
         enablePerfectOverclock = false;
         speedBonus = 1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (fieldTier < 1) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (fieldTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
+        }
         if (fieldTier > 1) {
             // using homo field block need use homo structure block at same time
             if (Safe_Calamity_MicroSpaceTimeFabricatorio) {
-                if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) return false;
+                if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) {
+                    errors.add(tiered_structure_issue);
+                    return;
+                }
             }
             // using homo field block enable perfect overclock
             enablePerfectOverclock = true;
@@ -214,7 +224,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             }
         }
 
-        return true;
     }
 
     // endregion
@@ -402,7 +411,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                     HatchElementBuilder.<TST_MicroSpaceTimeFabricatorio>builder()
                         .atLeast(InputBus)
                         .adder(TST_MicroSpaceTimeFabricatorio::addSpecialInputBusToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1024 + 12)
                         .buildAndChain(tra))
                 .addElement(
@@ -410,7 +419,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                     HatchElementBuilder.<TST_MicroSpaceTimeFabricatorio>builder()
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_MicroSpaceTimeFabricatorio::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(inj))
                 .build();
@@ -481,15 +490,15 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         return tooltip;
     }
 
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
+        ActiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
+        InactiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
         super.registerIcons(aBlockIconRegister);
     }

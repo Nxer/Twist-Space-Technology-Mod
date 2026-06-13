@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.too_more_hatches;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_2_01;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_Controller;
@@ -17,8 +18,10 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_IMPLOSION_COM
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -121,10 +124,12 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        return mInputBusses.size() + mOutputBusses.size() <= 8;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (mInputBusses.size() + mOutputBusses.size() > 8) {
+            errors.add(too_more_hatches);
+        }
     }
     // endregion
 
@@ -170,7 +175,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
             HatchElementBuilder.<TST_CircuitConverter>builder()
                 .atLeast(InputBus, OutputBus)
                 .adder(TST_CircuitConverter::addInputBusOrOutputBusToMachineList)
-                .dot(1)
+                .hint(1)
                 .casingIndex(16)
                 .buildAndChain(GregTechAPI.sBlockCasings2, 6))
         .build();

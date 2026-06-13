@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -152,7 +153,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                             .<TST_Disassembler>builder()
                             .atLeast(InputBus, OutputBus, OutputHatch)
                             .adder(TST_Disassembler::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(1028)
                             .buildAndChain(sBlockCasingsTT, 4)
                     )
@@ -175,10 +176,10 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         tierComponentCasing = -2;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     // spotless:on

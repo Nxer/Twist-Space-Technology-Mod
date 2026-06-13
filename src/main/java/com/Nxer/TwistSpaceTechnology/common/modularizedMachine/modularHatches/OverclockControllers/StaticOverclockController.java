@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -72,18 +73,18 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
     // spotless:on
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFaceLowSpeed;
-    protected static Textures.BlockIcons.CustomIcon ActiveFacePerfect;
-    protected static Textures.BlockIcons.CustomIcon ActiveFaceSingularity;
+    protected static IIconContainer ActiveFaceLowSpeed;
+    protected static IIconContainer ActiveFacePerfect;
+    protected static IIconContainer ActiveFaceSingularity;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFaceLowSpeed = new Textures.BlockIcons.CustomIcon(
+        ActiveFaceLowSpeed = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Pri");
-        ActiveFacePerfect = new Textures.BlockIcons.CustomIcon(
+        ActiveFacePerfect = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Adv");
-        ActiveFaceSingularity = new Textures.BlockIcons.CustomIcon(
+        ActiveFaceSingularity = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Per");
         super.registerIcons(aBlockIconRegister);
     }

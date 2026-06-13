@@ -26,6 +26,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
@@ -60,6 +61,8 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
 import gregtech.common.blocks.BlockCasings8;
+
+import java.util.List;
 
 public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> {
 
@@ -131,14 +134,11 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mBlockTier = -1;
         glassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return checkPiece(STRUCTURE_PIECE_OLD, horizontalOffSet, verticalOffSet, depthOffSet);
-        }
-        return true;
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     public static Integer getTierOfBlock(Block block, int meta) {
@@ -199,7 +199,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                     HatchElementBuilder.<TST_MegaMacerator>builder()
                         .atLeast(InputBus, OutputBus, Maintenance)
                         .adder(TST_MegaMacerator::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0))
                         .buildAndChain(GregTechAPI.sBlockCasings2, 0))
                 .addElement('b', ofBlock(GregTechAPI.sBlockCasings2, 0))
@@ -209,7 +209,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
                     HatchElementBuilder.<TST_MegaMacerator>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_MegaMacerator::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                 .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))

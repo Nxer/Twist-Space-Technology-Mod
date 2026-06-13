@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.P
 
 import java.util.List;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -75,16 +76,16 @@ public abstract class ParallelControllerBase extends ModularHatchBase {
     // endregion
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    // protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    // protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
+        ActiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ParallelController");
         // InactiveFace = new
-        // Textures.BlockIcons.CustomIcon("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ParallelController_Static");
+        // IIconContainer("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ParallelController_Static");
         super.registerIcons(aBlockIconRegister);
     }
 

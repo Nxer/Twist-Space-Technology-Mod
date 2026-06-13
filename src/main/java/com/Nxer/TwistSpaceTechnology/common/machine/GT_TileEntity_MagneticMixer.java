@@ -15,6 +15,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -43,6 +44,8 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings8;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
+
+import java.util.List;
 
 public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEntity_MagneticMixer> {
 
@@ -86,11 +89,10 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticMixer, getTotalPowerTier());
-        return true;
     }
 
     // endregion
@@ -142,7 +144,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
                                                           HatchElementBuilder.<GT_TileEntity_MagneticMixer>builder()
                                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                 .adder(GT_TileEntity_MagneticMixer::addToMachineList)
-                                                                                .dot(1)
+                                                                                .hint(1)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 2))
                                                       .addElement(
@@ -150,7 +152,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
                                                           HatchElementBuilder.<GT_TileEntity_MagneticMixer>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GT_TileEntity_MagneticMixer::addToMachineList)
-                                                                                .dot(2)
+                                                                                .hint(2)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                                                       .addElement(
@@ -158,7 +160,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
                                                           HatchElementBuilder.<GT_TileEntity_MagneticMixer>builder()
                                                                                 .atLeast(Maintenance)
                                                                                 .adder(GT_TileEntity_MagneticMixer::addToMachineList)
-                                                                                .dot(3)
+                                                                                .hint(3)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                                                       .addElement('E', ofBlock(ModBlocks.blockCasings3Misc, 11))

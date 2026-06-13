@@ -8,18 +8,12 @@ import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import appeng.api.storage.data.IAEFluidStack;
-import appeng.api.storage.data.IAEItemStack;
-import appeng.util.item.AEFluidStack;
-import appeng.util.item.AEItemStack;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
-import thaumcraft.common.items.ItemCrystalEssence;
-import thaumicenergistics.common.fluids.GaseousEssentia;
-import thaumicenergistics.common.integration.tc.EssentiaConversionHelper;
 
 public class ItemEssentiaHelper {
 
+    /*
     @Nullable
     public static IAEFluidStack getAeFluidStack(ItemStack stack) {
         if (stack == null || !(stack.getItem() instanceof ItemCrystalEssence)) {
@@ -118,6 +112,7 @@ public class ItemEssentiaHelper {
 
         return AEFluidStack.create(new net.minecraftforge.fluids.FluidStack(gas, totalFluid));
     }
+    */
 
     @Nullable
     public static Aspect readAspectFromCrystal(@Nullable ItemStack stack) {
@@ -170,7 +165,7 @@ public class ItemEssentiaHelper {
 
     /**
      * Based on two input Aspect, return the target Aspect that can be synthesized (if it exists).
-     * 
+     *
      * @param aspectA The first input factor
      * @param aspectB The second input factor
      * @return The synthesized result ; if they do not exist, return null

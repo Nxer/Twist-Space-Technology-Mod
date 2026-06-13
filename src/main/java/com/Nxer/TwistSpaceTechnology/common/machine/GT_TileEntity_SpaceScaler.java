@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Multiplier_ExtraOutputsPerFieldTier_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_BeyondTier2Block_SpaceScaler;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_Tier1Block_SpaceScaler;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -287,15 +289,15 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.fieldGeneratorTier = -1;
-        boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         if (this.fieldGeneratorTier < 1) {
-            return false;
+            errors.add(internal_structure_issue);
+            return;
         }
         multiplier = 1 + Multiplier_ExtraOutputsPerFieldTier_SpaceScaler * Math.max(0, fieldGeneratorTier - 3);
-        return sign;
     }
 
     // endregion
@@ -351,7 +353,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
                                                          .atLeast(Energy.or(ExoticEnergy))
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .dot(1)
+                                                         .hint(1)
                                                          .casingIndex(1024)
                                                          .buildAndChain(sBlockCasingsTT, 0))
                                .addElement('B', ofBlock(sBlockCasingsTT, 4))
@@ -362,7 +364,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
                                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
                                                          .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
                                                          .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .dot(2)
+                                                         .hint(2)
                                                          .casingIndex(1028)
                                                          .buildAndChain(sBlockCasingsTT, 4))
                                .addElement(

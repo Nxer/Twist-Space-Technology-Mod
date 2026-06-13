@@ -37,6 +37,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -136,7 +137,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                 // #zh_CN 当前消耗EU:
                 EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.2")
                     + EnumChatFormatting.GOLD
-                    + GTUtility.formatNumbers(tag.getLong("usingEU"))
+                    + formatNumber(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET
                     + " EU");
         }
@@ -441,11 +442,12 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.mExoticEnergyHatches.clear();
         this.mEnergyHatches.clear();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+
         isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         if (isWirelessMode) {
             EUtCanUse = 0;
@@ -457,7 +459,6 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             // 1/32 Power losing region with multi energy hatch
             EUtCanUse = getMaxInputEu() * 31 / 32;
         }
-        return true;
     }
 
     // endregion
@@ -507,7 +508,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(InputHatch)
                                    .adder(TST_OreProcessingFactory::addFluidInputToMachineList)
-                                   .dot(1)
+                                   .hint(1)
                                    .casingIndex(48)
                                    .buildAndChain(GregTechAPI.sBlockCasings4,0))
                    .addElement('K',
@@ -515,7 +516,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(Energy.or(ExoticEnergy))
                                    .adder(TST_OreProcessingFactory::addEnergyHatchOrExoticEnergyHatchToMachineList)
-                                   .dot(2)
+                                   .hint(2)
                                    .casingIndex(1024)
                                    .buildAndChain(sBlockCasingsTT,0))
                    .addElement('L',
@@ -523,7 +524,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(InputBus, OutputBus)
                                    .adder(TST_OreProcessingFactory::addInputBusOrOutputBusToMachineList)
-                                   .dot(3)
+                                   .hint(3)
                                    .casingIndex(48)
                                    .buildAndChain(GregTechAPI.sBlockCasings4,0))
                    .addElement('M', ofFrame(Materials.TungstenSteel))

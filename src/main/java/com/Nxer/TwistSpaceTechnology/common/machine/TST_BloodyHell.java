@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInf
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.ChiselBeacon_1;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -29,6 +30,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -40,6 +43,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -80,9 +84,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
-import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
 import gregtech.api.gui.modularui.GTUITextures;
-import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -233,11 +235,11 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         mTier = 0;
         isBloodChecked = false;
         for (int i = 6; i > 0; i--) {
-            if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2))) {
+            if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2), errors)) {
                 mTier = i;
                 break;
             }
@@ -248,18 +250,18 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             "fluid" + fluidTier,
             getOffset(1, mTier, 0),
             getOffset(1, mTier, 1),
-            getOffset(1, mTier, 2))) {
+            getOffset(1, mTier, 2), errors)) {
             isBloodChecked = true;
         }
 
         if (mTier <= 0) {
             parallel = 1;
-            return false;
+            errors.add(internal_structure_issue);
+            return;
         }
 
         calculateParallel();
 
-        return true;
     }
 
     protected void calculateParallel() {
@@ -306,9 +308,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addElement('A', ofBlock(TstBlocks.MetaBlockCasing01, 9))
                 .addElement('B', ofBlock(MetaBlockCasing02, 0))
                 .addElement('C', ofBlock(MetaBlockCasing02, 1))
-                .addElement('D', ofBlockAnyMeta(BlockList.BloodyIchorium.getBlock()))
-                .addElement('E', ofBlockAnyMeta(BlockList.BloodyThaumium.getBlock()))
-                .addElement('F', ofBlockAnyMeta(BlockList.BloodyVoid.getBlock()))
+                .addElement('D', ofBlockAnyMeta(BlockList.BloodyIchorium.block))
+                .addElement('E', ofBlockAnyMeta(BlockList.BloodyThaumium.block))
+                .addElement('F', ofBlockAnyMeta(BlockList.BloodyVoid.block))
                 .addElement(
                     'G',
                     ofChain(
@@ -333,7 +335,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, OutputBus, InputHatch)
                             .adder(TST_BloodyHell::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
                             .buildAndChain(MetaBlockCasing02, 0)))
                 .addElement('Z', ofBlock(blockLifeEssence, 0))
@@ -536,7 +538,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     protected static FluidStack getLifeEssenceFluidStack(int amount) {
-        return FluidUtils.getFluidStack("lifeessence", amount);
+        return FluidRegistry.getFluidStack("lifeessence", amount);
     }
 
     @Override
@@ -549,7 +551,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public ButtonWidget createBloodStatusButton(IWidgetBuilder<?> builder) {
 
         Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (checkStructure(true) && !this.getBaseMetaTileEntity()
+            if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
                 .isActive()) if (checkBlood(true)) {
                     isBloodClear = !isBloodClear;
                     isBloodChecked = !isBloodClear;
@@ -973,24 +975,24 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     // endregion
 
     // region Texture
-    private static CustomIcon BH_1_Active;
-    private static CustomIcon BH_1;
-    private static CustomIcon BH_2_Active;
-    private static CustomIcon BH_2;
-    private static CustomIcon BH_3_Active;
-    private static CustomIcon BH_3;
-    private static CustomIcon BH_4_Active;
-    private static CustomIcon BH_4;
-    private static CustomIcon BH_5_Active;
-    private static CustomIcon BH_5;
-    private static CustomIcon BH_6_Active;
-    private static CustomIcon BH_6;
-    private static CustomIcon BH_7_Active;
-    private static CustomIcon BH_7;
-    private static CustomIcon BH_8_Active;
-    private static CustomIcon BH_8;
-    private static CustomIcon BH_9_Active;
-    private static CustomIcon BH_9;
+    private static IIconContainer BH_1_Active;
+    private static IIconContainer BH_1;
+    private static IIconContainer BH_2_Active;
+    private static IIconContainer BH_2;
+    private static IIconContainer BH_3_Active;
+    private static IIconContainer BH_3;
+    private static IIconContainer BH_4_Active;
+    private static IIconContainer BH_4;
+    private static IIconContainer BH_5_Active;
+    private static IIconContainer BH_5;
+    private static IIconContainer BH_6_Active;
+    private static IIconContainer BH_6;
+    private static IIconContainer BH_7_Active;
+    private static IIconContainer BH_7;
+    private static IIconContainer BH_8_Active;
+    private static IIconContainer BH_8;
+    private static IIconContainer BH_9_Active;
+    private static IIconContainer BH_9;
 
     private static IIconContainer[] BloodyHellIcons;
     private static IIconContainer[] BloodyHellIconsActive;
@@ -998,24 +1000,24 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        BH_1_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_1");
-        BH_1 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_1");
-        BH_2_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_2");
-        BH_2 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_2");
-        BH_3_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_3");
-        BH_3 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_3");
-        BH_4_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_4");
-        BH_4 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_4");
-        BH_5_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_5");
-        BH_5 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_5");
-        BH_6_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_6");
-        BH_6 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_6");
-        BH_7_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_7");
-        BH_7 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_7");
-        BH_8_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_8");
-        BH_8 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_8");
-        BH_9_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_9");
-        BH_9 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_9");
+        BH_1_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_1");
+        BH_1 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_1");
+        BH_2_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_2");
+        BH_2 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_2");
+        BH_3_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_3");
+        BH_3 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_3");
+        BH_4_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_4");
+        BH_4 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_4");
+        BH_5_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_5");
+        BH_5 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_5");
+        BH_6_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_6");
+        BH_6 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_6");
+        BH_7_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_7");
+        BH_7 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_7");
+        BH_8_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_8");
+        BH_8 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_8");
+        BH_9_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_9");
+        BH_9 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_9");
         BloodyHellIcons = new IIconContainer[] { BH_1, BH_2, BH_3, BH_4, BH_5, BH_6, BH_7, BH_8, BH_9, BH_1, BH_2, BH_3,
             BH_4, BH_5, BH_6, BH_7, BH_8, BH_9, BH_1, BH_2, BH_3, BH_4, BH_5, BH_6, BH_7 };
         BloodyHellIconsActive = new IIconContainer[] { BH_1_Active, BH_2_Active, BH_3_Active, BH_4_Active, BH_5_Active,

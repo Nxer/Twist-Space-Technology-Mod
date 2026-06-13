@@ -4,6 +4,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -25,7 +27,9 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -86,8 +90,8 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     @Override
     public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CUTTING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
     }
 
     @Override
@@ -143,21 +147,21 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.SCfieldGeneratorTier = 0;
         this.TAfieldGeneratorTier = 0;
         this.STfieldGeneratorTier = 0;
         this.mCraftingTier = 0;
         this.mFocusingTier = 0;
-        boolean sign = checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         if (this.SCfieldGeneratorTier == 0 || this.TAfieldGeneratorTier == 0
             || this.STfieldGeneratorTier == 0
             || this.mCraftingTier == 0
             || this.mFocusingTier == 0) {
-            return false;
+            errors.add(tiered_structure_issue);
+            return;
         }
-        return sign;
     }
     // endregion
 
@@ -208,7 +212,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
                                                           'A',HatchElementBuilder.<GTCM_HyperSpacetimeTransformer>builder()
                                                                                     .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch, OutputHatch)
                                                                                     .adder(GTCM_HyperSpacetimeTransformer::addToMachineList)
-                                                                                    .dot(1)
+                                                                                    .hint(1)
                                                                                     .casingIndex(1028)
                                                                                     .buildAndChain(sBlockCasingsBA0, 11))
                                                       .addElement(

@@ -1,11 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults;
 
-import static gregtech.api.util.GTUtility.formatNumbers;
-
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -18,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
+
 
 public class SimpleResultWithText implements CheckRecipeResult {
 
@@ -37,7 +36,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
             StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_fluid",
                 stack.getLocalizedName(),
-                formatNumbers(stack.amount)));
+                formatNumber(stack.amount)));
         this.persistsOnShutdown = persistsOnShutdown;
     }
 
@@ -47,7 +46,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
             StatCollector.translateToLocalFormatted(
                 "GT5U.gui.text.out_of_item",
                 stack.getDisplayName(),
-                formatNumbers(stack.stackSize)));
+                formatNumber(stack.stackSize)));
         this.persistsOnShutdown = persistsOnShutdown;
     }
 

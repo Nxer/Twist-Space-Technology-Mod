@@ -29,7 +29,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
+import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.common.blocks.BlockMetal;
 
@@ -460,10 +460,10 @@ public class BlockRegister {
             new Materials[] { MaterialsTST.NeutroniumAlloy, MaterialsTST.AxonisAlloy, MaterialsTST.Axonium,
                 MaterialsTST.Dubnium },
             OrePrefixes.block,
-            new IIconContainer[] { new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockNeutroniumAlloy"),
-                new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonisAlloy"),
-                new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonium"),
-                new CustomIcon(RESOURCE_ROOT_ID + ":MetalBlock/BlockDubnium") });
+            new IIconContainer[] { Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockNeutroniumAlloy"),
+                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonisAlloy"),
+                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockAxonium"),
+                Textures.BlockIcons.custom(RESOURCE_ROOT_ID + ":MetalBlock/BlockDubnium") });
 
         // region PhotonControllerUpgrade
 

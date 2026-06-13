@@ -11,6 +11,7 @@ import static tectech.util.TTUtility.getUniqueIdentifier;
 import java.util.HashMap;
 import java.util.Map;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,8 +49,8 @@ import tectech.util.TTUtility;
 
 public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGregtechLogo, IAddUIWidgets {
 
-    private static Textures.BlockIcons.CustomIcon EM_R;
-    private static Textures.BlockIcons.CustomIcon EM_R_ACTIVE;
+    private static IIconContainer EM_R;
+    private static IIconContainer EM_R_ACTIVE;
     public int heat = 0;
     private float overClock = 1, overVolt = 1;
 
@@ -107,8 +108,8 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
     public void registerIcons(IIconRegister aBlockIconRegister) {
         super.registerIcons(aBlockIconRegister);
         // MTEHatch_Rack.RackComponent
-        EM_R_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/EM_RACK_ACTIVE");
-        EM_R = new Textures.BlockIcons.CustomIcon("iconsets/EM_RACK");
+        EM_R_ACTIVE = Textures.BlockIcons.custom("iconsets/EM_RACK_ACTIVE");
+        EM_R = Textures.BlockIcons.custom("iconsets/EM_RACK");
     }
 
     @Override

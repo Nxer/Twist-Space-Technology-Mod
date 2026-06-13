@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.FluidStack;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
@@ -51,7 +51,7 @@ public class SpaceAssemblerRecipePool {
                 .fluidInputs(
                     new FluidStack(solderUEV, 144 * 1024),
                     Materials.Lead.getMolten(144 * 16 * 1024),
-                    MaterialsUEVplus.SpaceTime.getMolten(144 * 8),
+                    Materials.SpaceTime.getMolten(144 * 8),
                     Materials.UUMatter.getFluid(1000 * 16))
                 .itemOutputs(GTUtility.copyAmountUnsafe(1024, ItemRefer.Advanced_Radiation_Protection_Plate.get(1)))
                 .metadata(IGRecipeMaps.MODULE_TIER, 2)

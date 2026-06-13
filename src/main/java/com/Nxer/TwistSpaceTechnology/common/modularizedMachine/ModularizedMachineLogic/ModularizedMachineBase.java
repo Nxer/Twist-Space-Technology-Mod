@@ -3,8 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachi
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +21,8 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.one_hatch_each_module;
 
 public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>> extends GTCM_MultiMachineBase<T>
     implements IModularizedMachine {
@@ -243,15 +247,17 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         resetModularHatchCollections();
-        if (!checkMachineMM(aBaseMetaTileEntity, aStack)) return false;
+        if (!checkMachineMM(aBaseMetaTileEntity, aStack, errors)) return;
         if (!canMultiplyModularHatchType()) {
-            if (!checkSingleModularHatch()) return false;
+            if (!checkSingleModularHatch()) {
+                errors.add(one_hatch_each_module);
+                return;
+            }
         }
         checkModularStaticSettings();
-        return true;
     }
 
     protected boolean checkSingleModularHatch() {
@@ -276,7 +282,7 @@ public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>
 
     protected abstract boolean canMultiplyModularHatchType();
 
-    public abstract boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack);
+    public abstract boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors);
 
     // endregion
 }

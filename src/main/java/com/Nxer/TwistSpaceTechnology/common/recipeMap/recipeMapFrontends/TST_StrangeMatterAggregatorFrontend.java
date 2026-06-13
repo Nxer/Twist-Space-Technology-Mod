@@ -1,12 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
-import static gregtech.api.util.GTUtility.formatNumbers;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
-
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
@@ -26,7 +25,7 @@ public class TST_StrangeMatterAggregatorFrontend extends RecipeMapFrontend {
         // the EU/t.
         recipeInfo.drawText(
             GTUtility.trans("152", "Total: ")
-                + formatNumbers(1000L * recipeInfo.recipe.mDuration / 100L * recipeInfo.recipe.mEUt)
+                + formatNumber(1000L * recipeInfo.recipe.mDuration / 100L * recipeInfo.recipe.mEUt)
                 + " EU");
         // 1000 / (20 ticks * 5 seconds) = 10L/t. 10L/t * x EU/L = 10 * x EU/t.
         long averageUsage = 256L * recipeInfo.recipe.mEUt;
@@ -35,7 +34,7 @@ public class TST_StrangeMatterAggregatorFrontend extends RecipeMapFrontend {
         // #zh_CN 消耗功率
         recipeInfo.drawText(
             TextEnums.tr("TST_StrangeMatterAggregatorFrontend.drawEnergyInfo.Power") + ": "
-                + formatNumbers(averageUsage)
+                + formatNumber(averageUsage)
                 + " EU/t"
                 + GTUtility.getTierNameWithParentheses(averageUsage));
     }

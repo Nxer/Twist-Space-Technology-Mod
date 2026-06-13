@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.steam;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.hatch_tier_incompatible;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
@@ -16,9 +18,11 @@ import static gregtech.api.util.GTStructureUtility.filterByMTETier;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -67,7 +71,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     private static final int EU_PER_TICK = 32;
     private long DYNAMO_AMP = 0;
     private int mCasing = 0;
-    public FluidStack steamFluid = FluidUtils.getSteam(1);
+    public FluidStack steamFluid = steam;
 
     @Nonnull
     @Override
@@ -93,15 +97,18 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.mCasing = 0;
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         DYNAMO_AMP = getDynamoAmperage();
-
-        return (this.mCasing >= 10 && !this.mInputHatches.isEmpty()
-            && this.mDynamoHatches.size() <= 2
-            && setDynamoTier(1, true));
+        checkHasInputHatch(errors);
+        checkCasingMin(errors, mCasing, 10);
+        checkHatchMin(errors, Dynamo, 1);
+        checkHatchMax(errors, Dynamo, 2);
+        if (setDynamoTier(1, true)) {
+            errors.add(hatch_tier_incompatible);
+        }
     }
 
     // endregion
@@ -138,12 +145,12 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                             .atLeast(Dynamo)
                             .hatchItemFilterAnd(t -> filterByMTETier(1, 1))
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         buildHatchAdder(TST_SteamBasicGenerator.class)
                             .atLeast(InputHatch)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings2, 0))))
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 14))

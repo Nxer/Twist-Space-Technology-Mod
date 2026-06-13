@@ -30,8 +30,6 @@ public abstract class TST_GeneratorBase<T extends TST_GeneratorBase<T>> extends 
 
     // region Logic
 
-    protected List<MTEHatchDynamoMulti> mExoticDynamoHatches = new ArrayList<>();
-
     @Override
     public boolean addDynamoToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         if (aTileEntity == null) {
@@ -41,14 +39,15 @@ public abstract class TST_GeneratorBase<T extends TST_GeneratorBase<T>> extends 
         if (aMetaTileEntity == null) {
             return false;
         }
-        if (aMetaTileEntity instanceof MTEHatchDynamo) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            return mDynamoHatches.add((MTEHatchDynamo) aMetaTileEntity);
-        }
         if (aMetaTileEntity instanceof MTEHatchDynamoMulti) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             return mExoticDynamoHatches.add((MTEHatchDynamoMulti) aMetaTileEntity);
         }
+        if (aMetaTileEntity instanceof MTEHatchDynamo) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return mDynamoHatches.add((MTEHatchDynamo) aMetaTileEntity);
+        }
+
         return false;
     }
 
@@ -56,37 +55,6 @@ public abstract class TST_GeneratorBase<T extends TST_GeneratorBase<T>> extends 
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return super.addToMachineList(aTileEntity, aBaseCasingIndex)
             || addDynamoToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    public enum HatchElement implements IHatchElement<TST_GeneratorBase> {
-
-        ExoticDynamo(TST_GeneratorBase::addDynamoToMachineList, MTEHatchDynamoMulti.class) {
-
-            @Override
-            public long count(TST_GeneratorBase tstGeneratorBase) {
-                return tstGeneratorBase.mExoticDynamoHatches.size();
-            }
-        };
-
-        private final List<Class<? extends IMetaTileEntity>> mteClasses;
-        private final IGTHatchAdder<TST_GeneratorBase> adder;
-
-        @SafeVarargs
-        HatchElement(IGTHatchAdder<TST_GeneratorBase> adder, Class<? extends IMetaTileEntity>... mteClasses) {
-            this.adder = adder;
-            this.mteClasses = Collections.unmodifiableList(Arrays.asList(mteClasses));
-        }
-
-        @Override
-        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
-            return mteClasses;
-        }
-
-        @Override
-        public IGTHatchAdder<? super TST_GeneratorBase> adder() {
-            return adder;
-        }
-
     }
 
     @Override
@@ -112,7 +80,8 @@ public abstract class TST_GeneratorBase<T extends TST_GeneratorBase<T>> extends 
             }
         }
         // check multi dynamo hatches
-        for (MTEHatchDynamoMulti tHatch : filterValidMTEs(mExoticDynamoHatches)) {
+        for (MTEHatch tHatch : filterValidMTEs(mExoticDynamoHatches)) {
+
             freeCapacity = tHatch.maxEUStore() - tHatch.getBaseMetaTileEntity()
                 .getStoredEU();
             if (freeCapacity > 0) {

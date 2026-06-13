@@ -1,4 +1,7 @@
+// spotless:off
+/*
 package com.Nxer.TwistSpaceTechnology.common.tile;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -332,3 +335,4 @@ public class TileEssentiaDiscretizer extends AENetworkTile implements IPriorityH
         }
     }
 }
+*/

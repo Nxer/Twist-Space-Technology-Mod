@@ -292,11 +292,11 @@ public class DSP_DataCell implements Serializable {
                    + " , amountDSPNode:"
                    + amountDSPNode
                    + " , maxDSPPowerPoint:"
-                   + (useBigInteger ? GTUtility.formatNumbers(maxDSPPowerPoint_BigInteger) : maxDSPPowerPoint)
+                   + (useBigInteger ? formatNumber(maxDSPPowerPoint_BigInteger) : maxDSPPowerPoint)
                    + " , usedDSPPowerPoint:"
-                   + (useBigInteger ? GTUtility.formatNumbers(usedDSPPowerPoint_BigInteger) : usedDSPPowerPoint)
+                   + (useBigInteger ? formatNumber(usedDSPPowerPoint_BigInteger) : usedDSPPowerPoint)
                    + " , PowerPointCanUse: "
-                   + (useBigInteger ? GTUtility.formatNumbers(getDSPPowerPointCanUseBigInteger())  : getDSPPowerPointCanUse())
+                   + (useBigInteger ? formatNumber(getDSPPowerPointCanUseBigInteger())  : getDSPPowerPointCanUse())
                    + (useBigInteger ? " , "+EnumChatFormatting.RED+"Using Big Integer Calculation"+EnumChatFormatting.RESET : "")
                    + " }";
     }

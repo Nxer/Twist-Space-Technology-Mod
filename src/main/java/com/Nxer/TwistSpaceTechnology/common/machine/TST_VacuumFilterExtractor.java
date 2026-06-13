@@ -19,7 +19,9 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -137,12 +139,11 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         coefficientMultiplier = 1 + getTotalPowerTier();
         speedBonus = 1F / coefficientMultiplier;
-        return true;
     }
     // endregion
 
@@ -176,7 +177,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .dot(1)
+                                               .hint(1)
                                                .casingIndex(((BlockCasings4)GregTechAPI.sBlockCasings4).getTextureIndex(10))
                                                .buildAndChain(GregTechAPI.sBlockCasings4, 10))
                                        .addElement(
@@ -185,7 +186,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(Energy.or(ExoticEnergy))
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .dot(2)
+                                               .hint(2)
                                                .casingIndex(((BlockCasings8)GregTechAPI.sBlockCasings8).getTextureIndex(3))
                                                .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                                        .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 0))

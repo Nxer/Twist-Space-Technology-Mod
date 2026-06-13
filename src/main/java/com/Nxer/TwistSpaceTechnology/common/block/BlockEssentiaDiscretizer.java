@@ -1,3 +1,6 @@
+// spotless:off
+/*
+
 package com.Nxer.TwistSpaceTechnology.common.block;
 
 import java.util.List;
@@ -110,3 +113,4 @@ public class BlockEssentiaDiscretizer extends Block {
 
     }
 }
+*/

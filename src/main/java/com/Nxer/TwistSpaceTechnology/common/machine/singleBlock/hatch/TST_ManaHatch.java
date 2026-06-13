@@ -117,7 +117,7 @@ public class TST_ManaHatch extends MTEHatchInput {
 
     @Override
     public synchronized String[] getDescription() {
-        mDescriptionArray[1] = FluidCapacity + GTUtility.formatNumbers(getCapacity()) + "L";
+        mDescriptionArray[1] = FluidCapacity + formatNumber(getCapacity()) + "L";
         final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();

@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.P
 
 import java.util.List;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -67,15 +68,15 @@ public abstract class PowerConsumptionControllerBase extends ModularHatchBase {
     }
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    // protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    // protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_PowerController");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_PowerController");
         // InactiveFace = new
-        // Textures.BlockIcons.CustomIcon("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_PowerController_Static");
+        // IIconContainer("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_PowerController_Static");
         super.registerIcons(aBlockIconRegister);
     }
 

@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.HorizontalDirt;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -636,7 +638,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
                     'b',
                     buildHatchAdder(GT_TileEntity_MegaBrickedBlastFurnace.class).atLeast(InputBus, OutputBus)
                         .casingIndex(BRONZE_PLATED_BRICKS_INDEX)
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings1, BRONZE_PLATED_BRICKS_INDEX)))
                 .addElement('N', ofBlock(GregTechAPI.sBlockCasings4, FIREBRICK_METAID))
                 .addElement('s', ofBlock(Blocks.brick_block, 0))
@@ -927,16 +929,14 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         // Check the main structure
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16, errors)) return;
         // Item input bus check.
-        if (mInputBusses.size() > max_input_bus) return false;
+        checkHatchMax(errors, InputBus, max_input_bus);
         // Item output bus check.
-        if (mOutputBusses.size() > max_output_bus) return false;
-        // All structure checks passed, return true.
-        return true;
+        checkHatchMax(errors, OutputBus, max_output_bus);
     }
 
     @Override
@@ -944,19 +944,19 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return new String[] {
             StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": "
                 + EnumChatFormatting.GREEN
-                + GTUtility.formatNumbers(mProgresstime)
+                + formatNumber(mProgresstime)
                 + EnumChatFormatting.RESET
                 + "t / "
                 + EnumChatFormatting.YELLOW
-                + GTUtility.formatNumbers(mMaxProgresstime)
+                + formatNumber(mMaxProgresstime)
                 + EnumChatFormatting.RESET
                 + "t",
             "Ticks run: " + EnumChatFormatting.GREEN
-                + GTUtility.formatNumbers(running_time)
+                + formatNumber(running_time)
                 + EnumChatFormatting.RESET
                 + ", Fuel Efficiency: "
                 + EnumChatFormatting.RED
-                + GTUtility.formatNumbers(100 * fuelEfficiency)
+                + formatNumber(100 * fuelEfficiency)
                 + EnumChatFormatting.RESET
                 + "%" };
     }

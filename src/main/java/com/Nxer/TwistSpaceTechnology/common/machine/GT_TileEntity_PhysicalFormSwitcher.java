@@ -19,9 +19,11 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -38,7 +40,6 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import ggfab.api.GGFabRecipeMaps;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -96,16 +97,15 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.glassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return;
         }
 
         speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, getTotalPowerTier());
 
-        return true;
     }
 
     public int getMaxParallelRecipes() {
@@ -148,9 +148,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                 setInputFluids(inputs.inputFluid);
                 Set<GTRecipe> recipes = findRecipeMatches(RecipeMaps.fluidSolidifierRecipes)
                     .collect(Collectors.toSet());
-                // this might be able to be safely removed. Ill keep it in. REMOVE IN NEXT MAJOR UPDATE
-                if (recipes.isEmpty())
-                    recipes = findRecipeMatches(GGFabRecipeMaps.toolCastRecipes).collect(Collectors.toSet());
                 if (!recipes.isEmpty()) {
                     dualInvWithPatternToRecipeCache.put(inv, recipes);
                     activeDualInv = inv;
@@ -237,7 +234,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
                                                    HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
                                                                          .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                                                                          .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
-                                                                         .dot(1)
+                                                                         .hint(1)
                                                                          .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                                                                          .buildAndChain(GregTechAPI.sBlockCasings8,10))
                                        .addElement('F', ofFrame(Materials.NaquadahAlloy))
@@ -253,7 +250,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
 	}
 
-	private String[][] shape = new String[][]{
+	protected static final String[][] shape = new String[][]{
 		{"               ","      EEE      ","      EEE      ","      EEE      ","     EEEEE     ","    EEEEEEE    "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","    EEEEEEE    ","     EEEEE     ","      EEE      ","      EEE      ","      EEE      ","               "},
 		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
 		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},

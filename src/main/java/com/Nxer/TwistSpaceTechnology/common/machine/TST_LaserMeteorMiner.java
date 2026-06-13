@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Totto;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Mod_TwistSpaceTechnology;
@@ -18,6 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -76,13 +80,13 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable {
 
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER = new Textures.BlockIcons.CustomIcon(
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons.custom(
         "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_ACTIVE = new Textures.BlockIcons.CustomIcon(
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE = Textures.BlockIcons.custom(
         "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = new Textures.BlockIcons.CustomIcon(
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = Textures.BlockIcons.custom(
         "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_GLOW = new Textures.BlockIcons.CustomIcon(
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_GLOW = Textures.BlockIcons.custom(
         "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
 
     private static final int distanceFromMeteor = 48;
@@ -130,20 +134,20 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     'W',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'Y',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(InputBus)
                         .adder(TST_LaserMeteorMiner::addInjector)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'X',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 2)))
                 .addElement('Z', ofBlock(LaserBeaconRender, 0))
                 .build();
@@ -473,7 +477,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 getBaseMetaTileEntity().getYCoord() + (this.multiTier == 1 ? 10 : 15),
                 zStart) instanceof TileEntityLaserBeacon laser) {
             renderer = laser;
-            renderer.setRotationFields(getDirection(), getRotation(), getFlip());
+            renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
             return true;
         }
         return false;
@@ -505,17 +509,21 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.multiTier = 0;
-        if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_T1, verticalOffSet_T1, depthOffSet_T1)) {
+        if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_T1, verticalOffSet_T1, depthOffSet_T1, errors)) {
             multiTier = 1;
-        } else if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2)) {
+        } else if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2, errors)) {
             multiTier = 2;
-        } else return false;
+        } else return;
 
-        if (!findLaserRenderer()) return false;
+        if (!findLaserRenderer()) {
+            errors.add(special_block_structure_issue);
+            return;
+        }
 
-        return !mEnergyHatches.isEmpty();
+        checkHasEnergyHatch(errors);
+
     }
 
     private int getMultiTier(ItemStack inventory) {

@@ -38,10 +38,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.function.LongConsumer;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -70,7 +73,6 @@ import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import emt.tile.TileElectricCloud;
 import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
-import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
@@ -85,7 +87,6 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import journeymap.shadow.org.jetbrains.annotations.NotNull;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.common.config.ConfigBlocks;
@@ -96,7 +97,9 @@ import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 import vazkii.botania.common.block.ModBlocks;
 
-public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements IConstructable, ISurvivalConstructable {
+import javax.annotation.Nonnull;
+
+public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTower> implements IConstructable, ISurvivalConstructable {
 
     public TST_SkypiercerTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -120,11 +123,10 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_RINGS = "rings";
     private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
-    private static int MachineMode = 0;
 
     @Override
-    protected void clearHatches_EM() {
-        super.clearHatches_EM();
+    public void clearHatches() {
+        super.clearHatches();
         mEssentiaOutputHatches.clear();
     }
 
@@ -211,8 +213,9 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         super(mName);
     }
 
+
     @Override
-    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
+    public IStructureDefinition<TST_SkypiercerTower> getStructureDefinition() {
         if (multiDefinition == null) {
             var channel = "chisel";
             var list = ImmutableList.of(
@@ -234,7 +237,7 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
                                 gregtech.api.enums.HatchElement.InputHatch,
                                 gregtech.api.enums.HatchElement.OutputHatch)
                             .casingIndex(176)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofAccurateTileAdder(
                             TST_SkypiercerTower::addInfusionProvider,
@@ -398,30 +401,29 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     }
 
     @Override
-    protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.mParallel = 0;
         this.ringCount = 0;
         this.mTileInfusionProvider.clear();
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, Main_horizontalOffSet, Main_verticalOffSet, Main_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, Main_horizontalOffSet, Main_verticalOffSet, Main_depthOffSet, errors)) {
+            return;
         }
 
         while (checkPiece(
             STRUCTURE_PIECE_RINGS,
             Rings_horizontalOffSet,
             Main_verticalOffSet + Rings_verticalOffSet * ringCount + Rings_verticalOffSet,
-            Rings_depthOffSet)) {
+            Rings_depthOffSet, errors)) {
             this.ringCount++;
         }
 
         this.mParallel = (int) Math.min((long) this.ringCount * Parallel_PerRing_SkypiercerTower, Integer.MAX_VALUE);
         // FMLLog.info("[SkypiercerTower] Parallel: %f | Rings: %d", mParallel, ringCount);
-        return true;
     }
 
     private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
-        if (aTileEntity instanceof MTEEssentiaOutputHatch) {
+        if (aTileEntity != null) {
             return this.mEssentiaOutputHatches.add(aTileEntity);
         }
         return false;
@@ -453,27 +455,28 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     };
 
     @Override
-    public @NotNull CheckRecipeResult checkProcessing_EM() {
+    @Nonnull
+    public CheckRecipeResult checkProcessing() {
         RECIPE_DURATION = 0;
         ResetOutputs();
         ArrayList<ItemStack> tItemsList = getStoredInputs();
 
         // === [CHALLENGE MODE] ===
-        MachineMode = 0;
+        int machineMode1 = 0;
         if (getControllerSlot() != null && getControllerSlot().getDisplayName() != null) {
             String name = getControllerSlot().getDisplayName()
                 .toUpperCase();
             if (name.contains("NORMAL")) {
-                MachineMode = 1;
+                machineMode1 = 1;
             }
             if (name.contains("CHALLENGE")) {
-                MachineMode = 2;
+                machineMode1 = 2;
             }
         }
 
-        if (MachineMode == 2) {
+        if (machineMode1 == 2) {
             return processChallengeMode();
-        } else if (MachineMode == 1) {
+        } else if (machineMode1 == 1) {
             return processNormalMode();
         } else {
             return processOldMode(tItemsList);
@@ -540,7 +543,6 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             .setDurationDecreasePerOC(4)
             .calculate();
 
-        useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
         this.updateSlots();
@@ -624,7 +626,6 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             .setDuration((int) (RECIPE_DURATION * SECOND_IN_TICKS / (ringCount == 0 ? 1 : Math.pow(1.2, ringCount))))
             .calculate();
 
-        useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
         this.updateSlots();
@@ -764,7 +765,6 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
             .setDurationDecreasePerOC(4)
             .calculate();
 
-        useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
         this.updateSlots();
@@ -778,8 +778,8 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
     }
 
     @Override
-    protected void addClassicOutputs_EM() {
-        super.addClassicOutputs_EM();
+    protected void outputAfterRecipe() {
+        super.outputAfterRecipe();
         fillEssentiaOutputHatch();
     }
 
@@ -1030,29 +1030,5 @@ public class TST_SkypiercerTower extends MTETooltipMultiBlockBaseEM implements I
         return new TST_SkypiercerTower(this.mName);
     }
 
-    @Override
-    public final boolean shouldCheckMaintenance() {
-        return false;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public boolean doRandomMaintenanceDamage() {
-        return true;
-    }
-
-    @Override
-    public boolean willExplodeInRain() {
-        return false;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
 
 }

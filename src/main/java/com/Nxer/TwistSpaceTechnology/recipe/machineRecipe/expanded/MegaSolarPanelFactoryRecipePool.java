@@ -16,7 +16,7 @@ import crazypants.enderio.material.Material;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsKevlar;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.util.GTModHandler;
@@ -41,7 +41,7 @@ public class MegaSolarPanelFactoryRecipePool {
             GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorIV, 4))
         .fluidInputs(
             Materials.SolderingAlloy.getMolten(144))
-        .itemOutputs(NHItemList.IrradiantReinforcedAluminiumPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedAluminiumPlate.get(16))
         .eut(HV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -56,7 +56,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .fluidInputs(
             Materials.SolderingAlloy.getMolten(144*2),
             Materials.Sunnarium.getMolten(144))
-        .itemOutputs(NHItemList.IrradiantReinforcedTitaniumPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedTitaniumPlate.get(16))
         .eut(EV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -70,7 +70,7 @@ public class MegaSolarPanelFactoryRecipePool {
             Materials.SolderingAlloy.getMolten(144*4),
             Materials.Uranium.getMolten(144*9),
             Materials.Sunnarium.getMolten(144*9))
-        .itemOutputs(NHItemList.IrradiantReinforcedTungstenPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedTungstenPlate.get(16))
         .eut(IV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -84,7 +84,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .fluidInputs(
             Materials.SolderingAlloy.getMolten(144*8),
             Materials.Sunnarium.getMolten(144*4))
-        .itemOutputs(NHItemList.IrradiantReinforcedTungstenSteelPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedTungstenSteelPlate.get(16))
         .eut(LuV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -101,7 +101,7 @@ public class MegaSolarPanelFactoryRecipePool {
             Materials.SolderingAlloy.getMolten(144*16),
             Materials.Iridium.getMolten(144*32),
             Materials.Sunnarium.getMolten(144*4))
-        .itemOutputs(NHItemList.IrradiantReinforcedChromePlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedChromePlate.get(16))
         .eut(ZPM)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -135,7 +135,7 @@ public class MegaSolarPanelFactoryRecipePool {
             Materials.Uranium.getMolten(144*64),
             Materials.Iridium.getMolten(144*32),
             Materials.Sunnarium.getMolten(144*76))
-        .itemOutputs(NHItemList.IrradiantReinforcedNaquadriaPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedNaquadriaPlate.get(16))
         .eut(UHV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -154,7 +154,7 @@ public class MegaSolarPanelFactoryRecipePool {
             Materials.Uranium.getMolten(144*64),
             Materials.Iridium.getMolten(144*32),
             Materials.Sunnarium.getMolten(144*76))
-        .itemOutputs(NHItemList.IrradiantReinforcedNeutroniumPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedNeutroniumPlate.get(16))
         .eut(UEV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -173,7 +173,7 @@ public class MegaSolarPanelFactoryRecipePool {
             Materials.Uranium.getMolten(144*64),
             Materials.Iridium.getMolten(144*32),
             Materials.Sunnarium.getMolten(144*76))
-        .itemOutputs(NHItemList.IrradiantReinforcedBedrockiumPlate.getIS(16))
+        .itemOutputs(NHItemList.IrradiantReinforcedBedrockiumPlate.get(16))
         .eut(UIV)
         .duration(40*SECONDS)
         .addTo(MSPF);
@@ -181,7 +181,7 @@ public class MegaSolarPanelFactoryRecipePool {
     // Solar Panels
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedTungstenPlate.getIS(4),
+            NHItemList.IrradiantReinforcedTungstenPlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(1),
             GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorUHV, 8),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 4))
@@ -194,7 +194,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .addTo(MSPF);
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedTungstenSteelPlate.getIS(4),
+            NHItemList.IrradiantReinforcedTungstenSteelPlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(1),
             GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUHV, 8),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 4))
@@ -207,7 +207,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .addTo(MSPF);
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedChromePlate.getIS(4),
+            NHItemList.IrradiantReinforcedChromePlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(1),
             GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUHV, 8),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 4))
@@ -235,7 +235,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .addTo(MSPF);
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedNaquadriaPlate.getIS(4),
+            NHItemList.IrradiantReinforcedNaquadriaPlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(1),
             ItemList.Circuit_Wafer_QPIC.get(32),
             GTOreDictUnificator.get(OrePrefixes.wireGt02, Materials.SuperconductorUEV, 8),
@@ -250,7 +250,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .addTo(MSPF);
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedNeutroniumPlate.getIS(4),
+            NHItemList.IrradiantReinforcedNeutroniumPlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(2),
             ItemList.Circuit_Wafer_QPIC.get(32),
             GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Steeleaf, 2),
@@ -266,7 +266,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .addTo(MSPF);
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedNeutroniumPlate.getIS(12),
+            NHItemList.IrradiantReinforcedNeutroniumPlate.get(12),
             ItemList.Circuit_Silicon_Wafer7.get(2),
             ItemList.Circuit_Wafer_QPIC.get(32),
             GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Steeleaf, 2),
@@ -274,14 +274,14 @@ public class MegaSolarPanelFactoryRecipePool {
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 4))
         .fluidInputs(
             Materials.Infinity.getMolten(2 * 144),
-            MaterialsKevlar.Kevlar.getMolten(4 * 144))
+            Materials.Kevlar.getMolten(4 * 144))
         .itemOutputs(GTUtility.copyAmountUnsafe(16384,ItemList.Cover_SolarPanel_ZPM.get(1)))
         .eut(UIV)
         .duration(40*SECONDS)
         .addTo(MSPF);
     GTValues.RA.stdBuilder()
         .itemInputs(
-            NHItemList.IrradiantReinforcedBedrockiumPlate.getIS(4),
+            NHItemList.IrradiantReinforcedBedrockiumPlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(4),
             GTModHandler.getModItem("dreamcraft", "item.PicoWafer", 32),
             ItemList.Circuit_Wafer_QPIC.get(64),
@@ -290,7 +290,7 @@ public class MegaSolarPanelFactoryRecipePool {
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 4))
         .fluidInputs(
             Materials.Infinity.getMolten(4 * 144),
-            MaterialsKevlar.Kevlar.getMolten(8 * 144),
+            Materials.Kevlar.getMolten(8 * 144),
             Materials.Knightmetal.getMolten(2 * 144))
         .itemOutputs(GTUtility.copyAmountUnsafe(16384,ItemList.Cover_SolarPanel_UV.get(1)))
         .eut(UIV)

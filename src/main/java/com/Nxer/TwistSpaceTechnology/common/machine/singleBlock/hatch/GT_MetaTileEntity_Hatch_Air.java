@@ -40,7 +40,7 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
     public synchronized String[] getDescription() {
         mDescriptionArray[2] = FluidCapacity + " "
             + EnumChatFormatting.BLUE
-            + GTUtility.formatNumbers(getCapacity())
+            + formatNumber(getCapacity())
             + EnumChatFormatting.RESET
             + " L";
         final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };

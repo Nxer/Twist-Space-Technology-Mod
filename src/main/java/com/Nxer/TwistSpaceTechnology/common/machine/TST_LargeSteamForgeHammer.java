@@ -1,10 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -28,6 +31,8 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
+
+import java.util.List;
 
 public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_LargeSteamForgeHammer>
     implements ISurvivalConstructable {
@@ -81,15 +86,16 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         steamCasingTier = -1;
-        if (!checkPiece(mName, 1, 1, 0)) return false;
-        if (steamCasingTier < 1) return false;
+        if (!checkPiece(mName, 1, 1, 0, errors)) return;
+        if (steamCasingTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
+        }
         updateHatchTexture();
-
         parallel = 16 * steamCasingTier;
-        return true;
     }
 
     protected static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
@@ -136,13 +142,13 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
                     'C',
                     ofChain(
                         buildSteamInput(TST_LargeSteamForgeHammer.class).casingIndex(10)
-                            .dot(1)
+                            .hint(1)
                             .build(),
 
                         buildHatchAdder(TST_LargeSteamForgeHammer.class)
                             .atLeast(SteamHatchElement.InputBus_Steam, SteamHatchElement.OutputBus_Steam)
                             .casingIndex(10)
-                            .dot(1)
+                            .hint(1)
                             .build(),
 
                         ofBlocksTiered(
@@ -174,19 +180,13 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     @Override
-    protected ITexture getFrontOverlay() {
-        return TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER)
-            .extFacing()
-            .build();
+    protected IIconContainer getInactiveOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER;
     }
 
     @Override
-    protected ITexture getFrontOverlayActive() {
-        return TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_HAMMER_ACTIVE)
-            .extFacing()
-            .build();
+    protected IIconContainer getActiveOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER_ACTIVE;
     }
 
     @Override
@@ -194,6 +194,12 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         // todo
         return 0;
     }
+
+    @Override
+    protected boolean isHighPressure() {
+        return steamCasingTier > 1;
+    }
+
 
     @Override
     public void onValueUpdate(byte aValue) {
@@ -205,16 +211,6 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         return (byte) steamCasingTier;
     }
 
-    @Override
-    public ITexture[] getTexture(final IGregTechTileEntity aBaseMetaTileEntity, final ForgeDirection side,
-        final ForgeDirection facing, final int aColorIndex, final boolean aActive, final boolean aRedstone) {
-
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID(steamCasingTier)),
-                aActive ? getFrontOverlayActive() : getFrontOverlay() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID(steamCasingTier)) };
-    }
 
     /**
      * No more machine error

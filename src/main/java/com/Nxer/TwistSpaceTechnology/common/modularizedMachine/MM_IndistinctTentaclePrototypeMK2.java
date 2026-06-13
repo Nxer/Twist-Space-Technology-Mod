@@ -1,9 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
 import static bartworks.API.BorosilicateGlass.ofBoroGlass;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.hatch_tier_incompatible;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ExecutionCoreModule;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.ParallelController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -26,6 +28,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -110,7 +113,7 @@ public class MM_IndistinctTentaclePrototypeMK2
             return false;
         }
 
-        this.costEU = GTUtility.formatNumbers(costEU);
+        this.costEU = formatNumber(costEU);
         eMaxProgressingTime = 20;
 
         return true;
@@ -148,7 +151,7 @@ public class MM_IndistinctTentaclePrototypeMK2
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
     }
 
     @Override
@@ -249,16 +252,19 @@ public class MM_IndistinctTentaclePrototypeMK2
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        if (!super.checkMachine(aBaseMetaTileEntity, aStack)) return false;
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
+        if (!errors.isEmpty()) return;
 
         // only allow using perfect execution cores
-        return executionCores.isEmpty() && advExecutionCores.isEmpty();
+        if (!executionCores.isEmpty() || !advExecutionCores.isEmpty()) {
+            errors.add(hatch_tier_incompatible);
+        }
     }
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     // endregion
@@ -362,7 +368,7 @@ public class MM_IndistinctTentaclePrototypeMK2
                             ParallelController,
                             PowerConsumptionController)
                         .adder(MM_IndistinctTentaclePrototypeMK2::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024 + 12)
                         .buildAndChain(sBlockCasingsTT, 12))
                 .addElement('M', ofBlock(sBlockCasingsTT, 14))
@@ -371,7 +377,7 @@ public class MM_IndistinctTentaclePrototypeMK2
                     HatchElementBuilder.<MM_IndistinctTentaclePrototypeMK2>builder()
                         .atLeast(ExecutionCoreModule, ParallelController, PowerConsumptionController)
                         .adder(MM_IndistinctTentaclePrototypeMK2::addAnyModularHatchToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1024 + 13)
                         .buildAndChain(ofBlock(BlockQuantumGlass.INSTANCE, 0), ofBlock(sBlockCasingsTT, 13)))
                 .build();

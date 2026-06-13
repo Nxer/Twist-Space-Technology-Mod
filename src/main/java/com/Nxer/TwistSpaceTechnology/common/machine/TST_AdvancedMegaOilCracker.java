@@ -19,6 +19,7 @@ import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -46,6 +47,8 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+
+import java.util.List;
 
 public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_AdvancedMegaOilCracker> {
 
@@ -159,17 +162,19 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
      * F -> ofFrame...(Materials.Vanadium);
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.coilLevel = HeatingCoilLevel.None;
         this.glassTier = -1;
         this.enablePerfectOverclock = false;
         clearHatches();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (this.glassTier <= 0 || coilLevel == HeatingCoilLevel.None) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (this.glassTier <= 0 || coilLevel == HeatingCoilLevel.None) {
+
+            return;
+        }
         this.euModifier = 1F / (coilLevel.getTier() + 1);
         this.enablePerfectOverclock = coilLevel.getTier() >= HeatingCoilLevel.UXV.getTier();
-        return true;
     }
 
     @Override
@@ -208,7 +213,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
                     HatchElementBuilder.<TST_AdvancedMegaOilCracker>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_AdvancedMegaOilCracker::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(49)
                         .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement('F', ofFrame(Materials.Vanadium))

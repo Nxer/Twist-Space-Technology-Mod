@@ -158,7 +158,7 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
 
         updateSlots();
         if (!succeeded) return finalResult;
-        costingEUText = GTUtility.formatNumbers(costingEU);
+        costingEUText = formatNumber(costingEU);
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;

@@ -19,10 +19,12 @@ import static gregtech.api.util.GTUtility.validMTEList;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -491,7 +493,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                         buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
                             .adder(TST_InfusionMaterialDispenser::addToMachineList)
                             .casingIndex(1536)
-                            .dot(1)
+                            .hint(1)
                             .buildAndChain(magicCasing, 0)))
                 .build();
         }
@@ -554,9 +556,9 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.subPedestals.clear();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override

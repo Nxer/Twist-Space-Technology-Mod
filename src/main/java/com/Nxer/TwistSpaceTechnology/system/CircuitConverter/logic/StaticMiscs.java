@@ -28,17 +28,17 @@ public class StaticMiscs {
 
     public static void init() {
         CircuitULV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Primitive));
-        CircuitLV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Basic));
+        CircuitLV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.LV));
         CircuitMV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Good));
         CircuitHV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Advanced));
-        CircuitEV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Data));
-        CircuitIV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Elite));
-        CircuitLuV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Master));
-        CircuitZPM = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Ultimate));
+        CircuitEV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.EV));
+        CircuitIV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.IV));
+        CircuitLuV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.LuV));
+        CircuitZPM = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.ZPM));
         CircuitUV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.SuperconductorUHV));
-        CircuitUHV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Infinite));
-        CircuitUEV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Bio));
-        CircuitUIV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Optical));
+        CircuitUHV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.UHV));
+        CircuitUEV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.UEV));
+        CircuitUIV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.UIV));
         CircuitUMV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Exotic));
         CircuitUXV = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Cosmic));
         CircuitMAX = GTOreDictUnificator.getOres(OrePrefixes.circuit.get(Materials.Transcendent));

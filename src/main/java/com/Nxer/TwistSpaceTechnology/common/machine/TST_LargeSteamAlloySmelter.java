@@ -7,8 +7,12 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_PYROLYSE_OVEN_GLOW;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI;
+import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -31,6 +35,8 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.MultiblockTooltipBuilder;
+
+import java.util.List;
 
 public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_LargeSteamAlloySmelter>
     implements ISurvivalConstructable {
@@ -70,9 +76,9 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(mName, 2, 1, 0);
+        checkPiece(mName, 2, 1, 0, errors);
     }
 
     // endregion
@@ -105,12 +111,12 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
                     'B',
                     ofChain(
                         buildSteamInput(TST_LargeSteamAlloySmelter.class).casingIndex(1090)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         buildHatchAdder(TST_LargeSteamAlloySmelter.class)
                             .atLeast(SteamHatchElement.InputBus_Steam, SteamHatchElement.OutputBus_Steam)
                             .casingIndex(1090)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofBlock(GregTechAPI.sBlockCasingsNH, 2)))
                 .build();
@@ -120,26 +126,26 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     // endregion
 
     // region General
-    @Override
-    protected ITexture getFrontOverlay() {
-        return TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI)
-            .extFacing()
-            .build();
-    }
-
-    @Override
-    protected ITexture getFrontOverlayActive() {
-        return TextureFactory.builder()
-            .addIcon(Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE)
-            .extFacing()
-            .build();
-    }
 
     @Override
     public int getTierRecipes() {
         // todo
         return 3;
+    }
+
+    @Override
+    protected boolean isHighPressure() {
+        return false;
+    }
+
+    @Override
+    protected IIconContainer getActiveOverlay() {
+        return OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE;
+    }
+
+    @Override
+    protected IIconContainer getInactiveOverlay() {
+        return OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI;
     }
 
     @Override

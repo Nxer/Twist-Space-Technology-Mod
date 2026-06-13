@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology;
 
 import static com.Nxer.TwistSpaceTechnology.loader.RecipeLoader.loadRecipesServerStarted;
 
+import gregtech.common.render.GTBlockTextureBuilder;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
@@ -93,8 +94,8 @@ public class CommonProxy {
         TstUtils.registerTexture(
             31,
             0,
-            new GTTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
-                .build());
+            new GTBlockTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)
+                                       .build());
 
         LazyStaticsInitLoader.initStaticsOnInit();
         MachineLoader.loadMachines();

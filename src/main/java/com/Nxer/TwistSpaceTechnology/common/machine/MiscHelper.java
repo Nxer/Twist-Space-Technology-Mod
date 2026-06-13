@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static tectech.thing.CustomItemList.astralArrayFabricator;
 
+import gregtech.api.enums.Materials;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ public class MiscHelper {
     public static Fluid UnknowWater;
     public static FluidStack water;
     public static FluidStack distilledWater;
+    public static FluidStack steam;
 
     public static void initStatics() {
         ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
@@ -62,6 +64,8 @@ public class MiscHelper {
         if (distilledWater == null) {
             distilledWater = water;
         }
+
+        steam = Materials.Steam.getGas(1);
 
     }
 

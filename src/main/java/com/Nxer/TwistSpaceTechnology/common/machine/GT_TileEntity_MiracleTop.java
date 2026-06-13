@@ -19,7 +19,9 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -91,14 +93,14 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
                     'M',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
                         .atLeast(Maintenance)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .addElement(
                     'H',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .build();
@@ -202,15 +204,15 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
      * @param aStack
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
 
         // init the pointer, also the Properties.
         this.amountRings = 1;
 
         // check the Top layer.
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+            return;
         }
 
         // check middle layer, increase speedBoost per layer.
@@ -219,10 +221,10 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.amountRings * 8)) {
+            baseDepthOffSet - this.amountRings * 8, errors)) {
             this.amountRings++;
             if (amountRings > 15) {
-                return false;
+                return;
             }
         }
 
@@ -231,8 +233,8 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.amountRings * 8)) {
-            return false;
+            baseDepthOffSet - this.amountRings * 8, errors)) {
+            return;
         }
 
         // basic two layers: the top and the end, means amountRings default is 2 .
@@ -243,7 +245,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         speedBonus = 1.0F / (amountRings * SpeedUpMultiplier_PerRing_MiracleTop);
         maxParallel = amountRings * Parallel_PerRing_MiracleTop;
 
-        return true;
     }
 
     // endregion

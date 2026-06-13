@@ -24,7 +24,9 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -111,21 +113,21 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                     'M',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Maintenance)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(183)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'I',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(183)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'X',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Energy.or(ExoticEnergy))
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsTT, 0))
                 .addElement(
@@ -259,17 +261,16 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
      * @param aStack
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.totalSpeedIncrement = 0;
         this.enablePerfectOverclock = false;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return;
         }
 
         speedBonus = 10000F / (10000F + totalSpeedIncrement);
 
-        return true;
     }
 
     // endregion

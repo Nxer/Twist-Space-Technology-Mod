@@ -29,6 +29,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -46,7 +47,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
@@ -206,12 +207,11 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         maxParallel = 2_000_000;
-        if (!checkPiece(STRUCTURE_PIECE, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-
-        return this.mCasing >= 45;
+        if (!checkPiece(STRUCTURE_PIECE, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        checkCasingMin(errors, mCasing, 45);
     }
 
     // endregion
@@ -250,12 +250,12 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                         buildHatchAdder(TST_SuperWaterPurifier.class)
                             .atLeast(InputHatch, InputBus, OutputBus, OutputHatch, Energy, ExoticEnergy)
                             .casingIndex(mainTextureID)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings10, 9))))
                 .addElement('B',ofBlock(sBlockCasings8, 14))
                 .addElement('C',ofBlock(sBlockCasingsTT,10))
-                .addElement('D', ofFrame(MaterialsUEVplus.SixPhasedCopper))
+                .addElement('D', ofFrame(Materials.SixPhasedCopper))
                 .addElement('E', ofBlock(GodforgeCasings, 3))
                 .addElement('F',ofBlock(BlockGodforgeGlass.INSTANCE, 0))
 

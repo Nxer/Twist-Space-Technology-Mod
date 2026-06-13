@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
@@ -37,6 +38,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -250,7 +253,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
@@ -258,7 +261,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
@@ -266,7 +269,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     buildHatchAdder(TST_SwelegfyrBlastFurnace.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_SwelegfyrBlastFurnace::addBlazeHatch)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement('Z', ofBlock(TFFluids.fluidPyrotheum.getBlock(), 0))
                 .build();
@@ -326,16 +329,16 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         recipeHeatLimitation = 0;
         glassTier = -1;
 
         // Check all tier to render properly in nei
-        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
             clearHatches();
-            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
-                || controllerTier > 1) return false;
+            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)
+                || controllerTier > 1) return;
         }
 
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
@@ -344,20 +347,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (glassTier < 12) {
             for (MTEHatchEnergy mEnergyHatch : this.mEnergyHatches) {
                 if (this.glassTier < mEnergyHatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
+        }
+
+        if (mBlazeHatch == null) {
+            errors.add(special_hatch_amount_wrong);
+            return;
         }
 
         // set recipe heat limitation
         recipeHeatLimitation = (int) getCoilLevel().getHeat() + 100 * (getTotalPowerTier() - 2);
 
-        return mBlazeHatch != null;
     }
 
     // region Processing Logic
@@ -746,7 +755,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         Widget button = new ButtonWidget()
             .setOnClick(
                 (clickData, widget) -> {
-                    if (checkStructure(true) && !this.getBaseMetaTileEntity()
+                    if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
                         .isActive()) setRemoveBlaze();
                 })
             .setPlayClickSound(true)

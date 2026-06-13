@@ -17,6 +17,8 @@ import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -42,6 +44,8 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+
+import java.util.List;
 
 public class TST_CoreDeviceOfHumanPowerGenerationFacility
     extends GTCM_MultiMachineBase<TST_CoreDeviceOfHumanPowerGenerationFacility> {
@@ -116,23 +120,27 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         glassTier = -1;
         coilLevel = HeatingCoilLevel.None;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (glassTier <= 0 || coilLevel == HeatingCoilLevel.None) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+
+        if (glassTier <= 0 || coilLevel == HeatingCoilLevel.None) {
+            errors.add(StructureErrorRegistry.COIL_LEVEL_NOT_ENOUGH);
+            return;
+        }
         if (glassTier < 12) {
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
         }
 
         speedBonus = 1F / getCoilTier();
         glassTierName = TierName.getVoltageName(glassTier);
-        return true;
     }
     // endregion
 
@@ -193,7 +201,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
                             .<TST_CoreDeviceOfHumanPowerGenerationFacility>builder()
                             .atLeast(InputHatch, OutputHatch)
                             .adder(TST_CoreDeviceOfHumanPowerGenerationFacility::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(11)
                             .buildAndChain(GregTechAPI.sBlockCasings1, 11)
                     )
@@ -203,7 +211,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
                             .<TST_CoreDeviceOfHumanPowerGenerationFacility>builder()
                             .atLeast(InputBus, OutputBus)
                             .adder(TST_CoreDeviceOfHumanPowerGenerationFacility::addToMachineList)
-                            .dot(2)
+                            .hint(2)
                             .casingIndex(16)
                             .buildAndChain(GregTechAPI.sBlockCasings2, 0)
                     )
@@ -224,7 +232,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
                             .<TST_CoreDeviceOfHumanPowerGenerationFacility>builder()
                             .atLeast(Energy.or(ExoticEnergy))
                             .adder(TST_CoreDeviceOfHumanPowerGenerationFacility::addToMachineList)
-                            .dot(3)
+                            .hint(3)
                             .casingIndex(183)
                             .buildAndChain(GregTechAPI.sBlockCasings8, 7)
                     )

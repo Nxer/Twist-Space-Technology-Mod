@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -23,7 +25,10 @@ import static gregtech.api.util.GTStructureUtility.ofHatchAdder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -276,14 +281,19 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mRadHatches.clear();
         mGlassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (this.mGlassTier <= 0) return false;
-        if (mRadHatches.size() > 1 && mOutputHatches.size() > 1) return false;
-        return true;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return ;
+        if (this.mGlassTier <= 0) {
+            errors.add(internal_structure_issue);
+            return;
+        }
+        checkOneOutputHatch(errors);
+        if (mRadHatches.size() > 1) {
+            errors.add(StructureErrors.of("GT5U.gui.text.structure_error.too_many_radiation_hatch"));
+        }
     }
 
     @Override
@@ -359,7 +369,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
                                                               HatchElementBuilder.<TST_BiosphereIII>builder()
                                                                                     .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                     .adder(TST_BiosphereIII::addToMachineList)
-                                                                                    .dot(1)
+                                                                                    .hint(1)
                                                                                     .casingIndex(STAINLESS_STEEL_CASING_INDEX)
                                                                                     .buildAndChain(GregTechAPI.sBlockCasings4, 1)))
                                                       .addElement('I', isAir())
@@ -491,7 +501,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :
             // Bio Vat
-            (EnumChatFormatting.GREEN + GTUtility.formatNumbers(efficiency) + EnumChatFormatting.RESET + "x"));
+            (EnumChatFormatting.GREEN + formatNumber(efficiency) + EnumChatFormatting.RESET + "x"));
         return ret;
     }
 }

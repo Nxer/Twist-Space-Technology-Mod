@@ -1,11 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -74,7 +76,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
             return false;
         }
 
-        this.costEU = GTUtility.formatNumbers(costEU);
+        this.costEU = formatNumber(costEU);
         maxProgressingTime = 20;
 
         trySetActive();
@@ -196,15 +198,15 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
     // endregion
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
+        ActiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
+        InactiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
         super.registerIcons(aBlockIconRegister);
     }

@@ -11,7 +11,9 @@ import static gregtech.api.enums.HatchElement.OutputBus;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -93,10 +95,10 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         enablePerfectOverclock = true;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // endregion
 
@@ -136,7 +138,7 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
                                                           HatchElementBuilder.<GTCM_ElvenWorkshop>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy),InputBus, OutputBus, InputHatch)
                                                                                 .adder(GTCM_ElvenWorkshop::addToMachineList)
-                                                                                .dot(1)
+                                                                                .hint(1)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                                                                                 .buildAndChain(GregTechAPI.sBlockStones, 7))
                                                       .addElement('B',ofBlock(ModBlocks.storage, 4))

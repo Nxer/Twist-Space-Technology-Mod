@@ -1,10 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Dynamo;
 import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticDynamo;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.Maintenance;
 import static gregtech.api.enums.HatchElement.OutputHatch;
@@ -20,6 +23,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -55,7 +61,6 @@ import goodgenerator.loader.Loaders;
 import goodgenerator.util.CrackRecipeAdder;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -83,7 +88,7 @@ import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
  * 最大并行可在配置文件中调整。
  * 消耗减免按配方开始时刻的累计运行时间计算。
  */
-public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
+public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     implements IConstructable, ISurvivalConstructable, IMTERenderer {
 
     // region Constants & tier caches
@@ -99,14 +104,14 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     protected static final int DEFAULT_COOLANT_EFFICIENCY = 100;
 
     protected static final List<Pair<FluidStack, Integer>> EXCITED_TIERS = Arrays.asList(
-        Pair.of(MaterialsUEVplus.Space.getMolten(20L), EXCITED_LIQUID_COEFF[0]),
+        Pair.of(Materials.Space.getMolten(20L), EXCITED_LIQUID_COEFF[0]),
         Pair.of(GGMaterial.atomicSeparationCatalyst.getMolten(20), EXCITED_LIQUID_COEFF[1]),
         Pair.of(Materials.Naquadah.getMolten(20L), EXCITED_LIQUID_COEFF[2]),
         Pair.of(Materials.Uranium235.getMolten(180L), EXCITED_LIQUID_COEFF[3]),
         Pair.of(Materials.Caesium.getMolten(180L), EXCITED_LIQUID_COEFF[4]));
 
     protected static final List<Pair<FluidStack, Integer>> COOLANT_TIERS = Arrays.asList(
-        Pair.of(MaterialsUEVplus.Time.getMolten(20L), COOLANT_EFFICIENCY[0]),
+        Pair.of(Materials.Time.getMolten(20L), COOLANT_EFFICIENCY[0]),
         Pair.of(new FluidStack(TFFluids.fluidCryotheum, 1_000), COOLANT_EFFICIENCY[1]),
         Pair.of(Materials.SuperCoolant.getFluid(1_000), COOLANT_EFFICIENCY[2]),
         Pair.of(GTModHandler.getIC2Coolant(1_000), COOLANT_EFFICIENCY[3]));
@@ -371,13 +376,12 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
 
     public TST_MegaNqReactor(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
-        super.useLongPower = true;
     }
 
     public TST_MegaNqReactor(String name) {
         super(name);
-        super.useLongPower = true;
     }
+
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -456,7 +460,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public @NotNull CheckRecipeResult checkProcessing_EM() {
+    public @NotNull CheckRecipeResult checkProcessing() {
         FluidInventoryView fluidView = createFluidInventoryView(getStoredFluids());
         FluidStack[] fluidArray = fluidView.toFluidArray();
 
@@ -605,8 +609,8 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean addEnergyOutput_EM(long EU, long Amperes) {
-        boolean result = super.addEnergyOutput_EM(EU, Amperes);
+    public boolean addEnergyOutput(long EU) {
+        boolean result = super.addEnergyOutput(EU);
         if (!result) stopMachine(ShutDownReasonRegistry.INSUFFICIENT_DYNAMO);
         return result;
     }
@@ -1609,8 +1613,9 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }};
     // spotless:on
 
+
     @Override
-    public IStructureDefinition<TST_MegaNqReactor> getStructure_EM() {
+    public IStructureDefinition<TST_MegaNqReactor> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaNqReactor>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
@@ -1618,10 +1623,10 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
                     'D',
                     GTStructureUtility.buildHatchAdder(TST_MegaNqReactor.class)
                         .casingIndex(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3))
-                        .dot(1)
+                        .hint(1)
                         .atLeast(
-                            TTMultiblockBase.HatchElement.DynamoMulti.or(Dynamo),
-                            TTMultiblockBase.HatchElement.EnergyMulti.or(Energy),
+                            ExoticDynamo.or(Dynamo),
+                            ExoticEnergy.or(Energy),
                             InputHatch,
                             OutputHatch,
                             Maintenance)
@@ -1637,17 +1642,16 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        boolean formed = structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        boolean formed = checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
         if (formed) {
             updateCoreFxCenter();
         }
-        return formed;
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        structureBuild_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, stackSize, hintsOnly);
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
     }
 
     @Override
@@ -1715,16 +1719,6 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean isPowerPassButtonEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isSafeVoidButtonEnabled() {
-        return false;
-    }
-
-    @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
         // #tr GUI.MegaNqReactor.RunningTime
@@ -1752,7 +1746,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
                     // # Current Output:
                     // #zh_CN 当前输出:
                     .setStringSupplier(
-                        () -> tr("GUI.MegaNqReactor.CurrentOutput") + GTUtility.formatNumbers(lEUt) + " EU/t")
+                        () -> tr("GUI.MegaNqReactor.CurrentOutput") + formatNumber(lEUt) + " EU/t")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> lEUt, val -> lEUt = val))

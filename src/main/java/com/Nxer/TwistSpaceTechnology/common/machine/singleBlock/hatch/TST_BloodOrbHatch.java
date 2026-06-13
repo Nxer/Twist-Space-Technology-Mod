@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -26,9 +27,9 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch";
     private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch_inactive";
 
-    public static Textures.BlockIcons.CustomIcon OVERLAY_ACTIVE = new Textures.BlockIcons.CustomIcon(
+    public static IIconContainer OVERLAY_ACTIVE = Textures.BlockIcons.custom(
         TEXTURE_NAME_OVERLAY_ACTIVE);
-    public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(
+    public static IIconContainer OVERLAY_INACTIVE = Textures.BlockIcons.custom(
         TEXTURE_NAME_OVERLAY_INACTIVE);
 
     private static final String[] DESC = new String[] {

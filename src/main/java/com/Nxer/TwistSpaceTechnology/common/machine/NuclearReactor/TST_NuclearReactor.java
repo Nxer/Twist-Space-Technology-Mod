@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.NuclearReactor;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -10,6 +11,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.util.MultiblockTooltipBuilder;
+
+import java.util.List;
 
 public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor> {
 
@@ -70,8 +73,8 @@ public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return false;
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+
     }
 
     @Override

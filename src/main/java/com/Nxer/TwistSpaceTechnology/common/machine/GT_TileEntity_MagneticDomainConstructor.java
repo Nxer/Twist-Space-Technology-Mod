@@ -18,7 +18,9 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -133,20 +135,20 @@ public class GT_TileEntity_MagneticDomainConstructor
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
 
         this.rings = 1;
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+            return;
         }
 
         while (checkPiece(
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.rings * 4)) {
+            baseDepthOffSet - this.rings * 4, errors)) {
 
             this.rings++;
         }
@@ -155,15 +157,14 @@ public class GT_TileEntity_MagneticDomainConstructor
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.rings * 4)) {
+            baseDepthOffSet - this.rings * 4, errors)) {
 
-            return false;
+            return;
         }
 
         maxParallel = (int) Math.min((long) rings * Parallel_PerRing_MagneticDomainConstructor, Integer.MAX_VALUE);
         speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor, getTotalPowerTier());
 
-        return true;
     }
 
     // endregion
@@ -284,7 +285,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement(
@@ -292,7 +293,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
@@ -300,7 +301,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(OutputBus, OutputHatch)
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement('F', ofFrame(Materials.NaquadahAlloy))
@@ -403,40 +404,6 @@ public class GT_TileEntity_MagneticDomainConstructor
         return tt;
     }
 
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

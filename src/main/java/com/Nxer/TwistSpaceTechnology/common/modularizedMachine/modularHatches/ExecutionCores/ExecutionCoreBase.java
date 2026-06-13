@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.E
 import java.util.Collections;
 import java.util.List;
 
+import gregtech.api.interfaces.IOutputBus;
+import gregtech.api.util.GTUtility;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -367,13 +369,6 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void setVoidingMode(VoidingMode mode) {}
 
-    @Override
-    public List<ItemStack> getItemOutputSlots(ItemStack[] toOutput) {
-        if (mainMachine instanceof IVoidable m) {
-            return m.getItemOutputSlots(toOutput);
-        }
-        return Collections.emptyList();
-    }
 
     @Override
     public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
@@ -384,12 +379,21 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
 
     @Override
-    public boolean canDumpItemToME() {
+    public List<IOutputBus> getOutputBusses() {
         if (mainMachine instanceof IVoidable m) {
-            return m.canDumpItemToME();
+            return m.getOutputBusses();
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean canDumpItemToME(List<GTUtility.ItemId> outputs) {
+        if (mainMachine instanceof IVoidable m) {
+            return m.canDumpItemToME(outputs);
         }
         return false;
     }
+
 
     @Override
     public boolean canDumpFluidToME() {
@@ -397,14 +401,6 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
             return m.canDumpFluidToME();
         }
         return false;
-    }
-
-    @Override
-    public List<ItemStack> getVoidOutputSlots() {
-        if (mainMachine instanceof IVoidable m) {
-            return m.getVoidOutputSlots();
-        }
-        return TstUtils.EMPTY_ITEMSTACK_LIST;
     }
 
     // endregion

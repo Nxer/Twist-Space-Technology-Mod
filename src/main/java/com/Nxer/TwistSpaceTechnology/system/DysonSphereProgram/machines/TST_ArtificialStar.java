@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
@@ -56,6 +57,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
+import gregtech.api.enums.HatchElement;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -445,19 +448,21 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mInputBusses.clear();
         tierDimensionField = -1;
         tierTimeField = -1;
         tierStabilisationField = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (tierDimensionField < 0 || tierTimeField < 0 || tierStabilisationField < 0) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (tierDimensionField < 0 || tierTimeField < 0 || tierStabilisationField < 0) {
+            errors.add(tiered_structure_issue);
+            return;
+        }
         // Only allow and must be 1 input bus
-        if (this.mInputBusses.size() != 1) return false;
+        checkHatchExact(errors, HatchElement.InputBus, 1);
         calculateOutputMultiplier();
         recoveryChance = (short) (tierDimensionField * tierTimeField * tierStabilisationField);
-        return true;
     }
 
     @Override
@@ -574,7 +579,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                HatchElementBuilder.<TST_ArtificialStar>builder()
                                    .atLeast(InputBus, OutputBus)
                                    .adder(TST_ArtificialStar::addInputBusOrOutputBusToMachineList)
-                                   .dot(1)
+                                   .hint(1)
                                    .casingIndex(1024+12)
                                    .buildAndChain(sBlockCasingsTT, 12))
                    .build();

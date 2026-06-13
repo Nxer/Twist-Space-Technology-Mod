@@ -24,7 +24,9 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -251,7 +253,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
                     HatchElementBuilder.<TST_GiantVacuumDryingFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy), InputHatch, OutputBus)
                         .adder(TST_GiantVacuumDryingFurnace::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 2))
                 .build();
@@ -460,27 +462,27 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         coilLevel = HeatingCoilLevel.None;
 
         this.piece = 0;
 
-        if (!checkPiece(STRUCTURE_PIECE_VP, VP_horizontalOffSet, VP_verticalOffSet, VP_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_VP, VP_horizontalOffSet, VP_verticalOffSet, VP_depthOffSet, errors)) {
+            return;
         }
-        if (!checkPiece(STRUCTURE_PIECE_MF, MF_horizontalOffSet, MF_verticalOffSet, MF_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MF, MF_horizontalOffSet, MF_verticalOffSet, MF_depthOffSet, errors)) {
+            return;
         }
-        if (!checkPiece(STRUCTURE_PIECE_DTB, DT_horizontalOffSet, DT_verticalOffSet, DT_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_DTB, DT_horizontalOffSet, DT_verticalOffSet, DT_depthOffSet, errors)) {
+            return;
         }
 
         while (checkPiece(
             STRUCTURE_PIECE_DTM,
             DT_horizontalOffSet,
             DT_verticalOffSet + 7 * piece + 7,
-            DT_depthOffSet)) {
+            DT_depthOffSet, errors)) {
             this.piece++;
         }
 
@@ -488,8 +490,8 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             STRUCTURE_PIECE_DTH,
             DT_horizontalOffSet,
             DT_verticalOffSet + 7 * piece + 3,
-            DT_depthOffSet)) {
-            return false;
+            DT_depthOffSet, errors)) {
+            return;
         }
         // parallel = piece * 32
         maxParallel = (int) Math
@@ -499,7 +501,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, getTotalPowerTier()))
             / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
 
-        return true;
     }
 
     @Override

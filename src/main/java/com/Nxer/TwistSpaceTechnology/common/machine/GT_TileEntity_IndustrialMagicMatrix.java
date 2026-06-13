@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.dreammaster.block.BlockList.BloodyThaumium;
@@ -35,6 +36,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -2918,13 +2920,13 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                             .atLeast(InputBus, OutputBus, Energy)
                             .adder(GT_TileEntity_IndustrialMagicMatrix::addToMachineList)
                             .casingIndex(1536)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofBlock(magicCasing, 0),
                         ofTileAdder(GT_TileEntity_IndustrialMagicMatrix::addInfusionProvider, magicCasing, 0)))
                 .addElement('E', ofBlock(blockMetalDevice, 9))
-                .addElement('F', ofBlock(BloodyThaumium.getBlock(), 0))
-                .addElement('G', ofBlock(BloodyVoid.getBlock(), 0))
+                .addElement('F', ofBlock(BloodyThaumium.block, 0))
+                .addElement('G', ofBlock(BloodyVoid.block, 0))
                 .addElement(
                     'H',
                     ofBlock(ModBlocksHandler.BlockCrystalDeep.getLeft(), ModBlocksHandler.BlockCrystalDeep.getRight()))
@@ -3203,20 +3205,18 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.mParallel = 0;
         this.blockTier = -1;
         this.mNodeEnergized.clear();
         this.mTileInfusionProvider.clear();
-        if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)
-            || checkPiece(STRUCTURE_PIECE_MAIN_ERR, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            if (blockTier > 0) {
-                mParallel = blockTier << 3;
-                return true;
-            } else return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (blockTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
         }
-        return false;
+        mParallel = blockTier << 3;
     }
 
     @Override

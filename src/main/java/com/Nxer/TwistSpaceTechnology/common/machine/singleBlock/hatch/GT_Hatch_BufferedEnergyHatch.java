@@ -220,15 +220,15 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
         updateStorageInfo();
 
         return new String[] { EnumChatFormatting.BLUE + getLocalName() + EnumChatFormatting.RESET, "Stored Items:",
-            EnumChatFormatting.GREEN + GTUtility.formatNumbers(mStored)
+            EnumChatFormatting.GREEN + formatNumber(mStored)
                 + EnumChatFormatting.RESET
                 + " EU / "
                 + EnumChatFormatting.YELLOW
-                + GTUtility.formatNumbers(mMax)
+                + formatNumber(mMax)
                 + EnumChatFormatting.RESET
                 + " EU",
-            "Average input:", GTUtility.formatNumbers(getBaseMetaTileEntity().getAverageElectricInput()) + " EU/t",
-            "Average output:", GTUtility.formatNumbers(getBaseMetaTileEntity().getAverageElectricOutput()) + " EU/t" };
+            "Average input:", formatNumber(getBaseMetaTileEntity().getAverageElectricInput()) + " EU/t",
+            "Average output:", formatNumber(getBaseMetaTileEntity().getAverageElectricOutput()) + " EU/t" };
     }
 
     private void updateStorageInfo() {
@@ -247,20 +247,20 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
         currenttip.add(
             StatCollector.translateToLocalFormatted(
                 "GT5U.waila.energy.stored",
-                GTUtility.formatNumbers(tag.getLong("mStored")),
-                GTUtility.formatNumbers(tag.getLong("mMax"))));
+                formatNumber(tag.getLong("mStored")),
+                formatNumber(tag.getLong("mMax"))));
         long avgIn = tag.getLong("AvgIn");
         long avgOut = tag.getLong("AvgOut");
         currenttip.add(
             StatCollector.translateToLocalFormatted(
                 "GT5U.waila.energy.avg_in_with_amperage",
-                GTUtility.formatNumbers(avgIn),
+                formatNumber(avgIn),
                 GTUtility.getAmperageForTier(avgIn, (byte) getInputTier()),
                 GTUtility.getColoredTierNameFromTier((byte) getInputTier())));
         currenttip.add(
             StatCollector.translateToLocalFormatted(
                 "GT5U.waila.energy.avg_out_with_amperage",
-                GTUtility.formatNumbers(avgOut),
+                formatNumber(avgOut),
                 GTUtility.getAmperageForTier(avgOut, (byte) getOutputTier()),
                 GTUtility.getColoredTierNameFromTier((byte) getOutputTier())));
         super.getWailaBody(itemStack, currenttip, accessor, config);

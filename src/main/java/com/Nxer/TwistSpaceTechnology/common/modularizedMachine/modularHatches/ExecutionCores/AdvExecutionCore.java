@@ -5,6 +5,7 @@ import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
 import java.math.BigInteger;
 import java.util.UUID;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -111,15 +112,15 @@ public class AdvExecutionCore extends ExecutionCoreBase {
     // endregion
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
+        ActiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
+        InactiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
         super.registerIcons(aBlockIconRegister);
     }

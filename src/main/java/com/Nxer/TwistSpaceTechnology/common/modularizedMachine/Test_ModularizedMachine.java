@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.AllModule;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -16,6 +17,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.TranslatableStructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -45,6 +48,8 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
 import gregtech.common.blocks.BlockCasings4;
 import gregtech.common.tileentities.machines.IDualInputHatch;
+
+import java.util.List;
 
 public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAllModuleBase<Test_ModularizedMachine> {
 
@@ -162,10 +167,15 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
      * The method checkMachine in this custom base class. Same as the origin checkMachine.
      */
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         tierMachine = 0;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (tierMachine == 0) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return false;
+        }
+        if (tierMachine == 0) {
+            errors.add(tiered_structure_issue);
+            return false;
+        }
         updateHatchTexture();
         return true;
     }
@@ -234,7 +244,7 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy), AllModule)
                         .adder(Test_ModularizedMachine::addToMachineList)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(0))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(tierBlockElement))
                 .build();
         }

@@ -17,6 +17,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_VACUUM_FREEZE
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -47,6 +48,8 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
 import gregtech.common.blocks.BlockCasings8;
+
+import java.util.List;
 
 public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TST_ThermalEnergyDevourer> {
 
@@ -80,7 +83,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     @Override
     public void setMachineModeIcons() {
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
     }
 
     @Override
@@ -172,14 +175,14 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         coefficientMultiplier = 1 + getExtraCoefficientMultiplierByVoltageTier();
         ItemStack controllerSlot = getControllerSlot();
         wirelessMode = controllerSlot != null && controllerSlot.stackSize > 0
             && GTUtility.areStacksEqual(controllerSlot, ItemList.EnergisedTesseract.get(1));
-        return true;
+
     }
 
     public int getExtraCoefficientMultiplierByVoltageTier() {
@@ -256,7 +259,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
                         .<TST_ThermalEnergyDevourer>builder()
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                         .adder(TST_ThermalEnergyDevourer::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(1))
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 1)))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 8))
@@ -266,7 +269,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
                         .<TST_ThermalEnergyDevourer>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_ThermalEnergyDevourer::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 3)))
                 .addElement('F', ofFrame(Materials.NaquadahAlloy))

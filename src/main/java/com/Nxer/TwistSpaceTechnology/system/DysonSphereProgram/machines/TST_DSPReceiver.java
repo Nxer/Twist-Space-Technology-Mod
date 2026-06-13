@@ -38,6 +38,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotN
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -57,6 +58,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -271,7 +273,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                     // #zh_CN 接收能源:
                     + TextEnums.tr("Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
-                    + GTUtility.formatNumbers(tag.getLong("TickEU"))
+                    + formatNumber(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET
                     + " EU/t");
         }
@@ -540,12 +542,11 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     // region Structure
     // spotless:off
 	@Override
-	public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+	public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-		if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+		if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
 //        wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         wirelessMode = true;
-        return true;
 	}
 
 	@Override
@@ -598,7 +599,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 			                                                 .atLeast(InputBus, OutputBus)
 			                                                 .adder(TST_DSPReceiver::addToMachineList)
 			                                                 .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
-			                                                 .dot(1)
+			                                                 .hint(1)
 			                                                 .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
                                    )
                                    .addElement('Q', ofFrame(Materials.NaquadahAlloy))

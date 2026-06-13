@@ -18,6 +18,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -40,6 +41,8 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
+
+import java.util.List;
 
 public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_LargeIndustrialCokingFactory> {
 
@@ -82,11 +85,10 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         this.speedBonus = 1F / (coilLevel.getTier() + 1);
-        return true;
     }
     // endregion
 
@@ -163,7 +165,7 @@ I -> ofFrame...(Materials.Steel, ...);
                                                .<TST_LargeIndustrialCokingFactory>builder()
                                                .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
-                                               .dot(1)
+                                               .hint(1)
                                                .casingIndex(48)
                                                .buildAndChain(GregTechAPI.sBlockCasings4, 0))
                                        .addElement(

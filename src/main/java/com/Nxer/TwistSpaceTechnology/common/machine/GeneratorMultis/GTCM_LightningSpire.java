@@ -131,7 +131,7 @@ public class GTCM_LightningSpire extends TT_MultiMachineBase_EM implements ICons
                     'B',
                     buildHatchAdder(GTCM_LightningSpire.class)
                         .atLeast(Dynamo.or(DynamoMulti), InputBus, InputHatch, OutputBus)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(textureOffset + 16 + 6)
                         .buildAndChain(sBlockCasingsBA0, 6))
                 .build();

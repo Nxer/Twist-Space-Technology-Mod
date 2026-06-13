@@ -23,8 +23,10 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
+import java.util.List;
 import java.util.Objects;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -96,9 +98,9 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     // region Structure
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override
@@ -143,13 +145,13 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
                     buildHatchAdder(TST_IncompactCyclotron.class)
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(BorosilicateGlass.ofBoroGlass(10)))
                 .addElement(
                     'F',
                     buildHatchAdder(TST_IncompactCyclotron.class).atLeast(Energy.or(ExoticEnergy))
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 11))
                 .build();
         }

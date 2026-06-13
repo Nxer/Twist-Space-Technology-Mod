@@ -15,11 +15,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
+import static gregtech.api.structure.error.StructureErrorRegistry.TOO_SHORT_HEIGHT;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -73,16 +76,14 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     public int totalMachineMode() {
         /*
          * 0 - Cutting Machine
-         * 1 - Slicer
-         * 2 - Lathe
+         * 1 - Lathe
          */
-        return 3;
+        return 2;
     }
 
     @Override
     public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CUTTING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
+        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
     }
 
@@ -114,48 +115,46 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        switch (machineMode) {
-            case 1:
-                return RecipeMaps.slicerRecipes;
-            case 2:
-                return RecipeMaps.latheRecipes;
-            default:
-                return RecipeMaps.cutterRecipes;
-        }
+        return switch (machineMode) {
+            case 1 -> RecipeMaps.latheRecipes;
+            default -> RecipeMaps.cutterRecipes;
+        };
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.slicerRecipes, RecipeMaps.latheRecipes, RecipeMaps.cutterRecipes);
+        return Arrays.asList(RecipeMaps.latheRecipes, RecipeMaps.cutterRecipes);
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.piece = 0;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return;
         }
         while (checkPiece(
             STRUCTURE_PIECE_MIDDLE,
             horizontalOffSet,
             verticalOffSet + (this.piece + 1) * 4,
-            depthOffSet)) {
+            depthOffSet, errors)) {
             this.piece++;
         }
+
         if (piece < 1) {
-            return false;
+            errors.add(TOO_SHORT_HEIGHT);
+            return;
         }
-        if (!checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet + (this.piece + 1) * 4, depthOffSet)) {
-            return false;
+
+        if (!checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet + (this.piece + 1) * 4, depthOffSet, errors)) {
+            return ;
         }
 
         speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerTier_HolySeparator, getTotalPowerTier()));
 
         maxParallel = ParallelPerPiece_HolySeparator * piece;
 
-        return true;
     }
 
     // endregion
@@ -235,7 +234,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
                                                                   HatchElementBuilder.<GT_TileEntity_HolySeparator>builder()
                                                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                                                                                         .adder(GT_TileEntity_HolySeparator::addToMachineList)
-                                                                                        .dot(1)
+                                                                                        .hint(1)
                                                                                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                                                                                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                                       .addElement('B',ofBlock(GregTechAPI.sBlockCasings8, 10))
@@ -343,41 +342,6 @@ G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     @Override

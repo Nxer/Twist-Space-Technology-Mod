@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.SpecialHatchElement.DataAccess;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.SpecialHatchElement.NaniteBus;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -22,6 +23,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -248,14 +251,16 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     protected static IStructureDefinition<TST_IntegratedAssemblyMatrix> STRUCTURE_DEFINITION;
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
 
         // get voltage limitation
         checkEnergyLimitation();
 
-        return dataAccessHatches.size() == 1 && naniteBuses.size() <= 1;
+        if (dataAccessHatches.size() != 1 || naniteBuses.size() != 1) {
+            errors.add(special_hatch_amount_wrong);
+        }
     }
 
     public void checkEnergyLimitation() {
@@ -319,7 +324,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
                             OutputHatch,
                             Energy.or(ExoticEnergy))
                         .adder(TST_IntegratedAssemblyMatrix::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsTT, 0))
                 .addElement('F', ofBlock(sBlockCasingsTT, 4))
@@ -348,15 +353,15 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     // region General
 
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
+        ActiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
+        InactiveFace = Textures.BlockIcons.custom(
             "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
         super.registerIcons(aBlockIconRegister);
     }
@@ -433,8 +438,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
                 TextLocalization.textUseBlueprint,
                 1)
             // #tr Tooltips_IntegratedAssemblyMatrix_DataHatchLimit
-            // # Only allow {\GOLD}1{\GRAY} Data Access Hatch and {\GOLD}1{\GRAY} Nanites Bus
-            // #zh_CN 只允许安装{\GOLD}1{\GRAY}个数据访问仓和{\GOLD}1{\GRAY}个纳米蜂群仓
+            // # Only allow and must place {\GOLD}1{\GRAY} Data Access Hatch and {\GOLD}1{\GRAY} Nanites Bus
+            // #zh_CN 只允许且必须安装{\GOLD}1{\GRAY}个数据访问仓和{\GOLD}1{\GRAY}个纳米蜂群仓
             .addStructureInfo(tr("Tooltips_IntegratedAssemblyMatrix_DataHatchLimit"))
             .toolTipFinisher(TextLocalization.ModName);
         // spotless:on

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -166,28 +168,28 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                     'R',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HyperThermalConvector::addHotFluidInputHatch)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'S',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HyperThermalConvector::addColdFluidOutputHatch)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'T',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HyperThermalConvector::addSteamOutputHatch)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'U',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HyperThermalConvector::addDistilledWaterInputHatch)
-                        .dot(4)
+                        .hint(4)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .build();
@@ -223,19 +225,19 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mHotFluidHatch = null;
         mDistilledWaterHatch = null;
         mSteamHatch = null;
         mColdFluidHatch = null;
         Arrays.fill(dedicatedHatches, null);
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
-            && !checkPiece(STRUCTURE_PIECE_OLD, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) return;
         dedicatedHatches[0] = mHotFluidHatch;
         dedicatedHatches[1] = mDistilledWaterHatch;
-        return mHotFluidHatch != null && mColdFluidHatch != null;
+        if (mHotFluidHatch == null || mColdFluidHatch == null) {
+            errors.add(special_hatch_amount_wrong);
+        }
     }
 
     // region Processing Logic

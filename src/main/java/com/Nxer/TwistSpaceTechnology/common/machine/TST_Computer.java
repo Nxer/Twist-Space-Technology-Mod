@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer.ComputerHatches.ComputationMonitor;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
@@ -26,6 +27,8 @@ import static vazkii.botania.common.block.ModBlocks.pylon;
 import java.util.Collections;
 import java.util.List;
 
+import gregtech.api.interfaces.IIconContainer;
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,8 +81,8 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     // GT_MetaTileEntity_AssemblyLine
     // GT_MetaTileEntity_EM_computer
     private static boolean localWirelessTag = false;
-    private static Textures.BlockIcons.CustomIcon ScreenOFF;
-    private static Textures.BlockIcons.CustomIcon ScreenON;
+    private static IIconContainer ScreenOFF;
+    private static IIconContainer ScreenON;
     // endregion
     private static final String[] description = new String[] {
         EnumChatFormatting.AQUA + translateToLocal("tt.keyphrase.Hint_Details") + ":",
@@ -1015,13 +1018,18 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         realMonitor = null;
         // eRacks.clear();
-        if (!structureCheck_EM(MAIN, offsetX, offsetY, offsetZ)) {
-            return false;
+        if (!checkPiece(MAIN, offsetX, offsetY, offsetZ, errors)) {
+            return;
         }
-        return !mInputHatches.isEmpty() && realMonitor != null && !eOutputData.isEmpty() && eInputData.isEmpty();
+
+        checkHasInputHatch(errors);
+        if (realMonitor == null || eOutputData.isEmpty() || !eInputData.isEmpty()) {
+            errors.add(special_hatch_amount_wrong);
+        }
+
     }
 
     @Override
@@ -1250,8 +1258,8 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ScreenOFF = new Textures.BlockIcons.CustomIcon("iconsets/EM_COMPUTER");
-        ScreenON = new Textures.BlockIcons.CustomIcon("iconsets/EM_COMPUTER_ACTIVE");
+        ScreenOFF = Textures.BlockIcons.custom("iconsets/EM_COMPUTER");
+        ScreenON = Textures.BlockIcons.custom("iconsets/EM_COMPUTER_ACTIVE");
         super.registerIcons(aBlockIconRegister);
     }
 
@@ -1317,7 +1325,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        structureBuild_EM(MAIN, offsetX, offsetY, offsetZ, stackSize, hintsOnly);
+        buildPiece(MAIN, stackSize, hintsOnly, offsetX, offsetY, offsetZ);
     }
 
     @Override
@@ -1357,7 +1365,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                     HatchElementBuilder.<TST_Computer>builder()
                         .atLeast(ComputationMonitor, OutputData, InputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_Computer::superAddToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(textureOffset + 2)
                         .buildAndChain(ofBlock(sBlockCasingsSE, 2)))
                 .addElement('Q', ofBlock(sBlockCasingsTT, 3))

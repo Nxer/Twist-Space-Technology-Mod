@@ -14,7 +14,9 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Collection;
+import java.util.List;
 
+import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -103,8 +105,8 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     protected static IStructureDefinition<MM_MassFabricatorGenesis> STRUCTURE_DEFINITION;
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override
@@ -205,7 +207,7 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
                     HatchElementBuilder.<MM_MassFabricatorGenesis>builder()
                         .atLeast(InputBus, OutputHatch, Energy.or(ExoticEnergy), ParallelController)
                         .adder(MM_MassFabricatorGenesis::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsBA0, 12))
                 .build();

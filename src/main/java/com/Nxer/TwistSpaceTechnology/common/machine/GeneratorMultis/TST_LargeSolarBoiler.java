@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -12,6 +13,7 @@ import static gregtech.api.GregTechAPI.sBlockMetal6;
 import static gregtech.api.enums.GTValues.V;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputHatch;
+import static gregtech.api.enums.Materials.Water;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
@@ -21,9 +23,15 @@ import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
+import com.glodblock.github.util.Util;
+import gregtech.api.enums.Materials;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.util.GTModHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -31,6 +39,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -99,8 +108,8 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     private static final long explosionPower = V[1];
 
-    private static final FluidStack waterFluid = FluidUtils.getWater(1);
-    private static final FluidStack distilledWaterFluid = FluidUtils.getDistilledWater(1);
+    private static final FluidStack waterFluid = MiscHelper.water;
+    private static final FluidStack distilledWaterFluid = MiscHelper.distilledWater;
 
     private double heat = 0; // min - 0, max - 1
     private double calcification = 0; // min - 0, max - 1
@@ -163,14 +172,13 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
                 FluidStack liquidToDeplete;
                 if (hasWater) {
-                    liquidToDeplete = FluidUtils.getWater(consumedWater);
+                    liquidToDeplete = copyAmount(waterFluid, consumedWater);
                 } else {
-                    liquidToDeplete = FluidUtils.getDistilledWater(consumedWater);
+                    liquidToDeplete = copyAmount(distilledWaterFluid, consumedWater);
                 }
 
                 if (super.depleteInput(liquidToDeplete)) {
-                    super.mOutputFluids = new FluidStack[] {
-                        FluidUtils.getSteam(consumedWater * GTValues.STEAM_PER_WATER) };
+                    super.mOutputFluids = new FluidStack[] { Materials.Steam.getGas((long) consumedWater * GTValues.STEAM_PER_WATER) };
                     super.mMaxProgresstime = 20;
                     super.mEfficiency = getMaxEfficiency(null);
                     runningTicks += 20;
@@ -212,18 +220,18 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         tierFrameCasing = -1;
         tierGearBoxCasing = -1;
         tierPipeCasing = -1;
         tierFireBoxCasing = -1;
         tierMachineCasing = -1;
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
             if (isRendering) {
                 destroyRenderBlock();
             }
-            return false;
+            return;
         }
 
         if (tierGearBoxCasing == 1 && tierPipeCasing == 1
@@ -232,15 +240,16 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
             && tierFrameCasing == 1) {
             updateHatchTexture();
             machineTier = 1;
-            return true;
+            return;
         }
+
         if (tierGearBoxCasing == 2 && tierPipeCasing == 2
             && tierFireBoxCasing == 2
             && tierMachineCasing == 2
             && tierFrameCasing == 2) {
             updateHatchTexture();
             machineTier = 2;
-            return true;
+            return;
         }
 
         return false;
@@ -370,7 +379,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         buildHatchAdder(TST_LargeSolarBoiler.class)
                             .atLeast(InputHatch)
                             .casingIndex(getCasingTextureID())
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofBlocksTiered(
                             TST_LargeSolarBoiler::getMachineCasingTier,
@@ -386,7 +395,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                         buildHatchAdder(TST_LargeSolarBoiler.class)
                             .atLeast(OutputHatch)
                             .casingIndex(getCasingTextureID())
-                            .dot(2)
+                            .hint(2)
                             .build(),
                         ofBlocksTiered(
                             TST_LargeSolarBoiler::getMachineCasingTier,

@@ -5,6 +5,7 @@ import static gregtech.api.enums.Dyes.MACHINE_METAL;
 import java.util.ArrayList;
 import java.util.List;
 
+import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -44,7 +45,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     public long actualInputAmperes = 0;
     public long actualOutputAmperes = 0;
     public long lastStoredEU = 0;
-    public static Textures.BlockIcons.CustomIcon EMCandyActive, EMpipe, Facing;
+    public static IIconContainer EMCandyActive, EMpipe, Facing;
 
     public GT_MetaTileEntity_Pipe_EnergySmart(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
@@ -58,9 +59,9 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        EMCandyActive = new Textures.BlockIcons.CustomIcon("iconsets/EM_CANDY_ACTIVE");
-        EMpipe = new Textures.BlockIcons.CustomIcon("iconsets/EM_LASER");
-        Facing = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_ENERGY_IN_LASER");
+        EMCandyActive = Textures.BlockIcons.custom("iconsets/EM_CANDY_ACTIVE");
+        EMpipe = Textures.BlockIcons.custom("iconsets/EM_LASER");
+        Facing = Textures.BlockIcons.custom("iconsets/OVERLAY_ENERGY_IN_LASER");
         super.registerIcons(aBlockIconRegister);
     }
 
