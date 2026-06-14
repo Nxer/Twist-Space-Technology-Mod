@@ -24,3 +24,12 @@ configurations.all {
 test {
     useJUnitPlatform()
 }
+
+tasks.register("preprocessLangInJavaFiles", GenerateLanguageTask) {
+    sources = sourceSets.main.allSource
+    outputDirectory = layout.projectDirectory.dir("src/main/resources/assets/gtnhcommunitymod/lang/")
+}
+
+tasks.processResources {
+    dependsOn(tasks.preprocessLangInJavaFiles)
+}
