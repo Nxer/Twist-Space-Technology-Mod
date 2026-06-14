@@ -65,7 +65,7 @@ public class StarKernelForgeRecipePool {
             if (liquid == null) liquid = FluidRegistry.getFluidStack("molten." + liquidName, plasma.amount);
             if (liquid == null) {
                 switch (liquidName) {
-                    case "helium_3" -> liquid = Materials.Helium_3.getGas(plasma.amount);
+                    case "helium_3", "helium-3" -> liquid = Materials.Helium3.getGas(plasma.amount);
                     case "sodium" -> liquid = Materials.Sodium.getFluid(plasma.amount);
                 }
             }

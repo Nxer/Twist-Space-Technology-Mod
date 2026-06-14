@@ -271,7 +271,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
             this.priority = priority;
         }
 
-        @Override
+
         public boolean equals(Object obj) {
             if (obj == null) {
                 return false;

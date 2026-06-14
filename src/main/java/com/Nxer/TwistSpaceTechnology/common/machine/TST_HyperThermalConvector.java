@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import gregtech.api.structure.error.StructureError;
+import gregtech.api.util.FluidEjectionHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -506,9 +507,12 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         FluidStack copiedFluidStack = aLiquid.copy();
         List<MTEHatchOutput> targetHatches = Collections
             .singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
-        if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
-            dumpFluid(targetHatches, copiedFluidStack, false);
-        }
+//        if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
+//            dumpFluid(targetHatches, copiedFluidStack, false);
+//        }
+        FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
+        ejectionHelper.ejectStack(copiedFluidStack);
+        ejectionHelper.commit();
         return false;
     }
 

@@ -38,22 +38,22 @@ public class NanoForgeRecipePool {
             .addTo(nanoForgeRecipes);
 
         // Axonium
-        GTValues.RA.stdBuilder()
-            .itemInputs(
-                GTCMItemList.EnergyFluctuationSelfHarmonizer.get(0),
-                GTCMItemList.CoreElement.get(0),
-                MaterialsTST.Axonium.getBlocks(8),
-                GTCMItemList.AnnihilationConstrainer.get(1),
-                GTCMItemList.PerfectEngravedEnergyChip.get(4),
-                GTCMItemList.InformationHorizonInterventionShell.get(16))
-            .fluidInputs(
-                Materials.UUMatter.getFluid(2000000),
-                Materials.PhononMedium.getFluid(4000),
-                Materials.Infinity.getPlasma(8000))
-            .itemOutputs(MaterialsTST.Axonium.getNanite(2))
-            .metadata(NANO_FORGE_TIER, 3)
-            .eut(RECIPE_MAX)
-            .duration(20 * 750)
-            .addTo(nanoForgeRecipes);
+//        GTValues.RA.stdBuilder()
+//            .itemInputs(
+//                GTCMItemList.EnergyFluctuationSelfHarmonizer.get(0),
+//                GTCMItemList.CoreElement.get(0),
+//                MaterialsTST.Axonium.getBlocks(8),
+//                GTCMItemList.AnnihilationConstrainer.get(1),
+//                GTCMItemList.PerfectEngravedEnergyChip.get(4),
+//                GTCMItemList.InformationHorizonInterventionShell.get(16))
+//            .fluidInputs(
+//                Materials.UUMatter.getFluid(2000000),
+//                Materials.PhononMedium.getFluid(4000),
+//                Materials.Infinity.getPlasma(8000))
+//            .itemOutputs(MaterialsTST.Axonium.getNanite(2))
+//            .metadata(NANO_FORGE_TIER, 3)
+//            .eut(RECIPE_MAX)
+//            .duration(20 * 750)
+//            .addTo(nanoForgeRecipes);
     }
 }

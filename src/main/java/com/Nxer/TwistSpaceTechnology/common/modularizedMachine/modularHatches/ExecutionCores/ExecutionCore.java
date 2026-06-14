@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.E
 
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.IOutputBus;
+import gregtech.api.interfaces.IOutputHatch;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.util.GTUtility;
 import net.minecraft.client.renderer.texture.IIconRegister;

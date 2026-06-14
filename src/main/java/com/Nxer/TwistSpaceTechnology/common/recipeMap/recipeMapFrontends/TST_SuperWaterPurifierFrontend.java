@@ -19,7 +19,7 @@ public class TST_SuperWaterPurifierFrontend extends RecipeMapFrontend {
     public TST_SuperWaterPurifierFrontend(BasicUIPropertiesBuilder uiPropertiesBuilder,
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(uiPropertiesBuilder.logoPos(new Pos2d(6, 47)), neiPropertiesBuilder);
-        neiProperties.recipeBackgroundSize = new Size(170, 10 + (getFluidRowCount()) * 18);
+//        neiProperties.recipeBackgroundSize = new Size(170, 10 + (getFluidRowCount()) * 18);
     }
 
     private int getFluidRowCount() {

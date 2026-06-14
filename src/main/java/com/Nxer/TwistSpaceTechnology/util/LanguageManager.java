@@ -39,11 +39,11 @@ public class LanguageManager {
 
         // Gregtech Material
 
-        addGTMaterialLocalization(MaterialsTST.NeutroniumAlloy, "中子合金");
-        addGTMaterialLocalization(MaterialsTST.AxonisAlloy, "灵韵合金");
-        addGTMaterialLocalization(MaterialsTST.Axonium, "焕律璨金");
-        addGTMaterialLocalization(MaterialsTST.Dubnium, "钅杜");
-        addGTMaterialNanitesLocalization(MaterialsTST.Axonium);
+//        addGTMaterialLocalization(MaterialsTST.NeutroniumAlloy, "中子合金");
+//        addGTMaterialLocalization(MaterialsTST.AxonisAlloy, "灵韵合金");
+//        addGTMaterialLocalization(MaterialsTST.Axonium, "焕律璨金");
+//        addGTMaterialLocalization(MaterialsTST.Dubnium, "钅杜");
+//        addGTMaterialNanitesLocalization(MaterialsTST.Axonium);
 
         addStringLocalization("tst.blockcasings.multi.32767.name", "任意本方块的子方块");
         addStringLocalization("tst.blockmetal01.0.name", "%material块");

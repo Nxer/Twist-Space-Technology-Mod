@@ -416,7 +416,6 @@ public class EGSArtificialGreenHouseOutputBucket {
     }
 
     public boolean isSeedSupported() {
-        return false;
 
         if (seed == null) {
             return false;

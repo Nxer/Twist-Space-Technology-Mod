@@ -37,23 +37,23 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
         return new GT_MetaTileEntity_Hatch_Air(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
-    @Override
-    public synchronized String[] getDescription() {
-        mDescriptionArray[2] = FluidCapacity + " "
-            + EnumChatFormatting.BLUE
-            + formatNumber(getCapacity())
-            + EnumChatFormatting.RESET
-            + " L";
-        final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };
-
-        String[] aCustomTips = getCustomTooltip();
-        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
-        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-        System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
-        System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
-        desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
-        return desc;
-    }
+//    @Override
+//    public synchronized String[] getDescription() {
+//        mDescriptionArray[2] = FluidCapacity + " "
+//            + EnumChatFormatting.BLUE
+//            + formatNumber(getCapacity())
+//            + EnumChatFormatting.RESET
+//            + " L";
+//        final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };
+//
+//        String[] aCustomTips = getCustomTooltip();
+//        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
+//        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+//        System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
+//        System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
+//        desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
+//        return desc;
+//    }
 
     @Override
     public String[] getCustomTooltip() {

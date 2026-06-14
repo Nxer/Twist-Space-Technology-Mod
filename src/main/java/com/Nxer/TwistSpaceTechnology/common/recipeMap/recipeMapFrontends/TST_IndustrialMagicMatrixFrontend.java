@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.gtnewhorizons.modularui.common.widget.ProgressBar;
+import gregtech.nei.GTNEIDefaultHandler;
 import org.jetbrains.annotations.NotNull;
 
 import com.gtnewhorizons.modularui.api.math.Pos2d;
@@ -28,9 +30,9 @@ public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
     }
 
     @Override
-    public void addProgressBar(ModularWindow.@NotNull Builder builder, @NotNull Supplier<Float> progressSupplier,
-        @NotNull Pos2d windowOffset) {
-        super.addProgressBar(builder, progressSupplier, new Pos2d(15, 10));
+    public void addProgressBar(ModularWindow.Builder builder, GTNEIDefaultHandler.NEITemplateContext ctx) {
+//        new Pos2d(15, 10);
+        super.addProgressBar(builder, ctx);
     }
 
     private int getItemRowCount() {

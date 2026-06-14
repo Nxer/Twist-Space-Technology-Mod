@@ -71,7 +71,7 @@ public class DragonBloodRecipe {
                 .itemInputs(GTPPCombType.DRAGONBLOOD.getStackForType(8))
                 .fluidInputs(Materials.DraconiumAwakened.getMolten(144 * 16))
                 .itemOutputs(
-                    Materials.DarkAsh.getDust(8),
+                    Materials.AshDark.getDust(8),
                     GTPP_Bees.propolis.getStackForType(GTPPPropolisType.DRAGONBLOOD),
                     GTPP_Bees.drop.getStackForType(GTPPDropType.DRAGONBLOOD))
                 .fluidOutputs(DRAGON_METAL.getFluidStack(36))

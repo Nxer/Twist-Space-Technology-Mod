@@ -12,16 +12,16 @@ import com.Nxer.TwistSpaceTechnology.util.LanguageManager;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import gregtech.GTMod;
 
-@Mixin(value = GTMod.class, remap = false)
+//@Mixin(value = GTMod.class, remap = false)
 public class HookMaterials_Mixin {
 
-    @Inject(
-        method = "onPreInitialization",
-        at = @At(value = "INVOKE", target = "Lgregtech/api/enums/Materials;init()V"))
-    private void tst$runBeforeMaterialsInit(FMLPreInitializationEvent aEvent, CallbackInfo ci) {
-        MaterialsTST.init();
-        LanguageManager.initGTMaterials();
-        TwistSpaceTechnology.LOG.info("Materials Hooked!");
-    }
+//    @Inject(
+//        method = "onPreInitialization",
+//        at = @At(value = "INVOKE", target = "Lgregtech/api/enums/Materials;init()V"))
+//    private void tst$runBeforeMaterialsInit(FMLPreInitializationEvent aEvent, CallbackInfo ci) {
+//        MaterialsTST.init();
+//        LanguageManager.initGTMaterials();
+//        TwistSpaceTechnology.LOG.info("Materials Hooked!");
+//    }
 
 }

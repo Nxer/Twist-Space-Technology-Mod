@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.util.GTUtility;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 /**
  * This class adds a new "failed recipe result" to show that something of some type is not met the requirement like
  * {@link gregtech.api.recipe.check.ResultInsufficientMachineTier ResultInsufficientMachineTier}.

@@ -14,6 +14,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OrePro
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;

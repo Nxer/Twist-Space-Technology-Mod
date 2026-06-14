@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import gregtech.api.interfaces.IOutputBus;
+import gregtech.api.interfaces.IOutputHatch;
 import gregtech.api.util.GTUtility;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -368,6 +369,16 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
 
     @Override
     public void setVoidingMode(VoidingMode mode) {}
+
+
+    @Override
+    public List<IOutputHatch> getOutputHatches() {
+        if (mainMachine instanceof IVoidable iVoidable) {
+            iVoidable.getOutputHatches();
+        }
+        return Collections.emptyList();
+    }
+
 
 
     @Override
