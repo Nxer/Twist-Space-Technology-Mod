@@ -19,9 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -40,6 +37,7 @@ import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -55,6 +53,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -66,6 +65,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
@@ -80,14 +80,14 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable {
 
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons.custom(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE = Textures.BlockIcons.custom(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = Textures.BlockIcons.custom(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_GLOW = Textures.BlockIcons.custom(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_GLOW = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
 
     private static final int distanceFromMeteor = 48;
     private static final String STRUCTURE_PIECE_MAIN = "main";

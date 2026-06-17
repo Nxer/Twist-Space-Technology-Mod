@@ -29,9 +29,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.enums.VoltageIndex;
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -57,6 +54,8 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -159,7 +158,8 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         if (this.glassTier < GlassTier_LimitLaserHatch_MagneticDrivePressureFormer) {
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
-                    errors.add(StructureErrors.glassTierNotEnough(GlassTier_LimitLaserHatch_MagneticDrivePressureFormer));
+                    errors
+                        .add(StructureErrors.glassTierNotEnough(GlassTier_LimitLaserHatch_MagneticDrivePressureFormer));
                     return;
                 }
             }

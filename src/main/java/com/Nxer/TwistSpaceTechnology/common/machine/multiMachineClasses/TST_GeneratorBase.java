@@ -2,17 +2,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static gregtech.api.util.GTUtility.filterValidMTEs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
-import gregtech.api.util.IGTHatchAdder;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 
 public abstract class TST_GeneratorBase<T extends TST_GeneratorBase<T>> extends GTCM_MultiMachineBase<T> {

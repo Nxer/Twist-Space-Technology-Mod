@@ -8,7 +8,6 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import bartworks.system.material.Werkstoff;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TextureSet;
 
 /**
@@ -179,9 +178,9 @@ public class MaterialPool implements Runnable {
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
-//        for (var prefix : OrePrefixes.values()) {
-//            gf.addPrefix(prefix);
-//        }
-//        gf.removePrefix(OrePrefixes.ore);
+        // for (var prefix : OrePrefixes.values()) {
+        // gf.addPrefix(prefix);
+        // }
+        // gf.removePrefix(OrePrefixes.ore);
     }
 }

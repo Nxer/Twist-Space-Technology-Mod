@@ -30,6 +30,8 @@ String gtnhB(String name) {
 configurations.all {
     resolutionStrategy {
         force 'com.github.GTNewHorizons:GTNHLib:0.11.11:dev'
+        force 'com.github.GTNewHorizons:GT5-Unofficial:5.09.52.594:dev'
+//        force 'com.github.GTNewHorizons:NotEnoughItems:2.8.101:dev'
     }
 }
 

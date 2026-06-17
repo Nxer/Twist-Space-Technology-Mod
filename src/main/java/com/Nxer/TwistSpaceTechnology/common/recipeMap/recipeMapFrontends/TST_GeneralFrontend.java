@@ -2,6 +2,8 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.math.Size;
 
@@ -20,7 +22,14 @@ public class TST_GeneralFrontend extends RecipeMapFrontend {
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(uiPropertiesBuilder.logoPos(new Pos2d(79, 7)), neiPropertiesBuilder);
         this.itemRowCount = getItemRowCount();
-//        neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount + getFluidRowCount()) * 18);
+        // neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount + getFluidRowCount()) * 18);
+    }
+
+    @Override
+    protected @NotNull NEIRecipePropertiesBuilder modifyNEIProperties(NEIRecipePropertiesBuilder neiPropertiesBuilder) {
+        int itemRowCount = getItemRowCount();
+        int fluidRowCount = getFluidRowCount();
+        return neiPropertiesBuilder.recipeBackgroundSize(new Size(170, 10 + (itemRowCount + getFluidRowCount()) * 18));
     }
 
     private int getItemRowCount() {
@@ -32,22 +41,22 @@ public class TST_GeneralFrontend extends RecipeMapFrontend {
     }
 
     @Override
-    public List<Pos2d> getItemInputPositions(int itemInputCount) {
+    public @NotNull List<Pos2d> getItemInputPositions(int itemInputCount) {
         return UIHelper.getGridPositions(itemInputCount, 6, yOrigin, xDirMaxCount);
     }
 
     @Override
-    public List<Pos2d> getItemOutputPositions(int itemOutputCount) {
+    public @NotNull List<Pos2d> getItemOutputPositions(int itemOutputCount) {
         return UIHelper.getGridPositions(itemOutputCount, 98, yOrigin, xDirMaxCount);
     }
 
     @Override
-    public List<Pos2d> getFluidInputPositions(int fluidInputCount) {
+    public @NotNull List<Pos2d> getFluidInputPositions(int fluidInputCount) {
         return UIHelper.getGridPositions(fluidInputCount, 6, yOrigin + itemRowCount * 18, xDirMaxCount);
     }
 
     @Override
-    public List<Pos2d> getFluidOutputPositions(int fluidOutputCount) {
+    public @NotNull List<Pos2d> getFluidOutputPositions(int fluidOutputCount) {
         return UIHelper.getGridPositions(fluidOutputCount, 98, yOrigin + itemRowCount * 18, xDirMaxCount);
     }
 

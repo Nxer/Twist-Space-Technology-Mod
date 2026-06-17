@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.NuclearReactor;
 
-import gregtech.api.structure.error.StructureError;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -10,9 +11,8 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
-
-import java.util.List;
 
 public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor> {
 

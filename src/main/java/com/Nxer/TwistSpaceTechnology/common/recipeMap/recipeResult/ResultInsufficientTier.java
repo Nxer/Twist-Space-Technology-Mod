@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.StatCollector;
@@ -7,9 +9,6 @@ import net.minecraft.util.StatCollector;
 import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.util.GTUtility;
-
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 /**
  * This class adds a new "failed recipe result" to show that something of some type is not met the requirement like

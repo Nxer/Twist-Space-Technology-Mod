@@ -20,8 +20,6 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.gtnhlib.capability.Capabilities;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
@@ -47,11 +45,12 @@ import gregtech.api.metatileentity.implementations.MTEBasicHull;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom> implements IConstructable, ISecondaryDescribable, ICleanroom {
+public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
+    implements IConstructable, ISecondaryDescribable, ICleanroom {
 
     private static final int MAX_WIDTH = 63;
     private static final int MAX_HEIGHT = 64;
@@ -106,7 +105,6 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom> implemen
     public TST_CleanRoom(String aName) {
         super(aName);
     }
-
 
     @Override
     public IStructureDefinition<TST_CleanRoom> getStructureDefinition() {
@@ -544,8 +542,8 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom> implemen
         }
         mHeight = -dyMin + 1;
 
-//        if (debugCleanroom) GTLog.out.println(
-//            "Cleanroom: Structure complete. Found " + casingCount + " casings, " + otherCount + " other blocks.");
+        // if (debugCleanroom) GTLog.out.println(
+        // "Cleanroom: Structure complete. Found " + casingCount + " casings, " + otherCount + " other blocks.");
 
         // Step 3: Validate totals
         if (casingCount < 20) {

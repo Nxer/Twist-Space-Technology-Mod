@@ -19,7 +19,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
-import gregtech.api.structure.error.StructureError;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -42,13 +43,12 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings1;
 import gregtech.common.blocks.BlockCasings8;
-
-import java.util.List;
 
 public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_TileEntity_Silksong> {
 
@@ -113,12 +113,20 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
             return;
         }
 
-        while (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2, errors)) {
+        while (checkPiece(
+            STRUCTURE_PIECE_MIDDLE,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet - piece * 2 - 2,
+            errors)) {
             this.piece++;
         }
 
-        if (this.piece < 1
-            || !checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2, errors)) {
+        if (piece < 1) return;
+
+        errors.clear();
+
+        if (!checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2, errors)) {
             return;
         }
 

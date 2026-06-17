@@ -23,8 +23,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -50,6 +48,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -61,6 +60,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchNanite;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
@@ -359,10 +359,8 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
         super.registerIcons(aBlockIconRegister);
     }
 

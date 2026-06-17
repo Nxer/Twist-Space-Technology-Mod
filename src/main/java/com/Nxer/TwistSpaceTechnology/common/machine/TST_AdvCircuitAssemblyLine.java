@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static bartworks.common.tileentities.multis.MTECircuitAssemblyLine.isValidImprint;
-import static bartworks.system.material.CircuitGeneration.CircuitPartsItem.getCircuitParts;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.laser_hatch_incompatible;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
@@ -33,13 +31,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import bartworks.API.enums.CircuitImprint;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import gregtech.api.enums.HatchElement;
-import gregtech.api.structure.error.ErrorType;
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
-import gregtech.api.util.GTUtility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -51,13 +42,15 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.enums.CircuitImprint;
 import bartworks.API.recipe.BartWorksRecipeMaps;
-import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
@@ -69,6 +62,9 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.ErrorType;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -188,14 +184,22 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
 
         if (!mExoticEnergyHatches.isEmpty()) {
             if (!mEnergyHatches.isEmpty()) {
-                errors.add(StructureErrors.hatchCount(ErrorType.TOO_MANY, HatchElement.Energy, mExoticEnergyHatches.size()+mEnergyHatches.size(), 1));
+                errors.add(
+                    StructureErrors.hatchCount(
+                        ErrorType.TOO_MANY,
+                        HatchElement.Energy,
+                        mExoticEnergyHatches.size() + mEnergyHatches.size(),
+                        1));
                 return;
             }
             if (mExoticEnergyHatches.size() > 1) {
-                errors.add(StructureErrors.hatchCount(ErrorType.TOO_MANY, HatchElement.Energy, mExoticEnergyHatches.size(), 1));
+                errors.add(
+                    StructureErrors
+                        .hatchCount(ErrorType.TOO_MANY, HatchElement.Energy, mExoticEnergyHatches.size(), 1));
                 return;
             }
-            if (mExoticEnergyHatches.get(0).maxWorkingAmperesIn() > 64) {
+            if (mExoticEnergyHatches.get(0)
+                .maxWorkingAmperesIn() > 64) {
                 errors.add(laser_hatch_incompatible);
                 return;
             }
@@ -218,7 +222,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     protected long maxVoltageAllow = 0;
     ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
     HashSet<TST_ItemID> circuitType = new HashSet<>();
-
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -292,13 +295,15 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                 }
 
                 // Check controller
-                CircuitImprint ci = CircuitImprint.findCircuitImprintByImprintStack(TST_AdvCircuitAssemblyLine.this.getControllerSlot());
+                CircuitImprint ci = CircuitImprint
+                    .findCircuitImprintByImprintStack(TST_AdvCircuitAssemblyLine.this.getControllerSlot());
                 if (ci != null && ci.circuit.isStackEqual(recipe.mOutputs[0])) {
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
 
                 // Check imprint hatch
-                circuitType = mCircuitImprintHatches.get(0).getStoredCircuitImprints();
+                circuitType = mCircuitImprintHatches.get(0)
+                    .getStoredCircuitImprints();
                 if (circuitType.contains(TST_ItemID.create(recipe.mOutputs[0]))) {
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
@@ -310,7 +315,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             .setMaxParallelSupplier(this::getMaxParallelRecipes);
 
     }
-
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {

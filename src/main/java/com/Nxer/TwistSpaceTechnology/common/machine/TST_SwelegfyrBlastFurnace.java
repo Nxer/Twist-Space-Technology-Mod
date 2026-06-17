@@ -38,8 +38,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrorRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -95,6 +93,8 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -127,18 +127,18 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     // end region
 
     // region Structure
-    private static final int baseHorizontalOffSet = 5;
-    private static final int baseVerticalOffSet = 17;
-    private static final int baseDepthOffSet = 1;
-    private static final int BlazeHorizontalOffSet = 3;
-    private static final int BlazeVerticalOffSet = 10;
-    private static final int BlazeDepthOffSet = -1;
-    private static final String STRUCTURE_PIECE_MAIN_T1 = "mainT1";
-    private static final String STRUCTURE_PIECE_MAIN_T2 = "mainT2";
-    private static final String STRUCTURE_PIECE_Blaze_T1 = "BlazeT1";
-    private static final String STRUCTURE_PIECE_Blaze_T2 = "BlazeT2";
+    protected static final int baseHorizontalOffSet = 5;
+    protected static final int baseVerticalOffSet = 17;
+    protected static final int baseDepthOffSet = 1;
+    protected static final int BlazeHorizontalOffSet = 3;
+    protected static final int BlazeVerticalOffSet = 10;
+    protected static final int BlazeDepthOffSet = -1;
+    protected static final String STRUCTURE_PIECE_MAIN_T1 = "mainT1";
+    protected static final String STRUCTURE_PIECE_MAIN_T2 = "mainT2";
+    protected static final String STRUCTURE_PIECE_Blaze_T1 = "BlazeT1";
+    protected static final String STRUCTURE_PIECE_Blaze_T2 = "BlazeT2";
     // spotless:off
-    private static final String[][] shapeMainT1 = new String[][]{
+    protected static final String[][] shapeMainT1 = new String[][]{
         {"           ","           ","   NNNNN   ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","   NNNNN   ","           ","           "},
         {"           ","   NNNNN   ","  NHHHHHN  "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN ","  NHHHHHN  ","   NNNNN   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFKKKFMF ","FMFEEEEEFMF","FMKEEEEEKMF","FMKEECEEKMF","FMKEEEEEKMF","FMFEEEEEFMF"," FMFKKKFMF ","  FMMMMMF  ","   FFFFF   "},
@@ -161,7 +161,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"           ","   PPPPP   ","  PDDDDDP  "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP ","  PDDDDDP  ","   PPPPP   ","           "}
     };
 
-    private static final String[][] shapeMainT2 = new String[][]{
+    protected static final String[][] shapeMainT2 = new String[][]{
         {"                      ","                      ","   NNNNN              ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","   NNNNN              ","                      ","                      "},
         {"                      ","   NNNNN              ","  NHHHHHN             "," NHDDDDDHN       NNN  "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN       NNN  ","  NHHHHHN             ","   NNNNN              ","                      "},
         {"   FFFFF              ","  FMMMMMF             "," FMFKKKFMF      GGGGG ","FMFEEEEEFMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMKEECEEKMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMFEEEEEFMF    GGGGGGG"," FMFKKKFMF      GGGGG ","  FMMMMMF             ","   FFFFF              "},
@@ -184,7 +184,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"                      ","   PPPPP              ","  PDDDDDP       GGGGG "," PDDDDDDDP     GGNNNGG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GGNNNGG","  PDDDDDP       GGGGG ","   PPPPP              ","                      "}
     };
 
-    private static final String[][] shapeBlazeT1 = new String[][]{
+    protected static final String[][] shapeBlazeT1 = new String[][]{
         {"       ","       ","       ","       ","       ","       ","       "},
         {"       ","       ","       ","       ","       ","       ","       "},
         {"       ","       ","       ","       ","       ","       ","       "},
@@ -199,7 +199,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {" ZZZZZ ","ZZ   ZZ","Z     Z","Z     Z","Z     Z","ZZ   ZZ"," ZZZZZ "}
     };
 
-    private static final String[][] shapeBlazeT2 = new String[][]{
+    protected static final String[][] shapeBlazeT2 = new String[][]{
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
@@ -215,7 +215,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     };
     // spotless:on
 
-    private static IStructureDefinition<TST_SwelegfyrBlastFurnace> STRUCTURE_DEFINITION = null;
+    protected static IStructureDefinition<TST_SwelegfyrBlastFurnace> STRUCTURE_DEFINITION = null;
 
     @Override
     public IStructureDefinition<TST_SwelegfyrBlastFurnace> getStructureDefinition() {
@@ -337,6 +337,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         // Check all tier to render properly in nei
         if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
             clearHatches();
+            errors.clear();
             if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)
                 || controllerTier > 1) return;
         }
@@ -382,10 +383,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     static ItemStack UpgradeItem = null;
     int previousRecipeCode = 0;
     int correctBlazeCost = 0;
-    private MTEHatchInput mBlazeHatch;
-    public HeatingCoilLevel coilLevel;
-    private int mHeatingCapacity;
-    private int maxHeatingCapacity;
+    protected MTEHatchInput mBlazeHatch;
+    public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+    protected int mHeatingCapacity;
+    protected int maxHeatingCapacity;
     protected int recipeHeatLimitation;
 
     public HeatingCoilLevel getCoilLevel() {
@@ -406,7 +407,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfyrUpgradeChip.get(1);
     }
 
-    private boolean setRemoveBlaze() {
+    protected boolean setRemoveBlaze() {
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
         Block Air = Blocks.air;
@@ -437,7 +438,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return false;
     }
 
-    private boolean checkBlaze() {
+    protected boolean checkBlaze() {
         // If blaze illegal return true
         if (isBlazeFinishClear || !isBlazeFinishSet) {
             return !setRemoveBlaze();
@@ -576,7 +577,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     }
 
-    private long runningTick = 0;
+    protected long runningTick = 0;
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
@@ -659,15 +660,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
      * @param doDrain if really drain
      * @return can it drain
      */
-    private boolean drainPyrotheumFromBlazeHatch(int amount, boolean doDrain) {
+    protected boolean drainPyrotheumFromBlazeHatch(int amount, boolean doDrain) {
         return drain(this.mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, amount), doDrain);
     }
 
-    private void stopMachineOfMissingPyrotheum(int amount) {
+    protected void stopMachineOfMissingPyrotheum(int amount) {
         stopMachine(ShutDownReasonRegistry.outOfFluid(new FluidStack(TFFluids.fluidPyrotheum, amount)));
     }
 
-    private CheckRecipeResult shutDownOfMissingPyrotheum(int amount) {
+    protected CheckRecipeResult shutDownOfMissingPyrotheum(int amount) {
         return SimpleResultWithText.outOfFluid(new FluidStack(TFFluids.fluidPyrotheum, amount));
     }
 
@@ -748,6 +749,11 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         builder.widget(createRapidHeatingButton(builder));
         builder.widget(createHoldingHeatButton(builder));
 
+    }
+
+    @Override
+    protected boolean useMui2() {
+        return super.useMui2();
     }
 
     public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {

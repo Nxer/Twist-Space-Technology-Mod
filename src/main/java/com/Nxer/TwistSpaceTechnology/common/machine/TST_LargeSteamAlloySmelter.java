@@ -11,8 +11,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_S
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -28,15 +28,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
-
-import java.util.List;
 
 public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_LargeSteamAlloySmelter>
     implements ISurvivalConstructable {

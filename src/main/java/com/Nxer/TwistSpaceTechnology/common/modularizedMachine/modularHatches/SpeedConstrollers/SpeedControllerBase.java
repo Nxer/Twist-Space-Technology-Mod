@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.S
 
 import java.util.List;
 
-import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;

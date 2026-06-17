@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -55,6 +54,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings1;
@@ -151,9 +151,10 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
 
         if (checkPiece(STRUCTURE_PIECE_GAS, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, errors)) {
             mSetTier = 1;
-        } else if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
-            mSetTier = 2;
-        }
+        } else
+            if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
+                mSetTier = 2;
+            }
 
         if (mSetTier == 0) return;
 

@@ -18,9 +18,10 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -49,6 +50,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -56,8 +58,6 @@ import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.ParallelHelper;
 import gregtech.api.util.shutdown.ShutDownReason;
 import tectech.thing.block.BlockQuantumGlass;
-
-import java.util.List;
 
 public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> {
@@ -87,8 +87,8 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
 
     // Valid fuels which the discount will get applied to.
     protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
-        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L),
-        Materials.ExcitedDTCC.getFluid(1L), Materials.ExcitedDTSC.getFluid(1L) };
+        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L), Materials.ExcitedDTCC.getFluid(1L),
+        Materials.ExcitedDTSC.getFluid(1L) };
 
     // endregion
 
@@ -274,7 +274,8 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     private static IStructureDefinition<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> STRUCTURE_DEFINITION = null;
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
         coilLevel = HeatingCoilLevel.None;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return false;
         coilHeat = (int) coilLevel.getHeat();

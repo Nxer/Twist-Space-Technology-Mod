@@ -1,12 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-
 import net.minecraftforge.fluids.FluidStack;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
@@ -16,11 +15,11 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 
 public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
@@ -28,10 +27,8 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch";
     private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch_inactive";
 
-    public static IIconContainer OVERLAY_ACTIVE = Textures.BlockIcons.custom(
-        TEXTURE_NAME_OVERLAY_ACTIVE);
-    public static IIconContainer OVERLAY_INACTIVE = Textures.BlockIcons.custom(
-        TEXTURE_NAME_OVERLAY_INACTIVE);
+    public static IIconContainer OVERLAY_ACTIVE = Textures.BlockIcons.custom(TEXTURE_NAME_OVERLAY_ACTIVE);
+    public static IIconContainer OVERLAY_INACTIVE = Textures.BlockIcons.custom(TEXTURE_NAME_OVERLAY_INACTIVE);
 
     private static final String[] DESC = new String[] {
         // #tr Tooltip_BloodOrbHatch_1
@@ -164,7 +161,6 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_INACTIVE) };
     }
 
-
     public boolean addFluidToHatchNow() {
         if (!getBaseMetaTileEntity().isServerSide()) { // I don't know where to check if remote. :(
             return false;
@@ -231,7 +227,6 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             this.mMaxProgresstime = 0;
         }
     }
-
 
     @Override
     public boolean isValidSlot(final int aIndex) {

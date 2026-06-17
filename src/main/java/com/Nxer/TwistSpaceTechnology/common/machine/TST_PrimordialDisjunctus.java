@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,6 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -55,11 +54,11 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.visnet.VisNetHandler;
@@ -173,7 +172,6 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     public TST_PrimordialDisjunctus(String mName) {
         super(mName);
     }
-
 
     @Override
     public IStructureDefinition<TST_PrimordialDisjunctus> getStructureDefinition() {
@@ -302,7 +300,8 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack, List<StructureError> errors) {
+    public void checkMachine(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack,
+        List<StructureError> errors) {
 
         // This data is set through the structure check so we reset it here
         this.mCasing = 0;

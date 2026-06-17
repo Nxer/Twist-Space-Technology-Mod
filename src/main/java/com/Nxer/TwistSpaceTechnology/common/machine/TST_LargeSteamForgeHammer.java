@@ -6,11 +6,10 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -23,16 +22,14 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
-
-import java.util.List;
 
 public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_LargeSteamForgeHammer>
     implements ISurvivalConstructable {
@@ -200,7 +197,6 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         return steamCasingTier > 1;
     }
 
-
     @Override
     public void onValueUpdate(byte aValue) {
         steamCasingTier = aValue;
@@ -210,7 +206,6 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     public byte getUpdateData() {
         return (byte) steamCasingTier;
     }
-
 
     /**
      * No more machine error

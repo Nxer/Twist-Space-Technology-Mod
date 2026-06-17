@@ -1,10 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.interfaces.IOutputBus;
-import gregtech.api.interfaces.IOutputHatch;
-import gregtech.api.interfaces.tileentity.IVoidable;
-import gregtech.api.util.GTUtility;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -12,14 +7,11 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class ExecutionCore extends ExecutionCoreBase {
 
@@ -99,10 +91,8 @@ public class ExecutionCore extends ExecutionCoreBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_on");
-        InactiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_off");
         super.registerIcons(aBlockIconRegister);
     }
 

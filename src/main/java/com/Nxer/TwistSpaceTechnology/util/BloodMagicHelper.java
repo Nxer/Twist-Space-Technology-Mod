@@ -13,7 +13,6 @@ import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import WayofTime.alchemicalWizardry.common.items.ActivationCrystal;
 import WayofTime.alchemicalWizardry.common.items.BloodShard;
 import fox.spiteful.avaritia.items.LudicrousItems;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class BloodMagicHelper {
 

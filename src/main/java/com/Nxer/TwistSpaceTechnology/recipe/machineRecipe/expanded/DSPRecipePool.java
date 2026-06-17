@@ -52,7 +52,6 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Advanced;
 import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -64,6 +63,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.item.NHItemList;
 
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
@@ -503,9 +503,7 @@ public class DSPRecipePool {
                 ItemList.Electric_Motor_UXV.get(8),
                 ItemList.Field_Generator_UXV.get(4),
                 ItemList.Emitter_UXV.get(4))
-            .fluidInputs(
-                Materials.MHDCSM.getMolten(144 * 32),
-                Materials.Universium.getMolten(144 * 128))
+            .fluidInputs(Materials.MHDCSM.getMolten(144 * 32), Materials.Universium.getMolten(144 * 128))
             .itemOutputs(DysonSphereFrameComponent.get(27))
 
             .specialValue(3)
@@ -520,9 +518,7 @@ public class DSPRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Graphene, 16),
                 ItemList.Circuit_Silicon_Wafer7.get(16),
                 ItemList.Emitter_UEV.get(16))
-            .fluidInputs(
-                Materials.SiliconSG.getMolten(144 * 1024),
-                Materials.TranscendentMetal.getMolten(144 * 64))
+            .fluidInputs(Materials.SiliconSG.getMolten(144 * 1024), Materials.TranscendentMetal.getMolten(144 * 64))
             .itemOutputs(SolarSail.get(3))
 
             .eut(RECIPE_UMV)
@@ -620,8 +616,7 @@ public class DSPRecipePool {
                 GTUtility.getIntegratedCircuit(23),
                 GTUtility.copyAmountUnsafe(0, Materials.Universium.getNanite(1)),
                 GTUtility.copyAmountUnsafe(0, Materials.Eternity.getNanite(1)),
-                GTOreDictUnificator
-                    .get(OrePrefixes.frameGt, Materials.MHDCSM, 1),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.MHDCSM, 1),
 
                 SpaceWarper.get(4),
                 ParticleTrapTimeSpaceShield.get(8),
@@ -631,9 +626,7 @@ public class DSPRecipePool {
                 ItemList.EnergisedTesseract.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Universium, 64),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Universium, 64))
-            .fluidInputs(
-                Materials.PrimordialMatter.getFluid(144 * 16),
-                Materials.Eternity.getMolten(144 * 16))
+            .fluidInputs(Materials.PrimordialMatter.getFluid(144 * 16), Materials.Eternity.getMolten(144 * 16))
             .itemOutputs(AnnihilationConstrainer.get(64))
             .specialValue(3)
 
@@ -706,8 +699,7 @@ public class DSPRecipePool {
                 Antimatter.get(64),
                 ItemList.Timepiece.get(1),
                 StellarConstructionFrameMaterial.get(64),
-                GTOreDictUnificator
-                    .get(OrePrefixes.foil, Materials.MHDCSM, 6))
+                GTOreDictUnificator.get(OrePrefixes.foil, Materials.MHDCSM, 6))
             .fluidInputs(Materials.Hydrogen.getPlasma(1000 * 128))
             .itemOutputs(AntimatterFuelRod.get(64))
             .specialValue(3)
@@ -901,9 +893,7 @@ public class DSPRecipePool {
         // Strange Matter Aggregator Controller
         TST_RecipeBuilder.builder()
             .itemInputs(
-                GTUtility.copyAmountUnsafe(
-                    8192,
-                    GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.SpaceTime, 1)),
+                GTUtility.copyAmountUnsafe(8192, GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.SpaceTime, 1)),
                 AntimatterFuelRod.get(512),
                 AnnihilationConstrainer.get(512),
                 DysonSphereFrameComponent.get(512),

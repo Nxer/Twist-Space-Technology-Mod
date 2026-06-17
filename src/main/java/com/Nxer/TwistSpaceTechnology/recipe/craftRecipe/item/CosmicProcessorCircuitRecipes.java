@@ -27,12 +27,12 @@ import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.SpaceTimeBendingCore;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.item.NHItemList;
 
 import appeng.items.materials.MaterialType;
 import bartworks.API.recipe.BartWorksRecipeMaps;
@@ -40,7 +40,6 @@ import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
@@ -50,8 +49,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
-import tectech.thing.CustomItemList;
 
 public class CosmicProcessorCircuitRecipes {
 
@@ -209,7 +206,8 @@ public class CosmicProcessorCircuitRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
-                new ItemStack(ModItems.itemStandarParticleBase, 1, 17),
+                // new ItemStack(ModItems.itemStandarParticleBase, 1, 17),
+                GTCMItemList.CriticalPhoton.get(1),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(128),
                 ItemList.EnergisedTesseract.get(4),
                 GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 32))
@@ -227,9 +225,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 2),
                 GGMaterial.metastableOganesson.get(OrePrefixes.foil, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Infinity, 2))
-            .fluidInputs(
-                Materials.Time.getMolten(72),
-                Materials.DTR.getFluid(100))
+            .fluidInputs(Materials.Time.getMolten(72), Materials.DTR.getFluid(100))
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .outputChances(9000)
             .eut(RECIPE_UMV)
@@ -243,9 +239,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 2),
                 GGMaterial.metastableOganesson.get(OrePrefixes.foil, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Infinity, 2))
-            .fluidInputs(
-                Materials.Time.getMolten(36),
-                Materials.DTR.getFluid(50))
+            .fluidInputs(Materials.Time.getMolten(36), Materials.DTR.getFluid(50))
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 120)
@@ -258,9 +252,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 2),
                 GGMaterial.metastableOganesson.get(OrePrefixes.foil, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Infinity, 2))
-            .fluidInputs(
-                Materials.Time.getMolten(36),
-                Materials.DTR.getFluid(50))
+            .fluidInputs(Materials.Time.getMolten(36), Materials.DTR.getFluid(50))
             .itemOutputs(
                 GTCMItemList.EnergyFluctuationSelfHarmonizer.get(2),
                 GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
@@ -435,9 +427,7 @@ public class CosmicProcessorCircuitRecipes {
 
         // MicroSpaceTimeFabricatorio
         GTValues.RA.stdBuilder()
-            .metadata(
-                RESEARCH_ITEM,
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 1))
+            .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 1))
             .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.TranscendentMetal, 16),

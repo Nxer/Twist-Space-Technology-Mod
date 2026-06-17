@@ -13,7 +13,6 @@ import static gregtech.api.GregTechAPI.sBlockMetal6;
 import static gregtech.api.enums.GTValues.V;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputHatch;
-import static gregtech.api.enums.Materials.Water;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
@@ -27,11 +26,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
-import com.glodblock.github.util.Util;
-import gregtech.api.enums.Materials;
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.util.GTModHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -39,12 +33,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -65,6 +59,7 @@ import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
@@ -75,11 +70,11 @@ import gregtech.api.metatileentity.implementations.MTEHatchOutput;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.blocks.BlockCasings1;
 import gregtech.common.blocks.BlockCasings2;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBoiler> {
 
@@ -178,7 +173,8 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 }
 
                 if (super.depleteInput(liquidToDeplete)) {
-                    super.mOutputFluids = new FluidStack[] { Materials.Steam.getGas((long) consumedWater * GTValues.STEAM_PER_WATER) };
+                    super.mOutputFluids = new FluidStack[] {
+                        Materials.Steam.getGas((long) consumedWater * GTValues.STEAM_PER_WATER) };
                     super.mMaxProgresstime = 20;
                     super.mEfficiency = getMaxEfficiency(null);
                     runningTicks += 20;

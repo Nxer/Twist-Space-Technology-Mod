@@ -1,27 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.material;
 
-import static gregtech.api.util.GTRecipeBuilder.TICKS;
-import static gregtech.api.util.GTRecipeConstants.COIL_HEAT;
-import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_MULTISTEP;
-import static gregtech.api.util.GTRecipeConstants.FOG_PLASMA_TIER;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-
-import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.TierEU;
-import gregtech.api.metatileentity.implementations.MTECable;
 import gregtech.api.recipe.RecipeMaps;
-import gregtech.api.util.GTLanguageManager;
-import gregtech.api.util.GTOreDictUnificator;
-import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
-import gtPlusPlus.core.material.MaterialsElements;
-import tectech.recipe.TecTechRecipeMaps;
 
 public class MaterialFix {
 

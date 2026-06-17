@@ -23,9 +23,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -39,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -69,6 +66,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
@@ -81,7 +79,6 @@ import gregtech.common.render.IMTERenderer;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 /**
  * 可使用的激发流体/冷却液与大型硅岩反应堆一致
@@ -381,7 +378,6 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     public TST_MegaNqReactor(String name) {
         super(name);
     }
-
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -1613,7 +1609,6 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     }};
     // spotless:on
 
-
     @Override
     public IStructureDefinition<TST_MegaNqReactor> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -1624,12 +1619,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
                     GTStructureUtility.buildHatchAdder(TST_MegaNqReactor.class)
                         .casingIndex(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3))
                         .hint(1)
-                        .atLeast(
-                            ExoticDynamo.or(Dynamo),
-                            ExoticEnergy.or(Energy),
-                            InputHatch,
-                            OutputHatch,
-                            Maintenance)
+                        .atLeast(ExoticDynamo.or(Dynamo), ExoticEnergy.or(Energy), InputHatch, OutputHatch, Maintenance)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(Loaders.MAR_Casing, 0))
@@ -1745,8 +1735,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
                     // #tr GUI.MegaNqReactor.CurrentOutput
                     // # Current Output:
                     // #zh_CN 当前输出:
-                    .setStringSupplier(
-                        () -> tr("GUI.MegaNqReactor.CurrentOutput") + formatNumber(lEUt) + " EU/t")
+                    .setStringSupplier(() -> tr("GUI.MegaNqReactor.CurrentOutput") + formatNumber(lEUt) + " EU/t")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> lEUt, val -> lEUt = val))

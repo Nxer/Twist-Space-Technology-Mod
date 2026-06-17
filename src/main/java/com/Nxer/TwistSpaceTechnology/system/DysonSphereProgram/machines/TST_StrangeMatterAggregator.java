@@ -22,8 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -69,9 +67,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -81,7 +79,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GTUtility;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
@@ -1067,7 +1065,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
 
         oscillatorTier = -1;
         oscillatorPiece = 0;
@@ -1093,7 +1092,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 horizontalOffSet_ring,
                 verticalOffSet_ring,
                 depth,
-                RingType.OSCILLATOR, errors);
+                RingType.OSCILLATOR,
+                errors);
 
             boolean isConstraintor = false;
             if (!isOscillator) {
@@ -1102,7 +1102,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
                     depth,
-                    RingType.CONSTRAINTOR, errors);
+                    RingType.CONSTRAINTOR,
+                    errors);
             }
 
             boolean isMerger = false;
@@ -1112,7 +1113,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
                     depth,
-                    RingType.MERGER, errors);
+                    RingType.MERGER,
+                    errors);
             }
 
             if (!isOscillator && !isConstraintor && !isMerger) {
@@ -1142,7 +1144,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             STRUCTURE_PIECE_END,
             horizontalOffSet_main,
             verticalOffSet_main,
-            depthOffSet_ring_first - rings * depthOffSet_ring_distance, errors)) {
+            depthOffSet_ring_first - rings * depthOffSet_ring_distance,
+            errors)) {
             return false;
         }
 
@@ -1150,7 +1153,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return wirelessMode || getMaxInputEu() >= Config.PowerConsume_StrangeMatterAggregator;
     }
 
-    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type, List<StructureError> errors) {
+    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type,
+        List<StructureError> errors) {
         int savedOTier = oscillatorTier;
         int savedCTier = constraintorTier;
         int savedMTier = mergerTier;
@@ -1947,10 +1951,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
-        InactiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
         super.registerIcons(aBlockIconRegister);
     }
 

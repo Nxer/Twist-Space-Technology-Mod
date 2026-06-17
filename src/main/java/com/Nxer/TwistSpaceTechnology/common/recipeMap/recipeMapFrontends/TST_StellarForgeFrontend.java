@@ -24,7 +24,7 @@ public class TST_StellarForgeFrontend extends RecipeMapFrontend {
     }
 
     @Override
-    public List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
+    public @NotNull List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         String aToolTip = EnumChatFormatting.YELLOW + TextEnums.tr("MiracleDoor.nei.tooltip.0");
         // #tr MiracleDoor.nei.tooltip.0

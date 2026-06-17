@@ -43,8 +43,8 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.function.LongConsumer;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import gregtech.api.structure.error.StructureError;
+import javax.annotation.Nonnull;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -54,6 +54,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -84,6 +85,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import journeymap.shadow.org.jetbrains.annotations.NotNull;
@@ -97,9 +99,8 @@ import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 import vazkii.botania.common.block.ModBlocks;
 
-import javax.annotation.Nonnull;
-
-public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTower> implements IConstructable, ISurvivalConstructable {
+public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTower>
+    implements IConstructable, ISurvivalConstructable {
 
     public TST_SkypiercerTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
@@ -212,7 +213,6 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
     public TST_SkypiercerTower(String mName) {
         super(mName);
     }
-
 
     @Override
     public IStructureDefinition<TST_SkypiercerTower> getStructureDefinition() {
@@ -414,9 +414,12 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             STRUCTURE_PIECE_RINGS,
             Rings_horizontalOffSet,
             Main_verticalOffSet + Rings_verticalOffSet * ringCount + Rings_verticalOffSet,
-            Rings_depthOffSet, errors)) {
+            Rings_depthOffSet,
+            errors)) {
             this.ringCount++;
         }
+
+        errors.clear();
 
         this.mParallel = (int) Math.min((long) this.ringCount * Parallel_PerRing_SkypiercerTower, Integer.MAX_VALUE);
         // FMLLog.info("[SkypiercerTower] Parallel: %f | Rings: %d", mParallel, ringCount);
@@ -1029,6 +1032,5 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
         return new TST_SkypiercerTower(this.mName);
     }
-
 
 }

@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -14,12 +13,12 @@ import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
@@ -30,7 +29,6 @@ import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtnhintergalactic.recipe.IGRecipeMaps;
-import tectech.thing.CustomItemList;
 
 public class LapotronChipRecipes {
 

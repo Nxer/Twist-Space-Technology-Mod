@@ -8,13 +8,11 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IRecipeMap;
@@ -40,9 +38,7 @@ public class DTPFRecipePool {
                 Materials.Space.getMolten(144),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500),
                 Materials.ExcitedDTPC.getFluid(1000))
-            .fluidOutputs(
-                MaterialPool.EntropicFlux.getFluidOrGas(500),
-                Materials.DTR.getFluid(250))
+            .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500), Materials.DTR.getFluid(250))
             .specialValue(10800)
             .eut(TierEU.RECIPE_UIV)
             .duration(20 * 30)
@@ -58,9 +54,7 @@ public class DTPFRecipePool {
                 Materials.Space.getMolten(144 * 2),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 2),
                 Materials.ExcitedDTRC.getFluid(2000))
-            .fluidOutputs(
-                MaterialPool.EntropicFlux.getFluidOrGas(500 * 4),
-                Materials.DTR.getFluid(1000))
+            .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500 * 4), Materials.DTR.getFluid(1000))
             .specialValue(11700)
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 25)
@@ -76,9 +70,7 @@ public class DTPFRecipePool {
                 Materials.Space.getMolten(144 * 4),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 4),
                 Materials.ExcitedDTEC.getFluid(4000))
-            .fluidOutputs(
-                MaterialPool.EntropicFlux.getFluidOrGas(500 * 16),
-                Materials.DTR.getFluid(4000))
+            .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500 * 16), Materials.DTR.getFluid(4000))
             .specialValue(12600)
             .eut(TierEU.RECIPE_UXV)
             .duration(20 * 20)
@@ -94,9 +86,7 @@ public class DTPFRecipePool {
                 Materials.Space.getMolten(144 * 8),
                 Materials.DimensionallyShiftedSuperfluid.getFluid(500 * 8),
                 Materials.ExcitedDTSC.getFluid(8000))
-            .fluidOutputs(
-                MaterialPool.EntropicFlux.getFluidOrGas(500 * 64),
-                Materials.DTR.getFluid(16000))
+            .fluidOutputs(MaterialPool.EntropicFlux.getFluidOrGas(500 * 64), Materials.DTR.getFluid(16000))
             .specialValue(13500)
             .eut(TierEU.RECIPE_MAX)
             .duration(20 * 15)
@@ -119,8 +109,8 @@ public class DTPFRecipePool {
         final int[] Coils = { awakened_heat, infinity_heat, hypogen_heat, eternal_heat };
 
         // Catalyst
-        final Materials[] Catalysts = { Materials.ExcitedDTCC, Materials.ExcitedDTPC,
-            Materials.ExcitedDTRC, Materials.ExcitedDTEC, Materials.ExcitedDTSC };
+        final Materials[] Catalysts = { Materials.ExcitedDTCC, Materials.ExcitedDTPC, Materials.ExcitedDTRC,
+            Materials.ExcitedDTEC, Materials.ExcitedDTSC };
 
         final int[] multiply = { 1, 2, 4, 8 };
 

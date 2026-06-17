@@ -34,8 +34,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -84,6 +82,8 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -299,9 +299,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.hasKey("tier")) {
             currentTip.add(
-                "Tier: " + EnumChatFormatting.YELLOW
-                    + formatNumber(tag.getInteger("tier"))
-                    + EnumChatFormatting.RESET);
+                "Tier: " + EnumChatFormatting.YELLOW + formatNumber(tag.getInteger("tier")) + EnumChatFormatting.RESET);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.client.render;
 
-import forestry.core.fluids.Fluids;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,8 +8,8 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
-
 import net.minecraftforge.fluids.FluidRegistry;
+
 import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
@@ -18,7 +17,6 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 @SideOnly(Side.CLIENT)
 public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {

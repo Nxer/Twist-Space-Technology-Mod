@@ -40,8 +40,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrorRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -82,6 +80,8 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -182,7 +182,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     @Override
     public RecipeMap<?> getRecipeMap() {
         return switch (machineMode) {
-//            case 1 -> RecipeMaps.plasmaArcFurnaceRecipes;
+            // case 1 -> RecipeMaps.plasmaArcFurnaceRecipes;
             case 2 -> RecipeMaps.fusionRecipes;
             case 3 -> GTCMRecipe.BallLightningRecipes;
             default -> RecipeMaps.arcFurnaceRecipes;
@@ -194,7 +194,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(
             RecipeMaps.arcFurnaceRecipes,
-//            RecipeMaps.plasmaArcFurnaceRecipes,
+            // RecipeMaps.plasmaArcFurnaceRecipes,
             RecipeMaps.fusionRecipes,
             GTCMRecipe.BallLightningRecipes);
     }
@@ -271,9 +271,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 // #tr BallLightning.modeMsg.IncompleteStructure
                 // # INCOMPLETE STRUCTURE!
                 // #zh_CN 结构不完整!
-                GTUtility.sendChatTrans(
-                    aPlayer,
-                    "BallLightning.modeMsg.IncompleteStructure");
+                GTUtility.sendChatTrans(aPlayer, "BallLightning.modeMsg.IncompleteStructure");
                 return;
             }
         }

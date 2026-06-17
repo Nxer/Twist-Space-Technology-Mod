@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
-import gregtech.api.structure.error.StructureError;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -13,9 +14,8 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
-
-import java.util.List;
 
 public class GT_TileEntity_LagrangeDysonSpaceStation
     extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>

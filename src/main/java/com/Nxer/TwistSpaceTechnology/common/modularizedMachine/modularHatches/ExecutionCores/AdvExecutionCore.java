@@ -5,7 +5,6 @@ import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap
 import java.math.BigInteger;
 import java.util.UUID;
 
-import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
@@ -15,6 +14,7 @@ import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -118,10 +118,8 @@ public class AdvExecutionCore extends ExecutionCoreBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
         super.registerIcons(aBlockIconRegister);
     }
 

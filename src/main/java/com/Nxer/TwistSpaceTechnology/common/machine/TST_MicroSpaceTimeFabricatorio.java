@@ -20,8 +20,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.ArrayList;
 import java.util.List;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
@@ -47,6 +45,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -54,6 +53,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -496,10 +496,8 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
         super.registerIcons(aBlockIconRegister);
     }
 

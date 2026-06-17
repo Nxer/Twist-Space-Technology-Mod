@@ -16,7 +16,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -37,6 +36,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import tectech.thing.block.BlockQuantumGlass;
@@ -105,7 +105,8 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     protected static IStructureDefinition<MM_MassFabricatorGenesis> STRUCTURE_DEFINITION;
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
         return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 

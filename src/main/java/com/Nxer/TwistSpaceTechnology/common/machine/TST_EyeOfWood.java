@@ -18,16 +18,12 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import galacticgreg.api.ModDimensionDef;
-import galacticgreg.api.enums.DimensionDef;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -44,6 +40,7 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import bwcrossmod.galacticgreg.VoidMinerUtility;
+import galacticgreg.api.enums.DimensionDef;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
@@ -56,6 +53,7 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -400,9 +398,9 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         extraDropMap = null;
 
         dropMap = VoidMinerUtility.dropMapsByDimName
-                           .getOrDefault(DimensionDef.DimNames.OW, new VoidMinerUtility.DropMap());
+            .getOrDefault(DimensionDef.DimNames.OW, new VoidMinerUtility.DropMap());
         extraDropMap = VoidMinerUtility.extraDropsByDimName
-                                .getOrDefault(DimensionDef.DimNames.OW, new VoidMinerUtility.DropMap());
+            .getOrDefault(DimensionDef.DimNames.OW, new VoidMinerUtility.DropMap());
 
         dropMap.isDistributionCached(extraDropMap);
 
@@ -431,7 +429,6 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         return (worldProvider.dimensionId == STANDARD_DIMENSION_ID)
             || (ALLOW_PERSONAL_SPACE && isPersonalSpace(worldProvider));
     }
-
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {

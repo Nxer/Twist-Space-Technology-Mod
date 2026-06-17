@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static gregtech.api.util.GTModHandler.getModItem;
 import static tectech.thing.CustomItemList.astralArrayFabricator;
 
-import gregtech.api.enums.Materials;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.recipe.Scanning;
 

@@ -27,8 +27,6 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -43,11 +41,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Math;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.IAlternativeItem;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipe;
@@ -92,6 +91,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
@@ -99,7 +99,6 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import org.joml.Math;
 import scala.actors.migration.pattern;
 import scala.collection.mutable.StringBuilder;
 import scala.tools.nsc.doc.model.Object;
@@ -118,7 +117,6 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     protected TST_MegaCraftingCenter(String aName) {
         super(aName);
     }
-
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -270,7 +268,6 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         public void setPriority(int priority) {
             this.priority = priority;
         }
-
 
         public boolean equals(Object obj) {
             if (obj == null) {
@@ -918,7 +915,6 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
     // region Structure
     protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
-
 
     @Override
     public IStructureDefinition<TST_MegaCraftingCenter> getStructureDefinition() {

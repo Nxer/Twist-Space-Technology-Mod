@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -49,6 +48,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -148,16 +148,20 @@ public class GT_TileEntity_MagneticDomainConstructor
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.rings * 4, errors)) {
+            baseDepthOffSet - this.rings * 4,
+            errors)) {
 
             this.rings++;
         }
+
+        errors.clear();
 
         if (!checkPiece(
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.rings * 4, errors)) {
+            baseDepthOffSet - this.rings * 4,
+            errors)) {
 
             return;
         }
@@ -321,26 +325,79 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     private static IStructureDefinition<GT_TileEntity_MagneticDomainConstructor> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
     /**
      * The first piece of Structure
      */
     private final String[][] shapeMain = new String[][] {
-        { "               ", "               ", "               ", "               ", "               ",
-            "      DDD      ", "     DEEED     ", "     DEEED     ", "     DEEED     ", "      DDD      ",
-            "      FDF      ", "      FDF      ", "      FDF      ", "      FDF      ", "      FDF      ",
-            "      D~D      ", "     DDDDD     " },
-        { "               ", "      BBB      ", "    BB   BB    ", "   B       B   ", "  B         B  ",
-            "  B         B  ", " B     C     B ", " B    CCC    B ", " B     C     B ", "  B         B  ",
-            "  B         B  ", "   B       B   ", "   FBB   BBF   ", "  F   BBB   F  ", " F    DDD    F ",
-            "F     DDD     F", "DDDDDDDDDDDDDDD" },
-        { "      BBB      ", "    BBAAABB    ", "   BAAGGGAAB   ", "  BAGG   GGAB  ", " BAG       GAB ",
-            " BAG       GAB ", "BAG    C    GAB", "BAG   CCC   GAB", "BAG    C    GAB", " BAG       GAB ",
-            " BAG       GAB ", "  BAGG   GGAB  ", "   BAAGGGAAB   ", "    BBAAABB    ", "      BBB      ",
-            "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD" },
-        { "               ", "      BBB      ", "    BB   BB    ", "   B       B   ", "  B         B  ",
-            "  B         B  ", " B     C     B ", " B    CCC    B ", " B     C     B ", "  B         B  ",
-            "  B         B  ", "   B       B   ", "   FBB   BBF   ", "  F   BBB   F  ", " F    DDD    F ",
-            "F     DDD     F", "DDDDDDDDDDDDDDD" } };
+        { "               ",
+            "               ",
+            "               ",
+            "               ",
+            "               ",
+            "      DDD      ",
+            "     DEEED     ",
+            "     DEEED     ",
+            "     DEEED     ",
+            "      DDD      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      D~D      ",
+            "     DDDDD     " },
+        { "               ",
+            "      BBB      ",
+            "    BB   BB    ",
+            "   B       B   ",
+            "  B         B  ",
+            "  B         B  ",
+            " B     C     B ",
+            " B    CCC    B ",
+            " B     C     B ",
+            "  B         B  ",
+            "  B         B  ",
+            "   B       B   ",
+            "   FBB   BBF   ",
+            "  F   BBB   F  ",
+            " F    DDD    F ",
+            "F     DDD     F",
+            "DDDDDDDDDDDDDDD" },
+        { "      BBB      ",
+            "    BBAAABB    ",
+            "   BAAGGGAAB   ",
+            "  BAGG   GGAB  ",
+            " BAG       GAB ",
+            " BAG       GAB ",
+            "BAG    C    GAB",
+            "BAG   CCC   GAB",
+            "BAG    C    GAB",
+            " BAG       GAB ",
+            " BAG       GAB ",
+            "  BAGG   GGAB  ",
+            "   BAAGGGAAB   ",
+            "    BBAAABB    ",
+            "      BBB      ",
+            "DDDDDDDDDDDDDDD",
+            "DDDDDDDDDDDDDDD" },
+        { "               ",
+            "      BBB      ",
+            "    BB   BB    ",
+            "   B       B   ",
+            "  B         B  ",
+            "  B         B  ",
+            " B     C     B ",
+            " B    CCC    B ",
+            " B     C     B ",
+            "  B         B  ",
+            "  B         B  ",
+            "   B       B   ",
+            "   FBB   BBF   ",
+            "  F   BBB   F  ",
+            " F    DDD    F ",
+            "F     DDD     F",
+            "DDDDDDDDDDDDDDD" } };
     /**
      * The middle of Structure
      */
@@ -369,6 +426,7 @@ public class GT_TileEntity_MagneticDomainConstructor
         "     DOOOD     ", "      DDD      ", "      FDF      ", "      FDF      ", "      FDF      ",
         "      FDF      ", "      FDF      ", "      DDD      ", "     DDDDD     " } };
 
+    // spotless:on
     // endregion
 
     // region Overrides
@@ -403,7 +461,6 @@ public class GT_TileEntity_MagneticDomainConstructor
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
-
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {

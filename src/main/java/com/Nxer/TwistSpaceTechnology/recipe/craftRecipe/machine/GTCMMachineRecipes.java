@@ -76,6 +76,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WhiteDwarfMold_I
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataInputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutputHatch;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeUtils.getCircuits;
@@ -122,7 +123,6 @@ import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.GoodGenerator;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.util.GTModHandler.addCraftingRecipe;
-import static gregtech.api.util.GTModHandler.getModItem;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
 import static gregtech.api.util.GTRecipeBuilder.MINUTES;
 import static gregtech.api.util.GTRecipeBuilder.SECONDS;
@@ -172,7 +172,6 @@ import static tectech.thing.CustomItemList.eM_Ultimate_Containment_Field;
 import static tectech.thing.CustomItemList.hatch_CreativeMaintenance;
 import static tectech.thing.CustomItemList.rack_Hatch;
 
-import bartworks.system.material.CircuitGeneration.CircuitPartsItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -196,6 +195,7 @@ import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
 import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
+import bartworks.system.material.CircuitGeneration.CircuitPartsItem;
 import bartworks.system.material.WerkstoffLoader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import fox.spiteful.avaritia.items.LudicrousItems;
@@ -219,7 +219,6 @@ import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
-import gtPlusPlus.core.item.ModItems;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
@@ -250,10 +249,10 @@ public class GTCMMachineRecipes {
         final IRecipeMap assembler = RecipeMaps.assemblerRecipes;
 
         ItemStack ExtraUtilitiesNodeUpgrade2 = Mods.ExtraUtilities.isModLoaded()
-            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "nodeUpgrade", 64, 2)
+            ? getModItem(Mods.ExtraUtilities.ID, "nodeUpgrade", 64, 2)
             : new ItemStack(Items.iron_pickaxe);
         ItemStack CompressCobblestone8 = Mods.ExtraUtilities.isModLoaded()
-            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7)
+            ? getModItem(Mods.ExtraUtilities.ID, "cobblestone_compressed", 1, 7)
             : new ItemStack(Blocks.cobblestone);
 
         // spotless:off
@@ -309,7 +308,7 @@ public class GTCMMachineRecipes {
                 eM_Power.get(4),
                 getModItem("gregtech", "gt.blockmachines", 8, 10932),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.lens, 64),
-                getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1L, 32105),
+                getModItem(GTPlusPlus.ID, "MU-metaitem.01", 1, 32105),
                 ItemList.Emitter_UV.get(5),
                 ItemList.Field_Generator_UV.get(1),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 4},
@@ -326,7 +325,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11100),
+                getModItem("gregtech", "gt.blockmachines", 1, 11100),
                 ItemList.Transformer_MV_LV.get(1),
                 ItemList.Emitter_LV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 3),
@@ -343,7 +342,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11101),
+                getModItem("gregtech", "gt.blockmachines", 1, 11101),
                 ItemList.Transformer_HV_MV.get(1),
                 ItemList.Emitter_MV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 6),
@@ -360,7 +359,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11102),
+                getModItem("gregtech", "gt.blockmachines", 1, 11102),
                 ItemList.Transformer_EV_HV.get(1),
                 ItemList.Emitter_HV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 12),
@@ -377,7 +376,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11103),
+                getModItem("gregtech", "gt.blockmachines", 1, 11103),
                 ItemList.Transformer_IV_EV.get(1),
                 ItemList.Emitter_EV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 24),
@@ -394,7 +393,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11104),
+                getModItem("gregtech", "gt.blockmachines", 1, 11104),
                 ItemList.Transformer_LuV_IV.get(1),
                 ItemList.Emitter_IV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Diamond, 48),
@@ -410,11 +409,11 @@ public class GTCMMachineRecipes {
 
         // Upgrade LuV
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105))
+            .metadata(RESEARCH_ITEM, getModItem("gregtech", "gt.blockmachines", 1, 11105))
             .metadata(SCANNING, scanningLV(1 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11105),
+                getModItem("gregtech", "gt.blockmachines", 1, 11105),
                 ItemList.Transformer_ZPM_LuV.get(1),
                 eM_Power.get(4),
                 ItemList.Emitter_LuV.get(4),
@@ -432,11 +431,11 @@ public class GTCMMachineRecipes {
 
         // Upgrade ZPM
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106))
+            .metadata(RESEARCH_ITEM, getModItem("gregtech", "gt.blockmachines", 1, 11106))
             .metadata(SCANNING, scanningLV(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11106),
+                getModItem("gregtech", "gt.blockmachines", 1, 11106),
                 ItemList.Transformer_UV_ZPM.get(1),
                 eM_Power.get(4),
                 ItemList.Emitter_ZPM.get(4),
@@ -455,11 +454,11 @@ public class GTCMMachineRecipes {
 
         // Upgrade UV
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107))
+            .metadata(RESEARCH_ITEM, getModItem("gregtech", "gt.blockmachines", 1, 11107))
             .metadata(SCANNING, scanningLV(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 11107),
+                getModItem("gregtech", "gt.blockmachines", 1, 11107),
                 ItemList.Transformer_MAX_UV.get(1),
                 eM_Power.get(4),
                 ItemList.Emitter_UV.get(4),
@@ -481,7 +480,7 @@ public class GTCMMachineRecipes {
             .metadata(SCANNING, scanningLV(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 8, 11107),
+                getModItem("gregtech", "gt.blockmachines", 8, 11107),
                 ItemList.Transformer_UEV_UHV.get(1),
                 eM_Power.get(4),
 
@@ -510,7 +509,7 @@ public class GTCMMachineRecipes {
             .metadata(SCANNING, scanningLV(2 * HOURS))
             .itemInputs(
                 ItemList.Casing_Advanced_Iridium.get(1),
-                GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 11107),
+                getModItem("gregtech", "gt.blockmachines", 64, 11107),
                 ItemList.Transformer_UIV_UEV.get(1),
                 eM_Power.get(4),
 
@@ -546,7 +545,7 @@ public class GTCMMachineRecipes {
                 ItemList.Casing_Dim_Injector.get(1),
 
                 ItemList.Emitter_UIV.get(4),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4L, 32105),
+                getModItem(GTPlusPlus.ID, "MU-metaitem.01", 4, 32105),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
                 ItemList.Field_Generator_UIV.get(2),
 
@@ -577,7 +576,7 @@ public class GTCMMachineRecipes {
                 ItemList.Casing_Dim_Injector.get(4),
 
                 ItemList.Emitter_UMV.get(8),
-                GTModHandler.getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16L, 32105),
+                getModItem(GTPlusPlus.ID, "MU-metaitem.01", 16, 32105),
                 WerkstoffMaterialPool.CeriumDopedLutetiumAluminiumGarnet.get(OrePrefixes.gemExquisite, 64),
                 ItemList.Field_Generator_UMV.get(4),
 
@@ -638,16 +637,16 @@ public class GTCMMachineRecipes {
                 PhotonControllerUpgradeUXV.get(1),
                 SpaceWarper.get(64),
                 getCircuits(Materials.UXV, 64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
                 Materials.Eternity.getNanite(16),
                 Materials.Universium.getNanite(16),
                 ItemList.Timepiece.get(64),
                 ItemList.EnergisedTesseract.get(64),
-                GTModHandler.getModItem("eternalsingularity", "combined_singularity", 3, 15))
+                getModItem("eternalsingularity", "combined_singularity", 3, 15))
             .itemOutputs(PhotonControllerUpgradeMAX.get(1))
             .fluidInputs(
                 Materials.Universium.getMolten(144 * 64),
@@ -670,11 +669,11 @@ public class GTCMMachineRecipes {
             .metadata(
                 RESEARCH_ITEM,
                 Config.Enable_AdvCircuitAssemblyLine ? GTCMItemList.AdvCircuitAssemblyLine.get(1)
-                    : GTModHandler.getModItem("gregtech", "gt.blockmachines", 1, 12735))
+                    : getModItem("gregtech", "gt.blockmachines", 1, 12735))
             .metadata(SCANNING, scanningLV(2 * HOURS))
             .itemInputs(
                 Config.Enable_AdvCircuitAssemblyLine ? GTCMItemList.AdvCircuitAssemblyLine.get(64)
-                    : GTModHandler.getModItem("gregtech", "gt.blockmachines", 64, 12735),
+                    : getModItem("gregtech", "gt.blockmachines", 64, 12735),
                 Component_Assembly_Line.get(64),
                 SpaceWarper.get(64),
                 Materials.TranscendentMetal.getNanite(48),
@@ -685,8 +684,10 @@ public class GTCMMachineRecipes {
                 new Object[] { OrePrefixes.circuit.get(Materials.UIV), 64 },
 
                 OpticalSOC.get(64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
+                OpticalSOC.get(64),
+                OpticalSOC.get(64),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 14),
                 OpticalSOC.get(64),
 
                 eM_Spacetime.get(16),
@@ -718,8 +719,10 @@ public class GTCMMachineRecipes {
                 new Object[]{OrePrefixes.circuit.get(Materials.UIV), 24},
 
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
+//                getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
+//                getModItem(GTPlusPlus.ID, "particleBase", 2, 14),
+                Laser_Lens_Special.get(2),
+                Laser_Lens_Special.get(2),
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
 
                 GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 64),
@@ -812,7 +815,7 @@ public class GTCMMachineRecipes {
                 GTOreDictUnificator.get(OrePrefixes.cableGt01, Materials.Naquadah, 4),
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 8))
             .fluidInputs(Materials.NaquadahAlloy.getMolten(144 * 4))
-            .itemOutputs(GTModHandler.getModItem("gregtech", "gt.blockcasings2", 1, 8))
+            .itemOutputs(getModItem("gregtech", "gt.blockcasings2", 1, 8))
 
 
             .eut(RECIPE_UV)
@@ -997,7 +1000,7 @@ public class GTCMMachineRecipes {
                 ItemList.Field_Generator_UEV.get(32),
                 ItemList.Field_Generator_UHV.get(64),
                 ItemList.Field_Generator_UHV.get(64),
-                GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 16),
+                getModItem("eternalsingularity", "eternal_singularity", 16),
 
                 new Object[]{OrePrefixes.circuit.get(Materials.UIV), 32},
                 new Object[]{OrePrefixes.circuit.get(Materials.UEV), 64},
@@ -1049,7 +1052,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(GTOreDictUnificator.get(OrePrefixes.dust, Materials.InfinityCatalyst, 64))
 
-            .itemOutputs(GTModHandler.getModItem("Avaritia", "Resource", 1, 5))
+            .itemOutputs(getModItem("Avaritia", "Resource", 1, 5))
 
 
             .eut(RECIPE_UHV)
@@ -1517,7 +1520,7 @@ public class GTCMMachineRecipes {
         // endregion
 
         // region BiosphereIII
-        ItemStack bioVat = GTModHandler.getModItem("gregtech", "gt.blockmahines", 1, 12600 + GTValues.VN.length * 7, ItemList.BreweryUHV.get(1)); // todo ConfigHandler.IDOffset has been removed
+        ItemStack bioVat = ItemRegistry.vat.copy();
 
         GTValues.RA
             .stdBuilder()
@@ -1891,7 +1894,7 @@ public class GTCMMachineRecipes {
                 UXVTarget104.get(64),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
                 UXVTarget104.get(64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
+                getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
 
                 UXVTarget104.get(64),
                 ItemList.Field_Generator_UXV.get(64),
@@ -1927,7 +1930,7 @@ public class GTCMMachineRecipes {
                 UXVSource104.get(64),
                 GTOreDictUnificator.get(OrePrefixes.lens, Materials.Forcicium, 64),
                 UXVSource104.get(64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
+                getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 16),
 
                 UXVSource104.get(64),
                 ItemList.Field_Generator_UXV.get(64),
@@ -2445,7 +2448,7 @@ public class GTCMMachineRecipes {
 
                     AnnihilationConstrainer.get(1),
                     ItemList.ZPM2.get(1),
-                    GTModHandler.getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 1),
+                    getModItem(GTPlusPlus.ID, "item.itemBufferCore10", 1),
                     Laser_Lens_Special.get(4)
                 )
                 .fluidInputs(
@@ -2467,7 +2470,7 @@ public class GTCMMachineRecipes {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Bronze, 64),
-                GTModHandler.getModItem(Forestry.ID, "alveary", 64, 0),
+                getModItem(Forestry.ID, "alveary", 64, 0),
 
                 ItemList.Field_Generator_LuV.get(4),
                 ItemList.Electric_Pump_LuV.get(16),
@@ -2621,7 +2624,7 @@ public class GTCMMachineRecipes {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Bronze, 64),
-                GTModHandler.getModItem(Forestry.ID, "alveary", 64, 0),
+                getModItem(Forestry.ID, "alveary", 64, 0),
 
                 ItemList.Field_Generator_LuV.get(4),
                 ItemList.Electric_Pump_LuV.get(16),
@@ -2884,7 +2887,7 @@ public class GTCMMachineRecipes {
                     ItemList.UHV_Coil.get(64),
 
                     new Object[]{OrePrefixes.circuit.get(Materials.UEV), 2},
-                    new ItemStack(ModItems.itemStandarParticleBase, 16, 19),
+//                    new ItemStack(ModItems.itemStandarParticleBase, 16, 19),
                     ItemList.Field_Generator_UHV.get(1)
                 )
                 .fluidInputs(
@@ -2938,10 +2941,10 @@ public class GTCMMachineRecipes {
         ItemStack thermionicTubeLapis;
         ItemStack thermionicTubeTin;
         if (Forestry.isModLoaded()) {
-            thermionicTubeGold = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 4);
-            thermionicTubeBronze = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 2);
-            thermionicTubeLapis = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 11);
-            thermionicTubeTin = GTModHandler.getModItem(Forestry.ID, "thermionicTubes", 64, 1);
+            thermionicTubeGold = getModItem(Forestry.ID, "thermionicTubes", 64, 4);
+            thermionicTubeBronze = getModItem(Forestry.ID, "thermionicTubes", 64, 2);
+            thermionicTubeLapis = getModItem(Forestry.ID, "thermionicTubes", 64, 11);
+            thermionicTubeTin = getModItem(Forestry.ID, "thermionicTubes", 64, 1);
         } else {
             thermionicTubeGold = GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Gold, 64);
             thermionicTubeBronze = GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Bronze, 64);
@@ -3263,7 +3266,7 @@ public class GTCMMachineRecipes {
                 .stdBuilder()
                 .itemInputs(
                     Mods.DraconicEvolution.isModLoaded()?
-                    GTModHandler.getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1):TestItem0.get(1),
+                    getModItem(Mods.DraconicEvolution.ID,"draconicBlock",1):TestItem0.get(1),
                     GTUtility.getIntegratedCircuit(6))
                 .fluidInputs(BloodMagicHelper.getLifeEssence(100000))
                 .itemOutputs(GTCMItemList.BloodyCasing2.get(1))

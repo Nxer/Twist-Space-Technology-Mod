@@ -124,24 +124,20 @@ public class TCRecipePool {
 
                     GTModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
                     new ItemStack[] { Industrial_TreeFarm.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
-                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         Industrial_FishingPond.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
-                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         ExtremeIndustrialGreenhouse.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
-                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         (Mods.EnderIO.isModLoaded() && Mods.MobsInfo.isModLoaded()) ? ExtremeEntityCrusher.get(1)
                             : new ItemStack(diamond_sword, 1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
-                        TITANSTEEL.getPlateDense(1),
+                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1) });
 
                 infusionRecipeFontOfEcology = ThaumcraftApi.addInfusionCraftingRecipe(
@@ -300,20 +296,20 @@ public class TCRecipePool {
             }
 
             /*
-            if (Config.Enable_EssentiaDiscretizer) {
-                infusionRecipeEssentiaDiscretizer = ThaumcraftApi.addInfusionCraftingRecipe(
-                    "ESSENTIA_DISCRETIZER",
-                    BlockEssentiaDiscretizer.stack(),
-                    6,
-                    new AspectList().merge(Aspect.MECHANISM, 32)
-                        .merge(Aspect.MAN, 32)
-                        .merge(Aspect.MAGIC, 32)
-                        .merge(Aspect.SOUL, 32),
-                    DISCRETIZER.stack(),
-                    new ItemStack[] { new ItemStack(itemZombieBrain, 1), new ItemStack(blockMetalDevice, 1, 9),
-                        GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
-            }*/
-
+             * if (Config.Enable_EssentiaDiscretizer) {
+             * infusionRecipeEssentiaDiscretizer = ThaumcraftApi.addInfusionCraftingRecipe(
+             * "ESSENTIA_DISCRETIZER",
+             * BlockEssentiaDiscretizer.stack(),
+             * 6,
+             * new AspectList().merge(Aspect.MECHANISM, 32)
+             * .merge(Aspect.MAN, 32)
+             * .merge(Aspect.MAGIC, 32)
+             * .merge(Aspect.SOUL, 32),
+             * DISCRETIZER.stack(),
+             * new ItemStack[] { new ItemStack(itemZombieBrain, 1), new ItemStack(blockMetalDevice, 1, 9),
+             * GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1L) });
+             * }
+             */
 
         }
     }

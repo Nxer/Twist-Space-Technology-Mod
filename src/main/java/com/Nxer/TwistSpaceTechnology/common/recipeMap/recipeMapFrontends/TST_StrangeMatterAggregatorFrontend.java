@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;

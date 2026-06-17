@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -48,9 +47,9 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasicGenerator> {
 

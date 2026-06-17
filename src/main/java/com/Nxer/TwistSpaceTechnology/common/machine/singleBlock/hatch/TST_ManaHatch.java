@@ -118,7 +118,7 @@ public class TST_ManaHatch extends MTEHatchInput {
 
     @Override
     public synchronized String[] getDescription() {
-        String[] mDescriptionArray = new String[]{FluidCapacity + formatNumber(getCapacity()) + "L"};
+        String[] mDescriptionArray = new String[] { FluidCapacity + formatNumber(getCapacity()) + "L" };
         final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
@@ -127,7 +127,6 @@ public class TST_ManaHatch extends MTEHatchInput {
         System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
         System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
         desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
-
 
         return desc;
     }

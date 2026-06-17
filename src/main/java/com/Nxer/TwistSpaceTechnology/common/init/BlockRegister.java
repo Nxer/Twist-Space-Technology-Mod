@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
-import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.RESOURCE_ROOT_ID;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockArcaneHole;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockEyeOfWoodRender;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.BlockLargeSolarBoilerRender;
@@ -17,7 +16,6 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockPowerChair;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileEyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
@@ -27,11 +25,6 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
-import gregtech.api.enums.Textures;
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.common.blocks.BlockMetal;
 
 public class BlockRegister {
 

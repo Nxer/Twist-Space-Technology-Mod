@@ -32,7 +32,6 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,6 +63,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
@@ -449,7 +449,8 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         if (coilTier == 1) {
             checkHasAnyEnergy(errors);
             maxEut = (long) (15d / 16 * getMaxInputEu());
-            maxProcessNormalModeFurnace = (int) Math.min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
+            maxProcessNormalModeFurnace = (int) Math
+                .min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
         }
 
     }

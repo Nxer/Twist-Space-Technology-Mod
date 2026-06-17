@@ -84,5 +84,5 @@
 //        // #zh_CN 主要包括两类物品,第一类为含有源质的玻璃安瓿,第二类为NEI的源质物品
 //        list.add(TextEnums.tr("item.essentia.pattern.terminal.tooltip.2"));
 //        // spotless:on
-//    }
-//}
+// }
+// }

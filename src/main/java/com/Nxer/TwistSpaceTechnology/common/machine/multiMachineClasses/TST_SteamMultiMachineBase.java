@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.MTESteamMultiBlockBase;
 import net.minecraft.block.Block;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,8 +18,10 @@ import com.google.common.collect.ImmutableList;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.OverclockCalculator;
+import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.MTESteamMultiBlockBase;
 
-public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineBase<T>> extends MTESteamMultiBlockBase<T> {
+public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineBase<T>>
+    extends MTESteamMultiBlockBase<T> {
 
     public TST_SteamMultiMachineBase(String aName) {
         super(aName);

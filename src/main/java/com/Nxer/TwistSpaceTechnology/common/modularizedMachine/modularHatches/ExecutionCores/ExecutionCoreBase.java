@@ -3,9 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.E
 import java.util.Collections;
 import java.util.List;
 
-import gregtech.api.interfaces.IOutputBus;
-import gregtech.api.interfaces.IOutputHatch;
-import gregtech.api.util.GTUtility;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,14 +18,15 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IS
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.enums.VoidingMode;
+import gregtech.api.interfaces.IOutputBus;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.fluid.IFluidStore;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.util.GTUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -370,16 +368,13 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void setVoidingMode(VoidingMode mode) {}
 
-
-    @Override
-    public List<IOutputHatch> getOutputHatches() {
-        if (mainMachine instanceof IVoidable iVoidable) {
-            iVoidable.getOutputHatches();
-        }
-        return Collections.emptyList();
-    }
-
-
+//    @Override
+//    public List<IOutputHatch> getOutputHatches() {
+//        if (mainMachine instanceof IVoidable iVoidable) {
+//            iVoidable.getOutputHatches();
+//        }
+//        return Collections.emptyList();
+//    }
 
     @Override
     public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
@@ -404,7 +399,6 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
         }
         return false;
     }
-
 
     @Override
     public boolean canDumpFluidToME() {

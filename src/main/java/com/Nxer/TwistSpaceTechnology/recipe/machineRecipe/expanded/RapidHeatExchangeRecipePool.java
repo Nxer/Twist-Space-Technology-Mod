@@ -10,7 +10,6 @@ import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Materials;
 import gregtech.api.util.GTRecipe;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 

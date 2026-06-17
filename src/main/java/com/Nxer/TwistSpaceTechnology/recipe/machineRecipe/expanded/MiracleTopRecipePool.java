@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.removeIntegratedCircuitFromStacks;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
-import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -38,6 +37,7 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.util.BWUtil;
 import goodgenerator.items.GGMaterial;
@@ -48,14 +48,12 @@ import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.Material;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import tectech.thing.CustomItemList;
 
 public class MiracleTopRecipePool {
 
@@ -78,30 +76,19 @@ public class MiracleTopRecipePool {
         HashSet<TST_ItemID> IgnoreRecipeOutputs = new HashSet<>();
 
         IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("appliedenergistics2", "item.ItemMultiPart", 1, 220)));
-        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(GTModHandler.getModItem("ae2fc", "part_fluid_storage_bus", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsAstroMiner", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsMoonBuggy", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsCargoRocket", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier1", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier2", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier3", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier4", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier5", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier6", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier7", 1)));
-        IgnoreRecipeOutputs
-            .add(TST_ItemID.createNoNBT(GTModHandler.getModItem("dreamcraft", "item.SchematicsTier8", 1)));
+            .add(TST_ItemID.createNoNBT(getModItem("appliedenergistics2", "item.ItemMultiPart", 1, 220)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("ae2fc", "part_fluid_storage_bus", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsAstroMiner", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsMoonBuggy", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsCargoRocket", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier1", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier2", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier3", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier4", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier5", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier6", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier7", 1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("dreamcraft", "SchematicsTier8", 1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(tectech.thing.CustomItemList.parametrizerMemory.get(1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Wetware.get(1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Bio.get(1)));
@@ -254,7 +241,8 @@ public class MiracleTopRecipePool {
                             if (stackData != null) {
                                 Materials material = stackData.mMaterial.mMaterial;
 
-                                if (material == Materials.StyreneButadieneRubber || material == Materials.RubberSilicone) {
+                                if (material == Materials.StyreneButadieneRubber
+                                    || material == Materials.RubberSilicone) {
                                     if (usedMaterial == null) {
                                         usedMaterial = material;
                                     } else if (usedMaterial != material) {
@@ -331,7 +319,7 @@ public class MiracleTopRecipePool {
 
     private static void loadSpaceAssemblerRecipes() {
         HashSet<TST_ItemID> GenerateRecipeOutputs = new HashSet<>();
-        GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(GTModHandler.getModItem("OpenComputers", "item", 1, 39)));
+        GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(getModItem("OpenComputers", "item", 1, 39)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Optically_Perfected_CPU.get(1)));
         GenerateRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Optically_Compatible_Memory.get(1)));
 
@@ -631,9 +619,9 @@ public class MiracleTopRecipePool {
         int Count = 0;
         for (WrappedCircuitItem item : WrappedCircuitItem.values()) {
             if (Count < 15) {
-                item.set(GTModHandler.getModItem("GoodGenerator", "circuitWrap", 1, Count));
+                item.set(getModItem("GoodGenerator", "circuitWrap", 1, Count));
             } else {
-                item.set(GTModHandler.getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32778 - Count));
+                item.set(getModItem("bartworks", "gt.bwMetaGeneratedItem0", 1, 32778 - Count));
             }
             if (CircuitParts[Count] != null && item.get(1) != null) {
                 circuitItemsToWrapped.put(CircuitParts[Count], item.get(1));
@@ -744,27 +732,28 @@ public class MiracleTopRecipePool {
     public static void loadCustomRecipes() {
         // Do Not Add Messy Recipe to MT
 
-        final ItemStack ringBlock = GTModHandler.getModItem("SGCraft", "stargateRing", 1, 0);
-        final ItemStack chevronBlock = GTModHandler.getModItem("SGCraft", "stargateRing", 1, 1);
-        final ItemStack irisUpgrade = GTModHandler.getModItem("SGCraft", "sgIrisUpgrade", 1, 0);
+        final ItemStack ringBlock = getModItem("SGCraft", "stargateRing", 1, 0);
+        final ItemStack chevronBlock = getModItem("SGCraft", "stargateRing", 1, 1);
+        final ItemStack irisUpgrade = getModItem("SGCraft", "sgIrisUpgrade", 1, 0);
 
         // region Proof Of Heroes
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTCMItemList.SpaceWarper.get(64),
-                GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 64),
-                GTModHandler.getModItem("eternalsingularity", "combined_singularity", 64, 15),
+                getModItem("eternalsingularity", "eternal_singularity", 64),
+                getModItem("eternalsingularity", "combined_singularity", 64, 15),
                 ItemList.Timepiece.get(64),
                 ItemList.GigaChad.get(64),
                 tectech.thing.CustomItemList.SpacetimeCompressionFieldGeneratorTier8.get(64),
                 tectech.thing.CustomItemList.TimeAccelerationFieldGeneratorTier8.get(64),
                 tectech.thing.CustomItemList.StabilisationFieldGeneratorTier8.get(64),
-                GTModHandler.getModItem("dreamcraft", "item.QuantumCircuit", 64),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
-                GTModHandler.getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
+                new Object[]{OrePrefixes.circuit.get(Materials.UXV), 64},
+//                getModItem("dreamcraft", "item.QuantumCircuit", 64),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 15),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 16),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 20),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 21),
+//                getModItem(GTPlusPlus.ID, "particleBase", 64, 17),
                 ItemList.ZPM6.get(64),
                 GTCMItemList.IndistinctTentacle.get(64)
             )

@@ -14,8 +14,6 @@ import net.minecraft.util.EnumChatFormatting;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
-import gregtech.api.util.GTUtility;
-
 // spotless:off
 public class DSP_DataCell implements Serializable {
 

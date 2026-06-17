@@ -13,12 +13,12 @@ import static gregtech.api.enums.TierEU.RECIPE_UV;
 import static gregtech.api.enums.TierEU.RECIPE_ZPM;
 import static net.minecraftforge.fluids.FluidRegistry.getFluidStack;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;

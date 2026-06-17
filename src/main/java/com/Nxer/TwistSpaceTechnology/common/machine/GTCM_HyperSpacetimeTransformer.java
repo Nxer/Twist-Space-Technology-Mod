@@ -4,7 +4,6 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiplier_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_MolecularTransformerMode_HyperSpacetimeTransformer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedMultiplier_SpaceTimeTransformerMode_HyperSpacetimeTransformer;
-import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
@@ -29,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,6 +51,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;

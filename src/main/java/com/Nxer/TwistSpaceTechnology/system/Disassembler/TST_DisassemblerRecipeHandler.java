@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.dreammaster.item.NHItemList;
 import com.google.common.collect.Sets;
 
 import galaxyspace.core.register.GSItems;

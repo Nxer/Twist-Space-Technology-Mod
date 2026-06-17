@@ -41,8 +41,8 @@ public class ShapedCraftRecipePool {
         addCraftingRecipe(
             GTCMItemList.ManaHatch.get(1),
             new Object[] { "ABA", "ACA", "ADA", 'A',
-                GTOreDictUnificator.get(OrePrefixes.plate, Materials.ElvenElementium, 1), 'B',
-                new ItemStack(spark), 'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.ElvenElementium, 1), 'B', new ItemStack(spark),
+                'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
 
         if (Config.Enable_IndustrialMagnetarSeparator) {
             // Industrial Magnetar Separator

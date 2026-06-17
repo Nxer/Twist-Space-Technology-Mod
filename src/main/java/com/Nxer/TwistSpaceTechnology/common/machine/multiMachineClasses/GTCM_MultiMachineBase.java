@@ -11,6 +11,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
+import gregtech.api.modularui2.GTGuiTextures;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -519,10 +522,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             totalOutput += aTotal;
         }
 
-//        if (totalOutput < aEU || (aFoundMixedDynamos && !aAllowMixedVoltageDynamos)) {
-//            explodeMultiblock();
-//            return false;
-//        }
+        // if (totalOutput < aEU || (aFoundMixedDynamos && !aAllowMixedVoltageDynamos)) {
+        // explodeMultiblock();
+        // return false;
+        // }
 
         long leftToInject;
         long aVoltage;
@@ -537,12 +540,12 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             ampsOnCurrentHatch = (int) Math.min(aDynamo.maxAmperesOut(), aAmpsToInject);
             for (int i = 0; i < ampsOnCurrentHatch; i++) {
                 aDynamo.getBaseMetaTileEntity()
-                       .increaseStoredEnergyUnits(aVoltage, false);
+                    .increaseStoredEnergyUnits(aVoltage, false);
             }
             injected += aVoltage * ampsOnCurrentHatch;
             if (aRemainder > 0 && ampsOnCurrentHatch < aDynamo.maxAmperesOut()) {
                 aDynamo.getBaseMetaTileEntity()
-                       .increaseStoredEnergyUnits(aRemainder, false);
+                    .increaseStoredEnergyUnits(aRemainder, false);
                 injected += aRemainder;
             }
         }
@@ -554,12 +557,12 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             ampsOnCurrentHatch = (int) Math.min(aDynamo.maxAmperesOut(), aAmpsToInject);
             for (int i = 0; i < ampsOnCurrentHatch; i++) {
                 aDynamo.getBaseMetaTileEntity()
-                       .increaseStoredEnergyUnits(aVoltage, false);
+                    .increaseStoredEnergyUnits(aVoltage, false);
             }
             injected += aVoltage * ampsOnCurrentHatch;
             if (aRemainder > 0 && ampsOnCurrentHatch < aDynamo.maxAmperesOut()) {
                 aDynamo.getBaseMetaTileEntity()
-                       .increaseStoredEnergyUnits(aRemainder, false);
+                    .increaseStoredEnergyUnits(aRemainder, false);
                 injected += aRemainder;
             }
         }
@@ -848,4 +851,27 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     // endregion
+
+    // endregion
+
+    // region UI
+
+//    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+//        if (supportsMachineModeSwitch()) {
+//            return new TST_Gui<>((T) this)
+//                       .withMachineModeIcons(GTGuiTextures);
+//        } else {
+//            return new TST_Gui<>((T) this);
+//        }
+//
+//    }
+//
+//    public com.cleanroommc.modularui.drawable.UITexture getMachineModeIcons() {
+//        if (machineModeIcons == null || machineModeIcons.isEmpty()) return new UITexture[0];
+//        return machineModeIcons.toArray(new UITexture[0]);
+//    }
+
+    // endregion
+
+
 }

@@ -30,8 +30,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -85,6 +83,7 @@ import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -94,12 +93,12 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.ISBRWorldContext;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.LightingHelper;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.render.GTRenderUtil;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
@@ -242,6 +241,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2), errors)) {
                 mTier = i;
                 break;
+            } else if (i > 1) {
+                errors.clear();
             }
         }
 
@@ -250,7 +251,8 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             "fluid" + fluidTier,
             getOffset(1, mTier, 0),
             getOffset(1, mTier, 1),
-            getOffset(1, mTier, 2), errors)) {
+            getOffset(1, mTier, 2),
+            errors)) {
             isBloodChecked = true;
         }
 

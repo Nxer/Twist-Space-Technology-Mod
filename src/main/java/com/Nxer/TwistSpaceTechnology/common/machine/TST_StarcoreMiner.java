@@ -24,13 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import galacticgreg.api.ModDimensionDef;
-import galacticgreg.api.enums.DimensionDef;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -46,6 +42,8 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.BorosilicateGlass;
 import bwcrossmod.galacticgreg.VoidMinerUtility;
+import galacticgreg.api.ModDimensionDef;
+import galacticgreg.api.enums.DimensionDef;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -56,6 +54,7 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -375,9 +374,9 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         this.canVoidMine = true;
 
         this.dropMap = VoidMinerUtility.dropMapsByDimName
-                           .getOrDefault(dimensionDef.getDimensionName(), new VoidMinerUtility.DropMap());
+            .getOrDefault(dimensionDef.getDimensionName(), new VoidMinerUtility.DropMap());
         this.extraDropMap = VoidMinerUtility.extraDropsByDimName
-                                .getOrDefault(dimensionDef.getDimensionName(), new VoidMinerUtility.DropMap());
+            .getOrDefault(dimensionDef.getDimensionName(), new VoidMinerUtility.DropMap());
 
         this.dropMap.isDistributionCached(this.extraDropMap);
 

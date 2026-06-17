@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.item;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,8 +50,6 @@ import gregtech.api.util.GTUtility;
 import ic2.api.item.IElectricItem;
 import ic2.core.init.InternalName;
 import ic2.core.item.armor.ItemArmorElectric;
-
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 @EventBusSubscriber
 public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
@@ -196,10 +196,8 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             // #tr tst.cardigan.tooltip.power
             // # {\GRAY}Charged: {\GREEN}%s{\GRAY}/{\GREEN}%s
             // #zh_CN {\GRAY}充能: {\GREEN}%s{\GRAY}/{\GREEN}%s
-            String s = StatCollector.translateToLocalFormatted(
-                "tst.cardigan.tooltip.power",
-                formatNumber(current),
-                formatNumber(max));
+            String s = StatCollector
+                .translateToLocalFormatted("tst.cardigan.tooltip.power", formatNumber(current), formatNumber(max));
             tooltips.add(s);
         } else {
             // #tr tst.cardigan.tooltip.error

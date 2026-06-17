@@ -22,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -51,6 +50,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings8;
@@ -138,7 +138,8 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
             STRUCTURE_PIECE_MIDDLE,
             horizontalOffSet,
             verticalOffSet + (this.piece + 1) * 4,
-            depthOffSet, errors)) {
+            depthOffSet,
+            errors)) {
             this.piece++;
         }
 
@@ -147,8 +148,15 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
             return;
         }
 
-        if (!checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet + (this.piece + 1) * 4, depthOffSet, errors)) {
-            return ;
+        errors.clear();
+
+        if (!checkPiece(
+            STRUCTURE_PIECE_END,
+            horizontalOffSet,
+            verticalOffSet + (this.piece + 1) * 4,
+            depthOffSet,
+            errors)) {
+            return;
         }
 
         speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerTier_HolySeparator, getTotalPowerTier()));

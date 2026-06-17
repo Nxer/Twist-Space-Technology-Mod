@@ -19,14 +19,10 @@ import static net.minecraftforge.common.util.ForgeDirection.WEST;
 import static tectech.thing.casing.BlockGTCasingsTT.textureOffset;
 import static tectech.thing.casing.BlockGTCasingsTT.texturePage;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
-import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElement.DynamoMulti;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
-import gregtech.api.metatileentity.implementations.MTEHatch;
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -41,7 +37,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
@@ -65,16 +61,17 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
-public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire> implements IConstructable, ISurvivalConstructable {
+public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
+    implements IConstructable, ISurvivalConstructable {
 
     // region Construct
     public GTCM_LightningSpire(int id, String name, String nameRegional) {
@@ -84,7 +81,6 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire> 
     public GTCM_LightningSpire(String name) {
         super(name);
     }
-
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
@@ -123,7 +119,6 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire> 
             {"   BBBBB   ","  BBBBBBB  "," BBBBBBBBB ","BBBBBBBBBBB","BBBBAAABBBB","BBBBABABBBB","BBBBAAABBBB","BBBBBBBBBBB"," BBBBBBBBB ","  BBBBBBB  ","   BBBBB   "}
     };
     //spotless:on
-
 
     @Override
     public IStructureDefinition<GTCM_LightningSpire> getStructureDefinition() {

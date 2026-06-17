@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -50,6 +49,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -482,17 +482,24 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             STRUCTURE_PIECE_DTM,
             DT_horizontalOffSet,
             DT_verticalOffSet + 7 * piece + 7,
-            DT_depthOffSet, errors)) {
+            DT_depthOffSet,
+            errors)) {
             this.piece++;
         }
 
-        if (this.piece < 1 || !checkPiece(
+        if (piece < 1) return;
+
+        errors.clear();
+
+        if (!checkPiece(
             STRUCTURE_PIECE_DTH,
             DT_horizontalOffSet,
             DT_verticalOffSet + 7 * piece + 3,
-            DT_depthOffSet, errors)) {
+            DT_depthOffSet,
+            errors)) {
             return;
         }
+
         // parallel = piece * 32
         maxParallel = (int) Math
             .min((long) piece * getCoilTier() * Parallel_PerPiece_GiantVacuumDryingFurnace, Integer.MAX_VALUE);

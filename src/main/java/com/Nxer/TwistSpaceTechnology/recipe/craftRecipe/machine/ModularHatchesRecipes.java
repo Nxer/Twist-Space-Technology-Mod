@@ -14,13 +14,13 @@ import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
+import com.dreammaster.item.NHItemList;
 
 import goodgenerator.items.GGMaterial;
 import goodgenerator.util.ItemRefer;
@@ -33,7 +33,6 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.material.MaterialMisc;
 import gtPlusPlus.core.material.MaterialsElements;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
-import tectech.thing.CustomItemList;
 
 public class ModularHatchesRecipes {
 
@@ -45,9 +44,8 @@ public class ModularHatchesRecipes {
         if (!Config.EnableModularizedMachineSystem) return;
 
         Materials[] materials = new Materials[] { Materials.NaquadahAlloy, Materials.Neutronium,
-            Materials.CosmicNeutronium, Materials.Infinity, Materials.TranscendentMetal,
-            Materials.SpaceTime, Materials.MHDCSM,
-            Materials.MagMatter };
+            Materials.CosmicNeutronium, Materials.Infinity, Materials.TranscendentMetal, Materials.SpaceTime,
+            Materials.MHDCSM, Materials.MagMatter };
 
         ItemStack[] hulls = new ItemStack[] { ItemList.Hull_ZPM.get(1), ItemList.Hull_UV.get(1),
             ItemList.Hull_MAX.get(1), ItemList.Hull_UEV.get(1), ItemList.Hull_UIV.get(1), ItemList.Hull_UMV.get(1),
@@ -257,9 +255,8 @@ public class ModularHatchesRecipes {
                     GTCMItemList.ProofOfHeroes.get(1),
                     GTUtility.copyAmountUnsafe(2048, GTCMItemList.PerfectOverclockController.get(1)),
                     GTUtility.copyAmountUnsafe(4096, ItemList.Field_Generator_UXV.get(1)),
-                    GTUtility.copyAmountUnsafe(
-                        6144,
-                        GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Eternity, 1)),
+                    GTUtility
+                        .copyAmountUnsafe(6144, GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Eternity, 1)),
 
                     GTUtility.copyAmountUnsafe(8192, Materials.Universium.getNanite(1)),
                     GTUtility.copyAmountUnsafe(8192, Materials.Eternity.getNanite(1)),

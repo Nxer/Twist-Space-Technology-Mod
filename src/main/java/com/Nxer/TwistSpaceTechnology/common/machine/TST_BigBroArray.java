@@ -29,13 +29,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.dreammaster.item.NHItemList;
-import gregtech.api.enums.HatchElement;
-import gregtech.api.interfaces.IIconContainer;
-import gregtech.api.metatileentity.implementations.MTEHatch;
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -57,11 +50,13 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.dreammaster.item.NHItemList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -89,17 +84,20 @@ import emt.tile.solar.TileEntitySolarBase;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.metatileentity.implementations.MTEHatchEnergy;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
@@ -109,6 +107,8 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.maps.FuelBackend;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
@@ -126,9 +126,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
 import tectech.recipe.TTRecipeAdder;
 import tectech.thing.casing.TTCasingsContainer;
-import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
-import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
 
 public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> implements ISurvivalConstructable {
@@ -891,7 +889,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
                     return Pair.of(Block.getBlockFromItem(itemStack.getItem()), level);
                 } catch (Exception ex) {
                     ItemStack itemStack = NHItemList.valueOf(name)
-                                                    .get(1);
+                        .get(1);
                     int level = itemStack.getItemDamage();
                     return Pair.of(Block.getBlockFromItem(itemStack.getItem()), level);
                 } catch (IllegalAccessError error) {
@@ -1366,7 +1364,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         super(aName);
     }
 
-
     @Override
     public IStructureDefinition<TST_BigBroArray> getStructureDefinition() {
         return STRUCTURE_DEFINITION;
@@ -1401,14 +1398,14 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         if (GTUtility.isStackInvalid(stack) || getRecipeMap() == null) return null;
 
         return getRecipeMap().findRecipeQuery()
-                             .items(stack)
-                             .fluids()
-                             .specialSlot(null)
-                             .voltage(Long.MAX_VALUE)
-                             .cachedRecipe(null)
-                             .notUnificated(false)
-                             .dontCheckStackSizes(false)
-                             .find();
+            .items(stack)
+            .fluids()
+            .specialSlot(null)
+            .voltage(Long.MAX_VALUE)
+            .cachedRecipe(null)
+            .notUnificated(false)
+            .dontCheckStackSizes(false)
+            .find();
     }
 
     void consumeFuel(String machineType, FluidStack storedFluid, long liquidFuelValue) {
@@ -1689,7 +1686,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         return blockPlacedCount;
     }
 
-
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
@@ -1715,7 +1711,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
                 }
                 for (MTEHatch gt_metaTileEntity_hatch_dynamoMulti : mExoticDynamoHatches) {
                     if (gt_metaTileEntity_hatch_dynamoMulti.mTier > casingTier
-                            || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
+                        || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
                         return;
                     }
                 }
@@ -1724,7 +1720,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         }
 
         // energy hatch level follows glass level
-
 
         for (MTEHatchEnergy mEnergyHatch : mEnergyHatches) {
             if (mEnergyHatch.mTier > glassTier) {

@@ -1,9 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -16,7 +18,6 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
-
 
 public class SimpleResultWithText implements CheckRecipeResult {
 

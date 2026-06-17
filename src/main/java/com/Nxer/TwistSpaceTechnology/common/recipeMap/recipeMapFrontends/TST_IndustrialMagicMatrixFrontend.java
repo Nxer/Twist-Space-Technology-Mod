@@ -1,20 +1,20 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
 import java.util.List;
-import java.util.function.Supplier;
 
-import com.gtnewhorizons.modularui.common.widget.ProgressBar;
-import gregtech.nei.GTNEIDefaultHandler;
 import org.jetbrains.annotations.NotNull;
 
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.math.Size;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
+import com.gtnewhorizons.modularui.common.widget.ProgressBar;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.common.gui.modularui.UIHelper;
+import gregtech.nei.GTNEIDefaultHandler;
+import org.joml.Math;
 
 public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
 
@@ -26,13 +26,26 @@ public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
         NEIRecipePropertiesBuilder neiPropertiesBuilder) {
         super(uiPropertiesBuilder, neiPropertiesBuilder);
         this.itemRowCount = getItemRowCount();
-//        neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount * 18));
+        // neiProperties.recipeBackgroundSize = new Size(170, 10 + (itemRowCount * 18));
+    }
+
+    @Override
+    protected @NotNull NEIRecipePropertiesBuilder modifyNEIProperties(NEIRecipePropertiesBuilder neiPropertiesBuilder) {
+        int itemRowCount = getItemRowCount();
+        return neiPropertiesBuilder.recipeBackgroundSize(new Size(170, 10 + (itemRowCount) * 18));
     }
 
     @Override
     public void addProgressBar(ModularWindow.Builder builder, GTNEIDefaultHandler.NEITemplateContext ctx) {
-//        new Pos2d(15, 10);
-        super.addProgressBar(builder, ctx);
+        // new Pos2d(15, 10);
+        assert uiProperties.progressBarTexture != null;
+        builder.widget(
+            new ProgressBar().setTexture(uiProperties.progressBarTexture.get(), 20)
+                .setDirection(uiProperties.progressBarDirection)
+                .setProgress(ctx.progressSupplier)
+                .setSynced(false, false)
+                .setPos(new Pos2d(78+15, 24+10).add(ctx.windowOffset))
+                .setSize(uiProperties.progressBarSize));
     }
 
     private int getItemRowCount() {

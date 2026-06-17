@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.ic2Crop;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
@@ -56,6 +54,5 @@ public abstract class AbstractTstCrop extends CropCard {
     public String owner() {
         return "TwistSpaceTechnology";
     }
-
 
 }

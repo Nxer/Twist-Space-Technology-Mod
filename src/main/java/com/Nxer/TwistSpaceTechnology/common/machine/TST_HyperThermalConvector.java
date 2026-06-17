@@ -25,8 +25,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.util.FluidEjectionHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -63,6 +61,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -233,7 +232,8 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         mSteamHatch = null;
         mColdFluidHatch = null;
         Arrays.fill(dedicatedHatches, null);
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) return;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors))
+            return;
         dedicatedHatches[0] = mHotFluidHatch;
         dedicatedHatches[1] = mDistilledWaterHatch;
         if (mHotFluidHatch == null || mColdFluidHatch == null) {
@@ -507,12 +507,12 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         FluidStack copiedFluidStack = aLiquid.copy();
         List<MTEHatchOutput> targetHatches = Collections
             .singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
-//        if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
-//            dumpFluid(targetHatches, copiedFluidStack, false);
-//        }
-        FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
-        ejectionHelper.ejectStack(copiedFluidStack);
-        ejectionHelper.commit();
+         if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
+         dumpFluid(targetHatches, copiedFluidStack, false);
+         }
+//        FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
+//        ejectionHelper.ejectStack(copiedFluidStack);
+//        ejectionHelper.commit();
         return false;
     }
 

@@ -1,7 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.entity;
 
-import gregtech.common.tileentities.render.RenderingTileEntityLaser;
 import net.minecraft.nbt.NBTTagCompound;
+
+import gregtech.common.tileentities.render.RenderingTileEntityLaser;
 
 public class TileEntityLaserBeacon extends RenderingTileEntityLaser {
 

@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -42,6 +41,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
@@ -221,19 +221,23 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.amountRings * 8, errors)) {
+            baseDepthOffSet - this.amountRings * 8,
+            errors)) {
             this.amountRings++;
             if (amountRings > 15) {
                 return;
             }
         }
 
+        errors.clear();
+
         // check the end layer
         if (!checkPiece(
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.amountRings * 8, errors)) {
+            baseDepthOffSet - this.amountRings * 8,
+            errors)) {
             return;
         }
 

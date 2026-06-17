@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.OverclockControllers;
 
-import gregtech.api.interfaces.IIconContainer;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -9,6 +8,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -80,12 +80,12 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFaceLowSpeed = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Pri");
-        ActiveFacePerfect = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Adv");
-        ActiveFaceSingularity = Textures.BlockIcons.custom(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Per");
+        ActiveFaceLowSpeed = Textures.BlockIcons
+            .custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Pri");
+        ActiveFacePerfect = Textures.BlockIcons
+            .custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Adv");
+        ActiveFaceSingularity = Textures.BlockIcons
+            .custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Per");
         super.registerIcons(aBlockIconRegister);
     }
 

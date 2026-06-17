@@ -5,13 +5,13 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
 
-import com.dreammaster.item.NHItemList;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.Werkstoff;
 import goodgenerator.items.GGMaterial;

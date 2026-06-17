@@ -1,12 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfiniteAirHatchFillFull;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
@@ -17,7 +12,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
@@ -37,23 +31,23 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
         return new GT_MetaTileEntity_Hatch_Air(this.mName, this.mTier, this.mDescriptionArray, this.mTextures);
     }
 
-//    @Override
-//    public synchronized String[] getDescription() {
-//        mDescriptionArray[2] = FluidCapacity + " "
-//            + EnumChatFormatting.BLUE
-//            + formatNumber(getCapacity())
-//            + EnumChatFormatting.RESET
-//            + " L";
-//        final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };
-//
-//        String[] aCustomTips = getCustomTooltip();
-//        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
-//        System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-//        System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
-//        System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
-//        desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
-//        return desc;
-//    }
+    // @Override
+    // public synchronized String[] getDescription() {
+    // mDescriptionArray[2] = FluidCapacity + " "
+    // + EnumChatFormatting.BLUE
+    // + formatNumber(getCapacity())
+    // + EnumChatFormatting.RESET
+    // + " L";
+    // final String[] hatchTierString = new String[] { HatchTier + " " + GTUtility.getColoredTierNameFromTier(mTier) };
+    //
+    // String[] aCustomTips = getCustomTooltip();
+    // final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
+    // System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
+    // System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
+    // System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
+    // desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
+    // return desc;
+    // }
 
     @Override
     public String[] getCustomTooltip() {

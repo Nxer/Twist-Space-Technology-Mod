@@ -16,10 +16,8 @@ import crazypants.enderio.material.Material;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 
@@ -283,7 +281,7 @@ public class MegaSolarPanelFactoryRecipePool {
         .itemInputs(
             NHItemList.IrradiantReinforcedBedrockiumPlate.get(4),
             ItemList.Circuit_Silicon_Wafer7.get(4),
-            GTModHandler.getModItem("dreamcraft", "item.PicoWafer", 32),
+            NHItemList.PicoWafer.get(32),
             ItemList.Circuit_Wafer_QPIC.get(64),
             GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.Steeleaf, 2),
             GTOreDictUnificator.get(OrePrefixes.wireGt04, Materials.SuperconductorUIV, 32),

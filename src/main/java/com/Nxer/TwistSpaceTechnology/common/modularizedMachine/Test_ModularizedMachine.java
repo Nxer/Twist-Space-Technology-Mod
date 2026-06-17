@@ -17,8 +17,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICA
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.TranslatableStructureError;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -43,13 +43,12 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
 import gregtech.common.blocks.BlockCasings4;
 import gregtech.common.tileentities.machines.IDualInputHatch;
-
-import java.util.List;
 
 public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAllModuleBase<Test_ModularizedMachine> {
 
@@ -167,7 +166,8 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
      * The method checkMachine in this custom base class. Same as the origin checkMachine.
      */
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
         tierMachine = 0;
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
             return false;

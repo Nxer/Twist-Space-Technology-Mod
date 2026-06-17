@@ -147,7 +147,9 @@ public class ItemHatchUpdateTool extends Item {
                     if (tileEntity instanceof BaseMetaTileEntity te) {
                         if (te.getMetaTileEntity() instanceof MTEMultiBlockBase machine) {
                             LOG.info("Find nearby machine named: " + machine.getLocalName());
-                            LOG.info("is it ok after force replace and check? " + machine.checkStructure(true, machine.getBaseMetaTileEntity()));
+                            LOG.info(
+                                "is it ok after force replace and check? "
+                                    + machine.checkStructure(true, machine.getBaseMetaTileEntity()));
                         }
                     }
                 }

@@ -13,9 +13,10 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_ON;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FUSION1_GLOW;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
-import gregtech.api.structure.error.StructureError;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -41,14 +42,13 @@ import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.common.blocks.BlockCasings8;
-
-import java.util.List;
 
 public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_DeployedNanoCore> {
 
@@ -133,11 +133,9 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!(checkPiece(STRUCTURE_PIECE_BOTTOM, horizontalOffSetBottom, verticalOffSetBottom, depthOffSetBottom, errors)
-            && checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle, depthOffSetMiddle, errors))) {
-            //
-            return;
-        }
+        checkPiece(STRUCTURE_PIECE_BOTTOM, horizontalOffSetBottom, verticalOffSetBottom, depthOffSetBottom, errors);
+        checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle, depthOffSetMiddle, errors);
+        if (!errors.isEmpty()) return;
 
         wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
     }

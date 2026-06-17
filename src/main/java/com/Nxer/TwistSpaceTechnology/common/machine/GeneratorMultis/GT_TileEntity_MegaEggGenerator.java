@@ -10,17 +10,9 @@ import static gregtech.api.enums.HatchElement.ExoticDynamo;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElement.DynamoMulti;
 
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
-import com.Nxer.TwistSpaceTechnology.config.Config;
-import gregtech.api.enums.HatchElement;
-import gregtech.api.metatileentity.implementations.MTEHatch;
-import gregtech.api.structure.error.ErrorType;
-import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -33,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
-import com.Nxer.TwistSpaceTechnology.util.MathUtils;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -51,15 +43,17 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.ErrorType;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import tectech.thing.casing.TTCasingsContainer;
-import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 
 public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEntity_MegaEggGenerator>
@@ -73,7 +67,6 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
     public GT_TileEntity_MegaEggGenerator(String aName) {
         super(aName);
     }
-
 
     // endregion
 
@@ -197,13 +190,19 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
             STRUCTURE_PIECE_MIDDLE,
             horizontalOffSet,
             verticalOffSet + (this.mPieces + 1) * 2,
-            depthOffSet, errors)) {
+            depthOffSet,
+            errors)) {
             this.mPieces++;
         }
         if (mPieces < 1) {
             return false;
         }
-        return checkPiece(STRUCTURE_PIECE_TOP, horizontalOffSet, verticalOffSet + this.mPieces * 2 + 1, depthOffSet, errors);
+        return checkPiece(
+            STRUCTURE_PIECE_TOP,
+            horizontalOffSet,
+            verticalOffSet + this.mPieces * 2 + 1,
+            depthOffSet,
+            errors);
     }
 
     /**
@@ -231,7 +230,6 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
         }
         return true;
     }
-
 
     /**
      * Calls for initializing the output values (volt, amp) and efficiency increment.
