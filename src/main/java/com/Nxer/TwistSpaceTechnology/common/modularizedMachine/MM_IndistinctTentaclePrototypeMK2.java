@@ -28,6 +28,8 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -145,17 +147,29 @@ public class MM_IndistinctTentaclePrototypeMK2
         return 4;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+//    }
+
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);
     }
 
     @Override

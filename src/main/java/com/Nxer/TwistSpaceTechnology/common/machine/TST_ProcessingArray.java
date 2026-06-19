@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -237,6 +238,11 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
                     + EnumChatFormatting.YELLOW
                     + TextEnums.tr(tag.getString("recipeMap")));
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

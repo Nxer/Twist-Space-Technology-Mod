@@ -390,10 +390,6 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         return StatCollector.translateToLocal(getManufacturingMachineMode().unlocalizedName);
     }
 
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal(MODES.get(mode).unlocalizedName);
-    }
-
     @Override
     public void setMachineMode(int index) {
         machineMode = index % getMachineModesCount();
@@ -433,7 +429,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         currentTip.add(
             StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " "
                 + EnumChatFormatting.WHITE
-                + getMachineModeName(tag.getInteger("mode"))
+                + getMachineModeName()
                 + EnumChatFormatting.RESET);
     }
 

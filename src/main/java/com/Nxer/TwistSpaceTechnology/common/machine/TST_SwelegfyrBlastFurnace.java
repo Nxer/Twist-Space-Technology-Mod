@@ -56,6 +56,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
@@ -63,6 +64,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResult
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -102,6 +104,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -371,23 +374,23 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     // region Processing Logic
-    int glassTier = -1;
-    byte controllerTier = 1;
-    boolean isBlazeFinishSet = false;
-    boolean isBlazeFinishClear = true;
-    boolean isPassiveMode = false;
-    boolean inPassiveMode = false;
-    boolean isRapidHeating = false;
-    boolean inRapidHeating = false;
-    boolean isHoldingHeat = false;
-    static ItemStack UpgradeItem = null;
-    int previousRecipeCode = 0;
-    int correctBlazeCost = 0;
-    protected MTEHatchInput mBlazeHatch;
+    public int glassTier = -1;
+    public byte controllerTier = 1;
+    public boolean isBlazeFinishSet = false;
+    public boolean isBlazeFinishClear = true;
+    public boolean isPassiveMode = false;
+    public boolean inPassiveMode = false;
+    public boolean isRapidHeating = false;
+    public boolean inRapidHeating = false;
+    public boolean isHoldingHeat = false;
+    public static ItemStack UpgradeItem = null;
+    public int previousRecipeCode = 0;
+    public int correctBlazeCost = 0;
+    public MTEHatchInput mBlazeHatch;
     public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
-    protected int mHeatingCapacity;
-    protected int maxHeatingCapacity;
-    protected int recipeHeatLimitation;
+    public int mHeatingCapacity;
+    public int maxHeatingCapacity;
+    public int recipeHeatLimitation;
 
     public HeatingCoilLevel getCoilLevel() {
         return coilLevel;
@@ -685,11 +688,19 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return 2;
     }
 
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SBF_ModeBase,
+        UITextures.SBF_ModePassive };
+
     @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(UITextures.SBF_ModeBase);
-        machineModeIcons.add(UITextures.SBF_ModePassive);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
     }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(UITextures.SBF_ModeBase);
+    // machineModeIcons.add(UITextures.SBF_ModePassive);
+    // }
 
     @Override
     public void setMachineMode(int index) {
@@ -698,9 +709,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public String getMachineModeName(int mode) {
+    public String getMachineModeName() {
         // Override the origin logic, check machine mode name with the machine status
-        return getMachineModeName(mode != 0, inPassiveMode, inRapidHeating);
+        return getMachineModeName(machineMode != 0, inPassiveMode, inRapidHeating);
     }
 
     public String getMachineModeName(boolean isPassiveMode, boolean inPassiveMode, boolean inRapidHeating) {
@@ -742,99 +753,107 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return base;
     }
 
-    @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-        builder.widget(createBlazeStatusButton(builder));
-        builder.widget(createRapidHeatingButton(builder));
-        builder.widget(createHoldingHeatButton(builder));
-
-    }
+//    @Override
+//    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+//        super.addUIWidgets(builder, buildContext);
+//        builder.widget(createBlazeStatusButton(builder));
+//        builder.widget(createRapidHeatingButton(builder));
+//        builder.widget(createHoldingHeatButton(builder));
+//
+//    }
 
     @Override
     protected boolean useMui2() {
         return super.useMui2();
     }
 
-    public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
-
-        Widget button = new ButtonWidget()
-            .setOnClick(
-                (clickData, widget) -> {
-                    if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
-                        .isActive()) setRemoveBlaze();
-                })
-            .setPlayClickSound(true)
-            .setBackground(() -> {
-                List<IDrawable> layers = new ArrayList<>();
-                // Add icons per mode
-                if (!isBlazeFinishClear) {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_BlazeClear);
-                } else if (!isBlazeFinishSet) {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_BlazeSet);
-                }
-
-                return layers.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(
-                new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishSet, val -> isBlazeFinishSet = val),
-                builder)
-            .attachSyncer(
-                new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishClear, val -> isBlazeFinishClear = val),
-                builder)
-            // #tr SBF.Msg.setOrClearBlaze
-            // # Place / Clear Pyrotheum
-            // #zh_CN 填充/清除炽焱
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(98, 91)
-            .setSize(16, 16);
-
-        return (ButtonWidget) button;
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_SwelegfyrBlastFurnace(this).withMachineModeIcons(getMachineModeIcons());
     }
 
-    public ButtonWidget createRapidHeatingButton(IWidgetBuilder<?> builder) {
-        // if controller tier = 1, not generate button
-        if (controllerTier != 2) return null;
-
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (isPassiveMode) {
-                setRapidHeating(!isRapidHeating);
-                if (isRapidHeating) isHoldingHeat = false;
-            }
-        })
-            .setPlayClickSound(isPassiveMode)
-            .setBackground(() -> {
-                List<IDrawable> layers = new ArrayList<>();
-                // Add icons per mode
-                if (isPassiveMode) {
-                    if (getRapidHeating()) {
-                        layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-                        layers.add(UITextures.SBF_RapidHeating_On);
-                    } else {
-                        layers.add(GTUITextures.BUTTON_STANDARD);
-                        layers.add(UITextures.SBF_RapidHeating_Off);
-                    }
-                } else {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_RapidHeating_Forbidden);
-                }
-
-                return layers.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getRapidHeating, this::setRapidHeating), builder)
-            // #tr SBF.Msg.enableRapidHeating
-            // # Rapid Thermal Boost
-            // #zh_CN 快速热增强模式
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(116, 91)
-            .setSize(16, 16);
-
-        return (ButtonWidget) button;
+    public void clickBlazeStatusButton() {
+        if (checkStructure(true, getBaseMetaTileEntity()) && this.getBaseMetaTileEntity() != null
+            && !this.getBaseMetaTileEntity()
+                .isActive()) {
+            setRemoveBlaze();
+        }
     }
+
+    // public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
+    //
+    // Widget button = new ButtonWidget()
+    // .setOnClick(
+    // (clickData, widget) -> {
+    // if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
+    // .isActive()) setRemoveBlaze();
+    // })
+    // .setPlayClickSound(true)
+    // .setBackground(() -> {
+    // List<IDrawable> layers = new ArrayList<>();
+    // // Add icons per mode
+    // if (!isBlazeFinishClear) {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_BlazeClear);
+    // } else if (!isBlazeFinishSet) {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_BlazeSet);
+    // }
+    //
+    // return layers.toArray(new IDrawable[0]);
+    // })
+    // .attachSyncer(
+    // new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishSet, val -> isBlazeFinishSet = val),
+    // builder)
+    // .attachSyncer(
+    // new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishClear, val -> isBlazeFinishClear = val),
+    // builder)
+    //
+    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze"))
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(98, 91)
+    // .setSize(16, 16);
+    //
+    // return (ButtonWidget) button;
+    // }
+
+//    public ButtonWidget createRapidHeatingButton(IWidgetBuilder<?> builder) {
+//        // if controller tier = 1, not generate button
+//        if (controllerTier != 2) return null;
+//
+//        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+//            if (isPassiveMode) {
+//                setRapidHeating(!isRapidHeating);
+//                if (isRapidHeating) isHoldingHeat = false;
+//            }
+//        })
+//            .setPlayClickSound(isPassiveMode)
+//            .setBackground(() -> {
+//                List<IDrawable> layers = new ArrayList<>();
+//                // Add icons per mode
+//                if (isPassiveMode) {
+//                    if (getRapidHeating()) {
+//                        layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
+//                        layers.add(UITextures.SBF_RapidHeating_On);
+//                    } else {
+//                        layers.add(GTUITextures.BUTTON_STANDARD);
+//                        layers.add(UITextures.SBF_RapidHeating_Off);
+//                    }
+//                } else {
+//                    layers.add(GTUITextures.BUTTON_STANDARD);
+//                    layers.add(UITextures.SBF_RapidHeating_Forbidden);
+//                }
+//
+//                return layers.toArray(new IDrawable[0]);
+//            })
+//            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getRapidHeating, this::setRapidHeating), builder)
+//
+//            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating"))
+//            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+//            .setPos(116, 91)
+//            .setSize(16, 16);
+//
+//        return (ButtonWidget) button;
+//    }
 
     public boolean getRapidHeating() {
         return isRapidHeating;
@@ -844,46 +863,44 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         isRapidHeating = b;
     }
 
-    public ButtonWidget createHoldingHeatButton(IWidgetBuilder<?> builder) {
-        // if controller tier = 1, not generate button
-        if (controllerTier != 2) return null;
-
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (isPassiveMode) {
-                setHoldingHeat(!isHoldingHeat);
-                if (isHoldingHeat) isRapidHeating = false;
-            }
-        })
-            .setPlayClickSound(isPassiveMode)
-            .setBackground(() -> {
-                List<IDrawable> layers = new ArrayList<>();
-                // Add icons per mode
-                if (isPassiveMode) {
-                    if (getHoldingHeat()) {
-                        layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-                        layers.add(UITextures.SBF_HoldingHeat_On);
-                    } else {
-                        layers.add(GTUITextures.BUTTON_STANDARD);
-                        layers.add(UITextures.SBF_HoldingHeat_Off);
-                    }
-                } else {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_HoldingHeat_Forbidden);
-                }
-
-                return layers.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getHoldingHeat, this::setHoldingHeat), builder)
-            // #tr SBF.Msg.enableHoldingHeat
-            // # Thermal Retention Standby
-            // #zh_CN 热保持待机模式
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(134, 91)
-            .setSize(16, 16);
-
-        return (ButtonWidget) button;
-    }
+//    public ButtonWidget createHoldingHeatButton(IWidgetBuilder<?> builder) {
+//        // if controller tier = 1, not generate button
+//        if (controllerTier != 2) return null;
+//
+//        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+//            if (isPassiveMode) {
+//                setHoldingHeat(!isHoldingHeat);
+//                if (isHoldingHeat) isRapidHeating = false;
+//            }
+//        })
+//            .setPlayClickSound(isPassiveMode)
+//            .setBackground(() -> {
+//                List<IDrawable> layers = new ArrayList<>();
+//                // Add icons per mode
+//                if (isPassiveMode) {
+//                    if (getHoldingHeat()) {
+//                        layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
+//                        layers.add(UITextures.SBF_HoldingHeat_On);
+//                    } else {
+//                        layers.add(GTUITextures.BUTTON_STANDARD);
+//                        layers.add(UITextures.SBF_HoldingHeat_Off);
+//                    }
+//                } else {
+//                    layers.add(GTUITextures.BUTTON_STANDARD);
+//                    layers.add(UITextures.SBF_HoldingHeat_Forbidden);
+//                }
+//
+//                return layers.toArray(new IDrawable[0]);
+//            })
+//            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getHoldingHeat, this::setHoldingHeat), builder)
+//
+//            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat"))
+//            .setTooltipShowUpDelay(TOOLTIP_DELAY)
+//            .setPos(134, 91)
+//            .setSize(16, 16);
+//
+//        return (ButtonWidget) button;
+//    }
 
     public boolean getHoldingHeat() {
         return isHoldingHeat;

@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -108,17 +110,31 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         return 4;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    }
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+//    }
+//
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);
     }
 
     @Override

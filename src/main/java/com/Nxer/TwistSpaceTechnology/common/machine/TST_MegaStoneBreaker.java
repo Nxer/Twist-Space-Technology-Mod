@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
@@ -102,6 +103,11 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     public int getMaxParallelRecipes() {
         int EuTier = (int) calculateVoltageTier(getMaxInputEu());
         return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

@@ -20,6 +20,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
@@ -163,6 +164,11 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         }
 
         return result;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     protected boolean tryConsumeSpaceTimeSeed() {

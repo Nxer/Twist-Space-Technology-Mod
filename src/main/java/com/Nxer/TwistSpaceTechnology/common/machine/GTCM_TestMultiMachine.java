@@ -15,6 +15,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -123,6 +124,11 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
                 aPlayer,
                 StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

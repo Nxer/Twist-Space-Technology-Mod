@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.joml.Math;
 
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.math.Size;
@@ -14,7 +15,6 @@ import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.common.gui.modularui.UIHelper;
 import gregtech.nei.GTNEIDefaultHandler;
-import org.joml.Math;
 
 public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
 
@@ -44,7 +44,7 @@ public class TST_IndustrialMagicMatrixFrontend extends RecipeMapFrontend {
                 .setDirection(uiProperties.progressBarDirection)
                 .setProgress(ctx.progressSupplier)
                 .setSynced(false, false)
-                .setPos(new Pos2d(78+15, 24+10).add(ctx.windowOffset))
+                .setPos(new Pos2d(78 + 15, 24 + 10).add(ctx.windowOffset))
                 .setSize(uiProperties.progressBarSize));
     }
 

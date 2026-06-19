@@ -57,6 +57,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.UUID;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -196,6 +197,11 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
                     + EnumChatFormatting.RESET
                     + " EU / t");
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

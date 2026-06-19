@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
@@ -516,6 +517,11 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         return addDataAccessToMachineList(aTileEntity, aBaseCasingIndex)
             || addNaniteBusToMachineList(aTileEntity, aBaseCasingIndex)
             || super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

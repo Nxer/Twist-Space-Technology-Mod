@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -217,15 +219,25 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+//    }
+//
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
     }
 
     @Override

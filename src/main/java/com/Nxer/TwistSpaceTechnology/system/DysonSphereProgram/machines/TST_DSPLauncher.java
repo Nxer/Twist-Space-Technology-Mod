@@ -58,6 +58,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -549,6 +550,11 @@ I -> ofFrame...(NaquadahAlloy);
     @Override
     public boolean supportsInputSeparation() {
         return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

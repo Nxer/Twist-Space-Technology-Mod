@@ -15,6 +15,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -116,6 +117,11 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     @Override
     public boolean supportsSingleRecipeLocking() {
         return true;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

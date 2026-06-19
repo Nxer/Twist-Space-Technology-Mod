@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -87,15 +89,25 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
+//    }
+//
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + machineMode);
     }
 
     protected float getEuModifier() {

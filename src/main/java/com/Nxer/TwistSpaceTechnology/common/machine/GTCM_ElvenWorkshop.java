@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -66,16 +68,25 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
          */
         return 2;
     }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT
+    };
 
     @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
     }
 
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+//    }
+//
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + mode);
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + machineMode);
     }
 
     @Override

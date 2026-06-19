@@ -929,6 +929,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
+    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
+        return new com.cleanroommc.modularui.drawable.UITexture[0];
+    }
+
+    @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);

@@ -29,6 +29,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -198,6 +199,11 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
         };
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

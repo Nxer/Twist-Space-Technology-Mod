@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
-import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTUtility.validMTEList;
 
 import java.util.ArrayList;
@@ -11,9 +10,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
-import gregtech.api.modularui2.GTGuiTextures;
-import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -29,21 +25,16 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.drawable.UITexture;
-import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
-import com.gtnewhorizons.modularui.api.widget.Widget;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
@@ -57,6 +48,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 import gregtech.common.tileentities.machines.MTEHatchInputBusME;
@@ -94,7 +86,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     /**
      * Default parameters. If these parameter is only confirmed by machine structure, they should be calculated in
-     * {@link #checkMachine(IGregTechTileEntity, ItemStack)}.
+     * {@link #checkMachine(IGregTechTileEntity, ItemStack, List)}.
      */
     protected boolean enablePerfectOverclock = false;
     protected int maxParallel = 1;
@@ -116,9 +108,13 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         enablePerfectOverclock = aNBT.getBoolean("enablePerfectOverclock");
         maxParallel = Math.max(aNBT.getInteger("maxParallel"), 1);
         euModifier = aNBT.getFloat("euModifier");
-        if (euModifier <= 0) euModifier = 1;
+        if (euModifier <= 0) {
+            euModifier = 1;
+        }
         speedBonus = aNBT.getFloat("speedBonus");
-        if (speedBonus <= 0) speedBonus = 1;
+        if (speedBonus <= 0) {
+            speedBonus = 1;
+        }
     }
 
     /**
@@ -222,7 +218,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         result = postCheckRecipe(result, processingLogic);
         // inputs are consumed at this point
         updateSlots();
-        if (!result.wasSuccessful()) return result;
+        if (!result.wasSuccessful()) {
+            return result;
+        }
 
         mEfficiency = 10000;
         mEfficiencyIncrease = 10000;
@@ -258,7 +256,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
 
         if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
-            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+            .startsWith("gt.integrated_circuit")) {
+            rList.add(getStackInSlot(1));
+        }
         return rList;
     }
 
@@ -270,7 +270,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 while (inventoryIterator.hasNext()) {
                     ItemStack[] items = inventoryIterator.next()
                         .getItemInputs();
-                    if (items == null || items.length == 0) continue;
+                    if (items == null || items.length == 0) {
+                        continue;
+                    }
 
                     ArrayList<ItemStack> rList = new ArrayList<>();
                     for (int i = 0; i < items.length; i++) {
@@ -296,7 +298,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
 
         if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
-            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+            .startsWith("gt.integrated_circuit")) {
+            rList.add(getStackInSlot(1));
+        }
         return rList;
     }
 
@@ -314,7 +318,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 while (inventoryIterator.hasNext()) {
                     ItemStack[] items = inventoryIterator.next()
                         .getItemInputs();
-                    if (items == null || items.length == 0) continue;
+                    if (items == null || items.length == 0) {
+                        continue;
+                    }
 
                     for (int i = 0; i < items.length; i++) {
                         if (items[i] != null) {
@@ -345,7 +351,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
 
         if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
-            .startsWith("gt.integrated_circuit")) rList.add(getStackInSlot(1));
+            .startsWith("gt.integrated_circuit")) {
+            rList.add(getStackInSlot(1));
+        }
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
         }
@@ -393,7 +401,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 while (inventoryIterator.hasNext()) {
                     FluidStack[] fluids = inventoryIterator.next()
                         .getFluidInputs();
-                    if (fluids == null || fluids.length == 0) continue;
+                    if (fluids == null || fluids.length == 0) {
+                        continue;
+                    }
 
                     for (int i = 0; i < fluids.length; i++) {
                         if (fluids[i] != null && fluids[i].amount > 0) {
@@ -464,9 +474,13 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     public boolean addFluidInputToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
+        if (aTileEntity == null) {
+            return false;
+        }
         IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity == null) {
+            return false;
+        }
         if (aMetaTileEntity instanceof MTEHatchInput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             ((MTEHatchInput) aMetaTileEntity).mRecipeMap = getRecipeMap();
@@ -649,7 +663,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     @Override
     public boolean getDefaultBatchMode() {
-        if (!supportsBatchMode()) return false;
+        if (!supportsBatchMode()) {
+            return false;
+        }
         return Config.DEFAULT_BATCH_MODE;
     }
 
@@ -665,77 +681,44 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // endregion
 
-    // region Machine Mode
-    /**
-     * Set total mode count for the machine.
-     * Also indicate whether this machine has multiple modes.
-     * Use {@link #machineMode} to get current machine mode index.
-     * Override {@link #getMachineModeName(int)} to set name for each mode.
-     * Override {@link #setMachineModeIcons()} to set button icon.
-     * Override {@link #setMachineMode(int)} or {@link #nextMachineMode()} to restrict mode change.
-     */
-    public int totalMachineMode() {
-        return 1;
-    }
+    // region Old MUI1 Machine Mode
 
-    public String getMachineModeName(int mode) {
-        return "Unknown Mode " + mode;
-    }
+    // @Override
+    // public void setMachineModeIcons() {
+    // for (int i = 0; i < totalMachineMode(); i++) {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+    // }
+    // }
 
-    @Override
-    public final String getMachineModeName() {
-        return getMachineModeName(machineMode);
-    }
+    // public boolean canButtonSwitchMode() {
+    // return supportsMachineModeSwitch();
+    // }
 
-    @Override
-    public void setMachineModeIcons() {
-        for (int i = 0; i < totalMachineMode(); i++) {
-            machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
-        }
-    }
-
-    @Override
-    public boolean supportsMachineModeSwitch() {
-        return totalMachineMode() > 1;
-    }
-
-    @Override
-    public int nextMachineMode() {
-        if (machineMode + 1 >= totalMachineMode()) {
-            return 0;
-        }
-        return machineMode + 1;
-    }
-
-    public boolean canButtonSwitchMode() {
-        return supportsMachineModeSwitch();
-    }
-
-    @Override
-    public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
-        if (!supportsMachineModeSwitch()) return null;
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (canButtonSwitchMode()) {
-                onMachineModeSwitchClick();
-                setMachineMode(nextMachineMode());
-            }
-        })
-            .setPlayClickSound(supportsMachineModeSwitch())
-            .setBackground(() -> {
-                List<UITexture> ret = new ArrayList<>();
-                if (supportsMachineModeSwitch()) {
-                    ret.add(GTUITextures.BUTTON_STANDARD);
-                    ret.add(getMachineModeIcon(getMachineMode()));
-                } else return null;
-                return ret.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
-            .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(getMachineModeSwitchButtonPos())
-            .setSize(16, 16);
-        return (ButtonWidget) button;
-    }
+    // @Override
+    // public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
+    // if (!supportsMachineModeSwitch()) return null;
+    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+    // if (canButtonSwitchMode()) {
+    // onMachineModeSwitchClick();
+    // setMachineMode(nextMachineMode());
+    // }
+    // })
+    // .setPlayClickSound(supportsMachineModeSwitch())
+    // .setBackground(() -> {
+    // List<UITexture> ret = new ArrayList<>();
+    // if (supportsMachineModeSwitch()) {
+    // ret.add(GTUITextures.BUTTON_STANDARD);
+    // ret.add(getMachineModeIcon(getMachineMode()));
+    // } else return null;
+    // return ret.toArray(new IDrawable[0]);
+    // })
+    // .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
+    // .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(getMachineModeSwitchButtonPos())
+    // .setSize(16, 16);
+    // return (ButtonWidget) button;
+    // }
 
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
@@ -776,7 +759,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 StatCollector.translateToLocal("TST.machines.running_mode")
                 + " "
                 + EnumChatFormatting.WHITE
-                + getMachineModeName(tag.getInteger("modeTST"))
+                + getMachineModeName()
                 + EnumChatFormatting.RESET);
         }
     }
@@ -834,7 +817,9 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         int count = 0;
         for (MTEHatchDynamo tHatch : validMTEList(mDynamoHatches)) {
             count++;
-            if (count > countAvaliableDynamo) return false;
+            if (count > countAvaliableDynamo) {
+                return false;
+            }
         }
         return true;
     }
@@ -856,22 +841,48 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // region UI
 
-//    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
-//        if (supportsMachineModeSwitch()) {
-//            return new TST_Gui<>((T) this)
-//                       .withMachineModeIcons(GTGuiTextures);
-//        } else {
-//            return new TST_Gui<>((T) this);
-//        }
-//
-//    }
-//
-//    public com.cleanroommc.modularui.drawable.UITexture getMachineModeIcons() {
-//        if (machineModeIcons == null || machineModeIcons.isEmpty()) return new UITexture[0];
-//        return machineModeIcons.toArray(new UITexture[0]);
-//    }
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        if (supportsMachineModeSwitch()) {
+            return new TST_Gui<>((T) this).withMachineModeIcons(getMachineModeIcons());
+        } else {
+            return new TST_Gui<>((T) this);
+        }
+
+    }
+
+    @Override
+    public boolean supportsMachineModeSwitch() {
+        return totalMachineMode() > 1;
+    }
+
+    public abstract UITexture[] getMachineModeIcons();
+
+    /**
+     * Set total mode count for the machine.
+     * Also indicate whether this machine has multiple modes.
+     * Use {@link #machineMode} to get current machine mode index.
+     * Override {@link #getMachineModeName()} to set name for each mode.
+     * Override {@link #setMachineModeIcons()} to set button icon.
+     * Override {@link #setMachineMode(int)} or {@link #nextMachineMode()} to restrict mode change.
+     */
+    public int totalMachineMode() {
+        return 1;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        return super.getMachineModeName();
+    }
+
+    @Override
+    public int nextMachineMode() {
+        machineMode++;
+        if (machineMode >= totalMachineMode()) {
+            machineMode = 0;
+        }
+        return machineMode;
+    }
 
     // endregion
-
 
 }

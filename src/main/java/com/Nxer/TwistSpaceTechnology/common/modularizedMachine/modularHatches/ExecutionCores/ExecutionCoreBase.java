@@ -368,13 +368,13 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void setVoidingMode(VoidingMode mode) {}
 
-//    @Override
-//    public List<IOutputHatch> getOutputHatches() {
-//        if (mainMachine instanceof IVoidable iVoidable) {
-//            iVoidable.getOutputHatches();
-//        }
-//        return Collections.emptyList();
-//    }
+    // @Override
+    // public List<IOutputHatch> getOutputHatches() {
+    // if (mainMachine instanceof IVoidable iVoidable) {
+    // iVoidable.getOutputHatches();
+    // }
+    // return Collections.emptyList();
+    // }
 
     @Override
     public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {

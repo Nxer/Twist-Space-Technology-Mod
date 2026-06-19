@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -1948,6 +1949,11 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         }
         GTUtility.sendChatToPlayer(aPlayer, message);
         endRecipeProcessing();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

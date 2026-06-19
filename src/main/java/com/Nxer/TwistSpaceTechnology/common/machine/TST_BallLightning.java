@@ -40,6 +40,8 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -167,16 +169,28 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         return machineMode + 1;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    }
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("BallLightning.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+//    }
+//
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("BallLightning.modeMsg." + machineMode);
     }
 
     @Override

@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -111,6 +112,11 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     @Override
     public boolean supportsSingleRecipeLocking() {
         return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

@@ -25,6 +25,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -267,19 +269,29 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
-        machineModeIcons.add(UITextures.HESTTD_RapidCooling);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        UITextures.HESTTD_HeatExchanger,
+        UITextures.HESTTD_RapidCooling
+    };
 
     @Override
-    public void setMachineMode(int index) {
-        super.setMachineMode(index);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
     }
 
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
+//        machineModeIcons.add(UITextures.HESTTD_RapidCooling);
+//    }
+//
+//    @Override
+//    public void setMachineMode(int index) {
+//        super.setMachineMode(index);
+//    }
+
     @Override
-    public String getMachineModeName(int mode) {
+    public String getMachineModeName() {
         // #tr HyperThermalConvector.modeMsg.0
         // # Rapid Heat Exchange
         // #zh_CN 快速热交换模式
@@ -287,8 +299,10 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         // #tr HyperThermalConvector.modeMsg.1
         // # Rapid Cooling
         // #zh_CN 快速冷却模式
-        return TextEnums.tr("HyperThermalConvector.modeMsg." + mode);
+        return TextEnums.tr("HyperThermalConvector.modeMsg." + machineMode);
+
     }
+
 
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
@@ -507,12 +521,12 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         FluidStack copiedFluidStack = aLiquid.copy();
         List<MTEHatchOutput> targetHatches = Collections
             .singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
-         if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
-         dumpFluid(targetHatches, copiedFluidStack, false);
-         }
-//        FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
-//        ejectionHelper.ejectStack(copiedFluidStack);
-//        ejectionHelper.commit();
+        if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
+            dumpFluid(targetHatches, copiedFluidStack, false);
+        }
+        // FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
+        // ejectionHelper.ejectStack(copiedFluidStack);
+        // ejectionHelper.commit();
         return false;
     }
 

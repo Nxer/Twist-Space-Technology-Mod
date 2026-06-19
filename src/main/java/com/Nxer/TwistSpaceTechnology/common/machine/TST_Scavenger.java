@@ -27,6 +27,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -209,6 +210,11 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     @Override
     public boolean supportsInputSeparation() {
         return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

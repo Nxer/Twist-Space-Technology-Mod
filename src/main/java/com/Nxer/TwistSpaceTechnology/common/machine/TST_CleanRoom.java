@@ -20,6 +20,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -629,6 +630,11 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

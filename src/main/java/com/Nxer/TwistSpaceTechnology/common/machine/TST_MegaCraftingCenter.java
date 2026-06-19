@@ -503,7 +503,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
      * Finally the pattern actual IO numbers will be multiplied by this number, also include the crafting table recipe
      * patterns.
      */
-    protected int magnification = 1;
+    protected int magnification = maxParallel;
 
     @Nullable
     private AENetworkProxy gridProxy;
@@ -572,6 +572,11 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         // #zh_CN 已载入样板数量
         currentTip
             .add(TextEnums.tr("MegaCraftingCenter.waila.PatternAmount") + " : " + tag.getInteger("patternAmount"));
+    }
+
+    @Override
+    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
+        return new com.cleanroommc.modularui.drawable.UITexture[0];
     }
 
     @Override
@@ -1060,6 +1065,11 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     protected static final int SYNC_WINDOW_MAGNIFICATION_ID = 10_114;
 
     @Override
+    public boolean supportsPowerPanel() {
+        return false;
+    }
+
+    @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         super.addUIWidgets(builder, buildContext);
         buildContext.addSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID, this::createMagnificationConfigurationWindow);
@@ -1076,9 +1086,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
                     ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
                     return ret.toArray(new IDrawable[0]);
                 })
-                // #tr MegaCraftingCenter.UI.MagnificationInfoMenuButton.name
-                // # Pattern Magnification Configuration Menu
-                // #zh_CN 样板倍率配置菜单
+
                 .addTooltip(TextEnums.tr("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name"))
                 .setPos(174, 97));
     }
@@ -1089,11 +1097,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         builder.setGuiTint(getGUIColorization());
 
         builder.widget(
-            // spotless:off
-                // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
-                // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
-                // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
-                // spotless:on
+
             TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
                 .setPos(20, 10)
                 .setSize(200, 14))

@@ -394,7 +394,7 @@ public class GTCMRecipe {
         .maxIO(0, 0, 1, 1)
         .dontUseProgressBar()
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperThermalConvector.get(1)))
-        .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic)
+        .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic_MUI1)
         .frontend(TST_RapidCoolingDownFrontend::new)
         .build();
 

@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.NuclearReactor;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -55,6 +56,11 @@ public class TST_NuclearReactor extends GTCM_MultiMachineBase<TST_NuclearReactor
     @Override
     public int getMaxParallelRecipes() {
         return 0;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

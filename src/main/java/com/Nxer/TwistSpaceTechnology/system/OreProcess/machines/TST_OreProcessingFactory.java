@@ -38,6 +38,7 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -142,6 +143,11 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                     + EnumChatFormatting.RESET
                     + " EU");
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

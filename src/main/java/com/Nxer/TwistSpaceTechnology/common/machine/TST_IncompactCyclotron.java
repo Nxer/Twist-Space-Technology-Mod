@@ -26,6 +26,7 @@ import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import java.util.List;
 import java.util.Objects;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -86,6 +87,11 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     @Override
     public int getMaxParallelRecipes() {
         return MaxParallel_IncompactCyclotron;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

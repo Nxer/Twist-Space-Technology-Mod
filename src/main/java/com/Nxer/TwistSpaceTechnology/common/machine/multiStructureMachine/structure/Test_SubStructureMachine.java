@@ -13,6 +13,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -120,6 +121,11 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
                 aPlayer,
                 StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

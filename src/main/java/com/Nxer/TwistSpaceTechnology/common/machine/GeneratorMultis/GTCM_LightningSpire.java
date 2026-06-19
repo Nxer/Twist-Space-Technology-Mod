@@ -23,6 +23,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -519,6 +520,11 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
                 // #zh_CN 闪电尖塔设置为输出模式
                 StatCollector.translateToLocal(tr("LightningSpire.ModeMsg." + OperatingMode)));
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

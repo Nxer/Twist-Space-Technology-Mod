@@ -27,6 +27,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -92,6 +94,16 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return 2;
     }
 
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH
+    };
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
     @Override
     public void setMachineModeIcons() {
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
@@ -99,15 +111,15 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + mode);
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
     }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
-        return RecipeMaps.multiblockChemicalReactorRecipes;
-    }
+//
+//    @Override
+//    public RecipeMap<?> getRecipeMap() {
+//        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+//        return RecipeMaps.multiblockChemicalReactorRecipes;
+//    }
 
     @NotNull
     @Override

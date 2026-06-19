@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -414,6 +415,11 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
 
         // spotless:on
         return ret;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     private static MultiblockTooltipBuilder tooltip;

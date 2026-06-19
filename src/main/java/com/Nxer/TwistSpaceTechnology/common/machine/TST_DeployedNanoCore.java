@@ -17,6 +17,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -77,6 +78,11 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
             + EnumChatFormatting.BOLD
             + TextLocalization.Info_Wireless_mode_enabled;
         return ret;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

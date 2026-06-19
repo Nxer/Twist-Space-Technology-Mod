@@ -7,6 +7,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -95,6 +96,11 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
     @Override
     public int getMaxParallelRecipes() {
         return 1;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     // endregion

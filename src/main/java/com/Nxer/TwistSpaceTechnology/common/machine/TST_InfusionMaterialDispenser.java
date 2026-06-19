@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -273,6 +274,11 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         ItemStack tool) {
         this.fakePlayer = null;
         this.subPedestals.clear();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -104,9 +106,15 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
     }
 
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
+    };
+
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
     }
 
     @Override

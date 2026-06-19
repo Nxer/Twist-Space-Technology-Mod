@@ -26,6 +26,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -86,6 +87,11 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     @Override
     public int getMaxParallelRecipes() {
         return ParallelMultiply_IndustrialMagnetarSeparator * GTUtility.getTier(this.getMaxInputVoltage());
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

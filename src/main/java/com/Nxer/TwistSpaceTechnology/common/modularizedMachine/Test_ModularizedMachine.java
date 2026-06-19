@@ -19,6 +19,7 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -138,6 +139,11 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
         ret[origin.length] = "tierMachine = " + tierMachine;
 
         return ret;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     /**

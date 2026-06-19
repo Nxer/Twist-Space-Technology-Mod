@@ -27,6 +27,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -111,17 +113,30 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         return 4;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SIMPLEWASHER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SIMPLEWASHER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return switch (mode) {
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SIMPLEWASHER);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+//    }
+//
+    @Override
+    public String getMachineModeName() {
+        return switch (machineMode) {
             case 0 -> TextLocalization.BiosphereIII_Mode_00;
             case 1 -> TextLocalization.BiosphereIII_Mode_01;
             case 2 -> TextLocalization.BiosphereIII_Mode_02;
@@ -495,7 +510,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(this.mGlassTier);
-        ret[origin.length + 1] = EnumChatFormatting.BLUE + getMachineModeName(machineMode);
+        ret[origin.length + 1] = EnumChatFormatting.BLUE + getMachineModeName();
         ret[origin.length + 2] = TextLocalization.BiosphereIIIEfficiency + ((machineMode == 2 || machineMode == 3) ?
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :

@@ -34,6 +34,8 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
+import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -141,16 +143,29 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return 3;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[]{
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT
+    };
 
     @Override
-    public String getMachineModeName(int mode) {
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+
+//    @Override
+//    public void setMachineModeIcons() {
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+//    }
+
+    @Override
+    public String getMachineModeName() {
         // #tr EcoSphereSimulator.modeMsg.0
         // # Tree Growth Simulator
         // #zh_CN 原木拟生模式
@@ -166,7 +181,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // #tr EcoSphereSimulator.modeMsg.3
         // # Directed Mob Cloner
         // #zh_CN 定向克隆模式
-        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + mode);
+        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + machineMode);
     }
 
     @Override
@@ -175,10 +190,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         SetRemoveWater();
     }
 
-    @Override
-    public boolean canButtonSwitchMode() {
-        return checkStructure(true, getBaseMetaTileEntity());
-    }
+//    @Override
+//    public boolean canButtonSwitchMode() {
+//        return checkStructure(true, getBaseMetaTileEntity());
+//    }
 
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {

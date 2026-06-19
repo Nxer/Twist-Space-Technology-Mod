@@ -36,6 +36,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -399,6 +400,11 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         ret[origin.length] = EnumChatFormatting.AQUA + "Mean: " + EnumChatFormatting.GOLD + this.Mean;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Variance: " + EnumChatFormatting.GOLD + this.Variance;
         return ret;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     protected String getPlayName() {

@@ -13,6 +13,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.List;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -471,6 +472,11 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return getMaxEfficiency();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

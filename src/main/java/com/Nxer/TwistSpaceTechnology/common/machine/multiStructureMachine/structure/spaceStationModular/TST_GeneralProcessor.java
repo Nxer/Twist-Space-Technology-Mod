@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.struc
 
 import java.util.HashMap;
 
+import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -81,6 +82,11 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     @Override
     public CheckRecipeResult checkProcessing() {
         return monitor.checkProcessing();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
