@@ -18,7 +18,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,6 +34,7 @@ import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;

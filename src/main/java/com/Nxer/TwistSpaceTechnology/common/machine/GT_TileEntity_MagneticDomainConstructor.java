@@ -20,8 +20,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -34,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -41,11 +40,11 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -81,22 +80,20 @@ public class GT_TileEntity_MagneticDomainConstructor
         return 2;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[]{
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER
-    };
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER };
 
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
 
-//    @Override
-//    public void setMachineModeIcons() {
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER);
-//    }
-//
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER);
+    // }
+    //
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + machineMode);

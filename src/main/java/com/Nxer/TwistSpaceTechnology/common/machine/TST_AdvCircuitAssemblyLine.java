@@ -31,7 +31,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -44,6 +43,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_Circui
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;

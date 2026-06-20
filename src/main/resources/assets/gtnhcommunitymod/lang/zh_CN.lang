@@ -2344,3 +2344,6 @@ TST_BigbroArray.hatch_tier_too_large=仓室等级过高
 TST_MegaTreeFarm.StructureErrors.no_water_block=在机器结构顶部的特定位置放置水方块
 TST.MegaEggGeneratorStructureErrors.InfinityEgg=无限之蛋数量超过了层数
 TST.MegaEggGeneratorStructureErrors.Laser=未达到允许使用激光仓的层数要求
+Waila.SBF.4=§6已升级至二级
+NameBloodOrbHatchDebug=Debug血液仓
+Tooltip_DebugBloodHatch=§6提供无线的生命本质

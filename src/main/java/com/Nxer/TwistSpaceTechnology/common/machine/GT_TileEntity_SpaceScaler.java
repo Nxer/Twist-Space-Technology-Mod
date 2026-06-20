@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,6 +42,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -52,11 +51,11 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.recipe.BartWorksRecipeMaps;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -110,28 +109,25 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         }
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[]{
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY
-    };
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
 
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
 
-//    @Override
-//    public void setMachineModeIcons() {
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-//    }
-//
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    // }
+    //
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("SpaceScaler.modeMsg." + machineMode);

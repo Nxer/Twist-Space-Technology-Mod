@@ -38,8 +38,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -50,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -59,11 +58,11 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
@@ -98,22 +97,20 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
         return 2;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[]{
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR
-    };
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR };
 
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
 
-//    @Override
-//    public void setMachineModeIcons() {
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-//    }
-//
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    // }
+    //
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("MoleculeDeconstructor.modeMsg." + machineMode);

@@ -13,8 +13,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -27,16 +25,17 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
@@ -68,22 +67,21 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
          */
         return 2;
     }
-    public static final UITexture[] tMachineModeIcons = new UITexture[]{
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT
-    };
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT };
 
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
 
-//    @Override
-//    public void setMachineModeIcons() {
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-//        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
-//    }
-//
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+    // }
+    //
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + machineMode);

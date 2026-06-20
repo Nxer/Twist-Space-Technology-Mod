@@ -27,8 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -41,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -52,6 +51,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -94,10 +94,8 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return 2;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[]{
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH
-    };
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH };
 
     @Override
     public UITexture[] getMachineModeIcons() {
@@ -114,12 +112,12 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     public String getMachineModeName() {
         return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
     }
-//
-//    @Override
-//    public RecipeMap<?> getRecipeMap() {
-//        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
-//        return RecipeMaps.multiblockChemicalReactorRecipes;
-//    }
+    //
+    // @Override
+    // public RecipeMap<?> getRecipeMap() {
+    // if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+    // return RecipeMaps.multiblockChemicalReactorRecipes;
+    // }
 
     @NotNull
     @Override

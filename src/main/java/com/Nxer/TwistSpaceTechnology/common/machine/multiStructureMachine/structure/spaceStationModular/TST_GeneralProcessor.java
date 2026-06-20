@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.struc
 
 import java.util.HashMap;
 
-import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -10,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 
 import gregtech.api.enums.ItemList;

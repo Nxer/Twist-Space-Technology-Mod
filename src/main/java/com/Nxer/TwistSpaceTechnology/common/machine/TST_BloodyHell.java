@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInf
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.ChiselBeacon_1;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -30,9 +29,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_BloodyHell;
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -52,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_BloodyHell;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -64,6 +61,7 @@ import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -101,6 +99,7 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.LightingHelper;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.render.GTRenderUtil;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
@@ -114,6 +113,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public int parallel = 1;
     public boolean isBloodChecked = false;
     public boolean isBloodClear = true;
+    public boolean isStructureBuild = false;
     public boolean mIsAnimated = true;
     protected boolean mFormed;
 
@@ -240,13 +240,22 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         mTier = 0;
         isBloodChecked = false;
+        isStructureBuild = false;
         for (int i = 6; i > 0; i--) {
             if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2), errors)) {
                 mTier = i;
                 break;
             } else if (i > 1) {
+                clearHatches();
                 errors.clear();
             }
+        }
+
+        if (!errors.isEmpty()) {
+            parallel = 1;
+            return;
+        } else {
+            isStructureBuild = true;
         }
 
         int fluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
@@ -257,12 +266,6 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             getOffset(1, mTier, 2),
             errors)) {
             isBloodChecked = true;
-        }
-
-        if (mTier <= 0) {
-            parallel = 1;
-            errors.add(internal_structure_issue);
-            return;
         }
 
         calculateParallel();
@@ -360,6 +363,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             getOffset(0, tier, 0),
             getOffset(0, tier, 1),
             getOffset(0, tier, 2));
+    }
+
+    @Override
+    public boolean isFlipChangeAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean isRotationChangeAllowed() {
+        return false;
     }
 
     @Override

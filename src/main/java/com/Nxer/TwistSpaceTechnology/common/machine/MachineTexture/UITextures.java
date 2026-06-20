@@ -10,10 +10,10 @@ public class UITextures {
     public static final UITexture SBF_ModePassive = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_ModePassive");
     public static final UITexture SBF_BlazeClear = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_BlazeClear");
     public static final com.gtnewhorizons.modularui.api.drawable.UITexture SBF_BlazeClear_MUI1 = com.gtnewhorizons.modularui.api.drawable.UITexture
-                                                                                                     .fullImage(TST_ID, "icons/UITextures/SBF_BlazeClear");
+        .fullImage(TST_ID, "icons/UITextures/SBF_BlazeClear");
     public static final UITexture SBF_BlazeSet = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_BlazeSet");
     public static final com.gtnewhorizons.modularui.api.drawable.UITexture SBF_BlazeSet_MUI1 = com.gtnewhorizons.modularui.api.drawable.UITexture
-                                                                                                   .fullImage(TST_ID, "icons/UITextures/SBF_BlazeSet");
+        .fullImage(TST_ID, "icons/UITextures/SBF_BlazeSet");
     public static final UITexture SBF_RapidHeating_Forbidden = UITexture
         .fullImage(TST_ID, "icons/UITextures/SBF_RapidHeating_Forbidden");
     public static final UITexture SBF_RapidHeating_Off = UITexture
@@ -32,5 +32,5 @@ public class UITextures {
         .fullImage(TST_ID, "icons/UITextures/HESTTD_RapidCooling");
     public static final UITexture HESTTD_NEIPic = UITexture.fullImage(TST_ID, "icons/Pictures/rapid_heat_exchanger");
     public static final com.gtnewhorizons.modularui.api.drawable.UITexture HESTTD_NEIPic_MUI1 = com.gtnewhorizons.modularui.api.drawable.UITexture
-                                                                                                                .fullImage(TST_ID, "icons/Pictures/rapid_heat_exchanger");
+        .fullImage(TST_ID, "icons/Pictures/rapid_heat_exchanger");
 }

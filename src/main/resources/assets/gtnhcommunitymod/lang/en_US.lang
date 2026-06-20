@@ -2344,3 +2344,6 @@ TST_BigbroArray.hatch_tier_too_large=Hatch tier too high.
 TST_MegaTreeFarm.StructureErrors.no_water_block=Place a water block at the specific location on the top of the machine structure.
 TST.MegaEggGeneratorStructureErrors.InfinityEgg=The number of infinite eggs exceeds the number of pieces.
 TST.MegaEggGeneratorStructureErrors.Laser=The number of pieces does not meet the requirement for using the laser hatches.
+Waila.SBF.4=§6Machine Updated
+NameBloodOrbHatchDebug=Debug Blood Hatch
+Tooltip_DebugBloodHatch=§6Infinity Life Essence.

@@ -25,8 +25,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.cleanroommc.modularui.drawable.UITexture;
-import gregtech.api.modularui2.GTGuiTextures;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -42,6 +40,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -269,26 +268,24 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return 2;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[]{
-        UITextures.HESTTD_HeatExchanger,
-        UITextures.HESTTD_RapidCooling
-    };
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.HESTTD_HeatExchanger,
+        UITextures.HESTTD_RapidCooling };
 
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
 
-//    @Override
-//    public void setMachineModeIcons() {
-//        machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
-//        machineModeIcons.add(UITextures.HESTTD_RapidCooling);
-//    }
-//
-//    @Override
-//    public void setMachineMode(int index) {
-//        super.setMachineMode(index);
-//    }
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
+    // machineModeIcons.add(UITextures.HESTTD_RapidCooling);
+    // }
+    //
+    // @Override
+    // public void setMachineMode(int index) {
+    // super.setMachineMode(index);
+    // }
 
     @Override
     public String getMachineModeName() {
@@ -302,7 +299,6 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return TextEnums.tr("HyperThermalConvector.modeMsg." + machineMode);
 
     }
-
 
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {

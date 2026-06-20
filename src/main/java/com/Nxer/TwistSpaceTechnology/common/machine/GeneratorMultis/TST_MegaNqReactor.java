@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -40,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
@@ -93,8 +93,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     protected static final int LIQUID_AIR_PER_SECOND = 2400;
     protected static final int TICKS_PER_SECOND = 20;
-    protected static final int[] COOLANT_EFFICIENCY = {500, 275, 150, 105};
-    protected static final int[] EXCITED_LIQUID_COEFF = {64, 16, 4, 3, 2};
+    protected static final int[] COOLANT_EFFICIENCY = { 500, 275, 150, 105 };
+    protected static final int[] EXCITED_LIQUID_COEFF = { 64, 16, 4, 3, 2 };
 
     protected static final long TICKS_TO_MAX_DISCOUNT = 24L * 60 * 60 * TICKS_PER_SECOND;
     protected static final long DECAY_PER_IDLE_TICK = 20L;
@@ -408,7 +408,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             this.lockedFluid = null;
         }
         this.cachedCoolantEfficiency = aNBT.hasKey("mCachedCoolantEff") ? aNBT.getInteger("mCachedCoolantEff")
-                                           : DEFAULT_COOLANT_EFFICIENCY;
+            : DEFAULT_COOLANT_EFFICIENCY;
         this.cachedTimeMultiplier = aNBT.hasKey("mCachedTimeMult") ? aNBT.getInteger("mCachedTimeMult") : 1;
         super.loadNBTData(aNBT);
     }
@@ -466,8 +466,8 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         FluidStack[] fluidArray = fluidView.toFluidArray();
 
         GTRecipe tRecipe = GoodGeneratorRecipeMaps.naquadahReactorFuels.findRecipeQuery()
-                                                                       .fluids(fluidArray)
-                                                                       .find();
+            .fluids(fluidArray)
+            .find();
         if (tRecipe == null) {
             return CheckRecipeResultRegistry.NO_FUEL_FOUND;
         }
@@ -540,7 +540,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         FluidStack lockedForRun = null;
         if (excitedInfo != null) {
             lockedForRun = excitedInfo.getKey()
-                                      .copy();
+                .copy();
             timeMultForRun = coefficient;
             if (recipeSeconds > 0) {
                 long perSecondExcited = (long) getDiscountedAmount(lockedForRun.amount) * maxParallel;
@@ -605,7 +605,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     public boolean onRunningTick(ItemStack stack) {
         boolean isRunning = mMaxProgresstime != 0;
         if (this.getBaseMetaTileEntity()
-                .isServerSide()) {
+            .isServerSide()) {
             updateRunTimeDiscountState(isRunning);
         }
         return super.onRunningTick(stack);
@@ -642,17 +642,17 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
         ForgeDirection back = facing.getRelativeBackInWorld();
         ForgeDirection up = facing.getRelativeUpInWorld();
         coreFxX = base.getXCoord() + 0.5D
-                      + CORE_CENTER_OFFSET_X * back.offsetX
-                      + CORE_CENTER_OFFSET_Y * up.offsetX
-                      + CORE_CENTER_OFFSET_Z * back.offsetX;
+            + CORE_CENTER_OFFSET_X * back.offsetX
+            + CORE_CENTER_OFFSET_Y * up.offsetX
+            + CORE_CENTER_OFFSET_Z * back.offsetX;
         coreFxY = base.getYCoord() + 0.5D
-                      + CORE_CENTER_OFFSET_X * back.offsetY
-                      + CORE_CENTER_OFFSET_Y * up.offsetY
-                      + CORE_CENTER_OFFSET_Z * back.offsetY;
+            + CORE_CENTER_OFFSET_X * back.offsetY
+            + CORE_CENTER_OFFSET_Y * up.offsetY
+            + CORE_CENTER_OFFSET_Z * back.offsetY;
         coreFxZ = base.getZCoord() + 0.5D
-                      + CORE_CENTER_OFFSET_X * back.offsetZ
-                      + CORE_CENTER_OFFSET_Y * up.offsetZ
-                      + CORE_CENTER_OFFSET_Z * back.offsetZ;
+            + CORE_CENTER_OFFSET_X * back.offsetZ
+            + CORE_CENTER_OFFSET_Y * up.offsetZ
+            + CORE_CENTER_OFFSET_Z * back.offsetZ;
     }
 
     /**
@@ -1629,20 +1629,20 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     public IStructureDefinition<TST_MegaNqReactor> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaNqReactor>builder()
-                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
-                                                      .addElement(
-                                                          'D',
-                                                          GTStructureUtility.buildHatchAdder(TST_MegaNqReactor.class)
-                                                                            .casingIndex(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3))
-                                                                            .hint(1)
-                                                                            .atLeast(ExoticDynamo.or(Dynamo), ExoticEnergy.or(Energy), InputHatch, OutputHatch, Maintenance)
-                                                                            .buildAndChain(GregTechAPI.sBlockCasings8, 3))
-                                                      .addElement('A', chainAllGlasses())
-                                                      .addElement('B', ofBlock(Loaders.MAR_Casing, 0))
-                                                      .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
-                                                      .addElement('E', ofBlock(GregTechAPI.sBlockCasings9, 14))
-                                                      .addElement('F', ofBlock(TstBlocks.MetaBlockCasing02, 2))
-                                                      .build();
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
+                .addElement(
+                    'D',
+                    GTStructureUtility.buildHatchAdder(TST_MegaNqReactor.class)
+                        .casingIndex(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3))
+                        .hint(1)
+                        .atLeast(ExoticDynamo.or(Dynamo), ExoticEnergy.or(Energy), InputHatch, OutputHatch, Maintenance)
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 3))
+                .addElement('A', chainAllGlasses())
+                .addElement('B', ofBlock(Loaders.MAR_Casing, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings9, 14))
+                .addElement('F', ofBlock(TstBlocks.MetaBlockCasing02, 2))
+                .build();
         }
         return STRUCTURE_DEFINITION;
     }
@@ -1688,22 +1688,22 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
             GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3));
         if (side == facing) {
             if (aActive) {
-                return new ITexture[]{baseCasingTexture, TextureFactory.builder()
-                                                                       .addIcon(NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE)
-                                                                       .extFacing()
-                                                             .build(),
+                return new ITexture[] { baseCasingTexture, TextureFactory.builder()
+                    .addIcon(NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE)
+                    .extFacing()
+                    .build(),
                     TextureFactory.builder()
-                                  .addIcon(NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE_GLOW)
-                                  .extFacing()
-                                  .glow()
-                        .build()};
+                        .addIcon(NAQUADAH_REACTOR_SOLID_FRONT_ACTIVE_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
             }
-            return new ITexture[]{baseCasingTexture, TextureFactory.builder()
-                                                                   .addIcon(NAQUADAH_REACTOR_SOLID_FRONT)
-                                                                   .extFacing()
-                                                         .build()};
+            return new ITexture[] { baseCasingTexture, TextureFactory.builder()
+                .addIcon(NAQUADAH_REACTOR_SOLID_FRONT)
+                .extFacing()
+                .build() };
         }
-        return new ITexture[]{baseCasingTexture};
+        return new ITexture[] { baseCasingTexture };
     }
 
     // endregion
@@ -1714,15 +1714,15 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         tt.addMachineType(tr("Tooltip_MegaNqReactor_MachineType"))
-          .addInfo(tr("Tooltip_MegaNqReactor_01"))
-          .addInfo(tr("Tooltip_MegaNqReactor_02"))
-          .addInfo(tr("Tooltip_MegaNqReactor_03"))
-          .addInfo(tr("Tooltip_MegaNqReactor_04"))
-          .addInfo(tr("Tooltip_MegaNqReactor_05"))
-          .addSeparator()
-          .addInfo(TextLocalization.StructureTooComplex)
-          .addInfo(TextLocalization.BLUE_PRINT_INFO)
-          .toolTipFinisher(TextLocalization.ModName);
+            .addInfo(tr("Tooltip_MegaNqReactor_01"))
+            .addInfo(tr("Tooltip_MegaNqReactor_02"))
+            .addInfo(tr("Tooltip_MegaNqReactor_03"))
+            .addInfo(tr("Tooltip_MegaNqReactor_04"))
+            .addInfo(tr("Tooltip_MegaNqReactor_05"))
+            .addSeparator()
+            .addInfo(TextLocalization.StructureTooComplex)
+            .addInfo(TextLocalization.BLUE_PRINT_INFO)
+            .toolTipFinisher(TextLocalization.ModName);
         return tt;
     }
 

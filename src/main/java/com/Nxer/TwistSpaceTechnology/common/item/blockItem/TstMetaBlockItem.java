@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.util.GTLanguageManager;
+import gregtech.common.blocks.BlockCasingsAbstract;
 
 /**
  * The {@link ItemBlock} for {@link AbstractTstMetaBlock} and its subclasses.
@@ -85,10 +86,10 @@ public class TstMetaBlockItem extends ItemBlock {
         // see IHasMoreBlockInfo
         if (getMetaBlock() instanceof IHasMoreBlockInfo hasMoreBlockInfo) {
             if (hasMoreBlockInfo.isNoMobSpawn()) {
-                theTooltipsList.add(mNoMobsToolTip);
+                theTooltipsList.add(BlockCasingsAbstract.NO_MOB_SPAWNING.get());
             }
             if (hasMoreBlockInfo.isNotTileEntity()) {
-                theTooltipsList.add(mNoTileEntityToolTip);
+                theTooltipsList.add(BlockCasingsAbstract.NOT_TILE_ENTITY.get());
             }
         }
     }

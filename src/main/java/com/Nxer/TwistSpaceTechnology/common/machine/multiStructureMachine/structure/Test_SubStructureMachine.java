@@ -13,7 +13,6 @@ import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 
 import java.util.List;
 
-import com.cleanroommc.modularui.drawable.UITexture;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -24,6 +23,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 

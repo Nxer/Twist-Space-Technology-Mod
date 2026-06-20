@@ -481,6 +481,7 @@ public enum GTCMItemList {
     WirelessDataInputHatch,
     WirelessDataOutputHatch,
     BloodOrbHatch,
+    BloodOrbHatchDebug,
     PatternAccessHatch,
     LegendaryWirelessEnergyHatch,
     HarmoniousWirelessEnergyHatch,
