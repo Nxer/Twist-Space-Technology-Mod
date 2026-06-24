@@ -41,6 +41,8 @@ test {
 }
 
 tasks.register("preprocessLangInJavaFiles", GenerateLanguageTask) {
+    dependsOn(sourcesJar)
+
     sources = sourceSets.main.allSource
     outputDirectory = layout.projectDirectory.dir("src/main/resources/assets/gtnhcommunitymod/lang/")
 }
