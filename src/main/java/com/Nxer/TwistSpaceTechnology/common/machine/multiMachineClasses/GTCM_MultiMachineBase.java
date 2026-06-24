@@ -726,7 +726,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (getBaseMetaTileEntity().isServerSide()) {
             if (supportsMachineModeSwitch()) {
                 setMachineMode(nextMachineMode());
-                GTUtility.sendChatToPlayer(aPlayer, getMachineModeName());
+                GTUtility.sendChatTrans(aPlayer, getMachineModeName());
             } else {
                 super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, tool);
             }

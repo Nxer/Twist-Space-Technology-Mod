@@ -38,7 +38,7 @@ public class EGSArtificialGreenHouseOutputBucket {
 
     public static final IEGSBucketFactory factory = new EGSArtificialGreenHouseOutputBucket.Factory();
     public static final String NBT_IDENTIFIER = "GREENHOUSE";
-    private static final int NUMBER_OF_DROPS_TO_SIMULATE = 1000;
+    private static final int NUMBER_OF_DROPS_TO_SIMULATE = 10;
 
     public static class Factory implements IEGSBucketFactory {
 
@@ -137,31 +137,47 @@ public class EGSArtificialGreenHouseOutputBucket {
 
     protected void getAdditionalInfoData(StringBuilder sb) {}
 
+    public void setNull() {
+        seed = null;
+        seedCount = 0;
+    }
+
+    public boolean checkCached(ItemStack seedStack) {
+        if (seed == null || seedStack == null) return false;
+        return ItemStack.areItemStacksEqual(seed, seedStack);
+    }
+
     /**
      * Updates the bucket to the latest seeds
      */
     public void updateBucket(@NotNull TST_MegaTreeFarm greenhouse) {
         // Abort is input if empty
-        if (greenhouse.getControllerSlot() == null) return;
 
-        if (greenhouse.getControllerSlot().stackSize <= 0) return;
+        ItemStack seedStack = greenhouse.getControllerSlot();
 
-        seed = greenhouse.getControllerSlot()
-            .copy();
+        if (seedStack == null || seedStack.stackSize < 1) {
+            setNull();
+            return;
+        }
+
+        if (checkCached(seedStack)) {
+            return;
+        }
+
+        seed = seedStack.copy();
 
         // no support items, remove seed reference
         if (!isSeedSupported()) {
-            seed = null;
-            seedCount = 0;
+            setNull();
             return;
         }
 
         // When we have a valid seed make more
-        createMoreSeeds(greenhouse);
+        // createMoreSeeds(greenhouse);
 
         seed = greenhouse.getControllerSlot()
             .copy();
-        seedCount = greenhouse.getControllerSlot().stackSize;
+        seedCount = 64;
 
         revalidate(greenhouse);
     }
@@ -444,6 +460,8 @@ public class EGSArtificialGreenHouseOutputBucket {
         }
 
         Block block = Block.getBlockFromItem(item);
+
+        if (block == null) return false;
 
         if (block == Blocks.cactus) {
             return true;

@@ -115,8 +115,10 @@ public class TST_Gui_MegaCraftingCenter extends TST_Gui<TST_MegaCraftingCenter> 
             .tooltipBuilder(
                 t -> t.addLine(
                     IKey.dynamic(
-                        () -> StatCollector
-                            .translateToLocalFormatted("GT5U.gui.text.rangedvalue", 1, Integer.MAX_VALUE))))
+                        () -> StatCollector.translateToLocalFormatted(
+                            "GT5U.gui.text.recipe_result.rangedvalue",
+                            1,
+                            Integer.MAX_VALUE))))
             .tooltipShowUpTimer(TOOLTIP_DELAY)
             .size(70, 14)
             .marginBottom(4)

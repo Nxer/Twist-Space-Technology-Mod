@@ -60,10 +60,12 @@ dependencies {
     implementation(gtnh("EnderCore"))
     implementation(gtnh("Galaxy-Space-GTNH"))
     implementation(gtnh("ForestryMC"))
-//    implementation(gtnh("CropsNH"))
-    compileOnly(deobfCurse('witchery-69673:2234410'))
+    implementation(gtnh("CropsNH"))
+    implementation(deobfCurse('witchery-69673:2234410'))
+    implementation(gtnh("twilightforest"))
+    implementation(gtnh("Natura"))
+    runtimeOnlyNonPublishable(rfg.deobf("curse.maven:BiomesOPlenty-220318:2499612"))
     compileOnly(gtnh("amunra"))
-    compileOnly(gtnh("twilightforest"))
 
 //    implementation("com.github.GTNewHorizons:GT5-Unofficial:5.09.51.459:dev")
 //    implementation("com.github.GTNewHorizons:GTNHLib:0.6.39:dev")
@@ -88,6 +90,7 @@ dependencies {
 
     implementation ("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
 
+
     runtimeOnlyNonPublishable(gtnh("BlockRenderer6343")) { transitive = false }
 //    runtimeOnlyNonPublishable(gtnh("worldedit-gtnh")) { transitive = false }
 //    implementation("com.github.GTNewHorizons:BlockRenderer6343:1.3.16:dev") { transitive = false }
@@ -95,7 +98,7 @@ dependencies {
     implementation("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
     implementation(rfg.deobf('curse.maven:advsolar-362768:2885953'))
     //These 2 deps have conflicts with Amun-Ra by default, see Twist-Space-Technology-Mod#150
-    compileOnly(rfg.deobf('curse.maven:witchery-69673:2234410'))
+//    compileOnly(rfg.deobf('curse.maven:witchery-69673:2234410'))
     implementation('com.google.auto.value:auto-value-annotations:1.10.1')
     annotationProcessor('com.google.auto.value:auto-value:1.10.1')
     //These 2 deps are for mixin

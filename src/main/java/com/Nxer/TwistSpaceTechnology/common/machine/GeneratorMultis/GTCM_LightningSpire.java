@@ -507,7 +507,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.OperatingMode = (this.OperatingMode + 1) % 3;
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 // #tr LightningSpire.ModeMsg.0
                 // # Lightning Spire is in Operate Mode
@@ -538,7 +538,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             // #tr LightningSpire.enable_lightning.false
             // # Disable lightning animation
             // #zh_CN 禁用闪电特效
-            GTUtility.sendChatToPlayer(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
+            GTUtility.sendChatTrans(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
             return true;
         }
         return false;

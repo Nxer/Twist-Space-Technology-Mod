@@ -32,7 +32,8 @@ public class ResultInsufficientPedestals implements CheckRecipeResult {
     @Override
     @Nonnull
     public String getDisplayString() {
-        return StatCollector.translateToLocalFormatted("GT5U.gui.text.insufficient_pedestals", missingCount);
+        return StatCollector
+            .translateToLocalFormatted("GT5U.gui.text.recipe_result.insufficient_pedestals", missingCount);
     }
 
     @Override

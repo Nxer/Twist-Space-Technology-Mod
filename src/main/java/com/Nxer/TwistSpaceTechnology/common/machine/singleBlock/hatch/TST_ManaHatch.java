@@ -111,9 +111,8 @@ public class TST_ManaHatch extends MTEHatchInput {
         ItemStack aTool) {
         super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aTool);
         isLiquidizerMode = !isLiquidizerMode;
-        GTUtility.sendChatToPlayer(
-            aPlayer,
-            StatCollector.translateToLocal("Mana_Hatch.modeMsg." + (isLiquidizerMode ? 0 : 1)));
+        GTUtility
+            .sendChatTrans(aPlayer, StatCollector.translateToLocal("Mana_Hatch.modeMsg." + (isLiquidizerMode ? 0 : 1)));
     }
 
     @Override

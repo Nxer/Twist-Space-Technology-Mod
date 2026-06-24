@@ -643,7 +643,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @NotNull
     public CheckRecipeResult checkProcessing() {
         if (this.multiTier != this.getMultiTier(mInventory[1])) {
-            // #tr GT5U.gui.text.missing_schematic
+            // #tr GT5U.gui.text.recipe_result.missing_schematic
             // # {\LIGHT_PURPLE}Missing Schematic.
             // #zh_CN {\LIGHT_PURPLE}缺少设计图.
             return SimpleCheckRecipeResult.ofFailure("missing_schematic");
@@ -653,7 +653,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         }
         if (isResetting) {
             this.reset();
-            // #tr GT5U.gui.text.meteor_reset
+            // #tr GT5U.gui.text.recipe_result.meteor_reset
             // # {\LIGHT_PURPLE}Reset completed!
             // #zh_CN {\LIGHT_PURPLE}重置完成!
             return SimpleCheckRecipeResult.ofSuccess("meteor_reset");
@@ -689,14 +689,14 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 this.setReady();
                 this.hasFinished = false;
             } else {
-                // #tr GT5U.gui.text.meteor_waiting
+                // #tr GT5U.gui.text.recipe_result.meteor_waiting
                 // # {\LIGHT_PURPLE}Waiting for a Meteor...
                 // #zh_CN {\LIGHT_PURPLE}等待陨星中...
                 return SimpleCheckRecipeResult.ofSuccess("meteor_waiting");
             }
         }
 
-        // #tr GT5U.gui.text.meteor_mining
+        // #tr GT5U.gui.text.recipe_result.meteor_mining
         // # {\LIGHT_PURPLE}Currently Mining!
         // #zh_CN {\LIGHT_PURPLE}正在开采!
         return SimpleCheckRecipeResult.ofSuccess("meteor_mining");

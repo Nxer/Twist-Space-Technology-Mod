@@ -301,7 +301,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         }
         checkOneOutputHatch(errors);
         if (mRadHatches.size() > 1) {
-            errors.add(StructureErrors.of("GT5U.gui.text.structure_error.too_many_radiation_hatch"));
+            errors.add(StructureErrors.of("GT5U.gui.text.recipe_result.structure_error.too_many_radiation_hatch"));
         }
     }
 

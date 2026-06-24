@@ -120,9 +120,8 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
-            GTUtility.sendChatToPlayer(
-                aPlayer,
-                StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
+            GTUtility
+                .sendChatTrans(aPlayer, StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
         }
     }
 

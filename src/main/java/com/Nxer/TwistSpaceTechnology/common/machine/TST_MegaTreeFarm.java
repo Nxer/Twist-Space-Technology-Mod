@@ -2,9 +2,12 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.UnknowWater;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NotEnoughWater;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
+import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -56,11 +59,11 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EGSArtificialGreenHouseOutputBucket;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
+import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -95,8 +98,6 @@ import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import ic2.core.init.BlocksItems;
 import ic2.core.init.InternalName;
-import kubatech.api.eig.EIGDropTable;
-import kubatech.tileentity.gregtech.multiblock.MTEExtremeIndustrialGreenhouse;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -127,10 +128,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // public ESSFakePlayer ESSPlayer = null;
     // public final Random rand = new FastRandom();
 
-    public final EIGDropTable dropTracker = new EIGDropTable();
-    public EIGDropTable guiDropTracker = new EIGDropTable();
-    public HashMap<ItemStack, Double> synchedGUIDropTracker = new HashMap<>();
-    public EGSArtificialGreenHouseOutputBucket bucket = null;
+    public long fertilizerToConsume = 0;
+    public long waterToConsume = 0;
 
     @Override
     public int totalMachineMode() {
@@ -144,7 +143,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT };
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT/* , GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT */ };
 
     @Override
     public UITexture[] getMachineModeIcons() {
@@ -300,6 +299,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         tag.setInteger("tier", controllerTier + 1);
+        if (machineMode == 2) {
+            tag.setLong("fertilizerToConsume", fertilizerToConsume);
+            tag.setLong("waterToConsume", waterToConsume);
+        }
+
     }
 
     @Override
@@ -311,6 +315,19 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             currentTip.add(
                 "Tier: " + EnumChatFormatting.YELLOW + formatNumber(tag.getInteger("tier")) + EnumChatFormatting.RESET);
         }
+        if (tag.hasKey("fertilizerToConsume")) {
+            // #tr MegaTreeFarm.Waila.fertiConsume
+            // # Now consumption of Enriched Fertilizer is :
+            // #zh_CN 当前富集肥料消耗量：
+            currentTip.add(
+                tr("MegaTreeFarm.Waila.fertiConsume") + " " + formatNumber(tag.getLong("fertilizerToConsume")) + "L");
+            // #tr MegaTreeFarm.Waila.waterConsume
+            // # Now consumption of Water is :
+            // #zh_CN 当前水消耗量：
+            currentTip
+                .add(tr("MegaTreeFarm.Waila.waterConsume") + " " + formatNumber(tag.getLong("waterToConsume")) + "L");
+        }
+
     }
 
     @Override
@@ -318,7 +335,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (!checkStructure(true, getBaseMetaTileEntity())) {
-                GTUtility.sendChatToPlayer(
+                GTUtility.sendChatTrans(
                     aPlayer,
                     StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
                 return;
@@ -868,7 +885,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
 
                 SetRemoveWater();
-                EuTier = (int) Math.max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                EuTier = (int) Math.max(0, Math.log((double) availableVoltage * availableAmperage / 8d) / Math.log(4d));
 
                 updateSlots();
 
@@ -877,7 +894,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return switch (machineMode) {
                     case 0 -> TreeGrowthSimulator();
                     case 1 -> AquaticZoneSimulator();
-                    case 2 -> GreenHouseSimulator();
+                    case 2 -> IndustrialFarmSimulator();
                     default -> SimpleCheckRecipeResult.ofFailure("Invalid_machine_mode");
                 };
             }
@@ -1094,81 +1111,152 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 return SimpleCheckRecipeResult.ofSuccess("fishing");
             }
 
-            private CheckRecipeResult GreenHouseSimulator() {
-                int tierTemp = EuTier;
+            /**
+             * Process CropsNH Seeds.
+             * Buffed by fertilizer, consumption = voltage * seed tier ^2 * basic value 8,
+             * and output multiplier by fertilizer = consumption ^ 0.5 , meanwhile the water cost = 1000L * fertilizer
+             * consumption.
+             * Another the voltage multiplier = voltage tier ^ 2 .
+             *
+             */
+            public CheckRecipeResult IndustrialFarmSimulator() {
+                TST_MegaTreeFarm.this.fertilizerToConsume = 0;
+                TST_MegaTreeFarm.this.waterToConsume = 0;
+                ItemStack seedStack = getControllerSlot();
+                if (seedStack == null) return NoSeedInController;
 
-                if (bucket == null) {
-                    bucket = new EGSArtificialGreenHouseOutputBucket(TST_MegaTreeFarm.this);
-                } else {
-                    bucket.updateBucket(TST_MegaTreeFarm.this);
-                }
+                if (!cropsNHFarm.createCropCache(seedStack)) return NoSeedInController;
 
-                if (!bucket.isValid()) {
-                    return SimpleCheckRecipeResult.ofFailure("Invalid_Seed");
-                }
+                long fertilizerAmount = 0;
+                long waterAmount = 0;
+                List<FluidStack> fertilizerList = new ArrayList<>();
+                List<FluidStack> waterList = new ArrayList<>();
 
-                ItemStack seed = getControllerSlot();
-                if (seed == null) return SimpleCheckRecipeResult.ofFailure("no_seed");
-
-                int waterUsage = seed.stackSize * 1000;
-
-                // Consume water, fail if we don't have enough
-                if (!tryDrain(new FluidStack(FluidRegistry.WATER, waterUsage), false)) {
-                    return SimpleCheckRecipeResult.ofFailure("EIG_missingwater");
-                }
-
-                // OVERCLOCK
-                // FERTILIZER IDEA:
-                // +200% per fertilizer per crop per operation
-                // tier 2 Eco Growth Sphere = free fertilizer
-
-                int consumedFertilizer = 0;
-                int maxFertilizerToConsume = seed.stackSize * ((int) tierMultiplier / 64);
-
-                ArrayList<ItemStack> inputs = getStoredInputs();
-                for (ItemStack i : inputs) {
-                    if (MTEExtremeIndustrialGreenhouse.isFertilizer(i)) {
-                        int used = Math.min(i.stackSize, maxFertilizerToConsume - consumedFertilizer);
-                        i.stackSize -= used;
-                        consumedFertilizer += used;
+                for (FluidStack f : getStoredFluids()) {
+                    if (f.getFluid() == CropsNHFluids.enrichedFertilizer && f.amount > 0) {
+                        fertilizerAmount += f.amount;
+                        fertilizerList.add(f);
+                    } else if (f.getFluid() == FluidRegistry.WATER && f.amount > 0) {
+                        waterAmount += f.amount;
+                        waterList.add(f);
                     }
-                    if (consumedFertilizer == maxFertilizerToConsume) break;
                 }
-                double multiplier = (tierMultiplier / 2.5)
-                    * (1.0 + ((double) (consumedFertilizer / maxFertilizerToConsume))
-                        * MTEExtremeIndustrialGreenhouse.EIG_BALANCE_MAX_FERTILIZER_BOOST);
 
-                // compute drops based on the drop tracker
-                guiDropTracker = new EIGDropTable();
+                if (waterList.isEmpty() || waterAmount < 1000_000) return NotEnoughWater;
+                // TODO fertilizer consumption and dynamic multiplier calculations
 
-                if (bucket != null) {
-                    bucket.addProgress(multiplier, guiDropTracker);
+                /*
+                 * Process CropsNH Seeds.
+                 * Buffed by fertilizer, consumption = voltage * seed tier ^2 * basic value 8,
+                 * and output multiplier by fertilizer = consumption ^ 0.5 , meanwhile the water cost = 1000L *
+                 * fertilizer consumption.
+                 * Another the voltage multiplier = voltage tier ^ 2 .
+                 */
+                int seedTier = cropsNHFarm.seedData != null ? cropsNHFarm.seedData.getCrop()
+                    .getTier() : 1;
+                // max fertilizer can use
+                int fertilizerConsumption = EuTier * seedTier * seedTier * 8;
+
+                if (fertilizerConsumption * 1000L > fertilizerAmount) {
+                    fertilizerConsumption = (int) fertilizerAmount / 1000;
                 }
-                guiDropTracker.addTo(dropTracker);
-                // get running output
+                long fertilizerToConsume = fertilizerConsumption * 1000L;
 
-                this.outputItems = dropTracker.getDrops();
+                // water consumption is 1k times of fertilizer
+                long waterToConsume = 0;
+                if (fertilizerConsumption > waterAmount / 1000_000) {
+                    waterToConsume = waterAmount;
+                    fertilizerConsumption = (int) waterToConsume / 1000_000;
+                    fertilizerToConsume = fertilizerConsumption * 1000;
+                } else {
+                    waterToConsume = fertilizerConsumption * 1000_000L;
+                }
+                if (waterToConsume < 1000_000) waterToConsume = 1000_000;
 
-                this.calculatedEut = (long) (8 * Math.pow(4, tierTemp) * 15 / 16);
+                double fertilizerMultiplier = Math.pow(fertilizerConsumption, 0.25d);
+                // Outputs bonus of this machine in this status.
+                int multiplier = (int) (tierMultiplier * Math.max(fertilizerMultiplier, 1));
+
+                // output
+                if (!cropsNHFarm.isValid()) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+
+                // consume water and fertilizer
+                TST_MegaTreeFarm.this.fertilizerToConsume = fertilizerToConsume;
+                TST_MegaTreeFarm.this.waterToConsume = waterToConsume;
+                if (fertilizerToConsume > 0) {
+                    for (FluidStack f : fertilizerList) {
+                        if (f.amount >= fertilizerToConsume) {
+                            f.amount -= fertilizerToConsume;
+                            fertilizerToConsume = 0;
+                            break;
+                        } else {
+                            fertilizerToConsume -= f.amount;
+                            f.amount = 0;
+                        }
+                    }
+                }
+
+                for (FluidStack f : waterList) {
+                    if (f.amount >= waterToConsume) {
+                        f.amount -= waterToConsume;
+                        waterToConsume = 0;
+                        break;
+                    } else {
+                        waterToConsume -= f.amount;
+                        f.amount = 0;
+                    }
+                }
+
+                if (fertilizerToConsume > 0 || waterToConsume > 0) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+
+                this.outputItems = cropsNHFarm.getOutputStacks(multiplier);
+
+                this.calculatedEut = (long) (8d * Math.pow(4, EuTier) * 15 / 16);
                 this.duration = controllerTier > 0 ? 20 : 100;
                 return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
-            // private CheckRecipeResult MachineMode3() {
-            // ItemStack controllerStack = getControllerSlot();
-            // IGregTechTileEntity aBaseMetaTileEntity = getBaseMetaTileEntity();
-            // if (controllerStack == null) return SimpleCheckRecipeResult.ofFailure("failed");
-            // if (controllerStack.isItemEqual(GTCMItemList.TestItem0.get(1))) {
-            // String mobType = controllerStack.getTagCompound()
-            // .getString("mobType");
-            // MobHandlerLoader.MobEECRecipe recipe = MobHandlerLoader.recipeMap.get(mobType);
-            // // mOutputItems = recipe
-            // // .generateOutputs(new FastRandom(), this, 7, 3, false, false);
-            // }
-            // return SimpleCheckRecipeResult.ofSuccess("debug");
-            // }
         };
+
     }
+
+    public final CropsNHFarm cropsNHFarm = new CropsNHFarm();
+
+    // #tr GT5U.gui.text.recipe_result.no_energy
+    // # No power
+    // #zh_CN 能源不足
+
+    // #tr GT5U.gui.text.recipe_result.no_sapling
+    // # Missing Sapling
+    // #zh_CN 缺失树苗
+
+    // #tr GT5U.gui.text.recipe_result.no_fluid
+    // # Missing Fluid
+    // #zh_CN 缺失流体
+
+    // #tr GT5U.gui.text.recipe_result.no_enough_input
+    // # No Enough Fluid
+    // #zh_CN 输入流体不足
+
+    // #tr GT5U.gui.text.recipe_result.no_correct_Circuit
+    // # No Match Circuit
+    // #zh_CN 没有匹配的电路板
+
+    // #tr GT5U.gui.text.recipe_result.growing_trees
+    // # {\GREEN}Growing Trees
+    // #zh_CN {\GREEN}原木拟生中
+
+    // #tr GT5U.gui.text.recipe_result.focus_on
+    // # {\BLUE}Targeting
+    // #zh_CN {\BLUE}定向中
+
+    // #tr GT5U.gui.text.recipe_result.fishing
+    // # {\BLUE}Fishing
+    // #zh_CN {\BLUE}捕鱼中
+
+    // #tr GT5U.gui.text.recipe_result.Invalid_Seed
+    // # Invalid Seed
+    // #zh_CN 无效种子
 
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
@@ -1224,80 +1312,80 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // #tr Tooltip_EcoSphereSimulator_MachineType
         // # Tree Farm | Aquatic Farm | Green House | Mob Cloner
         // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
-        tt.addMachineType(TextEnums.tr("Tooltip_EcoSphereSimulator_MachineType"))
+        tt.addMachineType(tr("Tooltip_EcoSphereSimulator_MachineType"))
             // #tr Tooltip_EcoSphereSimulator_Controller
             // # Controller block for the Eco-Sphere Growth Simulator
             // #zh_CN 拟似生态圈的控制方块
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator_Controller"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator_Controller"))
             // #tr Tooltip_EcoSphereSimulator.0.01
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.01"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.01"))
             // #tr Tooltip_EcoSphereSimulator.0.02
             // # {\WHITE}Hark to the whispers of all creation......
             // #zh_CN {\WHITE}聆听万物之声......
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.02"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.02"))
             // #tr Tooltip_EcoSphereSimulator.0.03
             // # {\WHITE}Yet, save the bees, for they do buzz too loudly.
             // #zh_CN {\WHITE}等一下, 蜜蜂除外. 它实在是太吵了.
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.03"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.03"))
             // #tr Tooltip_EcoSphereSimulator.0.04
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.04"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.04"))
             // #tr Tooltip_EcoSphereSimulator.0.05
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.05"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.05"))
             // #tr Tooltip_EcoSphereSimulator.0.06
             // # {\AQUA}The thaumaturges' latest masterpiece in the Integration of Magic and Electrical Engineering
             // #zh_CN {\AQUA}神秘使在魔电一体化领域的又一力作
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.06"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.06"))
             // #tr Tooltip_EcoSphereSimulator.0.07
             // # {\AQUA}Simulate the growth and development cycle of samples using simple raw materials
             // #zh_CN {\AQUA}通过简单的原材料就可以模拟样本的生长发育周期
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.07"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.07"))
             .addSeparator()
             // #tr Tooltip_EcoSphereSimulator.0.08
             // # {\GOLD}Features a unique method of overclocking
             // #zh_CN {\GOLD}拥有独特的超频增益方式
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.08"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.08"))
             // #tr Tooltip_EcoSphereSimulator.0.09
             // # Recipe time is fixed
             // #zh_CN 配方时间被固定
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.09"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.09"))
             // #tr Tooltip_EcoSphereSimulator.0.10
             // # The product increases nonlinearly with the increase of voltage
             // #zh_CN 且产物随着电压的增加而非线性提升
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.10"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.10"))
             // #tr Tooltip_EcoSphereSimulator.0.11
             // # Use screwdriver to change mode
             // #zh_CN 使用螺丝刀切换模式
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.11"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.11"))
             // #tr Tooltip_EcoSphereSimulator.0.12
             // # Need to pour a bucket of {\AQUA}distilled water {\GRAY}at the top to drive the machine
             // #zh_CN 需要在顶端倒一桶{\AQUA}蒸馏水{\GRAY}来驱动机器
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.12"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.12"))
             // #tr Tooltip_EcoSphereSimulator.0.13
             // # Secondary recipes incomplete
             // #zh_CN 二级配方尚未完成
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.13"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.13"))
             // #tr Tooltip_EcoSphereSimulator.0.14
             // # {\GREEN}Green House Mode:
             // #zh_CN {\GREEN}工业温室模式:
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.14"))
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.14"))
             // #tr Tooltip_EcoSphereSimulator.0.15
-            // # {\SPACE}- supports both normal & IC2 crops
-            // #zh_CN {\SPACE}- 同时支持普通作物与IC2作物
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.15"))
+            // # {\SPACE}- supports both normal & CropsNH's crops
+            // #zh_CN {\SPACE}- 同时支持普通作物与CropsNH作物
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.15"))
             // #tr Tooltip_EcoSphereSimulator.0.16
-            // # {\SPACE}- Can be boosted by supplying fertilizer
-            // #zh_CN {\SPACE}- 提供肥料提高产量
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.16"))
+            // # {\SPACE}- Can be boosted by supplying enriched fertilizer
+            // #zh_CN {\SPACE}- 提供富集肥料提高产量
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.16"))
             // #tr Tooltip_EcoSphereSimulator.0.17
-            // # - Given 1 IC2 crop seed it will optimize its stats & amount for maximum productivity
-            // #zh_CN {\SPACE}- 机器将主动将内部种子的数量设置为64, 并将IC2作物属性调整至31/31/1的完美状态
-            .addInfo(TextEnums.tr("Tooltip_EcoSphereSimulator.0.17"))
+            // # - Has a huge consumption of water
+            // #zh_CN {\SPACE}- 运行时消耗大量水
+            .addInfo(tr("Tooltip_EcoSphereSimulator.0.17"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
@@ -1312,39 +1400,5 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .toolTipFinisher(ModName);
         return tt;
     }
-    // #tr GT5U.gui.text.no_energy
-    // # No power
-    // #zh_CN 能源不足
 
-    // #tr GT5U.gui.text.no_sapling
-    // # Missing Sapling
-    // #zh_CN 缺失树苗
-
-    // #tr GT5U.gui.text.no_fluid
-    // # Missing Fluid
-    // #zh_CN 缺失流体
-
-    // #tr GT5U.gui.text.no_enough_input
-    // # No Enough Fluid
-    // #zh_CN 输入流体不足
-
-    // #tr GT5U.gui.text.no_correct_Circuit
-    // # No Match Circuit
-    // #zh_CN 没有匹配的电路板
-
-    // #tr GT5U.gui.text.growing_trees
-    // # {\GREEN}Growing Trees
-    // #zh_CN {\GREEN}原木拟生中
-
-    // #tr GT5U.gui.text.focus_on
-    // # {\BLUE}Targeting
-    // #zh_CN {\BLUE}定向中
-
-    // #tr GT5U.gui.text.fishing
-    // # {\BLUE}Fishing
-    // #zh_CN {\BLUE}捕鱼中
-
-    // #tr GT5U.gui.text.Invalid_Seed
-    // # Invalid Seed
-    // #zh_CN 无效种子
 }

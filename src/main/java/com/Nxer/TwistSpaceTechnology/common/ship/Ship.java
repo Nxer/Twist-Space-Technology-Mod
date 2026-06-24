@@ -51,7 +51,7 @@ public class Ship extends EntityMob implements Runnable {
     @Override
     public void travelToDimension(int dimensionId) {
         if (!validDimId.contains(dimensionId) && !forceTravel) {
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 owner,
                 "your ship :" + shipName + "is trying to travel to a dimension which can destroy it immediately");
         }

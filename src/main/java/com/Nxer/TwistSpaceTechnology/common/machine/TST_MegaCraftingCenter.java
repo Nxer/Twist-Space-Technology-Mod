@@ -783,7 +783,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
                 // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
                 // # The encoded patterns can only be returned when there is no recipe running.
                 // #zh_CN 仅可在未运行配方状态下退回样板.
-                GTUtility.sendChatToPlayer(
+                GTUtility.sendChatTrans(
                     aPlayer,
                     StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.failed"));
                 return;
@@ -795,7 +795,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
             // #tr MegaCraftingCenter.onScrewdriverRightClick.success
             // # Preparing to returning encoded patterns.
             // #zh_CN 正在准备退回样板.
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.success"));
 

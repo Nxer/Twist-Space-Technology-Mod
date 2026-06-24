@@ -50,4 +50,17 @@ public final class CheckRecipeResults {
     // #zh_CN 升温完成：已自动执行热保持操作
     public static final CheckRecipeResult RapidHeatFinish = SimpleResultWithText
         .ofSuccess("CheckRecipeResult.RapidHeatFinish");
+
+    // #tr CheckRecipeResult.NoSeedInController
+    // # There is no valid seed in controller block slot.
+    // #zh_CN 没有在主机内识别到可用的种子
+    public static final CheckRecipeResult NoSeedInController = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.NoSeedInController");
+
+    // #tr CheckRecipeResult.NotEnoughWater
+    // # Not enough water has been input.
+    // #zh_CN 没有输入足够的水
+    public static final CheckRecipeResult NotEnoughWater = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.NotEnoughWater");
+
 }

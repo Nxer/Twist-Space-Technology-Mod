@@ -435,7 +435,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 // check structure blood
                 if (!isBloodChecked) return SimpleCheckRecipeResult.ofFailure("press_button_to_set_structure");
-                // #tr GT5U.gui.text.press_button_to_set_structure
+                // #tr GT5U.gui.text.recipe_result.press_button_to_set_structure
                 // # Click the button to fill up the structure
                 // #zh_CN 点击按钮以填充结构
 

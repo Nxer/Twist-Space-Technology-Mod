@@ -273,7 +273,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.enableRender = (byte) ((this.enableRender + 1) % 2);
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector.translateToLocal("ArtificialStar.enableRender." + this.enableRender));
             if (enableRender == 0 && isRendering) {

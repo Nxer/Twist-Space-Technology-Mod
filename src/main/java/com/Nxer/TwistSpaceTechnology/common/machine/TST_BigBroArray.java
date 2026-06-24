@@ -1947,7 +1947,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
                 break;
             }
         }
-        GTUtility.sendChatToPlayer(aPlayer, message);
+        GTUtility.sendChatTrans(aPlayer, message);
         endRecipeProcessing();
     }
 

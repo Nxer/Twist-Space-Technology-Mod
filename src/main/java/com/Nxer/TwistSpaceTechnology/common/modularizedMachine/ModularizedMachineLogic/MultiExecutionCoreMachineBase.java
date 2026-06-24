@@ -559,7 +559,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             // #tr MultiExecutionCoreMachineBase.progressingTickIndex
             // # The base run cycle time is set to{\SPACE}
             // #zh_CN 基础运行循环时间设置为{\SPACE}
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector.translateToLocal("MultiExecutionCoreMachineBase.progressingTickIndex")
                     + getBaseProgressingTick()

@@ -123,7 +123,7 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        GTUtility.sendChatToPlayer(
+        GTUtility.sendChatTrans(
             env.getActor(),
             "warning! you should not use general method to construct such a "
                 + "big structure! this will still process for you anyway.");

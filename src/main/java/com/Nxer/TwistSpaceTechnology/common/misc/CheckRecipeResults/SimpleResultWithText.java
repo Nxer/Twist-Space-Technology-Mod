@@ -35,7 +35,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
         this.success = success;
         this.key = Objects.requireNonNull(
             StatCollector.translateToLocalFormatted(
-                "GT5U.gui.text.out_of_fluid",
+                "GT5U.gui.text.recipe_result.out_of_fluid",
                 stack.getLocalizedName(),
                 formatNumber(stack.amount)));
         this.persistsOnShutdown = persistsOnShutdown;
@@ -45,7 +45,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
         this.success = success;
         this.key = Objects.requireNonNull(
             StatCollector.translateToLocalFormatted(
-                "GT5U.gui.text.out_of_item",
+                "GT5U.gui.text.recipe_result.out_of_item",
                 stack.getDisplayName(),
                 formatNumber(stack.stackSize)));
         this.persistsOnShutdown = persistsOnShutdown;

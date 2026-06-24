@@ -367,7 +367,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public void onModeChangeByScrewdriver(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         setMachineMode(nextMachineMode());
-        GTUtility.sendChatToPlayer(
+        GTUtility.sendChatTrans(
             aPlayer,
             String.format(StatCollector.translateToLocal("GT5U.MULTI_MACHINE_CHANGE"), getMachineModeName()));
     }

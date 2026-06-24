@@ -601,7 +601,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
         usePrimitiveRecipes = !usePrimitiveRecipes;
-        GTUtility.sendChatToPlayer(
+        GTUtility.sendChatTrans(
             aPlayer,
             usePrimitiveRecipes ? "Now Bricked DTPF accepts primitive blast furnace recipes"
                 : "Now Bricked DTPF only accepts iron/wrought iron and charcoal");
