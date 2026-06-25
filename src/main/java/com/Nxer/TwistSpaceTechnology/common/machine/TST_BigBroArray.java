@@ -1603,7 +1603,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
     protected MultiblockTooltipBuilder createTooltip() {
         MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new MultiblockTooltipBuilder()
             .addMachineType(TextEnums.BigBroArrayType.toString())
-            .addInfo(TextEnums.BigBroArrayName.toString())
+            .addInfo(TextEnums.OutOfMaintenance.toString())
             .addInfo(TextEnums.BigBroArrayDesc1.toString())
             .addInfo(TextEnums.BigBroArrayDesc2.toString())
             .addInfo(TextEnums.BigBroArrayDesc3.toString())

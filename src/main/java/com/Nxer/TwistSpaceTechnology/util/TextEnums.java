@@ -190,6 +190,11 @@ public enum TextEnums {
     ModularHatch("ModularHatch"),
     // endregion
 
+    // #tr OutOfMaintenance
+    // # {\RED}{\BOLD} OUT OF MAINTENANCE !
+    // #zh_CN {\RED}{\BOLD}不再维护！
+    OutOfMaintenance("OutOfMaintenance"),
+
     // start
     BigBroArrayName("BigBroArray.name"),
     BigBroArrayType("BigBroArray.type"),
