@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstructionFrameMaterial;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
@@ -80,11 +81,13 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.HatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -93,6 +96,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -196,6 +200,11 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
@@ -264,7 +273,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.enableRender = (byte) ((this.enableRender + 1) % 2);
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector.translateToLocal("ArtificialStar.enableRender." + this.enableRender));
             if (enableRender == 0 && isRendering) {
@@ -445,19 +454,21 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mInputBusses.clear();
         tierDimensionField = -1;
         tierTimeField = -1;
         tierStabilisationField = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (tierDimensionField < 0 || tierTimeField < 0 || tierStabilisationField < 0) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (tierDimensionField < 0 || tierTimeField < 0 || tierStabilisationField < 0) {
+            errors.add(tiered_structure_issue);
+            return;
+        }
         // Only allow and must be 1 input bus
-        if (this.mInputBusses.size() != 1) return false;
+        checkHatchExact(errors, HatchElement.InputBus, 1);
         calculateOutputMultiplier();
         recoveryChance = (short) (tierDimensionField * tierTimeField * tierStabilisationField);
-        return true;
     }
 
     @Override
@@ -574,7 +585,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
                                HatchElementBuilder.<TST_ArtificialStar>builder()
                                    .atLeast(InputBus, OutputBus)
                                    .adder(TST_ArtificialStar::addInputBusOrOutputBusToMachineList)
-                                   .dot(1)
+                                   .hint(1)
                                    .casingIndex(1024+12)
                                    .buildAndChain(sBlockCasingsTT, 12))
                    .build();

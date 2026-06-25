@@ -28,7 +28,6 @@ import bartworks.system.material.WerkstoffLoader;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
@@ -451,20 +450,20 @@ public class StellarForgeRecipePool {
 
         // Mellion and Creon
         addToMiracleDoorRecipes(
-            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(1) },
-            new FluidStack[] { MaterialsUEVplus.Creon.getPlasma(144) },
+            new ItemStack[] { Materials.Mellion.getDust(1), GTUtility.getIntegratedCircuit(1) },
+            new FluidStack[] { Materials.Creon.getPlasma(144) },
             null,
-            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144), MaterialsUEVplus.Creon.getMolten(144) },
+            new FluidStack[] { Materials.Mellion.getMolten(144), Materials.Creon.getMolten(144) },
             (int) RECIPE_UMV,
             20 * 10,
             GTCMRecipe.StellarForgeRecipes);
 
         // Single Mellion
         addToMiracleDoorRecipes(
-            new ItemStack[] { MaterialsUEVplus.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
+            new ItemStack[] { Materials.Mellion.getDust(1), GTUtility.getIntegratedCircuit(2) },
             null,
             null,
-            new FluidStack[] { MaterialsUEVplus.Mellion.getMolten(144) },
+            new FluidStack[] { Materials.Mellion.getMolten(144) },
             (int) RECIPE_UMV,
             20 * 5,
             GTCMRecipe.StellarForgeRecipes);

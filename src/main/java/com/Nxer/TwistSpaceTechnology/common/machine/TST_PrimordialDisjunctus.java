@@ -33,7 +33,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -42,7 +44,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import goodgenerator.blocks.tileEntity.MTEEssentiaOutputHatch;
-import goodgenerator.blocks.tileEntity.base.MTETooltipMultiBlockBaseEM;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
@@ -54,11 +55,11 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.visnet.VisNetHandler;
@@ -68,7 +69,7 @@ import thaumcraft.common.lib.network.fx.PacketFXEssentiaSource;
 import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileEssentiaProvider;
 
-public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
+public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_PrimordialDisjunctus>
     implements IConstructable, ISurvivalConstructable {
 
     public TST_PrimordialDisjunctus(int aID, String aName, String aNameRegional) {
@@ -107,8 +108,8 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     private static final int STANDARD_BOOST_REDUCTION = ValueEnum.BoostReduction_PrimordialDisjunctus;
 
     @Override
-    protected void clearHatches_EM() {
-        super.clearHatches_EM();
+    public void clearHatches() {
+        super.clearHatches();
         mEssentiaOutputHatches.clear();
     }
 
@@ -174,7 +175,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     @Override
-    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
+    public IStructureDefinition<TST_PrimordialDisjunctus> getStructureDefinition() {
         if (multiDefinition == null) {
             this.multiDefinition = StructureDefinition.<TST_PrimordialDisjunctus>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapePrimordialDisjunctus))
@@ -188,7 +189,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                                 gregtech.api.enums.HatchElement.InputBus,
                                 gregtech.api.enums.HatchElement.InputHatch)
                             .casingIndex(CASING_INDEX)
-                            .dot(1)
+                            .hint(1)
                             .build(),
                         ofSpecificTileAdder(
                             TST_PrimordialDisjunctus::addEssentiaOutputHatchToMachineList,
@@ -300,23 +301,24 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     @Override
-    protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack,
+        List<StructureError> errors) {
 
         // This data is set through the structure check so we reset it here
         this.mCasing = 0;
         this.mParallel = 0;
         this.pTier = 0;
         this.cachedEssentiaCoords = generateCoordinate(this.mMufflerHatches);
-        boolean bStructureCheck = checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1);
 
-        // Only reset this data if we have an invalid structure check
-        if (!bStructureCheck) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, 7, 16, 1, errors)) {
             this.nodeIncrease = 0;
             this.nodePurificationEfficiency = 0;
             this.cachedEssentiaCoords = null;
+            return;
         }
 
-        return bStructureCheck;
+        // Only reset this data if we have an invalid structure check
+
     }
 
     @Override
@@ -349,7 +351,7 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     @Override
-    public @NotNull CheckRecipeResult checkProcessing_EM() {
+    public @NotNull CheckRecipeResult checkProcessing() {
         int parallel = (int) this.mParallel;
         if (parallel <= 0) {
             return CheckRecipeResultRegistry.NO_RECIPE;
@@ -386,7 +388,6 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
             .setDurationDecreasePerOC(2)
             .calculate();
 
-        useLongPower = true;
         lEUt = -calculator.getConsumption();
         mMaxProgresstime = calculator.getDuration();
 
@@ -417,8 +418,8 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
     }
 
     @Override
-    protected void addClassicOutputs_EM() {
-        super.addClassicOutputs_EM();
+    protected void outputAfterRecipe() {
+        super.outputAfterRecipe();
         fillEssentiaOutputHatch();
     }
 
@@ -708,38 +709,13 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        structureBuild_EM(STRUCTURE_PIECE_MAIN, 7, 16, 1, stackSize, hintsOnly);
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 7, 16, 1);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
 
         return new TST_PrimordialDisjunctus(this.mName);
-    }
-
-    @Override
-    public final boolean shouldCheckMaintenance() {
-        return false;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public boolean doRandomMaintenanceDamage() {
-        return true;
-    }
-
-    @Override
-    public boolean willExplodeInRain() {
-        return false;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
     }
 
     @Override
@@ -782,5 +758,10 @@ public class TST_PrimordialDisjunctus extends MTETooltipMultiBlockBaseEM
                     + "%"
                     + EnumChatFormatting.RESET);
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 }

@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -14,11 +15,11 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 
 public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
@@ -26,10 +27,8 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch";
     private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch_inactive";
 
-    public static Textures.BlockIcons.CustomIcon OVERLAY_ACTIVE = new Textures.BlockIcons.CustomIcon(
-        TEXTURE_NAME_OVERLAY_ACTIVE);
-    public static Textures.BlockIcons.CustomIcon OVERLAY_INACTIVE = new Textures.BlockIcons.CustomIcon(
-        TEXTURE_NAME_OVERLAY_INACTIVE);
+    public static IIconContainer OVERLAY_ACTIVE = Textures.BlockIcons.custom(TEXTURE_NAME_OVERLAY_ACTIVE);
+    public static IIconContainer OVERLAY_INACTIVE = Textures.BlockIcons.custom(TEXTURE_NAME_OVERLAY_INACTIVE);
 
     private static final String[] DESC = new String[] {
         // #tr Tooltip_BloodOrbHatch_1
@@ -120,8 +119,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
 
     @Override
     public Fluid getFluidToGenerate() {
-        return FluidUtils.getFluidStack(AlchemicalWizardry.lifeEssenceFluid, 1)
-            .getFluid();
+        return AlchemicalWizardry.lifeEssenceFluid;
     }
 
     @Override
@@ -163,8 +161,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         return new ITexture[] { aBaseTexture, TextureFactory.of(OVERLAY_INACTIVE) };
     }
 
-    @Override
-    public boolean addFluidToHatch(long aTick) {
+    public boolean addFluidToHatchNow() {
         if (!getBaseMetaTileEntity().isServerSide()) { // I don't know where to check if remote. :(
             return false;
         }
@@ -183,7 +180,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         int maxDrainAmount = MathUtils.clamp(getCapacity() - getFluidAmount(), 0, getMaxCanDrainFromOrb());
         int drainedAmount = drainFromOrb(maxDrainAmount);
         if (drainedAmount > 0) {
-            super.fill(FluidUtils.getFluidStack(getFluidToGenerate(), drainedAmount), true);
+            super.fill(new FluidStack(getFluidToGenerate(), drainedAmount), true);
             return true;
         }
 
@@ -208,6 +205,10 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         }
     }
 
+    public void deleteInternalFluidStack() {
+        mFluid = null;
+    }
+
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
@@ -217,9 +218,9 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             this.mMaxProgresstime = getMaxTickTime();
             if (++this.mProgresstime >= this.mMaxProgresstime) {
                 if (this.getOrbItemStack() == null) { // remove the remaining bloods if the orb is not present
-                    this.mFluid = null;
+                    deleteInternalFluidStack();
                 } else { // canTankBeFilled() will always be true, ignored
-                    this.addFluidToHatch(aTick);
+                    this.addFluidToHatchNow();
                 }
                 this.mProgresstime = 0;
             }
@@ -246,5 +247,54 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
     public boolean allowPutStack(final IGregTechTileEntity aBaseMetaTileEntity, final int aIndex,
         final ForgeDirection side, final ItemStack aStack) {
         return true;
+    }
+
+    public static class TST_Debug_BloodHatch extends TST_BloodOrbHatch {
+
+        public TST_Debug_BloodHatch(int aID, String aName, String aNameRegional, int aTier) {
+            super(aID, aName, aNameRegional, aTier);
+        }
+
+        public TST_Debug_BloodHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
+            super(aName, aTier, aDescription, aTextures);
+        }
+
+        @Override
+        public MetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+            return new TST_Debug_BloodHatch(mName, mTier, mDescriptionArray, mTextures);
+        }
+
+        @Override
+        public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+            super.onPostTick(aBaseMetaTileEntity, aTick);
+            if (!aBaseMetaTileEntity.isServerSide()) return;
+
+            if (aTick % 20 != 0) return;
+
+            mFluid = new FluidStack(getFluidToGenerate(), 200000000);
+
+        }
+
+        public int getCapacity() {
+            return 200000000;
+        }
+
+        public void deleteInternalFluidStack() {}
+
+        private static final String[] DESC_DEBUG = new String[] {
+            // tr Tooltip_BloodOrbHatch_1
+            // Life Essence Input for Multiblocks
+            // zh_CN 多方块结构的生命本质输入仓
+            TextEnums.tr("Tooltip_BloodOrbHatch_1"),
+            // #tr Tooltip_DebugBloodHatch
+            // # {\GOLD}Infinity Life Essence.
+            // #zh_CN {\GOLD}提供无线的生命本质
+            TextEnums.tr("Tooltip_BloodOrbHatch_5"), TextEnums.Mod_TwistSpaceTechnology.getText() };
+
+        @Override
+        public synchronized String[] getDescription() {
+            return DESC_DEBUG;
+        }
+
     }
 }

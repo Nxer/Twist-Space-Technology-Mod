@@ -20,13 +20,13 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,12 +36,15 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import bartworks.API.BorosilicateGlass;
 import bwcrossmod.galacticgreg.VoidMinerUtility;
+import galacticgreg.api.ModDimensionDef;
+import galacticgreg.api.enums.DimensionDef;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -52,6 +55,7 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -162,7 +166,7 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                             .<TST_StarcoreMiner>builder()
                             .atLeast(InputBus, InputHatch, OutputBus, Energy.or(ExoticEnergy))
                             .adder(TST_StarcoreMiner::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
                             .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
                     )
@@ -234,12 +238,12 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain)) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain, errors)) {
             IGregTechTileEntity b = getBaseMetaTileEntity();
             TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() );
-            return false;
+            return;
         }
         if (CheckMiningPipeStructure_StarcoreMiner) {
             IGregTechTileEntity b = getBaseMetaTileEntity();
@@ -250,20 +254,19 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                 int needPiece = y_value - ValueEnum.HeightValueLimit_StarcoreMiner;
                 int p = 0;
                 for (;p<needPiece;p++) {
-                    if (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle - p, depthOffSetMiddle)) continue;
+                    if (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle - p, depthOffSetMiddle, errors)) continue;
                     // or check if stopped by a bedrock block
-                    if (checkPiece(STRUCTURE_PIECE_END, horizontalOffSetEnd, verticalOffSetMiddle - p, depthOffSetEnd)) {
+                    if (checkPiece(STRUCTURE_PIECE_END, horizontalOffSetEnd, verticalOffSetMiddle - p, depthOffSetEnd, errors)) {
                         break;
                     } else {
                         TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() + " p=" + p );
-                        return false;
+                        return;
                     }
                 }
             }
         }
 
         isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
-        return true;
     }
 
     // spotless:on
@@ -271,9 +274,11 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
 
     // region Processing Logic
 
+    protected ModDimensionDef dimensionDef;
     protected VoidMinerUtility.DropMap dropMap = null;
     protected VoidMinerUtility.DropMap extraDropMap = null;
     protected float totalWeight = 0;
+    protected boolean canVoidMine = true;
     protected boolean isWirelessMode = false;
     protected UUID ownerUUID;
     protected int oreStackSize = Config.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
@@ -358,44 +363,25 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     }
 
     protected void initDropMap() {
-        this.dropMap = new VoidMinerUtility.DropMap();
-        this.extraDropMap = new VoidMinerUtility.DropMap();
-        int id = this.getBaseMetaTileEntity()
-            .getWorld().provider.dimensionId;
-        this.handleModDimDef(id);
-        this.handleExtraDrops(id);
+        this.dropMap = null;
+        this.extraDropMap = null;
+        this.totalWeight = 0;
+        this.canVoidMine = false;
+
+        dimensionDef = DimensionDef.getDefForWorld(getBaseMetaTileEntity().getWorld());
+
+        if (dimensionDef == null || !dimensionDef.canBeVoidMined()) return;
+
+        this.canVoidMine = true;
+
+        this.dropMap = VoidMinerUtility.dropMapsByDimName
+            .getOrDefault(dimensionDef.getDimensionName(), new VoidMinerUtility.DropMap());
+        this.extraDropMap = VoidMinerUtility.extraDropsByDimName
+            .getOrDefault(dimensionDef.getDimensionName(), new VoidMinerUtility.DropMap());
+
+        this.dropMap.isDistributionCached(this.extraDropMap);
+
         this.totalWeight = dropMap.getTotalWeight() + extraDropMap.getTotalWeight();
-    }
-
-    /**
-     * Gets the DropMap of the dim for the specified dim id
-     *
-     * @param id the dim number
-     */
-    private void handleModDimDef(int id) {
-        if (VoidMinerUtility.dropMapsByDimId.containsKey(id)) {
-            this.dropMap = VoidMinerUtility.dropMapsByDimId.get(id);
-        } else {
-            String chunkProviderName = ((ChunkProviderServer) this.getBaseMetaTileEntity()
-                .getWorld()
-                .getChunkProvider()).currentChunkProvider.getClass()
-                    .getName();
-
-            if (VoidMinerUtility.dropMapsByChunkProviderName.containsKey(chunkProviderName)) {
-                this.dropMap = VoidMinerUtility.dropMapsByChunkProviderName.get(chunkProviderName);
-            }
-        }
-    }
-
-    /**
-     * Handles the ores added manually with {@link VoidMinerUtility#addMaterialToDimensionList}
-     *
-     * @param id the specified dim id
-     */
-    private void handleExtraDrops(int id) {
-        if (VoidMinerUtility.extraDropsDimMap.containsKey(id)) {
-            extraDropMap = VoidMinerUtility.extraDropsDimMap.get(id);
-        }
     }
 
     private ItemStack generateOneStackOre() {
@@ -461,6 +447,11 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     @Override
     public boolean supportsSingleRecipeLocking() {
         return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

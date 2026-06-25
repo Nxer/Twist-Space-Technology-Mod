@@ -18,6 +18,8 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import net.minecraft.item.ItemStack;
@@ -33,12 +35,13 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.enums.MaterialsUEVplus;
+import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -48,6 +51,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -83,9 +87,9 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     protected static final long tick_decrease_per_tick = 24;
 
     // Valid fuels which the discount will get applied to.
-    protected static final FluidStack[] valid_fuels = { MaterialsUEVplus.ExcitedDTEC.getFluid(1L),
-        MaterialsUEVplus.ExcitedDTRC.getFluid(1L), MaterialsUEVplus.ExcitedDTPC.getFluid(1L),
-        MaterialsUEVplus.ExcitedDTCC.getFluid(1L), MaterialsUEVplus.ExcitedDTSC.getFluid(1L) };
+    protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
+        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L), Materials.ExcitedDTCC.getFluid(1L),
+        Materials.ExcitedDTSC.getFluid(1L) };
 
     // endregion
 
@@ -271,9 +275,10 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     private static IStructureDefinition<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> STRUCTURE_DEFINITION = null;
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
         coilLevel = HeatingCoilLevel.None;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return false;
         coilHeat = (int) coilLevel.getHeat();
         return true;
     }
@@ -363,7 +368,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                     HatchElementBuilder.<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2::addNormalHatchToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsBA0, 12))
                 .addElement('C', ofBlock(sBlockCasingsTT, 10))
@@ -374,7 +379,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                     HatchElementBuilder.<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2>builder()
                         .atLeast(AllModule)
                         .adder(MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2::addModularHatchToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1036)
                         .buildAndChain(sBlockCasingsTT, 12))
                 .build();
@@ -410,6 +415,11 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
 
         // spotless:on
         return ret;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     private static MultiblockTooltipBuilder tooltip;

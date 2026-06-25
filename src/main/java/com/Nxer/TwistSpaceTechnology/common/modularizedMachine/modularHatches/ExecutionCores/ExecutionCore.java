@@ -7,6 +7,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -84,16 +85,14 @@ public class ExecutionCore extends ExecutionCoreBase {
     // endregion
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Pri_off");
         super.registerIcons(aBlockIconRegister);
     }
 

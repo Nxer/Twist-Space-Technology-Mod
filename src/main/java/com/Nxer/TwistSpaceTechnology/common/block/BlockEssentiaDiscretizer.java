@@ -1,3 +1,6 @@
+// spotless:off
+/*
+
 package com.Nxer.TwistSpaceTechnology.common.block;
 
 import java.util.List;
@@ -106,7 +109,7 @@ public class BlockEssentiaDiscretizer extends Block {
             // #zh_CN 我们仍然推荐优先使用ae2t,其完成度以及适配度更好,本离散器仅为替代品.
             list.add(TextEnums.tr("tile.essentia.discretizer.tooltip.2"));
             // spotless:on
-        }
-
-    }
-}
+ * }
+ * }
+ * }
+ */

@@ -11,11 +11,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
-import gregtech.api.gui.modularui.GTUIInfos;
+import bartworks.API.enums.CircuitImprint;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
@@ -27,7 +27,7 @@ import gregtech.api.render.TextureFactory;
 public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
 
     private int timeout = 4;
-    public HashSet<NBTTagCompound> circuitType = new HashSet<>();
+    public HashSet<TST_ItemID> circuitType = new HashSet<>();
 
     public TST_CircuitImprintHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(
@@ -91,7 +91,8 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
-        GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
+        // GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
+        openGui(aPlayer);
         return true;
     }
 
@@ -147,19 +148,17 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
         refreshImprint();
     }
 
-    public HashSet<NBTTagCompound> getStoredCircuitImprints() {
+    public HashSet<TST_ItemID> getStoredCircuitImprints() {
         return circuitType;
     }
 
     public void refreshImprint() {
         circuitType = new HashSet<>();
         IGregTechTileEntity te = getBaseMetaTileEntity();
-        for (int i = 0; i < te.getSizeInventory(); ++i) {
-            ItemStack slot = te.getStackInSlot(i);
-            if (slot != null && slot.isItemEqual(
-                BWMetaItems.getCircuitParts()
-                    .getStack(0, 0))) {
-                circuitType.add(slot.stackTagCompound);
+        for (int i = 0; i < te.getSizeInventory(); i++) {
+            CircuitImprint ci = CircuitImprint.findCircuitImprintByImprintStack(te.getStackInSlot(i));
+            if (ci != null) {
+                circuitType.add(TST_ItemID.create(ci.circuit.get(1)));
             }
         }
     }

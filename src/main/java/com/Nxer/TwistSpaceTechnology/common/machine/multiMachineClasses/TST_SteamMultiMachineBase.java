@@ -18,9 +18,10 @@ import com.google.common.collect.ImmutableList;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.OverclockCalculator;
-import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.MTESteamMultiBase;
+import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.MTESteamMultiBlockBase;
 
-public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineBase<T>> extends MTESteamMultiBase<T> {
+public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineBase<T>>
+    extends MTESteamMultiBlockBase<T> {
 
     public TST_SteamMultiMachineBase(String aName) {
         super(aName);

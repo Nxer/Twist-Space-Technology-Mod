@@ -15,10 +15,10 @@ import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
 import gregtech.api.util.GTRecipe;
 import gregtech.common.gui.modularui.UIHelper;
+import gregtech.common.tileentities.machines.multi.MTETreeFarm;
 import gregtech.nei.GTNEIDefaultHandler;
 import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;
-import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm;
 
 public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 

@@ -20,6 +20,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static gregtech.api.util.ParallelHelper.addItemsLong;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -51,6 +53,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -100,6 +103,11 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     public int getMaxParallelRecipes() {
         int EuTier = (int) calculateVoltageTier(getMaxInputEu());
         return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -185,9 +193,9 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // region Structure
 
@@ -236,7 +244,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
                     HatchElementBuilder.<TST_MegaStoneBreaker>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_MegaStoneBreaker::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TAE.getIndexFromPage(1, 0))
                         .buildAndChain(ModBlocks.blockCasings2Misc, 0))
                 .addElement(
@@ -244,14 +252,14 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
                     buildHatchAdder(TST_MegaStoneBreaker.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_MegaStoneBreaker::addLavaHatch)
                         .casingIndex(TAE.getIndexFromPage(1, 0))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(ModBlocks.blockCasings2Misc, 0))
                 .addElement(
                     'W',
                     buildHatchAdder(TST_MegaStoneBreaker.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_MegaStoneBreaker::addWaterHatch)
                         .casingIndex(TAE.getIndexFromPage(1, 0))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(ModBlocks.blockCasings2Misc, 0))
                 .build();
         }

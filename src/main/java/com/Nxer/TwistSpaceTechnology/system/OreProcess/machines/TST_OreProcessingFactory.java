@@ -14,6 +14,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OrePro
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -54,6 +55,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
@@ -68,6 +70,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -136,10 +139,15 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                 // #zh_CN 当前消耗EU:
                 EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.2")
                     + EnumChatFormatting.GOLD
-                    + GTUtility.formatNumbers(tag.getLong("usingEU"))
+                    + formatNumber(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET
                     + " EU");
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -441,11 +449,12 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.mExoticEnergyHatches.clear();
         this.mEnergyHatches.clear();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+
         isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
         if (isWirelessMode) {
             EUtCanUse = 0;
@@ -457,7 +466,6 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             // 1/32 Power losing region with multi energy hatch
             EUtCanUse = getMaxInputEu() * 31 / 32;
         }
-        return true;
     }
 
     // endregion
@@ -507,7 +515,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(InputHatch)
                                    .adder(TST_OreProcessingFactory::addFluidInputToMachineList)
-                                   .dot(1)
+                                   .hint(1)
                                    .casingIndex(48)
                                    .buildAndChain(GregTechAPI.sBlockCasings4,0))
                    .addElement('K',
@@ -515,7 +523,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(Energy.or(ExoticEnergy))
                                    .adder(TST_OreProcessingFactory::addEnergyHatchOrExoticEnergyHatchToMachineList)
-                                   .dot(2)
+                                   .hint(2)
                                    .casingIndex(1024)
                                    .buildAndChain(sBlockCasingsTT,0))
                    .addElement('L',
@@ -523,7 +531,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                                    .<TST_OreProcessingFactory>builder()
                                    .atLeast(InputBus, OutputBus)
                                    .adder(TST_OreProcessingFactory::addInputBusOrOutputBusToMachineList)
-                                   .dot(3)
+                                   .hint(3)
                                    .casingIndex(48)
                                    .buildAndChain(GregTechAPI.sBlockCasings4,0))
                    .addElement('M', ofFrame(Materials.TungstenSteel))

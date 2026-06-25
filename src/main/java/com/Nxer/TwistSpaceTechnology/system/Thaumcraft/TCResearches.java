@@ -6,7 +6,6 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodyHell;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereSimulator;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeElvenWorkshop;
-import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEssentiaDiscretizer;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeFontOfEcology;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
@@ -20,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -535,25 +533,27 @@ public class TCResearches {
                     .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
         }
-        if (Config.Enable_EssentiaDiscretizer) {
-            // #tr tc.research_name.ESSENTIA_DISCRETIZER
-            // # Essentia Discretizer
-            // #zh_CN 源质离散器
-            // #tr tc.research_text.ESSENTIA_DISCRETIZER
-            // # Free movement!
-            // #zh_CN 自由流动!
-            new ResearchItem(
-                "ESSENTIA_DISCRETIZER",
-                "TST",
-                new AspectList().merge(Aspect.MECHANISM, 1)
-                    .merge(Aspect.MAN, 1)
-                    .merge(Aspect.MAGIC, 1)
-                    .merge(Aspect.SOUL, 1),
-                0,
-                6,
-                9,
-                BlockEssentiaDiscretizer.stack()).setPages(
-                    // spotless:off
+
+        /*
+         * if (Config.Enable_EssentiaDiscretizer) {
+         * // #tr tc.research_name.ESSENTIA_DISCRETIZER
+         * // # Essentia Discretizer
+         * // #zh_CN 源质离散器
+         * // #tr tc.research_text.ESSENTIA_DISCRETIZER
+         * // # Free movement!
+         * // #zh_CN 自由流动!
+         * new ResearchItem(
+         * "ESSENTIA_DISCRETIZER",
+         * "TST",
+         * new AspectList().merge(Aspect.MECHANISM, 1)
+         * .merge(Aspect.MAN, 1)
+         * .merge(Aspect.MAGIC, 1)
+         * .merge(Aspect.SOUL, 1),
+         * 0,
+         * 6,
+         * 9,
+         * BlockEssentiaDiscretizer.stack()).setPages(
+         * // spotless:off
                     // #tr tc.research_text.ESSENTIA_DISCRETIZER.0
                     // # As a thaumaturge versed in the art of technology, you have long been vexed by the management of essentia. The properties unveiled upon crystallization are precisely what you seek. Through the study of the crystallizer and the fluid discretizer, and by melding mind with machine, the Essentia Discretizer has come into being!
                     // #zh_CN 作为一名进修过科技的魔法使,你常常为源质发配感到头疼,而源质结晶后所展现的特性正是你所需的,通过对结晶器与流体离散器的研究,配合大脑与电路的控制,源质离散器就此而生!
@@ -562,10 +562,12 @@ public class TCResearches {
                     // # Getting back to the point, the Essentia Discretizer is a container that monitors both item and fluid channels, operating with the highest priority. When either item-based or fluid-based essentia enters, the Discretizer first detects it. If it is indeed essentia, the device inserts it into the corresponding component or container, while simultaneously creating a crystallized essentia as a duplicate that stays synchronized with the original. Conversely, when the crystallized essentia is consumed, the corresponding original essentia undergoes the same consumption process.
                     // #zh_CN 言归正传,源质离散器,是一个容器,监听物品与流体通道,且具有最高优先级,当物品源质亦或者流体版源质进入时,首先被离散器检测,如果确实为源质则将其插入至对应的元件或者容器,并且本身创建一份晶化源质作为副本,与其同步变化,反过来,将晶化源质被使用时对应的本体也做一样的消耗行为.
                     // spotless:on
-                    new ResearchPage(TextEnums.tr("tc.research_text.ESSENTIA_DISCRETIZER.1")),
-                    new ResearchPage(infusionRecipeEssentiaDiscretizer))
-                    .setParents("TST_WELCOME")
-                    .registerResearchItem();
-        }
+         * new ResearchPage(TextEnums.tr("tc.research_text.ESSENTIA_DISCRETIZER.1")),
+         * new ResearchPage(infusionRecipeEssentiaDiscretizer))
+         * .setParents("TST_WELCOME")
+         * .registerResearchItem();
+         * }
+         */
+
     }
 }

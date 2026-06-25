@@ -14,6 +14,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -24,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -35,6 +37,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import tectech.thing.block.BlockQuantumGlass;
@@ -88,6 +91,11 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     }
 
     @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
     public boolean supportsVoidProtection() {
         return false;
     }
@@ -103,8 +111,9 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     protected static IStructureDefinition<MM_MassFabricatorGenesis> STRUCTURE_DEFINITION;
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override
@@ -205,7 +214,7 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
                     HatchElementBuilder.<MM_MassFabricatorGenesis>builder()
                         .atLeast(InputBus, OutputHatch, Energy.or(ExoticEnergy), ParallelController)
                         .adder(MM_MassFabricatorGenesis::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsBA0, 12))
                 .build();

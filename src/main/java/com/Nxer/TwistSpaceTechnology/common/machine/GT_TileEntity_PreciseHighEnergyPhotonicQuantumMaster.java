@@ -24,6 +24,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,19 +38,21 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.PhotonControllerUp
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -111,21 +114,21 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
                     'M',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Maintenance)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(183)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'I',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(183)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
                     'X',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster.class)
                         .atLeast(Energy.or(ExoticEnergy))
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(1024)
                         .buildAndChain(sBlockCasingsTT, 0))
                 .addElement(
@@ -215,15 +218,23 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    // }
+    //
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
     }
 
     @Override
@@ -259,17 +270,16 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
      * @param aStack
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.totalSpeedIncrement = 0;
         this.enablePerfectOverclock = false;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return;
         }
 
         speedBonus = 10000F / (10000F + totalSpeedIncrement);
 
-        return true;
     }
 
     // endregion

@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
@@ -24,13 +25,11 @@ import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
-import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -55,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SwelegfyrBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
@@ -62,24 +62,17 @@ import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResult
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.api.widget.IWidgetBuilder;
-import com.gtnewhorizons.modularui.api.widget.Widget;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -92,6 +85,8 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -99,6 +94,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -124,18 +120,18 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     // end region
 
     // region Structure
-    private static final int baseHorizontalOffSet = 5;
-    private static final int baseVerticalOffSet = 17;
-    private static final int baseDepthOffSet = 1;
-    private static final int BlazeHorizontalOffSet = 3;
-    private static final int BlazeVerticalOffSet = 10;
-    private static final int BlazeDepthOffSet = -1;
-    private static final String STRUCTURE_PIECE_MAIN_T1 = "mainT1";
-    private static final String STRUCTURE_PIECE_MAIN_T2 = "mainT2";
-    private static final String STRUCTURE_PIECE_Blaze_T1 = "BlazeT1";
-    private static final String STRUCTURE_PIECE_Blaze_T2 = "BlazeT2";
+    protected static final int baseHorizontalOffSet = 5;
+    protected static final int baseVerticalOffSet = 17;
+    protected static final int baseDepthOffSet = 1;
+    protected static final int BlazeHorizontalOffSet = 3;
+    protected static final int BlazeVerticalOffSet = 10;
+    protected static final int BlazeDepthOffSet = -1;
+    protected static final String STRUCTURE_PIECE_MAIN_T1 = "mainT1";
+    protected static final String STRUCTURE_PIECE_MAIN_T2 = "mainT2";
+    protected static final String STRUCTURE_PIECE_Blaze_T1 = "BlazeT1";
+    protected static final String STRUCTURE_PIECE_Blaze_T2 = "BlazeT2";
     // spotless:off
-    private static final String[][] shapeMainT1 = new String[][]{
+    protected static final String[][] shapeMainT1 = new String[][]{
         {"           ","           ","   NNNNN   ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","   NNNNN   ","           ","           "},
         {"           ","   NNNNN   ","  NHHHHHN  "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN ","  NHHHHHN  ","   NNNNN   ","           "},
         {"   FFFFF   ","  FMMMMMF  "," FMFKKKFMF ","FMFEEEEEFMF","FMKEEEEEKMF","FMKEECEEKMF","FMKEEEEEKMF","FMFEEEEEFMF"," FMFKKKFMF ","  FMMMMMF  ","   FFFFF   "},
@@ -158,7 +154,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"           ","   PPPPP   ","  PDDDDDP  "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP "," PDDDDDDDP ","  PDDDDDP  ","   PPPPP   ","           "}
     };
 
-    private static final String[][] shapeMainT2 = new String[][]{
+    protected static final String[][] shapeMainT2 = new String[][]{
         {"                      ","                      ","   NNNNN              ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","   NNNNN              ","                      ","                      "},
         {"                      ","   NNNNN              ","  NHHHHHN             "," NHDDDDDHN       NNN  "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN       NNN  ","  NHHHHHN             ","   NNNNN              ","                      "},
         {"   FFFFF              ","  FMMMMMF             "," FMFKKKFMF      GGGGG ","FMFEEEEEFMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMKEECEEKMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMFEEEEEFMF    GGGGGGG"," FMFKKKFMF      GGGGG ","  FMMMMMF             ","   FFFFF              "},
@@ -181,7 +177,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"                      ","   PPPPP              ","  PDDDDDP       GGGGG "," PDDDDDDDP     GGNNNGG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GGNNNGG","  PDDDDDP       GGGGG ","   PPPPP              ","                      "}
     };
 
-    private static final String[][] shapeBlazeT1 = new String[][]{
+    protected static final String[][] shapeBlazeT1 = new String[][]{
         {"       ","       ","       ","       ","       ","       ","       "},
         {"       ","       ","       ","       ","       ","       ","       "},
         {"       ","       ","       ","       ","       ","       ","       "},
@@ -196,7 +192,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {" ZZZZZ ","ZZ   ZZ","Z     Z","Z     Z","Z     Z","ZZ   ZZ"," ZZZZZ "}
     };
 
-    private static final String[][] shapeBlazeT2 = new String[][]{
+    protected static final String[][] shapeBlazeT2 = new String[][]{
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
         {"                  ","                  ","               ZZZ","               Z Z","               ZZZ","                  ","                  "},
@@ -212,7 +208,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     };
     // spotless:on
 
-    private static IStructureDefinition<TST_SwelegfyrBlastFurnace> STRUCTURE_DEFINITION = null;
+    protected static IStructureDefinition<TST_SwelegfyrBlastFurnace> STRUCTURE_DEFINITION = null;
 
     @Override
     public IStructureDefinition<TST_SwelegfyrBlastFurnace> getStructureDefinition() {
@@ -250,7 +246,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
@@ -258,7 +254,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement(
@@ -266,7 +262,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     buildHatchAdder(TST_SwelegfyrBlastFurnace.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_SwelegfyrBlastFurnace::addBlazeHatch)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
                 .addElement('Z', ofBlock(TFFluids.fluidPyrotheum.getBlock(), 0))
                 .build();
@@ -326,16 +322,17 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         recipeHeatLimitation = 0;
         glassTier = -1;
 
         // Check all tier to render properly in nei
-        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN_T2, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
             clearHatches();
-            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
-                || controllerTier > 1) return false;
+            errors.clear();
+            if (!checkPiece(STRUCTURE_PIECE_MAIN_T1, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)
+                || controllerTier > 1) return;
         }
 
         if (this.mHeatingCapacity < getCoilHeat()) this.mHeatingCapacity = getCoilHeat();
@@ -344,40 +341,46 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (glassTier < 12) {
             for (MTEHatchEnergy mEnergyHatch : this.mEnergyHatches) {
                 if (this.glassTier < mEnergyHatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
+        }
+
+        if (mBlazeHatch == null) {
+            errors.add(special_hatch_amount_wrong);
+            return;
         }
 
         // set recipe heat limitation
         recipeHeatLimitation = (int) getCoilLevel().getHeat() + 100 * (getTotalPowerTier() - 2);
 
-        return mBlazeHatch != null;
     }
 
     // region Processing Logic
-    int glassTier = -1;
-    byte controllerTier = 1;
-    boolean isBlazeFinishSet = false;
-    boolean isBlazeFinishClear = true;
-    boolean isPassiveMode = false;
-    boolean inPassiveMode = false;
-    boolean isRapidHeating = false;
-    boolean inRapidHeating = false;
-    boolean isHoldingHeat = false;
-    static ItemStack UpgradeItem = null;
-    int previousRecipeCode = 0;
-    int correctBlazeCost = 0;
-    private MTEHatchInput mBlazeHatch;
-    public HeatingCoilLevel coilLevel;
-    private int mHeatingCapacity;
-    private int maxHeatingCapacity;
-    protected int recipeHeatLimitation;
+    public int glassTier = -1;
+    public byte controllerTier = 1;
+    public boolean isBlazeFinishSet = false;
+    public boolean isBlazeFinishClear = true;
+    public boolean isPassiveMode = false;
+    public boolean inPassiveMode = false;
+    public boolean isRapidHeating = false;
+    public boolean inRapidHeating = false;
+    public boolean isHoldingHeat = false;
+    public static ItemStack UpgradeItem = null;
+    public int previousRecipeCode = 0;
+    public int correctBlazeCost = 0;
+    public MTEHatchInput mBlazeHatch;
+    public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+    public int mHeatingCapacity;
+    public int maxHeatingCapacity;
+    public int recipeHeatLimitation;
 
     public HeatingCoilLevel getCoilLevel() {
         return coilLevel;
@@ -397,7 +400,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfyrUpgradeChip.get(1);
     }
 
-    private boolean setRemoveBlaze() {
+    protected boolean setRemoveBlaze() {
         IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
         String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
         Block Air = Blocks.air;
@@ -428,7 +431,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return false;
     }
 
-    private boolean checkBlaze() {
+    protected boolean checkBlaze() {
         // If blaze illegal return true
         if (isBlazeFinishClear || !isBlazeFinishSet) {
             return !setRemoveBlaze();
@@ -567,7 +570,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     }
 
-    private long runningTick = 0;
+    protected long runningTick = 0;
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
@@ -650,15 +653,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
      * @param doDrain if really drain
      * @return can it drain
      */
-    private boolean drainPyrotheumFromBlazeHatch(int amount, boolean doDrain) {
+    protected boolean drainPyrotheumFromBlazeHatch(int amount, boolean doDrain) {
         return drain(this.mBlazeHatch, new FluidStack(TFFluids.fluidPyrotheum, amount), doDrain);
     }
 
-    private void stopMachineOfMissingPyrotheum(int amount) {
+    protected void stopMachineOfMissingPyrotheum(int amount) {
         stopMachine(ShutDownReasonRegistry.outOfFluid(new FluidStack(TFFluids.fluidPyrotheum, amount)));
     }
 
-    private CheckRecipeResult shutDownOfMissingPyrotheum(int amount) {
+    protected CheckRecipeResult shutDownOfMissingPyrotheum(int amount) {
         return SimpleResultWithText.outOfFluid(new FluidStack(TFFluids.fluidPyrotheum, amount));
     }
 
@@ -675,11 +678,19 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return 2;
     }
 
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SBF_ModeBase,
+        UITextures.SBF_ModePassive };
+
     @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(UITextures.SBF_ModeBase);
-        machineModeIcons.add(UITextures.SBF_ModePassive);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
     }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(UITextures.SBF_ModeBase);
+    // machineModeIcons.add(UITextures.SBF_ModePassive);
+    // }
 
     @Override
     public void setMachineMode(int index) {
@@ -688,9 +699,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public String getMachineModeName(int mode) {
+    public String getMachineModeName() {
         // Override the origin logic, check machine mode name with the machine status
-        return getMachineModeName(mode != 0, inPassiveMode, inRapidHeating);
+        return getMachineModeName(machineMode != 0, inPassiveMode, inRapidHeating);
     }
 
     public String getMachineModeName(boolean isPassiveMode, boolean inPassiveMode, boolean inRapidHeating) {
@@ -732,94 +743,107 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return base;
     }
 
+    // @Override
+    // public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+    // super.addUIWidgets(builder, buildContext);
+    // builder.widget(createBlazeStatusButton(builder));
+    // builder.widget(createRapidHeatingButton(builder));
+    // builder.widget(createHoldingHeatButton(builder));
+    //
+    // }
+
     @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-        builder.widget(createBlazeStatusButton(builder));
-        builder.widget(createRapidHeatingButton(builder));
-        builder.widget(createHoldingHeatButton(builder));
-
+    protected boolean useMui2() {
+        return super.useMui2();
     }
 
-    public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
-
-        Widget button = new ButtonWidget()
-            .setOnClick(
-                (clickData, widget) -> {
-                    if (checkStructure(true) && !this.getBaseMetaTileEntity()
-                        .isActive()) setRemoveBlaze();
-                })
-            .setPlayClickSound(true)
-            .setBackground(() -> {
-                List<IDrawable> layers = new ArrayList<>();
-                // Add icons per mode
-                if (!isBlazeFinishClear) {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_BlazeClear);
-                } else if (!isBlazeFinishSet) {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_BlazeSet);
-                }
-
-                return layers.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(
-                new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishSet, val -> isBlazeFinishSet = val),
-                builder)
-            .attachSyncer(
-                new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishClear, val -> isBlazeFinishClear = val),
-                builder)
-            // #tr SBF.Msg.setOrClearBlaze
-            // # Place / Clear Pyrotheum
-            // #zh_CN 填充/清除炽焱
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(98, 91)
-            .setSize(16, 16);
-
-        return (ButtonWidget) button;
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_SwelegfyrBlastFurnace(this).withMachineModeIcons(getMachineModeIcons());
     }
 
-    public ButtonWidget createRapidHeatingButton(IWidgetBuilder<?> builder) {
-        // if controller tier = 1, not generate button
-        if (controllerTier != 2) return null;
-
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (isPassiveMode) {
-                setRapidHeating(!isRapidHeating);
-                if (isRapidHeating) isHoldingHeat = false;
-            }
-        })
-            .setPlayClickSound(isPassiveMode)
-            .setBackground(() -> {
-                List<IDrawable> layers = new ArrayList<>();
-                // Add icons per mode
-                if (isPassiveMode) {
-                    if (getRapidHeating()) {
-                        layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-                        layers.add(UITextures.SBF_RapidHeating_On);
-                    } else {
-                        layers.add(GTUITextures.BUTTON_STANDARD);
-                        layers.add(UITextures.SBF_RapidHeating_Off);
-                    }
-                } else {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_RapidHeating_Forbidden);
-                }
-
-                return layers.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getRapidHeating, this::setRapidHeating), builder)
-            // #tr SBF.Msg.enableRapidHeating
-            // # Rapid Thermal Boost
-            // #zh_CN 快速热增强模式
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(116, 91)
-            .setSize(16, 16);
-
-        return (ButtonWidget) button;
+    public void clickBlazeStatusButton() {
+        if (checkStructure(true, getBaseMetaTileEntity()) && this.getBaseMetaTileEntity() != null
+            && !this.getBaseMetaTileEntity()
+                .isActive()) {
+            setRemoveBlaze();
+        }
     }
+
+    // public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
+    //
+    // Widget button = new ButtonWidget()
+    // .setOnClick(
+    // (clickData, widget) -> {
+    // if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
+    // .isActive()) setRemoveBlaze();
+    // })
+    // .setPlayClickSound(true)
+    // .setBackground(() -> {
+    // List<IDrawable> layers = new ArrayList<>();
+    // // Add icons per mode
+    // if (!isBlazeFinishClear) {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_BlazeClear);
+    // } else if (!isBlazeFinishSet) {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_BlazeSet);
+    // }
+    //
+    // return layers.toArray(new IDrawable[0]);
+    // })
+    // .attachSyncer(
+    // new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishSet, val -> isBlazeFinishSet = val),
+    // builder)
+    // .attachSyncer(
+    // new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishClear, val -> isBlazeFinishClear = val),
+    // builder)
+    //
+    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze"))
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(98, 91)
+    // .setSize(16, 16);
+    //
+    // return (ButtonWidget) button;
+    // }
+
+    // public ButtonWidget createRapidHeatingButton(IWidgetBuilder<?> builder) {
+    // // if controller tier = 1, not generate button
+    // if (controllerTier != 2) return null;
+    //
+    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+    // if (isPassiveMode) {
+    // setRapidHeating(!isRapidHeating);
+    // if (isRapidHeating) isHoldingHeat = false;
+    // }
+    // })
+    // .setPlayClickSound(isPassiveMode)
+    // .setBackground(() -> {
+    // List<IDrawable> layers = new ArrayList<>();
+    // // Add icons per mode
+    // if (isPassiveMode) {
+    // if (getRapidHeating()) {
+    // layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
+    // layers.add(UITextures.SBF_RapidHeating_On);
+    // } else {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_RapidHeating_Off);
+    // }
+    // } else {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_RapidHeating_Forbidden);
+    // }
+    //
+    // return layers.toArray(new IDrawable[0]);
+    // })
+    // .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getRapidHeating, this::setRapidHeating), builder)
+    //
+    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating"))
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(116, 91)
+    // .setSize(16, 16);
+    //
+    // return (ButtonWidget) button;
+    // }
 
     public boolean getRapidHeating() {
         return isRapidHeating;
@@ -829,46 +853,44 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         isRapidHeating = b;
     }
 
-    public ButtonWidget createHoldingHeatButton(IWidgetBuilder<?> builder) {
-        // if controller tier = 1, not generate button
-        if (controllerTier != 2) return null;
-
-        Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (isPassiveMode) {
-                setHoldingHeat(!isHoldingHeat);
-                if (isHoldingHeat) isRapidHeating = false;
-            }
-        })
-            .setPlayClickSound(isPassiveMode)
-            .setBackground(() -> {
-                List<IDrawable> layers = new ArrayList<>();
-                // Add icons per mode
-                if (isPassiveMode) {
-                    if (getHoldingHeat()) {
-                        layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-                        layers.add(UITextures.SBF_HoldingHeat_On);
-                    } else {
-                        layers.add(GTUITextures.BUTTON_STANDARD);
-                        layers.add(UITextures.SBF_HoldingHeat_Off);
-                    }
-                } else {
-                    layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_HoldingHeat_Forbidden);
-                }
-
-                return layers.toArray(new IDrawable[0]);
-            })
-            .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getHoldingHeat, this::setHoldingHeat), builder)
-            // #tr SBF.Msg.enableHoldingHeat
-            // # Thermal Retention Standby
-            // #zh_CN 热保持待机模式
-            .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat"))
-            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-            .setPos(134, 91)
-            .setSize(16, 16);
-
-        return (ButtonWidget) button;
-    }
+    // public ButtonWidget createHoldingHeatButton(IWidgetBuilder<?> builder) {
+    // // if controller tier = 1, not generate button
+    // if (controllerTier != 2) return null;
+    //
+    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
+    // if (isPassiveMode) {
+    // setHoldingHeat(!isHoldingHeat);
+    // if (isHoldingHeat) isRapidHeating = false;
+    // }
+    // })
+    // .setPlayClickSound(isPassiveMode)
+    // .setBackground(() -> {
+    // List<IDrawable> layers = new ArrayList<>();
+    // // Add icons per mode
+    // if (isPassiveMode) {
+    // if (getHoldingHeat()) {
+    // layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
+    // layers.add(UITextures.SBF_HoldingHeat_On);
+    // } else {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_HoldingHeat_Off);
+    // }
+    // } else {
+    // layers.add(GTUITextures.BUTTON_STANDARD);
+    // layers.add(UITextures.SBF_HoldingHeat_Forbidden);
+    // }
+    //
+    // return layers.toArray(new IDrawable[0]);
+    // })
+    // .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getHoldingHeat, this::setHoldingHeat), builder)
+    //
+    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat"))
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(134, 91)
+    // .setSize(16, 16);
+    //
+    // return (ButtonWidget) button;
+    // }
 
     public boolean getHoldingHeat() {
         return isHoldingHeat;
@@ -978,6 +1000,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             tag.setBoolean("isPassiveMode", isPassiveMode);
             tag.setBoolean("inPassiveMode", inPassiveMode);
             tag.setBoolean("inRapidHeating", inRapidHeating);
+            tag.setBoolean("machineUpdated", controllerTier == 2);
         }
     }
 
@@ -992,6 +1015,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         boolean InRapidHeating = tag.getBoolean("inRapidHeating");
         boolean IsActive = this.getBaseMetaTileEntity()
             .isActive();
+        boolean updated = tag.getBoolean("machineUpdated");
 
         if (tag.hasKey("mode")) {
             // Old one won't refresh automatically, replace it with new one
@@ -1035,6 +1059,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN 当前炽焰消耗
             (EnumChatFormatting.YELLOW + TextEnums.tr(
                 "Waila.SBF.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
+
+        if (updated) {
+            // #tr Waila.SBF.4
+            // # {\GOLD}Machine Updated
+            // #zh_CN {\GOLD}已升级至二级
+            currentTip.add(TextEnums.tr("Waila.SBF.4"));
+        }
 
     }
 

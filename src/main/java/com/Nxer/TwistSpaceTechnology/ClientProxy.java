@@ -8,7 +8,6 @@ import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
-import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.loader.RendereLoader;
 import com.Nxer.TwistSpaceTechnology.system.ItemCooldown.CooldownEventHandler;
 
@@ -21,7 +20,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-        MaterialsTST.initClient();
+        // MaterialsTST.initClient();
     }
 
     @Override

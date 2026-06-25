@@ -37,6 +37,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -52,6 +53,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -168,10 +170,10 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         maxParallel = Config.MaxParallel_NetherInterface;
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     // endregion
@@ -226,7 +228,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
                             .<TST_NetherInterface>builder()
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                             .adder(TST_NetherInterface::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(16)
                             .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 0))
                     )
@@ -271,6 +273,11 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     @Override
     public boolean supportsMachineModeSwitch() {
         return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

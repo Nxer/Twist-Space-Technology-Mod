@@ -13,12 +13,10 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import appeng.api.AEApi;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsBotania;
 import gregtech.api.enums.OreDictNames;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
-import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
 public class ShapedCraftRecipePool {
@@ -42,15 +40,15 @@ public class ShapedCraftRecipePool {
         addCraftingRecipe(
             GTCMItemList.ManaHatch.get(1),
             new Object[] { "ABA", "ACA", "ADA", 'A',
-                GTOreDictUnificator.get(OrePrefixes.plate, MaterialsBotania.ElvenElementium, 1), 'B',
-                new ItemStack(spark), 'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
+                GTOreDictUnificator.get(OrePrefixes.plate, Materials.ElvenElementium, 1), 'B', new ItemStack(spark),
+                'C', ItemList.Hatch_Input_HV.get(1), 'D', new ItemStack(rune, 1, 0) });
 
         if (Config.Enable_IndustrialMagnetarSeparator) {
             // Industrial Magnetar Separator
             addCraftingRecipe(
                 GTCMItemList.IndustrialMagnetarSeparator.get(1),
                 new Object[] { "ABA", "CDC", "ABA", 'A', MaterialsAlloy.TALONITE.getPlate(1), 'B',
-                    OrePrefixes.circuit.get(Materials.Elite), 'C', ItemList.IV_Coil.get(1), 'D',
+                    OrePrefixes.circuit.get(Materials.IV), 'C', ItemList.IV_Coil.get(1), 'D',
                     ItemList.Machine_IV_ElectromagneticSeparator.get(1) });
 
             // Anti Magnetic Casing
@@ -99,7 +97,7 @@ public class ShapedCraftRecipePool {
                         .molecularAssembler()
                         .maybeStack(1)
                         .orNull(),
-                    'C', GregtechItemList.Controller_MolecularTransformer.get(1) });
+                    'C', ItemList.MolecularTransformer.get(1) });
         }
 
     }

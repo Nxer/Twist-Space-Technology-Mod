@@ -53,11 +53,11 @@ public class ItemMultiStructuresLinkTool extends Item {
             var main = MultiStructureManager.getMachine(firstPosition);
             var sub = MultiStructureManager.getMachine(secondPosition);
             if (MultiStructureManager.linkMachine(main, sub)) {
-                GTUtility.sendChatToPlayer(
+                GTUtility.sendChatTrans(
                     aPlayer,
                     "linked main structure:" + main.getLocalName() + " with sub structure:" + sub.getLocalName());
             } else {
-                GTUtility.sendChatToPlayer(aPlayer, "the structure is incomplete please check your build");
+                GTUtility.sendChatTrans(aPlayer, "the structure is incomplete please check your build");
             }
             firstPosition = -1;
             secondPosition = -1;
@@ -69,15 +69,15 @@ public class ItemMultiStructuresLinkTool extends Item {
         if (player.isSneaking()) {
             firstPosition = -1;
             secondPosition = -1;
-            GTUtility.sendChatToPlayer(player, "cleared the settings");
+            GTUtility.sendChatTrans(player, "cleared the settings");
         } else {
             var main = MultiStructureManager.getMachine(firstPosition);
             var sub = MultiStructureManager.getMachine(secondPosition);
             if (main != null) {
-                GTUtility.sendChatToPlayer(player, "linked structure:" + main.getLocalName());
+                GTUtility.sendChatTrans(player, "linked structure:" + main.getLocalName());
             }
             if (sub != null) {
-                GTUtility.sendChatToPlayer(player, "linked structure:" + sub.getLocalName());
+                GTUtility.sendChatTrans(player, "linked structure:" + sub.getLocalName());
             }
         }
         return super.onItemRightClick(itemStackIn, worldIn, player);

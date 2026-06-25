@@ -19,6 +19,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,19 +30,21 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
@@ -81,15 +84,23 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    // }
+
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + machineMode);
     }
 
     @Override
@@ -137,12 +148,11 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         coefficientMultiplier = 1 + getTotalPowerTier();
         speedBonus = 1F / coefficientMultiplier;
-        return true;
     }
     // endregion
 
@@ -176,7 +186,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .dot(1)
+                                               .hint(1)
                                                .casingIndex(((BlockCasings4)GregTechAPI.sBlockCasings4).getTextureIndex(10))
                                                .buildAndChain(GregTechAPI.sBlockCasings4, 10))
                                        .addElement(
@@ -185,7 +195,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
                                                .<TST_VacuumFilterExtractor>builder()
                                                .atLeast(Energy.or(ExoticEnergy))
                                                .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .dot(2)
+                                               .hint(2)
                                                .casingIndex(((BlockCasings8)GregTechAPI.sBlockCasings8).getTextureIndex(3))
                                                .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                                        .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 0))

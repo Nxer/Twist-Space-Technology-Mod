@@ -19,6 +19,8 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -27,6 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.Wireless
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -41,6 +44,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -100,23 +104,31 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         coilLevel = HeatingCoilLevel.None;
 
         this.piece = 0;
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return;
         }
 
-        while (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2)) {
+        while (checkPiece(
+            STRUCTURE_PIECE_MIDDLE,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet - piece * 2 - 2,
+            errors)) {
             this.piece++;
         }
 
-        if (this.piece < 1
-            || !checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2)) {
-            return false;
+        if (piece < 1) return;
+
+        errors.clear();
+
+        if (!checkPiece(STRUCTURE_PIECE_END, horizontalOffSet, verticalOffSet, depthOffSet - piece * 2 - 2, errors)) {
+            return;
         }
 
         // parallel = piece * coilTier * 32
@@ -135,7 +147,6 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
             wirelessMode = false;
         }
 
-        return true;
     }
     // endregion
 
@@ -236,7 +247,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
                                                           HatchElementBuilder.<GT_TileEntity_Silksong>builder()
                                                                                 .atLeast(Energy.or(ExoticEnergy))
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
-                                                                                .dot(1)
+                                                                                .hint(1)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 2))
                                                       .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
@@ -246,7 +257,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
                                                           HatchElementBuilder.<GT_TileEntity_Silksong>builder()
                                                                                 .atLeast(OutputBus, OutputHatch)
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
-                                                                                .dot(2)
+                                                                                .hint(2)
                                                                                 .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                                       .addElement('H', ofFrame(Materials.Neutronium))
@@ -255,7 +266,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
                                                           HatchElementBuilder.<GT_TileEntity_Silksong>builder()
                                                                                 .atLeast(InputBus, InputHatch)
                                                                                 .adder(GT_TileEntity_Silksong::addToMachineList)
-                                                                                .dot(3)
+                                                                                .hint(3)
                                                                                 .casingIndex(((BlockCasings1) GregTechAPI.sBlockCasings1).getTextureIndex(11))
                                                                                 .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                                                       .build();
@@ -355,6 +366,11 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
     @Override
     public boolean supportsInputSeparation() {
         return true;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

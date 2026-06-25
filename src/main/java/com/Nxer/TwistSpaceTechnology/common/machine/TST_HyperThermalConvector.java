@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -39,6 +40,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -60,6 +62,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
@@ -166,28 +169,28 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
                     'R',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HyperThermalConvector::addHotFluidInputHatch)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'S',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HyperThermalConvector::addColdFluidOutputHatch)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'T',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchOutput.class)
                         .adder(TST_HyperThermalConvector::addSteamOutputHatch)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .addElement(
                     'U',
                     buildHatchAdder(TST_HyperThermalConvector.class).hatchClass(MTEHatchInput.class)
                         .adder(TST_HyperThermalConvector::addDistilledWaterInputHatch)
-                        .dot(4)
+                        .hint(4)
                         .casingIndex(TstBlocks.MetaBlockCasing02.getTextureIndex(2))
                         .buildAndChain(TstBlocks.MetaBlockCasing02, 2))
                 .build();
@@ -223,19 +226,20 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mHotFluidHatch = null;
         mDistilledWaterHatch = null;
         mSteamHatch = null;
         mColdFluidHatch = null;
         Arrays.fill(dedicatedHatches, null);
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)
-            && !checkPiece(STRUCTURE_PIECE_OLD, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet))
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors))
+            return;
         dedicatedHatches[0] = mHotFluidHatch;
         dedicatedHatches[1] = mDistilledWaterHatch;
-        return mHotFluidHatch != null && mColdFluidHatch != null;
+        if (mHotFluidHatch == null || mColdFluidHatch == null) {
+            errors.add(special_hatch_amount_wrong);
+        }
     }
 
     // region Processing Logic
@@ -264,19 +268,27 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
-        machineModeIcons.add(UITextures.HESTTD_RapidCooling);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.HESTTD_HeatExchanger,
+        UITextures.HESTTD_RapidCooling };
 
     @Override
-    public void setMachineMode(int index) {
-        super.setMachineMode(index);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
     }
 
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
+    // machineModeIcons.add(UITextures.HESTTD_RapidCooling);
+    // }
+    //
+    // @Override
+    // public void setMachineMode(int index) {
+    // super.setMachineMode(index);
+    // }
+
     @Override
-    public String getMachineModeName(int mode) {
+    public String getMachineModeName() {
         // #tr HyperThermalConvector.modeMsg.0
         // # Rapid Heat Exchange
         // #zh_CN 快速热交换模式
@@ -284,7 +296,8 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         // #tr HyperThermalConvector.modeMsg.1
         // # Rapid Cooling
         // #zh_CN 快速冷却模式
-        return TextEnums.tr("HyperThermalConvector.modeMsg." + mode);
+        return TextEnums.tr("HyperThermalConvector.modeMsg." + machineMode);
+
     }
 
     @Override
@@ -507,6 +520,9 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
             dumpFluid(targetHatches, copiedFluidStack, false);
         }
+        // FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
+        // ejectionHelper.ejectStack(copiedFluidStack);
+        // ejectionHelper.commit();
         return false;
     }
 

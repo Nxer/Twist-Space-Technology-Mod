@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.SpecialProcessingLineMaterialInstead;
@@ -23,7 +24,6 @@ import goodgenerator.items.GGMaterial;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
@@ -206,14 +206,14 @@ public class OP_NormalProcessing {
         // Tinker Construct
         // Cobalt ore
         processOreRecipe(
-            GTModHandler.getModItem("TConstruct","SearedBrick", 1, 1),
+            getModItem("TConstruct","SearedBrick", 1, 1),
             Materials.Cobalt,
             true
         );
 
         // Ardite ore
         processOreRecipe(
-            GTModHandler.getModItem("TConstruct","SearedBrick", 1, 2),
+            getModItem("TConstruct","SearedBrick", 1, 2),
             Materials.Ardite,
             true
         );
@@ -227,8 +227,8 @@ public class OP_NormalProcessing {
 
         // HEE end powder
         registryOreProcessRecipe(
-            GTModHandler.getModItem("HardcoreEnderExpansion","end_powder_ore",1),
-            new ItemStack[]{GTModHandler.getModItem("HardcoreEnderExpansion", "end_powder", 24)}
+            getModItem("HardcoreEnderExpansion","end_powder_ore",1),
+            new ItemStack[]{getModItem("HardcoreEnderExpansion", "end_powder", 24)}
         );
 
         // Minecraft Iron ore
@@ -253,7 +253,7 @@ public class OP_NormalProcessing {
         ItemStack[] outputsRich = getOutputs(material, true);
 
         // registry normal stone ore
-        registryOreProcessRecipe(GTModHandler.getModItem("gregtech", "gt.blockores", 1, ID), outputs);
+        registryOreProcessRecipe(getModItem("gregtech", "gt.blockores", 1, ID), outputs);
 
         // registry raw ore item style
         registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, material, 1), outputs);

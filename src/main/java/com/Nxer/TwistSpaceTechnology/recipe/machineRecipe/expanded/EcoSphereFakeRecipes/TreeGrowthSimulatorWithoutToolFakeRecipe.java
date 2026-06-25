@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFak
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.UnknowWater;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
-import static gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.treeProductsMap;
+import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -25,7 +25,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.xmod.gregtech.common.tileentities.machines.multi.production.MTETreeFarm.Mode;
+import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 

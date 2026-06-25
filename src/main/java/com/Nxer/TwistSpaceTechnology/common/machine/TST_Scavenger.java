@@ -25,11 +25,14 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -43,6 +46,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
@@ -99,11 +103,10 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     private static IStructureDefinition<TST_Scavenger> STRUCTURE_DEFINITION = null;
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
         this.speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_Scavenger, getTotalPowerTier());
-        return true;
     }
 
     @Override
@@ -138,7 +141,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                     HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(OutputBus, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_Scavenger::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
@@ -146,7 +149,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                     HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_Scavenger::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(chainAllGlasses(), ofBlock(GregTechAPI.sBlockCasings4, 14)))
                 .addElement(
@@ -154,7 +157,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
                     HatchElementBuilder.<TST_Scavenger>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_Scavenger::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(14))
                         .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                 .addElement('E', ofFrame(Materials.Osmiridium))
@@ -207,6 +210,11 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     @Override
     public boolean supportsInputSeparation() {
         return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
 import java.math.BigInteger;
@@ -21,11 +22,11 @@ import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
-import gregtech.api.util.GTUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -74,7 +75,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
             return false;
         }
 
-        this.costEU = GTUtility.formatNumbers(costEU);
+        this.costEU = formatNumber(costEU);
         maxProgressingTime = 20;
 
         trySetActive();
@@ -196,16 +197,14 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
     // endregion
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
         super.registerIcons(aBlockIconRegister);
     }
 

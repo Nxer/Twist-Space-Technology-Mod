@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -110,14 +111,13 @@ public class TST_ManaHatch extends MTEHatchInput {
         ItemStack aTool) {
         super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aTool);
         isLiquidizerMode = !isLiquidizerMode;
-        GTUtility.sendChatToPlayer(
-            aPlayer,
-            StatCollector.translateToLocal("Mana_Hatch.modeMsg." + (isLiquidizerMode ? 0 : 1)));
+        GTUtility
+            .sendChatTrans(aPlayer, StatCollector.translateToLocal("Mana_Hatch.modeMsg." + (isLiquidizerMode ? 0 : 1)));
     }
 
     @Override
     public synchronized String[] getDescription() {
-        mDescriptionArray[1] = FluidCapacity + GTUtility.formatNumbers(getCapacity()) + "L";
+        String[] mDescriptionArray = new String[] { FluidCapacity + formatNumber(getCapacity()) + "L" };
         final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
@@ -126,6 +126,7 @@ public class TST_ManaHatch extends MTEHatchInput {
         System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
         System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
         desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
+
         return desc;
     }
 

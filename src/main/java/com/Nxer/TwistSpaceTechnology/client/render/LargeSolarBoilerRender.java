@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import org.lwjgl.opengl.GL11;
 
@@ -16,7 +17,6 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 @SideOnly(Side.CLIENT)
 public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
@@ -36,10 +36,8 @@ public class LargeSolarBoilerRender extends TileEntitySpecialRenderer {
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GL11.glDisable(GL11.GL_LIGHTING);
 
-        Fluid water = FluidUtils.getWater(1)
-            .getFluid();
-        Fluid steam = FluidUtils.getSteam(1)
-            .getFluid();
+        Fluid water = FluidRegistry.WATER;
+        Fluid steam = FluidRegistry.getFluid("steam");
 
         GL11.glPushMatrix();
         GL11.glTranslated(x - 1, y, z - 1);

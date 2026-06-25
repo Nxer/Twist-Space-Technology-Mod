@@ -42,7 +42,7 @@ public class GTCMRecipe {
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.IntensifyChemicalDistorter.get(1))
-                .setMaxRecipesPerPage(1))
+                .setMultipleWidgetsAllowed(false))
         .build();
 
     public static final RecipeMap<TST_RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
@@ -52,7 +52,7 @@ public class GTCMRecipe {
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.get(1))
-                .setMaxRecipesPerPage(1))
+                .setMultipleWidgetsAllowed(false))
         .build();
 
     public static final RecipeMap<TST_RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
@@ -62,7 +62,7 @@ public class GTCMRecipe {
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1))
-                .setMaxRecipesPerPage(1))
+                .setMultipleWidgetsAllowed(false))
         .build();
 
     public static final RecipeMap<RecipeMapBackend> QuantumInversionRecipes = RecipeMapBuilder
@@ -197,7 +197,7 @@ public class GTCMRecipe {
         .frontend(TST_GeneralFrontend::new)
         .neiHandlerInfo(
             builder -> builder.setDisplayStack(GTCMItemList.BallLightning.get(1))
-                .setMaxRecipesPerPage(1))
+                .setMultipleWidgetsAllowed(false))
         .build();
     public static final RecipeMap<RecipeMapBackend> IndustrialMagicMatrixRecipe = RecipeMapBuilder
         .of("tst.recipe.IndustrialMagicMatrixRecipe")
@@ -394,7 +394,7 @@ public class GTCMRecipe {
         .maxIO(0, 0, 1, 1)
         .dontUseProgressBar()
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperThermalConvector.get(1)))
-        .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic)
+        .addSpecialTexture(47, 13, 78, 59, UITextures.HESTTD_NEIPic_MUI1)
         .frontend(TST_RapidCoolingDownFrontend::new)
         .build();
 

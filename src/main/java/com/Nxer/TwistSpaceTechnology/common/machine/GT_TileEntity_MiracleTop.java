@@ -19,6 +19,7 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,16 +31,18 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
@@ -91,14 +94,14 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
                     'M',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
                         .atLeast(Maintenance)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .addElement(
                     'H',
                     GTStructureUtility.buildHatchAdder(GT_TileEntity_MiracleTop.class)
                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .build();
@@ -202,15 +205,15 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
      * @param aStack
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
 
         // init the pointer, also the Properties.
         this.amountRings = 1;
 
         // check the Top layer.
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+            return;
         }
 
         // check middle layer, increase speedBoost per layer.
@@ -219,20 +222,24 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.amountRings * 8)) {
+            baseDepthOffSet - this.amountRings * 8,
+            errors)) {
             this.amountRings++;
             if (amountRings > 15) {
-                return false;
+                return;
             }
         }
+
+        errors.clear();
 
         // check the end layer
         if (!checkPiece(
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.amountRings * 8)) {
-            return false;
+            baseDepthOffSet - this.amountRings * 8,
+            errors)) {
+            return;
         }
 
         // basic two layers: the top and the end, means amountRings default is 2 .
@@ -243,7 +250,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         speedBonus = 1.0F / (amountRings * SpeedUpMultiplier_PerRing_MiracleTop);
         maxParallel = amountRings * Parallel_PerRing_MiracleTop;
 
-        return true;
     }
 
     // endregion
@@ -258,15 +264,23 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("MiracleTop.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // }
+    //
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("MiracleTop.modeMsg." + machineMode);
     }
 
     public int amountRings = 1;

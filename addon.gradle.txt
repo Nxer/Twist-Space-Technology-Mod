@@ -242,6 +242,9 @@ tasks.register('preprocessLangInJavaFiles') {
 
         // Function Body Start
 
+//        def javaExtension = project.extensions.getByType(JavaPluginExtension)
+//        def mainSourceSet = javaExtension.sourceSets.main
+
         // 搜索源文件
         def javaFiles = sourceSets.main.java
 

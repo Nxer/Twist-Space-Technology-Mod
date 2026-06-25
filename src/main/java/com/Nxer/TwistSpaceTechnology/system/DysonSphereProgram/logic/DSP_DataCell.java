@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailCanHoldPerNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.solarSailPowerPoint;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData.markDataDirty;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -12,8 +13,6 @@ import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-
-import gregtech.api.util.GTUtility;
 
 // spotless:off
 public class DSP_DataCell implements Serializable {
@@ -292,11 +291,11 @@ public class DSP_DataCell implements Serializable {
                    + " , amountDSPNode:"
                    + amountDSPNode
                    + " , maxDSPPowerPoint:"
-                   + (useBigInteger ? GTUtility.formatNumbers(maxDSPPowerPoint_BigInteger) : maxDSPPowerPoint)
+                   + (useBigInteger ? formatNumber(maxDSPPowerPoint_BigInteger) : maxDSPPowerPoint)
                    + " , usedDSPPowerPoint:"
-                   + (useBigInteger ? GTUtility.formatNumbers(usedDSPPowerPoint_BigInteger) : usedDSPPowerPoint)
+                   + (useBigInteger ? formatNumber(usedDSPPowerPoint_BigInteger) : usedDSPPowerPoint)
                    + " , PowerPointCanUse: "
-                   + (useBigInteger ? GTUtility.formatNumbers(getDSPPowerPointCanUseBigInteger())  : getDSPPowerPointCanUse())
+                   + (useBigInteger ? formatNumber(getDSPPowerPointCanUseBigInteger())  : getDSPPowerPointCanUse())
                    + (useBigInteger ? " , "+EnumChatFormatting.RED+"Using Big Integer Calculation"+EnumChatFormatting.RESET : "")
                    + " }";
     }

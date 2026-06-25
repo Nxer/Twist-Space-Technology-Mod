@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.multi_Amp_hatch_incompatible;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -50,6 +51,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.metadata.CompressionTierKey;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
 import gregtech.api.util.GTUtility;
@@ -365,7 +367,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public void onModeChangeByScrewdriver(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         setMachineMode(nextMachineMode());
-        GTUtility.sendChatToPlayer(
+        GTUtility.sendChatTrans(
             aPlayer,
             String.format(StatCollector.translateToLocal("GT5U.MULTI_MACHINE_CHANGE"), getMachineModeName()));
     }
@@ -386,10 +388,6 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal(getManufacturingMachineMode().unlocalizedName);
-    }
-
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal(MODES.get(mode).unlocalizedName);
     }
 
     @Override
@@ -431,7 +429,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         currentTip.add(
             StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " "
                 + EnumChatFormatting.WHITE
-                + getMachineModeName(tag.getInteger("mode"))
+                + getMachineModeName()
                 + EnumChatFormatting.RESET);
     }
 
@@ -503,7 +501,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
                             HatchElement.Maintenance,
                             HatchElement.Muffler)
                         .casingIndex(getTextureIndex())
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(
                             onElementPass((te) -> te.casingCount++, ofBlock(ModBlocks.blockCasings3Misc, 2))))
                 .addElement(
@@ -529,10 +527,13 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         casingCount = 0;
-        if (!checkPiece("main", 1, 1, 0)) return false;
-        return mExoticEnergyHatches.isEmpty() && casingCount >= 6;
+        if (!checkPiece("main", 1, 1, 0, errors)) return;
+        checkCasingMin(errors, casingCount, 6);
+        if (!mExoticEnergyHatches.isEmpty()) {
+            errors.add(multi_Amp_hatch_incompatible);
+        }
     }
 
     // endregion

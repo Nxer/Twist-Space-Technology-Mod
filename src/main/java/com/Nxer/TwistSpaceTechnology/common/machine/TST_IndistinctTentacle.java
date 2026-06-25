@@ -53,6 +53,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -60,17 +61,19 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -123,17 +126,26 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
         return 4;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SLICING);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // }
+
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);
     }
 
     @Override
@@ -299,11 +311,11 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         tierComponentCasing = -1;
         glassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
 
         // trans metal allow use wireless mode
         if (glassTier < GlassTierLimit_WirelessMode_IndistinctTentacle
@@ -315,21 +327,24 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
                 // osmium glass allow use laser hatch
                 if (this.glassTier < GlassTierLimit_LaserHatch_IndistinctTentacle
                     && hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
                 if (this.glassTier < hatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
             for (MTEHatch hatch : this.mEnergyHatches) {
                 if (this.glassTier < hatch.mTier) {
-                    return false;
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
                 }
             }
         } else {
             wirelessMode = mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
         }
-        return true;
+
     }
 
     // endregion
@@ -441,7 +456,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
                     HatchElementBuilder.<TST_IndistinctTentacle>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_IndistinctTentacle::addEnergyHatchOrExoticEnergyHatchToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(texturePage << 7)
                         .buildAndChain(sBlockCasingsBA0, 12))
                 .addElement('F', ofBlock(sBlockCasingsTT, 7))
@@ -455,7 +470,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
                     HatchElementBuilder.<TST_IndistinctTentacle>builder()
                         .atLeast(InputBus, InputHatch, OutputBus)
                         .adder(TST_IndistinctTentacle::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1024 + 12)
                         .buildAndChain(sBlockCasingsTT, 12))
                 .addElement('M', ofBlock(sBlockCasingsTT, 14))

@@ -18,14 +18,15 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IS
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.enums.VoidingMode;
+import gregtech.api.interfaces.IOutputBus;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.fluid.IFluidStore;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IVoidable;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.util.GTUtility;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -367,13 +368,13 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public void setVoidingMode(VoidingMode mode) {}
 
-    @Override
-    public List<ItemStack> getItemOutputSlots(ItemStack[] toOutput) {
-        if (mainMachine instanceof IVoidable m) {
-            return m.getItemOutputSlots(toOutput);
-        }
-        return Collections.emptyList();
-    }
+    // @Override
+    // public List<IOutputHatch> getOutputHatches() {
+    // if (mainMachine instanceof IVoidable iVoidable) {
+    // iVoidable.getOutputHatches();
+    // }
+    // return Collections.emptyList();
+    // }
 
     @Override
     public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
@@ -384,9 +385,17 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     }
 
     @Override
-    public boolean canDumpItemToME() {
+    public List<IOutputBus> getOutputBusses() {
         if (mainMachine instanceof IVoidable m) {
-            return m.canDumpItemToME();
+            return m.getOutputBusses();
+        }
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean canDumpItemToME(List<GTUtility.ItemId> outputs) {
+        if (mainMachine instanceof IVoidable m) {
+            return m.canDumpItemToME(outputs);
         }
         return false;
     }
@@ -397,14 +406,6 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
             return m.canDumpFluidToME();
         }
         return false;
-    }
-
-    @Override
-    public List<ItemStack> getVoidOutputSlots() {
-        if (mainMachine instanceof IVoidable m) {
-            return m.getVoidOutputSlots();
-        }
-        return TstUtils.EMPTY_ITEMSTACK_LIST;
     }
 
     // endregion

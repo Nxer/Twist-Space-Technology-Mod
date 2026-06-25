@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.AbstractTstMetaBlock;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.util.GTLanguageManager;
+import gregtech.common.blocks.BlockCasingsAbstract;
 
 /**
  * The {@link ItemBlock} for {@link AbstractTstMetaBlock} and its subclasses.
@@ -63,10 +64,8 @@ public class TstMetaBlockItem extends ItemBlock {
     // -----------------------
     // region Member Variables
 
-    public final String mNoMobsToolTip = GTLanguageManager
-        .addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
-    public final String mNoTileEntityToolTip = GTLanguageManager
-        .addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
+    public static final String mNoMobsToolTip = GTLanguageManager.getTranslation("gt.nomobspawnsonthisblock");
+    public static final String mNoTileEntityToolTip = GTLanguageManager.getTranslation("gt.notileentityinthisblock");
 
     // endregion
     // -----------------------
@@ -87,10 +86,10 @@ public class TstMetaBlockItem extends ItemBlock {
         // see IHasMoreBlockInfo
         if (getMetaBlock() instanceof IHasMoreBlockInfo hasMoreBlockInfo) {
             if (hasMoreBlockInfo.isNoMobSpawn()) {
-                theTooltipsList.add(mNoMobsToolTip);
+                theTooltipsList.add(BlockCasingsAbstract.NO_MOB_SPAWNING.get());
             }
             if (hasMoreBlockInfo.isNotTileEntity()) {
-                theTooltipsList.add(mNoTileEntityToolTip);
+                theTooltipsList.add(BlockCasingsAbstract.NOT_TILE_ENTITY.get());
             }
         }
     }

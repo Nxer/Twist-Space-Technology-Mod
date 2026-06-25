@@ -1,14 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EssentiaPatternTerminalEx;
-import static com.glodblock.github.loader.ItemAndBlockHolder.FLUID_TERMINAL_EX;
-
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
@@ -31,7 +27,7 @@ public class SingleItemRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.Silver, 1),
-                CustomItemList.ChromaticLens.get(0))
+                NHItemList.ChromaticLens.get(0))
             .fluidInputs(Materials.Boron.getPlasma(144 * 32))
             .itemOutputs(GTCMItemList.BoropheneFoil.get(1))
             .outputChances(2500)
@@ -68,14 +64,15 @@ public class SingleItemRecipes {
             .addTo(GoodGeneratorRecipeMaps.preciseAssemblerRecipes);
 
         //Essentia Pattern Terminal Ex
-        TST_RecipeBuilder.builder()
-            .itemInputs(
-                new ItemStack(FLUID_TERMINAL_EX, 1)
-            )
-            .itemOutputs(new ItemStack(EssentiaPatternTerminalEx, 1))
-            .eut(TierEU.RECIPE_HV)
-            .duration(20 * 10)
-            .addTo(RecipeMaps.assemblerRecipes);
+//
+//        TST_RecipeBuilder.builder()
+//            .itemInputs(
+//                new ItemStack(FLUID_TERMINAL_EX, 1)
+//            )
+//            .itemOutputs(new ItemStack(EssentiaPatternTerminalEx, 1))
+//            .eut(TierEU.RECIPE_HV)
+//            .duration(20 * 10)
+//            .addTo(RecipeMaps.assemblerRecipes);
     }
     // spotless:on
 }

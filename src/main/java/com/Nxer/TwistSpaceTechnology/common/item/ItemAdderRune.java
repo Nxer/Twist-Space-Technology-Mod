@@ -53,7 +53,7 @@ public class ItemAdderRune extends AbstractTstMetaItem implements IItemHasCooldo
         if (!itemNBT.hasKey("CurrentCooldown")) {
             itemNBT.setLong("CurrentCooldown", getCooldown());
         } else if (itemNBT.getLong("CurrentCooldown") > 0) {
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 player,
                 "This item has a cooldown of " + (float) (itemNBT.getLong("CurrentCooldown")) / 20.0F + 's');
             return itemStackIn;

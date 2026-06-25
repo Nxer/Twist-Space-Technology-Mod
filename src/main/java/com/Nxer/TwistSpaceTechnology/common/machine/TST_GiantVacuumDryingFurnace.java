@@ -24,6 +24,7 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -42,12 +44,13 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -81,15 +84,23 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("GT5U.GTPP_MULTI_INDUSTRIAL_DEHYDRATOR.mode." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    // }
+    //
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("GT5U.GTPP_MULTI_INDUSTRIAL_DEHYDRATOR.mode." + machineMode);
     }
 
     @Override
@@ -251,7 +262,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
                     HatchElementBuilder.<TST_GiantVacuumDryingFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy), InputHatch, OutputBus)
                         .adder(TST_GiantVacuumDryingFurnace::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 2))
                 .build();
@@ -460,37 +471,44 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         coilLevel = HeatingCoilLevel.None;
 
         this.piece = 0;
 
-        if (!checkPiece(STRUCTURE_PIECE_VP, VP_horizontalOffSet, VP_verticalOffSet, VP_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_VP, VP_horizontalOffSet, VP_verticalOffSet, VP_depthOffSet, errors)) {
+            return;
         }
-        if (!checkPiece(STRUCTURE_PIECE_MF, MF_horizontalOffSet, MF_verticalOffSet, MF_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MF, MF_horizontalOffSet, MF_verticalOffSet, MF_depthOffSet, errors)) {
+            return;
         }
-        if (!checkPiece(STRUCTURE_PIECE_DTB, DT_horizontalOffSet, DT_verticalOffSet, DT_depthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_DTB, DT_horizontalOffSet, DT_verticalOffSet, DT_depthOffSet, errors)) {
+            return;
         }
 
         while (checkPiece(
             STRUCTURE_PIECE_DTM,
             DT_horizontalOffSet,
             DT_verticalOffSet + 7 * piece + 7,
-            DT_depthOffSet)) {
+            DT_depthOffSet,
+            errors)) {
             this.piece++;
         }
 
-        if (this.piece < 1 || !checkPiece(
+        if (piece < 1) return;
+
+        errors.clear();
+
+        if (!checkPiece(
             STRUCTURE_PIECE_DTH,
             DT_horizontalOffSet,
             DT_verticalOffSet + 7 * piece + 3,
-            DT_depthOffSet)) {
-            return false;
+            DT_depthOffSet,
+            errors)) {
+            return;
         }
+
         // parallel = piece * 32
         maxParallel = (int) Math
             .min((long) piece * getCoilTier() * Parallel_PerPiece_GiantVacuumDryingFurnace, Integer.MAX_VALUE);
@@ -499,7 +517,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, getTotalPowerTier()))
             / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
 
-        return true;
     }
 
     @Override

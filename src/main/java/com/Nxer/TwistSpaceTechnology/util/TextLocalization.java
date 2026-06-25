@@ -74,10 +74,10 @@ public class TextLocalization {
     // #zh_CN 未安装能源仓时自动进入无线电力网络模式.
     public static final String Tooltips_JoinWirelessNetWithoutEnergyHatch = TextEnums.tr("Tooltips_JoinWirelessNetWithoutEnergyHatch");
 
-    public static final String mNoMobsToolTip = GTLanguageManager
-        .addStringLocalization("gt.nomobspawnsonthisblock", "Mobs cannot Spawn on this Block");
-    public static final String mNoTileEntityToolTip = GTLanguageManager
-        .addStringLocalization("gt.notileentityinthisblock", "This is NOT a TileEntity!");
+    // Mobs cannot Spawn on this Block
+    public static final String mNoMobsToolTip = GTLanguageManager.getTranslation("gt.nomobspawnsonthisblock");
+    // This is NOT a TileEntity!
+    public static final String mNoTileEntityToolTip = GTLanguageManager.getTranslation("gt.notileentityinthisblock");
     // endregion
 
     // region Waila

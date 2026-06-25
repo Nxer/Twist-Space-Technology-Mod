@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.laser_hatch_incompatible;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
@@ -40,14 +42,16 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import bartworks.API.enums.CircuitImprint;
 import bartworks.API.recipe.BartWorksRecipeMaps;
-import bartworks.system.material.CircuitGeneration.BWMetaItems;
-import bartworks.system.material.CircuitGeneration.CircuitImprintLoader;
 import gregtech.api.GregTechAPI;
+import gregtech.api.enums.HatchElement;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
@@ -59,6 +63,9 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.ErrorType;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -108,21 +115,21 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(InputBus, OutputBus, InputHatch)
                         .adder(TST_AdvCircuitAssemblyLine::addToMachineList)
                         .casingIndex(16)
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(GregTechAPI.sBlockCasings2, 0))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
                 .addElement(
                     'D',
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(Energy.or(ExoticEnergy))
                         .casingIndex(16)
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(GregTechAPI.sBlockCasings2, 6))
                 .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
                 .addElement('F', ofBlock(GregTechAPI.sBlockCasings3, 10))
                 .addElement(
                     'G',
                     buildHatchAdder(TST_AdvCircuitAssemblyLine.class).atLeast(CircuitImprintHatchElement.CircuitAccess)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(42)
                         .buildAndChain(GregTechAPI.sBlockCasings3, 10))
                 .build();
@@ -157,49 +164,65 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         mCircuitImprintHatches.clear();
         maxVoltageAllow = 0;
 
         // check the main layer.
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+            return;
         }
 
         // only one imprint circuit hatch allowed
-        if (mCircuitImprintHatches.size() > 1) return false;
+        if (mCircuitImprintHatches.size() > 1) {
+            errors.add(special_hatch_amount_wrong);
+            return;
+        }
 
         // only one and 64a exotic energy hatch allowed
+        checkOneEnergyHatchMaybeExotic(errors);
+
         if (!mExoticEnergyHatches.isEmpty()) {
-            if (!mEnergyHatches.isEmpty()) return false;
-            if (mExoticEnergyHatches.size() > 1) return false;
+            if (!mEnergyHatches.isEmpty()) {
+                errors.add(
+                    StructureErrors.hatchCount(
+                        ErrorType.TOO_MANY,
+                        HatchElement.Energy,
+                        mExoticEnergyHatches.size() + mEnergyHatches.size(),
+                        1));
+                return;
+            }
+            if (mExoticEnergyHatches.size() > 1) {
+                errors.add(
+                    StructureErrors
+                        .hatchCount(ErrorType.TOO_MANY, HatchElement.Energy, mExoticEnergyHatches.size(), 1));
+                return;
+            }
             if (mExoticEnergyHatches.get(0)
-                .maxWorkingAmperesIn() > 64) return false;
+                .maxWorkingAmperesIn() > 64) {
+                errors.add(laser_hatch_incompatible);
+                return;
+            }
 
         } else if (mEnergyHatches.size() > 1) {
-            return false;
+            errors.add(StructureErrors.hatchCount(ErrorType.TOO_MANY, HatchElement.Energy, mEnergyHatches.size(), 1));
+            return;
         }
 
         maxVoltageAllow = getMaxInputVoltage();
 
-        return maxVoltageAllow > 0;
+        if (maxVoltageAllow <= 0) {
+            errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, HatchElement.Energy, 0, 1));
+        }
     }
 
     // endregion
 
     // region Processing Logic
-    private static ItemStack circuitImprint;
     protected long maxVoltageAllow = 0;
     ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
-    HashSet<NBTTagCompound> circuitType = new HashSet<>();
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (circuitImprint == null) circuitImprint = BWMetaItems.getCircuitParts()
-            .getStack(0, 0);
-    }
+    HashSet<TST_ItemID> circuitType = new HashSet<>();
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -257,6 +280,11 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
     public boolean isInputSeparationEnabled() {
         return false;
     }
@@ -272,21 +300,20 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                     return CheckRecipeResultRegistry.insufficientPower(recipe.mEUt);
                 }
 
-                NBTTagCompound outputTag = CircuitImprintLoader.getTagFromStack(recipe.mOutputs[0]);
-
                 // Check controller
-                ItemStack controllerStack = TST_AdvCircuitAssemblyLine.this.getControllerSlot();
-                if (controllerStack != null && controllerStack.isItemEqual(circuitImprint)
-                    && controllerStack.stackTagCompound.equals(outputTag)) {
+                CircuitImprint ci = CircuitImprint
+                    .findCircuitImprintByImprintStack(TST_AdvCircuitAssemblyLine.this.getControllerSlot());
+                if (ci != null && ci.circuit.isStackEqual(recipe.mOutputs[0])) {
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
 
                 // Check imprint hatch
-                mCircuitImprintHatches.get(0)
-                    .refreshImprint();
                 circuitType = mCircuitImprintHatches.get(0)
                     .getStoredCircuitImprints();
-                if (circuitType.contains(outputTag)) return CheckRecipeResultRegistry.SUCCESSFUL;
+                if (circuitType.contains(TST_ItemID.create(recipe.mOutputs[0]))) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+
                 return CheckRecipeResultRegistry.NO_RECIPE;
             }
 

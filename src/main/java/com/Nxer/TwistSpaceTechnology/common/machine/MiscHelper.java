@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.recipe.Scanning;
 
@@ -26,6 +27,7 @@ public class MiscHelper {
     public static Fluid UnknowWater;
     public static FluidStack water;
     public static FluidStack distilledWater;
+    public static FluidStack steam;
 
     public static void initStatics() {
         ASTRAL_ARRAY_FABRICATOR = astralArrayFabricator.get(1);
@@ -62,6 +64,8 @@ public class MiscHelper {
         if (distilledWater == null) {
             distilledWater = water;
         }
+
+        steam = Materials.Steam.getGas(1);
 
     }
 

@@ -1,11 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.simple_structure_issue;
 import static gregtech.api.enums.GTValues.debugCleanroom;
 import static gregtech.api.enums.Textures.BlockIcons.BLOCK_PLASCRETE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM_GLOW;
+import static gregtech.api.structure.error.StructureErrorRegistry.TOO_TALL;
 import static gregtech.api.util.GTUtility.filterValidMTEs;
 import static gregtech.api.util.GlassTier.getGlassBlockTier;
 import static net.minecraft.util.StatCollector.translateToLocal;
@@ -13,6 +15,7 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -24,8 +27,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.gtnhlib.capability.Capabilities;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -42,11 +46,12 @@ import gregtech.api.metatileentity.implementations.MTEBasicHull;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
-public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructable, ISecondaryDescribable, ICleanroom {
+public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
+    implements IConstructable, ISecondaryDescribable, ICleanroom {
 
     private static final int MAX_WIDTH = 63;
     private static final int MAX_HEIGHT = 64;
@@ -102,13 +107,8 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         super(aName);
     }
 
-    public void init() {
-        ePowerPass = true;
-        useLongPower = true;
-    }
-
     @Override
-    public IStructureDefinition<? extends TTMultiblockBase> getStructure_EM() {
+    public IStructureDefinition<TST_CleanRoom> getStructureDefinition() {
         return null;
     }
 
@@ -179,27 +179,20 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
 
     @Nonnull
     @Override
-    public CheckRecipeResult checkProcessing_EM() {
+    public CheckRecipeResult checkProcessing() {
         mEfficiency = 10000;
 
         // negate it to trigger the special energy consumption function. divide by 10 to get the actual final
         // consumption.
         lEUt = -10;
-        if (ePowerPass) {
-            mMaxProgresstime = 20;
-        } else {
-            mEfficiencyIncrease = 0;
-            mMaxProgresstime = 0;
-        }
-        eAmpereFlow = 0;
-        mEUt = 0;
+        mMaxProgresstime = 20;
 
         {
             var a = filterValidMTEs(mInputHatches);
             var b = filterValidMTEs(mOutputHatches);
             var c = filterValidMTEs(mInputBusses);
             var d = filterValidMTEs(mOutputBusses);
-            boolean item_me = canDumpItemToME();
+            boolean item_me = true;
             boolean fluid_me = canDumpFluidToME();
             if ((a.size() != b.size() && (!item_me)) || (c.size() != d.size() && (!fluid_me))) {
                 stopMachine();
@@ -229,8 +222,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
             }
         }
 
-        return ePowerPass ? SimpleCheckRecipeResult.ofSuccess("routing")
-            : SimpleCheckRecipeResult.ofSuccess("running fine");
+        return SimpleCheckRecipeResult.ofSuccess("running fine");
     }
 
     // region Block identification
@@ -481,7 +473,7 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     // endregion
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
 
         this.mUpdate = 100;
@@ -499,8 +491,14 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         if (dyMin == 0 || !checkCeiling(aBaseMetaTileEntity)) {
             casingCount = 0;
             otherCount = 0;
-            if (!checkSize(aBaseMetaTileEntity)) return false;
-            if (!checkCeiling(aBaseMetaTileEntity)) return false;
+            if (!checkSize(aBaseMetaTileEntity)) {
+                errors.add(simple_structure_issue);
+                return;
+            }
+            if (!checkCeiling(aBaseMetaTileEntity)) {
+                errors.add(simple_structure_issue);
+                return;
+            }
         }
 
         // Step 2: Scan downward. Each level is either a wall or the floor.
@@ -508,37 +506,57 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
             if (dyMin < -2 && checkFloor(aBaseMetaTileEntity, dyMin)) {
                 // Found valid floor interior. Now check floor edges.
                 for (int dx = dxMin; dx <= dxMax; ++dx) {
-                    if (!addStructureBlock(aBaseMetaTileEntity, dx, dyMin, dzMin, MASK_FLOOR_EDGE)) return false;
-                    if (!addStructureBlock(aBaseMetaTileEntity, dx, dyMin, dzMax, MASK_FLOOR_EDGE)) return false;
+                    if (!addStructureBlock(aBaseMetaTileEntity, dx, dyMin, dzMin, MASK_FLOOR_EDGE)) {
+                        errors.add(simple_structure_issue);
+                        return;
+                    }
+                    if (!addStructureBlock(aBaseMetaTileEntity, dx, dyMin, dzMax, MASK_FLOOR_EDGE)) {
+                        errors.add(simple_structure_issue);
+                        return;
+                    }
                 }
                 for (int dz = dzMin + 1; dz <= dzMax - 1; ++dz) {
-                    if (!addStructureBlock(aBaseMetaTileEntity, dxMin, dyMin, dz, MASK_FLOOR_EDGE)) return false;
-                    if (!addStructureBlock(aBaseMetaTileEntity, dxMax, dyMin, dz, MASK_FLOOR_EDGE)) return false;
+                    if (!addStructureBlock(aBaseMetaTileEntity, dxMin, dyMin, dz, MASK_FLOOR_EDGE)) {
+                        errors.add(simple_structure_issue);
+                        return;
+                    }
+                    if (!addStructureBlock(aBaseMetaTileEntity, dxMax, dyMin, dz, MASK_FLOOR_EDGE)) {
+                        errors.add(simple_structure_issue);
+                        return;
+                    }
                 }
                 break;
             } else {
                 // Not floor, check as wall layer
-                if (!checkWall(aBaseMetaTileEntity, dyMin)) return false;
+                if (!checkWall(aBaseMetaTileEntity, dyMin)) {
+                    errors.add(simple_structure_issue);
+                    return;
+                }
             }
         }
         if (dyMin < -(MAX_HEIGHT - 1)) {
             if (debugCleanroom) GTLog.out.println("Cleanroom: Too tall.");
-            return false;
+            errors.add(simple_structure_issue);
+            errors.add(TOO_TALL);
+
+            return;
         }
         mHeight = -dyMin + 1;
 
-        if (debugCleanroom) GTLog.out.println(
-            "Cleanroom: Structure complete. Found " + casingCount + " casings, " + otherCount + " other blocks.");
+        // if (debugCleanroom) GTLog.out.println(
+        // "Cleanroom: Structure complete. Found " + casingCount + " casings, " + otherCount + " other blocks.");
 
         // Step 3: Validate totals
         if (casingCount < 20) {
             if (debugCleanroom) GTLog.out.println("Cleanroom: Could not find 20 Plascrete.");
-            return false;
+            checkCasingMin(errors, casingCount, 20);
+            return;
         }
         if (casingCount + otherCount > 0
             && (otherCount * 100) / (casingCount + otherCount) > maxReplacementPercentage) {
             if (debugCleanroom) GTLog.out.println("Cleanroom: Too many non-plascrete blocks.");
-            return false;
+            checkCasingMin(errors, casingCount, (casingCount + otherCount) * (100 - maxReplacementPercentage) / 100);
+            return;
         }
 
         // Step 4: Register cleanroom receivers inside the room
@@ -571,7 +589,6 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
         }
 
         if (debugCleanroom) GTLog.out.println("Cleanroom: Check successful.");
-        return true;
     }
 
     @Override
@@ -613,6 +630,11 @@ public class TST_CleanRoom extends TT_MultiMachineBase_EM implements IConstructa
     @Override
     public int getDamageToComponent(ItemStack aStack) {
         return 0;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

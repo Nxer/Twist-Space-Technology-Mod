@@ -6,10 +6,10 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Dynamo;
+import static gregtech.api.enums.HatchElement.ExoticDynamo;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG;
 import static gregtech.api.enums.Textures.BlockIcons.MACHINE_CASING_DRAGONEGG_GLOW;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static tectech.thing.metaTileEntity.multi.base.TTMultiblockBase.HatchElement.DynamoMulti;
 
 import java.util.List;
 
@@ -25,9 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
-import com.Nxer.TwistSpaceTechnology.util.MathUtils;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
+import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -43,30 +44,31 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.ErrorType;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import tectech.thing.casing.TTCasingsContainer;
-import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoMulti;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 
-public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
+public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEntity_MegaEggGenerator>
     implements IConstructable, ISurvivalConstructable {
 
     // region Class Constructor
     public GT_TileEntity_MegaEggGenerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        super.useLongPower = true;
     }
 
     public GT_TileEntity_MegaEggGenerator(String aName) {
         super(aName);
-        super.useLongPower = true;
     }
+
     // endregion
 
     // region Processing Logic
@@ -75,16 +77,14 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     private int mDragonEggs = 0;
     private int mCreeperEggs = 0;
     private int mAirPosed = 0;
-    private long genVol = 0L;
-    private long genAmp = 0L;
+    private long genPower = 0L;
     private int efficiencyIncrement = 1;
 
     @Override
     @NotNull
-    public CheckRecipeResult checkProcessing_EM() {
+    public CheckRecipeResult checkProcessing() {
         this.mMaxProgresstime = 20;
-        this.lEUt = Math.abs(genVol);
-        this.eAmpereFlow = genAmp;
+        this.lEUt = Math.abs(genPower);
         this.mEfficiencyIncrease = efficiencyIncrement;
         return CheckRecipeResultRegistry.GENERATING;
     }
@@ -127,27 +127,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      * 2024.1.21 Fix vol explode
      */
     private void updateOutput() {
-        long hatchVol = 0, hatchAmp = 0;
-        for (MTEHatchDynamo tHatch : mDynamoHatches) {
-            hatchVol += tHatch.maxEUOutput();
-            hatchAmp += tHatch.maxAmperesOut();
-        }
-        for (MTEHatchDynamoMulti tHatch : eDynamoMulti) {
-            hatchVol += tHatch.maxEUOutput();
-            hatchAmp += tHatch.maxAmperesOut();
-        }
-        if (hatchVol > Integer.MAX_VALUE) hatchVol = Integer.MAX_VALUE;
-        if (hatchAmp > Integer.MAX_VALUE) hatchAmp = Integer.MAX_VALUE;
-
-        long expectedEUt = getOutputEUt();
-        if (expectedEUt > hatchVol) { // the expected amp is greater than 1
-            genVol = hatchVol;
-            long expectedAmp = expectedEUt / hatchVol;
-            genAmp = MathUtils.clamp(expectedAmp, 1, hatchAmp); // 1 <= amp <= maxHatchAmp
-        } else {
-            genVol = expectedEUt;
-            genAmp = 1L;
-        }
+        genPower = getOutputEUt();
     }
 
     /**
@@ -164,7 +144,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         // No need for the maintenance hatches!
         repairMachine();
 
@@ -175,11 +155,27 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         this.mAirPosed = 0;
         this.mPieces = 0;
         // Main checks
-        return checkAllPieces() && checkInfinityEgg()
-            && checkLaser()
-            && checkDynamo()
-            && checkAnyDynamoHatch()
-            && initValues();
+        if (!checkAllPieces(errors)) return;
+        if (!checkInfinityEgg()) {
+            // #tr TST.MegaEggGeneratorStructureErrors.InfinityEgg
+            // # The number of infinite eggs exceeds the number of pieces.
+            // #zh_CN 无限之蛋数量超过了层数
+            errors.add(StructureErrors.of("TST.MegaEggGeneratorStructureErrors.InfinityEgg"));
+        }
+        int dynamoCount = mDynamoHatches.size() + mExoticDynamoHatches.size();
+        if (dynamoCount == 0) {
+            errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, Dynamo, 0, 1));
+        } else if (dynamoCount > Config.MEG_Dynamo_Limit) {
+            errors.add(StructureErrors.hatchCount(ErrorType.TOO_MANY, Dynamo, dynamoCount, Config.MEG_Dynamo_Limit));
+        }
+        if (!checkLaser()) {
+            // #tr TST.MegaEggGeneratorStructureErrors.Laser
+            // # The number of pieces does not meet the requirement for using the laser hatches.
+            // #zh_CN 未达到允许使用激光仓的层数要求
+            errors.add(StructureErrors.of("TST.MegaEggGeneratorStructureErrors.Laser"));
+        }
+
+        initValues();
     }
 
     /**
@@ -187,21 +183,27 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
      *
      * @return If pieces are all set
      */
-    private boolean checkAllPieces() {
-        if (!checkPiece(STRUCTURE_PIECE_BASE, horizontalOffSet, verticalOffSet, depthOffSet)) {
+    private boolean checkAllPieces(List<StructureError> errors) {
+        if (!checkPiece(STRUCTURE_PIECE_BASE, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
             return false;
         }
         while (checkPiece(
             STRUCTURE_PIECE_MIDDLE,
             horizontalOffSet,
             verticalOffSet + (this.mPieces + 1) * 2,
-            depthOffSet)) {
+            depthOffSet,
+            errors)) {
             this.mPieces++;
         }
         if (mPieces < 1) {
             return false;
         }
-        return checkPiece(STRUCTURE_PIECE_TOP, horizontalOffSet, verticalOffSet + this.mPieces * 2 + 1, depthOffSet);
+        return checkPiece(
+            STRUCTURE_PIECE_TOP,
+            horizontalOffSet,
+            verticalOffSet + this.mPieces * 2 + 1,
+            depthOffSet,
+            errors);
     }
 
     /**
@@ -221,7 +223,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     @SuppressWarnings("deprecation")
     private boolean checkLaser() {
         if (mPieces < ValueEnum.MEG_Laser_Pieces) {
-            for (MTEHatchDynamoMulti tHatch : eDynamoMulti) {
+            for (MTEHatch tHatch : mExoticDynamoHatches) {
                 if (tHatch instanceof MTEHatchDynamoTunnel) {
                     return false;
                 }
@@ -231,29 +233,11 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     }
 
     /**
-     * No matter what kind of dynamo in use, only one allowed.
-     *
-     * @return If dynamo is allowed
-     */
-    @SuppressWarnings("deprecation")
-    private boolean checkDynamo() {
-        return (mDynamoHatches.size() + eDynamoMulti.size()) <= ValueEnum.MEG_Dynamo_Limit;
-    }
-
-    /**
-     * Must have at least one dynamo hatch
-     */
-    private boolean checkAnyDynamoHatch() {
-        return !mDynamoHatches.isEmpty() || !eDynamoMulti.isEmpty();
-    }
-
-    /**
      * Calls for initializing the output values (volt, amp) and efficiency increment.
      */
-    private boolean initValues() {
+    private void initValues() {
         this.updateOutput();
         this.updateEfficiencyIncrement();
-        return true;
     }
 
     // endregion
@@ -337,7 +321,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     }
 
 	@Override
-	public IStructureDefinition<GT_TileEntity_MegaEggGenerator> getStructure_EM() {
+	public IStructureDefinition<GT_TileEntity_MegaEggGenerator> getStructureDefinition() {
         if (structureDef == null) {
 		structureDef = StructureDefinition.<GT_TileEntity_MegaEggGenerator>builder()
 			       .addShape(STRUCTURE_PIECE_BASE, transpose(shapeBase))
@@ -345,10 +329,10 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
 			       .addShape(STRUCTURE_PIECE_TOP, transpose(shapeTop))
 			       .addElement('A',
                        HatchElementBuilder.<GT_TileEntity_MegaEggGenerator>builder()
-                                       .atLeast(Dynamo.or(DynamoMulti))
+                                       .atLeast(Dynamo.or(ExoticDynamo))
                            .adder(GT_TileEntity_MegaEggGenerator::addToMachineList)
                                        .casingIndex(1536)
-                                       .dot(1)
+                                       .hint(1)
                                        .buildAndChain(Loaders.magicCasing, 0))
 			       .addElement('B',ofFrame(Materials.Trinium))
 			       .addElement('C',ofBlock(Loaders.essentiaCell, 0))
@@ -398,8 +382,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         info.add(EnumChatFormatting.AQUA + "Air Voids: " + EnumChatFormatting.GOLD + this.mAirPosed);
         info.add(EnumChatFormatting.AQUA + "Pieces: " + EnumChatFormatting.GOLD + this.mPieces);
         // dynamic info
-        info.add(EnumChatFormatting.BLUE + "Generating Vol: " + EnumChatFormatting.GOLD + this.genVol);
-        info.add(EnumChatFormatting.BLUE + "Generating Amp: " + EnumChatFormatting.GOLD + this.genAmp);
+        info.add(EnumChatFormatting.BLUE + "Generating Power: " + EnumChatFormatting.GOLD + this.genPower);
         info.add(
             EnumChatFormatting.BLUE + "Efficiency: "
                 + EnumChatFormatting.GOLD
@@ -425,7 +408,7 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
         info.add(
             EnumChatFormatting.BLUE + "Possibly Generating EUt: "
                 + EnumChatFormatting.GOLD
-                + (this.genVol * this.mEfficiency) / 10000
+                + (this.genPower * this.mEfficiency) / 10000
                 + EnumChatFormatting.GRAY
                 + " ("
                 + EnumChatFormatting.BLUE
@@ -489,6 +472,11 @@ public class GT_TileEntity_MegaEggGenerator extends TT_MultiMachineBase_EM
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
         return getMaxEfficiency();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override

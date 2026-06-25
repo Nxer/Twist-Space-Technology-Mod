@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Totto;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Mod_TwistSpaceTechnology;
@@ -36,6 +37,7 @@ import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
+import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -51,6 +53,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -62,6 +65,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
@@ -76,14 +80,14 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable {
 
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER = new Textures.BlockIcons.CustomIcon(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_ACTIVE = new Textures.BlockIcons.CustomIcon(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = new Textures.BlockIcons.CustomIcon(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
-    public static Textures.BlockIcons.CustomIcon OVERLAY_FRONT_METEOR_MINER_GLOW = new Textures.BlockIcons.CustomIcon(
-        "gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_GLOW = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
 
     private static final int distanceFromMeteor = 48;
     private static final String STRUCTURE_PIECE_MAIN = "main";
@@ -130,20 +134,20 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                     'W',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'Y',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(InputBus)
                         .adder(TST_LaserMeteorMiner::addInjector)
                         .casingIndex(TAE.getIndexFromPage(3, 9))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(ofBlock(ModBlocks.blockSpecialMultiCasings, 6)))
                 .addElement(
                     'X',
                     buildHatchAdder(TST_LaserMeteorMiner.class).atLeast(OutputBus, Energy, Maintenance)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(2))
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(ofBlock(GregTechAPI.sBlockCasings8, 2)))
                 .addElement('Z', ofBlock(LaserBeaconRender, 0))
                 .build();
@@ -473,7 +477,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 getBaseMetaTileEntity().getYCoord() + (this.multiTier == 1 ? 10 : 15),
                 zStart) instanceof TileEntityLaserBeacon laser) {
             renderer = laser;
-            renderer.setRotationFields(getDirection(), getRotation(), getFlip());
+            renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
             return true;
         }
         return false;
@@ -505,17 +509,21 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.multiTier = 0;
-        if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_T1, verticalOffSet_T1, depthOffSet_T1)) {
+        if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_T1, verticalOffSet_T1, depthOffSet_T1, errors)) {
             multiTier = 1;
-        } else if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2)) {
+        } else if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2, errors)) {
             multiTier = 2;
-        } else return false;
+        } else return;
 
-        if (!findLaserRenderer()) return false;
+        if (!findLaserRenderer()) {
+            errors.add(special_block_structure_issue);
+            return;
+        }
 
-        return !mEnergyHatches.isEmpty();
+        checkHasEnergyHatch(errors);
+
     }
 
     private int getMultiTier(ItemStack inventory) {
@@ -635,7 +643,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @NotNull
     public CheckRecipeResult checkProcessing() {
         if (this.multiTier != this.getMultiTier(mInventory[1])) {
-            // #tr GT5U.gui.text.missing_schematic
+            // #tr GT5U.gui.text.recipe_result.missing_schematic
             // # {\LIGHT_PURPLE}Missing Schematic.
             // #zh_CN {\LIGHT_PURPLE}缺少设计图.
             return SimpleCheckRecipeResult.ofFailure("missing_schematic");
@@ -645,7 +653,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         }
         if (isResetting) {
             this.reset();
-            // #tr GT5U.gui.text.meteor_reset
+            // #tr GT5U.gui.text.recipe_result.meteor_reset
             // # {\LIGHT_PURPLE}Reset completed!
             // #zh_CN {\LIGHT_PURPLE}重置完成!
             return SimpleCheckRecipeResult.ofSuccess("meteor_reset");
@@ -681,14 +689,14 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 this.setReady();
                 this.hasFinished = false;
             } else {
-                // #tr GT5U.gui.text.meteor_waiting
+                // #tr GT5U.gui.text.recipe_result.meteor_waiting
                 // # {\LIGHT_PURPLE}Waiting for a Meteor...
                 // #zh_CN {\LIGHT_PURPLE}等待陨星中...
                 return SimpleCheckRecipeResult.ofSuccess("meteor_waiting");
             }
         }
 
-        // #tr GT5U.gui.text.meteor_mining
+        // #tr GT5U.gui.text.recipe_result.meteor_mining
         // # {\LIGHT_PURPLE}Currently Mining!
         // #zh_CN {\LIGHT_PURPLE}正在开采!
         return SimpleCheckRecipeResult.ofSuccess("meteor_mining");

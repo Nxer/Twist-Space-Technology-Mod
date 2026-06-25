@@ -23,6 +23,7 @@ import static gregtech.api.enums.HatchElement.OutputHatch;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 
+import java.util.List;
 import java.util.Objects;
 
 import net.minecraft.block.Block;
@@ -32,6 +33,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -42,6 +44,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -87,6 +90,11 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     }
 
     @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return GTPPRecipeMaps.cyclotronRecipes;
     }
@@ -96,9 +104,9 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     // region Structure
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override
@@ -143,13 +151,13 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
                     buildHatchAdder(TST_IncompactCyclotron.class)
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(BorosilicateGlass.ofBoroGlass(10)))
                 .addElement(
                     'F',
                     buildHatchAdder(TST_IncompactCyclotron.class).atLeast(Energy.or(ExoticEnergy))
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(11))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 11))
                 .build();
         }

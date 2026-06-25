@@ -40,6 +40,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -47,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_BloodyHell;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
@@ -59,6 +61,7 @@ import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -80,7 +83,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Dyes;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
-import gregtech.api.enums.Textures.BlockIcons.CustomIcon;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
@@ -92,25 +94,27 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.ISBRWorldContext;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.LightingHelper;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.render.GTRenderUtil;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implements ISurvivalConstructable {
 
-    private int speedRuneCount = 0;
-    private int tbSpeedRuneCount = 0;
-    private int mTier = 0;
+    public int speedRuneCount = 0;
+    public int tbSpeedRuneCount = 0;
+    public int mTier = 0;
     /**
      * parallel = mTier^3
      */
-    private int parallel = 1;
-    private boolean isBloodChecked = false;
-    private boolean isBloodClear = true;
-    private boolean mIsAnimated = true;
+    public int parallel = 1;
+    public boolean isBloodChecked = false;
+    public boolean isBloodClear = true;
+    public boolean isStructureBuild = false;
+    public boolean mIsAnimated = true;
     protected boolean mFormed;
 
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
@@ -154,12 +158,12 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return BloodMagicHelper.getActivationCrystalTier(getControllerSlot());
     }
 
-    private float getTierSpeedBonus() {
+    public float getTierSpeedBonus() {
         // for more, you should go to the Pull Request of this block
         return (getAltarTierForSpeed() - 2) * 0.5F;
     }
 
-    private float getSpeedRuneSpeedBonus() {
+    public float getSpeedRuneSpeedBonus() {
         // for more, you should go to the Pull Request of this block
         return (float) TaskerenAdvancedMathUtils.calcBloodyHellSpeedRuneBonus(speedRuneCount + 3 * tbSpeedRuneCount);
     }
@@ -233,14 +237,25 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         mTier = 0;
         isBloodChecked = false;
+        isStructureBuild = false;
         for (int i = 6; i > 0; i--) {
-            if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2))) {
+            if (checkPiece("tier" + i, getOffset(0, i, 0), getOffset(0, i, 1), getOffset(0, i, 2), errors)) {
                 mTier = i;
                 break;
+            } else if (i > 1) {
+                clearHatches();
+                errors.clear();
             }
+        }
+
+        if (!errors.isEmpty()) {
+            parallel = 1;
+            return;
+        } else {
+            isStructureBuild = true;
         }
 
         int fluidTier = (mTier == 6) ? 2 : (mTier > 2) ? 1 : 0;
@@ -248,18 +263,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             "fluid" + fluidTier,
             getOffset(1, mTier, 0),
             getOffset(1, mTier, 1),
-            getOffset(1, mTier, 2))) {
+            getOffset(1, mTier, 2),
+            errors)) {
             isBloodChecked = true;
-        }
-
-        if (mTier <= 0) {
-            parallel = 1;
-            return false;
         }
 
         calculateParallel();
 
-        return true;
     }
 
     protected void calculateParallel() {
@@ -282,14 +292,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     // note that the actual altar tier is machine structure tier + 1!
     // which means, the machine structure tier starts at 2 at the view of the altar
 
-    private static final String STRUCTURE_PIECE_1 = "tier1";
-    private static final String STRUCTURE_PIECE_2 = "tier2";
-    private static final String STRUCTURE_PIECE_3 = "tier3";
-    private static final String STRUCTURE_PIECE_4 = "tier4";
-    private static final String STRUCTURE_PIECE_5 = "tier5";
-    private static final String STRUCTURE_PIECE_6 = "tier6";
-    private static final String STRUCTURE_FLUID_1 = "fluid1";
-    private static final String STRUCTURE_FLUID_2 = "fluid2";
+    public static final String STRUCTURE_PIECE_1 = "tier1";
+    public static final String STRUCTURE_PIECE_2 = "tier2";
+    public static final String STRUCTURE_PIECE_3 = "tier3";
+    public static final String STRUCTURE_PIECE_4 = "tier4";
+    public static final String STRUCTURE_PIECE_5 = "tier5";
+    public static final String STRUCTURE_PIECE_6 = "tier6";
+    public static final String STRUCTURE_FLUID_1 = "fluid1";
+    public static final String STRUCTURE_FLUID_2 = "fluid2";
 
     @Override
     public IStructureDefinition<TST_BloodyHell> getStructureDefinition() {
@@ -306,9 +316,9 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 .addElement('A', ofBlock(TstBlocks.MetaBlockCasing01, 9))
                 .addElement('B', ofBlock(MetaBlockCasing02, 0))
                 .addElement('C', ofBlock(MetaBlockCasing02, 1))
-                .addElement('D', ofBlockAnyMeta(BlockList.BloodyIchorium.getBlock()))
-                .addElement('E', ofBlockAnyMeta(BlockList.BloodyThaumium.getBlock()))
-                .addElement('F', ofBlockAnyMeta(BlockList.BloodyVoid.getBlock()))
+                .addElement('D', ofBlockAnyMeta(BlockList.BloodyIchorium.block))
+                .addElement('E', ofBlockAnyMeta(BlockList.BloodyThaumium.block))
+                .addElement('F', ofBlockAnyMeta(BlockList.BloodyVoid.block))
                 .addElement(
                     'G',
                     ofChain(
@@ -333,7 +343,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                         HatchElementBuilder.<TST_BloodyHell>builder()
                             .atLeast(InputBus, OutputBus, InputHatch)
                             .adder(TST_BloodyHell::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(MetaBlockCasing02.getTextureIndex(0))
                             .buildAndChain(MetaBlockCasing02, 0)))
                 .addElement('Z', ofBlock(blockLifeEssence, 0))
@@ -353,6 +363,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             getOffset(0, tier, 0),
             getOffset(0, tier, 1),
             getOffset(0, tier, 2));
+    }
+
+    @Override
+    public boolean isFlipChangeAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean isRotationChangeAllowed() {
+        return false;
     }
 
     @Override
@@ -415,7 +435,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
                 // check structure blood
                 if (!isBloodChecked) return SimpleCheckRecipeResult.ofFailure("press_button_to_set_structure");
-                // #tr GT5U.gui.text.press_button_to_set_structure
+                // #tr GT5U.gui.text.recipe_result.press_button_to_set_structure
                 // # Click the button to fill up the structure
                 // #zh_CN 点击按钮以填充结构
 
@@ -462,7 +482,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
      * @param needPlace true = set block, false = only check structure
      * @return true if the blood is valid, or successfully placed/cleared.
      */
-    private boolean checkBlood(boolean needPlace) {
+    public boolean checkBlood(boolean needPlace) {
         if (mTier <= 0) return false; // invalid tiers
         else if (mTier < 3) return true; // no blood needed
 
@@ -536,20 +556,29 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     protected static FluidStack getLifeEssenceFluidStack(int amount) {
-        return FluidUtils.getFluidStack("lifeessence", amount);
+        return FluidRegistry.getFluidStack("lifeessence", amount);
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_BloodyHell(this);
     }
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         super.addUIWidgets(builder, buildContext);
         builder.widget(createBloodStatusButton(builder));
-
     }
 
     public ButtonWidget createBloodStatusButton(IWidgetBuilder<?> builder) {
 
         Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-            if (checkStructure(true) && !this.getBaseMetaTileEntity()
+            if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
                 .isActive()) if (checkBlood(true)) {
                     isBloodClear = !isBloodClear;
                     isBloodChecked = !isBloodClear;
@@ -561,18 +590,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
                 // Add icons per mode
                 if (!isBloodClear) {
                     layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_BlazeClear);
+                    layers.add(UITextures.SBF_BlazeClear_MUI1);
                 } else {
                     layers.add(GTUITextures.BUTTON_STANDARD);
-                    layers.add(UITextures.SBF_BlazeSet);
+                    layers.add(UITextures.SBF_BlazeSet_MUI1);
                 }
 
                 return layers.toArray(new IDrawable[0]);
             })
             .attachSyncer(new FakeSyncWidget.BooleanSyncer(() -> isBloodClear, val -> isBloodClear = val), builder)
-            // #tr BloodyHell_setOrClearBlood
-            // # Place / Clear Blood
-            // #zh_CN 填充/清除血液
+
             .addTooltip(StatCollector.translateToLocal("BloodyHell_setOrClearBlood"))
             .setTooltipShowUpDelay(TOOLTIP_DELAY)
             .setPos(80, 91)
@@ -626,7 +653,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     }
 
     // region STRUCTURES
-    private static IStructureDefinition<TST_BloodyHell> StructureDef = null;
+    public static IStructureDefinition<TST_BloodyHell> StructureDef = null;
     // spotless:off
 
     /**
@@ -636,7 +663,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
      * @param offset 0,1,2 corresponds to a, b, c of Structure Printer
      * @return horizontalOffset, verticalOffset, depthOffset
      */
-    private int getOffset(int mode, int tier, int offset) {
+    public int getOffset(int mode, int tier, int offset) {
         int[][] Offsets= {offsetA,offsetB,offsetC};
         if (mode > 0) {
             if (tier > 5) {
@@ -649,14 +676,14 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         return 0;
     }
 
-    private static final int BLOOD_AMOUNT_NEEDED_1 = 324_000;
-    private static final int BLOOD_AMOUNT_NEEDED_2 = 2244_000;
+    public static final int BLOOD_AMOUNT_NEEDED_1 = 324_000;
+    public static final int BLOOD_AMOUNT_NEEDED_2 = 2244_000;
 
-    private static final int[] offsetA = {6,6,23,23,23,23,20,20};
-    private static final int[] offsetB = {6,6,23,23,23,23,20,20};
-    private static final int[] offsetC = {0,0,0,0,1,19,-4,19};
+    public static final int[] offsetA = {6,6,23,23,23,23,20,20};
+    public static final int[] offsetB = {6,6,23,23,23,23,20,20};
+    public static final int[] offsetC = {0,0,0,0,1,19,-4,19};
     // offsets 6,0,6
-    private static final String[][] STRUCTURE_TIER_1 = new String[][]{
+    public static final String[][] STRUCTURE_TIER_1 = new String[][]{
         {"             ","             ","             ","             ","             ","    AAAAA    "},
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAA   "},
         {"    AABAA    ","      A      ","             ","             ","             "," AAAAAAAAAA  "},
@@ -671,7 +698,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAAA  "},
         {"             ","             ","             ","             ","             ","    AAAAA    "}
     };
-    private static final String[][] STRUCTURE_TIER_2 = new String[][]{
+    public static final String[][] STRUCTURE_TIER_2 = new String[][]{
         {"             ","             ","             ","             ","             ","    AAAAA    "},
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAAA  "},
         {"    AABAA    ","      A      ","             ","             ","      A      "," AAAAAAAAAAA "},
@@ -686,7 +713,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"     ABA     ","      A      ","             ","             ","             ","  AAAAAAAAA  "},
         {"             ","             ","             ","             ","             ","    AAAAA    "}
     };
-    private static final String[][] STRUCTURE_TIER_3 = new String[][]{
+    public static final String[][] STRUCTURE_TIER_3 = new String[][]{
         {"                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "},
         {"                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","               AAAAABBBBBBBAAAAA               ","             AAAAAAAAAAAAAAAAAAAAA             "},
@@ -735,7 +762,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "}
     };
-    private static final String[][] STRUCTURE_TIER_4 = new String[][]{
+    public static final String[][] STRUCTURE_TIER_4 = new String[][]{
         {"                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "},
         {"                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","               AAAAABBBBBBBAAAAA               ","             AAAAAAAAAAAAAAAAAAAAA             "},
@@ -784,7 +811,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "}
     };
-    private static final String[][] STRUCTURE_TIER_5 = new String[][]{
+    public static final String[][] STRUCTURE_TIER_5 = new String[][]{
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","               AAAAABBBBBBBAAAAA               ","             AAAAAAAAAAAAAAAAAAAAA             "},
@@ -833,7 +860,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "}
     };
-    private static final String[][] STRUCTURE_TIER_6 = new String[][]{
+    public static final String[][] STRUCTURE_TIER_6 = new String[][]{
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","               AAAAABBBBBBBAAAAA               ","             AAAAAAAAAAAAAAAAAAAAA             "},
@@ -882,7 +909,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   AAAAAAAAA                   ","               AAAAAAAAAAAAAAAAA               "},
         {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                   A       A                   ","                   AAAAAAAAA                   "}
     };
-    private static final String[][] STRUCTURE_BLOOD_1 = new String[][]{
+    public static final String[][] STRUCTURE_BLOOD_1 = new String[][]{
         {"            ZZZZZ       ZZZZZ            "},
         {"          ZZZZZZZZZZZZZZZZZZZZZ          "},
         {"        ZZZZZZZZ         ZZZZZZZZ        "},
@@ -925,7 +952,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         {"          ZZZZZZZZZZZZZZZZZZZZZ          "},
         {"            ZZZZZ       ZZZZZ            "}
     };
-    private static final String[][] STRUCTURE_BLOOD_2 = new String[][]{
+    public static final String[][] STRUCTURE_BLOOD_2 = new String[][]{
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","            ZZZZZ       ZZZZZ            "},
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","          ZZZZZZZZZZZZZZZZZZZZZ          "},
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","        ZZZZZZZZ         ZZZZZZZZ        "},
@@ -973,49 +1000,49 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
     // endregion
 
     // region Texture
-    private static CustomIcon BH_1_Active;
-    private static CustomIcon BH_1;
-    private static CustomIcon BH_2_Active;
-    private static CustomIcon BH_2;
-    private static CustomIcon BH_3_Active;
-    private static CustomIcon BH_3;
-    private static CustomIcon BH_4_Active;
-    private static CustomIcon BH_4;
-    private static CustomIcon BH_5_Active;
-    private static CustomIcon BH_5;
-    private static CustomIcon BH_6_Active;
-    private static CustomIcon BH_6;
-    private static CustomIcon BH_7_Active;
-    private static CustomIcon BH_7;
-    private static CustomIcon BH_8_Active;
-    private static CustomIcon BH_8;
-    private static CustomIcon BH_9_Active;
-    private static CustomIcon BH_9;
+    public static IIconContainer BH_1_Active;
+    public static IIconContainer BH_1;
+    public static IIconContainer BH_2_Active;
+    public static IIconContainer BH_2;
+    public static IIconContainer BH_3_Active;
+    public static IIconContainer BH_3;
+    public static IIconContainer BH_4_Active;
+    public static IIconContainer BH_4;
+    public static IIconContainer BH_5_Active;
+    public static IIconContainer BH_5;
+    public static IIconContainer BH_6_Active;
+    public static IIconContainer BH_6;
+    public static IIconContainer BH_7_Active;
+    public static IIconContainer BH_7;
+    public static IIconContainer BH_8_Active;
+    public static IIconContainer BH_8;
+    public static IIconContainer BH_9_Active;
+    public static IIconContainer BH_9;
 
-    private static IIconContainer[] BloodyHellIcons;
-    private static IIconContainer[] BloodyHellIconsActive;
+    public static IIconContainer[] BloodyHellIcons;
+    public static IIconContainer[] BloodyHellIconsActive;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        BH_1_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_1");
-        BH_1 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_1");
-        BH_2_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_2");
-        BH_2 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_2");
-        BH_3_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_3");
-        BH_3 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_3");
-        BH_4_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_4");
-        BH_4 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_4");
-        BH_5_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_5");
-        BH_5 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_5");
-        BH_6_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_6");
-        BH_6 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_6");
-        BH_7_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_7");
-        BH_7 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_7");
-        BH_8_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_8");
-        BH_8 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_8");
-        BH_9_Active = new CustomIcon("gtnhcommunitymod:iconSets/BloodHellActive_9");
-        BH_9 = new CustomIcon("gtnhcommunitymod:iconSets/BloodHell_9");
+        BH_1_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_1");
+        BH_1 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_1");
+        BH_2_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_2");
+        BH_2 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_2");
+        BH_3_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_3");
+        BH_3 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_3");
+        BH_4_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_4");
+        BH_4 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_4");
+        BH_5_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_5");
+        BH_5 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_5");
+        BH_6_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_6");
+        BH_6 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_6");
+        BH_7_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_7");
+        BH_7 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_7");
+        BH_8_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_8");
+        BH_8 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_8");
+        BH_9_Active = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHellActive_9");
+        BH_9 = Textures.BlockIcons.custom("gtnhcommunitymod:iconSets/BloodHell_9");
         BloodyHellIcons = new IIconContainer[] { BH_1, BH_2, BH_3, BH_4, BH_5, BH_6, BH_7, BH_8, BH_9, BH_1, BH_2, BH_3,
             BH_4, BH_5, BH_6, BH_7, BH_8, BH_9, BH_1, BH_2, BH_3, BH_4, BH_5, BH_6, BH_7 };
         BloodyHellIconsActive = new IIconContainer[] { BH_1_Active, BH_2_Active, BH_3_Active, BH_4_Active, BH_5_Active,

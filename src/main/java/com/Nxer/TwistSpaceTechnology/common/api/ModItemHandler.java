@@ -146,10 +146,47 @@ public class ModItemHandler {
         }
 
         public ItemStack createFallbackItem(String name, int count) {
+            return createFallbackItem(modID, name, count);
+        }
+
+        public static ItemStack createFallbackItem(String modID, String name, int count) {
             ItemStack stack = GTCMItemList.TestItem0.get(count);
             String stackName = EnumChatFormatting.WHITE + modID + " : " + name;
             stack.setStackDisplayName(EnumChatFormatting.RESET + stackName);
             return stack;
         }
+
+        public static ItemStack getModItem(String modID, String itemName, int amount, int meta, ItemStack replace) {
+            ItemStack r = GTModHandler.getModItem(modID, itemName, amount, meta);
+            if (r == null) {
+                if (replace != null) {
+                    r = replace;
+                } else {
+                    r = createFallbackItem(modID, itemName + ":" + meta, 1);
+                }
+            }
+            return r;
+        }
+
+        public static ItemStack getModItem(String modID, String itemName, int amount, int meta) {
+            ItemStack r = GTModHandler.getModItem(modID, itemName, amount, meta);
+            if (r == null) {
+                r = createFallbackItem(modID, itemName + ":" + meta, 1);
+            }
+            return r;
+        }
+
+        public static ItemStack getModItem(String modID, String itemName, int amount) {
+            return getModItem(modID, itemName, amount, 0);
+        }
+
+        public static ItemStack getModItem(String modID, String itemName, int amount, ItemStack replace) {
+            return getModItem(modID, itemName, amount, 0, replace);
+        }
+
+        public static ItemStack getModItem(String modID, String itemName) {
+            return getModItem(modID, itemName, 1);
+        }
+
     }
 }

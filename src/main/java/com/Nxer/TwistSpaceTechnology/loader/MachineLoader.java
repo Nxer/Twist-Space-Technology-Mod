@@ -491,6 +491,7 @@ public final class MachineLoader {
                 // #zh_CN 血液仓
                 GTCMItemList.BloodOrbHatch
                     .set(new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TextEnums.tr("NameBloodOrbHatch"), 4));
+
             }
         }
 
@@ -1476,6 +1477,19 @@ public final class MachineLoader {
         }
 
         // endregion
+
+        if (Config.Enable_BloodHell && Config.Enable_BloodHatch) {
+            // #tr NameBloodOrbHatchDebug
+            // # Debug Blood Hatch
+            // #zh_CN Debug血液仓
+            GTCMItemList.BloodOrbHatchDebug.set(
+                new TST_BloodOrbHatch.TST_Debug_BloodHatch(
+                    18848,
+                    "NameBloodOrbHatchDebug",
+                    TextEnums.tr("NameBloodOrbHatchDebug"),
+                    4));
+
+        }
 
     }
 

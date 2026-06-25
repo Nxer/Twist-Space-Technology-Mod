@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.PowerConsumptionController;
 import static com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedHatchElement.SpeedController;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -66,9 +67,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUITextures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -78,7 +79,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.util.GTUtility;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
@@ -149,15 +150,15 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     public static void initStatics() {
         // spotless:off
         SpaceTimeMaintenanceConsumablesFluids = new Fluid[] {
-            MaterialsUEVplus.SpaceTime.getMolten(576).getFluid(),
-            MaterialsUEVplus.Universium.getMolten(96).getFluid(),
-            MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(16) .getFluid()
+            Materials.SpaceTime.getMolten(576).getFluid(),
+            Materials.Universium.getMolten(96).getFluid(),
+            Materials.MHDCSM.getMolten(16) .getFluid()
         };
 
         ByproductFluids = new Fluid[][] {
             new Fluid[] { Materials.Infinity.getMolten(1).getFluid(), HYPOGEN.getFluid() },
-            new Fluid[] { MaterialsUEVplus.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
-            new Fluid[] { MaterialsUEVplus.Universium.getMolten(1).getFluid() }
+            new Fluid[] { Materials.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
+            new Fluid[] { Materials.Universium.getMolten(1).getFluid() }
         };
 
         CoreElement = TST_ItemID.create(GTCMItemList.CoreElement.get(1));
@@ -922,9 +923,14 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     + EnumChatFormatting.GRAY
                     + " : "
                     + EnumChatFormatting.WHITE
-                    + GTUtility.formatNumbers(tag.getLong("powerConsumption"))
+                    + formatNumber(tag.getLong("powerConsumption"))
                     + " EU/t");
         }
+    }
+
+    @Override
+    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
+        return new com.cleanroommc.modularui.drawable.UITexture[0];
     }
 
     @Override
@@ -1064,7 +1070,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
 
         oscillatorTier = -1;
         oscillatorPiece = 0;
@@ -1074,7 +1081,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         mergerPiece = 0;
         rings = 0;
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_main, verticalOffSet_main, depthOffSet_main)) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_main, verticalOffSet_main, depthOffSet_main, errors)) {
             return false;
         }
 
@@ -1090,7 +1097,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 horizontalOffSet_ring,
                 verticalOffSet_ring,
                 depth,
-                RingType.OSCILLATOR);
+                RingType.OSCILLATOR,
+                errors);
 
             boolean isConstraintor = false;
             if (!isOscillator) {
@@ -1099,7 +1107,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
                     depth,
-                    RingType.CONSTRAINTOR);
+                    RingType.CONSTRAINTOR,
+                    errors);
             }
 
             boolean isMerger = false;
@@ -1109,7 +1118,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
                     depth,
-                    RingType.MERGER);
+                    RingType.MERGER,
+                    errors);
             }
 
             if (!isOscillator && !isConstraintor && !isMerger) {
@@ -1139,7 +1149,8 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             STRUCTURE_PIECE_END,
             horizontalOffSet_main,
             verticalOffSet_main,
-            depthOffSet_ring_first - rings * depthOffSet_ring_distance)) {
+            depthOffSet_ring_first - rings * depthOffSet_ring_distance,
+            errors)) {
             return false;
         }
 
@@ -1147,12 +1158,13 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return wirelessMode || getMaxInputEu() >= Config.PowerConsume_StrangeMatterAggregator;
     }
 
-    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type) {
+    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type,
+        List<StructureError> errors) {
         int savedOTier = oscillatorTier;
         int savedCTier = constraintorTier;
         int savedMTier = mergerTier;
 
-        boolean result = checkPiece(pieceName, x, y, z);
+        boolean result = checkPiece(pieceName, x, y, z, errors);
         if (!result) return false;
 
         boolean tierValid;
@@ -1328,7 +1340,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(OutputBus, OutputHatch, SpeedController, PowerConsumptionController)
                         .adder(TST_StrangeMatterAggregator::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(1024)
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
@@ -1338,7 +1350,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputHatch)
                         .adder(TST_StrangeMatterAggregator::addSpaceTimeMaintenanceConsumablesInputHatchToMachineList)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(1024)
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
@@ -1347,7 +1359,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_StrangeMatterAggregator::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(1024)
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
@@ -1357,7 +1369,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputBus)
                         .adder(TST_StrangeMatterAggregator::addCoreElementInputBusToMachineList)
-                        .dot(4)
+                        .hint(4)
                         .casingIndex(1024)
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
@@ -1938,16 +1950,14 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return builder.build();
     }
 
-    protected static Textures.BlockIcons.CustomIcon ActiveFace;
-    protected static Textures.BlockIcons.CustomIcon InactiveFace;
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
-        InactiveFace = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
         super.registerIcons(aBlockIconRegister);
     }
 

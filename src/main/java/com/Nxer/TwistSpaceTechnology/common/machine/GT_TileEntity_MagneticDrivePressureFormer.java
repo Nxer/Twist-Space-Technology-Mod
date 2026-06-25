@@ -7,6 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_Ma
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_Coil_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer;
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -26,6 +27,7 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -44,14 +47,16 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrors;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
@@ -104,17 +109,26 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         return 4;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // }
+    //
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);
     }
 
     @Override
@@ -141,21 +155,25 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.glassTier = -1;
         this.coilLevel = HeatingCoilLevel.None;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet)) return false;
-        if (this.glassTier <= 0) return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (this.glassTier <= 0) {
+            errors.add(internal_structure_issue);
+            return;
+        }
         // Infinity Glass enable Laser Energy Hatch
         if (this.glassTier < GlassTier_LimitLaserHatch_MagneticDrivePressureFormer) {
             for (MTEHatch hatch : this.mExoticEnergyHatches) {
                 if (hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
-                    return false;
+                    errors
+                        .add(StructureErrors.glassTierNotEnough(GlassTier_LimitLaserHatch_MagneticDrivePressureFormer));
+                    return;
                 }
             }
         }
-        return true;
     }
 
     @Override
@@ -235,7 +253,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                            HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
                                                                  .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                                                                 .dot(1)
+                                                                 .hint(1)
                                                                  .casingIndex(62)
                                                                  .buildAndChain(GregTechAPI.sBlockCasings4, 14))
                                        .addElement(
@@ -249,7 +267,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
                                            HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
                                                                  .atLeast(Energy.or(ExoticEnergy))
                                                                  .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                                                                 .dot(2)
+                                                                 .hint(2)
                                                                  .casingIndex(183)
                                                                  .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                                        .build();
@@ -333,41 +351,6 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             .addEnergyHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_EnergyHatch, 2)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     @Override

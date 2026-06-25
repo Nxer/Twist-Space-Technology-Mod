@@ -40,7 +40,7 @@ public class TSTSolidifierHatchRecipes {
                 ItemList.Hatch_Input_LuV.get(2),
                 ItemList.Hatch_Input_Bus_ULV.get(1),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
-                WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 6))
+                WerkstoffLoader.RhodiumPlatedPalladium.get(OrePrefixes.plate, 6))
             .fluidInputs(MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 4))
             .itemOutputs(GTCMItemList.SolidifyHatch_LuV.get(1))
             .eut(RECIPE_LuV)

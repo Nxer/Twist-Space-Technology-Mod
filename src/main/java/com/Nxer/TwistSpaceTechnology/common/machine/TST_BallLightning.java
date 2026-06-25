@@ -8,6 +8,7 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -61,6 +62,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -69,16 +71,18 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
+import gregtech.api.structure.error.StructureErrorRegistry;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -149,7 +153,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public int totalMachineMode() {
         /*
          * 0 - Arc Furnace
-         * 1 - Plasma Arc Furnace
+         * 1 - Arc Furnace
          * 2 - Fusion
          * 3 - Ball Lightning
          */
@@ -164,23 +168,31 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         return machineMode + 1;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("BallLightning.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    // }
+    //
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("BallLightning.modeMsg." + machineMode);
     }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
         return switch (machineMode) {
-            case 1 -> RecipeMaps.plasmaArcFurnaceRecipes;
+            // case 1 -> RecipeMaps.plasmaArcFurnaceRecipes;
             case 2 -> RecipeMaps.fusionRecipes;
             case 3 -> GTCMRecipe.BallLightningRecipes;
             default -> RecipeMaps.arcFurnaceRecipes;
@@ -192,7 +204,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(
             RecipeMaps.arcFurnaceRecipes,
-            RecipeMaps.plasmaArcFurnaceRecipes,
+            // RecipeMaps.plasmaArcFurnaceRecipes,
             RecipeMaps.fusionRecipes,
             GTCMRecipe.BallLightningRecipes);
     }
@@ -265,13 +277,11 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide() && mMachineTier != 0) {
-            if (!checkStructure(true)) {
+            if (!checkStructure(true, getBaseMetaTileEntity())) {
                 // #tr BallLightning.modeMsg.IncompleteStructure
                 // # INCOMPLETE STRUCTURE!
                 // #zh_CN 结构不完整!
-                GTUtility.sendChatToPlayer(
-                    aPlayer,
-                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
+                GTUtility.sendChatTrans(aPlayer, "BallLightning.modeMsg.IncompleteStructure");
                 return;
             }
         }
@@ -382,7 +392,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                 .multiply(BigInteger.valueOf(processingLogic.getDuration()))
                 .multiply(BigInteger.valueOf(Math.round((extraEuCostMultiplier * speedBonus))))
                 .divide(BigInteger.valueOf((long) (1 / euModifier)));
-            costingWirelessEU = GTUtility.formatNumbers(costingWirelessEUTemp);
+            costingWirelessEU = formatNumber(costingWirelessEUTemp);
             if (!addEUToGlobalEnergyMap(ownerUUID, costingWirelessEUTemp.multiply(NEGATIVE_ONE))) {
                 return CheckRecipeResultRegistry.insufficientPower(costingWirelessEUTemp.longValue());
             }
@@ -406,7 +416,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     private static ItemStack BallLightningUpgradeChip;
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         this.glassTier = -1;
         this.fieldGeneratorTier = -1;
@@ -415,18 +425,22 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         this.coilLevel = HeatingCoilLevel.None;
         this.mStructureTier = 0;
 
-        if (checkPiece(STRUCTURE_PIECE_MK1, 12, 20, 7) && coilLevel.getTier() > 10) {
-            if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7)) {
+        if (checkPiece(STRUCTURE_PIECE_MK1, 12, 20, 7, errors)) {
+
+            if (coilLevel.getTier() < 11) {
+                errors.add(StructureErrorRegistry.COIL_LEVEL_NOT_ENOUGH);
+                return;
+            }
+
+            if (checkPiece(STRUCTURE_PIECE_MK2, 38, 51, 7, errors)) {
                 mStructureTier = 2;
             } else {
                 mStructureTier = 1;
             }
-        } else return false;
+        } else return;
 
         checkTier();
         checkWireless();
-        return mStructureTier > 0;
-
     }
 
     protected void checkTier() {
@@ -570,7 +584,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(1))
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 1))
                 .addElement(
                     'Z',
@@ -578,7 +592,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(TST_BallLightning::addToMachineList)
                         .casingIndex(getCasingTextureIndex(GregTechAPI.sBlockCasings8, 5))
-                        .dot(2)
+                        .hint(2)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 5))
                 .build();
         }
@@ -655,7 +669,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
         final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
         if (tileEntity != null) {
-            tag.setString("FusionMaxEut", GTUtility.formatNumbers(FusionMaxEut));
+            tag.setString("FusionMaxEut", formatNumber(FusionMaxEut));
             tag.setBoolean("isWirelessMode", isWirelessMode);
             tag.setString("costingWirelessEU", costingWirelessEU);
             tag.setInteger("extraEuCostMultiplier", Math.round(extraEuCostMultiplier * speedBonus));
@@ -900,8 +914,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // #zh_CN 至少需要无尽线圈才可成型
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.08"))
             // #tr Tooltip_BallLightning.0.09
-            // # Comprises four machine levels, each unlocking a different mode.
-            // #zh_CN 机器拥有4个等级, 依次解锁4种模式,
+            // # Comprises four machine levels, Tier3 and Tier4 each unlocking a next mode.
+            // #zh_CN 机器拥有4个等级, 3级4级依次解锁聚变模式和星核发生器模式,
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.09"))
             // #tr Tooltip_BallLightning.0.10
             // # With each machine tier upgrade, the lower-tier modes benefit from a 4x speed multiplier.

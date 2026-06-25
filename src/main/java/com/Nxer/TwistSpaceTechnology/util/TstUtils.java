@@ -405,6 +405,16 @@ public class TstUtils {
         return copyAmount(amount, fluidStack);
     }
 
+    public static ItemStack[] remove0Stack(ItemStack... stacks) {
+        List<ItemStack> l = new ArrayList<>();
+        for (ItemStack i : stacks) {
+            if (i == null || i.stackSize < 1) continue;
+            l.add(i);
+        }
+        if (l.isEmpty()) return new ItemStack[0];
+        return l.toArray(new ItemStack[0]);
+    }
+
     /**
      * To more conveniently add item stacks to a list.
      *

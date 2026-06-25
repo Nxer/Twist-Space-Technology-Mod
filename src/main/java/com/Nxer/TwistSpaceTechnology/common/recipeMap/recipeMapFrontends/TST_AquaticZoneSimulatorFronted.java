@@ -7,6 +7,8 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
@@ -44,22 +46,22 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
     }
 
     @Override
-    public List<Pos2d> getItemInputPositions(int itemInputCount) {
+    public @NotNull List<Pos2d> getItemInputPositions(int itemInputCount) {
         return UIHelper.getGridPositions(1, INPUTS_X, INPUTS_Y, 1);
     }
 
     @Override
-    public List<Pos2d> getItemOutputPositions(int itemOutputCount) {
+    public @NotNull List<Pos2d> getItemOutputPositions(int itemOutputCount) {
         return UIHelper.getGridPositions(1, OUTPUTS_X, OUTPUTS_Y, 1);
     }
 
     @Override
-    public List<Pos2d> getFluidInputPositions(int fluidInputCount) {
+    public @NotNull List<Pos2d> getFluidInputPositions(int fluidInputCount) {
         return UIHelper.getGridPositions(1, INPUTFLUID_X, INPUTFLUID_Y, 1);
     }
 
     @Override
-    public List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
+    public @NotNull List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         // Fluid Stack
         if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {

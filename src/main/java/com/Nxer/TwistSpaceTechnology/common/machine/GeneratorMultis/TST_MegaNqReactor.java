@@ -1,10 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Dynamo;
 import static gregtech.api.enums.HatchElement.Energy;
+import static gregtech.api.enums.HatchElement.ExoticDynamo;
+import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.Maintenance;
 import static gregtech.api.enums.HatchElement.OutputHatch;
@@ -33,9 +36,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.alignment.enumerable.ExtendedFacing;
@@ -55,7 +59,6 @@ import goodgenerator.loader.Loaders;
 import goodgenerator.util.CrackRecipeAdder;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -64,6 +67,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTStructureUtility;
@@ -76,14 +80,13 @@ import gregtech.common.render.IMTERenderer;
 import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import tectech.thing.metaTileEntity.multi.base.TTMultiblockBase;
 
 /**
  * 可使用的激发流体/冷却液与大型硅岩反应堆一致
  * 最大并行可在配置文件中调整。
  * 消耗减免按配方开始时刻的累计运行时间计算。
  */
-public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
+public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     implements IConstructable, ISurvivalConstructable, IMTERenderer {
 
     // region Constants & tier caches
@@ -99,14 +102,14 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     protected static final int DEFAULT_COOLANT_EFFICIENCY = 100;
 
     protected static final List<Pair<FluidStack, Integer>> EXCITED_TIERS = Arrays.asList(
-        Pair.of(MaterialsUEVplus.Space.getMolten(20L), EXCITED_LIQUID_COEFF[0]),
+        Pair.of(Materials.Space.getMolten(20L), EXCITED_LIQUID_COEFF[0]),
         Pair.of(GGMaterial.atomicSeparationCatalyst.getMolten(20), EXCITED_LIQUID_COEFF[1]),
         Pair.of(Materials.Naquadah.getMolten(20L), EXCITED_LIQUID_COEFF[2]),
         Pair.of(Materials.Uranium235.getMolten(180L), EXCITED_LIQUID_COEFF[3]),
         Pair.of(Materials.Caesium.getMolten(180L), EXCITED_LIQUID_COEFF[4]));
 
     protected static final List<Pair<FluidStack, Integer>> COOLANT_TIERS = Arrays.asList(
-        Pair.of(MaterialsUEVplus.Time.getMolten(20L), COOLANT_EFFICIENCY[0]),
+        Pair.of(Materials.Time.getMolten(20L), COOLANT_EFFICIENCY[0]),
         Pair.of(new FluidStack(TFFluids.fluidCryotheum, 1_000), COOLANT_EFFICIENCY[1]),
         Pair.of(Materials.SuperCoolant.getFluid(1_000), COOLANT_EFFICIENCY[2]),
         Pair.of(GTModHandler.getIC2Coolant(1_000), COOLANT_EFFICIENCY[3]));
@@ -138,7 +141,9 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
 
         int totalSize = 0;
         for (FluidStack output : outputs) {
-            if (output == null) continue;
+            if (output == null) {
+                continue;
+            }
 
             long totalAmount = (long) output.amount * multiplier;
 
@@ -150,7 +155,9 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         int index = 0;
 
         for (FluidStack output : outputs) {
-            if (output == null) continue;
+            if (output == null) {
+                continue;
+            }
 
             long totalAmount = (long) output.amount * multiplier;
 
@@ -371,12 +378,10 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
 
     public TST_MegaNqReactor(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
-        super.useLongPower = true;
     }
 
     public TST_MegaNqReactor(String name) {
         super(name);
-        super.useLongPower = true;
     }
 
     @Override
@@ -456,7 +461,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public @NotNull CheckRecipeResult checkProcessing_EM() {
+    public @NotNull CheckRecipeResult checkProcessing() {
         FluidInventoryView fluidView = createFluidInventoryView(getStoredFluids());
         FluidStack[] fluidArray = fluidView.toFluidArray();
 
@@ -590,7 +595,9 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     @Override
     public byte getUpdateData() {
         byte data = 0;
-        if (getBaseMetaTileEntity().isActive()) data |= 0x01;
+        if (getBaseMetaTileEntity().isActive()) {
+            data |= 0x01;
+        }
         return data;
     }
 
@@ -605,10 +612,17 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean addEnergyOutput_EM(long EU, long Amperes) {
-        boolean result = super.addEnergyOutput_EM(EU, Amperes);
-        if (!result) stopMachine(ShutDownReasonRegistry.INSUFFICIENT_DYNAMO);
+    public boolean addEnergyOutput(long EU) {
+        boolean result = super.addEnergyOutput(EU);
+        if (!result) {
+            stopMachine(ShutDownReasonRegistry.INSUFFICIENT_DYNAMO);
+        }
         return result;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -709,7 +723,9 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     protected static final double CORE_CENTER_OFFSET_X = 15.0D;
     protected static final double CORE_CENTER_OFFSET_Y = 12.0D;
     protected static final double CORE_CENTER_OFFSET_Z = 0.0D;
-    /** 与 {@code MegaNqReactorParticle.LIFETIME_TICKS}（200）配合：约每 1/3 寿命一批，平均近 3 层叠加。 */
+    /**
+     * 与 {@code MegaNqReactorParticle.LIFETIME_TICKS}（200）配合：约每 1/3 寿命一批，平均近 3 层叠加。
+     */
     protected static final int CORE_PARTICLE_SPAWN_INTERVAL_TICKS = 67;
     protected static IStructureDefinition<TST_MegaNqReactor> STRUCTURE_DEFINITION = null;
 
@@ -748,7 +764,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FDDDDDDDDDFF   FFDDDDDDDDDF  ",
         "   FDDDDDDDF       FDDDDDDDF   ",
         "    FFFFFFF         FFFFFFF    ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "  FDBBBBBBB         BBBBBBBDF  ",
@@ -781,7 +797,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " FDDDDDDDDDB       BDDDDDDDDDF ",
         "  FDBBBBBBB         BBBBBBBDF  ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "    FFFFFFF         FFFFFFF    ",
         " FDFDDDDDDDF       FDDDDDDDFDF ",
@@ -814,7 +830,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " DDDDDDDDDDDFF   FFDDDDDDDDDDD ",
         " FDFDDDDDDDF       FDDDDDDDFDF ",
         "    FFFFFFF         FFFFFFF    ",
-    },{
+    }, {
         "                               ",
         "                               ",
         " FF FF                   FF FF ",
@@ -847,7 +863,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " FDFFFF                 FFFFDF ",
         " FF FF                   FF FF ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         " FD                         DF ",
@@ -880,7 +896,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " DDFFFF                 FFFFDD ",
         " FD                         DF ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -913,7 +929,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FFFF                   FFFF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -946,7 +962,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FFF                     FFF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -979,7 +995,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1012,7 +1028,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1045,7 +1061,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1078,7 +1094,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1111,7 +1127,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1144,7 +1160,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1177,7 +1193,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1210,7 +1226,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1243,7 +1259,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1276,7 +1292,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1309,7 +1325,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1342,7 +1358,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1375,7 +1391,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FF                       FF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1408,7 +1424,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FFF                     FFF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "                               ",
@@ -1441,7 +1457,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         "  FFFF                   FFFF  ",
         "                               ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "  F                         F  ",
@@ -1474,7 +1490,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " FDFFFF                 FFFFDF ",
         "  F                         F  ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "                               ",
         "  F FF                   FF F  ",
@@ -1507,7 +1523,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " FDFFFF                 FFFFDF ",
         "  F FF                   FF F  ",
         "                               ",
-    },{
+    }, {
         "                               ",
         "    FFFFFFF         FFFFFFF    ",
         "  FFDDDDDDDF       FDDDDDDDFF  ",
@@ -1540,7 +1556,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " FDDDDDDDDDDFF   FFDDDDDDDDDDF ",
         "  FFDDDDDDDF       FDDDDDDDFF  ",
         "    FFFFFFF         FFFFFFF    ",
-    },{
+    }, {
         "                               ",
         "               ~               ",
         "  FDBBBBBBB    C    BBBBBBBDF  ",
@@ -1573,7 +1589,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
         " FDDDDDDDDDB       BDDDDDDDDDF ",
         "  FDBBBBBBB         BBBBBBBDF  ",
         "                               ",
-    },{
+    }, {
         "              DDD              ",
         "    FFFFFFF   DDD   FFFFFFF    ",
         "   FDDDDDDDF  DDD  FDDDDDDDF   ",
@@ -1610,7 +1626,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     // spotless:on
 
     @Override
-    public IStructureDefinition<TST_MegaNqReactor> getStructure_EM() {
+    public IStructureDefinition<TST_MegaNqReactor> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaNqReactor>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE_MAIN))
@@ -1618,13 +1634,8 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
                     'D',
                     GTStructureUtility.buildHatchAdder(TST_MegaNqReactor.class)
                         .casingIndex(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 3))
-                        .dot(1)
-                        .atLeast(
-                            TTMultiblockBase.HatchElement.DynamoMulti.or(Dynamo),
-                            TTMultiblockBase.HatchElement.EnergyMulti.or(Energy),
-                            InputHatch,
-                            OutputHatch,
-                            Maintenance)
+                        .hint(1)
+                        .atLeast(ExoticDynamo.or(Dynamo), ExoticEnergy.or(Energy), InputHatch, OutputHatch, Maintenance)
                         .buildAndChain(GregTechAPI.sBlockCasings8, 3))
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(Loaders.MAR_Casing, 0))
@@ -1637,22 +1648,23 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean checkMachine_EM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        boolean formed = structureCheck_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset);
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        boolean formed = checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
         if (formed) {
             updateCoreFxCenter();
         }
-        return formed;
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        structureBuild_EM(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, stackSize, hintsOnly);
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
     }
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
+        if (mMachine) {
+            return -1;
+        }
         return survivalBuildPiece(
             STRUCTURE_PIECE_MAIN,
             stackSize,
@@ -1715,16 +1727,6 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public boolean isPowerPassButtonEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isSafeVoidButtonEnabled() {
-        return false;
-    }
-
-    @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
         // #tr GUI.MegaNqReactor.RunningTime
@@ -1751,8 +1753,7 @@ public class TST_MegaNqReactor extends TT_MultiMachineBase_EM
                     // #tr GUI.MegaNqReactor.CurrentOutput
                     // # Current Output:
                     // #zh_CN 当前输出:
-                    .setStringSupplier(
-                        () -> tr("GUI.MegaNqReactor.CurrentOutput") + GTUtility.formatNumbers(lEUt) + " EU/t")
+                    .setStringSupplier(() -> tr("GUI.MegaNqReactor.CurrentOutput") + formatNumber(lEUt) + " EU/t")
                     .setDefaultColor(COLOR_TEXT_WHITE.get())
                     .setEnabled(widget -> getErrorDisplayID() == 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> lEUt, val -> lEUt = val))

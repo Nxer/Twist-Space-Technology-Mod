@@ -41,6 +41,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.OverclockCalculator;
@@ -136,8 +137,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        if (!super.checkMachine(aBaseMetaTileEntity, aStack)) return false;
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
+        if (!errors.isEmpty()) return;
 
         // 2.5% for wire loss
         maxEutCanUse = (long) (0.975d * getMaxInputEu());
@@ -172,7 +174,6 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             }
         }
 
-        return true;
     }
 
     @Override
@@ -558,7 +559,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             // #tr MultiExecutionCoreMachineBase.progressingTickIndex
             // # The base run cycle time is set to{\SPACE}
             // #zh_CN 基础运行循环时间设置为{\SPACE}
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector.translateToLocal("MultiExecutionCoreMachineBase.progressingTickIndex")
                     + getBaseProgressingTick()

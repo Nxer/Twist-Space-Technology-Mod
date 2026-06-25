@@ -24,7 +24,7 @@ public class CokingFactoryRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(24), GTModHandler.getModItem("GalaxySpace", "barnardaClog", 64))
             .fluidInputs(Materials.Xenoxene.getFluid(1000))
-            .fluidOutputs(Materials.RawRadox.getFluid(1000 * 2))
+            .fluidOutputs(Materials.RadoxRaw.getFluid(1000 * 2))
             .eut(RECIPE_UV)
             .duration(20 * 120)
             .addTo(coke);

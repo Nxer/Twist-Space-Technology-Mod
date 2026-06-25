@@ -28,8 +28,6 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
 
     protected IIcon topBlockIcon;
     public static IIcon[] textures;
-    public static Textures.BlockIcons.CustomIcon LASER_BEACON = new Textures.BlockIcons.CustomIcon(
-        "gtnhcommunitymod:iconSets/LASER_BEACON");
 
     public BlockLaserBeacon() {
         super(Material.iron);
@@ -71,7 +69,7 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
         blockIcon = Textures.BlockIcons.MACHINE_COIL_SUPERCONDUCTOR.getIcon();
-        topBlockIcon = LASER_BEACON.getIcon();
+        topBlockIcon = iconRegister.registerIcon("gtnhcommunitymod:iconSets/LASER_BEACON");
     }
 
     @Override

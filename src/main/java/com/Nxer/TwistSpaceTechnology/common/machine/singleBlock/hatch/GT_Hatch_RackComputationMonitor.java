@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.dreammaster.item.NHItemList;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
@@ -35,6 +36,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUIInfos;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
@@ -48,8 +50,8 @@ import tectech.util.TTUtility;
 
 public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGregtechLogo, IAddUIWidgets {
 
-    private static Textures.BlockIcons.CustomIcon EM_R;
-    private static Textures.BlockIcons.CustomIcon EM_R_ACTIVE;
+    private static IIconContainer EM_R;
+    private static IIconContainer EM_R_ACTIVE;
     public int heat = 0;
     private float overClock = 1, overVolt = 1;
 
@@ -107,8 +109,8 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
     public void registerIcons(IIconRegister aBlockIconRegister) {
         super.registerIcons(aBlockIconRegister);
         // MTEHatch_Rack.RackComponent
-        EM_R_ACTIVE = new Textures.BlockIcons.CustomIcon("iconsets/EM_RACK_ACTIVE");
-        EM_R = new Textures.BlockIcons.CustomIcon("iconsets/EM_RACK");
+        EM_R_ACTIVE = Textures.BlockIcons.custom("iconsets/EM_RACK_ACTIVE");
+        EM_R = Textures.BlockIcons.custom("iconsets/EM_RACK");
     }
 
     @Override
@@ -436,11 +438,11 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
             new RackComponent(ItemList.Circuit_Biomainframe.get(1), 44, 28, -.4F, 6000, true); // UEV Circuit
             new RackComponent(ItemList.Circuit_Bioprocessor.get(1), 34, 20, -.35F, 5800, true);
 
-            new RackComponent("dreamcraft:item.HighEnergyCircuitParts", 3, 2, -.1f, 9001, true);
-            new RackComponent("dreamcraft:item.HighEnergyFlowCircuit", 24, 16, -.25f, 10000, true);
-            new RackComponent("dreamcraft:item.NanoCircuit", 50, 35, -.45f, 8000, true);
-            new RackComponent("dreamcraft:item.PikoCircuit", 64, 40, -.5f, 8500, true);
-            new RackComponent("dreamcraft:item.QuantumCircuit", 128, 48, -.6f, 9000, true);
+            new RackComponent(NHItemList.HighEnergyCircuitParts.get(1), 3, 2, -.1f, 9001, true);
+            new RackComponent(NHItemList.HighEnergyFlowCircuit.get(1), 24, 16, -.25f, 10000, true);
+            new RackComponent(NHItemList.NanoCircuit.get(1), 50, 35, -.45f, 8000, true);
+            new RackComponent(NHItemList.PikoCircuit.get(1), 64, 40, -.5f, 8500, true);
+            new RackComponent(NHItemList.QuantumCircuit.get(1), 128, 48, -.6f, 9000, true);
         }
 
         if (OpenComputers.isModLoaded()) {

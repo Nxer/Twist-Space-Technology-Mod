@@ -480,8 +480,8 @@ public class GTCM_ParallelHelper extends ParallelHelper {
             voidProtectionHelper.setMachine(machine)
                                 .setItemOutputs(truncatedItemOutputs)
                                 .setFluidOutputs(truncatedFluidOutputs)
-                                .setChangeGetter(recipe::getOutputChance)
-                                .setChanceMultiplier(chanceMultiplier)
+                                .setOutputChanceGetter(recipe::getOutputChance)
+                                .setOutputChanceMultiplier(chanceMultiplier)
                                 .setMaxParallel(maxParallel)
                                 .build();
             maxParallel = Math.min(voidProtectionHelper.getMaxParallel(), maxParallel);

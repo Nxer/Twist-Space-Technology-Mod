@@ -19,6 +19,7 @@ import static gregtech.api.util.GTUtility.validMTEList;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.recipes.ResultInsufficientPedestals;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -52,6 +54,7 @@ import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import gregtech.common.tileentities.machines.MTEHatchCraftingInputME;
@@ -138,7 +141,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         TileEntity tempTile = null;
         tempTile = world.getTileEntity(x, y - 1, z);
         if (!(tempTile instanceof TileInfusionMatrix)) {
-            // #tr GT5U.gui.text.no_infusion_matrix
+            // #tr GT5U.gui.text.recipe_result.no_infusion_matrix
             // # {\RED}Can't find infusion matrix
             // #zh_CN {\RED}未找到注魔矩阵
             return SimpleCheckRecipeResult.ofFailure("no_infusion_matrix");
@@ -147,7 +150,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
         // Check if there is an Unactivated infusion matrix .
         if (!targetMatrix.active) {
-            // #tr GT5U.gui.text.unactivated_infusion_matrix
+            // #tr GT5U.gui.text.recipe_result.unactivated_infusion_matrix
             // # {\RED}Unactivated infusion matrix
             // #zh_CN {\RED}未激活注魔矩阵
             return SimpleCheckRecipeResult.ofFailure("unactivated_infusion_matrix");
@@ -163,7 +166,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // This code is the core of Gadomancy's Infusion Claw. Thank you for the open source.
             // Otherwise, I might get stuck by this thing for a very long time.
             if (getControllerSlot() == null)
-                // #tr GT5U.gui.text.no_paper_in_controller
+                // #tr GT5U.gui.text.recipe_result.no_paper_in_controller
                 // # {\RED}The controller should contain a piece of paper with the player's name on it.
                 // #zh_CN {\RED}控制器内应当放置一张带有玩家名称的纸张
                 return SimpleCheckRecipeResult.ofFailure("no_paper_in_controller");
@@ -186,7 +189,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         // no significant loss of time.
         if (infusionState == STATE_IDLE) {
             if (tItemsList.isEmpty() && isAllPedestalsEmpty() && mainPedestal.getStackInSlot(0) == null) {
-                // #tr GT5U.gui.text.waiting_for_infusion
+                // #tr GT5U.gui.text.recipe_result.waiting_for_infusion
                 // # {\GREEN}Waiting for infusion's materials
                 // #zh_CN {\GREEN}等待注魔材料
                 return SimpleCheckRecipeResult.ofSuccess("waiting_for_infusion");
@@ -213,7 +216,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                     infusionState = STATE_INFUSING;
                     // The immediate return here is to enable the machine to start this function immediately and then
                     // enter the processing stage.
-                    // #tr GT5U.gui.text.infusioning
+                    // #tr GT5U.gui.text.recipe_result.infusioning
                     // # {\GREEN}Infusioning
                     // #zh_CN {\GREEN}正在注魔
                     return SimpleCheckRecipeResult.ofSuccess("infusioning");
@@ -224,7 +227,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         if (infusionState == STATE_INFUSING) {
             // Utilize the working time of only 1 tick to frequently check the working status.
             if (targetMatrix.crafting) {
-                // #tr GT5U.gui.text.infusioning
+                // #tr GT5U.gui.text.recipe_result.infusioning
                 // # {\GREEN}Infusioning
                 // #zh_CN {\GREEN}正在注魔
                 return SimpleCheckRecipeResult.ofSuccess("infusioning");
@@ -233,13 +236,13 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                 // but the performance was good.
                 collectAndOutputResults();
                 infusionState = STATE_IDLE;
-                // #tr GT5U.gui.text.infusion_complete
+                // #tr GT5U.gui.text.recipe_result.infusion_complete
                 // # {\GREEN}Infusion complete
                 // #zh_CN {\GREEN}注魔完成
                 return SimpleCheckRecipeResult.ofSuccess("infusion_complete");
             }
         }
-        // #tr GT5U.gui.text.unknown_problem
+        // #tr GT5U.gui.text.recipe_result.unknown_problem
         // # {\RED}Unknown problem
         // #zh_CN {\RED}未知问题
         return SimpleCheckRecipeResult.ofFailure("unknown_problem");
@@ -271,6 +274,11 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         ItemStack tool) {
         this.fakePlayer = null;
         this.subPedestals.clear();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -491,7 +499,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
                         buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
                             .adder(TST_InfusionMaterialDispenser::addToMachineList)
                             .casingIndex(1536)
-                            .dot(1)
+                            .hint(1)
                             .buildAndChain(magicCasing, 0)))
                 .build();
         }
@@ -554,9 +562,9 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.subPedestals.clear();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override

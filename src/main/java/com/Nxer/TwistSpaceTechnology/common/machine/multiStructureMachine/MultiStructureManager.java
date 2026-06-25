@@ -60,7 +60,8 @@ public class MultiStructureManager extends WorldSavedData {
         if (mainMachine == null || subMachine == null) {
             return false;
         }
-        if (mainMachine.checkStructure(false) || subMachine.checkStructure(false)) {
+        if (mainMachine.checkStructure(false, mainMachine.getBaseMetaTileEntity())
+            || subMachine.checkStructure(false, subMachine.getBaseMetaTileEntity())) {
             return false;
         }
         int mainID = mainMachine.ID;

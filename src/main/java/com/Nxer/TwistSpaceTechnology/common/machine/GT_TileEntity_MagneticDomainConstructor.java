@@ -18,6 +18,7 @@ import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +32,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -38,15 +40,16 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -77,15 +80,23 @@ public class GT_TileEntity_MagneticDomainConstructor
         return 2;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER);
-    }
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER };
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + mode);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER);
+    // }
+    //
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + machineMode);
     }
 
     @Override
@@ -133,37 +144,40 @@ public class GT_TileEntity_MagneticDomainConstructor
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
 
         this.rings = 1;
 
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet)) {
-            return false;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, baseHorizontalOffSet, baseVerticalOffSet, baseDepthOffSet, errors)) {
+            return;
         }
 
         while (checkPiece(
             STRUCTURE_PIECE_MIDDLE,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.rings * 4)) {
+            baseDepthOffSet - this.rings * 4,
+            errors)) {
 
             this.rings++;
         }
+
+        errors.clear();
 
         if (!checkPiece(
             STRUCTURE_PIECE_END,
             baseHorizontalOffSet,
             baseVerticalOffSet,
-            baseDepthOffSet - this.rings * 4)) {
+            baseDepthOffSet - this.rings * 4,
+            errors)) {
 
-            return false;
+            return;
         }
 
         maxParallel = (int) Math.min((long) rings * Parallel_PerRing_MagneticDomainConstructor, Integer.MAX_VALUE);
         speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_MagneticDomainConstructor, getTotalPowerTier());
 
-        return true;
     }
 
     // endregion
@@ -284,7 +298,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement(
@@ -292,7 +306,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
@@ -300,7 +314,7 @@ public class GT_TileEntity_MagneticDomainConstructor
                     HatchElementBuilder.<GT_TileEntity_MagneticDomainConstructor>builder()
                         .atLeast(OutputBus, OutputHatch)
                         .adder(GT_TileEntity_MagneticDomainConstructor::addToMachineList)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement('F', ofFrame(Materials.NaquadahAlloy))
@@ -320,26 +334,79 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     private static IStructureDefinition<GT_TileEntity_MagneticDomainConstructor> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
     /**
      * The first piece of Structure
      */
     private final String[][] shapeMain = new String[][] {
-        { "               ", "               ", "               ", "               ", "               ",
-            "      DDD      ", "     DEEED     ", "     DEEED     ", "     DEEED     ", "      DDD      ",
-            "      FDF      ", "      FDF      ", "      FDF      ", "      FDF      ", "      FDF      ",
-            "      D~D      ", "     DDDDD     " },
-        { "               ", "      BBB      ", "    BB   BB    ", "   B       B   ", "  B         B  ",
-            "  B         B  ", " B     C     B ", " B    CCC    B ", " B     C     B ", "  B         B  ",
-            "  B         B  ", "   B       B   ", "   FBB   BBF   ", "  F   BBB   F  ", " F    DDD    F ",
-            "F     DDD     F", "DDDDDDDDDDDDDDD" },
-        { "      BBB      ", "    BBAAABB    ", "   BAAGGGAAB   ", "  BAGG   GGAB  ", " BAG       GAB ",
-            " BAG       GAB ", "BAG    C    GAB", "BAG   CCC   GAB", "BAG    C    GAB", " BAG       GAB ",
-            " BAG       GAB ", "  BAGG   GGAB  ", "   BAAGGGAAB   ", "    BBAAABB    ", "      BBB      ",
-            "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD" },
-        { "               ", "      BBB      ", "    BB   BB    ", "   B       B   ", "  B         B  ",
-            "  B         B  ", " B     C     B ", " B    CCC    B ", " B     C     B ", "  B         B  ",
-            "  B         B  ", "   B       B   ", "   FBB   BBF   ", "  F   BBB   F  ", " F    DDD    F ",
-            "F     DDD     F", "DDDDDDDDDDDDDDD" } };
+        { "               ",
+            "               ",
+            "               ",
+            "               ",
+            "               ",
+            "      DDD      ",
+            "     DEEED     ",
+            "     DEEED     ",
+            "     DEEED     ",
+            "      DDD      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      FDF      ",
+            "      D~D      ",
+            "     DDDDD     " },
+        { "               ",
+            "      BBB      ",
+            "    BB   BB    ",
+            "   B       B   ",
+            "  B         B  ",
+            "  B         B  ",
+            " B     C     B ",
+            " B    CCC    B ",
+            " B     C     B ",
+            "  B         B  ",
+            "  B         B  ",
+            "   B       B   ",
+            "   FBB   BBF   ",
+            "  F   BBB   F  ",
+            " F    DDD    F ",
+            "F     DDD     F",
+            "DDDDDDDDDDDDDDD" },
+        { "      BBB      ",
+            "    BBAAABB    ",
+            "   BAAGGGAAB   ",
+            "  BAGG   GGAB  ",
+            " BAG       GAB ",
+            " BAG       GAB ",
+            "BAG    C    GAB",
+            "BAG   CCC   GAB",
+            "BAG    C    GAB",
+            " BAG       GAB ",
+            " BAG       GAB ",
+            "  BAGG   GGAB  ",
+            "   BAAGGGAAB   ",
+            "    BBAAABB    ",
+            "      BBB      ",
+            "DDDDDDDDDDDDDDD",
+            "DDDDDDDDDDDDDDD" },
+        { "               ",
+            "      BBB      ",
+            "    BB   BB    ",
+            "   B       B   ",
+            "  B         B  ",
+            "  B         B  ",
+            " B     C     B ",
+            " B    CCC    B ",
+            " B     C     B ",
+            "  B         B  ",
+            "  B         B  ",
+            "   B       B   ",
+            "   FBB   BBF   ",
+            "  F   BBB   F  ",
+            " F    DDD    F ",
+            "F     DDD     F",
+            "DDDDDDDDDDDDDDD" } };
     /**
      * The middle of Structure
      */
@@ -368,6 +435,7 @@ public class GT_TileEntity_MagneticDomainConstructor
         "     DOOOD     ", "      DDD      ", "      FDF      ", "      FDF      ", "      FDF      ",
         "      FDF      ", "      FDF      ", "      DDD      ", "     DDDDD     " } };
 
+    // spotless:on
     // endregion
 
     // region Overrides
@@ -401,41 +469,6 @@ public class GT_TileEntity_MagneticDomainConstructor
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher(TextLocalization.ModName);
         return tt;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
     }
 
     @Override

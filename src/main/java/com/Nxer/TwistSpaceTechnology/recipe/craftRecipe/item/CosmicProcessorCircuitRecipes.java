@@ -32,7 +32,7 @@ import net.minecraft.item.ItemStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.dreammaster.gthandler.CustomItemList;
+import com.dreammaster.item.NHItemList;
 
 import appeng.items.materials.MaterialType;
 import bartworks.API.recipe.BartWorksRecipeMaps;
@@ -41,7 +41,6 @@ import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.MaterialsUEVplus;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
@@ -50,7 +49,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipeConstants;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.core.item.ModItems;
 
 public class CosmicProcessorCircuitRecipes {
 
@@ -63,7 +61,7 @@ public class CosmicProcessorCircuitRecipes {
                 ItemList.Circuit_Board_Wetware_Extreme.get(1),
                 GTCMItemList.SiliconBasedNeuron.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUEVBase, 2))
-            .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1))
+            .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1))
 
             .eut(RECIPE_UMV)
             .duration(20 * 5)
@@ -74,7 +72,7 @@ public class CosmicProcessorCircuitRecipes {
                 ItemList.Circuit_Board_Wetware_Extreme.get(1),
                 GTCMItemList.SiliconBasedNeuron.get(1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 1))
-            .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 2))
+            .itemOutputs(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 2))
             .eut(RECIPE_UMV)
             .duration(20 * 5)
             .addTo(RecipeMaps.formingPressRecipes);
@@ -86,7 +84,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.InfinityCatalyst, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 22))
-            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(334))
+            .fluidInputs(Materials.SpaceTime.getMolten(334))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(16))
             .metadata(PCBFactoryTierKey.INSTANCE, 2)
             .metadata(PCB_NANITE_MATERIAL, Materials.Gold)
@@ -100,7 +98,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTOreDictUnificator.get(OrePrefixes.plate, Materials.CosmicNeutronium, 1),
                 GGMaterial.shirabon.get(OrePrefixes.foil, 22),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUMVBase, 22))
-            .fluidInputs(MaterialsUEVplus.SpaceTime.getMolten(667))
+            .fluidInputs(Materials.SpaceTime.getMolten(667))
             .itemOutputs(SpaceTimeSuperconductingInlaidMotherboard.get(64))
             .metadata(PCBFactoryTierKey.INSTANCE, 3)
             .metadata(PCB_NANITE_MATERIAL, Materials.Gold)
@@ -118,7 +116,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidInputs(
                 Materials.SiliconSG.getMolten(144 * 256),
                 Materials.UUMatter.getFluid(1000 * 8),
-                MaterialsUEVplus.Space.getMolten(100))
+                Materials.Space.getMolten(100))
             .itemOutputs(
                 GTCMItemList.SiliconBasedNeuron.get(4),
                 GTCMItemList.SiliconBasedNeuron.get(4),
@@ -133,12 +131,12 @@ public class CosmicProcessorCircuitRecipes {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(3),
                 GTUtility.copyAmountUnsafe(0, ItemList.Field_Generator_UIV.get(1)),
-                MaterialsUEVplus.Eternity.getDust(1),
+                Materials.Eternity.getDust(1),
                 ItemList.Circuit_Chip_Optical.get(1))
             .fluidInputs(
                 Materials.SiliconSG.getMolten(144 * 256),
                 Materials.UUMatter.getFluid(1000 * 8),
-                MaterialsUEVplus.Space.getMolten(16000))
+                Materials.Space.getMolten(16000))
             .itemOutputs(
                 GTCMItemList.SiliconBasedNeuron.get(64),
                 GTCMItemList.SiliconBasedNeuron.get(64),
@@ -156,7 +154,7 @@ public class CosmicProcessorCircuitRecipes {
                 GTCMItemList.SiliconBasedNeuron.get(1),
                 GGMaterial.enrichedNaquadahAlloy.get(OrePrefixes.plate, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUEVBase, 16))
-            .fluidInputs(Materials.UUMatter.getFluid(250), MaterialsUEVplus.TranscendentMetal.getMolten(72))
+            .fluidInputs(Materials.UUMatter.getFluid(250), Materials.TranscendentMetal.getMolten(72))
             .itemOutputs(GTCMItemList.PacketInformationTranslationArray.get(2))
             .specialValue(3)
             .eut(RECIPE_UIV)
@@ -167,9 +165,9 @@ public class CosmicProcessorCircuitRecipes {
             .itemInputs(
                 SpaceTimeSuperconductingInlaidMotherboard.get(1),
                 GTCMItemList.SiliconBasedNeuron.get(2),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.SpaceTime, 8),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.SpaceTime, 8),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUIVBase, 16))
-            .fluidInputs(Materials.UUMatter.getFluid(500), MaterialsUEVplus.TranscendentMetal.getMolten(144))
+            .fluidInputs(Materials.UUMatter.getFluid(500), Materials.TranscendentMetal.getMolten(144))
             .itemOutputs(GTCMItemList.PacketInformationTranslationArray.get(8))
             .specialValue(3)
             .eut(RECIPE_UIV)
@@ -180,9 +178,9 @@ public class CosmicProcessorCircuitRecipes {
             .itemInputs(
                 SpaceTimeSuperconductingInlaidMotherboard.get(1),
                 GTCMItemList.SiliconBasedNeuron.get(4),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.Eternity, 16),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.Eternity, 16),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.SuperconductorUMVBase, 16))
-            .fluidInputs(Materials.UUMatter.getFluid(1000), MaterialsUEVplus.TranscendentMetal.getMolten(288))
+            .fluidInputs(Materials.UUMatter.getFluid(1000), Materials.TranscendentMetal.getMolten(288))
             .itemOutputs(GTCMItemList.PacketInformationTranslationArray.get(64))
             .specialValue(3)
             .eut(RECIPE_UIV)
@@ -191,15 +189,15 @@ public class CosmicProcessorCircuitRecipes {
 
         // InformationHorizonInterventionShell
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.TranscendentMetal, 1))
+            .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 1))
             .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
-                MaterialsUEVplus.TranscendentMetal.getNanite(1),
+                Materials.TranscendentMetal.getNanite(1),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(64),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(64),
                 ItemList.EnergisedTesseract.get(2),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 16))
-            .fluidInputs(MaterialsUEVplus.Time.getMolten(36), CELESTIAL_TUNGSTEN.getFluidStack(36))
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 16))
+            .fluidInputs(Materials.Time.getMolten(36), CELESTIAL_TUNGSTEN.getFluidStack(36))
             .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(64))
             .eut(RECIPE_UMV)
             .duration(20 * 30)
@@ -208,11 +206,12 @@ public class CosmicProcessorCircuitRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
-                new ItemStack(ModItems.itemStandarParticleBase, 1, 17),
+                // new ItemStack(ModItems.itemStandarParticleBase, 1, 17),
+                GTCMItemList.CriticalPhoton.get(1),
                 GTCMItemList.ParticleTrapTimeSpaceShield.get(128),
                 ItemList.EnergisedTesseract.get(4),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 32))
-            .fluidInputs(MaterialsUEVplus.Time.getMolten(144))
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 32))
+            .fluidInputs(Materials.Time.getMolten(144))
             .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(128))
             .eut(RECIPE_UMV)
             .duration(20 * 120)
@@ -223,12 +222,10 @@ public class CosmicProcessorCircuitRecipes {
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
                 Laser_Lens_Special.get(1),
-                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.TranscendentMetal, 2),
+                GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 2),
                 GGMaterial.metastableOganesson.get(OrePrefixes.foil, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Infinity, 2))
-            .fluidInputs(
-                MaterialsUEVplus.Time.getMolten(72),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(100))
+            .fluidInputs(Materials.Time.getMolten(72), Materials.DTR.getFluid(100))
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .outputChances(9000)
             .eut(RECIPE_UMV)
@@ -239,12 +236,10 @@ public class CosmicProcessorCircuitRecipes {
             .itemInputs(
                 GTCMItemList.MatterRecombinator.get(0),
                 GTCMItemList.Antimatter.get(1),
-                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.TranscendentMetal, 2),
+                GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 2),
                 GGMaterial.metastableOganesson.get(OrePrefixes.foil, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Infinity, 2))
-            .fluidInputs(
-                MaterialsUEVplus.Time.getMolten(36),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(50))
+            .fluidInputs(Materials.Time.getMolten(36), Materials.DTR.getFluid(50))
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 120)
@@ -254,12 +249,10 @@ public class CosmicProcessorCircuitRecipes {
             .itemInputs(
                 GTCMItemList.CoreElement.get(0),
                 GTCMItemList.Antimatter.get(1),
-                GTOreDictUnificator.get(OrePrefixes.foil, MaterialsUEVplus.TranscendentMetal, 2),
+                GTOreDictUnificator.get(OrePrefixes.foil, Materials.TranscendentMetal, 2),
                 GGMaterial.metastableOganesson.get(OrePrefixes.foil, 4),
                 GTOreDictUnificator.get(OrePrefixes.foil, Materials.Infinity, 2))
-            .fluidInputs(
-                MaterialsUEVplus.Time.getMolten(36),
-                MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(50))
+            .fluidInputs(Materials.Time.getMolten(36), Materials.DTR.getFluid(50))
             .itemOutputs(
                 GTCMItemList.EnergyFluctuationSelfHarmonizer.get(2),
                 GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
@@ -275,8 +268,8 @@ public class CosmicProcessorCircuitRecipes {
                 EncapsulatedMicroSpaceTimeUnit.get(1),
                 InformationHorizonInterventionShell.get(1),
                 PacketInformationTranslationArray.get(1),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 2),
-                GTOreDictUnificator.get(OrePrefixes.screw, MaterialsUEVplus.TranscendentMetal, 2),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 2),
+                GTOreDictUnificator.get(OrePrefixes.screw, Materials.TranscendentMetal, 2),
                 GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.Infinity, 4))
             .fluidInputs(
                 // TODO spacetime glue
@@ -286,8 +279,8 @@ public class CosmicProcessorCircuitRecipes {
                 RadoxPolymer.getMolten(288))
             .itemOutputs(
                 Circuit_CosmicProcessor.get(1),
-                GTOreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
+                GTOreDictUnificator.get(OrePrefixes.nugget, Materials.SpaceTime, 3))
+            .fluidOutputs(Materials.DTR.getFluid(333))
             .eut(RECIPE_UEV)
             .duration(20 * 50)
             .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -310,8 +303,8 @@ public class CosmicProcessorCircuitRecipes {
                 RadoxPolymer.getMolten(288))
             .itemOutputs(
                 ItemList.Circuit_CosmicAssembly.get(1),
-                GTOreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
+                GTOreDictUnificator.get(OrePrefixes.nugget, Materials.SpaceTime, 3))
+            .fluidOutputs(Materials.DTR.getFluid(333))
             .eut(RECIPE_UIV)
             .duration(20 * 100)
             .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -325,19 +318,19 @@ public class CosmicProcessorCircuitRecipes {
                 EnergyFluctuationSelfHarmonizer.get(1),
                 InformationHorizonInterventionShell.get(2),
                 PacketInformationTranslationArray.get(4),
-                CustomItemList.PicoWafer.get(4),
+                NHItemList.PicoWafer.get(4),
                 ItemList.Tesseract.get(1),
                 ItemList.EnergisedTesseract.get(1))
             .fluidInputs(
                 // TODO spacetime glue
                 Materials.Hydrogen.getPlasma(500),
                 Materials.UUMatter.getFluid(8000),
-                MaterialsUEVplus.SpaceTime.getMolten(288),
+                Materials.SpaceTime.getMolten(288),
                 Materials.Thorium.getPlasma(288))
             .itemOutputs(
                 ItemList.Circuit_CosmicComputer.get(1),
-                GTOreDictUnificator.get(OrePrefixes.nugget, MaterialsUEVplus.SpaceTime, 3))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(333))
+                GTOreDictUnificator.get(OrePrefixes.nugget, Materials.SpaceTime, 3))
+            .fluidOutputs(Materials.DTR.getFluid(333))
             .eut(RECIPE_UIV)
             .duration(20 * 1000)
             .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -357,10 +350,10 @@ public class CosmicProcessorCircuitRecipes {
                 // TODO spacetime glue
                 Materials.Hydrogen.getPlasma(1000),
                 GGMaterial.shirabon.getMolten(1152),
-                MaterialsUEVplus.Space.getMolten(1152),
-                MaterialsUEVplus.Time.getMolten(1152))
+                Materials.Space.getMolten(1152),
+                Materials.Time.getMolten(1152))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(1), ItemList.Tesseract.get(2))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
+            .fluidOutputs(Materials.DTR.getFluid(666))
             .eut(RECIPE_UMV)
             .duration(20 * 1500)
             .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -378,11 +371,11 @@ public class CosmicProcessorCircuitRecipes {
             .fluidInputs(
                 // TODO spacetime glue
                 Materials.Hydrogen.getPlasma(1000),
-                MaterialsUEVplus.MagnetohydrodynamicallyConstrainedStarMatter.getMolten(72),
-                MaterialsUEVplus.Space.getMolten(1152),
-                MaterialsUEVplus.Time.getMolten(1152))
+                Materials.MHDCSM.getMolten(72),
+                Materials.Space.getMolten(1152),
+                Materials.Time.getMolten(1152))
             .itemOutputs(ItemList.Circuit_CosmicMainframe.get(3), ItemList.Tesseract.get(6))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(666))
+            .fluidOutputs(Materials.DTR.getFluid(666))
             .eut(RECIPE_UMV)
             .duration(20 * 2400)
             .addTo(GTCMRecipe.MiracleTopRecipes);
@@ -391,12 +384,12 @@ public class CosmicProcessorCircuitRecipes {
         TST_RecipeBuilder.builder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(24),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.SpaceTime, 1),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.SpaceTime, 1),
                 Laser_Lens_Special.get(1),
                 eternal_singularity.copy(),
                 MaterialType.Singularity.stack(1),
                 GGMaterial.shirabon.get(OrePrefixes.stick, 2))
-            .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(500))
+            .fluidInputs(Materials.DTR.getFluid(500))
             .itemOutputs(SeedsSpaceTime.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 60)
@@ -410,8 +403,8 @@ public class CosmicProcessorCircuitRecipes {
                 InformationHorizonInterventionShell.get(1),
                 EnergyFluctuationSelfHarmonizer.get(1),
                 eternal_singularity.copy(),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 3))
-            .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200))
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 3))
+            .fluidInputs(Materials.DTR.getFluid(200))
             .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(1), eternal_singularity.copy())
             .outputChances(10000, 4500)
             .eut(RECIPE_UMV)
@@ -425,8 +418,8 @@ public class CosmicProcessorCircuitRecipes {
                 InformationHorizonInterventionShell.get(3),
                 EnergyFluctuationSelfHarmonizer.get(3),
                 copyAmount(2, eternal_singularity),
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 9))
-            .fluidInputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(200))
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 9))
+            .fluidInputs(Materials.DTR.getFluid(200))
             .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(4))
             .eut(RECIPE_UMV)
             .duration(20 * 90)
@@ -434,12 +427,10 @@ public class CosmicProcessorCircuitRecipes {
 
         // MicroSpaceTimeFabricatorio
         GTValues.RA.stdBuilder()
-            .metadata(
-                RESEARCH_ITEM,
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 1))
+            .metadata(RESEARCH_ITEM, GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 1))
             .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
-                GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.TranscendentMetal, 16),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.TranscendentMetal, 16),
                 GTCMItemList.SpaceWarper.get(16),
                 GTCMItemList.GravitationalLens.get(16),
                 GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 16),
@@ -452,9 +443,9 @@ public class CosmicProcessorCircuitRecipes {
                 ItemList.Field_Generator_UIV.get(16),
                 ItemList.Emitter_UIV.get(16),
                 ItemList.Sensor_UIV.get(16),
-                CustomItemList.HighEnergyFlowCircuit.get(16),
+                NHItemList.HighEnergyFlowCircuit.get(16),
 
-                GTOreDictUnificator.get(OrePrefixes.itemCasing, MaterialsUEVplus.TranscendentMetal, 64),
+                GTOreDictUnificator.get(OrePrefixes.itemCasing, Materials.TranscendentMetal, 64),
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUIV, 48))
             .fluidInputs(
                 MUTATED_LIVING_SOLDER.getFluidStack(144 * 128),
@@ -483,11 +474,11 @@ public class CosmicProcessorCircuitRecipes {
                 SpaceTimeSuperconductingInlaidMotherboard.get(1),
                 Materials.Glowstone.getNanite(16))
             .fluidInputs(
-                MaterialsUEVplus.Space.getMolten(144),
-                MaterialsUEVplus.Time.getMolten(144),
-                MaterialsUEVplus.SpaceTime.getMolten(144 * 2))
+                Materials.Space.getMolten(144),
+                Materials.Time.getMolten(144),
+                Materials.SpaceTime.getMolten(144 * 2))
             .itemOutputs(GTCMItemList.ParticleTrapTimeSpaceShield.get(64))
-            .fluidOutputs(MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(2500))
+            .fluidOutputs(Materials.DTR.getFluid(2500))
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 64)
             .addTo(GTCMRecipe.MiracleTopRecipes);

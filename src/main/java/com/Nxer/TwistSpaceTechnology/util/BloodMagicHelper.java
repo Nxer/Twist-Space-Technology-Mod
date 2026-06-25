@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.util;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +13,6 @@ import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import WayofTime.alchemicalWizardry.common.items.ActivationCrystal;
 import WayofTime.alchemicalWizardry.common.items.BloodShard;
 import fox.spiteful.avaritia.items.LudicrousItems;
-import gtPlusPlus.core.util.minecraft.FluidUtils;
 
 public class BloodMagicHelper {
 
@@ -101,7 +101,7 @@ public class BloodMagicHelper {
      */
     @Nullable
     public static FluidStack getLifeEssence(int amount) {
-        return FluidUtils.getFluidStack("lifeessence", amount);
+        return FluidRegistry.getFluidStack("lifeessence", amount);
     }
 
     /**

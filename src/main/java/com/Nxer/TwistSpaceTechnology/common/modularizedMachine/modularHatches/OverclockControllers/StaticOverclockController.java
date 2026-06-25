@@ -8,6 +8,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -72,19 +73,19 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
     // spotless:on
 
     // region Texture
-    protected static Textures.BlockIcons.CustomIcon ActiveFaceLowSpeed;
-    protected static Textures.BlockIcons.CustomIcon ActiveFacePerfect;
-    protected static Textures.BlockIcons.CustomIcon ActiveFaceSingularity;
+    protected static IIconContainer ActiveFaceLowSpeed;
+    protected static IIconContainer ActiveFacePerfect;
+    protected static IIconContainer ActiveFaceSingularity;
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFaceLowSpeed = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Pri");
-        ActiveFacePerfect = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Adv");
-        ActiveFaceSingularity = new Textures.BlockIcons.CustomIcon(
-            "gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Per");
+        ActiveFaceLowSpeed = Textures.BlockIcons
+            .custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Pri");
+        ActiveFacePerfect = Textures.BlockIcons
+            .custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Adv");
+        ActiveFaceSingularity = Textures.BlockIcons
+            .custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_OverClockController_Per");
         super.registerIcons(aBlockIconRegister);
     }
 

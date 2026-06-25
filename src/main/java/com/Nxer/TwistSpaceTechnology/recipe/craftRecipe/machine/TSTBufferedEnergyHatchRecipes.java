@@ -43,17 +43,17 @@ import gregtech.api.util.GTOreDictUnificator;
 public class TSTBufferedEnergyHatchRecipes {
 
     public static void loadRecipes() {
-        final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Basic, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Good, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Advanced, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Data, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Ultimate, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.SuperconductorUHV, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
-            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.Optical, 1),
+        final ItemStack[] circuits = new ItemStack[] { GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.HV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.EV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.IV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LuV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ZPM, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UHV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UEV, 1),
+            GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UIV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UMV, 1),
             GTOreDictUnificator.get(OrePrefixes.circuit, Materials.UXV, 1) };
 
@@ -64,7 +64,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_LV.get(1),
                 circuits[0],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Tin, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 9))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchLV.get(1))
             .eut(RECIPE_LV)
             .duration(120)
@@ -75,7 +75,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_MV.get(1),
                 circuits[1],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Copper, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 9))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchMV.get(1))
             .eut(RECIPE_MV)
             .duration(120)
@@ -86,7 +86,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_HV.get(1),
                 circuits[2],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Gold, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 9))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchHV.get(1))
             .eut(RECIPE_HV)
             .duration(120)
@@ -97,7 +97,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_EV.get(1),
                 circuits[3],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.Aluminium, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 9))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchEV.get(1))
             .eut(RECIPE_EV)
             .duration(120)
@@ -108,7 +108,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_IV.get(1),
                 circuits[4],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorIV, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 9))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 9))
             .itemOutputs(BufferedEnergyHatchIV.get(1))
             .eut(RECIPE_IV)
             .duration(120)
@@ -119,7 +119,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_LuV.get(1),
                 circuits[5],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorLuV, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchLuV.get(1))
             .eut(RECIPE_LuV)
             .duration(120)
@@ -130,7 +130,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_ZPM.get(1),
                 circuits[6],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorZPM, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchZPM.get(1))
             .eut(RECIPE_ZPM)
             .duration(120)
@@ -141,7 +141,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_UV.get(1),
                 circuits[7],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUV, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUV.get(1))
             .eut(RECIPE_UV)
             .duration(120)
@@ -152,7 +152,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_UHV.get(1),
                 circuits[8],
                 GTOreDictUnificator.get(OrePrefixes.wireGt16, Materials.SuperconductorUHV, 1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUHV.get(1))
             .eut(RECIPE_UHV)
             .duration(120)
@@ -163,7 +163,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_UEV.get(1),
                 circuits[9],
                 ItemList.Field_Generator_UEV.get(1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUEV.get(1))
             .eut(RECIPE_UEV)
             .duration(120)
@@ -174,7 +174,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_UIV.get(1),
                 circuits[10],
                 ItemList.Field_Generator_UIV.get(1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUIV.get(1))
             .eut(RECIPE_UIV)
             .duration(120)
@@ -185,7 +185,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_UMV.get(1),
                 circuits[11],
                 ItemList.Field_Generator_UMV.get(1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUMV.get(1))
             .eut(RECIPE_UMV)
             .duration(120)
@@ -196,7 +196,7 @@ public class TSTBufferedEnergyHatchRecipes {
                 ItemList.Hatch_Energy_UXV.get(1),
                 circuits[12],
                 ItemList.Field_Generator_UXV.get(1))
-            .fluidInputs(Materials.Plastic.getMolten(144 * 90))
+            .fluidInputs(Materials.Polyethylene.getMolten(144 * 90))
             .itemOutputs(BufferedEnergyHatchUXV.get(1))
             .eut(RECIPE_UXV)
             .duration(120)

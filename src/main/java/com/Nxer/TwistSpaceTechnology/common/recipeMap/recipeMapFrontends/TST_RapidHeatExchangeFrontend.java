@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
@@ -17,12 +19,12 @@ public class TST_RapidHeatExchangeFrontend extends RecipeMapFrontend {
     }
 
     @Override
-    public List<Pos2d> getFluidInputPositions(int fluidInputCount) {
+    public @NotNull List<Pos2d> getFluidInputPositions(int fluidInputCount) {
         return Arrays.asList(new Pos2d(26, 13), new Pos2d(26, 37));
     }
 
     @Override
-    public List<Pos2d> getFluidOutputPositions(int fluidOutputCount) {
+    public @NotNull List<Pos2d> getFluidOutputPositions(int fluidOutputCount) {
         return Arrays.asList(new Pos2d(128, 25), new Pos2d(128, 54));
     }
 

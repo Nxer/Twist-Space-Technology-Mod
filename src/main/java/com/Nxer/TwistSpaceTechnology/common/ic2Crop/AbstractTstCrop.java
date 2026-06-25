@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.ic2Crop;
 
-import java.util.List;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
 
@@ -9,17 +7,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ic2.api.crops.CropCard;
 import ic2.api.crops.ICropTile;
-import speiger.src.crops.api.ICropCardInfo;
 
-public abstract class AbstractTstCrop extends CropCard implements ICropCardInfo {
+public abstract class AbstractTstCrop extends CropCard {
 
     @SideOnly(Side.CLIENT)
     public void registerSprites(IIconRegister iconRegister) {
         textures = new IIcon[maxSize()];
 
         for (int i = 1; i <= textures.length; i++) {
-            // ic2:crop/blockCrop.NAME.n is the legacy name for backwards compatiblity
-            textures[i - 1] = iconRegister.registerIcon("gtnhcommunitymod:crop/blockCrop." + name() + "." + i);
+            // ic2:crops/blockCrop.NAME.n is the legacy name for backwards compatiblity
+            textures[i - 1] = iconRegister.registerIcon("gtnhcommunitymod:crops/blockCrop." + name() + "." + i);
         }
     }
 
@@ -56,11 +53,6 @@ public abstract class AbstractTstCrop extends CropCard implements ICropCardInfo 
     @Override
     public String owner() {
         return "TwistSpaceTechnology";
-    }
-
-    @Override
-    public List<String> getCropInformation() {
-        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.extremeCraftRecipesMap;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.visualExtremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -40,11 +41,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Math;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.IAlternativeItem;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemActualPattern;
-import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipe;
@@ -89,6 +91,7 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
@@ -97,10 +100,12 @@ import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import scala.actors.migration.pattern;
+import scala.collection.mutable.StringBuilder;
+import scala.tools.nsc.doc.model.Object;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
-public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
+public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCraftingCenter>
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
 
     // region Class Constructor
@@ -264,7 +269,6 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             this.priority = priority;
         }
 
-        @Override
         public boolean equals(Object obj) {
             if (obj == null) {
                 return false;
@@ -499,7 +503,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
      * Finally the pattern actual IO numbers will be multiplied by this number, also include the crafting table recipe
      * patterns.
      */
-    protected int magnification = 1;
+    protected int magnification = maxParallel;
 
     @Nullable
     private AENetworkProxy gridProxy;
@@ -568,6 +572,11 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         // #zh_CN 已载入样板数量
         currentTip
             .add(TextEnums.tr("MegaCraftingCenter.waila.PatternAmount") + " : " + tag.getInteger("patternAmount"));
+    }
+
+    @Override
+    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
+        return new com.cleanroommc.modularui.drawable.UITexture[0];
     }
 
     @Override
@@ -721,7 +730,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    protected @NotNull CheckRecipeResult checkProcessing_EM() {
+    public @NotNull CheckRecipeResult checkProcessing() {
 
         if (toReturnPatterns) {
             toReturnPatterns = false;
@@ -774,7 +783,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                 // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
                 // # The encoded patterns can only be returned when there is no recipe running.
                 // #zh_CN 仅可在未运行配方状态下退回样板.
-                GTUtility.sendChatToPlayer(
+                GTUtility.sendChatTrans(
                     aPlayer,
                     StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.failed"));
                 return;
@@ -786,7 +795,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
             // #tr MegaCraftingCenter.onScrewdriverRightClick.success
             // # Preparing to returning encoded patterns.
             // #zh_CN 正在准备退回样板.
-            GTUtility.sendChatToPlayer(
+            GTUtility.sendChatTrans(
                 aPlayer,
                 StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.success"));
 
@@ -822,8 +831,8 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    public void onFirstTick_EM(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick_EM(aBaseMetaTileEntity);
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
         getProxy().onReady();
     }
 
@@ -859,17 +868,19 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     }
 
     @Override
-    protected boolean checkMachine_EM(IGregTechTileEntity iGregTechTileEntity, ItemStack itemStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         mPatternAccessHatch.clear();
         maintenance_EM();
-        if (structureCheck_EM("MAIN", 3, 3, 0)) {
-            if (mPatternAccessHatch.size() > 1) {
-                mPatternAccessHatch.clear();
-                return false;
-            }
-            return !mOutputBusses.isEmpty();
+        if (!checkPiece("MAIN", 3, 3, 0, errors)) return;
+
+        if (mPatternAccessHatch.size() > 1) {
+            mPatternAccessHatch.clear();
+            errors.add(special_hatch_amount_wrong);
+            return;
         }
-        return false;
+
+        checkHasOutputBus(errors);
+
     }
 
     protected void maintenance_EM() {
@@ -911,7 +922,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
 
     @Override
-    public IStructureDefinition<TST_MegaCraftingCenter> getStructure_EM() {
+    public IStructureDefinition<TST_MegaCraftingCenter> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaCraftingCenter>builder()
                 .addShape(
@@ -933,7 +944,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                         .atLeast(InputBus, OutputBus, AccessHatchElement)
                         .adder(TST_MegaCraftingCenter::superAddToMachineList)
                         .casingIndex(textureOffset + 12)
-                        .dot(1)
+                        .hint(1)
                         .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 4)))
                 .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .build();
@@ -1054,6 +1065,11 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
     protected static final int SYNC_WINDOW_MAGNIFICATION_ID = 10_114;
 
     @Override
+    public boolean supportsPowerPanel() {
+        return false;
+    }
+
+    @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         super.addUIWidgets(builder, buildContext);
         buildContext.addSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID, this::createMagnificationConfigurationWindow);
@@ -1070,9 +1086,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
                     ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
                     return ret.toArray(new IDrawable[0]);
                 })
-                // #tr MegaCraftingCenter.UI.MagnificationInfoMenuButton.name
-                // # Pattern Magnification Configuration Menu
-                // #zh_CN 样板倍率配置菜单
+
                 .addTooltip(TextEnums.tr("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name"))
                 .setPos(174, 97));
     }
@@ -1083,11 +1097,7 @@ public class TST_MegaCraftingCenter extends TT_MultiMachineBase_EM
         builder.setGuiTint(getGUIColorization());
 
         builder.widget(
-            // spotless:off
-                // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
-                // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
-                // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
-                // spotless:on
+
             TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
                 .setPos(20, 10)
                 .setSize(200, 14))

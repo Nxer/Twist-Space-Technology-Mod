@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,10 +36,12 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 
 import bwcrossmod.galacticgreg.VoidMinerUtility;
+import galacticgreg.api.enums.DimensionDef;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
@@ -53,6 +54,7 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
@@ -165,6 +167,11 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
                 isRendering = false;
             }
         }
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     public void createRenderBlock() {
@@ -392,22 +399,21 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         super.onBlockDestroyed();
     }
 
-    protected void initDropMap() {
-        dropMap = new VoidMinerUtility.DropMap();
-        extraDropMap = new VoidMinerUtility.DropMap();
-        WorldProvider worldProvider = this.getBaseMetaTileEntity()
-            .getWorld().provider;
-        int dimensionId = worldProvider.dimensionId;
-        if (isPersonalSpace(worldProvider) && ALLOW_PERSONAL_SPACE) {
-            // override to use overworld dimension data.
-            dimensionId = 0;
-        }
-        handleModDimDef(dimensionId);
-        handleExtraDrops(dimensionId);
+    protected static void initDropMap() {
+        dropMap = null;
+        extraDropMap = null;
+
+        dropMap = VoidMinerUtility.dropMapsByDimName
+            .getOrDefault(DimensionDef.DimNames.OW, new VoidMinerUtility.DropMap());
+        extraDropMap = VoidMinerUtility.extraDropsByDimName
+            .getOrDefault(DimensionDef.DimNames.OW, new VoidMinerUtility.DropMap());
+
+        dropMap.isDistributionCached(extraDropMap);
+
         totalWeight = dropMap.getTotalWeight() + extraDropMap.getTotalWeight();
 
         if (totalWeight <= 0) {
-            TwistSpaceTechnology.LOG.warn("Failed to generate the dropMap of dimension {}", dimensionId);
+            TwistSpaceTechnology.LOG.warn("Failed to generate the dropMap of dimension 0");
             dropMap = null;
             extraDropMap = null;
         }
@@ -428,37 +434,6 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     protected static boolean isWorkableDimension(@NotNull WorldProvider worldProvider) {
         return (worldProvider.dimensionId == STANDARD_DIMENSION_ID)
             || (ALLOW_PERSONAL_SPACE && isPersonalSpace(worldProvider));
-    }
-
-    /**
-     * Gets the DropMap of the dim for the specified dim id
-     *
-     * @param id the dim number
-     */
-    private void handleModDimDef(int id) {
-        if (VoidMinerUtility.dropMapsByDimId.containsKey(id)) {
-            dropMap = VoidMinerUtility.dropMapsByDimId.get(id);
-        } else {
-            String chunkProviderName = ((ChunkProviderServer) this.getBaseMetaTileEntity()
-                .getWorld()
-                .getChunkProvider()).currentChunkProvider.getClass()
-                    .getName();
-
-            if (VoidMinerUtility.dropMapsByChunkProviderName.containsKey(chunkProviderName)) {
-                dropMap = VoidMinerUtility.dropMapsByChunkProviderName.get(chunkProviderName);
-            }
-        }
-    }
-
-    /**
-     * Handles the ores added manually with {@link VoidMinerUtility#addMaterialToDimensionList}
-     *
-     * @param id the specified dim id
-     */
-    private void handleExtraDrops(int id) {
-        if (VoidMinerUtility.extraDropsDimMap.containsKey(id)) {
-            extraDropMap = VoidMinerUtility.extraDropsDimMap.get(id);
-        }
     }
 
     @Override
@@ -502,9 +477,9 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     }
 
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // endregion
 
@@ -582,7 +557,7 @@ F -> ofBlock...(tile.wood, 0, ...);
                             .<TST_EyeOfWood>builder()
                             .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
                             .adder(TST_EyeOfWood::addToMachineList)
-                            .dot(1)
+                            .hint(1)
                             .casingIndex(10)
                             .buildAndChain(GregTechAPI.sBlockCasings1, 10))
                     .addElement('B', ofBlock(Blocks.lapis_block, 0))

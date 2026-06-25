@@ -2,9 +2,9 @@ package com.Nxer.TwistSpaceTechnology.common.entity;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import gregtech.common.tileentities.render.TileEntityLaser;
+import gregtech.common.tileentities.render.RenderingTileEntityLaser;
 
-public class TileEntityLaserBeacon extends TileEntityLaser {
+public class TileEntityLaserBeacon extends RenderingTileEntityLaser {
 
     private double range;
 

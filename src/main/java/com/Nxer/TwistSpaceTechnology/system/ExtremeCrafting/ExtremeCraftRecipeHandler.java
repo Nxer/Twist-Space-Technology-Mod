@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
+import static fox.spiteful.avaritia.items.LudicrousItems.cosmic_meatballs;
+import static fox.spiteful.avaritia.items.LudicrousItems.ultimate_stew;
 import static gregtech.api.util.GTModHandler.getModItem;
 
 import java.util.ArrayList;
@@ -133,7 +135,13 @@ public class ExtremeCraftRecipeHandler {
         List<IRecipe> originRecipes = ExtremeCraftingManager.getInstance()
             .getRecipeList();
 
-        LOG.info("start init extreme craft table recipe :" + originRecipes.size());
+        Set<TST_ItemID> ignore = new HashSet<>();
+        {
+            ignore.add(TST_ItemID.create(new ItemStack(ultimate_stew)));
+            ignore.add(TST_ItemID.create(new ItemStack(cosmic_meatballs)));
+        }
+
+        LOG.info("start init extreme craft table recipe :{}", originRecipes.size());
 
         // pre init
         {
@@ -142,25 +150,51 @@ public class ExtremeCraftRecipeHandler {
             OreDictItem odi = new OreDictItem("cropSpace");
             OreDictItem.UsedOreDictItems.put("cropSpace", odi);
             OreDictItem.UsedOreDictItems.put("cropTcetiESeaweed", odi);
+            LOG.info(
+                "UsedOreDictItems pre init finished. UsedOreDictItems.size = {}",
+                OreDictItem.UsedOreDictItems.size());
         }
 
-        for (var Recipe : originRecipes) {
+        for (int i = 0; i < originRecipes.size(); i++) {
+            LOG.info(
+                "index = {}, output = {}",
+                i,
+                originRecipes.get(i)
+                    .getRecipeOutput()
+                    .getDisplayName());
+        }
+
+        int checkIndex = 0;
+
+        for (IRecipe Recipe : originRecipes) {
+            checkIndex++;
+
+            LOG.info("checkIndex = {}, IRecipe = {}", checkIndex, Recipe);
             Object[] inputs = null;
-            ItemStack output = null;
+            ItemStack output = Recipe.getRecipeOutput();
+            LOG.info("output = {}", output.getDisplayName());
+            if (ignore.contains(TST_ItemID.create(output))) {
+                LOG.info("ignore");
+                continue;
+            }
+
             if (Recipe instanceof ExtremeShapedRecipe recipe) {
+                LOG.info("Recipe instanceof ExtremeShapedRecipe recipe");
                 inputs = sortOutInputs(recipe.recipeItems);
-                output = recipe.getRecipeOutput();
             } else if (Recipe instanceof ExtremeShapedOreRecipe recipe) {
+                LOG.info("Recipe instanceof ExtremeShapedOreRecipe recipe");
                 inputs = sortOutInputs(recipe.getInput());
-                output = recipe.getRecipeOutput();
             } else if (Recipe instanceof ShapelessOreRecipe recipe) {
+                LOG.info("Recipe instanceof ShapelessOreRecipe recipe");
                 inputs = sortOutInputs(
                     recipe.getInput()
                         .toArray());
-                output = recipe.getRecipeOutput();
             }
 
             if (inputs != null && output != null) {
+                LOG.info("Inputs and outputs both are valid. Building GTRecipe.");
+                LOG.info("Inputs = {}", inputs);
+                LOG.info("Output = {}", output);
                 GTRecipeBuilder builder = GTValues.RA.stdBuilder()
                     .ignoreCollision()
                     .itemInputs(inputs)
@@ -170,20 +204,29 @@ public class ExtremeCraftRecipeHandler {
 
                 Optional<GTRecipe.GTRecipe_WithAlt> oRecipe = builder.buildWithAlt();
                 if (oRecipe.isPresent()) {
+                    LOG.info("oRecipe is present");
                     visualExtremeCraftRecipes.add(oRecipe.get());
+                    LOG.info("visual recipe adding finish : {}", output.getDisplayName());
                 } else {
+                    LOG.info("oRecipe is not present");
                     builder.addTo(visualExtremeCraftRecipes);
                 }
 
+                LOG.info("Creating ExtremeCraftRecipe");
                 ExtremeCraftRecipe ecr = new ExtremeCraftRecipe().itemInputs(inputs)
                     .itemOutputs(output);
                 extremeCraftRecipes.add(ecr);
 
+                LOG.info("Creating TST_ItemID for output stack sign");
                 TST_ItemID oi = TST_ItemID.create(output);
                 if (extremeCraftRecipesMap.containsKey(oi)) {
+                    LOG.info("just adding ExtremeCraftRecipe");
                     extremeCraftRecipesMap.get(oi)
                         .add(ecr);
+                    LOG.info("finish adding ExtremeCraftRecipe : {}", output.getDisplayName());
+
                 } else {
+                    LOG.info("create new set to contain the new ExtremeCraftRecipe");
                     Set<ExtremeCraftRecipe> s = new HashSet<>();
                     s.add(ecr);
                     extremeCraftRecipesMap.put(oi, s);
@@ -193,6 +236,11 @@ public class ExtremeCraftRecipeHandler {
                 LOG.info("ExtremeCraftRecipeHandler get a null recipe.");
             }
 
+            if (output != null) {
+                LOG.info("finish recipe adding for {}", output.getDisplayName());
+            } else {
+                LOG.info("Final check : output is null");
+            }
         }
 
         LOG.info("complete init extreme craft table recipe :" + extremeCraftRecipes.size());

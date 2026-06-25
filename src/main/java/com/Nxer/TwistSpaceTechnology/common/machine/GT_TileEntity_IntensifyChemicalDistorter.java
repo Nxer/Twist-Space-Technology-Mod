@@ -25,6 +25,7 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -49,11 +51,13 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
@@ -90,6 +94,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return 2;
     }
 
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH };
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
     @Override
     public void setMachineModeIcons() {
         machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
@@ -97,15 +109,15 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     @Override
-    public String getMachineModeName(int mode) {
-        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + mode);
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
     }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
-        return RecipeMaps.multiblockChemicalReactorRecipes;
-    }
+    //
+    // @Override
+    // public RecipeMap<?> getRecipeMap() {
+    // if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+    // return RecipeMaps.multiblockChemicalReactorRecipes;
+    // }
 
     @NotNull
     @Override
@@ -240,7 +252,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(InputHatch, OutputHatch)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(176)/* index of stainless steal casing */
-                        .dot(1)/* preview channel of blueprint */
+                        .hint(1)/* preview channel of blueprint */
                         .buildAndChain(GregTechAPI.sBlockCasings8, 0))
                 .addElement(
                     'b',
@@ -248,7 +260,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(InputBus, OutputBus)
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(49)/* index of chem inert casing */
-                        .dot(2)/* preview channel of blueprint */
+                        .hint(2)/* preview channel of blueprint */
                         .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement(
                     'e',
@@ -256,7 +268,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(GT_TileEntity_IntensifyChemicalDistorter::addToMachineList)
                         .casingIndex(11)
-                        .dot(3)
+                        .hint(3)
                         .buildAndChain(GregTechAPI.sBlockCasings1, 11))
                 .build();
         }
@@ -313,56 +325,11 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      * @param aStack
      */
     @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         coilLevel = HeatingCoilLevel.None;
         // this.casingAmountActual = 0; // re-init counter
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    /**
-     * Gets the maximum Efficiency that spare Part can get (0 - 10000)
-     *
-     * @param aStack
-     */
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 10000;
-    }
-
-    /**
-     * Gets the damage to the ItemStack, usually 0 or 1.
-     *
-     * @param aStack
-     */
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    /**
-     * If it explodes when the Component has to be replaced.
-     *
-     * @param aStack
-     */
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return true;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
 
     @Override

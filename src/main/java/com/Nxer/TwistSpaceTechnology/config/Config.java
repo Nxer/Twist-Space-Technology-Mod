@@ -530,16 +530,16 @@ public class Config {
     //endregion
 
     // region Skypiercer Tower
-    public static boolean Enable_SkypiercerTower =true ;
+    public static boolean Enable_SkypiercerTower = true ;
     public static int Parallel_PerRing_SkypiercerTower = 16;
     // endregion
 
     // region Infusion Material Dispenser
-    public static boolean Enable_InfusionMaterialDispenser =true ;
+    public static boolean Enable_InfusionMaterialDispenser = true ;
     // endregion
 
     // region Infusion Material Dispenser
-    public static boolean Enable_EssentiaDiscretizer =true ;
+    public static boolean Enable_EssentiaDiscretizer = false ;
     // endregion
 
     // region Nether Interface

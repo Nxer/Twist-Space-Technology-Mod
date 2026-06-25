@@ -16,6 +16,8 @@ import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -23,6 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -36,6 +39,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
+import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
@@ -68,6 +72,11 @@ public class MM_LargeNeutronOscillator
     }
 
     @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return GTCMRecipe.NeutronActivatorRecipesWithEU;
     }
@@ -78,8 +87,9 @@ public class MM_LargeNeutronOscillator
     }
 
     @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet);
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // endregion
 
@@ -166,7 +176,7 @@ public class MM_LargeNeutronOscillator
                     HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
                         .atLeast(AllModule)
                         .adder(MM_LargeNeutronOscillator::addModularHatchToMachineList)
-                        .dot(1)
+                        .hint(1)
                         .casingIndex(((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(1))
                         .buildAndChain(GregTechAPI.sBlockCasings4, 1))
                 .addElement(
@@ -174,7 +184,7 @@ public class MM_LargeNeutronOscillator
                     HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
                         .atLeast(Energy.or(ExoticEnergy))
                         .adder(MM_LargeNeutronOscillator::addNormalHatchToMachineList)
-                        .dot(2)
+                        .hint(2)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(7))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 7))
                 .addElement(
@@ -182,7 +192,7 @@ public class MM_LargeNeutronOscillator
                     HatchElementBuilder.<MM_LargeNeutronOscillator>builder()
                         .atLeast(InputHatch, OutputHatch, InputBus, OutputBus)
                         .adder(MM_LargeNeutronOscillator::addNormalHatchToMachineList)
-                        .dot(3)
+                        .hint(3)
                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
                         .buildAndChain(GregTechAPI.sBlockCasings8, 10))
                 .addElement('D', ofBlock(sBlockCasingsTT, 0))
