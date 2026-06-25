@@ -276,7 +276,7 @@ public class EGSArtificialGreenHouseOutputBucket {
                             crop = new EGSArtificialGreenHouseOutputBucket.FakeTileEntityCrop(this, greenhouse, xyz);
 
                             crop.setSize((byte) cropCard.maxSize());
-                            // check if the crop can be harvested at its max size
+                            // check if the crops can be harvested at its max size
                             // Eg: the Eating plant cannot be harvested at its max size of 6, only 4 or 5 can
                             if (!cropCard.canBeHarvested(crop)) {
                                 crop.setSize((byte) (cropCard.maxSize() - 2));
@@ -489,7 +489,7 @@ public class EGSArtificialGreenHouseOutputBucket {
      * decompiling IC2.
      *
      * @see TileEntityCrop#harvest_automated(boolean)
-     * @param te The {@link TileEntityCrop} holding the crop
+     * @param te The {@link TileEntityCrop} holding the crops
      * @param cc The {@link CropCard} of the seed
      * @return The average number of drops to computer per harvest
      */
@@ -514,7 +514,7 @@ public class EGSArtificialGreenHouseOutputBucket {
      * decompiling IC2.
      *
      * @see TileEntityCrop#harvest_automated(boolean)
-     * @param te The {@link TileEntityCrop} holding the crop
+     * @param te The {@link TileEntityCrop} holding the crops
      * @param cc The {@link CropCard} of the seed
      * @return The average number of drops to computer per harvest
      */
@@ -537,7 +537,7 @@ public class EGSArtificialGreenHouseOutputBucket {
                 return;
             }
 
-            // put seed in crop stick
+            // put seed in crops stick
             CropCard cc = Crops.instance.getCropCard(bucket.seed);
             this.setCrop(cc);
             NBTTagCompound nbt = bucket.seed.getTagCompound();

@@ -15,8 +15,8 @@ public abstract class AbstractTstCrop extends CropCard {
         textures = new IIcon[maxSize()];
 
         for (int i = 1; i <= textures.length; i++) {
-            // ic2:crop/blockCrop.NAME.n is the legacy name for backwards compatiblity
-            textures[i - 1] = iconRegister.registerIcon("gtnhcommunitymod:crop/blockCrop." + name() + "." + i);
+            // ic2:crops/blockCrop.NAME.n is the legacy name for backwards compatiblity
+            textures[i - 1] = iconRegister.registerIcon("gtnhcommunitymod:crops/blockCrop." + name() + "." + i);
         }
     }
 

@@ -245,7 +245,7 @@ public class CropsNHFarm {
     }
 
     public static double getGrowthProgressPerCycle(ISeedData aCrop) {
-        // calc unscaled growth speed of crop.
+        // calc unscaled growth speed of crops.
         int tUnscaledGrowthSpeed = aCrop.getStats()
             .getGrowth() + BASE_GROWTH_SPEED;
         if (tUnscaledGrowthSpeed <= 0) return -1;

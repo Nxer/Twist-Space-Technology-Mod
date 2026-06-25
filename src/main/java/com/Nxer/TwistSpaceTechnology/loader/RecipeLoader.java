@@ -60,7 +60,9 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.QFTRecipePool
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.SpaceAssemblerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.specialRecipes.CropsMutationRecipes;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
+import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
@@ -141,8 +143,10 @@ public class RecipeLoader {
         OP_NormalProcessing.enumOreProcessingRecipes();
 
         if (Config.Enable_MegaCraftingCenter) {
-            // new ExtremeCraftRecipeHandler().initECRecipe();
+            new ExtremeCraftRecipeHandler().initECRecipe();
         }
+
+        CropsMutationRecipes.loadRecipes();
 
     }
 

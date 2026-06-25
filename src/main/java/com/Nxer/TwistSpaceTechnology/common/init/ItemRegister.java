@@ -235,7 +235,7 @@ public class ItemRegister {
         // # Purple Magnolia Sapling
         // #zh_CN 紫玉兰树苗
         // #tr tooltips.PurpleMagnoliaSapling.line1
-        // # Not plantable. Need to be on ic2 crop sticks.
+        // # Not plantable. Need to be on ic2 crops sticks.
         // #zh_CN 不可种植.需要使用ic2作物架.
         GTCMItemList.PurpleMagnoliaSapling.set(MetaItem01.registerVariantWithTooltips(20, new String[]{
             tr("tooltips.PurpleMagnoliaSapling.line1")}));

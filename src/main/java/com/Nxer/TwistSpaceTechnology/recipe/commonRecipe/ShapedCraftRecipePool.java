@@ -17,7 +17,6 @@ import gregtech.api.enums.OreDictNames;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
-import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import wanion.avaritiaddons.block.extremeautocrafter.BlockExtremeAutoCrafter;
 
 public class ShapedCraftRecipePool {
@@ -98,7 +97,7 @@ public class ShapedCraftRecipePool {
                         .molecularAssembler()
                         .maybeStack(1)
                         .orNull(),
-                    'C', GregtechItemList.Controller_MolecularTransformer.get(1) });
+                    'C', ItemList.MolecularTransformer.get(1) });
         }
 
     }
