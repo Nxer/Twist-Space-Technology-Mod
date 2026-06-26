@@ -288,7 +288,7 @@ public class GTCMMachineRecipes {
         GTValues.RA.stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                GTUtility.copyAmountUnsafe(1, megaMachines[3]),
+                ItemList.MegaChemicalReactor.get(1),
                 Materials.Carbon.getNanite(16),
                 ItemList.Emitter_UV.get(16),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16})
@@ -1250,7 +1250,7 @@ public class GTCMMachineRecipes {
             .metadata(SCANNING, scanningLV(16 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 64),
-                ItemList.Ore_Processor.get(64),
+                ItemList.IntegratedOreFactory.get(64),
                 new Object[]{OrePrefixes.circuit.get(Materials.UIV), 64},
                 GTOreDictUnificator.get(OrePrefixes.rotor, Materials.Neutronium, 64),
 

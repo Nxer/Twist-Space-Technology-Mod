@@ -6,12 +6,12 @@ import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static goodgenerator.loader.Loaders.huiCircuit;
 import static gregtech.api.enums.ItemList.Automation_ChestBuffer_IV;
 import static gregtech.api.enums.ItemList.Machine_IV_Assembler;
+import static gregtech.api.enums.ItemList.TreeGrowSimulator;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
 import static gregtech.api.enums.TCAspects.RADIO;
 import static gtPlusPlus.core.material.MaterialsAlloy.TITANSTEEL;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_AlloyBlastSmelter;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_TreeFarm;
 import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
 import static kubatech.api.enums.ItemList.ExtremeIndustrialGreenhouse;
 import static net.minecraft.init.Items.diamond_sword;
@@ -123,7 +123,7 @@ public class TCRecipePool {
                         .merge((Aspect) ELECTRUM.mAspect, 8192),
 
                     GTModHandler.getModItem(Mods.Botania.ID, "manaResource", 1, 5),
-                    new ItemStack[] { Industrial_TreeFarm.get(1),
+                    new ItemStack[] { TreeGrowSimulator.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
