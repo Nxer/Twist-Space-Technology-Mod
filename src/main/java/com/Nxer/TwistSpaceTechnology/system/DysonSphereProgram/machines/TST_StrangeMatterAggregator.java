@@ -421,7 +421,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 }
             }
 
-
         }
     }
 
