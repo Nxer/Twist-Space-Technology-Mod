@@ -65,4 +65,22 @@ public class SimpleStructureErrors {
     public static TranslatableStructureError one_hatch_each_module = StructureErrors
         .of("TST.SimpleStructureErrors.one_hatch_each_module");
 
+    // #tr TST.SimpleStructureErrors.missing_oscillator_ring
+    // # Missing SpaceTime Oscillator ring(s).
+    // #zh_CN 缺少时空振荡器环
+    public static TranslatableStructureError missing_oscillator_ring = StructureErrors
+        .of("TST.SimpleStructureErrors.missing_oscillator_ring");
+
+    // #tr TST.SimpleStructureErrors.missing_constraintor_ring
+    // # Missing SpaceTime Constraintor ring(s).
+    // #zh_CN 缺少时空约束器环
+    public static TranslatableStructureError missing_constraintor_ring = StructureErrors
+        .of("TST.SimpleStructureErrors.missing_constraintor_ring");
+
+    // #tr TST.SimpleStructureErrors.missing_merger_ring
+    // # Missing SpaceTime Merger ring(s).
+    // #zh_CN 缺少时空归并器环
+    public static TranslatableStructureError missing_merger_ring = StructureErrors
+        .of("TST.SimpleStructureErrors.missing_merger_ring");
+
 }

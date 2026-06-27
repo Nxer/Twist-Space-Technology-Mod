@@ -1175,9 +1175,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 break;
             }
 
-            // Merge only the successful ring type's errors
-            errors.addAll(probeErrors);
-
             if (isOscillator) {
                 oscillatorPiece = tempOPieces + 1;
             } else if (isConstraintor) {
@@ -1188,13 +1185,23 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
             rings++;
         }
+        // Print out all the missing ring information.
+        boolean hasMissingRing = false;
 
-        if (oscillatorTier < 1 || constraintorTier < 1
-            || mergerTier < 1
-            || oscillatorPiece < 1
-            || constraintorPiece < 1
-            || mergerPiece < 1) {
-            errors.add(SimpleStructureErrors.simple_structure_issue);
+        if (oscillatorPiece < 1 || oscillatorTier < 1) {
+            errors.add(SimpleStructureErrors.missing_oscillator_ring);
+            hasMissingRing = true;
+        }
+        if (constraintorPiece < 1 || constraintorTier < 1) {
+            errors.add(SimpleStructureErrors.missing_constraintor_ring);
+            hasMissingRing = true;
+        }
+        if (mergerPiece < 1 || mergerTier < 1) {
+            errors.add(SimpleStructureErrors.missing_merger_ring);
+            hasMissingRing = true;
+        }
+
+        if (hasMissingRing) {
             return false;
         }
 
