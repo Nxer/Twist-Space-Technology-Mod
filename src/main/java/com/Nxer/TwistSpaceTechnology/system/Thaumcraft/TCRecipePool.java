@@ -11,7 +11,6 @@ import static gregtech.api.enums.TCAspects.ELECTRUM;
 import static gregtech.api.enums.TCAspects.RADIO;
 import static gtPlusPlus.core.material.MaterialsAlloy.TITANSTEEL;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_AlloyBlastSmelter;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_FishingPond;
 import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
 import static kubatech.api.enums.ItemList.ExtremeIndustrialGreenhouse;
 import static net.minecraft.init.Items.diamond_sword;
@@ -127,9 +126,8 @@ public class TCRecipePool {
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
-                        Industrial_FishingPond.get(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),
-                        GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
+                        ItemList.FishingPort.get(1), GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
+                        TITANSTEEL.getPlateDense(1), GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1),
 
                         ExtremeIndustrialGreenhouse.get(1),
                         GTOreDictUnificator.get(OrePrefixes.circuit.get(Materials.UHV), 1), TITANSTEEL.getPlateDense(1),

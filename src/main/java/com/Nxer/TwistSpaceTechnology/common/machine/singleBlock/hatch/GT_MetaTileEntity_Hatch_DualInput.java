@@ -37,12 +37,13 @@ import gregtech.common.tileentities.machines.IDualInputInventory;
 
 public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implements IAddUIWidgets, IDualInputHatch {
 
-    private final FluidStack[] mStoredFluid;
-    private final FluidStackTank[] fluidTanks;
+    public static final int ITEM_SLOT_AMOUNT = 19;
+    public static final int CATALYST_SLOT_1 = 16;
+    public static final int CATALYST_SLOT_2 = 17;
+
+    public final FluidStack[] mStoredFluid;
+    public final FluidStackTank[] fluidTanks;
     public final int mCapacityPer;
-    private static final int ITEM_SLOT_AMOUNT = 19;
-    private static final int CATALYST_SLOT_1 = 16;
-    private static final int CATALYST_SLOT_2 = 17;
 
     public static class Inventory implements IDualInputInventory {
 
