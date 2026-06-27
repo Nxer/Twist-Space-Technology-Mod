@@ -169,8 +169,8 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     }
 
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
 
     @Override
     public UITexture[] getMachineModeIcons() {
