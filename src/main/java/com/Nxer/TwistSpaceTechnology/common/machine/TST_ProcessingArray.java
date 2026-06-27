@@ -165,6 +165,9 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     public CheckRecipeResult checkProcessing() {
         checkInternalMachine();
         if (internalMachine == null) {
+            // #tr GT5U.gui.text.recipe_result.no_machine
+            // # No machine!
+            // #zh_CN 没有机器
             return SimpleCheckRecipeResult.ofFailure("no_machine");
         }
 
