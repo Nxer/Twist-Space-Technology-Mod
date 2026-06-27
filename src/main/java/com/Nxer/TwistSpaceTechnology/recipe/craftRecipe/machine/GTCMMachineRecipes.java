@@ -1639,7 +1639,7 @@ public class GTCMMachineRecipes {
             .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
-                ItemList.MegaVacuumFreezer.get(64),
+                ItemList.EndothermicFridge.get(64),
                 ItemList.Field_Generator_UHV.get(16),
                 ItemList.Electric_Pump_UHV.get(64),
 

@@ -16,12 +16,17 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_HatchGui_DualInput;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.utils.fluid.FluidStackTank;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.fluid.FluidStackTank;
 import com.gtnewhorizons.modularui.common.widget.FluidSlotWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
@@ -460,4 +465,10 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
                 .setPos(7, 7));
         getBaseMetaTileEntity().add4by4Slots(builder);
     }
+
+    @Override
+    public ModularPanel buildUI(PosGuiData guiData, PanelSyncManager syncManager, UISettings uiSettings) {
+        return new TST_HatchGui_DualInput(this).build(guiData, syncManager, uiSettings);
+    }
+
 }
