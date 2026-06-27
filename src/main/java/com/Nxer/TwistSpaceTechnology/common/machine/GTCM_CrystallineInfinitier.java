@@ -32,6 +32,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,7 +52,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -98,13 +98,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         return 3;
     }
 
-    @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    }
-
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID, };
@@ -112,6 +105,11 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + machineMode);
     }
 
     @Override
