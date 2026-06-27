@@ -107,7 +107,6 @@ import static gregtech.api.enums.ItemList.ExtractorUHV;
 import static gregtech.api.enums.ItemList.FluidExtractorUV;
 import static gregtech.api.enums.ItemList.FluidSolidifierUV;
 import static gregtech.api.enums.ItemList.MixerUV;
-import static gregtech.api.enums.ItemList.PlasmaArcFurnaceUEV;
 import static gregtech.api.enums.ItemList.PolarizerUHV;
 import static gregtech.api.enums.ItemList.SiftingMachineZPM;
 import static gregtech.api.enums.ItemList.Transformer_UMV_UIV;
@@ -143,9 +142,7 @@ import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.GT_Dehydrator_
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Hatch_Air_Intake_Extreme;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Arc_Furnace;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_Extruder;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MacerationStack;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_MassFab;
-import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_PlatePress;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Mega_AlloyBlastSmelter;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.TransmissionComponent_UV;
@@ -752,9 +749,9 @@ public class GTCMMachineRecipes {
             .metadata(RESEARCH_ITEM, Industrial_Extruder.get(1))
             .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
-                ItemList.Casing_MiningOsmiridium.get(64),
-                Industrial_Extruder.get(64),
-                Industrial_PlatePress.get(64),
+                ItemList.IndustrialBendingMachine.get(64),
+                ItemList.IndustrialExtruder.get(64),
+                ItemList.IndustrialFormingPress.get(64),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 64},
 
                 ItemList.UV_Coil.get(64),
@@ -1392,8 +1389,8 @@ public class GTCMMachineRecipes {
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                GregtechItemList.Industrial_CokeOven.get(64),
-                ItemList.PyrolyseOven.get(64),
+                ItemList.IndustrialCokeOven.get(64),
+                ItemList.PyrolyzeOven.get(64),
 
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackSteel, 16),
                 new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16},
@@ -1502,7 +1499,7 @@ public class GTCMMachineRecipes {
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                GregtechItemList.Industrial_Sifter.get(64),
+                ItemList.LargeSifter.get(64),
                 SiftingMachineZPM.get(16),
 
                 new Object[]{OrePrefixes.circuit.get(Materials.ZPM), 16},
@@ -1642,7 +1639,7 @@ public class GTCMMachineRecipes {
             .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 64),
-                GTUtility.copyAmountUnsafe(64, megaMachines[1]),
+                ItemList.MegaVacuumFreezer.get(64),
                 ItemList.Field_Generator_UHV.get(16),
                 ItemList.Electric_Pump_UHV.get(64),
 
@@ -1734,7 +1731,7 @@ public class GTCMMachineRecipes {
             .metadata(SCANNING, scanningLV(8 * HOURS))
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackPlutonium, 64),
-                GTUtility.copyAmountUnsafe(64, megaMachines[2]),
+                ItemList.MegaDistillationTower.get(64),
                 Materials.Carbon.getNanite(64),
                 ItemList.Field_Generator_UHV.get(8),
 
@@ -1806,7 +1803,7 @@ public class GTCMMachineRecipes {
             .stdBuilder()
             .itemInputs(
                 GTUtility.getIntegratedCircuit(10),
-                Industrial_MacerationStack.get(64),
+                ItemList.MacerationStack.get(64),
                 ItemList.MaceratorZPM.get(16),
 
                 new Object[]{OrePrefixes.circuit.get(Materials.ZPM), 16},
@@ -2288,9 +2285,9 @@ public class GTCMMachineRecipes {
                 .metadata(SCANNING, scanningLV(8 * HOURS))
                 .itemInputs(
                     HighPowerRadiationProofCasing.get(64),
-                    Industrial_Arc_Furnace.get(64),
+                    ItemList.IndustrialArcFurnace.get(64),
                     ArcFurnaceUEV.get(16),
-                    PlasmaArcFurnaceUEV.get(16),
+                    ArcFurnaceUEV.get(16),
 
                     GTPP_Casing_UHV.get(64),
                     new ItemStack(ItemRegistry.bw_realglas, 48, 14),
@@ -2618,28 +2615,6 @@ public class GTCMMachineRecipes {
 
         // endregion
 
-        // region Bee Engineer
-        GTValues.RA
-            .stdBuilder()
-            .itemInputs(
-                GTUtility.getIntegratedCircuit(10),
-                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Bronze, 64),
-                getModItem(Forestry.ID, "alveary", 64, 0),
-
-                ItemList.Field_Generator_LuV.get(4),
-                ItemList.Electric_Pump_LuV.get(16),
-                ItemList.Conveyor_Module_LuV.get(16),
-
-                GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Plutonium241, 64),
-                new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16}
-            )
-            .fluidInputs(Materials.Honey.getFluid(1000 * 256))
-            .itemOutputs(GTCMItemList.BeeEngineer.get(1))
-            .eut(RECIPE_ZPM)
-            .duration(20 * 300)
-            .addTo(assembler);
-        // endregion
-
         // region Space Apiary Module
         if (Config.EnableSpaceApiaryModule) {
             final IRecipeMap SpaceAssembler = IGRecipeMaps.spaceAssemblerRecipes;
@@ -2781,11 +2756,10 @@ public class GTCMMachineRecipes {
                     GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.NaquadahAlloy, 16),
                     GTOreDictUnificator.get(OrePrefixes.plateDense, Materials.TungstenSteel, 16),
 
-                    ItemList.FluidCannerZPM.get(16),
-                    ItemList.CanningMachineZPM.get(16),
+                    ItemList.CanningMachineZPM.get(32),
                     new Object[]{OrePrefixes.circuit.get(Materials.SuperconductorUHV), 16},
-
                     ItemList.Electric_Pump_ZPM.get(16),
+
                     ItemList.Conveyor_Module_ZPM.get(8),
                     GTOreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorZPM, 16)
                 )
@@ -2829,7 +2803,7 @@ public class GTCMMachineRecipes {
                 .metadata(SCANNING, scanningLV(2 * HOURS))
                 .itemInputs(
                     ItemList.Hull_UEV.get(64),
-                    COMET_Cyclotron.get(64),
+                    ItemList.BeamCrafter.get(64),
                     ItemList.Casing_Coil_Infinity.get(8),
                     Laser_Lens_Special.get(4),
 
@@ -3022,7 +2996,7 @@ public class GTCMMachineRecipes {
                 .itemInputs(
                     ItemList.Hull_UEV.get(4),
                     ItemList.RockBreakerZPM.get(16),
-                    Controller_IndustrialRockBreaker.get(64),
+                    ItemList.Boldarnator.get(64),
                     GTOreDictUnificator.get(OrePrefixes.pipeLarge, Materials.ZPM, 64),
 
                     GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.CosmicNeutronium, 1),
@@ -3740,10 +3714,10 @@ public class GTCMMachineRecipes {
             .metadata(RESEARCH_ITEM, ItemRefer.Large_Naquadah_Reactor.get(1))
             .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
-                ItemRefer.Large_Naquadah_Reactor.get(64),
-                ItemRefer.Large_Naquadah_Reactor.get(64),
-                ItemRefer.Large_Naquadah_Reactor.get(64),
-                ItemRefer.Large_Naquadah_Reactor.get(64),
+                ItemList.LargeNaquadahReactor.get(64),
+                ItemList.LargeNaquadahReactor.get(64),
+                ItemList.LargeNaquadahReactor.get(64),
+                ItemList.LargeNaquadahReactor.get(64),
 
                 new Object[] { OrePrefixes.circuit.get(Materials.UIV), 16 },
                 new Object[] { OrePrefixes.circuit.get(Materials.UIV), 16 },
