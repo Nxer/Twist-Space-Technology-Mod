@@ -16,6 +16,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 public class Config {
     // region Regions enum
     public static final String GENERAL = "General";
+    public static final String DEBUG = "Debug";
     public static final String NETWORK = "Network";
     public static final String RECIPE = "Recipe";
     public static final String DSP = "DSP";
@@ -562,6 +563,10 @@ public class Config {
 
     // endregion
 
+    // region Debug
+    public static boolean Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe = true;
+    // endregion
+
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
@@ -569,6 +574,10 @@ public class Config {
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
         DEFAULT_BATCH_MODE = configuration.getBoolean("DEFAULT_BATCH_MODE", GENERAL, DEFAULT_BATCH_MODE, "Default Batch mode state of machine when placed. True is auto enable Batch mode.");
         RewriteEIOTravelStaffConfig = configuration.getBoolean("RewriteEIOTravelStaffConfig", GENERAL, RewriteEIOTravelStaffConfig, "Rewrite EIO Travel Staff Config : Let Travel Staff Max Distance be same as Teleport Staff. Because Yamato's teleportation function is calling the Travel Stuff Source function.");
+        // endregion
+
+        // region Debug
+        Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe = configuration.getBoolean("Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe", DEBUG, true, "There is a secret bug cause game crash by Out of Memory when installing TST with GTNL. Temporarily we can delete the extreme crafting recipe in Mega crafting center of Compressed Stargate T7 to resolve this problem.");
         // endregion
 
         // region Machine Base Class
