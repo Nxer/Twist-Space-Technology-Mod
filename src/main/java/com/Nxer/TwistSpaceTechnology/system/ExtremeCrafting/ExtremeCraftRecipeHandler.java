@@ -28,6 +28,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
+import cpw.mods.fml.common.Loader;
 import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
 import fox.spiteful.avaritia.crafting.ExtremeShapedOreRecipe;
 import fox.spiteful.avaritia.crafting.ExtremeShapedRecipe;
@@ -139,6 +140,9 @@ public class ExtremeCraftRecipeHandler {
         {
             ignore.add(TST_ItemID.create(new ItemStack(ultimate_stew)));
             ignore.add(TST_ItemID.create(new ItemStack(cosmic_meatballs)));
+            if (Loader.isModLoaded("sciencenotleisure")) {
+                ignore.add(TST_ItemID.create(getModItem("sciencenotleisure", "CompressedStargateTier7")));
+            }
         }
 
         LOG.info("start init extreme craft table recipe :{}", originRecipes.size());
