@@ -25,7 +25,7 @@ public final class CheckRecipeResults {
     // # No Space Time Maintenance Fluid Input
     // #zh_CN 没有时空维护流体输入
     public static final CheckRecipeResult NoSpaceTimeMaintenanceFluidInput = SimpleResultWithText
-        .ofFailurePersistOnShutdown("CheckRecipeResult.NoSpaceTimeMaintenanceFluidInput");
+        .ofFailure("CheckRecipeResult.NoSpaceTimeMaintenanceFluidInput");
 
     // #tr CheckRecipeResult.NoAnnihilationConstrainerInput
     // # No Annihilation Constrainers Input

@@ -22,4 +22,10 @@ public final class SimpleShutDownReasons {
     // #zh_CN 没有足够临界光子输入
     public static final ShutDownReason NoCriticalPhotonInput = SimpleShutDownReason
         .ofCritical("SimpleShutDownReasons.NoEnoughCriticalPhotonInput");
+
+    // #tr GT5U.gui.text.recipe_result.SimpleShutDownReasons.NoAnnihilationConstrainerInput
+    // # No Annihilation Constrainer Input
+    // #zh_CN 没有湮灭约束器输入
+    public static final ShutDownReason NoAnnihilationConstrainerInput = SimpleShutDownReason
+        .ofCritical("SimpleShutDownReasons.NoAnnihilationConstrainerInput");
 }

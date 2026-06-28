@@ -11,6 +11,7 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.HatchElement.OutputHatch;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
 import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsBA0;
@@ -24,7 +25,6 @@ import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,8 +39,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
+import com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -48,19 +50,23 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.cleanroommc.modularui.api.IPanelHandler;
+import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.api.widget.IWidget;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.sync.IntSyncValue;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
+import com.cleanroommc.modularui.widgets.TextWidget;
+import com.cleanroommc.modularui.widgets.layout.Flow;
+import com.cleanroommc.modularui.widgets.textfield.TextFieldWidget;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.drawable.UITexture;
-import com.gtnewhorizons.modularui.api.math.Alignment;
-import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
-import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -68,7 +74,6 @@ import goodgenerator.items.GGMaterial;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -76,6 +81,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
+import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -83,6 +89,7 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReasonRegistry;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import gregtech.common.tileentities.machines.MTEHatchCraftingInputME;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
@@ -180,6 +187,13 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // region Extra Hatches
     protected MTEHatchInput SpaceTimeMaintenanceConsumablesInputHatch;
     protected MTEHatchInputBus CoreElementInputBus;
+    // Save the result of the last checkMachine operation, which will be used to restore the mMachine that was reset by
+    // the framework in the onPostTick function.
+    protected boolean lastKnownMachineState = false;
+
+    // Track whether the last checkMachineMM call actually passed.
+    // When false, onPostTick must NOT restore mMachine.
+    protected boolean structureCheckPassed = false;
 
     // endregion
 
@@ -381,10 +395,32 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+
         if (aBaseMetaTileEntity.isServerSide()) {
             if (consecutivePoint != 0 && !aBaseMetaTileEntity.isActive()) {
                 consecutivePoint = 0;
             }
+
+            // The `super.onPostTick()` method of the framework will reset `mMachine`, and here it is restoring it.
+            // Only restore if the last structure check actually passed.
+            if (!mMachine && lastKnownMachineState && structureCheckPassed) {
+                mMachine = true;
+            }
+            lastKnownMachineState = mMachine;
+
+            if (mMachine) {
+                if (!aBaseMetaTileEntity.isActive() && mMaxProgresstime > 0) {
+                    aBaseMetaTileEntity.setActive(true);
+                }
+                if (aBaseMetaTileEntity.isActive() && mMaxProgresstime <= 0) {
+                    aBaseMetaTileEntity.setActive(false);
+                }
+            } else {
+                if (aBaseMetaTileEntity.isActive()) {
+                    aBaseMetaTileEntity.setActive(false);
+                }
+            }
+
         }
     }
 
@@ -408,15 +444,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             consecutivePoint = 0;
             stopMachine(SimpleShutDownReasons.NoSpaceTimeMaintenanceFluidInput);
             return CheckRecipeResults.NoSpaceTimeMaintenanceFluidInput;
-        }
-
-        // set continue running
-        // set power and progressing time which means process succeed to start
-        CheckRecipeResult setPower = setRunning();
-        if (!setPower.wasSuccessful()) {
-            consecutivePoint = 0;
-            stopMachine(ShutDownReasonRegistry.POWER_LOSS);
-            return setPower;
         }
 
         // check Core Element and Annihilation Constrainer inputs
@@ -496,6 +523,14 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
         // output rod amount of one recipe
         long rodAmountRecipe = 1 + consecutivePoint;
+
+        // set power and progressing time which means process succeed to start
+        CheckRecipeResult setPower = setRunning();
+        if (!setPower.wasSuccessful()) {
+            consecutivePoint = 0;
+            stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+            return setPower;
+        }
 
         // now everything is ready
 
@@ -1070,6 +1105,13 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
+        lastKnownMachineState = mMachine;
+        structureCheckPassed = mMachine;
+    }
+
+    @Override
     public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
         List<StructureError> errors) {
 
@@ -1092,34 +1134,41 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             int tempCPieces = constraintorPiece;
             int tempMPieces = mergerPiece;
 
+            // Use a temporary error list for ring type probing at this depth.
+            // Only the successful match's errors are kept; failed probe errors
+            // are discarded to avoid polluting the structure check result.
+            List<StructureError> probeErrors = new ArrayList<>();
+
             boolean isOscillator = checkRingWithTierVerification(
                 STRUCTURE_PIECE_RING_O,
                 horizontalOffSet_ring,
                 verticalOffSet_ring,
                 depth,
                 RingType.OSCILLATOR,
-                errors);
+                probeErrors);
 
             boolean isConstraintor = false;
             if (!isOscillator) {
+                probeErrors.clear();
                 isConstraintor = checkRingWithTierVerification(
                     STRUCTURE_PIECE_RING_C,
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
                     depth,
                     RingType.CONSTRAINTOR,
-                    errors);
+                    probeErrors);
             }
 
             boolean isMerger = false;
             if (!isOscillator && !isConstraintor) {
+                probeErrors.clear();
                 isMerger = checkRingWithTierVerification(
                     STRUCTURE_PIECE_RING_M,
                     horizontalOffSet_ring,
                     verticalOffSet_ring,
                     depth,
                     RingType.MERGER,
-                    errors);
+                    probeErrors);
             }
 
             if (!isOscillator && !isConstraintor && !isMerger) {
@@ -1136,12 +1185,23 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
             rings++;
         }
+        // Print out all the missing ring information.
+        boolean hasMissingRing = false;
 
-        if (oscillatorTier < 1 || constraintorTier < 1 || mergerTier < 1) {
-            return false;
+        if (oscillatorPiece < 1 || oscillatorTier < 1) {
+            errors.add(SimpleStructureErrors.missing_oscillator_ring);
+            hasMissingRing = true;
+        }
+        if (constraintorPiece < 1 || constraintorTier < 1) {
+            errors.add(SimpleStructureErrors.missing_constraintor_ring);
+            hasMissingRing = true;
+        }
+        if (mergerPiece < 1 || mergerTier < 1) {
+            errors.add(SimpleStructureErrors.missing_merger_ring);
+            hasMissingRing = true;
         }
 
-        if (oscillatorPiece < 1 || constraintorPiece < 1 || mergerPiece < 1) {
+        if (hasMissingRing) {
             return false;
         }
 
@@ -1155,7 +1215,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         }
 
         calculateParametersWithStructure();
-        return wirelessMode || getMaxInputEu() >= Config.PowerConsume_StrangeMatterAggregator;
+        if (!wirelessMode && getMaxInputEu() < Config.PowerConsume_StrangeMatterAggregator) {
+            return false;
+        }
+
+        return true;
     }
 
     private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type,
@@ -1799,155 +1863,199 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return false;
     }
 
-    protected static final int SYNC_WINDOW_STRUCTURE_ID = 114;
-    protected static final int SYNC_WINDOW_RUNNING_ID = 115;
+    // region UI
+
+    @Override
+    protected MTEMultiBlockBaseGui<?> getGui() {
+        TST_StrangeMatterAggregator self = this;
+        return new TST_Gui<TST_StrangeMatterAggregator>(this) {
+
+            @Override
+            public Flow createLeftPanelGapRow(ModularPanel panel, PanelSyncManager syncManager) {
+                return super.createLeftPanelGapRow(panel, syncManager)
+                    .child(self.createStructureConfigButton(syncManager, panel))
+                    .child(self.createRunningConfigButton(syncManager, panel));
+            }
+        };
+    }
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         super.addUIWidgets(builder, buildContext);
-        buildContext.addSyncedWindow(SYNC_WINDOW_STRUCTURE_ID, this::createStructureConfigurationWindow);
-        buildContext.addSyncedWindow(SYNC_WINDOW_RUNNING_ID, this::createRunningConfigurationWindow);
-        builder.widget(
-            new ButtonWidget().setOnClick(
-                (clickData, widget) -> {
-                    if (!widget.isClient()) widget.getContext()
-                        .openSyncedWindow(SYNC_WINDOW_STRUCTURE_ID);
-                })
-                .setSize(16, 16)
-                .setBackground(() -> {
-                    List<UITexture> ret = new ArrayList<>();
-                    ret.add(GTUITextures.BUTTON_STANDARD);
-                    ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
-                    return ret.toArray(new IDrawable[0]);
-                })
-                // #tr StrangeMatterAggregator.UI.BuildingInfoMenuButton.name
-                // # Auto Building Configuration Menu
-                // #zh_CN 自动搭建配置菜单
-                .addTooltip(TextEnums.tr("StrangeMatterAggregator.UI.BuildingInfoMenuButton.name"))
-                .setPos(174, 130))
-            .widget(
-                new ButtonWidget().setOnClick(
-                    (clickData, widget) -> {
-                        if (!widget.isClient()) widget.getContext()
-                            .openSyncedWindow(SYNC_WINDOW_RUNNING_ID);
-                    })
-                    .setSize(16, 16)
-                    .setBackground(() -> {
-                        List<UITexture> ret = new ArrayList<>();
-                        ret.add(GTUITextures.BUTTON_STANDARD);
-                        ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
-                        return ret.toArray(new IDrawable[0]);
-                    })
-                    // #tr StrangeMatterAggregator.UI.RunningInfoMenuButton.name
-                    // # Running Configuration Menu
-                    // #zh_CN 运行配置菜单
-                    .addTooltip(TextEnums.tr("StrangeMatterAggregator.UI.RunningInfoMenuButton.name"))
-                    .setPos(174, 112));
     }
 
-    protected ModularWindow createStructureConfigurationWindow(final EntityPlayer player) {
-        ModularWindow.Builder builder = ModularWindow.builder(240, 80);
-        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
-        builder.setGuiTint(getGUIColorization());
+    // region Structure Config Button & Panel
 
-        builder.widget(
-            // spotless:off
-            // #tr StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text
-            // # The machine will build the oscillator ring, constraintor ring, and merger ring in a set number of cycles.
-            // #zh_CN 机器将按照设定数量的振荡器环, 约束器环, 归并器环依次循环搭建.
-            // spotless:on
-            TextWidget.localised("StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text")
-                .setPos(20, 10)
-                .setSize(200, 14))
-            .widget(
-                // #tr StrangeMatterAggregator.UI.OscillatorPieceNeed.text
-                // # Oscillator
-                // #zh_CN 时空振荡器
-                TextWidget.localised("StrangeMatterAggregator.UI.OscillatorPieceNeed.text")
-                    .setPos(1, 36)
-                    .setSize(100, 14))
-            .widget(new TextFieldWidget().setSetterInt(val -> {
-                oscillatorPieceNeed = val;
-                flushBuildingRingPieceArray();
+    private IWidget createStructureConfigButton(PanelSyncManager syncManager, ModularPanel parent) {
+        IPanelHandler panelHandler = syncManager.syncedPanel(
+            "structureConfigPanel",
+            true,
+            (p_syncManager, syncHandler) -> createStructureConfigPanel(p_syncManager, parent));
+        return new ButtonWidget<>().size(18, 18)
+            .marginLeft(4)
+            .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
+            .onMousePressed(d -> {
+                if (panelHandler.isPanelOpen()) {
+                    panelHandler.closePanel();
+                } else {
+                    panelHandler.openPanel();
+                }
+                return true;
             })
-                .setGetterInt(() -> oscillatorPieceNeed)
-                .setNumbers(1, 64)
-                .setOnScrollNumbers(1, 4, 16)
-                .setTextAlignment(Alignment.Center)
-                .setTextColor(Color.WHITE.normal)
-                .setSize(40, 18)
-                .setPos(30, 50)
-                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD))
-            .widget(
-                // #tr StrangeMatterAggregator.UI.ConstraintorPieceNeed.text
-                // # Constraintor
-                // #zh_CN 时空约束器
-                TextWidget.localised("StrangeMatterAggregator.UI.ConstraintorPieceNeed.text")
-                    .setPos(71, 36)
-                    .setSize(100, 14))
-            .widget(new TextFieldWidget().setSetterInt(val -> {
-                constraintorPieceNeed = val;
-                flushBuildingRingPieceArray();
-            })
-                .setGetterInt(() -> constraintorPieceNeed)
-                .setNumbers(1, 64)
-                .setOnScrollNumbers(1, 4, 16)
-                .setTextAlignment(Alignment.Center)
-                .setTextColor(Color.WHITE.normal)
-                .setSize(40, 18)
-                .setPos(100, 50)
-                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD))
-            .widget(
-                // #tr StrangeMatterAggregator.UI.MergerPieceNeed.text
-                // # Merger
-                // #zh_CN 时空归并器
-                TextWidget.localised("StrangeMatterAggregator.UI.MergerPieceNeed.text")
-                    .setPos(141, 36)
-                    .setSize(100, 14))
-            .widget(new TextFieldWidget().setSetterInt(val -> {
-                mergerPieceNeed = val;
-                flushBuildingRingPieceArray();
-            })
-                .setGetterInt(() -> mergerPieceNeed)
-                .setNumbers(1, 64)
-                .setOnScrollNumbers(1, 4, 16)
-                .setTextAlignment(Alignment.Center)
-                .setTextColor(Color.WHITE.normal)
-                .setSize(40, 18)
-                .setPos(170, 50)
-                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
-
-        return builder.build();
+            // #tr StrangeMatterAggregator.UI.BuildingInfoMenuButton.name
+            // # Auto Building Configuration Menu
+            // #zh_CN 自动搭建配置菜单
+            .tooltipBuilder(t -> t.addLine(IKey.lang("StrangeMatterAggregator.UI.BuildingInfoMenuButton.name")))
+            .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 
-    protected ModularWindow createRunningConfigurationWindow(final EntityPlayer player) {
-        ModularWindow.Builder builder = ModularWindow.builder(240, 80);
-        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
-        builder.setGuiTint(getGUIColorization());
+    private ModularPanel createStructureConfigPanel(PanelSyncManager syncManager, ModularPanel parent) {
+        IntSyncValue oscillatorSyncer = new IntSyncValue(() -> oscillatorPieceNeed, val -> {
+            oscillatorPieceNeed = val;
+            flushBuildingRingPieceArray();
+        }).allowC2S();
+        syncManager.syncValue("oscillatorPieceNeedSyncer", oscillatorSyncer);
 
-        builder.widget(
-            // spotless:off
-            // #tr StrangeMatterAggregator.UI.Running.ConfigurationDescription.text
-            // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium, 3-MagnetoConstrainedStarMatter
-            // #zh_CN 设置时空维护流体等级: 1-熔融时空, 2-熔融宇宙素, 3-磁流体约束恒星物质
-            // spotless:on
-            TextWidget.localised("StrangeMatterAggregator.UI.Running.ConfigurationDescription.text")
-                .setPos(20, 10)
-                .setSize(200, 14))
-            .widget(new TextFieldWidget().setSetterInt(val -> {
-                spaceTimeMaintenanceFluidTier = val;
-                calculateParametersWithSettings();
-            })
-                .setGetterInt(() -> spaceTimeMaintenanceFluidTier)
-                .setNumbers(1, 3)
-                .setOnScrollNumbers(1, 1, 1)
+        IntSyncValue constraintorSyncer = new IntSyncValue(() -> constraintorPieceNeed, val -> {
+            constraintorPieceNeed = val;
+            flushBuildingRingPieceArray();
+        }).allowC2S();
+        syncManager.syncValue("constraintorPieceNeedSyncer", constraintorSyncer);
+
+        IntSyncValue mergerSyncer = new IntSyncValue(() -> mergerPieceNeed, val -> {
+            mergerPieceNeed = val;
+            flushBuildingRingPieceArray();
+        }).allowC2S();
+        syncManager.syncValue("mergerPieceNeedSyncer", mergerSyncer);
+
+        ModularPanel panel = new ModularPanel("structureConfigPanel").relative(parent)
+            .leftRel(1)
+            .topRel(0)
+            .size(240, 80);
+
+        // #tr StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text
+        // # The machine will build the oscillator ring, constraintor ring, and merger ring in a set number of cycles.
+        // #zh_CN 机器将按照设定数量的振荡器环, 约束器环, 归并器环依次循环搭建.
+        panel.child(
+            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text"))
+                .textAlign(Alignment.Center)
+                .left(20)
+                .top(10)
+                .size(200, 14));
+
+        // #tr StrangeMatterAggregator.UI.OscillatorPieceNeed.text
+        // # Oscillator
+        // #zh_CN 时空振荡器
+        panel.child(
+            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.OscillatorPieceNeed.text"))
+                .textAlign(Alignment.Center)
+                .left(0)
+                .top(36)
+                .size(100, 14));
+        panel.child(
+            new TextFieldWidget().value(oscillatorSyncer)
                 .setTextAlignment(Alignment.Center)
-                .setTextColor(Color.WHITE.normal)
-                .setSize(40, 18)
-                .setPos(100, 36)
-                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
+                .numbersInt(1, 64)
+                .left(30)
+                .top(52)
+                .size(40, 18));
 
-        return builder.build();
+        // #tr StrangeMatterAggregator.UI.ConstraintorPieceNeed.text
+        // # Constraintor
+        // #zh_CN 时空约束器
+        panel.child(
+            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.ConstraintorPieceNeed.text"))
+                .textAlign(Alignment.Center)
+                .left(70)
+                .top(36)
+                .size(100, 14));
+        panel.child(
+            new TextFieldWidget().value(constraintorSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 64)
+                .left(100)
+                .top(52)
+                .size(40, 18));
+
+        // #tr StrangeMatterAggregator.UI.MergerPieceNeed.text
+        // # Merger
+        // #zh_CN 时空归并器
+        panel.child(
+            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.MergerPieceNeed.text")).textAlign(Alignment.Center)
+                .left(140)
+                .top(36)
+                .size(100, 14));
+        panel.child(
+            new TextFieldWidget().value(mergerSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 64)
+                .left(170)
+                .top(52)
+                .size(40, 18));
+
+        return panel;
+    }
+
+    // endregion
+
+    // region Running Config Button & Panel
+
+    private IWidget createRunningConfigButton(PanelSyncManager syncManager, ModularPanel parent) {
+        IPanelHandler panelHandler = syncManager.syncedPanel(
+            "runningConfigPanel",
+            true,
+            (p_syncManager, syncHandler) -> createRunningConfigPanel(p_syncManager, parent));
+        return new ButtonWidget<>().size(18, 18)
+            .marginLeft(4)
+            .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
+            .onMousePressed(d -> {
+                if (panelHandler.isPanelOpen()) {
+                    panelHandler.closePanel();
+                } else {
+                    panelHandler.openPanel();
+                }
+                return true;
+            })
+            // #tr StrangeMatterAggregator.UI.RunningInfoMenuButton.name
+            // # Running Configuration Menu
+            // #zh_CN 运行配置菜单
+            .tooltipBuilder(t -> t.addLine(IKey.lang("StrangeMatterAggregator.UI.RunningInfoMenuButton.name")))
+            .tooltipShowUpTimer(TOOLTIP_DELAY);
+    }
+
+    private ModularPanel createRunningConfigPanel(PanelSyncManager syncManager, ModularPanel parent) {
+        IntSyncValue fluidTierSyncer = new IntSyncValue(() -> spaceTimeMaintenanceFluidTier, val -> {
+            spaceTimeMaintenanceFluidTier = val;
+            calculateParametersWithSettings();
+        }).allowC2S();
+        syncManager.syncValue("fluidTierSyncer", fluidTierSyncer);
+
+        ModularPanel panel = new ModularPanel("runningConfigPanel").relative(parent)
+            .leftRel(1)
+            .topRel(0)
+            .size(240, 80);
+
+        // #tr StrangeMatterAggregator.UI.Running.ConfigurationDescription.text
+        // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium,
+        // 3-MagnetoConstrainedStarMatter
+        // #zh_CN 设置时空维护流体等级: 1-熔融时空, 2-熔融宇宙素, 3-磁流体约束恒星物质
+        panel.child(
+            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Running.ConfigurationDescription.text"))
+                .textAlign(Alignment.Center)
+                .left(20)
+                .top(10)
+                .size(200, 14));
+
+        // Fluid tier input
+        panel.child(
+            new TextFieldWidget().value(fluidTierSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 3)
+                .left(100)
+                .top(36)
+                .size(40, 18));
+
+        return panel;
     }
 
     protected static IIconContainer ActiveFace;
