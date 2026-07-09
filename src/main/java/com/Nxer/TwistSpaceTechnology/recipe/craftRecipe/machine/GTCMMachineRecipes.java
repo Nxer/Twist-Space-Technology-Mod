@@ -190,7 +190,6 @@ import com.dreammaster.item.NHItemList;
 
 import appeng.api.AEApi;
 import appeng.items.materials.MaterialType;
-import bartworks.common.loaders.BioItemList;
 import bartworks.common.loaders.ItemRegistry;
 import bartworks.system.material.CircuitGeneration.CircuitPartsItem;
 import bartworks.system.material.WerkstoffLoader;
@@ -1526,7 +1525,7 @@ public class GTCMMachineRecipes {
             .itemInputs(
                 GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmiridium, 64),
                 GTUtility.copyAmountUnsafe(64, bioVat),
-                GTUtility.copyAmountUnsafe(64, BioItemList.getPetriDish(null)),
+                GTUtility.copyAmountUnsafe(64, new ItemStack(GameRegistry.findItem("bartworks", "BioLabParts"))),
                 GTOreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Infinity, 3),
 
                 ItemList.Electric_Pump_UHV.get(16),
