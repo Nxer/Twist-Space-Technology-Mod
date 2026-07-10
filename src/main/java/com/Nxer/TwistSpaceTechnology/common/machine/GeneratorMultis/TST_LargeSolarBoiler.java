@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -35,6 +34,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -107,8 +108,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     private static final long explosionPower = V[1];
 
-    private static final FluidStack waterFluid = MiscHelper.water;
-    private static final FluidStack distilledWaterFluid = MiscHelper.distilledWater;
+    private static final Fluid plainWater = FluidRegistry.WATER;
 
     private double heat = 0; // min - 0, max - 1
     private double calcification = 0; // min - 0, max - 1
@@ -141,22 +141,16 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
         final ArrayList<FluidStack> storedFluids = super.getStoredFluids();
         for (FluidStack hatchFluid : storedFluids) {
+            if (hatchFluid == null) continue;
 
-            boolean hasWater = hatchFluid.isFluidEqual(waterFluid);
-            boolean hasDistilledWater = hatchFluid.isFluidEqual(distilledWaterFluid);
+            boolean hasWater = hatchFluid.getFluid() == plainWater;
+            boolean hasDistilledWater = MiscHelper.distilledWater != null
+                && hatchFluid.isFluidEqual(MiscHelper.distilledWater);
 
             int amountOfFluidInHatch = 0;
 
             if (hasWater || hasDistilledWater) {
                 amountOfFluidInHatch = hatchFluid.amount;
-            }
-
-            boolean shouldIncreaseCalcification = (runningTicks / 20) % (calcificationTimeSeconds / 100) == 0;
-            if (runningTicks > calcificationDelayTicks && shouldIncreaseCalcification && hasWater) {
-                calcification += 0.01;
-                if (calcification > 1) {
-                    calcification = 1;
-                }
             }
 
             if (amountOfFluidInHatch > 0) {
@@ -165,11 +159,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                 }
 
                 if (shouldExplode) {
-
                     for (MTEHatchInput hatch : mInputHatches) {
                         hatch.doExplosion(explosionPower);
                     }
-
                     return CheckRecipeResultRegistry.NONE;
                 }
 
@@ -177,21 +169,28 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     .min(amountOfFluidInHatch, getSteamProduction() / GTValues.STEAM_PER_WATER) * heat
                     / ((calcification * (calcificationFactor - 1)) + 1));
 
-                FluidStack liquidToDeplete;
-                if (hasWater) {
-                    liquidToDeplete = copyAmount(waterFluid, consumedWater);
-                } else {
-                    liquidToDeplete = copyAmount(distilledWaterFluid, consumedWater);
-                }
+                if (consumedWater > 0) {
+                    FluidStack liquidToDeplete;
+                    if (hasWater) {
+                        liquidToDeplete = new FluidStack(plainWater, consumedWater);
+                    } else {
+                        liquidToDeplete = new FluidStack(MiscHelper.distilledWater.getFluid(), consumedWater);
+                    }
 
-                if (super.depleteInput(liquidToDeplete)) {
-                    super.mOutputFluids = new FluidStack[] {
-                        Materials.Steam.getGas((long) consumedWater * GTValues.STEAM_PER_WATER) };
-                    super.mMaxProgresstime = 20;
-                    super.mEfficiency = getMaxEfficiency(null);
-                    runningTicks += 20;
+                    if (super.depleteInput(liquidToDeplete)) {
+                        if (hasWater && runningTicks > calcificationDelayTicks
+                            && (runningTicks / 20) % (calcificationTimeSeconds / 100) == 0) {
+                            calcification = Math.min(1, calcification + 0.01);
+                        }
 
-                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                        super.mOutputFluids = new FluidStack[] {
+                            Materials.Steam.getGas((long) consumedWater * GTValues.STEAM_PER_WATER) };
+                        super.mMaxProgresstime = 20;
+                        super.mEfficiency = getMaxEfficiency(null);
+                        runningTicks += 20;
+
+                        return CheckRecipeResultRegistry.SUCCESSFUL;
+                    }
                 }
             }
         }
