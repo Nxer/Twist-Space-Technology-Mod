@@ -33,7 +33,6 @@ import static tectech.thing.casing.TTCasingsContainer.sBlockCasingsTT;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
@@ -205,12 +204,14 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                             }
                         }
                     }
+                    break;
                 }
             }
             // If is gt ore but not in recipe map
             // Handle it specially
             if (hasNotFound) {
-                if (Objects.equals(items.getUnlocalizedName(), "gt.blockores")) {
+                if (items.getUnlocalizedName()
+                    .startsWith("gt.blockores")) {
                     TwistSpaceTechnology.LOG.info("OP system recipe has not write this material's: " + items);
                     outputs.add(items.copy());
                     items.stackSize = 0;
@@ -244,6 +245,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
             boolean hasNotFound = true;
             for (GTRecipe recipe : recipeMap.getAllRecipes()) {
+                if (recipe.mInputs == null || recipe.mInputs.length < 1) continue;
                 if (GTUtility.areStacksEqual(recipe.mInputs[0], items)
                     && items.stackSize >= recipe.mInputs[0].stackSize) {
                     // found the recipe
@@ -286,12 +288,14 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
                             }
                         }
                     }
+                    break;
                 }
             }
             // If is gt ore but not in recipe map
             // Handle it specially
             if (hasNotFound) {
-                if (Objects.equals(items.getUnlocalizedName(), "gt.blockores")) {
+                if (items.getUnlocalizedName()
+                    .startsWith("gt.blockores")) {
                     TwistSpaceTechnology.LOG.info("OP system recipe has not write this material's: " + items);
                     outputs.add(items.copy());
                     items.stackSize = 0;
