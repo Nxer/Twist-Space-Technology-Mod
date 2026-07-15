@@ -17,7 +17,6 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAS
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW;
-import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 
@@ -26,8 +25,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LargeSolarBoiler;
-import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -38,9 +35,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LargeSolarBoiler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -51,20 +50,10 @@ import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import com.gtnewhorizons.modularui.api.drawable.IDrawable;
-import com.gtnewhorizons.modularui.api.math.Pos2d;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
-import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -78,7 +67,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.blocks.BlockCasings1;
 import gregtech.common.blocks.BlockCasings2;
-import org.jetbrains.annotations.NotNull;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 
 public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBoiler> {
 
@@ -720,30 +709,30 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()) };
     }
 
-//    @Override
-//    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-//        super.drawTexts(screenElements, inventorySlot);
-//        screenElements.widget(
-//            new TextWidget().setStringSupplier(
-//                () -> EnumChatFormatting.WHITE
-//                    + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
-//                    + " "
-//                    + EnumChatFormatting.GOLD
-//                    + numberFormat.format((int) (heat * 100))
-//                    + "% "
-//                    + EnumChatFormatting.RESET))
-//            .widget(
-//                new TextWidget().setStringSupplier(
-//                    () -> EnumChatFormatting.WHITE
-//                        + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
-//                        + " "
-//                        + EnumChatFormatting.GOLD
-//                        + numberFormat.format((int) (calcification * 100))
-//                        + "% "
-//                        + EnumChatFormatting.RESET))
-//            .widget(new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val))
-//            .widget(new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val));;
-//    }
+    // @Override
+    // protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+    // super.drawTexts(screenElements, inventorySlot);
+    // screenElements.widget(
+    // new TextWidget().setStringSupplier(
+    // () -> EnumChatFormatting.WHITE
+    // + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
+    // + " "
+    // + EnumChatFormatting.GOLD
+    // + numberFormat.format((int) (heat * 100))
+    // + "% "
+    // + EnumChatFormatting.RESET))
+    // .widget(
+    // new TextWidget().setStringSupplier(
+    // () -> EnumChatFormatting.WHITE
+    // + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
+    // + " "
+    // + EnumChatFormatting.GOLD
+    // + numberFormat.format((int) (calcification * 100))
+    // + "% "
+    // + EnumChatFormatting.RESET))
+    // .widget(new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val))
+    // .widget(new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val));;
+    // }
 
     public void onClickClearingButton() {
         calcification = 0;
@@ -755,28 +744,28 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return new TST_Gui_LargeSolarBoiler(this);
     }
 
-//    @Override
-//    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-//        super.addUIWidgets(builder, buildContext);
-//
-//        builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
-//            if (clickData.mouseButton == 0) {
-//                calcification = 0;
-//                runningTicks = 0;
-//            }
-//        })
-//            .setPlayClickSound(true)
-//            .setBackground(
-//                () -> new IDrawable[] { GTUITextures.BUTTON_STANDARD,
-//                    GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
-//            .addTooltip(
-//                EnumChatFormatting.WHITE
-//                    + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
-//                    + EnumChatFormatting.RESET)
-//            .setTooltipShowUpDelay(TOOLTIP_DELAY)
-//            .setPos(new Pos2d(174, 91))
-//            .setSize(16, 16));
-//    }
+    // @Override
+    // public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+    // super.addUIWidgets(builder, buildContext);
+    //
+    // builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
+    // if (clickData.mouseButton == 0) {
+    // calcification = 0;
+    // runningTicks = 0;
+    // }
+    // })
+    // .setPlayClickSound(true)
+    // .setBackground(
+    // () -> new IDrawable[] { GTUITextures.BUTTON_STANDARD,
+    // GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
+    // .addTooltip(
+    // EnumChatFormatting.WHITE
+    // + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
+    // + EnumChatFormatting.RESET)
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(new Pos2d(174, 91))
+    // .setSize(16, 16));
+    // }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
