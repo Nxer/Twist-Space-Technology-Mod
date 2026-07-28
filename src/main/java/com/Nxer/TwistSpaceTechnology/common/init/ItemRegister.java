@@ -1061,6 +1061,7 @@ public class ItemRegister {
         GTCMItemList.MegaTreeFramModSymboll2.set(MegaTreeFarmModeSymbol.registerVariant(1));
         GTCMItemList.MegaTreeFramModSymboll3.set(MegaTreeFarmModeSymbol.registerVariant(2));
         GTCMItemList.MegaTreeFramModSymboll4.set(MegaTreeFarmModeSymbol.registerVariant(3));
+        GTCMItemList.MegaTreeFramModSymboll5.set(MegaTreeFarmModeSymbol.registerVariant(4));
 
         // endregion
     }

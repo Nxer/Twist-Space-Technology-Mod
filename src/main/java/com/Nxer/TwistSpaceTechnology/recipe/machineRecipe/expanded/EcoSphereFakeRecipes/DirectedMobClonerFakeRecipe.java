@@ -2,14 +2,15 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFak
 
 import java.util.Map;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerBossRequirementKey;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerTierDisplayKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import crazypants.enderio.EnderIO;
@@ -37,16 +38,23 @@ public final class DirectedMobClonerFakeRecipe {
                 .itemInputs(circuit)
                 .itemOutputs(createDisplayOutputs(entry.getValue()))
                 .fluidInputs(lifeEssence)
-                .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 2)
+                .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 2)
+                .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, true)
                 .metadata(
                     DirectedMobClonerBossRequirementKey.INSTANCE,
                     entry.getValue()
-                        .boss() ? new ItemStack(Items.diamond_sword) : null)
+                        .boss() ? createInfiniteUpgradeRequirement() : null)
                 .duration(DURATION)
                 .eut(0)
                 .fake()
                 .addTo(GTCMRecipe.DirectedMobClonerFakeRecipes);
         }
+    }
+
+    private static ItemStack createInfiniteUpgradeRequirement() {
+        ItemStack upgrade = GTCMItemList.MegaTreeFramModSymboll5.get(1);
+        upgrade.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.infiniteUpgrade"));
+        return upgrade;
     }
 
     private static void registerLifeEssenceRecipe() {
@@ -66,7 +74,8 @@ public final class DirectedMobClonerFakeRecipe {
             .itemOutputs(lifeBucket)
             .fluidInputs(water)
             .fluidOutputs(lifeEssence)
-            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
+            .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 1)
+            .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, false)
             .duration(DURATION)
             .eut(0)
             .fake()

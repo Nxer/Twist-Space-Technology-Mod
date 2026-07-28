@@ -7,15 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -23,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Mods;
@@ -34,6 +31,48 @@ public class AquaticZoneSimulatorFakeRecipe {
     private static final ItemStack Offspring = GTCMItemList.OffSpring.get(1);
     public static ArrayList<ItemStack> WatersOutputs = new ArrayList<>();
     public static HashMap<String, Integer> WatersChances = new HashMap<>();
+    public static final List<TST_ItemID> AquaticItems = new ArrayList<>();
+
+    static {
+        addAquaticItem(Mods.Minecraft.ID, "fish", 0);
+        addAquaticItem(Mods.Minecraft.ID, "fish", 1);
+        addAquaticItem(Mods.Minecraft.ID, "fish", 2);
+        addAquaticItem(Mods.Minecraft.ID, "fish", 3);
+        if (Mods.PamsHarvestCraft.isModLoaded()) {
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "calamarirawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "anchovyrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "bassrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "carprawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "catfishrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "charrrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "crayfishrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "eelrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "grouperrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "herringrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "mudfishrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "octopusrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "perchrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "scalloprawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "shrimprawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "snailrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "snapperrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "tilapiarawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "troutrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "tunarawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "walleyerawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "greenheartfishItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "clamrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "crabrawItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "frograwItem", 0);
+            addAquaticItem(Mods.PamsHarvestCraft.ID, "turtlerawItem", 0);
+        }
+    }
+
+    private static void addAquaticItem(String modId, String itemName, int meta) {
+        ItemStack stack = GTModHandler.getModItem(modId, itemName, 1, meta);
+        if (stack != null) AquaticItems.add(TST_ItemID.createNoNBT(stack));
+    }
 
     public static void loadRecipes() {
         initStatics();
@@ -72,30 +111,10 @@ public class AquaticZoneSimulatorFakeRecipe {
             GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "waterchestnutItem", 2, 0));
         if (Mods.TwilightForest.isModLoaded()) Collections
             .addAll(WatersOutputs, GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
-        addSwampLootFish();
-        deduplicateWatersOutputs();
-    }
-
-    private static void addSwampLootFish() {
-        WeightedRandomChestContent[] contents = ChestGenHooks.getInfo("loot_swamp")
-            .getItems(new Random());
-        if (contents == null) return;
-        for (WeightedRandomChestContent content : contents) {
-            if (content == null || content.theItemId == null || !isSupportedFish(content.theItemId)) continue;
-            WatersOutputs.add(content.theItemId.copy());
+        for (TST_ItemID aquaticItem : AquaticItems) {
+            WatersOutputs.add(aquaticItem.getItemStackWithoutNBT(1));
         }
-    }
-
-    private static boolean isSupportedFish(ItemStack stack) {
-        String registryName = Item.itemRegistry.getNameForObject(stack.getItem());
-        if (registryName == null) return false;
-        if ("minecraft:fish".equals(registryName)) return true;
-        int separator = registryName.indexOf(':');
-        if (separator < 0 || !registryName.substring(0, separator)
-            .equalsIgnoreCase(Mods.PamsHarvestCraft.ID)) return false;
-        return registryName.substring(separator + 1)
-            .toLowerCase(Locale.ROOT)
-            .endsWith("rawitem");
+        deduplicateWatersOutputs();
     }
 
     private static void deduplicateWatersOutputs() {

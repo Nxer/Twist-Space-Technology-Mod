@@ -107,6 +107,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private int controllerTier = 0;
     private int boundMode = -1;
     private int pendingMode = -1;
+    private boolean modeSymbolPresent = false;
     private boolean cleaningRequested = false;
     private boolean cleaningRunActive = false;
     private int directedMobClonerDebugRecipeId = 0;
@@ -147,6 +148,13 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     public int getBoundMode() {
         return boundMode;
+    }
+
+    public boolean hasDirectedMobClonerInfiniteUpgrade() {
+        ItemStack symbol = getControllerSlot();
+        return symbol != null && symbol.stackSize > 0
+            && symbol.getItem() == TstItems.MegaTreeFarmModeSymbol
+            && symbol.getItemDamage() == 4;
     }
 
     public long getModeParallel() {
@@ -228,8 +236,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // # Directed Mob Cloner
         // #zh_CN 定向克隆模式
         if (cleaningRequested || cleaningRunActive) return tr("MegaTreeFarm.mode.cleaning");
-        return boundMode >= 0 && boundMode < MACHINE_MODES.length ? MACHINE_MODES[boundMode].getDisplayName()
-            : tr("MegaTreeFarm.mode.unbound");
+        return modeSymbolPresent && boundMode >= 0 && boundMode < MACHINE_MODES.length
+            ? MACHINE_MODES[boundMode].getDisplayName()
+            : tr("MegaTreeFarm.mode.waiting");
     }
 
     @Override
@@ -265,6 +274,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide()) updateModeSymbolBinding();
         if (aBaseMetaTileEntity.isServerSide() && directedMobClonerDebugStopPending && mMaxProgresstime <= 0) {
             resetDirectedMobClonerDebugRun();
             aBaseMetaTileEntity.disableWorking();
@@ -306,35 +316,30 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 }
                 return true;
             }
-            if (heldItem != null && heldItem.getItem() == TstItems.MegaTreeFarmModeSymbol) {
-                int requestedMode = heldItem.getItemDamage();
-                if (requestedMode >= 0 && requestedMode < MACHINE_MODES.length) {
-                    bindModeSymbol(aPlayer, heldItem, requestedMode);
-                    return true;
-                }
-            }
         }
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
     }
 
-    private void bindModeSymbol(EntityPlayer player, ItemStack heldItem, int requestedMode) {
-        if (!getBaseMetaTileEntity().isServerSide() || requestedMode == boundMode || requestedMode == pendingMode)
-            return;
-        if (boundMode >= 0) {
-            ItemStack oldSymbol = new ItemStack(TstItems.MegaTreeFarmModeSymbol, 1, boundMode);
-            if (!player.inventory.addItemStackToInventory(oldSymbol)) {
-                player.dropPlayerItemWithRandomChoice(oldSymbol, false);
+    private void updateModeSymbolBinding() {
+        int requestedMode = getModeFromSymbol(getControllerSlot());
+        boolean wasPresent = modeSymbolPresent;
+        modeSymbolPresent = requestedMode >= 0;
+        if (wasPresent != modeSymbolPresent) markDirty();
+        if (!modeSymbolPresent) return;
+        if (cleaningRequested || cleaningRunActive) {
+            if (requestedMode != pendingMode) {
+                pendingMode = requestedMode;
+                markDirty();
             }
+            return;
         }
-        player.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, 1));
-        player.inventory.markDirty();
+        if (requestedMode == boundMode) return;
         if (boundMode < 0) {
             boundMode = requestedMode;
             machineMode = requestedMode;
         } else {
             pendingMode = requestedMode;
             cleaningRequested = true;
-            cleaningRunActive = false;
             mProgresstime = 0;
             mMaxProgresstime = 0;
             mOutputItems = null;
@@ -342,6 +347,13 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         }
         markDirty();
         SetRemoveWater();
+    }
+
+    private static int getModeFromSymbol(ItemStack stack) {
+        if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.MegaTreeFarmModeSymbol) return -1;
+        int meta = stack.getItemDamage();
+        if (meta >= 0 && meta <= 2) return meta;
+        return meta == 3 || meta == 4 ? 3 : -1;
     }
 
     @Override
@@ -868,8 +880,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     duration = CLEANING_DURATION;
                     return SimpleCheckRecipeResult.ofSuccess("mega_tree_farm_cleaning");
                 }
-                if (boundMode < 0 || boundMode >= MACHINE_MODES.length) {
-                    return SimpleCheckRecipeResult.ofFailure("mega_tree_farm_unbound");
+                if (!modeSymbolPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
+                    // #tr GT5U.gui.text.recipe_result.mega_tree_farm_waiting_for_mode_symbol
+                    // # Waiting For Mode Symbol
+                    // #zh_CN 等待模式信物
+                    return SimpleCheckRecipeResult.ofFailure("mega_tree_farm_waiting_for_mode_symbol");
                 }
                 machineMode = boundMode;
 

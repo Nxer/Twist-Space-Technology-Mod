@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.AquaticItems;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,7 +11,8 @@ import java.util.Map;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
+
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Materials;
@@ -149,7 +152,7 @@ public enum DirectedMobClonerDropConversion {
     public static ConversionResult convert(ItemStack source) {
         if (source == null || source.getItem() == null) return ConversionResult.unmatched();
         GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(source.getItem());
-        if (isRawFishOrPamsRawFood(source, identifier)) {
+        if (AquaticItems.contains(TST_ItemID.createNoNBT(source))) {
             return ConversionResult.converted(convertRawFish(source.stackSize));
         }
         if (identifier == null || "TConstruct".equals(identifier.modId)) return ConversionResult.unmatched();
@@ -189,17 +192,6 @@ public enum DirectedMobClonerDropConversion {
     private static void addItem(List<ConvertedOutput> outputs, Item item, int amount, double probabilityMultiplier) {
         if (item != null && amount > 0)
             outputs.add(new ConvertedOutput(new ItemStack(item, amount), probabilityMultiplier));
-    }
-
-    private static boolean isRawFishOrPamsRawFood(ItemStack stack, GameRegistry.UniqueIdentifier identifier) {
-        boolean isPamsHarvestCraft = identifier != null && "harvestcraft".equalsIgnoreCase(identifier.modId);
-        for (int oreId : OreDictionary.getOreIDs(stack)) {
-            String oreName = OreDictionary.getOreName(oreId);
-            String normalizedName = oreName.toLowerCase(java.util.Locale.ROOT);
-            if ("listallfishraw".equals(normalizedName)) return true;
-            if (isPamsHarvestCraft && normalizedName.startsWith("food") && normalizedName.endsWith("raw")) return true;
-        }
-        return false;
     }
 
     private enum SpecialConversion {

@@ -20,6 +20,26 @@ public class NEIHandler {
 
     public static void IMCSender() {
         API.addRecipeCatalyst(GTCMItemList.HephaestusAtelier.get(1), "smelting");
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFramModSymboll1.get(1),
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFramModSymboll2.get(1),
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFramModSymboll3.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFramModSymboll4.get(1),
+            "tst.recipe.DirectedMobClonerFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFramModSymboll5.get(1),
+            "tst.recipe.DirectedMobClonerFakeRecipes",
+            -10);
 
         /*
          * sendCatalyst("mc.recipe.furnace", "gregtech:gt.blockmachines:19037", -10);

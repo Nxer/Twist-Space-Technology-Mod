@@ -53,7 +53,11 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         }
         if (!machine.isTierTwo())
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("mega_tree_farm_tier_two_required"));
+        boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
+        if (DirectedMobClonerRecipeCache.isBossRecipe(recipeId) && !infiniteUpgrade)
+            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
+        if (infiniteUpgrade) voltageTier += 4;
         int tierOffset = DirectedMobClonerRecipeCache.isBossRecipe(recipeId) ? 6 : 4;
         int maximumOverclocks = Math.max(0, voltageTier - tierOffset);
         EcoSphereModeSupport.PerfectOverclockResult overclockResult = EcoSphereModeSupport
@@ -61,7 +65,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         if (overclockResult == null)
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_enough_input"));
         return DirectedMobClonerRecipeCache
-            .process(machine, recipeId, overclockResult.tier(), overclockResult.multiplier());
+            .process(machine, recipeId, overclockResult.tier(), overclockResult.multiplier(), infiniteUpgrade);
     }
 
     private static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine, int euTier) {

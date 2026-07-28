@@ -10,8 +10,6 @@ import java.util.Map;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
@@ -91,12 +89,7 @@ public final class DirectedMobClonerRecipeCache {
             if (!conversion.matched()) {
                 if (sanitized.isItemStackDamageable()) sanitized.setItemDamage(0);
                 drops.add(
-                    new CachedDrop(
-                        sanitized,
-                        Math.max(0, Math.min(10000, drop.chance)),
-                        drop.lootable,
-                        durabilityExpectation,
-                        1d));
+                    new CachedDrop(sanitized, Math.max(0, Math.min(10000, drop.chance)), durabilityExpectation, 1d));
                 continue;
             }
             for (DirectedMobClonerDropConversion.ConvertedOutput converted : conversion.outputs()) {
@@ -104,7 +97,6 @@ public final class DirectedMobClonerRecipeCache {
                     new CachedDrop(
                         converted.stack(),
                         Math.max(0, Math.min(10000, drop.chance)),
-                        drop.lootable,
                         durabilityExpectation,
                         converted.probabilityMultiplier()));
             }
@@ -229,44 +221,32 @@ public final class DirectedMobClonerRecipeCache {
     }
 
     public static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
-        long multiplier) {
-        WeaponProfile weapon = findWeapon(machine.getStoredInputs());
-        if (weapon == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_sword"));
-        return process(machine, recipeId, effectiveTier, multiplier, weapon, FIXED_DURATION);
+        long multiplier, boolean infiniteUpgrade) {
+        return process(machine, recipeId, effectiveTier, multiplier, infiniteUpgrade, FIXED_DURATION);
     }
 
     public static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine, int recipeId) {
+        boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
+        if (isBossRecipe(recipeId) && !infiniteUpgrade)
+            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
+        if (infiniteUpgrade) voltageTier += 4;
         int overclocks = Math.max(0, voltageTier - (isBossRecipe(recipeId) ? 6 : 4));
-        return process(
-            machine,
-            recipeId,
-            overclocks,
-            EcoSphereModeSupport.powerOfFour(overclocks),
-            WeaponProfile.DIAMOND,
-            5);
+        return process(machine, recipeId, overclocks, EcoSphereModeSupport.powerOfFour(overclocks), infiniteUpgrade, 5);
     }
 
     private static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
-        long multiplier, WeaponProfile weapon, int duration) {
+        long multiplier, boolean infiniteUpgrade, int duration) {
         CachedRecipe recipe = recipesById.get(recipeId);
         if (recipe == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_recipe"));
-        if (recipe.boss() && !weapon.allowsBoss())
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_weapon_required"));
+        if (recipe.boss() && !infiniteUpgrade)
+            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
 
         List<ItemStack> outputs = new ArrayList<>();
         double durationMultiplier = (double) FIXED_DURATION / ((double) recipe.eecDuration() * recipe.eecDuration());
         for (CachedDrop drop : recipe.drops()) {
             int chance = drop.chance();
             long amount = drop.stack().stackSize;
-            if (drop.lootable() && weapon.lootingLevel() > 0) {
-                chance += weapon.lootingLevel() * 5000;
-                if (chance > 10000) {
-                    int divisor = (int) Math.ceil(chance / 10000d);
-                    amount *= divisor;
-                    chance /= divisor;
-                }
-            }
             long successfulOperations = calculateChanceBasedOperations(
                 multiplier,
                 chance,
@@ -293,17 +273,6 @@ public final class DirectedMobClonerRecipeCache {
         if (value <= 0 || multiplier <= 0) return 0;
         if (value > Long.MAX_VALUE / multiplier) return Long.MAX_VALUE;
         return value * multiplier;
-    }
-
-    private static WeaponProfile findWeapon(List<ItemStack> inputs) {
-        for (ItemStack input : inputs) {
-            if (input == null) continue;
-            Item item = input.getItem();
-            if (item == Items.diamond_sword) return WeaponProfile.DIAMOND;
-            if (item == Items.iron_sword) return WeaponProfile.IRON;
-            if (item == Items.wooden_sword) return WeaponProfile.WOOD;
-        }
-        return null;
     }
 
     private static final class PendingRecipe {
@@ -407,15 +376,12 @@ public final class DirectedMobClonerRecipeCache {
 
         private final ItemStack stack;
         private final int chance;
-        private final boolean lootable;
         private final double durabilityExpectation;
         private final double probabilityMultiplier;
 
-        private CachedDrop(ItemStack stack, int chance, boolean lootable, double durabilityExpectation,
-            double probabilityMultiplier) {
+        private CachedDrop(ItemStack stack, int chance, double durabilityExpectation, double probabilityMultiplier) {
             this.stack = stack;
             this.chance = chance;
-            this.lootable = lootable;
             this.durabilityExpectation = durabilityExpectation;
             this.probabilityMultiplier = probabilityMultiplier;
         }
@@ -428,10 +394,6 @@ public final class DirectedMobClonerRecipeCache {
             return chance;
         }
 
-        private boolean lootable() {
-            return lootable;
-        }
-
         private double durabilityExpectation() {
             return durabilityExpectation;
         }
@@ -441,26 +403,4 @@ public final class DirectedMobClonerRecipeCache {
         }
     }
 
-    private enum WeaponProfile {
-
-        WOOD(0, false),
-        IRON(3, false),
-        DIAMOND(10, true);
-
-        private final int lootingLevel;
-        private final boolean allowsBoss;
-
-        WeaponProfile(int lootingLevel, boolean allowsBoss) {
-            this.lootingLevel = lootingLevel;
-            this.allowsBoss = allowsBoss;
-        }
-
-        int lootingLevel() {
-            return lootingLevel;
-        }
-
-        boolean allowsBoss() {
-            return allowsBoss;
-        }
-    }
 }

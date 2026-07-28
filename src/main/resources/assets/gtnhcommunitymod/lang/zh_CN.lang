@@ -2362,3 +2362,7 @@ MegaTreeFarm.nei.strangeJellyfish=奇怪的水母？？
 MegaTreeFarm.nei.recipeNumberZero=配方编号：0
 MegaTreeFarm.nei.mobHealthLifeEssence=生物血量 x 20 x 生命本源
 DirectedMobCloner.nei.perfectOverclock=执行无损超频
+MegaTreeFarm.mode.waiting=等待模式信物
+GT5U.gui.text.recipe_result.mega_tree_farm_waiting_for_mode_symbol=等待模式信物
+MegaTreeFarm.nei.infiniteUpgrade=无尽升级
+GT5U.gui.text.recipe_result.boss_upgrade_required=需要无尽升级

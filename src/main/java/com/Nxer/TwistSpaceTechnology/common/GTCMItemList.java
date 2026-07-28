@@ -171,6 +171,7 @@ public enum GTCMItemList {
     MegaTreeFramModSymboll2,
     MegaTreeFramModSymboll3,
     MegaTreeFramModSymboll4,
+    MegaTreeFramModSymboll5,
 
     LvFlask,
     MvFlask,
