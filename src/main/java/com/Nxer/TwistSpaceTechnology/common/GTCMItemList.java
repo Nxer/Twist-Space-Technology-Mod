@@ -167,6 +167,10 @@ public enum GTCMItemList {
     WirelessUpdateItem,
     FountOfEcology,
     OffSpring,
+    MegaTreeFramModSymboll1,
+    MegaTreeFramModSymboll2,
+    MegaTreeFramModSymboll3,
+    MegaTreeFramModSymboll4,
 
     LvFlask,
     MvFlask,

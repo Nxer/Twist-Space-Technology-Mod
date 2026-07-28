@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MegaTreeFarmModeSymbol;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -26,7 +27,7 @@ public class ItemRegister {
 
     public static void registryItems() {
         Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
-            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask };
+            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask, MegaTreeFarmModeSymbol };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -1055,6 +1056,11 @@ public class ItemRegister {
         GTCMItemList.HatchUpdateTool.set(new ItemStack(TstItems.HatchUpdateTool, 1));
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
+
+        GTCMItemList.MegaTreeFramModSymboll1.set(MegaTreeFarmModeSymbol.registerVariant(0));
+        GTCMItemList.MegaTreeFramModSymboll2.set(MegaTreeFarmModeSymbol.registerVariant(1));
+        GTCMItemList.MegaTreeFramModSymboll3.set(MegaTreeFarmModeSymbol.registerVariant(2));
+        GTCMItemList.MegaTreeFramModSymboll4.set(MegaTreeFarmModeSymbol.registerVariant(3));
 
         // endregion
     }

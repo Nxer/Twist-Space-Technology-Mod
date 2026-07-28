@@ -2358,3 +2358,7 @@ TST.SimpleStructureErrors.missing_merger_ring=缺少时空归并器环
 TST_LargeSolarBoiler.gui.02=§f热量: §6%s%%§r
 TST_LargeSolarBoiler.gui.03=§f钙化程度: §6%s%%§r
 TST_LargeSolarBoiler.gui.01=点击以清洁机器的钙化
+MegaTreeFarm.nei.strangeJellyfish=奇怪的水母？？
+MegaTreeFarm.nei.recipeNumberZero=配方编号：0
+MegaTreeFarm.nei.mobHealthLifeEssence=生物血量 x 20 x 生命本源
+DirectedMobCloner.nei.perfectOverclock=执行无损超频

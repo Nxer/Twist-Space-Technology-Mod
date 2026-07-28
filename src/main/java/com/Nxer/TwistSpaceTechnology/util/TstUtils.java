@@ -49,6 +49,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.util.GTUtility;
+import gregtech.common.items.ItemIntegratedCircuit;
 
 /**
  * <h1>The Twist-Space-Technology Utilities.</h1>
@@ -206,7 +207,19 @@ public class TstUtils {
      * @return Which voltage tier the machine's maximum EU/t from its energy hatches should be in.
      */
     public static int getMachineTotalPowerTier(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
-        return (int) Math.ceil(calculateVoltageTier(getMachineTotalPower(machine)));
+        return getPowerTier(getMachineTotalPower(machine));
+    }
+
+    public static int getPowerTier(long power) {
+        if (power <= 8) return 0;
+        int tier = 0;
+        long tierPower = 8;
+        while (power > tierPower) {
+            tier++;
+            if (tierPower > Long.MAX_VALUE / 4) return tier;
+            tierPower *= 4;
+        }
+        return tier;
     }
 
     /**
@@ -494,6 +507,19 @@ public class TstUtils {
             }
         }
         return newStack.toArray(new ItemStack[0]);
+    }
+
+    /**
+     * Sum the configuration value of every integrated circuit in the given item stacks.
+     * Each stack contributes its configuration value multiplied by its stack size.
+     */
+    public static int getIntegratedCircuitConfigurationSum(Iterable<ItemStack> itemStacks) {
+        int total = 0;
+        for (ItemStack itemStack : itemStacks) {
+            if (itemStack == null || !(itemStack.getItem() instanceof ItemIntegratedCircuit)) continue;
+            total += itemStack.getItemDamage() * itemStack.stackSize;
+        }
+        return total;
     }
 
     /**

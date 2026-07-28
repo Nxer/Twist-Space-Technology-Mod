@@ -1,0 +1,54 @@
+package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
+
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.calculateEut;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NotEnoughWater;
+
+import net.minecraft.item.ItemStack;
+
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
+
+import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
+
+public final class ArtificialGreenHouseMode implements IEcoSphereMode {
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.ArtificialGreenHouseFakeRecipes;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return net.minecraft.util.StatCollector.translateToLocal("EcoSphereSimulator.modeMsg.2");
+    }
+
+    @Override
+    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier, double tierMultiplier) {
+        machine.fertilizerToConsume = 0;
+        machine.waterToConsume = 0;
+        ItemStack seed = machine.getControllerSlot();
+        if (seed == null || !machine.cropsNHFarm.createCropCache(seed))
+            return EcoSphereModeResult.failure(NoSeedInController);
+        if (!machine.cropsNHFarm.isValid())
+            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
+
+        boolean hybridSeed = machine.cropsNHFarm.seedData != null;
+        if (hybridSeed && !machine.isTierTwo())
+            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("mega_tree_farm_tier_two_required"));
+
+        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
+            .consumeFluidForParallel(machine, CropsNHFluids.enrichedFertilizer, hybridSeed ? 50L : 20L, euTier);
+        if (parallelResult == null) return EcoSphereModeResult.failure(NotEnoughWater);
+
+        machine.fertilizerToConsume = parallelResult.fluidCost();
+        return new EcoSphereModeResult(
+            CheckRecipeResultRegistry.SUCCESSFUL,
+            machine.cropsNHFarm.getOutputStacks(parallelResult.multiplier()),
+            calculateEut(parallelResult.tier()),
+            machine.getStandardModeDuration());
+    }
+}

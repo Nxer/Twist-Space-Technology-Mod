@@ -17,6 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialFix;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -46,6 +47,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import gregtech.api.enums.Mods;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.render.GTBlockTextureBuilder;
 
@@ -67,6 +69,7 @@ public class CommonProxy {
         TCLoader.preInit();
 
         LanguageManager.init();
+        if (Mods.MobsInfo.isModLoaded()) DirectedMobClonerRecipeCache.init();
     }
 
     public void init(FMLInitializationEvent event) {

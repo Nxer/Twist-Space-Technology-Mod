@@ -11,6 +11,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.ArtificialStar_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters.DSP_Receiver_SpecialValueFormatter;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_AquaticZoneSimulatorFronted;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_ArtificialGreenHouseFrontend;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_DirectedMobClonerFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_IndustrialMagicMatrixFrontend;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_RapidCoolingDownFrontend;
@@ -248,7 +250,7 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> AquaticZoneSimulatorFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.AquaticZoneSimulatorFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
-        .minInputs(1, 1)
+        .minInputs(0, 1)
         .frontend(TST_AquaticZoneSimulatorFronted::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
@@ -261,6 +263,7 @@ public class GTCMRecipe {
         .of("tst.recipe.ArtificialGreenHouseFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
         .minInputs(1, 1)
+        .frontend(TST_ArtificialGreenHouseFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .build();
@@ -270,8 +273,9 @@ public class GTCMRecipe {
     // #zh_CN 生态圈 : 定向克隆
     public static final RecipeMap<TST_RecipeMapBackend> DirectedMobClonerFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.DirectedMobClonerFakeRecipes", TST_RecipeMapBackend::new)
-        .maxIO(1, 1, 1, 0)
-        .minInputs(1, 1)
+        .maxIO(1, 2, 1, 1)
+        .minInputs(1, 0)
+        .frontend(TST_DirectedMobClonerFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
         .build();

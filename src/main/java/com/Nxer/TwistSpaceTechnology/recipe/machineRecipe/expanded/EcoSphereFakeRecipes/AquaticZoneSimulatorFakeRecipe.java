@@ -1,33 +1,36 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getItemStackString;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.getItemStackString;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmRequirementKey.INSTANCE;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomFishable;
-import net.minecraftforge.common.FishingHooks;
+import net.minecraft.util.StatCollector;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.GTValues;
-import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
 public class AquaticZoneSimulatorFakeRecipe {
 
-    private static final Logger LOGGER = LogManager.getLogger(AquaticZoneSimulatorFakeRecipe.class);
-    static FluidStack WaterStack = Materials.Water.getFluid(10000);
+    static FluidStack DistilledWaterStack = FluidRegistry.getFluidStack("ic2distilledwater", 10000);
     private static final ItemStack Offspring = GTCMItemList.OffSpring.get(1);
     public static ArrayList<ItemStack> WatersOutputs = new ArrayList<>();
     public static HashMap<String, Integer> WatersChances = new HashMap<>();
@@ -36,29 +39,12 @@ public class AquaticZoneSimulatorFakeRecipe {
         initStatics();
         loadAquaticZoneFakeRecipes();
         loadAquaticZoneTrueRecipes();
+        // loadOffspringFakeRecipe();
     }
 
-    private static List<WeightedRandomFishable> cachedFishList = null;
-
     static void initStatics() {
-        // generate fishes
-        List<WeightedRandomFishable> fishList = getFishList();
-
-        for (WeightedRandomFishable fishable : fishList) {
-            try {
-                Field itemStackField = WeightedRandomFishable.class.getDeclaredField("field_150711_b");
-                itemStackField.setAccessible(true);
-                ItemStack itemStack = (ItemStack) itemStackField.get(fishable);
-
-                if (itemStack != null) {
-                    ItemStack stackCopy = itemStack.copy();
-                    stackCopy.stackSize = 4;
-                    WatersOutputs.add(stackCopy);
-                }
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                LOGGER.error("TST_AquaticZoneFakeRecipeGenerateFail", e);
-            }
-        }
+        WatersOutputs.clear();
+        WatersChances.clear();
         Collections.addAll(
             WatersOutputs,
             GTModHandler.getModItem(Mods.Minecraft.ID, "waterlily", 1, 0),
@@ -86,30 +72,72 @@ public class AquaticZoneSimulatorFakeRecipe {
             GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "waterchestnutItem", 2, 0));
         if (Mods.TwilightForest.isModLoaded()) Collections
             .addAll(WatersOutputs, GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
+        addSwampLootFish();
+        deduplicateWatersOutputs();
     }
 
-    @SuppressWarnings("unchecked")
-    private static List<WeightedRandomFishable> getFishList() {
-        if (cachedFishList == null) {
-            try {
-                Field fishField = FishingHooks.class.getDeclaredField("fish");
-                fishField.setAccessible(true);
-                cachedFishList = (ArrayList<WeightedRandomFishable>) fishField.get(null);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                LOGGER.error("TST_AquaticZoneFakeRecipeGenerateFail", e);
-                return new ArrayList<>();
-            }
+    private static void addSwampLootFish() {
+        WeightedRandomChestContent[] contents = ChestGenHooks.getInfo("loot_swamp")
+            .getItems(new Random());
+        if (contents == null) return;
+        for (WeightedRandomChestContent content : contents) {
+            if (content == null || content.theItemId == null || !isSupportedFish(content.theItemId)) continue;
+            WatersOutputs.add(content.theItemId.copy());
         }
-        return cachedFishList;
+    }
+
+    private static boolean isSupportedFish(ItemStack stack) {
+        String registryName = Item.itemRegistry.getNameForObject(stack.getItem());
+        if (registryName == null) return false;
+        if ("minecraft:fish".equals(registryName)) return true;
+        int separator = registryName.indexOf(':');
+        if (separator < 0 || !registryName.substring(0, separator)
+            .equalsIgnoreCase(Mods.PamsHarvestCraft.ID)) return false;
+        return registryName.substring(separator + 1)
+            .toLowerCase(Locale.ROOT)
+            .endsWith("rawitem");
+    }
+
+    private static void deduplicateWatersOutputs() {
+        Map<String, ItemStack> uniqueOutputs = new LinkedHashMap<>();
+        for (ItemStack stack : WatersOutputs) {
+            if (stack == null || stack.getItem() == null) continue;
+            uniqueOutputs.putIfAbsent(getItemStackString(stack), stack);
+        }
+        WatersOutputs.clear();
+        WatersOutputs.addAll(uniqueOutputs.values());
     }
 
     static void loadAquaticZoneFakeRecipes() {
+        if (DistilledWaterStack == null) return;
         for (ItemStack aStack : WatersOutputs) {
             ItemStack Input = aStack.copy();
             Input.stackSize = 0;
             // addEnchantmentLight(Input);
-            addFakeRecipe(Input, aStack, WaterStack);
+            addFakeRecipe(Input, aStack, DistilledWaterStack);
         }
+    }
+
+    static void loadOffspringFakeRecipe() {
+        if (DistilledWaterStack == null) return;
+        ItemStack jellyfish = Mods.PamsHarvestCraft.isModLoaded()
+            ? GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", 5, 0)
+            : null;
+        if (jellyfish == null && Offspring != null) jellyfish = Offspring.copy();
+        if (jellyfish == null) return;
+        jellyfish.stackSize = 5;
+        jellyfish.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.strangeJellyfish"));
+        // #tr MegaTreeFarm.nei.strangeJellyfish
+        // # Strange Jellyfish??
+        // #zh_CN 奇怪的水母？？
+        GTValues.RA.stdBuilder()
+            .itemOutputs(jellyfish)
+            .fluidInputs(DistilledWaterStack)
+            .metadata(INSTANCE, StatCollector.translateToLocalFormatted("GT5U.nei.tier", "2??"))
+            .fake()
+            .duration(20 * 5)
+            .eut(0)
+            .addTo(GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
     }
 
     static void loadAquaticZoneTrueRecipes() {
@@ -130,6 +158,7 @@ public class AquaticZoneSimulatorFakeRecipe {
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
+            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
             .fake()
             .duration(20 * 5)
             .eut(0)
