@@ -867,8 +867,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 machineMode = boundMode;
 
                 tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
-                EcoSphereModeResult modeResult = MACHINE_MODES[machineMode]
-                    .process(TST_MegaTreeFarm.this, EuTier);
+                EcoSphereModeResult modeResult = MACHINE_MODES[machineMode].process(TST_MegaTreeFarm.this, EuTier);
                 if (!modeResult.result()
                     .wasSuccessful()) return modeResult.result();
                 outputItems = modeResult.outputs();

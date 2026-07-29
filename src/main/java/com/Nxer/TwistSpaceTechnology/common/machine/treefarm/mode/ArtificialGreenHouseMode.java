@@ -46,6 +46,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
             machine.cropsNHFarm.getOutputStacks(parallelResult.multiplier()),
             parallelResult.tier());
     }
+
     private static boolean findSeed(TST_MegaTreeFarm machine) {
         for (ItemStack input : machine.getStoredInputs()) {
             if (input != null && input.getItem() != null && machine.cropsNHFarm.createCropCache(input)) return true;

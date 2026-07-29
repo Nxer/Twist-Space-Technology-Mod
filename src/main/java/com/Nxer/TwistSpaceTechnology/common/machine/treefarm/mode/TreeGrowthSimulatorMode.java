@@ -81,7 +81,6 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             parallelResult.tier());
     }
 
-
     private static EnumMap<Mode, ItemStack> findTreeProduct(TST_MegaTreeFarm machine) {
         for (ItemStack input : machine.getStoredInputs()) {
             if (input == null || input.getItem() == null) continue;
