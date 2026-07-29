@@ -2366,3 +2366,4 @@ MegaTreeFarm.mode.waiting=等待模式信物
 GT5U.gui.text.recipe_result.mega_tree_farm_waiting_for_mode_symbol=等待模式信物
 MegaTreeFarm.nei.infiniteUpgrade=无尽升级
 GT5U.gui.text.recipe_result.boss_upgrade_required=需要无尽升级
+MegaTreeFarm.gui.focusOn=聚焦于

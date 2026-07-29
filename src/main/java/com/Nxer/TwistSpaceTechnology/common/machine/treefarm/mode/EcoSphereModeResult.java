@@ -1,5 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.calculateEut;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -44,6 +47,15 @@ public final class EcoSphereModeResult {
 
     public int duration() {
         return duration;
+    }
+
+    public static EcoSphereModeResult standard(CheckRecipeResult result, ItemStack[] outputs, int tier) {
+        return new EcoSphereModeResult(result, outputs, calculateEut(tier), MODE_RECIPE_DURATION);
+    }
+
+    public static EcoSphereModeResult standard(CheckRecipeResult result, ItemStack[] outputs, FluidStack[] fluidOutputs,
+        int tier) {
+        return new EcoSphereModeResult(result, outputs, fluidOutputs, calculateEut(tier), MODE_RECIPE_DURATION);
     }
 
     public static EcoSphereModeResult failure(CheckRecipeResult result) {

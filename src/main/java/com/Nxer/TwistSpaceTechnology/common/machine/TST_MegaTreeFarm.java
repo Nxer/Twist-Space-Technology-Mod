@@ -102,7 +102,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // region Structure
 
-    private static final int CLEANING_DURATION = 20 * 60 * 5;
+    public static final int MODE_RECIPE_DURATION = 128;
+    private static final int TIER_ONE_CLEANING_DURATION = 20 * 300;
+    private static final int TIER_TWO_CLEANING_DURATION = 20 * 60;
 
     private int controllerTier = 0;
     private int boundMode = -1;
@@ -116,12 +118,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private long availableInputPower = 0;
     boolean checkWaterFinish = false;
     boolean checkAirFinish = false;
-    boolean isFocusMode = false;
     private static ItemStack FountOfEcology;
     private static ItemStack Offspring;
 
     public long fertilizerToConsume = 0;
-    public long waterToConsume = 0;
 
     @Override
     public int totalMachineMode() {
@@ -138,16 +138,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT };
 
-    public int getControllerTier() {
-        return controllerTier;
-    }
-
     public boolean isTierTwo() {
         return controllerTier > 0;
-    }
-
-    public int getBoundMode() {
-        return boundMode;
     }
 
     public boolean hasDirectedMobClonerInfiniteUpgrade() {
@@ -155,10 +147,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return symbol != null && symbol.stackSize > 0
             && symbol.getItem() == TstItems.MegaTreeFarmModeSymbol
             && symbol.getItemDamage() == 4;
-    }
-
-    public long getModeParallel() {
-        return Math.max(1L, (long) tierMultiplier);
     }
 
     public long getAvailableInputPower() {
@@ -194,11 +182,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     public int getStandardModeDuration() {
-        return controllerTier > 0 ? 20 : 100;
-    }
-
-    public void setFocusMode(boolean focusMode) {
-        isFocusMode = focusMode;
+        return MODE_RECIPE_DURATION;
     }
 
     public boolean isOffspring(ItemStack stack) {
@@ -434,7 +418,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         tag.setInteger("tier", controllerTier + 1);
         if (machineMode == 2) {
             tag.setLong("fertilizerToConsume", fertilizerToConsume);
-            tag.setLong("waterToConsume", waterToConsume);
         }
 
     }
@@ -454,11 +437,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             // #zh_CN 当前富集肥料消耗量：
             currentTip.add(
                 tr("MegaTreeFarm.Waila.fertiConsume") + " " + formatNumber(tag.getLong("fertilizerToConsume")) + "L");
-            // #tr MegaTreeFarm.Waila.waterConsume
-            // # Now consumption of Water is :
-            // #zh_CN 当前水消耗量：
-            currentTip
-                .add(tr("MegaTreeFarm.Waila.waterConsume") + " " + formatNumber(tag.getLong("waterToConsume")) + "L");
         }
 
     }
@@ -877,7 +855,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     outputItems = new ItemStack[0];
                     outputFluids = new FluidStack[0];
                     calculatedEut = 0;
-                    duration = CLEANING_DURATION;
+                    duration = isTierTwo() ? TIER_TWO_CLEANING_DURATION : TIER_ONE_CLEANING_DURATION;
                     return SimpleCheckRecipeResult.ofSuccess("mega_tree_farm_cleaning");
                 }
                 if (!modeSymbolPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
@@ -890,7 +868,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
                 tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
                 EcoSphereModeResult modeResult = MACHINE_MODES[machineMode]
-                    .process(TST_MegaTreeFarm.this, EuTier, tierMultiplier);
+                    .process(TST_MegaTreeFarm.this, EuTier);
                 if (!modeResult.result()
                     .wasSuccessful()) return modeResult.result();
                 outputItems = modeResult.outputs();

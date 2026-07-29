@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+
 import java.util.Map;
 
 import net.minecraft.item.ItemStack;
@@ -20,8 +22,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 
 public final class DirectedMobClonerFakeRecipe {
-
-    private static final int DURATION = 20 * 5;
 
     private DirectedMobClonerFakeRecipe() {}
 
@@ -44,7 +44,7 @@ public final class DirectedMobClonerFakeRecipe {
                     DirectedMobClonerBossRequirementKey.INSTANCE,
                     entry.getValue()
                         .boss() ? createInfiniteUpgradeRequirement() : null)
-                .duration(DURATION)
+                .duration(MODE_RECIPE_DURATION)
                 .eut(0)
                 .fake()
                 .addTo(GTCMRecipe.DirectedMobClonerFakeRecipes);
@@ -76,7 +76,7 @@ public final class DirectedMobClonerFakeRecipe {
             .fluidOutputs(lifeEssence)
             .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 1)
             .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, false)
-            .duration(DURATION)
+            .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .fake()
             .addTo(GTCMRecipe.DirectedMobClonerFakeRecipes);

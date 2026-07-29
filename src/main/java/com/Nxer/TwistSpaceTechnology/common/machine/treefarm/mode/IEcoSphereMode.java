@@ -6,7 +6,7 @@ import gregtech.api.recipe.RecipeMap;
 
 public interface IEcoSphereMode {
 
-    EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier, double tierMultiplier);
+    EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier);
 
     RecipeMap<?> getRecipeMap();
 

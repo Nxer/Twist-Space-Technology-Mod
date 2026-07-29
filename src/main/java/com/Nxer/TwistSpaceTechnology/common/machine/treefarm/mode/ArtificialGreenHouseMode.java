@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.calculateEut;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NotEnoughWater;
 
@@ -27,12 +26,9 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
     }
 
     @Override
-    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier, double tierMultiplier) {
+    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
         machine.fertilizerToConsume = 0;
-        machine.waterToConsume = 0;
-        ItemStack seed = machine.getControllerSlot();
-        if (seed == null || !machine.cropsNHFarm.createCropCache(seed))
-            return EcoSphereModeResult.failure(NoSeedInController);
+        if (!findSeed(machine)) return EcoSphereModeResult.failure(NoSeedInController);
         if (!machine.cropsNHFarm.isValid())
             return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
 
@@ -45,10 +41,16 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
         if (parallelResult == null) return EcoSphereModeResult.failure(NotEnoughWater);
 
         machine.fertilizerToConsume = parallelResult.fluidCost();
-        return new EcoSphereModeResult(
+        return EcoSphereModeResult.standard(
             CheckRecipeResultRegistry.SUCCESSFUL,
             machine.cropsNHFarm.getOutputStacks(parallelResult.multiplier()),
-            calculateEut(parallelResult.tier()),
-            machine.getStandardModeDuration());
+            parallelResult.tier());
     }
+    private static boolean findSeed(TST_MegaTreeFarm machine) {
+        for (ItemStack input : machine.getStoredInputs()) {
+            if (input != null && input.getItem() != null && machine.cropsNHFarm.createCropCache(input)) return true;
+        }
+        return false;
+    }
+
 }

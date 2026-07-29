@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.getModeMultiplier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.queryTimeTreeProduct;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.queryTreeProduct;
@@ -223,7 +224,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
             .special(specialStacks)
             .metadata(INSTANCE, requiredTier)
             .fake()
-            .duration(20 * 5)
+            .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
     }

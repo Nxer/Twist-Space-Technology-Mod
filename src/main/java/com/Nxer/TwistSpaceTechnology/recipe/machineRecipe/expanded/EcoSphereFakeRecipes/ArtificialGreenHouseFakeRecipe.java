@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+
 import java.util.Collection;
 import java.util.Map;
 
@@ -16,8 +18,6 @@ import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
 import gregtech.api.enums.GTValues;
 
 public final class ArtificialGreenHouseFakeRecipe {
-
-    private static final int DURATION = 20 * 5;
 
     private ArtificialGreenHouseFakeRecipe() {}
 
@@ -57,7 +57,7 @@ public final class ArtificialGreenHouseFakeRecipe {
                 .itemOutputs(product)
                 .fluidInputs(requiredFluid)
                 .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, hybrid ? 2 : 1)
-                .duration(DURATION)
+                .duration(MODE_RECIPE_DURATION)
                 .eut(0)
                 .fake()
                 .addTo(GTCMRecipe.ArtificialGreenHouseFakeRecipes);

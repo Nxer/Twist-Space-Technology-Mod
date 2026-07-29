@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.addSplitStack;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.calculateEut;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 
 import java.util.ArrayList;
@@ -35,10 +34,8 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     }
 
     @Override
-    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier, double tierMultiplier) {
-        ItemStack sapling = machine.getControllerSlot();
-        if (sapling == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_sapling"));
-        EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
+    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
+        EnumMap<Mode, ItemStack> outputPerMode = findTreeProduct(machine);
         if (outputPerMode == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_sapling"));
 
         Fluid requiredFluid = FluidRegistry.WATER;
@@ -78,11 +75,20 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         }
         if (outputs.isEmpty())
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_correct_Circuit"));
-        return new EcoSphereModeResult(
+        return EcoSphereModeResult.standard(
             SimpleCheckRecipeResult.ofSuccess("growing_trees"),
             outputs.toArray(new ItemStack[0]),
-            calculateEut(parallelResult.tier()),
-            machine.getStandardModeDuration());
+            parallelResult.tier());
+    }
+
+
+    private static EnumMap<Mode, ItemStack> findTreeProduct(TST_MegaTreeFarm machine) {
+        for (ItemStack input : machine.getStoredInputs()) {
+            if (input == null || input.getItem() == null) continue;
+            EnumMap<Mode, ItemStack> outputs = queryTreeProduct(input);
+            if (outputs != null) return outputs;
+        }
+        return null;
     }
 
     private static SpecialTreeRecipe findSpecialRecipe(TST_MegaTreeFarm machine) {

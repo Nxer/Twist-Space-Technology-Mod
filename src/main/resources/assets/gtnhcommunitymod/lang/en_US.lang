@@ -2366,3 +2366,4 @@ MegaTreeFarm.mode.waiting=Waiting For Mode Symbol
 GT5U.gui.text.recipe_result.mega_tree_farm_waiting_for_mode_symbol=Waiting For Mode Symbol
 MegaTreeFarm.nei.infiniteUpgrade=Infinite Upgrade
 GT5U.gui.text.recipe_result.boss_upgrade_required=Infinite Upgrade Required
+MegaTreeFarm.gui.focusOn=Focus on

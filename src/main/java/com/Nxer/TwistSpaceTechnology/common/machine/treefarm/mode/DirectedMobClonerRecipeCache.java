@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,7 +34,6 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerRecipeCache {
 
-    public static final int FIXED_DURATION = 20 * 5;
     private static final int EEC_MIN_DURATION = 55;
     private static final long EEC_RECIPE_EUT = 1920L;
     private static final double EEC_DIAMOND_SPIKES_DAMAGE = 9d;
@@ -222,7 +223,7 @@ public final class DirectedMobClonerRecipeCache {
 
     public static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
         long multiplier, boolean infiniteUpgrade) {
-        return process(machine, recipeId, effectiveTier, multiplier, infiniteUpgrade, FIXED_DURATION);
+        return process(machine, recipeId, effectiveTier, multiplier, infiniteUpgrade, MODE_RECIPE_DURATION);
     }
 
     public static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine, int recipeId) {
@@ -243,7 +244,8 @@ public final class DirectedMobClonerRecipeCache {
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
 
         List<ItemStack> outputs = new ArrayList<>();
-        double durationMultiplier = (double) FIXED_DURATION / ((double) recipe.eecDuration() * recipe.eecDuration());
+        double durationMultiplier = (double) MODE_RECIPE_DURATION
+            / ((double) recipe.eecDuration() * recipe.eecDuration());
         for (CachedDrop drop : recipe.drops()) {
             int chance = drop.chance();
             long amount = drop.stack().stackSize;

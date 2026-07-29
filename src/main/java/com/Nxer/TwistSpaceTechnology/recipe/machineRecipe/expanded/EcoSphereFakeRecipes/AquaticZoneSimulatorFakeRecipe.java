@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.getItemStackString;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmRequirementKey.INSTANCE;
 
@@ -78,7 +79,7 @@ public class AquaticZoneSimulatorFakeRecipe {
         initStatics();
         loadAquaticZoneFakeRecipes();
         loadAquaticZoneTrueRecipes();
-        // loadOffspringFakeRecipe();
+        loadOffspringFakeRecipe();
     }
 
     static void initStatics() {
@@ -112,7 +113,7 @@ public class AquaticZoneSimulatorFakeRecipe {
         if (Mods.TwilightForest.isModLoaded()) Collections
             .addAll(WatersOutputs, GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
         for (TST_ItemID aquaticItem : AquaticItems) {
-            WatersOutputs.add(aquaticItem.getItemStackWithoutNBT(1));
+            WatersOutputs.add(aquaticItem.getItemStackWithoutNBT(4));
         }
         deduplicateWatersOutputs();
     }
@@ -140,11 +141,11 @@ public class AquaticZoneSimulatorFakeRecipe {
     static void loadOffspringFakeRecipe() {
         if (DistilledWaterStack == null) return;
         ItemStack jellyfish = Mods.PamsHarvestCraft.isModLoaded()
-            ? GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", 5, 0)
+            ? GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", 41, 0)
             : null;
         if (jellyfish == null && Offspring != null) jellyfish = Offspring.copy();
         if (jellyfish == null) return;
-        jellyfish.stackSize = 5;
+        jellyfish.stackSize = 41;
         jellyfish.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.strangeJellyfish"));
         // #tr MegaTreeFarm.nei.strangeJellyfish
         // # Strange Jellyfish??
@@ -154,7 +155,7 @@ public class AquaticZoneSimulatorFakeRecipe {
             .fluidInputs(DistilledWaterStack)
             .metadata(INSTANCE, StatCollector.translateToLocalFormatted("GT5U.nei.tier", "2??"))
             .fake()
-            .duration(20 * 5)
+            .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .addTo(GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
     }
@@ -179,7 +180,7 @@ public class AquaticZoneSimulatorFakeRecipe {
             .fluidInputs(inputFluid)
             .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
             .fake()
-            .duration(20 * 5)
+            .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .addTo(GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
     }

@@ -28,7 +28,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
     }
 
     @Override
-    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier, double tierMultiplier) {
+    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
         if (hasDebugItem(machine)) return processDebug(machine, euTier);
         machine.resetDirectedMobClonerDebugRun();
         if (!hasIntegratedCircuit(machine))
@@ -44,21 +44,21 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
             FluidStack lifeEssence = BloodMagicHelper
                 .getLifeEssence((int) Math.min(Integer.MAX_VALUE, lifeEssenceAmount));
             if (lifeEssence == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_recipe"));
-            return new EcoSphereModeResult(
+            return EcoSphereModeResult.standard(
                 SimpleCheckRecipeResult.ofSuccess("generating_life_essence"),
                 new ItemStack[0],
                 new FluidStack[] { lifeEssence },
-                EcoSphereModeSupport.calculateEut(parallelResult.tier()),
-                machine.getStandardModeDuration());
+                parallelResult.tier());
         }
         if (!machine.isTierTwo())
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("mega_tree_farm_tier_two_required"));
         boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
-        if (DirectedMobClonerRecipeCache.isBossRecipe(recipeId) && !infiniteUpgrade)
+        boolean bossRecipe = DirectedMobClonerRecipeCache.isBossRecipe(recipeId);
+        if (bossRecipe && !infiniteUpgrade)
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
         if (infiniteUpgrade) voltageTier += 4;
-        int tierOffset = DirectedMobClonerRecipeCache.isBossRecipe(recipeId) ? 6 : 4;
+        int tierOffset = bossRecipe ? 6 : 4;
         int maximumOverclocks = Math.max(0, voltageTier - tierOffset);
         EcoSphereModeSupport.PerfectOverclockResult overclockResult = EcoSphereModeSupport
             .consumeFluidForPerfectOverclock(machine, FluidRegistry.getFluid("lifeessence"), 100L, maximumOverclocks);

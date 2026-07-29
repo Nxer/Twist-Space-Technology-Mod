@@ -25,10 +25,7 @@ public final class EcoSphereModeSupport {
     public static ParallelResult consumeFluidForParallel(TST_MegaTreeFarm machine, Fluid requiredFluid,
         long fluidPerParallel, int powerTier) {
         if (requiredFluid == null || fluidPerParallel <= 0 || powerTier < 1) return null;
-        long availableFluid = 0;
-        for (FluidStack fluid : machine.getStoredFluids()) {
-            if (fluid != null && fluid.getFluid() == requiredFluid) availableFluid += fluid.amount;
-        }
+        long availableFluid = getAvailableFluid(machine, requiredFluid);
         long fluidParallel = availableFluid / fluidPerParallel;
         if (fluidParallel < 2) return null;
         int fluidTier = 63 - Long.numberOfLeadingZeros(fluidParallel);
@@ -47,10 +44,7 @@ public final class EcoSphereModeSupport {
     public static PerfectOverclockResult consumeFluidForPerfectOverclock(TST_MegaTreeFarm machine, Fluid requiredFluid,
         long fluidPerOperation, int maximumOverclocks) {
         if (requiredFluid == null || fluidPerOperation <= 0 || maximumOverclocks < 0) return null;
-        long availableFluid = 0;
-        for (FluidStack fluid : machine.getStoredFluids()) {
-            if (fluid != null && fluid.getFluid() == requiredFluid) availableFluid += fluid.amount;
-        }
+        long availableFluid = getAvailableFluid(machine, requiredFluid);
         long fluidOperations = availableFluid / fluidPerOperation;
         if (fluidOperations < 1) return null;
         int fluidOverclocks = 0;
@@ -88,6 +82,14 @@ public final class EcoSphereModeSupport {
         ItemStack split = template.copy();
         split.stackSize = (int) amount;
         outputs.add(split);
+    }
+
+    private static long getAvailableFluid(TST_MegaTreeFarm machine, Fluid requiredFluid) {
+        long available = 0;
+        for (FluidStack fluid : machine.getStoredFluids()) {
+            if (fluid != null && fluid.getFluid() == requiredFluid) available += fluid.amount;
+        }
+        return available;
     }
 
     public static boolean drainFluid(TST_MegaTreeFarm machine, Fluid requiredFluid, long amount) {
