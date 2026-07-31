@@ -22,6 +22,7 @@ import fox.spiteful.avaritia.render.CosmicItemRenderer;
 public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
 
     private static final float CONTENT_SCALE = 0.875F;
+    private static final float ITEM_THICKNESS = 1.0F / 16.0F;
     private static final CosmicItemRenderer COSMIC_RENDERER = new CosmicItemRenderer();
 
     @Override
@@ -40,29 +41,60 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        renderIcon(
+        // Draw the background first so every symbol has the same solid base.
+        renderBase(
             type,
             item.getItem()
                 .getIcon(item, 0),
-            item.getItemSpriteNumber(),
-            0.0F);
+            TstItems.MegaTreeFarmModeSymbol.getFrameIcon(),
+            item.getItemSpriteNumber());
 
+        // Pick the item shown in the center from the symbol metadata.
         int meta = item.getItemDamage();
         ItemStack displayStack = getDisplayStack(meta);
+
+        // Keep all center-item changes inside this matrix.
         GL11.glPushMatrix();
-        applyContentOffset(type, meta);
-        applyContentScale(type);
+        // Center and resize the item so it stays inside the frame.
+        applyContentTransform(type, meta);
         if (displayStack.getItem() == LudicrousItems.infinity_sword) {
-            COSMIC_RENDERER.renderItem(type, displayStack, data);
+            // Keep the original cosmic effect for the Infinity Sword.
+            applyLayerDepth(type, -1.0F);
+            if (type == ItemRenderType.ENTITY) {
+                // Skip Avaritia's extra ground-item shift so the sword stays centered.
+                COSMIC_RENDERER.processLightLevel(type, displayStack, data);
+                COSMIC_RENDERER.render(displayStack, null);
+            } else {
+                COSMIC_RENDERER.renderItem(type, displayStack, data);
+            }
+            restoreLayerDepth(type);
         } else {
+            // Draw normal center items as flat front and back layers.
             renderVanillaItem(type, displayStack);
         }
         GL11.glPopMatrix();
 
-        renderIcon(type, TstItems.MegaTreeFarmModeSymbol.getFrameIcon(), item.getItemSpriteNumber(), 4.0F);
+        // Draw the frame last so it always stays above the center item.
+        renderLayerIcon(type, TstItems.MegaTreeFarmModeSymbol.getFrameIcon(), item.getItemSpriteNumber(), 2);
+    }
+
+    private static void applyLayerDepth(ItemRenderType type, float offset) {
+        // Separate flat layers without moving them far apart.
+        if (type == ItemRenderType.INVENTORY) return;
+
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT | GL11.GL_POLYGON_BIT);
+        GL11.glEnable(GL11.GL_POLYGON_OFFSET_FILL);
+        GL11.glPolygonOffset(offset, offset);
+    }
+
+    private static void restoreLayerDepth(ItemRenderType type) {
+        if (type != ItemRenderType.INVENTORY) {
+            GL11.glPopAttrib();
+        }
     }
 
     private static ItemStack getDisplayStack(int meta) {
+        // Each metadata value uses one familiar item as its mode icon.
         return switch (meta) {
             case 0 -> new ItemStack(Item.getItemFromBlock(Blocks.sapling), 1, 0);
             case 1 -> new ItemStack(Items.fish, 1, 0);
@@ -73,29 +105,34 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
         };
     }
 
-    private static void applyContentOffset(ItemRenderType type, int meta) {
-        if (type != ItemRenderType.INVENTORY) return;
-
-        float horizontalOffset = switch (meta) {
-            case 0 -> -1.0F;
-            case 1, 2 -> -0.5F;
+    private static void applyContentTransform(ItemRenderType type, int meta) {
+        // Small icon-specific shifts keep the visible item near the frame center.
+        float horizontalOffsetPixels = switch (meta) {
+            case 0 -> 0.83F;
+            case 1, 2 -> 0.415F;
             default -> 0.0F;
         };
-        GL11.glTranslatef(horizontalOffset, 0.0F, 0.0F);
-    }
-
-    private static void applyContentScale(ItemRenderType type) {
         switch (type) {
             case INVENTORY -> {
-                float offset = 8.0F * (1.0F - CONTENT_SCALE);
-                GL11.glTranslatef(offset, offset, 0.0F);
+                // Inventory rendering uses a 16 by 16 pixel coordinate space.
+                float centerOffset = 8.0F * (1.0F - CONTENT_SCALE);
+                GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
                 GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
+                GL11.glTranslatef(-horizontalOffsetPixels / CONTENT_SCALE, 0.0F, 0.0F);
             }
-            case ENTITY -> GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, CONTENT_SCALE);
+            case ENTITY -> {
+                // Ground items face the other way, so their horizontal shift is reversed.
+                float centerOffset = (1.0F - CONTENT_SCALE) / 2.0F;
+                GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
+                GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
+                GL11.glTranslatef(horizontalOffsetPixels / 16.0F / CONTENT_SCALE, 0.0F, 0.0F);
+            }
             case EQUIPPED, EQUIPPED_FIRST_PERSON -> {
-                float offset = (1.0F - CONTENT_SCALE) / 2.0F;
-                GL11.glTranslatef(offset, offset, 0.0F);
-                GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, CONTENT_SCALE);
+                // Held items use the same centered scale as the inventory icon.
+                float centerOffset = (1.0F - CONTENT_SCALE) / 2.0F;
+                GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
+                GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
+                GL11.glTranslatef(-horizontalOffsetPixels / 16.0F / CONTENT_SCALE, 0.0F, 0.0F);
             }
             default -> {}
         }
@@ -103,6 +140,7 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
 
     private static void renderVanillaItem(ItemRenderType type, ItemStack displayStack) {
         if (type == ItemRenderType.INVENTORY) {
+            // Use Minecraft's normal GUI renderer to keep item colors and lighting.
             Minecraft minecraft = Minecraft.getMinecraft();
             RenderHelper.enableGUIStandardItemLighting();
             GL11.glTranslatef(0.0F, 0.0F, 2.0F);
@@ -112,10 +150,119 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
         }
 
         IIcon icon = displayStack.getIconIndex();
-        renderIcon(type, icon, displayStack.getItemSpriteNumber(), 2.0F);
+        renderLayerIcon(type, icon, displayStack.getItemSpriteNumber(), 1);
+    }
+
+    private static void renderBase(ItemRenderType type, IIcon background, IIcon frame, int spriteNumber) {
+        if (type == ItemRenderType.INVENTORY) {
+            // The inventory only needs the flat background image.
+            renderIcon(type, background, spriteNumber, 0.0F);
+            return;
+        }
+        if (background == null || frame == null) return;
+
+        // The background supplies the front and back faces.
+        renderLayerIcon(type, background, spriteNumber, 0);
+        // The frame texture supplies clean outer edges for the held model.
+        renderFrameSides(frame, spriteNumber);
+    }
+
+    private static void renderFrameSides(IIcon frame, int spriteNumber) {
+        // Build four simple sides so the item looks solid from an angle.
+        Minecraft.getMinecraft()
+            .getTextureManager()
+            .bindTexture(
+                Minecraft.getMinecraft()
+                    .getTextureManager()
+                    .getResourceLocation(spriteNumber));
+
+        float pixelU = (frame.getMaxU() - frame.getMinU()) / frame.getIconWidth();
+        float pixelV = (frame.getMaxV() - frame.getMinV()) / frame.getIconHeight();
+        float leftU = frame.getMinU() + pixelU * 0.5F;
+        float rightU = frame.getMaxU() - pixelU * 0.5F;
+        float topV = frame.getMinV() + pixelV * 0.5F;
+        float bottomV = frame.getMaxV() - pixelV * 0.5F;
+
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+
+        tessellator.addVertexWithUV(0, 0, -ITEM_THICKNESS, leftU, frame.getMaxV());
+        tessellator.addVertexWithUV(0, 0, 0, leftU, frame.getMaxV());
+        tessellator.addVertexWithUV(0, 1, 0, leftU, frame.getMinV());
+        tessellator.addVertexWithUV(0, 1, -ITEM_THICKNESS, leftU, frame.getMinV());
+
+        tessellator.addVertexWithUV(1, 1, -ITEM_THICKNESS, rightU, frame.getMinV());
+        tessellator.addVertexWithUV(1, 1, 0, rightU, frame.getMinV());
+        tessellator.addVertexWithUV(1, 0, 0, rightU, frame.getMaxV());
+        tessellator.addVertexWithUV(1, 0, -ITEM_THICKNESS, rightU, frame.getMaxV());
+
+        tessellator.addVertexWithUV(0, 1, -ITEM_THICKNESS, frame.getMinU(), topV);
+        tessellator.addVertexWithUV(0, 1, 0, frame.getMinU(), topV);
+        tessellator.addVertexWithUV(1, 1, 0, frame.getMaxU(), topV);
+        tessellator.addVertexWithUV(1, 1, -ITEM_THICKNESS, frame.getMaxU(), topV);
+
+        tessellator.addVertexWithUV(1, 0, -ITEM_THICKNESS, frame.getMaxU(), bottomV);
+        tessellator.addVertexWithUV(1, 0, 0, frame.getMaxU(), bottomV);
+        tessellator.addVertexWithUV(0, 0, 0, frame.getMinU(), bottomV);
+        tessellator.addVertexWithUV(0, 0, -ITEM_THICKNESS, frame.getMinU(), bottomV);
+
+        tessellator.draw();
+        GL11.glPopAttrib();
+    }
+
+    private static void renderLayerIcon(ItemRenderType type, IIcon icon, int spriteNumber, int layer) {
+        if (type == ItemRenderType.INVENTORY) {
+            // GUI layers use simple depth values and do not need model thickness.
+            renderIcon(type, icon, spriteNumber, layer * 2.0F);
+            return;
+        }
+        if (icon == null) return;
+
+        Minecraft.getMinecraft()
+            .getTextureManager()
+            .bindTexture(
+                Minecraft.getMinecraft()
+                    .getTextureManager()
+                    .getResourceLocation(spriteNumber));
+        GL11.glPushMatrix();
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        applyLayerDepth(type, -layer);
+
+        Tessellator tessellator = Tessellator.instance;
+        // Draw the front face.
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        tessellator.addVertexWithUV(0, 0, 0.0F, icon.getMaxU(), icon.getMaxV());
+        tessellator.addVertexWithUV(1, 0, 0.0F, icon.getMinU(), icon.getMaxV());
+        tessellator.addVertexWithUV(1, 1, 0.0F, icon.getMinU(), icon.getMinV());
+        tessellator.addVertexWithUV(0, 1, 0.0F, icon.getMaxU(), icon.getMinV());
+        tessellator.draw();
+
+        // Draw the same icon on the back so both sides look complete.
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        float backDepth = -ITEM_THICKNESS;
+        tessellator.addVertexWithUV(0, 1, backDepth, icon.getMaxU(), icon.getMinV());
+        tessellator.addVertexWithUV(1, 1, backDepth, icon.getMinU(), icon.getMinV());
+        tessellator.addVertexWithUV(1, 0, backDepth, icon.getMinU(), icon.getMaxV());
+        tessellator.addVertexWithUV(0, 0, backDepth, icon.getMaxU(), icon.getMaxV());
+        tessellator.draw();
+
+        restoreLayerDepth(type);
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glPopMatrix();
     }
 
     private static void renderIcon(ItemRenderType type, IIcon icon, int spriteNumber, float depthOffset) {
+        // This helper draws either a flat GUI icon or a normal thick item model.
         if (icon == null) return;
 
         Minecraft.getMinecraft()
