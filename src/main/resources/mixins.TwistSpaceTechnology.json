@@ -5,6 +5,7 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "HookMaterials_Mixin",
     "IC2_InternalName_Adder_Mixin"
   ],
   "client": [],

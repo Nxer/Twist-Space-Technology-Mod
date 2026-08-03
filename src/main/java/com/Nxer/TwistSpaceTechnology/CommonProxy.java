@@ -33,7 +33,6 @@ import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DimensionSystem.DimensionSystemInit;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
-import com.Nxer.TwistSpaceTechnology.util.LanguageManager;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
@@ -65,8 +64,6 @@ public class CommonProxy {
         }
 
         TCLoader.preInit();
-
-        LanguageManager.init();
     }
 
     public void init(FMLInitializationEvent event) {
