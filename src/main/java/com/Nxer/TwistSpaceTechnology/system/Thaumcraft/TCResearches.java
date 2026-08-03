@@ -267,6 +267,7 @@ public class TCResearches {
                     new ResearchPage("tc.research_text.FONT_OF_ECOLOGY.2"),
                     new ResearchPage(infusionRecipeFontOfEcology))
                     .setParents("OFFSPRING")
+                    .setSiblings("ECO_SPHERE_TIER_TWO")
                     .setHidden()
                     .registerResearchItem();
 

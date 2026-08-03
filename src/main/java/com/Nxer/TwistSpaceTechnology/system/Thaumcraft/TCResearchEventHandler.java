@@ -22,7 +22,6 @@ public final class TCResearchEventHandler {
     private static final String EVOLUTION_RESEARCH = "EVOLUTIO";
     private static final String OFFSPRING_RESEARCH = "OFFSPRING";
     private static final String FONT_OF_ECOLOGY_RESEARCH = "FONT_OF_ECOLOGY";
-    private static final String TIER_TWO_RESEARCH = "ECO_SPHERE_TIER_TWO";
     private static final String AQUATIC_MODE_RESEARCH = "ECO_SPHERE_MODE_SYMBOL_2";
 
     @SubscribeEvent
@@ -35,7 +34,6 @@ public final class TCResearchEventHandler {
         unlockEvolutionResearch(player, playerName);
         unlockOffspringResearch(player, playerName);
         revealFontOfEcologyResearch(player, playerName);
-        unlockTierTwoResearch(player, playerName);
     }
 
     private static void unlockEvolutionResearch(EntityPlayerMP player, String playerName) {
@@ -61,13 +59,6 @@ public final class TCResearchEventHandler {
             || !hasScannedOffspring(playerName)) return;
 
         completeResearch(player, "@" + FONT_OF_ECOLOGY_RESEARCH);
-    }
-
-    private static void unlockTierTwoResearch(EntityPlayerMP player, String playerName) {
-        if (ResearchManager.isResearchComplete(playerName, TIER_TWO_RESEARCH)
-            || !ResearchManager.isResearchComplete(playerName, FONT_OF_ECOLOGY_RESEARCH)) return;
-
-        completeResearch(player, TIER_TWO_RESEARCH);
     }
 
     private static boolean hasScannedOffspring(String playerName) {
