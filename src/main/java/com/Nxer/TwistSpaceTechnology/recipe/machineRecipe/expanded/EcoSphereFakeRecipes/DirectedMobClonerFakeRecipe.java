@@ -52,7 +52,7 @@ public final class DirectedMobClonerFakeRecipe {
     }
 
     private static ItemStack createInfiniteUpgradeRequirement() {
-        ItemStack upgrade = GTCMItemList.MegaTreeFramModSymboll5.get(1);
+        ItemStack upgrade = GTCMItemList.MegaTreeFarmModeBeacon5.get(1);
         upgrade.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.infiniteUpgrade"));
         return upgrade;
     }
