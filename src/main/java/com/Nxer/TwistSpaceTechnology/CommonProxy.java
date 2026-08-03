@@ -34,6 +34,7 @@ import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DimensionSystem.DimensionSystemInit;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearchEventHandler;
 import com.Nxer.TwistSpaceTechnology.util.LanguageManager;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
@@ -67,6 +68,11 @@ public class CommonProxy {
         }
 
         TCLoader.preInit();
+        if (TCLoader.TC_Installed && Config.Enable_MegaTreeFarm) {
+            FMLCommonHandler.instance()
+                .bus()
+                .register(new TCResearchEventHandler());
+        }
 
         LanguageManager.init();
         if (Mods.MobsInfo.isModLoaded()) DirectedMobClonerRecipeCache.init();
