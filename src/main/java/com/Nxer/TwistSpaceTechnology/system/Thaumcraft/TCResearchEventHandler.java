@@ -22,7 +22,7 @@ public final class TCResearchEventHandler {
     private static final String EVOLUTION_RESEARCH = "EVOLUTIO";
     private static final String OFFSPRING_RESEARCH = "OFFSPRING";
     private static final String FONT_OF_ECOLOGY_RESEARCH = "FONT_OF_ECOLOGY";
-    private static final String AQUATIC_MODE_RESEARCH = "ECO_SPHERE_MODE_SYMBOL_2";
+    private static final String AQUATIC_MODE_BEACON_RESEARCH = "ECO_SPHERE_MODE_BEACON_2";
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -46,7 +46,7 @@ public final class TCResearchEventHandler {
 
     private static void unlockOffspringResearch(EntityPlayerMP player, String playerName) {
         if (ResearchManager.isResearchComplete(playerName, OFFSPRING_RESEARCH)
-            || !ResearchManager.isResearchComplete(playerName, AQUATIC_MODE_RESEARCH)
+            || !ResearchManager.isResearchComplete(playerName, AQUATIC_MODE_BEACON_RESEARCH)
             || !hasOffspring(player)) return;
 
         completeResearch(player, OFFSPRING_RESEARCH);

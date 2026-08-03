@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
-import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MegaTreeFarmModeSymbol;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MegaTreeFarmModeBeacon;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -27,7 +27,7 @@ public class ItemRegister {
 
     public static void registryItems() {
         Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
-            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask, MegaTreeFarmModeSymbol };
+            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask, MegaTreeFarmModeBeacon };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -1057,11 +1057,30 @@ public class ItemRegister {
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
 
-        GTCMItemList.MegaTreeFramModSymboll1.set(MegaTreeFarmModeSymbol.registerVariant(0));
-        GTCMItemList.MegaTreeFramModSymboll2.set(MegaTreeFarmModeSymbol.registerVariant(1));
-        GTCMItemList.MegaTreeFramModSymboll3.set(MegaTreeFarmModeSymbol.registerVariant(2));
-        GTCMItemList.MegaTreeFramModSymboll4.set(MegaTreeFarmModeSymbol.registerVariant(3));
-        GTCMItemList.MegaTreeFramModSymboll5.set(MegaTreeFarmModeSymbol.registerVariant(4));
+        // #tr item.MegaTreeFarmModeBeacon.0.name
+        // # Eco-Sphere Mode Beacon: Tree Growth Simulator
+        // #zh_CN 生态圈模式信标：原木拟生
+        GTCMItemList.MegaTreeFarmModeBeacon1.set(MegaTreeFarmModeBeacon.registerVariant(0));
+
+        // #tr item.MegaTreeFarmModeBeacon.1.name
+        // # Eco-Sphere Mode Beacon: Aquatic Zone Simulator
+        // #zh_CN 生态圈模式信标：水域模拟
+        GTCMItemList.MegaTreeFarmModeBeacon2.set(MegaTreeFarmModeBeacon.registerVariant(1));
+
+        // #tr item.MegaTreeFarmModeBeacon.2.name
+        // # Eco-Sphere Mode Beacon: Artificial Green House
+        // #zh_CN 生态圈模式信标：人工温室
+        GTCMItemList.MegaTreeFarmModeBeacon3.set(MegaTreeFarmModeBeacon.registerVariant(2));
+
+        // #tr item.MegaTreeFarmModeBeacon.3.name
+        // # Eco-Sphere Mode Beacon: Directed Mob Cloner
+        // #zh_CN 生态圈模式信标：定向克隆
+        GTCMItemList.MegaTreeFarmModeBeacon4.set(MegaTreeFarmModeBeacon.registerVariant(3));
+
+        // #tr item.MegaTreeFarmModeBeacon.4.name
+        // # Eco-Sphere Mode Beacon: {\DARK_RED}D{\GOLD}i{\GREEN}r{\DARK_AQUA}e{\DARK_PURPLE}c{\DARK_RED}t{\GOLD}e{\GREEN}d {\DARK_AQUA}M{\DARK_PURPLE}o{\DARK_RED}b {\GOLD}C{\GREEN}l{\DARK_AQUA}o{\DARK_PURPLE}n{\DARK_RED}e{\GOLD}r
+        // #zh_CN 生态圈模式信标：{\DARK_RED}定{\GOLD}向{\GREEN}克{\DARK_AQUA}隆
+        GTCMItemList.MegaTreeFarmModeBeacon5.set(MegaTreeFarmModeBeacon.registerVariant(4));
 
         // endregion
     }

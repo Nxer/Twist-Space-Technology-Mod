@@ -19,7 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import fox.spiteful.avaritia.items.LudicrousItems;
 import fox.spiteful.avaritia.render.CosmicItemRenderer;
 
-public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
+public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
 
     private static final float CONTENT_SCALE = 0.875F;
     private static final float ITEM_THICKNESS = 1.0F / 16.0F;
@@ -27,7 +27,7 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return item != null && item.getItem() == TstItems.MegaTreeFarmModeSymbol;
+        return item != null && item.getItem() == TstItems.MegaTreeFarmModeBeacon;
     }
 
     @Override
@@ -41,15 +41,15 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-        // Draw the background first so every symbol has the same solid base.
+        // Draw the background first so every beacon has the same solid base.
         renderBase(
             type,
             item.getItem()
                 .getIcon(item, 0),
-            TstItems.MegaTreeFarmModeSymbol.getFrameIcon(),
+            TstItems.MegaTreeFarmModeBeacon.getFrameIcon(),
             item.getItemSpriteNumber());
 
-        // Pick the item shown in the center from the symbol metadata.
+        // Pick the item shown in the center from the beacon metadata.
         int meta = item.getItemDamage();
         ItemStack displayStack = getDisplayStack(meta);
 
@@ -75,7 +75,7 @@ public final class MegaTreeFarmModeSymbolRenderer implements IItemRenderer {
         GL11.glPopMatrix();
 
         // Draw the frame last so it always stays above the center item.
-        renderLayerIcon(type, TstItems.MegaTreeFarmModeSymbol.getFrameIcon(), item.getItemSpriteNumber(), 2);
+        renderLayerIcon(type, TstItems.MegaTreeFarmModeBeacon.getFrameIcon(), item.getItemSpriteNumber(), 2);
     }
 
     private static void applyLayerDepth(ItemRenderType type, float offset) {

@@ -155,29 +155,65 @@ public class TCResearches {
                     .setConcealed()
                     .registerResearchItem();
 
-            registerModeSymbolResearch(
-                "ECO_SPHERE_MODE_SYMBOL_1",
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_1
+            // # Eco-Sphere Mode Beacon: Tree Growth Simulator
+            // #zh_CN 生态圈模式信标：原木拟生
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_1
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_1.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_1",
                 -2,
                 -4,
-                GTCMItemList.MegaTreeFramModSymboll1.get(1),
+                GTCMItemList.MegaTreeFarmModeBeacon1.get(1),
                 "ECO_SPHERE_SIMULATOR");
-            registerModeSymbolResearch(
-                "ECO_SPHERE_MODE_SYMBOL_2",
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_2
+            // # Eco-Sphere Mode Beacon: Aquatic Zone Simulator
+            // #zh_CN 生态圈模式信标：水域模拟
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_2
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_2.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_2",
                 1,
                 -6,
-                GTCMItemList.MegaTreeFramModSymboll2.get(1),
+                GTCMItemList.MegaTreeFarmModeBeacon2.get(1),
                 "ECO_SPHERE_SIMULATOR");
-            registerModeSymbolResearch(
-                "ECO_SPHERE_MODE_SYMBOL_3",
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_3
+            // # Eco-Sphere Mode Beacon: Artificial Green House
+            // #zh_CN 生态圈模式信标：人工温室
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_3
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_3.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_3",
                 -1,
                 -6,
-                GTCMItemList.MegaTreeFramModSymboll3.get(1),
+                GTCMItemList.MegaTreeFarmModeBeacon3.get(1),
                 "ECO_SPHERE_SIMULATOR");
-            registerModeSymbolResearch(
-                "ECO_SPHERE_MODE_SYMBOL_4",
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_4
+            // # Eco-Sphere Mode Beacon: Directed Mob Cloner
+            // #zh_CN 生态圈模式信标：定向克隆
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_4
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_4.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_4",
                 2,
                 -4,
-                GTCMItemList.MegaTreeFramModSymboll4.get(1),
+                GTCMItemList.MegaTreeFarmModeBeacon4.get(1),
                 "ECO_SPHERE_SIMULATOR");
 
             // Offspring
@@ -202,7 +238,7 @@ public class TCResearches {
                     // #zh_CN 这是什么?
                     .setPages(new ResearchPage("tc.research_text.OFFSPRING.1"))
                     .setHidden()
-                    .setParents("ECO_SPHERE_MODE_SYMBOL_2")
+                    .setParents("ECO_SPHERE_MODE_BEACON_2")
                     .registerResearchItem();
 
             // Evolution
@@ -271,12 +307,24 @@ public class TCResearches {
                     .setHidden()
                     .registerResearchItem();
 
-            registerModeSymbolResearch(
-                "ECO_SPHERE_MODE_SYMBOL_5",
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_5
+            // # Eco-Sphere Mode Beacon:
+            // {\DARK_RED}D{\GOLD}i{\GREEN}r{\DARK_AQUA}e{\DARK_PURPLE}c{\DARK_RED}t{\GOLD}e{\GREEN}d
+            // {\DARK_AQUA}M{\DARK_PURPLE}o{\DARK_RED}b
+            // {\GOLD}C{\GREEN}l{\DARK_AQUA}o{\DARK_PURPLE}n{\DARK_RED}e{\GOLD}r
+            // #zh_CN 生态圈模式信标：{\DARK_RED}定{\GOLD}向{\GREEN}克{\DARK_AQUA}隆
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_5
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_5.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_5",
                 4,
                 -4,
-                GTCMItemList.MegaTreeFramModSymboll5.get(1),
-                "ECO_SPHERE_MODE_SYMBOL_4");
+                GTCMItemList.MegaTreeFarmModeBeacon5.get(1),
+                "ECO_SPHERE_MODE_BEACON_4");
 
             new ResearchItem(
                 "ECO_SPHERE_TIER_TWO",
@@ -620,7 +668,7 @@ public class TCResearches {
         return ResearchCategories.getResearch(researchKey) == null ? ROOT_RESEARCH : researchKey;
     }
 
-    private static void registerModeSymbolResearch(String key, int column, int row, ItemStack icon, String... parents) {
+    private static void registerModeBeaconResearch(String key, int column, int row, ItemStack icon, String... parents) {
         new ResearchItem(key, "TST", new AspectList(), column, row, 5, icon)
             .setPages(new ResearchPage("tc.research_text." + key + ".1"))
             .setParents(parents)
