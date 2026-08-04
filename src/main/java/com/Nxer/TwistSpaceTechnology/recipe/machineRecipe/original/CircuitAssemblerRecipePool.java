@@ -29,10 +29,10 @@ public class CircuitAssemblerRecipePool {
         // Optical Soc Circuit
         GTValues.RA.stdBuilder()
             .itemInputs(
-                ItemList.Circuit_Board_Optical.get(1),
-                GTCMItemList.OpticalSOC.get(1),
-                CustomItemList.DATApipe.get(1),
-                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Infinity, 3))
+                ItemList.Circuit_Board_Optical.get(6),
+                GTCMItemList.OpticalSOC.get(6),
+                CustomItemList.DATApipe.get(6),
+                GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Infinity, 18))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144 * 4))
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(1))
             .eut(RECIPE_UIV)
@@ -47,6 +47,7 @@ public class CircuitAssemblerRecipePool {
                 GTOreDictUnificator.get(OrePrefixes.bolt, Materials.Infinity, 48))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(144))
             .itemOutputs(ItemList.Circuit_OpticalProcessor.get(4)) // Normally 16, To align with the NAC Nerf to 4
+            .special(ItemList.CircuitImprint_OpticalProcessor.get(1))
             .eut(RECIPE_UIV)
             .duration(20 * 60 * 4)
             .addTo(CAL);
@@ -71,7 +72,8 @@ public class CircuitAssemblerRecipePool {
                 ItemList.Wrap_QuantumPowerICs.get(2),
                 GTOreDictUnificator.get(OrePrefixes.wireFine, Materials.Infinity, 32))
             .fluidInputs(MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(72))
-            .itemOutputs(ItemList.Circuit_OpticalProcessor.get(16))
+            .itemOutputs(HighEnergyFlowCircuit.get(16))
+            .special(ItemList.CircuitImprint_HighEnergyFlowCircuit.get(1))
             .eut(RECIPE_LuV)
             .duration(20 * 60 * 4)
             .addTo(CAL);

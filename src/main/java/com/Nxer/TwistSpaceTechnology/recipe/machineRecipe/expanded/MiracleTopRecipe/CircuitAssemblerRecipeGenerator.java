@@ -56,6 +56,7 @@ public final class CircuitAssemblerRecipeGenerator {
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(tectech.thing.CustomItemList.parametrizerMemory.get(1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Wetware.get(1)));
         IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.Circuit_Board_Bio.get(1)));
+        IgnoreRecipeOutputs.add(TST_ItemID.createNoNBT(ItemList.HighEnergyFlowCircuit.get(1)));
         // spotless:on
 
         for (GTRecipe originalRecipe : circuitAssemblerRecipes.getAllRecipes()) {
