@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static net.minecraft.util.StatCollector.translateToLocal;
+
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NotEnoughWater;
 
@@ -22,7 +24,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return net.minecraft.util.StatCollector.translateToLocal("EcoSphereSimulator.modeMsg.2");
+        return translateToLocal("EcoSphereSimulator.modeMsg.2");
     }
 
     @Override

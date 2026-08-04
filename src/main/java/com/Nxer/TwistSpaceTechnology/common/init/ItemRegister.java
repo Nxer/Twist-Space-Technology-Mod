@@ -1058,28 +1058,28 @@ public class ItemRegister {
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
 
         // #tr item.MegaTreeFarmModeBeacon.0.name
-        // # Eco-Sphere Mode Beacon: Tree Growth Simulator
-        // #zh_CN 生态圈模式信标：原木拟生
+        // # Eco-Sphere Mode Beacon: Arboreal Genesis
+        // #zh_CN 生态圈模式信标: 原木拟生
         GTCMItemList.MegaTreeFarmModeBeacon1.set(MegaTreeFarmModeBeacon.registerVariant(0));
 
         // #tr item.MegaTreeFarmModeBeacon.1.name
-        // # Eco-Sphere Mode Beacon: Aquatic Zone Simulator
-        // #zh_CN 生态圈模式信标：水域模拟
+        // # Eco-Sphere Mode Beacon: Aquatic Simulation
+        // #zh_CN 生态圈模式信标: 水域模拟
         GTCMItemList.MegaTreeFarmModeBeacon2.set(MegaTreeFarmModeBeacon.registerVariant(1));
 
         // #tr item.MegaTreeFarmModeBeacon.2.name
-        // # Eco-Sphere Mode Beacon: Artificial Green House
-        // #zh_CN 生态圈模式信标：人工温室
+        // # Eco-Sphere Mode Beacon: Artificial Greenhouse
+        // #zh_CN 生态圈模式信标: 人工温室
         GTCMItemList.MegaTreeFarmModeBeacon3.set(MegaTreeFarmModeBeacon.registerVariant(2));
 
         // #tr item.MegaTreeFarmModeBeacon.3.name
-        // # Eco-Sphere Mode Beacon: Directed Mob Cloner
-        // #zh_CN 生态圈模式信标：定向克隆
+        // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+        // #zh_CN 生态圈模式信标: 定向克隆
         GTCMItemList.MegaTreeFarmModeBeacon4.set(MegaTreeFarmModeBeacon.registerVariant(3));
 
         // #tr item.MegaTreeFarmModeBeacon.4.name
-        // # Eco-Sphere Mode Beacon: {\DARK_RED}D{\GOLD}i{\GREEN}r{\DARK_AQUA}e{\DARK_PURPLE}c{\DARK_RED}t{\GOLD}e{\GREEN}d {\DARK_AQUA}M{\DARK_PURPLE}o{\DARK_RED}b {\GOLD}C{\GREEN}l{\DARK_AQUA}o{\DARK_PURPLE}n{\DARK_RED}e{\GOLD}r
-        // #zh_CN 生态圈模式信标：{\DARK_RED}定{\GOLD}向{\GREEN}克{\DARK_AQUA}隆
+        // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+        // #zh_CN 生态圈模式信标: 定向克隆
         GTCMItemList.MegaTreeFarmModeBeacon5.set(MegaTreeFarmModeBeacon.registerVariant(4));
 
         // endregion

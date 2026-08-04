@@ -383,7 +383,7 @@ public final class MachineLoader {
                     19051,
                     "NameMegaTreeFarm",
                     // #tr NameMegaTreeFarm
-                    // # Eco-Sphere Growth Simulator
+                    // # Eco-Sphere Simulator
                     // #zh_CN 拟似生态圈
                     TextEnums.tr("NameMegaTreeFarm")));
         }

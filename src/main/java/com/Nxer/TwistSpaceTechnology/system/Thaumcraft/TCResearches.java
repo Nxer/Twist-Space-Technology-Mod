@@ -154,10 +154,9 @@ public class TCResearches {
                     .setParents("TST_WELCOME")
                     .setConcealed()
                     .registerResearchItem();
-
             // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_1
-            // # Eco-Sphere Mode Beacon: Tree Growth Simulator
-            // #zh_CN 生态圈模式信标：原木拟生
+            // # Eco-Sphere Mode Beacon: Arboreal Genesis
+            // #zh_CN 生态圈模式信标: 原木拟生
             // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_1
             // # Placeholder
             // #zh_CN 占位符
@@ -171,8 +170,8 @@ public class TCResearches {
                 GTCMItemList.MegaTreeFarmModeBeacon1.get(1),
                 "ECO_SPHERE_SIMULATOR");
             // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_2
-            // # Eco-Sphere Mode Beacon: Aquatic Zone Simulator
-            // #zh_CN 生态圈模式信标：水域模拟
+            // # Eco-Sphere Mode Beacon: Aquatic Simulation
+            // #zh_CN 生态圈模式信标: 水域模拟
             // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_2
             // # Placeholder
             // #zh_CN 占位符
@@ -186,8 +185,8 @@ public class TCResearches {
                 GTCMItemList.MegaTreeFarmModeBeacon2.get(1),
                 "ECO_SPHERE_SIMULATOR");
             // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_3
-            // # Eco-Sphere Mode Beacon: Artificial Green House
-            // #zh_CN 生态圈模式信标：人工温室
+            // # Eco-Sphere Mode Beacon: Artificial Greenhouse
+            // #zh_CN 生态圈模式信标: 人工温室
             // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_3
             // # Placeholder
             // #zh_CN 占位符
@@ -201,8 +200,8 @@ public class TCResearches {
                 GTCMItemList.MegaTreeFarmModeBeacon3.get(1),
                 "ECO_SPHERE_SIMULATOR");
             // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_4
-            // # Eco-Sphere Mode Beacon: Directed Mob Cloner
-            // #zh_CN 生态圈模式信标：定向克隆
+            // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+            // #zh_CN 生态圈模式信标: 定向克隆
             // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_4
             // # Placeholder
             // #zh_CN 占位符
@@ -308,11 +307,8 @@ public class TCResearches {
                     .registerResearchItem();
 
             // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_5
-            // # Eco-Sphere Mode Beacon:
-            // {\DARK_RED}D{\GOLD}i{\GREEN}r{\DARK_AQUA}e{\DARK_PURPLE}c{\DARK_RED}t{\GOLD}e{\GREEN}d
-            // {\DARK_AQUA}M{\DARK_PURPLE}o{\DARK_RED}b
-            // {\GOLD}C{\GREEN}l{\DARK_AQUA}o{\DARK_PURPLE}n{\DARK_RED}e{\GOLD}r
-            // #zh_CN 生态圈模式信标：{\DARK_RED}定{\GOLD}向{\GREEN}克{\DARK_AQUA}隆
+            // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+            // #zh_CN 生态圈模式信标: 定向克隆
             // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_5
             // # Placeholder
             // #zh_CN 占位符

@@ -231,8 +231,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes
-    // # Eco-Sphere : Tree Growth Simulator
-    // #zh_CN 生态圈 : 原木拟生
+    // # Eco-Sphere: Arboreal Genesis
+    // #zh_CN 生态圈: 原木拟生
     public static final RecipeMap<TST_RecipeMapBackend> TreeGrowthSimulatorWithoutToolFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 1, 0)
@@ -245,8 +245,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes
-    // # Eco-Sphere : Aquatic Zone Simulator
-    // #zh_CN 生态圈 : 水域模拟
+    // # Eco-Sphere: Aquatic Simulation
+    // #zh_CN 生态圈: 水域模拟
     public static final RecipeMap<TST_RecipeMapBackend> AquaticZoneSimulatorFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.AquaticZoneSimulatorFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
@@ -257,8 +257,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.ArtificialGreenHouseFakeRecipes
-    // # Eco-Sphere : Artificial Green House
-    // #zh_CN 生态圈 : 人工温室
+    // # Eco-Sphere: Artificial Greenhouse
+    // #zh_CN 生态圈: 人工温室
     public static final RecipeMap<TST_RecipeMapBackend> ArtificialGreenHouseFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.ArtificialGreenHouseFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 1, 1, 0)
@@ -269,8 +269,8 @@ public class GTCMRecipe {
         .build();
 
     // #tr tst.recipe.DirectedMobClonerFakeRecipes
-    // # Eco-Sphere : Directed Mob Cloner
-    // #zh_CN 生态圈 : 定向克隆
+    // # Eco-Sphere: Directed Mob Cloning
+    // #zh_CN 生态圈: 定向克隆
     public static final RecipeMap<TST_RecipeMapBackend> DirectedMobClonerFakeRecipes = RecipeMapBuilder
         .of("tst.recipe.DirectedMobClonerFakeRecipes", TST_RecipeMapBackend::new)
         .maxIO(1, 2, 1, 1)

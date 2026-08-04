@@ -10,6 +10,7 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
@@ -29,14 +30,14 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return net.minecraft.util.StatCollector.translateToLocal("EcoSphereSimulator.modeMsg.1");
+        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg.1");
     }
 
     @Override
     public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
         ItemStack focusStack = findFocusStack(machine);
         boolean focusMode = focusStack != null;
-        net.minecraftforge.fluids.Fluid requiredFluid = FluidRegistry.getFluid("ic2distilledwater");
+        Fluid requiredFluid = FluidRegistry.getFluid("ic2distilledwater");
         EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
             .consumeFluidForParallel(machine, requiredFluid, 10000L, euTier);
         if (parallelResult == null)
