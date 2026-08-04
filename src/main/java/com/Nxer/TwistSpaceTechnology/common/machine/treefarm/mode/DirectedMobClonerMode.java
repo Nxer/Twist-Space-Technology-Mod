@@ -15,6 +15,8 @@ import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.common.items.ItemIntegratedCircuit;
 
+import static net.minecraft.util.StatCollector.translateToLocal;
+
 public final class DirectedMobClonerMode implements IEcoSphereMode {
 
     @Override
@@ -24,7 +26,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return "Directed Mob Cloner";
+        return translateToLocal("EcoSphereSimulator.modeMsg.3");
     }
 
     @Override

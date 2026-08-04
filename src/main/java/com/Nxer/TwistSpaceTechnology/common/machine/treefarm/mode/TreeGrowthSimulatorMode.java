@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static net.minecraft.util.StatCollector.translateToLocal;
+
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.addSplitStack;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 
@@ -11,6 +13,7 @@ import java.util.Random;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -30,7 +33,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return net.minecraft.util.StatCollector.translateToLocal("EcoSphereSimulator.modeMsg.0");
+        return translateToLocal("EcoSphereSimulator.modeMsg.0");
     }
 
     @Override
@@ -93,7 +96,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     private static SpecialTreeRecipe findSpecialRecipe(TST_MegaTreeFarm machine) {
         Fluid temporalFluid = FluidRegistry.getFluid("temporalfluid");
         Fluid uuMatter = FluidRegistry.getFluid("ic2uumatter");
-        for (net.minecraftforge.fluids.FluidStack fluidStack : machine.getStoredFluids()) {
+        for (FluidStack fluidStack : machine.getStoredFluids()) {
             if (fluidStack == null) continue;
             Fluid fluid = fluidStack.getFluid();
             if (Mods.TwilightForest.isModLoaded() && temporalFluid != null && fluid == temporalFluid) {

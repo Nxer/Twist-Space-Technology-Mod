@@ -126,10 +126,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     public int totalMachineMode() {
         /*
-         * 0 - Tree Growth Simulator
-         * 1 - Aqua Zone Simulator
+         * 0 - Arboreal Genesis
+         * 1 - Aquatic Simulation
          * 2 - Green House Simulator
-         * 3 - Directed Mob Cloner
+         * 3 - Directed Mob Cloning
          */
         return 4;
     }
@@ -205,20 +205,20 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     public String getMachineModeName() {
         // #tr EcoSphereSimulator.modeMsg.0
-        // # Tree Growth Simulator
-        // #zh_CN 原木拟生模式
+        // # Arboreal Genesis
+        // #zh_CN 原木拟生
 
         // #tr EcoSphereSimulator.modeMsg.1
-        // # Aqua Zone Simulator
-        // #zh_CN 水域模拟模式
+        // # Aquatic Simulation
+        // #zh_CN 水域模拟
 
         // #tr EcoSphereSimulator.modeMsg.2
-        // # Artificial Green House
-        // #zh_CN 人工温室模式
+        // # Artificial Greenhouse
+        // #zh_CN 人工温室
 
         // #tr EcoSphereSimulator.modeMsg.3
-        // # Directed Mob Cloner
-        // #zh_CN 定向克隆模式
+        // # Directed Mob Cloning
+        // #zh_CN 定向克隆
         if (cleaningRequested || cleaningRunActive) return tr("MegaTreeFarm.mode.cleaning");
         return modeBeaconPresent && boundMode >= 0 && boundMode < MACHINE_MODES.length
             ? MACHINE_MODES[boundMode].getDisplayName()
@@ -977,7 +977,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
         tt.addMachineType(tr("Tooltip_EcoSphereSimulator_MachineType"))
             // #tr Tooltip_EcoSphereSimulator_Controller
-            // # Controller block for the Eco-Sphere Growth Simulator
+            // # Controller block for the Eco-Sphere Simulator
             // #zh_CN 拟似生态圈的控制方块
             .addInfo(tr("Tooltip_EcoSphereSimulator_Controller"))
             // #tr Tooltip_EcoSphereSimulator.0.01
