@@ -2358,3 +2358,5 @@ TST.SimpleStructureErrors.missing_merger_ring=缺少时空归并器环
 TST_LargeSolarBoiler.gui.02=§f热量: §6%s%%§r
 TST_LargeSolarBoiler.gui.03=§f钙化程度: §6%s%%§r
 TST_LargeSolarBoiler.gui.01=点击以清洁机器的钙化
+gt.circuitcomponent.processed.chipopticalsoc=谐振引力约束光量子晶体
+gt.circuitcomponent.bolt.processed.infinity=盒装无尽螺栓

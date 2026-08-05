@@ -5,6 +5,7 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CircuitComponentMixin",
     "IC2_InternalName_Adder_Mixin"
   ],
   "client": [],

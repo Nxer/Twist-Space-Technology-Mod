@@ -54,6 +54,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRe
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidSolidifierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FusionReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.MixerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NACRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NanoForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ParticleColliderRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.QFTRecipePool;
@@ -104,6 +105,7 @@ public class RecipeLoader {
         SpaceAssemblerRecipePool.loadRecipes();
         TCRecipePool.loadRecipes();
         FluidSolidifierRecipePool.loadRecipes();
+        NACRecipePool.loadRecipes();
         DragonBloodRecipe.loadRecipes();
         DTPFRecipePool.loadRecipes();
         // TST Recipe Map
