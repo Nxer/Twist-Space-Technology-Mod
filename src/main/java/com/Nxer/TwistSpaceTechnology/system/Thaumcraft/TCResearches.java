@@ -34,6 +34,7 @@ import thaumcraft.api.research.ResearchPage;
 public class TCResearches {
 
     private static final String TST_Path = "gtnhcommunitymod";
+    private static final String ROOT_RESEARCH = "TST_WELCOME";
 
     public static void register() {
         loadResearchTab();
@@ -409,7 +410,7 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.PRIMORDIAL_DISJUNCTUS.1")),
                     new ResearchPage(infusionRecipePrimordialDisjunctus))
-                    .setParents("ESSENTIA_DISCRETIZER")
+                    .setParents(existingParentOrRoot("ESSENTIA_DISCRETIZER"))
                     .registerResearchItem();
         }
         if (Config.Enable_SkypiercerTower) {
@@ -497,7 +498,7 @@ public class TCResearches {
                     // #en_US {\BOLD}Tier 8 Compound Aspects{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 seconds<BR>{\BOLD}Ira:{\RESET} 82 seconds
                     // #zh_CN {\BOLD}八级复合要素{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 秒<BR>{\BOLD}Ira:{\RESET} 82 秒
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.16")))
-                    .setParents("ESSENTIA_DISCRETIZER")
+                    .setParents(existingParentOrRoot("ESSENTIA_DISCRETIZER"))
                     .registerResearchItem();
             // spotless:on
         }
@@ -530,7 +531,7 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.2")),
                     new ResearchPage(infusionRecipeInfusionMaterialDispenser))
-                    .setParents("ESSENTIA_DISCRETIZER")
+                    .setParents(existingParentOrRoot("ESSENTIA_DISCRETIZER"))
                     .registerResearchItem();
         }
 
@@ -569,5 +570,9 @@ public class TCResearches {
          * }
          */
 
+    }
+
+    private static String existingParentOrRoot(String researchKey) {
+        return ResearchCategories.getResearch(researchKey) == null ? ROOT_RESEARCH : researchKey;
     }
 }

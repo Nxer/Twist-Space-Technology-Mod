@@ -99,7 +99,7 @@ abstract class GenerateLanguageTask : DefaultTask() {
     ) : MatchingState
 
     // matching "#tr <key> [optional English translation]"
-    private val trHeadMatcher = Regex("""//\s*#tr\s+(?<key>[a-zA-Z0-9._]+)\s*(?<data>.+)?\s*""")
+    private val trHeadMatcher = Regex("""//\s*#tr\s+(?<key>[a-zA-Z0-9._-]+)\s*(?<data>.+)?\s*""")
 
     // matching "# [optional language code, English by default] <translation>"
     private val translationMatcher = Regex("""//\s*#(?<lang>[a-z]{2}_[A-Z]{2})?\s+(?<data>.+)""")

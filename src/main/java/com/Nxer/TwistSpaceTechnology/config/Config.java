@@ -10,11 +10,13 @@ import java.math.BigInteger;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 
 // spotless:off
 public class Config {
     // region Regions enum
+    public static final String VERSION = "00_Version";
     public static final String GENERAL = "General";
     public static final String DEBUG = "Debug";
     public static final String NETWORK = "Network";
@@ -571,6 +573,11 @@ public class Config {
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
 
+        // region Version
+        configuration.get(VERSION, "CurrentVersion", TwistSpaceTechnology.VERSION, "Current Twist Space Technology version.")
+            .set(TwistSpaceTechnology.VERSION);
+        // endregion
+
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
         DEFAULT_BATCH_MODE = configuration.getBoolean("DEFAULT_BATCH_MODE", GENERAL, DEFAULT_BATCH_MODE, "Default Batch mode state of machine when placed. True is auto enable Batch mode.");
@@ -990,5 +997,6 @@ public class Config {
             configuration.save();
         }
     }
+
 }
 // spotless:on

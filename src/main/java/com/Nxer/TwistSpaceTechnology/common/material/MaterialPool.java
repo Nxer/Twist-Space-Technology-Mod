@@ -22,9 +22,18 @@ public class MaterialPool implements Runnable {
 
     /*----------- Test the forge item register -----------*/
 
+    // spotless:off
+
     // ID manager
     private static final int offsetID_01 = 20_000;
+    public static final Werkstoff.GenerationFeatures gf = new Werkstoff.GenerationFeatures();
+    public static Werkstoff eventHorizonDiffusers;
+    public static Werkstoff entropyReductionProcess;
+    public static Werkstoff realSingularity;
 
+    // #tr Material.holmiumgarnet
+    // # Holmium Garnet
+    // #zh_CN 钬石榴石
     public static final Werkstoff HolmiumGarnet = new Werkstoff(
         new short[] { 96, 96, 240 },
         "Holmium Garnet",
@@ -37,15 +46,133 @@ public class MaterialPool implements Runnable {
         offsetID_01 + 1,
         TextureSet.SET_SHINY);
 
-    // spotless:off
+    // #tr Material.puremana
+    // # Pure Mana
+    // #zh_CN 至纯魔力
+    public static final Werkstoff PureMana = new Werkstoff(
+        new short[] { 176, 196, 222 }, // LightSteelBlue
+        "Pure Mana",
+        subscriptNumbers("Ma⨕"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 5,
+        TextureSet.SET_FLUID);
 
-    public static final Werkstoff.GenerationFeatures gf = new Werkstoff.GenerationFeatures();
+    // #tr Material.liquidmana
+    // # Liquid Mana
+    // #zh_CN 液态魔力
+    public static final Werkstoff LiquidMana = new Werkstoff(
+        new short[] { 135, 206, 235 }, // skyblue
+        "Liquid Mana",
+        subscriptNumbers("??Ma⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 6,
+        TextureSet.SET_FLUID,
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
-    public static Werkstoff eventHorizonDiffusers;
+    // #tr Material.purifiedmana
+    // # Purified Mana
+    // #zh_CN 纯净魔力
+    public static final Werkstoff PurifiedMana = new Werkstoff(
+        new short[] { 173, 216, 230 }, // LightBLue
+        "Purified Mana",
+        subscriptNumbers("??Ma⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 7,
+        TextureSet.SET_FLUID,
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
-    public static Werkstoff entropyReductionProcess;
+    // #tr Material.stabilisevoidmatter
+    // # Stabilise Void Matter
+    // #zh_CN 稳定虚空物质
+    public static final Werkstoff StabiliseVoidMatter = new Werkstoff(
+        new short[] { 0, 0, 0 }, // Dark
+        "Stabilise Void Matter",
+        subscriptNumbers("??SvM⨕??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 8,
+        TextureSet.SET_FLUID,
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
 
-    public static Werkstoff realSingularity;
+    // #tr Material.liquidstargate
+    // # Liquid Stargate
+    // #zh_CN 液态星门
+    public static final Werkstoff LiquidStargate = new Werkstoff(
+        new short[] { 66, 170, 255 }, // Dark
+        "Liquid Stargate",
+        subscriptNumbers("??Stargate??"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.MIXTURE,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 9,
+        TextureSet.SET_FLUID,
+        Pair.of(PureMana, 1),
+        Pair.of(Materials.Stone, 2));
+
+    // #tr Material.concentrateduu-matter
+    // # Concentrated UU-Matter
+    // #zh_CN 浓缩UU物质
+    public static final Werkstoff ConcentratedUUMatter = new Werkstoff(
+        new short[] { 90, 0, 128 },
+        "Concentrated UU-Matter",
+        subscriptNumbers("UU+"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 10,
+        TextureSet.SET_FLUID);
+
+    // #tr Material.highlyenergeticdimensionalentropicfluid
+    // # Highly Energetic Dimensional Entropic Fluid
+    // #zh_CN 高能维度熵流体
+
+    // #tr Material.highlyenergeticdimensionalentropicfluid.ChemicalFormula
+    // # Origin of Entropy
+    // #zh_CN 熵的起源
+    public static final Werkstoff EntropicFlux = new Werkstoff(
+        new short[] { 43, 18, 128 },
+        "Highly Energetic Dimensional Entropic Fluid",
+        subscriptNumbers("Origin of Entropy"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 11,
+        TextureSet.SET_FLUID);
+
+    // #tr Material.chrono-dimensionallyannihilativeentropicfluid
+    // # Chrono-Dimensionally Annihilative Entropic Fluid
+    // #zh_CN 时空湮灭维度熵流体
+
+    // #tr Material.chrono-dimensionallyannihilativeentropicfluid.ChemicalFormula
+    // # Endless Entropy
+    // #zh_CN 熵增
+    public static final Werkstoff ChronoentropicFlux = new Werkstoff(
+        new short[] { 43, 18, 55 },
+        "Chrono-Dimensionally Annihilative Entropic Fluid",
+        subscriptNumbers("Endless Entropy"),
+        new Werkstoff.Stats(),
+        Werkstoff.Types.ELEMENT,
+        new Werkstoff.GenerationFeatures().disable()
+            .addCells(),
+        offsetID_01 + 12,
+        TextureSet.SET_FLUID);
 
     static {
         if (Config.activateMegaSpaceStation) {
@@ -79,102 +206,6 @@ public class MaterialPool implements Runnable {
         }
     }
 
-    public static final Werkstoff PureMana = new Werkstoff(
-        new short[] { 176, 196, 222 }, // LightSteelBlue
-        "Pure Mana",
-        subscriptNumbers("Ma⨕"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.ELEMENT,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 5,
-        TextureSet.SET_FLUID);
-
-    public static final Werkstoff LiquidMana = new Werkstoff(
-        new short[] { 135, 206, 235 }, // skyblue
-        "Liquid Mana",
-        subscriptNumbers("??Ma⨕??"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MIXTURE,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 6,
-        TextureSet.SET_FLUID,
-        Pair.of(PureMana, 1),
-        Pair.of(Materials.Stone, 2));
-
-    public static final Werkstoff PurifiedMana = new Werkstoff(
-        new short[] { 173, 216, 230 }, // LightBLue
-        "Purified Mana",
-        subscriptNumbers("??Ma⨕??"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MIXTURE,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 7,
-        TextureSet.SET_FLUID,
-        Pair.of(PureMana, 1),
-        Pair.of(Materials.Stone, 2));
-
-    public static final Werkstoff StabiliseVoidMatter = new Werkstoff(
-        new short[] { 0, 0, 0 }, // Dark
-        "Stabilise Void Matter",
-        subscriptNumbers("??SvM⨕??"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MIXTURE,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 8,
-        TextureSet.SET_FLUID,
-        Pair.of(PureMana, 1),
-        Pair.of(Materials.Stone, 2));
-
-    public static final Werkstoff LiquidStargate = new Werkstoff(
-        new short[] { 66, 170, 255 }, // Dark
-        "Liquid Stargate",
-        subscriptNumbers("??Stargate??"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.MIXTURE,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 9,
-        TextureSet.SET_FLUID,
-        Pair.of(PureMana, 1),
-        Pair.of(Materials.Stone, 2));
-
-    public static final Werkstoff ConcentratedUUMatter = new Werkstoff(
-        new short[] { 90, 0, 128 },
-        "Concentrated UU-Matter",
-        subscriptNumbers("UU+"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.ELEMENT,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 10,
-        TextureSet.SET_FLUID);
-
-    public static final Werkstoff EntropicFlux = new Werkstoff(
-        new short[] { 43, 18, 128 },
-        "Highly Energetic Dimensional Entropic Fluid",
-        subscriptNumbers("Origin of Entropy"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.ELEMENT,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 11,
-        TextureSet.SET_FLUID);
-
-    public static final Werkstoff ChronoentropicFlux = new Werkstoff(
-        new short[] { 43, 18, 55 },
-        "Chrono-Dimensionally Annihilative Entropic Fluid",
-        subscriptNumbers("Endless Entropy"),
-        new Werkstoff.Stats(),
-        Werkstoff.Types.ELEMENT,
-        new Werkstoff.GenerationFeatures().disable()
-            .addCells(),
-        offsetID_01 + 12,
-        TextureSet.SET_FLUID);
-
     // Bartworks' Material System run on Runnable.class
     @Override
     public void run() {
@@ -183,4 +214,5 @@ public class MaterialPool implements Runnable {
         // }
         // gf.removePrefix(OrePrefixes.ore);
     }
+
 }
