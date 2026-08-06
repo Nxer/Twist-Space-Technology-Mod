@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static net.minecraft.util.StatCollector.translateToLocal;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -7,6 +9,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
@@ -14,8 +17,6 @@ import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.common.items.ItemIntegratedCircuit;
-
-import static net.minecraft.util.StatCollector.translateToLocal;
 
 public final class DirectedMobClonerMode implements IEcoSphereMode {
 
@@ -37,8 +38,11 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_correct_Circuit"));
         int recipeId = TstUtils.getIntegratedCircuitConfigurationSum(machine.getStoredInputs());
         if (recipeId == 0) {
-            EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
-                .consumeFluidForParallel(machine, FluidRegistry.WATER, 1000L, euTier);
+            EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport.consumeFluidForParallel(
+                machine,
+                FluidRegistry.getFluid("lifeessence"),
+                DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
+                euTier);
             if (parallelResult == null)
                 return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_enough_input"));
             long lifeEssenceAmount = machine.isTierTwo() ? parallelResult.fluidCost()
@@ -63,7 +67,11 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         int tierOffset = bossRecipe ? 6 : 4;
         int maximumOverclocks = Math.max(0, voltageTier - tierOffset);
         EcoSphereModeSupport.PerfectOverclockResult overclockResult = EcoSphereModeSupport
-            .consumeFluidForPerfectOverclock(machine, FluidRegistry.getFluid("lifeessence"), 100L, maximumOverclocks);
+            .consumeFluidForPerfectOverclock(
+                machine,
+                FluidRegistry.getFluid("lifeessence"),
+                DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
+                maximumOverclocks);
         if (overclockResult == null)
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_enough_input"));
         return DirectedMobClonerRecipeCache

@@ -28,7 +28,12 @@ import gregtech.api.util.GTModHandler;
 
 public class AquaticZoneSimulatorFakeRecipe {
 
-    static FluidStack DistilledWaterStack = FluidRegistry.getFluidStack("ic2distilledwater", 10000);
+    public static final int DISTILLED_WATER_PER_PARALLEL = 10000;
+    public static final int CHANCE_SCALE = 10000;
+    public static final int OFFSPRING_TIER_TWO_MULTIPLIER = 41;
+
+    static FluidStack DistilledWaterStack = FluidRegistry
+        .getFluidStack("ic2distilledwater", DISTILLED_WATER_PER_PARALLEL);
     private static final ItemStack Offspring = GTCMItemList.OffSpring.get(1);
     public static ArrayList<ItemStack> WatersOutputs = new ArrayList<>();
     public static HashMap<String, Integer> WatersChances = new HashMap<>();
@@ -141,11 +146,11 @@ public class AquaticZoneSimulatorFakeRecipe {
     static void loadOffspringFakeRecipe() {
         if (DistilledWaterStack == null) return;
         ItemStack jellyfish = Mods.PamsHarvestCraft.isModLoaded()
-            ? GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", 41, 0)
+            ? GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", OFFSPRING_TIER_TWO_MULTIPLIER, 0)
             : null;
         if (jellyfish == null && Offspring != null) jellyfish = Offspring.copy();
         if (jellyfish == null) return;
-        jellyfish.stackSize = 41;
+        jellyfish.stackSize = OFFSPRING_TIER_TWO_MULTIPLIER;
         jellyfish.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.strangeJellyfish"));
         // #tr MegaTreeFarm.nei.strangeJellyfish
         // # Strange Jellyfish??
@@ -164,7 +169,7 @@ public class AquaticZoneSimulatorFakeRecipe {
         // generate recipe chance
         int TotalSize = 0;
         for (ItemStack aStack : WatersOutputs) TotalSize += aStack.stackSize;
-        int BasicSize = 10000 / TotalSize;
+        int BasicSize = CHANCE_SCALE / TotalSize;
         for (ItemStack aStack : WatersOutputs) {
             if (aStack == null) continue;
             WatersChances.put(getItemStackString(aStack), BasicSize * aStack.stackSize);

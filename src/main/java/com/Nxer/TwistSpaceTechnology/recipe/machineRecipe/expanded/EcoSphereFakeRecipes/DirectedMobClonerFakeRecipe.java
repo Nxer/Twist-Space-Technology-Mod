@@ -23,6 +23,8 @@ import gregtech.api.util.GTUtility;
 
 public final class DirectedMobClonerFakeRecipe {
 
+    public static final int LIFE_ESSENCE_PER_PARALLEL = 100;
+
     private DirectedMobClonerFakeRecipe() {}
 
     public static void rebuildFakeRecipes(Map<Integer, MobRecipeDisplay> recipesById) {
@@ -32,7 +34,7 @@ public final class DirectedMobClonerFakeRecipe {
         for (Map.Entry<Integer, MobRecipeDisplay> entry : recipesById.entrySet()) {
             ItemStack circuit = GTUtility.getIntegratedCircuit(0);
             circuit.setStackDisplayName("Recipe Number: " + entry.getKey());
-            FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", 100);
+            FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
             if (lifeEssence == null) continue;
             GTValues.RA.stdBuilder()
                 .itemInputs(circuit)
@@ -58,10 +60,10 @@ public final class DirectedMobClonerFakeRecipe {
     }
 
     private static void registerLifeEssenceRecipe() {
-        FluidStack water = FluidRegistry.getFluidStack("water", 1000);
+        FluidStack lifeEssenceInput = FluidRegistry.getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
         FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", 20);
         ItemStack lifeBucket = GTModHandler.getModItem(Mods.BloodMagic.ID, "bucketLife", 1, 0);
-        if (water == null || lifeEssence == null || lifeBucket == null) return;
+        if (lifeEssenceInput == null || lifeEssence == null || lifeBucket == null) return;
         lifeBucket.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.mobHealthLifeEssence"));
         ItemStack circuit = GTUtility.getIntegratedCircuit(0);
         circuit.stackSize = 0;
@@ -72,7 +74,7 @@ public final class DirectedMobClonerFakeRecipe {
         GTValues.RA.stdBuilder()
             .itemInputs(circuit)
             .itemOutputs(lifeBucket)
-            .fluidInputs(water)
+            .fluidInputs(lifeEssenceInput)
             .fluidOutputs(lifeEssence)
             .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 1)
             .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, false)
