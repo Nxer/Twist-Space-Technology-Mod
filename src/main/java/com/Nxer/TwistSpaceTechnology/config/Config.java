@@ -10,11 +10,13 @@ import java.math.BigInteger;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 
 // spotless:off
 public class Config {
     // region Regions enum
+    public static final String VERSION = "00_Version";
     public static final String GENERAL = "General";
     public static final String DEBUG = "Debug";
     public static final String NETWORK = "Network";
@@ -565,10 +567,16 @@ public class Config {
 
     // region Debug
     public static boolean Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe = true;
+    public static boolean Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe = false;
     // endregion
 
     public static void synchronizeConfiguration(File configFile) {
         Configuration configuration = new Configuration(configFile);
+
+        // region Version
+        configuration.get(VERSION, "CurrentVersion", TwistSpaceTechnology.VERSION, "Current Twist Space Technology version.")
+            .set(TwistSpaceTechnology.VERSION);
+        // endregion
 
         // region General
         MAX_PARALLEL_LIMIT = configuration.getInt("MAX_PARALLEL_LIMIT", GENERAL, MAX_PARALLEL_LIMIT, 1, Integer.MAX_VALUE, "Max parallel limit of normal machines.");
@@ -578,6 +586,7 @@ public class Config {
 
         // region Debug
         Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe = configuration.getBoolean("Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe", DEBUG, true, "There is a secret bug cause game crash by Out of Memory when installing TST with GTNL. Temporarily we can delete the extreme crafting recipe in Mega crafting center of Compressed Stargate T7 to resolve this problem.");
+        Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe = configuration.getBoolean("Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe", DEBUG, false, "ACAL usually displays the recipe pool of CAL. If it fails to operate normally, this should be checked.");
         // endregion
 
         // region Machine Base Class
@@ -988,5 +997,6 @@ public class Config {
             configuration.save();
         }
     }
+
 }
 // spotless:on

@@ -513,9 +513,13 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         this.multiTier = 0;
         if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_T1, verticalOffSet_T1, depthOffSet_T1, errors)) {
             multiTier = 1;
-        } else if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2, errors)) {
-            multiTier = 2;
-        } else return;
+        } else {
+            clearHatches();
+            errors.clear();
+            if (checkPiece(STRUCTURE_PIECE_TIER2, horizontalOffSet_T2, verticalOffSet_T2, depthOffSet_T2, errors)) {
+                multiTier = 2;
+            } else return;
+        }
 
         if (!findLaserRenderer()) {
             errors.add(special_block_structure_issue);
