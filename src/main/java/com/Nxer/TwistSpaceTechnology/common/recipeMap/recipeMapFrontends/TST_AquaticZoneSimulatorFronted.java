@@ -41,6 +41,14 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
     }
 
     @Override
+    public void drawDescription(RecipeDisplayInfo recipeInfo) {
+        drawMetadataInfo(recipeInfo);
+        drawDurationInfo(recipeInfo);
+        drawSpecialInfo(recipeInfo);
+        drawRecipeOwnerInfo(recipeInfo);
+    }
+
+    @Override
     protected void drawEnergyInfo(RecipeDisplayInfo recipeInfo) {
         // null
     }

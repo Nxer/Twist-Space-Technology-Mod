@@ -25,6 +25,7 @@ public final class EcoSphereModeSupport {
     public static ParallelResult consumeFluidForParallel(TST_MegaTreeFarm machine, Fluid requiredFluid,
         long fluidPerParallel, int powerTier) {
         if (requiredFluid == null || fluidPerParallel <= 0 || powerTier < 1) return null;
+        if (!machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
         long availableFluid = getAvailableFluid(machine, requiredFluid);
         long fluidParallel = availableFluid / fluidPerParallel;
         if (fluidParallel < 2) return null;
@@ -44,6 +45,7 @@ public final class EcoSphereModeSupport {
     public static PerfectOverclockResult consumeFluidForPerfectOverclock(TST_MegaTreeFarm machine, Fluid requiredFluid,
         long fluidPerOperation, int maximumOverclocks) {
         if (requiredFluid == null || fluidPerOperation <= 0 || maximumOverclocks < 0) return null;
+        if (!machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
         long availableFluid = getAvailableFluid(machine, requiredFluid);
         long fluidOperations = availableFluid / fluidPerOperation;
         if (fluidOperations < 1) return null;

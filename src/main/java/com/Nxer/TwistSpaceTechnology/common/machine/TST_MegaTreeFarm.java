@@ -35,6 +35,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +54,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeR
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -79,8 +82,6 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import ic2.core.init.BlocksItems;
-import ic2.core.init.InternalName;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
@@ -102,9 +103,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // region Structure
 
-    public static final int MODE_RECIPE_DURATION = 128;
+    public static final int MODE_RECIPE_DURATION = 100;
+    private static final int MODE_BEACON_CHECK_INTERVAL = 20;
     private static final int TIER_ONE_CLEANING_DURATION = 20 * 300;
     private static final int TIER_TWO_CLEANING_DURATION = 20 * 60;
+    private static final int FLUID_AREA_SWITCH_COST = 1000;
 
     private int controllerTier = 0;
     private int boundMode = -1;
@@ -116,8 +119,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private boolean directedMobClonerDebugActive = false;
     private boolean directedMobClonerDebugStopPending = false;
     private long availableInputPower = 0;
-    boolean checkWaterFinish = false;
-    boolean checkAirFinish = false;
+    private String fluidAreaFluidName = "";
+    private boolean fluidAreaInitialized = false;
+    private FluidStack missingFluidAreaInput;
     private static ItemStack FountOfEcology;
     private static ItemStack Offspring;
 
@@ -229,7 +233,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void setMachineMode(int index) {
         if (boundMode < 0) return;
         machineMode = boundMode;
-        SetRemoveWater();
+        updateFluidAreaForMode();
     }
 
     @Override
@@ -253,26 +257,23 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         super.onFirstTick(aBaseMetaTileEntity);
         if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
         if (Offspring == null) Offspring = GTCMItemList.OffSpring.get(1);
+        // Sync the installed beacon when the machine loads.
+        if (aBaseMetaTileEntity.isServerSide()) updateModeBeaconBinding();
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        // Check once per second while a recipe is active so beacon changes can stop it early.
+        if (aBaseMetaTileEntity.isServerSide() && mMaxProgresstime > 0 && aTick % MODE_BEACON_CHECK_INTERVAL == 0) {
+            updateModeBeaconBinding();
+        }
+        // Run the normal machine tick after a possible mode change has stopped the old recipe.
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide()) updateModeBeaconBinding();
         if (aBaseMetaTileEntity.isServerSide() && directedMobClonerDebugStopPending && mMaxProgresstime <= 0) {
             resetDirectedMobClonerDebugRun();
             aBaseMetaTileEntity.disableWorking();
         }
-        if (aBaseMetaTileEntity.isServerSide() && cleaningRunActive && mMaxProgresstime <= 0) {
-            cleaningRunActive = false;
-            if (pendingMode >= 0) {
-                boundMode = pendingMode;
-                machineMode = pendingMode;
-                pendingMode = -1;
-                markDirty();
-                SetRemoveWater();
-            }
-        }
+        if (aBaseMetaTileEntity.isServerSide()) completeCleaningIfReady();
         if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0 && controllerTier == 0) {
             ItemStack ControllerSlot = this.getControllerSlot();
             if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
@@ -304,6 +305,18 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
     }
 
+    private void completeCleaningIfReady() {
+        if (!cleaningRunActive || mMaxProgresstime > 0) return;
+        cleaningRunActive = false;
+        if (pendingMode < 0) return;
+        // Bind the requested mode before GT starts the next recipe automatically.
+        boundMode = pendingMode;
+        machineMode = pendingMode;
+        pendingMode = -1;
+        markDirty();
+        updateFluidAreaForMode();
+    }
+
     private void updateModeBeaconBinding() {
         int requestedMode = getModeFromBeacon(getControllerSlot());
         boolean wasPresent = modeBeaconPresent;
@@ -317,20 +330,25 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             }
             return;
         }
-        if (requestedMode == boundMode) return;
+        if (requestedMode == boundMode) {
+            if (!fluidAreaInitialized || missingFluidAreaInput != null) updateFluidAreaForMode();
+            return;
+        }
         if (boundMode < 0) {
             boundMode = requestedMode;
             machineMode = requestedMode;
+            updateFluidAreaForMode();
         } else {
             pendingMode = requestedMode;
             cleaningRequested = true;
+            // Keep the Eco-Sphere empty while the old mode is being cleaned.
+            switchFluidArea(null, false);
             mProgresstime = 0;
             mMaxProgresstime = 0;
             mOutputItems = null;
             mOutputFluids = null;
         }
         markDirty();
-        SetRemoveWater();
     }
 
     private static int getModeFromBeacon(ItemStack stack) {
@@ -362,8 +380,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         aNBT.setInteger("directedMobClonerDebugRecipeId", directedMobClonerDebugRecipeId);
         aNBT.setBoolean("directedMobClonerDebugActive", directedMobClonerDebugActive);
         aNBT.setBoolean("directedMobClonerDebugStopPending", directedMobClonerDebugStopPending);
-        aNBT.setBoolean("checkWater", checkWaterFinish);
-        aNBT.setBoolean("checkAir", checkAirFinish);
+        aNBT.setString("fluidAreaFluidName", fluidAreaFluidName);
+        aNBT.setBoolean("fluidAreaInitialized", fluidAreaInitialized);
     }
 
     @Override
@@ -378,8 +396,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         directedMobClonerDebugRecipeId = aNBT.getInteger("directedMobClonerDebugRecipeId");
         directedMobClonerDebugActive = aNBT.getBoolean("directedMobClonerDebugActive");
         directedMobClonerDebugStopPending = aNBT.getBoolean("directedMobClonerDebugStopPending");
-        checkWaterFinish = aNBT.getBoolean("checkWater");
-        checkAirFinish = aNBT.getBoolean("checkAir");
+        fluidAreaFluidName = aNBT.getString("fluidAreaFluidName");
+        fluidAreaInitialized = aNBT.hasKey("fluidAreaInitialized") && aNBT.getBoolean("fluidAreaInitialized");
     }
 
     @Override
@@ -457,7 +475,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     private static final String STRUCTURE_PIECE_MAIN = "mainEcoSphereSimulator0";
     private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
-    private static final String STRUCTURE_PIECE_WATER = "waterEcoSphereSimulator";
     private static IStructureDefinition<TST_MegaTreeFarm> STRUCTURE_DEFINITION = null;
 
     public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -471,7 +488,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         int built;
-        int builtW;
         int structureTier = stackSize.stackSize + controllerTier - 1;
         if (structureTier > 1) structureTier = 1;
         built = survivalBuildPiece(
@@ -484,9 +500,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             env,
             false,
             true);
-        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
-        if (built >= 0) return built;
-        return built + builtW;
+        return built;
 
     }
 
@@ -497,12 +511,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         if (!checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7, errors)) {
             return;
         }
-        if (!checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9, errors)) {
-            // #tr TST_MegaTreeFarm.StructureErrors.no_water_block
-            // # Place a water block at the specific location on the top of the machine structure.
-            // #zh_CN 在机器结构顶部的特定位置放置水方块
-            errors.add(StructureErrors.of("TST_MegaTreeFarm.StructureErrors.no_water_block"));
-        }
+        if (!checkFluidArea()) errors.add(StructureErrors.of("TST_MegaTreeFarm.StructureErrors.no_water_block"));
     }
 
     @Override
@@ -511,7 +520,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
-                .addShape(STRUCTURE_PIECE_WATER, transpose(water))
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(MetaBlockCasing01, 9))
                 .addElement('C', ofBlock(MetaBlockCasing01, 10))
@@ -543,7 +551,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 .addElement(
                     'O',
                     ofBlock(ModBlocksHandler.PurpleLight.getLeft(), ModBlocksHandler.PurpleLight.getRight()))
-                .addElement('P', ofBlock(BlocksItems.getFluidBlock(InternalName.fluidDistilledWater), 0))
                 .addElement(
                     'Q',
                     ofChain(
@@ -742,11 +749,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         {"            ddddddddd            ","            dsssssssd            ","           ddd     ddd           ","           ddddddddddd           ","           ddddddddddd           ","         ddddddddddddddd         ","        ddd  ddddddd  ddd        ","       dd     ddddd     dd       ","      dd      ddddd      dd      ","     dd     dd     dd     dd     ","     dd   dd         dd   dd     ","  dddd    d           d    dddd  ","dddddd   d    EJJJE    d   dddddd","dsddddd  d   FMMMMMF   d  dddddsd","ds dddddd   EMMMMMMME   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   EMMMMMMME   dddddd sd","dsddddd  d   FMMMMMF   d  dddddsd","dddddd   d    EJJJE    d   dddddd","  dddd    d           d    dddd  ","     dd   dd         dd   dd     ","     dd     dd     dd     dd     ","      dd      ddddd      dd      ","       dd     ddddd     dd       ","        ddd  ddddddd  ddd        ","         ddddddddddddddd         ","           ddddddddddd           ","           ddddddddddd           ","           ddd     ddd           ","            dsssssssd            ","            ddddddddd            "},
         {"            BBBBBBBBB            ","          BBB       BBB          ","        BBBBBB     BBBBBB        ","      BB  BBBBBBBBBBBBB  BB      ","     B   BBBBBBBBBBBBBBB   B     ","    B   BBBBBBBBBBBBBBBBB   B    ","   B   BBBB  BBBBBBB  BBBB   B   ","   B  BBB     BBBBB     BBB  B   ","  B  BBB      BBBBB      BBB  B  ","  B BBB     BB     BB     BBB B  "," BBBBBB   BB         BB   BBBBBB "," BBBBB    B           B    BBBBB ","BBBBBB   B    EEEEE    B   BBBBBB","B BBBBB  B   EFFFFFE   B  BBBBB B","B  BBBBBB   EFFMMMFFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFFMMMFFE   BBBBBB  B","B BBBBB  B   EFFFFFE   B  BBBBB B","BBBBBB   B    EEEEE    B   BBBBBB"," BBBBB    B           B    BBBBB "," BBBBBB   BB         BB   BBBBBB ","  B BBB     BB     BB     BBB B  ","  B  BBB      BBBBB      BBB  B  ","   B  BBB     BBBBB     BBB  B   ","   B   BBBB  BBBBBBB  BBBB   B   ","    B   BBBBBBBBBBBBBBBBB   B    ","     B   BBBBBBBBBBBBBBB   B     ","      BB  BBBBBBBBBBBBB  BB      ","        BBBBBB     BBBBBB        ","          BBB       BBB          ","            BBBBBBBBB            "}
     };
-    private final String[][] water = new String[][]{
-        {"P"}
-    };
-
-    // Only Use for checkwater()
+    // Defines the visible fluid area inside the Eco-Sphere.
     private final String[][] StructureWater = new String[][]{
         {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
         {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
@@ -760,33 +763,111 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // spotless:on
 
-    private void SetRemoveWater() {
+    private void updateFluidAreaForMode() {
+        IEcoSphereMode mode = getBoundMode();
+        Fluid targetFluid = mode != null && mode.displaysFluidArea() ? mode.getDefaultFluidArea() : null;
+        switchFluidArea(targetFluid, true);
+    }
 
-        // checkType = true, check Water
-        boolean checkType = machineMode != 0;
-        if (checkType && checkWaterFinish) return;
-        if (!checkType && checkAirFinish) return;
-        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] StructureDef = StructureWater;
-        Block Air = Blocks.air;
-        Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
-        boolean isFlipped = this.getFlip()
-            .isHorizontallyFlipped();
-        int OffSetX = 12;
-        int OffSetY = 25;
-        int OffSetZ = 3;
-        if (checkType && !checkWaterFinish) {
-            checkAirFinish = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
-            checkWaterFinish = true;
-        } else if (!checkType && !checkAirFinish) {
-            checkWaterFinish = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
-            checkAirFinish = true;
+    public boolean prepareFluidAreaForConsumption(Fluid consumedFluid) {
+        IEcoSphereMode mode = getBoundMode();
+        if (mode == null || !mode.displaysFluidArea()) return true;
+        return switchFluidArea(consumedFluid, true);
+    }
+
+    private IEcoSphereMode getBoundMode() {
+        return boundMode >= 0 && boundMode < MACHINE_MODES.length ? MACHINE_MODES[boundMode] : null;
+    }
+
+    private boolean switchFluidArea(Fluid targetFluid, boolean consumeInput) {
+        String targetName = targetFluid == null ? "" : targetFluid.getName();
+        Block targetBlock = targetFluid == null ? Blocks.air : targetFluid.getBlock();
+        if (targetBlock == null) {
+            fluidAreaInitialized = false;
+            missingFluidAreaInput = targetFluid == null ? null : new FluidStack(targetFluid, FLUID_AREA_SWITCH_COST);
+            return false;
         }
+        if (targetName.equals(fluidAreaFluidName)) {
+            missingFluidAreaInput = null;
+            if (!fluidAreaInitialized || !checkFluidAreaBlocks(targetBlock)) setFluidAreaBlock(targetBlock);
+            fluidAreaInitialized = true;
+            return true;
+        }
+        if (targetFluid != null && consumeInput
+            && !EcoSphereModeSupport.drainFluid(this, targetFluid, FLUID_AREA_SWITCH_COST)) {
+            fluidAreaInitialized = false;
+            missingFluidAreaInput = new FluidStack(targetFluid, FLUID_AREA_SWITCH_COST);
+            return false;
+        }
+        setFluidAreaBlock(targetBlock);
+        fluidAreaFluidName = targetName;
+        fluidAreaInitialized = true;
+        missingFluidAreaInput = null;
+        markDirty();
+        mUpdated = true;
+        return true;
+    }
 
+    private void setFluidAreaBlock(Block block) {
+        TstUtils.setStringBlockXZ(
+            getBaseMetaTileEntity(),
+            12,
+            25,
+            3,
+            StructureWater,
+            getFlip().isHorizontallyFlipped(),
+            "P",
+            block);
+    }
+
+    private boolean checkFluidArea() {
+        Fluid fluid = fluidAreaFluidName.isEmpty() ? null : FluidRegistry.getFluid(fluidAreaFluidName);
+        Block expectedBlock = fluid == null ? Blocks.air : fluid.getBlock();
+        return expectedBlock != null && checkFluidAreaBlocks(expectedBlock);
+    }
+
+    private boolean checkFluidAreaBlocks(Block expectedBlock) {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        int directionX = base.getFrontFacing().offsetX;
+        int directionZ = base.getFrontFacing().offsetZ;
+        int xDirection = directionX == 0 ? (directionZ == 1 ? -1 : 1) : directionX;
+        int zDirection = directionZ == 0 ? directionX : directionZ;
+        boolean horizontallyFlipped = getFlip().isHorizontallyFlipped();
+        World world = base.getWorld();
+        for (int y = 0; y < StructureWater.length; y++) {
+            for (int z = 0; z < StructureWater[y].length; z++) {
+                for (int x = 0; x < StructureWater[y][z].length(); x++) {
+                    if (StructureWater[y][z].charAt(x) != 'P') continue;
+                    int offsetX = (12 - x) * xDirection;
+                    int offsetY = 25 - y;
+                    int offsetZ = (3 - z) * zDirection;
+                    if (directionX != 0) {
+                        int swapped = offsetX;
+                        offsetX = offsetZ;
+                        offsetZ = swapped;
+                    }
+                    if (horizontallyFlipped) {
+                        if (directionX != 0) offsetZ = -offsetZ;
+                        else offsetX = -offsetX;
+                    }
+                    if (world
+                        .getBlock(base.getXCoord() + offsetX, base.getYCoord() + offsetY, base.getZCoord() + offsetZ)
+                        != expectedBlock) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRemoval() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base != null && base.isServerSide()) {
+            setFluidAreaBlock(Blocks.air);
+            fluidAreaFluidName = "";
+            fluidAreaInitialized = false;
+        }
+        super.onRemoval();
     }
 
     // region Processing Logic
@@ -841,10 +922,13 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             @Override
             @Nonnull
             public CheckRecipeResult process() {
+                // Finish a mode change before GT chains directly into the next recipe.
+                completeCleaningIfReady();
+                // Always use the latest beacon before starting the next recipe.
+                updateModeBeaconBinding();
                 if (inputItems == null) inputItems = new ItemStack[0];
                 if (inputFluids == null) inputFluids = new FluidStack[0];
 
-                SetRemoveWater();
                 availableInputPower = availableVoltage * availableAmperage;
                 EuTier = (int) Math.max(0, Math.log((double) availableInputPower / 8d) / Math.log(4d));
                 updateSlots();
@@ -852,6 +936,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 if (cleaningRequested) {
                     cleaningRequested = false;
                     cleaningRunActive = true;
+                    // Restore an air-filled cleaning area after loading an interrupted cleaning cycle.
+                    switchFluidArea(null, false);
                     outputItems = new ItemStack[0];
                     outputFluids = new FluidStack[0];
                     calculatedEut = 0;
@@ -865,6 +951,12 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     return SimpleCheckRecipeResult.ofFailure("mega_tree_farm_waiting_for_mode_beacon");
                 }
                 machineMode = boundMode;
+                if (missingFluidAreaInput != null) {
+                    FluidStack required = missingFluidAreaInput.copy();
+                    if (!prepareFluidAreaForConsumption(required.getFluid())) {
+                        return SimpleResultWithText.outOfFluid(required);
+                    }
+                }
 
                 tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
                 EcoSphereModeResult modeResult = MACHINE_MODES[machineMode].process(TST_MegaTreeFarm.this, EuTier);
@@ -919,7 +1011,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
+        int extraLines = missingFluidAreaInput == null ? 3 : 4;
+        String[] ret = new String[origin.length + extraLines];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "tierMultiplier"
             + " : "
@@ -930,6 +1023,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             + " : "
             + EnumChatFormatting.GOLD
             + getMachineModeName();
+        if (missingFluidAreaInput != null) {
+            ret[origin.length + 3] = EnumChatFormatting.RED + SimpleResultWithText.outOfFluid(missingFluidAreaInput)
+                .getDisplayString();
+        }
         return ret;
     }
 

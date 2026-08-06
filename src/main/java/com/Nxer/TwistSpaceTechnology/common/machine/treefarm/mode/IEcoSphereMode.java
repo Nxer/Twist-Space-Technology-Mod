@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import net.minecraftforge.fluids.Fluid;
+
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 
 import gregtech.api.recipe.RecipeMap;
@@ -11,4 +13,12 @@ public interface IEcoSphereMode {
     RecipeMap<?> getRecipeMap();
 
     String getDisplayName();
+
+    default boolean displaysFluidArea() {
+        return false;
+    }
+
+    default Fluid getDefaultFluidArea() {
+        return null;
+    }
 }
