@@ -2,8 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.addSplitStack;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.getItemStackString;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +14,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
@@ -38,20 +37,25 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         ItemStack focusStack = findFocusStack(machine);
         boolean focusMode = focusStack != null;
         Fluid requiredFluid = FluidRegistry.getFluid("ic2distilledwater");
-        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
-            .consumeFluidForParallel(machine, requiredFluid, 10000L, euTier);
+        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport.consumeFluidForParallel(
+            machine,
+            requiredFluid,
+            AquaticZoneSimulatorFakeRecipe.DISTILLED_WATER_PER_PARALLEL,
+            euTier);
         if (parallelResult == null)
             return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_enough_input"));
 
         List<ItemStack> outputs = new ArrayList<>();
-        for (ItemStack recipeStack : WatersOutputs) {
+        for (ItemStack recipeStack : AquaticZoneSimulatorFakeRecipe.WatersOutputs) {
             ItemStack output = recipeStack.copy();
-            int chance = WatersChances.get(getItemStackString(output));
-            int random = XSTR.XSTR_INSTANCE.nextInt(10000);
+            int chance = AquaticZoneSimulatorFakeRecipe.WatersChances.get(getItemStackString(output));
+            int random = XSTR.XSTR_INSTANCE.nextInt(AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE);
             double tierChance = Math.log(parallelResult.tier() + 2) / Math.log(2);
             if (machine.isOffspring(output)) {
                 if (machine.getAvailableInputPower() <= Integer.MAX_VALUE) continue;
-                int offspringChance = machine.isTierTwo() ? chance * 41 : chance;
+                int offspringChance = machine.isTierTwo()
+                    ? chance * AquaticZoneSimulatorFakeRecipe.OFFSPRING_TIER_TWO_MULTIPLIER
+                    : chance;
                 if (random > offspringChance * tierChance) continue;
                 addSplitStack(outputs, output, 1);
                 continue;
@@ -74,7 +78,8 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
 
     private static ItemStack findFocusStack(TST_MegaTreeFarm machine) {
         for (ItemStack input : machine.getStoredInputs()) {
-            if (input != null && input.getItem() != null && WatersChances.containsKey(getItemStackString(input))) {
+            if (input != null && input.getItem() != null
+                && AquaticZoneSimulatorFakeRecipe.WatersChances.containsKey(getItemStackString(input))) {
                 return input;
             }
         }

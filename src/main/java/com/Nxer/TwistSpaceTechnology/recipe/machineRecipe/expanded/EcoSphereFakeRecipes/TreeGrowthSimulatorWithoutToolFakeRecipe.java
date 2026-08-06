@@ -31,8 +31,12 @@ import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
-    static FluidStack WaterStack = Materials.Water.getFluid(2000);
-    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(500);
+    public static final int WATER_PER_PARALLEL = 2000;
+    public static final int TEMPORAL_FLUID_PER_PARALLEL = 100;
+    public static final int UU_MATTER_PER_PARALLEL = 500;
+
+    static FluidStack WaterStack = Materials.Water.getFluid(WATER_PER_PARALLEL);
+    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(UU_MATTER_PER_PARALLEL);
 
     static ItemStack[] IntegratedCircuitStack = { GTUtility.getIntegratedCircuit(1), GTUtility.getIntegratedCircuit(2),
         GTUtility.getIntegratedCircuit(3), GTUtility.getIntegratedCircuit(4), };
@@ -122,7 +126,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
             : null;
         net.minecraftforge.fluids.Fluid temporalFluid = FluidRegistry.getFluid("temporalfluid");
         if (timeSapling != null && temporalFluid != null) {
-            addSpecialFakeRecipe(timeSapling, new FluidStack(temporalFluid, 100));
+            addSpecialFakeRecipe(timeSapling, new FluidStack(temporalFluid, TEMPORAL_FLUID_PER_PARALLEL));
         }
         // Death Water
         // Thaumic Tentacle?

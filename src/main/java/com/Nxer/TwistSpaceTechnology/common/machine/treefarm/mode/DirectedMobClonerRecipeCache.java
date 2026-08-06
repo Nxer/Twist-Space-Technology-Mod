@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -97,7 +98,7 @@ public final class DirectedMobClonerRecipeCache {
                 drops.add(
                     new CachedDrop(
                         converted.stack(),
-                        Math.max(0, Math.min(10000, drop.chance)),
+                        Math.max(0, Math.min(CHANCE_SCALE, drop.chance)),
                         durabilityExpectation,
                         converted.probabilityMultiplier()));
             }

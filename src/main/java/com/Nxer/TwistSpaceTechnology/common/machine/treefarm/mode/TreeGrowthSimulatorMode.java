@@ -1,9 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
-import static net.minecraft.util.StatCollector.translateToLocal;
-
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.addSplitStack;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
+import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -17,6 +15,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 
 import gregtech.api.enums.Mods;
 import gregtech.api.recipe.RecipeMap;
@@ -42,7 +41,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         if (outputPerMode == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_sapling"));
 
         Fluid requiredFluid = FluidRegistry.WATER;
-        long fluidPerParallel = 2000L;
+        long fluidPerParallel = TreeGrowthSimulatorWithoutToolFakeRecipe.WATER_PER_PARALLEL;
         if (machine.isTierTwo()) {
             SpecialTreeRecipe specialRecipe = findSpecialRecipe(machine);
             if (specialRecipe != null) {
@@ -102,18 +101,24 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             if (Mods.TwilightForest.isModLoaded() && temporalFluid != null && fluid == temporalFluid) {
                 ItemStack specialSapling = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
                 EnumMap<Mode, ItemStack> outputs = specialSapling == null ? null : queryTimeTreeProduct(specialSapling);
-                if (outputs != null) return new SpecialTreeRecipe(fluid, 100, outputs);
+                if (outputs != null) return new SpecialTreeRecipe(
+                    fluid,
+                    TreeGrowthSimulatorWithoutToolFakeRecipe.TEMPORAL_FLUID_PER_PARALLEL,
+                    outputs);
             }
-            if (uuMatter != null && fluid == uuMatter && allProducts != null) {
+            if (uuMatter != null && fluid == uuMatter && TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts != null) {
                 Random random = new Random();
                 EnumMap<Mode, ItemStack> randomOutputs = new EnumMap<>(Mode.class);
                 for (Mode mode : Mode.values()) {
-                    ItemStack[] candidates = allProducts[mode.ordinal()];
+                    ItemStack[] candidates = TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts[mode.ordinal()];
                     if (candidates != null && candidates.length > 0) {
                         randomOutputs.put(mode, candidates[random.nextInt(candidates.length)]);
                     }
                 }
-                if (!randomOutputs.isEmpty()) return new SpecialTreeRecipe(fluid, 500, randomOutputs);
+                if (!randomOutputs.isEmpty()) return new SpecialTreeRecipe(
+                    fluid,
+                    TreeGrowthSimulatorWithoutToolFakeRecipe.UU_MATTER_PER_PARALLEL,
+                    randomOutputs);
             }
         }
         return null;
