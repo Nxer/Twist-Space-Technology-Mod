@@ -6,6 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infus
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeBloodyHell;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEcoSphereSimulator;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeElvenWorkshop;
+import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeEssentiaDiscretizer;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeFontOfEcology;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialAlchemyTower;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool.infusionRecipeIndustrialMagicMatrix;
@@ -19,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -410,7 +412,7 @@ public class TCResearches {
                     // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.PRIMORDIAL_DISJUNCTUS.1")),
                     new ResearchPage(infusionRecipePrimordialDisjunctus))
-                    .setParents(existingParentOrRoot("ESSENTIA_DISCRETIZER"))
+                    .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
         }
         if (Config.Enable_SkypiercerTower) {
@@ -498,7 +500,7 @@ public class TCResearches {
                     // #en_US {\BOLD}Tier 8 Compound Aspects{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 seconds<BR>{\BOLD}Ira:{\RESET} 82 seconds
                     // #zh_CN {\BOLD}八级复合要素{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 秒<BR>{\BOLD}Ira:{\RESET} 82 秒
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.16")))
-                    .setParents(existingParentOrRoot("ESSENTIA_DISCRETIZER"))
+                .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
             // spotless:on
         }
@@ -526,53 +528,52 @@ public class TCResearches {
                     // #zh_CN 常常有人被这些东西难住,对于享受自动化的玩家来说这是一种挑战,不应当剥夺他们的乐趣,然而也不乏玩家受限于水平因而对神秘自动化再也无法踏足,进一步导致对神秘体验的下降,此机器旨在帮助自动化较为困难的玩家进行辅助注魔.
                     new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.1")),
                     // #tr tc.research_text.INFUSION_MATERIAL_DISPENSER.2
-                    // # {\BOLD}Automation Tips:{\RESET}<BR><BR>Similar to the Skypiercer Tower, but this time the pattern itself contains items that will be consumed during infusion. Because of this, the subnet must include a Storage Bus attached to the Infusion Dispenser’s input bus. After the crystallized Essentia is converted back into Essentia by the Essentia Discretizer, the remaining items will naturally be stored into the input bus — exactly the behavior we want.<BR><BR>Furthermore, since the types of Essentia required for infusion are no longer limited to only two, Essentia Cells should be used within the subnet. Accordingly, an CardAdvancedBlocking must be inserted into the subnet’s fluid_interface and configured to {\BOLD}AdvancedBlockingModeAll{\RESET}.
-                    // #zh_CN {\BOLD}自动化提示:{\RESET}<BR><BR>与穿云尖塔的情形类似.不过这次由于样板里含有被用于注魔的物品,所以需要子网配有一个存储总线贴到注魔分配器的输入总线.这样在晶化源质被注魔离散器转为真正源质后剩余物品自然被存储到了输入总线——这正是我们所需要的。<BR><BR>此外，注魔所需的源质种类不再只局限于两种，因此这次应当使用源质元件,对应的需要在子网的二合一接口额外插入一张阻挡卡并设置为{\BOLD}严格阻挡模式{\RESET}。
-                    // spotless:on
+                    // # Now, you can use the dual interface to dispense essentia, but the blocking effect seems to have disappeared. Please note.
+                    // #zh_CN 现在可以通过二合一接口进行发配,但是对源质的阻挡效果似乎消失了,请注意.
                     new ResearchPage(TextEnums.tr("tc.research_text.INFUSION_MATERIAL_DISPENSER.2")),
+                    // spotless:on
                     new ResearchPage(infusionRecipeInfusionMaterialDispenser))
-                    .setParents(existingParentOrRoot("ESSENTIA_DISCRETIZER"))
+                    .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
         }
 
-        /*
-         * if (Config.Enable_EssentiaDiscretizer) {
-         * // #tr tc.research_name.ESSENTIA_DISCRETIZER
-         * // # Essentia Discretizer
-         * // #zh_CN 源质离散器
-         * // #tr tc.research_text.ESSENTIA_DISCRETIZER
-         * // # Free movement!
-         * // #zh_CN 自由流动!
-         * new ResearchItem(
-         * "ESSENTIA_DISCRETIZER",
-         * "TST",
-         * new AspectList().merge(Aspect.MECHANISM, 1)
-         * .merge(Aspect.MAN, 1)
-         * .merge(Aspect.MAGIC, 1)
-         * .merge(Aspect.SOUL, 1),
-         * 0,
-         * 6,
-         * 9,
-         * BlockEssentiaDiscretizer.stack()).setPages(
-         * // spotless:off
+        if (Config.Enable_EssentiaDiscretizer) {
+            // #tr tc.research_name.ESSENTIA_DISCRETIZER
+            // # Essentia Discretizer
+            // #zh_CN 源质离散器
+            // #tr tc.research_text.ESSENTIA_DISCRETIZER
+            // # Free movement!
+            // #zh_CN 自由流动!
+            new ResearchItem(
+                "ESSENTIA_DISCRETIZER",
+                "TST",
+                new AspectList().merge(Aspect.MECHANISM, 1)
+                    .merge(Aspect.MAN, 1)
+                    .merge(Aspect.MAGIC, 1)
+                    .merge(Aspect.SOUL, 1),
+                0,
+                6,
+                9,
+                BlockEssentiaDiscretizer.stack()).setPages(
+                    // spotless:off
                     // #tr tc.research_text.ESSENTIA_DISCRETIZER.0
                     // # As a thaumaturge versed in the art of technology, you have long been vexed by the management of essentia. The properties unveiled upon crystallization are precisely what you seek. Through the study of the crystallizer and the fluid discretizer, and by melding mind with machine, the Essentia Discretizer has come into being!
                     // #zh_CN 作为一名进修过科技的魔法使,你常常为源质发配感到头疼,而源质结晶后所展现的特性正是你所需的,通过对结晶器与流体离散器的研究,配合大脑与电路的控制,源质离散器就此而生!
                     new ResearchPage(TextEnums.tr("tc.research_text.ESSENTIA_DISCRETIZER.0")),
                     // #tr tc.research_text.ESSENTIA_DISCRETIZER.1
-                    // # Getting back to the point, the Essentia Discretizer is a container that monitors both item and fluid channels, operating with the highest priority. When either item-based or fluid-based essentia enters, the Discretizer first detects it. If it is indeed essentia, the device inserts it into the corresponding component or container, while simultaneously creating a crystallized essentia as a duplicate that stays synchronized with the original. Conversely, when the crystallized essentia is consumed, the corresponding original essentia undergoes the same consumption process.
-                    // #zh_CN 言归正传,源质离散器,是一个容器,监听物品与流体通道,且具有最高优先级,当物品源质亦或者流体版源质进入时,首先被离散器检测,如果确实为源质则将其插入至对应的元件或者容器,并且本身创建一份晶化源质作为副本,与其同步变化,反过来,将晶化源质被使用时对应的本体也做一样的消耗行为.
+                    // # In the past, the Essentia Discretizer is a container that monitors both item and fluid channels, operating with the highest priority. When either item-based or fluid-based essentia enters, the Discretizer first detects it. If it is indeed essentia, the device inserts it into the corresponding component or container, while simultaneously creating a crystallized essentia as a duplicate that stays synchronized with the original. Conversely, when the crystallized essentia is consumed, the corresponding original essentia undergoes the same consumption process.
+                    // #zh_CN 在过去,源质离散器,是一个容器,监听物品与流体信道,且具有最高优先级,当物品源质亦或者流体版源质进入时,首先被离散器检测,如果确实为源质则将其插入至对应的元件或者容器,并且本身创建一份晶化源质作为副本,与其同步变化,反过来,将晶化源质被使用时对应的本体也做一样的消耗行为.
+                    new ResearchPage(TextEnums.tr("tc.research_text.ESSENTIA_DISCRETIZER.1")),
+                    // #tr tc.research_text.ESSENTIA_DISCRETIZER.2
+                    // # With the update to version 2.9.0, Thaumic Energistics has been refactored. Essentia now has its own native essentia channel and no longer relies on the fluid channel. Therefore, the relationship is now more direct: CrystalEssence on the item channel directly corresponds to native essentia on the essentia channel.
+                    // #zh_CN 随着2.9.0版本的更新,神秘能源的源质也做出了重构,源质有原生信道,不再依托流体信道,因此现在更加直接,就是晶化源质对应源质.
+                    new ResearchPage(TextEnums.tr("tc.research_text.ESSENTIA_DISCRETIZER.2")),
                     // spotless:on
-         * new ResearchPage(TextEnums.tr("tc.research_text.ESSENTIA_DISCRETIZER.1")),
-         * new ResearchPage(infusionRecipeEssentiaDiscretizer))
-         * .setParents("TST_WELCOME")
-         * .registerResearchItem();
-         * }
-         */
+                    new ResearchPage(infusionRecipeEssentiaDiscretizer))
+                    .setParents("TST_WELCOME")
+                    .registerResearchItem();
+        }
 
     }
 
-    private static String existingParentOrRoot(String researchKey) {
-        return ResearchCategories.getResearch(researchKey) == null ? ROOT_RESEARCH : researchKey;
-    }
 }

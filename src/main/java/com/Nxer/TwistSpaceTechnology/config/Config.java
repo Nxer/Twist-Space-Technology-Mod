@@ -542,7 +542,7 @@ public class Config {
     // endregion
 
     // region Infusion Material Dispenser
-    public static boolean Enable_EssentiaDiscretizer = false ;
+    public static boolean Enable_EssentiaDiscretizer = true ;
     // endregion
 
     // region Nether Interface
