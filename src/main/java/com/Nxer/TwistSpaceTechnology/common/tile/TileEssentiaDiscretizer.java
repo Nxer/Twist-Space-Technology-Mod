@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.ItemEssentiaHelper;
@@ -160,6 +161,12 @@ public class TileEssentiaDiscretizer extends AENetworkTile implements ICellConta
         @Override
         public IAEItemStack injectItems(IAEItemStack request, Actionable type, BaseActionSource src) {
             if (request == null) return null;
+
+            ItemStack itemStack = request.getItemStack();
+            if (!(itemStack.getItem() instanceof thaumcraft.common.items.ItemCrystalEssence)) {
+                return request;
+            }
+
             AEEssentiaStack essentia = ItemEssentiaHelper.getAeEssentiaStack(request);
             if (essentia == null) return request;
             IMEMonitor<AEEssentiaStack> essentiaMonitor = getEssentiaMonitor();
