@@ -567,6 +567,7 @@ public class Config {
 
     // region Debug
     public static boolean Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe = true;
+    public static boolean Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe = false;
     // endregion
 
     public static void synchronizeConfiguration(File configFile) {
@@ -585,6 +586,7 @@ public class Config {
 
         // region Debug
         Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe = configuration.getBoolean("Debug_remove_sciencenotleisure_CompressedStargateTier7_ExtremeRecipe", DEBUG, true, "There is a secret bug cause game crash by Out of Memory when installing TST with GTNL. Temporarily we can delete the extreme crafting recipe in Mega crafting center of Compressed Stargate T7 to resolve this problem.");
+        Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe = configuration.getBoolean("Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe", DEBUG, false, "ACAL usually displays the recipe pool of CAL. If it fails to operate normally, this should be checked.");
         // endregion
 
         // region Machine Base Class
