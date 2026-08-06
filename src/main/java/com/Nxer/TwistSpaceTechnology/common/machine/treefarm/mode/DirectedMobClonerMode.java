@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -28,6 +29,16 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
     @Override
     public String getDisplayName() {
         return translateToLocal("EcoSphereSimulator.modeMsg.3");
+    }
+
+    @Override
+    public boolean displaysFluidArea() {
+        return true;
+    }
+
+    @Override
+    public Fluid getDefaultFluidArea() {
+        return FluidRegistry.getFluid("lifeessence");
     }
 
     @Override

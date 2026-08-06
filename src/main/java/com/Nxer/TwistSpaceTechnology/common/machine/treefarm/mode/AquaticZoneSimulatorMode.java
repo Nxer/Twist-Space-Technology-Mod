@@ -33,6 +33,16 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     }
 
     @Override
+    public boolean displaysFluidArea() {
+        return true;
+    }
+
+    @Override
+    public Fluid getDefaultFluidArea() {
+        return FluidRegistry.getFluid("ic2distilledwater");
+    }
+
+    @Override
     public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
         ItemStack focusStack = findFocusStack(machine);
         boolean focusMode = focusStack != null;

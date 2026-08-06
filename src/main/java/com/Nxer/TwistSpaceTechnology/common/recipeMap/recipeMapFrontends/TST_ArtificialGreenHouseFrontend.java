@@ -19,6 +19,14 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
     }
 
     @Override
+    public void drawDescription(RecipeDisplayInfo recipeInfo) {
+        drawMetadataInfo(recipeInfo);
+        drawDurationInfo(recipeInfo);
+        drawSpecialInfo(recipeInfo);
+        drawRecipeOwnerInfo(recipeInfo);
+    }
+
+    @Override
     protected void drawEnergyInfo(RecipeDisplayInfo recipeInfo) {}
 
     private static final class OutputBoostFormatter implements INEISpecialInfoFormatter {
