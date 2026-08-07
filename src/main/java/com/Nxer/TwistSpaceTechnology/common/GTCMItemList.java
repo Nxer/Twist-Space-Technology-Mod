@@ -172,6 +172,9 @@ public enum GTCMItemList {
     MegaTreeFarmModeBeacon3,
     MegaTreeFarmModeBeacon4,
     MegaTreeFarmModeBeacon5,
+    MegaTreeFarmModeBeacon6,
+    MegaTreeFarmModeBeacon7,
+    MegaTreeFarmModeBeacon8,
 
     LvFlask,
     MvFlask,

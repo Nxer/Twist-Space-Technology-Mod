@@ -147,10 +147,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     public boolean hasDirectedMobClonerInfiniteUpgrade() {
+        return getModeFromBeacon(getControllerSlot()) == 3 && hasSecondaryModeBeacon();
+    }
+
+    public boolean hasSecondaryModeBeacon() {
         ItemStack beacon = getControllerSlot();
         return beacon != null && beacon.stackSize > 0
             && beacon.getItem() == TstItems.MegaTreeFarmModeBeacon
-            && beacon.getItemDamage() == 4;
+            && beacon.getItemDamage() >= 0
+            && beacon.getItemDamage() <= 7
+            && (beacon.getItemDamage() & 1) == 1;
     }
 
     public long getAvailableInputPower() {
@@ -354,8 +360,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private static int getModeFromBeacon(ItemStack stack) {
         if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.MegaTreeFarmModeBeacon) return -1;
         int meta = stack.getItemDamage();
-        if (meta >= 0 && meta <= 2) return meta;
-        return meta == 3 || meta == 4 ? 3 : -1;
+        return meta >= 0 && meta <= 7 ? meta / 2 : -1;
     }
 
     @Override
