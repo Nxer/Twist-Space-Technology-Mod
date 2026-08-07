@@ -26,18 +26,30 @@ public class NEIHandler {
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.MegaTreeFarmModeBeacon2.get(1),
-            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.MegaTreeFarmModeBeacon3.get(1),
-            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.MegaTreeFarmModeBeacon4.get(1),
-            "tst.recipe.DirectedMobClonerFakeRecipes",
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
             -10);
         API.addRecipeCatalyst(
             GTCMItemList.MegaTreeFarmModeBeacon5.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFarmModeBeacon6.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFarmModeBeacon7.get(1),
+            "tst.recipe.DirectedMobClonerFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.MegaTreeFarmModeBeacon8.get(1),
             "tst.recipe.DirectedMobClonerFakeRecipes",
             -10);
 

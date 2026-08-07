@@ -15,9 +15,12 @@ import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
+import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
 import fox.spiteful.avaritia.render.CosmicItemRenderer;
+import gregtech.api.enums.Mods;
+import gregtech.api.util.GTModHandler;
 
 public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
 
@@ -97,45 +100,64 @@ public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
         // Each metadata value uses one familiar item as its mode icon.
         return switch (meta) {
             case 0 -> new ItemStack(Item.getItemFromBlock(Blocks.sapling), 1, 0);
-            case 1 -> new ItemStack(Items.fish, 1, 0);
-            case 2 -> new ItemStack(Items.wheat_seeds);
-            case 3 -> new ItemStack(Items.diamond_sword);
-            case 4 -> new ItemStack(LudicrousItems.infinity_sword);
+            case 1 -> getTimewoodSapling();
+            case 2 -> new ItemStack(Items.fish, 1, 0);
+            case 3 -> getUnknownLiquidBucket();
+            case 4 -> new ItemStack(Items.wheat_seeds);
+            case 5 -> getGaiaWart();
+            case 6 -> new ItemStack(Items.diamond_sword);
+            case 7 -> new ItemStack(LudicrousItems.infinity_sword);
             default -> new ItemStack(Items.diamond_sword);
         };
     }
 
+    private static ItemStack getTimewoodSapling() {
+        ItemStack sapling = Mods.TwilightForest.isModLoaded()
+            ? GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5)
+            : null;
+        return sapling == null ? new ItemStack(Items.clock) : sapling;
+    }
+
+    private static ItemStack getUnknownLiquidBucket() {
+        ItemStack bucket = Mods.GalaxySpace.isModLoaded()
+            ? GTModHandler.getModItem(Mods.GalaxySpace.ID, "item.UnknowWaterBucket", 1)
+            : null;
+        return bucket == null ? new ItemStack(Items.water_bucket) : bucket;
+    }
+
+    private static ItemStack getGaiaWart() {
+        ItemStack gaiaWart = CropsNHItemList.gaiaWart.get(1);
+        return gaiaWart == null ? new ItemStack(Items.nether_wart) : gaiaWart;
+    }
+
+    // spotless:off
+    private static final float[][] CONTENT_OFFSETS = {
+        { -0.83F, 0.83F, -0.83F },
+        { 0.415F, -0.415F, -0.415F },
+        { -0.415F, 0.415F, -0.415F },
+        { 0.0F, 0.0F, 0.0F },
+        { -0.415F, 0.415F, -0.415F },
+        { 0.0F, 0.0F, 0.0F },
+        { 0.0F, 0.0F, 0.0F },
+        { 0.0F, 0.0F, 0.0F } };
+    //spotless:on
+
     private static void applyContentTransform(ItemRenderType type, int meta) {
-        // Small icon-specific shifts keep the visible item near the frame center.
-        float horizontalOffsetPixels = switch (meta) {
-            case 0 -> 0.83F;
-            case 1, 2 -> 0.415F;
-            default -> 0.0F;
+        int state = switch (type) {
+            case INVENTORY -> 0;
+            case ENTITY -> 1;
+            case EQUIPPED, EQUIPPED_FIRST_PERSON -> 2;
+            default -> -1;
         };
-        switch (type) {
-            case INVENTORY -> {
-                // Inventory rendering uses a 16 by 16 pixel coordinate space.
-                float centerOffset = 8.0F * (1.0F - CONTENT_SCALE);
-                GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
-                GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
-                GL11.glTranslatef(-horizontalOffsetPixels / CONTENT_SCALE, 0.0F, 0.0F);
-            }
-            case ENTITY -> {
-                // Ground items face the other way, so their horizontal shift is reversed.
-                float centerOffset = (1.0F - CONTENT_SCALE) / 2.0F;
-                GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
-                GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
-                GL11.glTranslatef(horizontalOffsetPixels / 16.0F / CONTENT_SCALE, 0.0F, 0.0F);
-            }
-            case EQUIPPED, EQUIPPED_FIRST_PERSON -> {
-                // Held items use the same centered scale as the inventory icon.
-                float centerOffset = (1.0F - CONTENT_SCALE) / 2.0F;
-                GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
-                GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
-                GL11.glTranslatef(-horizontalOffsetPixels / 16.0F / CONTENT_SCALE, 0.0F, 0.0F);
-            }
-            default -> {}
-        }
+        if (state < 0) return;
+
+        float horizontalOffsetPixels = meta >= 0 && meta < CONTENT_OFFSETS.length ? CONTENT_OFFSETS[meta][state] : 0.0F;
+        float centerOffset = type == ItemRenderType.INVENTORY ? 8.0F * (1.0F - CONTENT_SCALE)
+            : (1.0F - CONTENT_SCALE) / 2.0F;
+        GL11.glTranslatef(centerOffset, centerOffset, 0.0F);
+        GL11.glScalef(CONTENT_SCALE, CONTENT_SCALE, 1.0F);
+        float coordinateScale = type == ItemRenderType.INVENTORY ? 1.0F : 16.0F;
+        GL11.glTranslatef(horizontalOffsetPixels / coordinateScale / CONTENT_SCALE, 0.0F, 0.0F);
     }
 
     private static void renderVanillaItem(ItemRenderType type, ItemStack displayStack) {

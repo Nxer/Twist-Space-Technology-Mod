@@ -1063,24 +1063,39 @@ public class ItemRegister {
         GTCMItemList.MegaTreeFarmModeBeacon1.set(MegaTreeFarmModeBeacon.registerVariant(0));
 
         // #tr item.MegaTreeFarmModeBeacon.1.name
-        // # Eco-Sphere Mode Beacon: Aquatic Simulation
-        // #zh_CN 生态圈模式信标: 水域模拟
+        // # Eco-Sphere Mode Beacon: Arboreal Genesis
+        // #zh_CN 生态圈模式信标: 原木拟生
         GTCMItemList.MegaTreeFarmModeBeacon2.set(MegaTreeFarmModeBeacon.registerVariant(1));
 
         // #tr item.MegaTreeFarmModeBeacon.2.name
-        // # Eco-Sphere Mode Beacon: Artificial Greenhouse
-        // #zh_CN 生态圈模式信标: 人工温室
+        // # Eco-Sphere Mode Beacon: Aquatic Simulation
+        // #zh_CN 生态圈模式信标: 水域模拟
         GTCMItemList.MegaTreeFarmModeBeacon3.set(MegaTreeFarmModeBeacon.registerVariant(2));
 
         // #tr item.MegaTreeFarmModeBeacon.3.name
-        // # Eco-Sphere Mode Beacon: Directed Mob Cloning
-        // #zh_CN 生态圈模式信标: 定向克隆
+        // # Eco-Sphere Mode Beacon: Aquatic Simulation
+        // #zh_CN 生态圈模式信标: 水域模拟
         GTCMItemList.MegaTreeFarmModeBeacon4.set(MegaTreeFarmModeBeacon.registerVariant(3));
 
         // #tr item.MegaTreeFarmModeBeacon.4.name
+        // # Eco-Sphere Mode Beacon: Artificial Greenhouse
+        // #zh_CN 生态圈模式信标: 人工温室
+        GTCMItemList.MegaTreeFarmModeBeacon5.set(MegaTreeFarmModeBeacon.registerVariant(4));
+
+        // #tr item.MegaTreeFarmModeBeacon.5.name
+        // # Eco-Sphere Mode Beacon: Artificial Greenhouse
+        // #zh_CN 生态圈模式信标: 人工温室
+        GTCMItemList.MegaTreeFarmModeBeacon6.set(MegaTreeFarmModeBeacon.registerVariant(5));
+
+        // #tr item.MegaTreeFarmModeBeacon.6.name
         // # Eco-Sphere Mode Beacon: Directed Mob Cloning
         // #zh_CN 生态圈模式信标: 定向克隆
-        GTCMItemList.MegaTreeFarmModeBeacon5.set(MegaTreeFarmModeBeacon.registerVariant(4));
+        GTCMItemList.MegaTreeFarmModeBeacon7.set(MegaTreeFarmModeBeacon.registerVariant(6));
+
+        // #tr item.MegaTreeFarmModeBeacon.7.name
+        // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+        // #zh_CN 生态圈模式信标: 定向克隆
+        GTCMItemList.MegaTreeFarmModeBeacon8.set(MegaTreeFarmModeBeacon.registerVariant(7));
 
         // endregion
     }
