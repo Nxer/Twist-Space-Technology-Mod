@@ -104,33 +104,20 @@ public class ItemEssentiaHelper {
     public static Aspect readAspectFromCrystal(@Nullable ItemStack stack) {
         if (stack == null || stack.stackSize <= 0) return null;
 
-        // TC CrystalEssence - aspects stored in root NBT
-        if (stack.getItem() instanceof thaumcraft.common.items.ItemCrystalEssence) {
-            NBTTagCompound tag = stack.getTagCompound();
-            if (tag != null) {
-                AspectList aspects = new AspectList();
-                aspects.readFromNBT(tag);
-                if (aspects.size() > 0) {
-                    return aspects.getAspects()[0];
-                }
-            }
+        // ItemAspect-style single-key format
+        if (stack.hasTagCompound() && stack.getTagCompound()
+            .hasKey("aspect")) {
+            Aspect aspect = Aspect.getAspect(
+                stack.getTagCompound()
+                    .getString("aspect"));
+            if (aspect != null) return aspect;
         }
 
-        // Generic tagged item
-        if (stack.hasTagCompound()) {
-            NBTTagCompound tag = stack.getTagCompound();
-            if (tag.hasKey("aspect")) {
-                Aspect aspect = Aspect.getAspect(tag.getString("aspect"));
-                if (aspect != null) return aspect;
-            }
-            if (tag.hasKey("Aspects")) {
-                // Aspects is an NBTTagList; readFromNBT parses it from the root tag directly
-                AspectList list = new AspectList();
-                list.readFromNBT(tag);
-                if (list.size() > 0) return list.getAspects()[0];
-            }
+        // TC CrystalEssence / glass ampoule: parse the full list and take the first
+        AspectList aspects = readAllAspectsFromCrystal(stack);
+        if (aspects != null && aspects.size() > 0) {
+            return aspects.getAspects()[0];
         }
-
         return null;
     }
 

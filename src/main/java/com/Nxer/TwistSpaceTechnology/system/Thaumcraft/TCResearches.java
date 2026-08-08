@@ -440,66 +440,20 @@ public class TCResearches {
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.1")),
                     new ResearchPage(infusionRecipeSkypiercerTower),
                     // #tr tc.research_text.SKYPIERCER_TOWER.2
-                    // #en_US {\BOLD}Automation Tips:{\RESET}<BR><BR>Without input and output buses, full automation becomes a bit more challenging. However, it is worth noting that the Essentia used in ThaumicEnergistics operates through {\ITALIC}fluid channels{\RESET}. This reveals a solution: place a fluid interface (for pattern distribution) directly adjacent to a subnet interface (which accepts Crystal Essentia). Inside the subnet, install an Essentia Discretizer — as Crystal Essentia enters, it is automatically converted into a fluid form.<BR><BR>Then, by attaching Fluid Storage Buses to two super tanks as buffers for essentia fluids, and taking advantage of the smart blocking mode of the interface, you can create a natural blocking mechanism. This setup works perfectly — even though the exported items become fluids upon entry, everything functions seamlessly.Finally, connecting infusion provider as a component of SkypiercerTower, and the essentia ExportBus is connected to the main network.
-                    // #zh_CN {\BOLD}自动化提示:{\RESET}<BR><BR>没有输入输出总线,自动化显然变得困难了一些,然而不得不提及的是神秘能源的源质使用的通道是{\ITALIC}流体{\RESET}.这揭示了一种方案,具体来说:将主网的接口(用于样板发配)紧贴子网的二合一接口(接受晶化源质).子网内需放置一个源质离散器,使晶化源质在进入时自动转化为流体.<BR><BR>随后在两个超级缸上贴上流体存储总线作为缓存源质的容器,并借助二合一接口的智能阻挡模式,可以自然地产生阻挡效果.这种设计恰到好处——即使发配是物品在进入后成为流体,整个系统依旧能正确运作,最后连接提供器做为穿云尖塔的组成部分,而源质输出仓连接主网即可.
+                    // #en_US It should be noted that although essentia can now be distributed, the blocking effect of the fluid interface does not seem to work on essentia. Be extra careful when building subnet.
+                    // #zh_CN 需要提醒的是,尽管现在源质可发配,但是二合一的阻挡效果似乎对源质无效,使用源质模式并构建子网作为输入时务农注意.
                     new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.2")),
                     // #tr tc.research_text.SKYPIERCER_TOWER.3
-                    // #en_US The schematic diagram can be found on the next page. Due to the limitations of code implementation, it is slightly out of style.Because the image insertion of 128*128 is just right, but in that case it would be difficult to identify the content. Therefore, the size of 256*256 was still adopted.I'm not quite sure how to position this picture in the middle. Maybe it would be better this way.
-                    // #zh_CN 示意图见下一页,碍于代码实现,稍微有点不合风格,因为图片插入128*128刚刚好,但是那样就完全看不清了,因此仍然采用了256*256大小.我不是很清楚怎么把这个图片放中间,这样的话也许会好点.
+                    // #en_US As for why Crystal Essence Mode is not recommended: crystalized essentia items conflict with the essentia distribution system. We currently recommend using essentia in its fluid form as the primary medium.
+                    // #zh_CN 关于为什么晶化源质模式不推荐使用,这里也说明一下,晶化源质的位子同源质本身在发配上互斥,当下我们推荐使用源质为本位.
                     new ResearchPage("tc.research_text.SKYPIERCER_TOWER.3"),
                     // #tr tc.research_text.SKYPIERCER_TOWER.4
-                    // #en_US Automation diagram for the Skypiercer Tower.<IMG>gtnhcommunitymod:textures/icons/Thaumonomicon/Automation_Diagram_of_the_Skypiercer_Tower.png:0:0:256:256:1</IMG>
-                    // #zh_CN 穿云尖塔自动化示意图.<IMG>gtnhcommunitymod:textures/icons/Thaumonomicon/Automation_Diagram_of_the_Skypiercer_Tower.png:0:0:256:256:1</IMG>
-                    new ResearchPage(" "),
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.4")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.5
-                    // # {\BOLD}Aspect tier and machine processing time rules:{\RESET}<BR><BR>{\BOLD}Aspect Tier:<BR>{\RESET}Primal aspects are Tier 0.<BR> Composite aspect (aspects made from composite/primal aspects) take the highest tier component and add 1 to determine its tier.<BR><BR>{\BOLD}Processing Time:<BR>{\RESET}An aspect tier of 'x' requires 2 * x seconds (excluding time to synthesize its components).
-                    // #zh_CN {\BOLD}要素等级与机器加工时间规则:{\RESET}<BR><BR>{\BOLD}要素等级:<BR>{\RESET}初等要素为0级。<BR>复合要素(由初等或其他复合要素组成)等级为其子要素等级较高者加1.<BR><BR>{\BOLD}加工时间:<BR>{\RESET}等级为 x 的要素需加工 2 * x 秒(不包括合成其组成部分所需的时间).
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.5")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.6
-                    // # {\BOLD}Recursive Synthesis Note:{\RESET}<BR><BR>All composite aspects are synthesized entirely from primal aspects. Each composite aspect must be synthesized step by step. Meaning that the total synthesized time for high tier composite aspects can differ quite a bit.<BR>{\BOLD}(see next page for timings){\RESET}<BR><BR>{\BOLD}Critical:<BR>{\RESET}Primal aspects (tier 0) cannot be synthesized. They must be made available to the Skypiercer Tower through the infusion provider or the machine will fail to start.
-                    // #zh_CN {\BOLD}关于递归合成的说明:{\RESET}<BR><BR>所有复合要素都必须由初等要素逐步合成,每一个复合要素都需一层层构建.因此,高等级复合要素的总合成时间会迅速增加(实际上是指数级增长)<BR>{\BOLD}(具体时间请参见下一页){\RESET}<BR><BR>{\BOLD}注意:<BR>{\RESET}初等要素(0级)无法被合成,必须通过注魔供应器提供给穿云尖塔,否则机器将无法启动.
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.6")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.7
-                    // #en_US {\BOLD}Tier 1 Compound Aspects{\RESET}<BR>{\BOLD}Gelum:{\RESET} 2 seconds<BR>{\BOLD}Lux:{\RESET} 2 seconds<BR>{\BOLD}Motus:{\RESET} 2 seconds<BR>{\BOLD}Permutatio:{\RESET} 2 seconds<BR>{\BOLD}Potentia:{\RESET} 2 seconds<BR>{\BOLD}Tempestas:{\RESET} 2 seconds<BR>{\BOLD}Vacuos:{\RESET} 2 seconds<BR>{\BOLD}Venenum:{\RESET} 2 seconds<BR>{\BOLD}Victus:{\RESET} 2 seconds<BR>{\BOLD}Vitreus:{\RESET} 2 seconds
-                    // #zh_CN {\BOLD}一级复合要素{\RESET}<BR>{\BOLD}寒冰:{\RESET} 2 秒<BR>{\BOLD}光明:{\RESET} 2 秒<BR>{\BOLD}移动:{\RESET} 2 秒<BR>{\BOLD}交换:{\RESET} 2 秒<BR>{\BOLD}能量:{\RESET} 2 秒<BR>{\BOLD}气候:{\RESET} 2 秒<BR>{\BOLD}虚空:{\RESET} 2 秒<BR>{\BOLD}毒药:{\RESET} 2 秒<BR>{\BOLD}生命:{\RESET} 2 秒<BR>{\BOLD}水晶:{\RESET} 2 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.7")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.8
-                    // #en_US {\BOLD}Tier 2 Compound Aspects (1/2){\RESET}<BR>{\BOLD}Bestia:{\RESET} 8 seconds<BR>{\BOLD}Fames:{\RESET} 8 seconds<BR>{\BOLD}Herba:{\RESET} 6 seconds<BR>{\BOLD}Iter:{\RESET} 6 seconds<BR>{\BOLD}Limus:{\RESET} 6 seconds<BR>{\BOLD}Metalum:{\RESET} 6 seconds<BR>{\BOLD}Mortuus:{\RESET} 6 seconds<BR>{\BOLD}Praecantio:{\RESET} 8 seconds<BR>{\BOLD}Radio:{\RESET} 8 seconds<BR>{\BOLD}Sano:{\RESET} 6 seconds
-                    // #zh_CN {\BOLD}二级复合要素 (1/2){\RESET}<BR>{\BOLD}野兽:{\RESET} 8 秒<BR>{\BOLD}饥饿:{\RESET} 8 秒<BR>{\BOLD}植物:{\RESET} 6 秒<BR>{\BOLD}旅行:{\RESET} 6 秒<BR>{\BOLD}粘液:{\RESET} 6 秒<BR>{\BOLD}金属:{\RESET} 6 秒<BR>{\BOLD}死亡:{\RESET} 6 秒<BR>{\BOLD}魔力:{\RESET} 8 秒<BR>{\BOLD}Radio:{\RESET} 8 秒<BR>{\BOLD}治疗:{\RESET} 6 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.8")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.9
-                    // #en_US {\BOLD}Tier 2 Compound Aspects (2/2){\RESET}<BR>{\BOLD}Tempus:{\RESET} 6 seconds<BR>{\BOLD}Tenebrae:{\RESET} 6 seconds<BR>{\BOLD}Vinculum:{\RESET} 6 seconds<BR>{\BOLD}Volatus:{\RESET} 6 seconds
-                    // #zh_CN {\BOLD}二级复合要素 (2/2){\RESET}<BR>{\BOLD}Tempus:{\RESET} 6 秒<BR>{\BOLD}黑暗:{\RESET} 6 秒<BR>{\BOLD}陷阱:{\RESET} 6 秒<BR>{\BOLD}飞行:{\RESET} 6 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.9")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.10
-                    // #en_US {\BOLD}Tier 3 Compound Aspects (1/2){\RESET}<BR>{\BOLD}Alienis:{\RESET} 14 seconds<BR>{\BOLD}Arbor:{\RESET} 12 seconds<BR>{\BOLD}Auram:{\RESET} 14 seconds<BR>{\BOLD}Corpus:{\RESET} 20 seconds<BR>{\BOLD}Exanimis:{\RESET} 14 seconds<BR>{\BOLD}Gula:{\RESET} 16 seconds<BR>{\BOLD}Infernus:{\RESET} 14 seconds<BR>{\BOLD}Magneto:{\RESET} 18 seconds<BR>{\BOLD}Spiritus:{\RESET} 14 seconds<BR>{\BOLD}Superbia:{\RESET} 14 seconds
-                    // #zh_CN {\BOLD}三级复合要素 (1/2){\RESET}<BR>{\BOLD}异域:{\RESET} 14 秒<BR>{\BOLD}树木:{\RESET} 12 秒<BR>{\BOLD}灵气:{\RESET} 14 秒<BR>{\BOLD}肉体:{\RESET} 20 秒<BR>{\BOLD}不死:{\RESET} 14 秒<BR>{\BOLD}Gula:{\RESET} 16 秒<BR>{\BOLD}Infernus:{\RESET} 14 秒<BR>{\BOLD}Magneto:{\RESET} 18 秒<BR>{\BOLD}灵魂:{\RESET} 14 秒<BR>{\BOLD}Superbia:{\RESET} 14 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.10")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.11
-                    // #en_US {\BOLD}Tier 3 Compound Aspects (2/2){\RESET}<BR>{\BOLD}Vitium:{\RESET} 14 seconds
-                    // #zh_CN {\BOLD}三级复合要素 (2/2){\RESET}<BR>{\BOLD}污染:{\RESET} 14 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.11")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.12
-                    // #en_US {\BOLD}Tier 4 Compound Aspects{\RESET}<BR>{\BOLD}Cognito:{\RESET} 22 seconds<BR>{\BOLD}Desidia:{\RESET} 28 seconds<BR>{\BOLD}Luxuria:{\RESET} 36 seconds<BR>{\BOLD}Sensus:{\RESET} 22 seconds
-                    // #zh_CN {\BOLD}四级复合要素{\RESET}<BR>{\BOLD}认知:{\RESET} 22 秒<BR>{\BOLD}Desidia:{\RESET} 28 秒<BR>{\BOLD}Luxuria:{\RESET} 36 秒<BR>{\BOLD}感官:{\RESET} 22 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.12")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.13
-                    // #en_US {\BOLD}Tier 5 Compound Aspects{\RESET}<BR>{\BOLD}Humanus:{\RESET} 40 seconds<BR>{\BOLD}Invidia:{\RESET} 40 seconds<BR>{\BOLD}Strontio:{\RESET} 32 seconds
-                   // #zh_CN {\BOLD}五级复合要素{\RESET}<BR>{\BOLD}人类:{\RESET} 40 秒<BR>{\BOLD}Invidia:{\RESET} 40 秒<BR>{\BOLD}Strontio:{\RESET} 32 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.13")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.14
-                    // #en_US {\BOLD}Tier 6 Compound Aspects{\RESET}<BR>{\BOLD}Instrumentum:{\RESET} 52 seconds<BR>{\BOLD}Lucrum:{\RESET} 60 seconds<BR>{\BOLD}Messis:{\RESET} 58 seconds<BR>{\BOLD}Perforio:{\RESET} 52 seconds
-                    // #zh_CN {\BOLD}六级复合要素{\RESET}<BR>{\BOLD}工具:{\RESET} 52 秒<BR>{\BOLD}贪婪:{\RESET} 60 秒<BR>{\BOLD}作物:{\RESET} 58 秒<BR>{\BOLD}矿藏:{\RESET} 52 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.14")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.15
-                    // #en_US {\BOLD}Tier 7 Compound Aspects{\RESET}<BR>{\BOLD}Fabrico:{\RESET} 106 seconds<BR>{\BOLD}Machina:{\RESET} 68 seconds<BR>{\BOLD}Meto:{\RESET} 124 seconds<BR>{\BOLD}Nebrisum:{\RESET} 126 seconds<BR>{\BOLD}Pannus:{\RESET} 74 seconds<BR>{\BOLD}Telum:{\RESET} 66 seconds<BR>{\BOLD}Terminus:{\RESET} 88 seconds<BR>{\BOLD}Tutamen:{\RESET} 66 seconds
-                    // #zh_CN {\BOLD}七级复合要素{\RESET}<BR>{\BOLD}合成:{\RESET} 106 秒<BR>{\BOLD}机械:{\RESET} 68 秒<BR>{\BOLD}收获:{\RESET} 124 秒<BR>{\BOLD}Nebrisum:{\RESET} 126 秒<BR>{\BOLD}布匹:{\RESET} 74 秒<BR>{\BOLD}武器:{\RESET} 66 秒<BR>{\BOLD}Terminus:{\RESET} 88 秒<BR>{\BOLD}防护:{\RESET} 66 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.15")),
-                    // #tr tc.research_text.SKYPIERCER_TOWER.16
-                    // #en_US {\BOLD}Tier 8 Compound Aspects{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 seconds<BR>{\BOLD}Ira:{\RESET} 82 seconds
-                    // #zh_CN {\BOLD}八级复合要素{\RESET}<BR>{\BOLD}Electrum:{\RESET} 86 秒<BR>{\BOLD}Ira:{\RESET} 82 秒
-                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.16")))
+                    // #en_US Furthermore, the current 1.5× time increase per tier feels a bit fast; using a factor of 1.7 might be a better choice…
+                    // #zh_CN 另外当下每提升一级时间为原先3/2似乎有些快,也许使用1.7倍是个不错的选择...
+                    new ResearchPage(TextEnums.tr("tc.research_text.SKYPIERCER_TOWER.4"))
+                )
+                //插入图需要如下格式,且大小最好为128*128
+                //<IMG>gtnhcommunitymod:textures/icons/Thaumonomicon/Automation_Diagram_of_the_Skypiercer_Tower.png:0:0:256:256:1</IMG>
                 .setParents("ESSENTIA_DISCRETIZER")
                     .registerResearchItem();
             // spotless:on
