@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NotEnoughWater;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
@@ -13,7 +13,6 @@ import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
@@ -29,24 +28,23 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     @Override
     public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
-        machine.fertilizerToConsume = 0;
+        // Build the crop cache once from the first valid seed in the input buses.
         if (!findSeed(machine)) return EcoSphereModeResult.failure(NoSeedInController);
         if (!machine.cropsNHFarm.isValid())
             return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
 
         boolean hybridSeed = machine.cropsNHFarm.seedData != null;
-        if (hybridSeed && !machine.isTierTwo())
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("mega_tree_farm_tier_two_required"));
+        if (hybridSeed && machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
 
-        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport.consumeFluidForParallel(
-            machine,
-            CropsNHFluids.enrichedFertilizer,
-            hybridSeed ? ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL
-                : ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL,
-            euTier);
-        if (parallelResult == null) return EcoSphereModeResult.failure(NotEnoughWater);
+        long baseFertilizerCost = hybridSeed ? ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL
+            : ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL;
+        long fertilizerPerParallel = machine.applyStructureFluidDiscount(baseFertilizerCost);
+        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
+            .consumeFluidForParallel(machine, CropsNHFluids.enrichedFertilizer, fertilizerPerParallel, euTier);
+        // The lowest power tier runs two parallels, so startup requires twice the per-parallel fertilizer.
+        if (parallelResult == null) return EcoSphereModeResult
+            .failure(EcoSphereModeSupport.missingFluid(CropsNHFluids.enrichedFertilizer, fertilizerPerParallel * 2));
 
-        machine.fertilizerToConsume = parallelResult.fluidCost();
         return EcoSphereModeResult.standard(
             CheckRecipeResultRegistry.SUCCESSFUL,
             machine.cropsNHFarm.getOutputStacks(parallelResult.multiplier()),

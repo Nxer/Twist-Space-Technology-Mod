@@ -3,12 +3,16 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFak
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
 import com.gtnewhorizon.cropsnh.farming.SeedStats;
@@ -50,23 +54,32 @@ public final class ArtificialGreenHouseFakeRecipe {
         if (seed == null || seed.getItem() == null || outputs == null) return;
         ItemStack input = copyOne(seed);
         input.stackSize = 0;
-        for (ItemStack output : outputs.keySet()) {
-            if (output == null || output.getItem() == null) continue;
-            ItemStack product = copyOne(output);
-            FluidStack requiredFluid = new FluidStack(
-                CropsNHFluids.enrichedFertilizer,
-                hybrid ? HYBRID_SEED_FERTILIZER_PER_PARALLEL : NORMAL_SEED_FERTILIZER_PER_PARALLEL);
-            if (requiredFluid.getFluid() == null) continue;
-            GTValues.RA.stdBuilder()
-                .itemInputs(input.copy())
-                .itemOutputs(product)
-                .fluidInputs(requiredFluid)
-                .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, hybrid ? 2 : 1)
-                .duration(MODE_RECIPE_DURATION)
-                .eut(0)
-                .fake()
-                .addTo(GTCMRecipe.ArtificialGreenHouseFakeRecipes);
-        }
+        List<ItemStack> products = outputs.entrySet()
+            .stream()
+            .filter(
+                entry -> entry.getKey() != null && entry.getKey()
+                    .getItem() != null)
+            // Match the CropsNH crop page: most likely drops appear first in the 3x3 grid.
+            .sorted(Map.Entry.<ItemStack, Integer>comparingByValue(Comparator.reverseOrder()))
+            .limit(9)
+            .map(entry -> copyOne(entry.getKey()))
+            .collect(Collectors.toList());
+        if (products.isEmpty()) return;
+
+        FluidStack requiredFluid = new FluidStack(
+            CropsNHFluids.enrichedFertilizer,
+            hybrid ? HYBRID_SEED_FERTILIZER_PER_PARALLEL : NORMAL_SEED_FERTILIZER_PER_PARALLEL);
+        if (requiredFluid.getFluid() == null) return;
+        GTValues.RA.stdBuilder()
+            .itemInputs(input)
+            .itemOutputs(products.toArray(new ItemStack[0]))
+            .fluidInputs(requiredFluid)
+            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
+            .metadata(MegaTreeFarmBeaconRequirementKey.INSTANCE, hybrid ? 2 : 1)
+            .duration(MODE_RECIPE_DURATION)
+            .eut(0)
+            .fake()
+            .addTo(GTCMRecipe.ArtificialGreenHouseFakeRecipes);
     }
 
     private static ItemStack copyOne(ItemStack stack) {

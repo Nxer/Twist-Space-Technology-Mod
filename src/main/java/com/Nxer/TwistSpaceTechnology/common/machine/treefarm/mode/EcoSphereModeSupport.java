@@ -8,6 +8,11 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
+import com.github.bsideup.jabel.Desugar;
+
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 
 public final class EcoSphereModeSupport {
 
@@ -20,6 +25,12 @@ public final class EcoSphereModeSupport {
 
     public static long calculateEut(int tier) {
         return (long) (8d * Math.pow(4, tier) * 15 / 16);
+    }
+
+    public static CheckRecipeResult missingFluid(Fluid requiredFluid, long amount) {
+        if (requiredFluid == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        return SimpleResultWithText
+            .outOfFluid(new FluidStack(requiredFluid, (int) Math.min(Integer.MAX_VALUE, amount)));
     }
 
     public static ParallelResult consumeFluidForParallel(TST_MegaTreeFarm machine, Fluid requiredFluid,
@@ -120,59 +131,9 @@ public final class EcoSphereModeSupport {
         return Item.itemRegistry.getNameForObject(stack.getItem()) + ":" + stack.getItemDamage();
     }
 
-    public static final class PerfectOverclockResult {
+    @Desugar
+    public record PerfectOverclockResult(int tier, long multiplier, long fluidCost) {}
 
-        private final int tier;
-        private final long multiplier;
-        private final long fluidCost;
-
-        private PerfectOverclockResult(int tier, long multiplier, long fluidCost) {
-            this.tier = tier;
-            this.multiplier = multiplier;
-            this.fluidCost = fluidCost;
-        }
-
-        public int tier() {
-            return tier;
-        }
-
-        public long multiplier() {
-            return multiplier;
-        }
-
-        public long fluidCost() {
-            return fluidCost;
-        }
-    }
-
-    public static final class ParallelResult {
-
-        private final int tier;
-        private final long parallel;
-        private final double multiplier;
-        private final long fluidCost;
-
-        private ParallelResult(int tier, long parallel, double multiplier, long fluidCost) {
-            this.tier = tier;
-            this.parallel = parallel;
-            this.multiplier = multiplier;
-            this.fluidCost = fluidCost;
-        }
-
-        public int tier() {
-            return tier;
-        }
-
-        public long parallel() {
-            return parallel;
-        }
-
-        public double multiplier() {
-            return multiplier;
-        }
-
-        public long fluidCost() {
-            return fluidCost;
-        }
-    }
+    @Desugar
+    public record ParallelResult(int tier, long parallel, double multiplier, long fluidCost) {}
 }

@@ -8,11 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerBossRequirementKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerRecipeNumberKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerTierDisplayKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import crazypants.enderio.EnderIO;
@@ -33,7 +33,10 @@ public final class DirectedMobClonerFakeRecipe {
         registerLifeEssenceRecipe();
         for (Map.Entry<Integer, MobRecipeDisplay> entry : recipesById.entrySet()) {
             ItemStack circuit = GTUtility.getIntegratedCircuit(0);
-            circuit.setStackDisplayName("Recipe Number: " + entry.getKey());
+            // #tr MegaTreeFarm.nei.circuitSum
+            // # Sum of Input Programmed Circuits: %s
+            // #zh_CN 输入编程电路总和: %s
+            circuit.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.circuitSum", entry.getKey()));
             FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
             if (lifeEssence == null) continue;
             GTValues.RA.stdBuilder()
@@ -41,11 +44,12 @@ public final class DirectedMobClonerFakeRecipe {
                 .itemOutputs(createDisplayOutputs(entry.getValue()))
                 .fluidInputs(lifeEssence)
                 .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 2)
-                .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, true)
                 .metadata(
-                    DirectedMobClonerBossRequirementKey.INSTANCE,
+                    MegaTreeFarmBeaconRequirementKey.INSTANCE,
                     entry.getValue()
-                        .boss() ? createInfiniteUpgradeRequirement() : null)
+                        .boss() ? 2 : 1)
+                .metadata(DirectedMobClonerRecipeNumberKey.INSTANCE, entry.getKey())
+                .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, true)
                 .duration(MODE_RECIPE_DURATION)
                 .eut(0)
                 .fake()
@@ -53,30 +57,22 @@ public final class DirectedMobClonerFakeRecipe {
         }
     }
 
-    private static ItemStack createInfiniteUpgradeRequirement() {
-        ItemStack upgrade = GTCMItemList.MegaTreeFarmModeBeacon8.get(1);
-        upgrade.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.infiniteUpgrade"));
-        return upgrade;
-    }
-
     private static void registerLifeEssenceRecipe() {
         FluidStack lifeEssenceInput = FluidRegistry.getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
-        FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", 20);
+        FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
         ItemStack lifeBucket = GTModHandler.getModItem(Mods.BloodMagic.ID, "bucketLife", 1, 0);
         if (lifeEssenceInput == null || lifeEssence == null || lifeBucket == null) return;
-        lifeBucket.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.mobHealthLifeEssence"));
-        ItemStack circuit = GTUtility.getIntegratedCircuit(0);
-        circuit.stackSize = 0;
-        circuit.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.recipeNumberZero"));
-        // #tr MegaTreeFarm.nei.recipeNumberZero
-        // # Recipe Number: 0
-        // #zh_CN 配方编号：0
+        // #tr MegaTreeFarm.nei.placeholder
+        // # Placeholder
+        // #zh_CN 占位符
+        lifeBucket.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.placeholder"));
         GTValues.RA.stdBuilder()
-            .itemInputs(circuit)
             .itemOutputs(lifeBucket)
             .fluidInputs(lifeEssenceInput)
             .fluidOutputs(lifeEssence)
             .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 1)
+            .metadata(MegaTreeFarmBeaconRequirementKey.INSTANCE, 1)
+            .metadata(DirectedMobClonerRecipeNumberKey.INSTANCE, 0)
             .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, false)
             .duration(MODE_RECIPE_DURATION)
             .eut(0)

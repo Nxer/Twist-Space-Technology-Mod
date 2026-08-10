@@ -21,6 +21,14 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 
 public class SimpleResultWithText implements CheckRecipeResult {
 
+    // #tr GT5U.gui.text.recipe_result.out_of_fluid
+    // # Missing %s: %s L required
+    // #zh_CN 缺失%s：需要%s L
+
+    // #tr GT5U.gui.text.recipe_result.out_of_item
+    // # Missing %s: %s required
+    // #zh_CN 缺失%s：需要%s个
+
     private boolean success;
     private String key;
     private boolean persistsOnShutdown;

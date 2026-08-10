@@ -1,8 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends;
 
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerBossRequirementKey;
+import org.jetbrains.annotations.NotNull;
+
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerRecipeNumberKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerTierDisplayKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
@@ -17,17 +20,19 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
     }
 
     @Override
-    public void drawDescription(RecipeDisplayInfo recipeInfo) {
+    public void drawDescription(@NotNull RecipeDisplayInfo recipeInfo) {
+        drawDurationInfo(recipeInfo);
         DirectedMobClonerTierDisplayKey.INSTANCE
             .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(DirectedMobClonerTierDisplayKey.INSTANCE));
-        drawDurationInfo(recipeInfo);
+        MegaTreeFarmBeaconRequirementKey.INSTANCE
+            .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(MegaTreeFarmBeaconRequirementKey.INSTANCE));
+        DirectedMobClonerRecipeNumberKey.INSTANCE
+            .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(DirectedMobClonerRecipeNumberKey.INSTANCE));
         DirectedMobClonerOutputInfoKey.INSTANCE
             .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(DirectedMobClonerOutputInfoKey.INSTANCE));
-        DirectedMobClonerBossRequirementKey.INSTANCE
-            .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(DirectedMobClonerBossRequirementKey.INSTANCE));
         drawRecipeOwnerInfo(recipeInfo);
     }
 
     @Override
-    protected void drawEnergyInfo(RecipeDisplayInfo recipeInfo) {}
+    protected void drawEnergyInfo(@NotNull RecipeDisplayInfo recipeInfo) {}
 }

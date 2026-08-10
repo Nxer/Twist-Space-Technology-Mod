@@ -18,6 +18,9 @@ public final class MegaTreeFarmTierRequirementKey extends RecipeMetadataKey<Inte
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
         int tier = cast(value, 1);
-        recipeInfo.drawText(StatCollector.translateToLocalFormatted("GT5U.nei.tier", tier));
+        // #tr MegaTreeFarm.nei.structureTier
+        // # Structure Tier: %s
+        // #zh_CN 结构等级: %s
+        recipeInfo.drawText(StatCollector.translateToLocalFormatted("MegaTreeFarm.nei.structureTier", tier));
     }
 }

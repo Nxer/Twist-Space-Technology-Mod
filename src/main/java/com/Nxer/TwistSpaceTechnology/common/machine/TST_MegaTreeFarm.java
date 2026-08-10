@@ -7,7 +7,6 @@ import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -26,11 +25,9 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -82,8 +79,6 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
@@ -125,8 +120,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     private static ItemStack FountOfEcology;
     private static ItemStack Offspring;
 
-    public long fertilizerToConsume = 0;
-
     @Override
     public int totalMachineMode() {
         /*
@@ -143,7 +136,17 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT };
 
     public boolean isTierTwo() {
-        return controllerTier > 0;
+        return getStructureTier() >= 2;
+    }
+
+    public int getStructureTier() {
+        return controllerTier + 1;
+    }
+
+    public int getModeBeaconTier() {
+        ItemStack beacon = getControllerSlot();
+        if (getModeFromBeacon(beacon) < 0) return 0;
+        return beacon.getItemDamage() % 2 + 1;
     }
 
     public boolean hasDirectedMobClonerInfiniteUpgrade() {
@@ -151,12 +154,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     public boolean hasSecondaryModeBeacon() {
-        ItemStack beacon = getControllerSlot();
-        return beacon != null && beacon.stackSize > 0
-            && beacon.getItem() == TstItems.MegaTreeFarmModeBeacon
-            && beacon.getItemDamage() >= 0
-            && beacon.getItemDamage() <= 7
-            && (beacon.getItemDamage() & 1) == 1;
+        return getModeBeaconTier() == 2;
+    }
+
+    public long applyStructureFluidDiscount(long fluidAmount) {
+        return isTierTwo() ? Math.max(1, fluidAmount / 10) : fluidAmount;
     }
 
     public long getAvailableInputPower() {
@@ -166,7 +168,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public int beginDirectedMobClonerDebugRun() {
         if (!directedMobClonerDebugActive) {
             directedMobClonerDebugActive = true;
-            directedMobClonerDebugRecipeId = 0;
+            directedMobClonerDebugRecipeId = 1;
             directedMobClonerDebugStopPending = false;
             markDirty();
         }
@@ -239,7 +241,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void setMachineMode(int index) {
         if (boundMode < 0) return;
         machineMode = boundMode;
-        updateFluidAreaForMode();
+        clearFluidAreaForMode();
     }
 
     @Override
@@ -320,7 +322,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         machineMode = pendingMode;
         pendingMode = -1;
         markDirty();
-        updateFluidAreaForMode();
+        clearFluidAreaForMode();
     }
 
     private void updateModeBeaconBinding() {
@@ -336,14 +338,11 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             }
             return;
         }
-        if (requestedMode == boundMode) {
-            if (!fluidAreaInitialized || missingFluidAreaInput != null) updateFluidAreaForMode();
-            return;
-        }
+        if (requestedMode == boundMode) return;
         if (boundMode < 0) {
             boundMode = requestedMode;
             machineMode = requestedMode;
-            updateFluidAreaForMode();
+            clearFluidAreaForMode();
         } else {
             pendingMode = requestedMode;
             cleaningRequested = true;
@@ -432,36 +431,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             tier = aNBT.getInteger("mTier") + 1;
         }
         tooltip.add(StatCollector.translateToLocalFormatted("tooltip.large_macerator.tier", tier));
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        tag.setInteger("tier", controllerTier + 1);
-        if (machineMode == 2) {
-            tag.setLong("fertilizerToConsume", fertilizerToConsume);
-        }
-
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.hasKey("tier")) {
-            currentTip.add(
-                "Tier: " + EnumChatFormatting.YELLOW + formatNumber(tag.getInteger("tier")) + EnumChatFormatting.RESET);
-        }
-        if (tag.hasKey("fertilizerToConsume")) {
-            // #tr MegaTreeFarm.Waila.fertiConsume
-            // # Now consumption of Enriched Fertilizer is :
-            // #zh_CN 当前富集肥料消耗量：
-            currentTip.add(
-                tr("MegaTreeFarm.Waila.fertiConsume") + " " + formatNumber(tag.getLong("fertilizerToConsume")) + "L");
-        }
-
     }
 
     @Override
@@ -768,10 +737,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // spotless:on
 
-    private void updateFluidAreaForMode() {
-        IEcoSphereMode mode = getBoundMode();
-        Fluid targetFluid = mode != null && mode.displaysFluidArea() ? mode.getDefaultFluidArea() : null;
-        switchFluidArea(targetFluid, true);
+    private void clearFluidAreaForMode() {
+        // A newly bound mode stays empty until its next recipe selects the required fluid.
+        switchFluidArea(null, false);
     }
 
     public boolean prepareFluidAreaForConsumption(Fluid consumedFluid) {
@@ -956,13 +924,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     return SimpleCheckRecipeResult.ofFailure("mega_tree_farm_waiting_for_mode_beacon");
                 }
                 machineMode = boundMode;
-                if (missingFluidAreaInput != null) {
-                    FluidStack required = missingFluidAreaInput.copy();
-                    if (!prepareFluidAreaForConsumption(required.getFluid())) {
-                        return SimpleResultWithText.outOfFluid(required);
-                    }
-                }
-
                 tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
                 EcoSphereModeResult modeResult = MACHINE_MODES[machineMode].process(TST_MegaTreeFarm.this, EuTier);
                 if (!modeResult.result()
@@ -1010,9 +971,31 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // # {\BLUE}Fishing
     // #zh_CN {\BLUE}捕鱼中
 
+    // #tr GT5U.gui.text.recipe_result.growing_algae
+    // # {\GREEN}Growing Algae
+    // #zh_CN {\GREEN}藻类生长中
+
     // #tr GT5U.gui.text.recipe_result.Invalid_Seed
     // # Invalid Seed
     // #zh_CN 无效种子
+
+    // These GT result keys are used directly by the Eco-Sphere GUI and must exist in TST language resources.
+
+    // #tr GT5U.gui.text.recipe_result.success
+    // # Processing recipe
+    // #zh_CN 配方处理中
+
+    // #tr GT5U.gui.text.recipe_result.mega_tree_farm_cleaning
+    // # Eco-Sphere cleaning in progress
+    // #zh_CN 生态圈清理中
+
+    // #tr GT5U.gui.text.recipe_result.processing_mob_drops
+    // # Processing mob drops
+    // #zh_CN 生物掉落处理中
+
+    // #tr GT5U.gui.text.recipe_result.generating_life_essence
+    // # Generating Life Essence
+    // #zh_CN 生命本源生成中
 
     public String[] getInfoData() {
         String[] origin = super.getInfoData();

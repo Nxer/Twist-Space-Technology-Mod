@@ -43,8 +43,8 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
     @Override
     public void drawDescription(RecipeDisplayInfo recipeInfo) {
-        drawMetadataInfo(recipeInfo);
         drawDurationInfo(recipeInfo);
+        drawMetadataInfo(recipeInfo);
         drawSpecialInfo(recipeInfo);
         drawRecipeOwnerInfo(recipeInfo);
     }

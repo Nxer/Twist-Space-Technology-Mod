@@ -42,8 +42,8 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
     @Override
     public void drawDescription(RecipeDisplayInfo recipeInfo) {
-        drawMetadataInfo(recipeInfo);
         drawDurationInfo(recipeInfo);
+        drawMetadataInfo(recipeInfo);
         drawSpecialInfo(recipeInfo);
         drawRecipeOwnerInfo(recipeInfo);
     }
@@ -60,7 +60,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
     @Override
     public @NotNull List<Pos2d> getItemOutputPositions(int itemOutputCount) {
-        return UIHelper.getGridPositions(1, OUTPUTS_X, OUTPUTS_Y, 1);
+        return UIHelper.getGridPositions(itemOutputCount, OUTPUTS_X, OUTPUTS_Y, 3);
     }
 
     @Override
@@ -92,7 +92,8 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         }
 
         // Output Stack
-        if (stack == neiCachedRecipe.mOutputs.get(0).item) {
+        if (neiCachedRecipe.mOutputs.stream()
+            .anyMatch(output -> stack == output.item)) {
             currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
             // #tr ESS.AquaticZoneSimulator.nei.tooltip.2
             // # Recipe size determines output chance.
