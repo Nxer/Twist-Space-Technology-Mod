@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers;
 
+import java.util.Objects;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
@@ -47,7 +49,7 @@ public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
         // Draw the background first so every beacon has the same solid base.
         renderBase(
             type,
-            item.getItem()
+            Objects.requireNonNull(item.getItem())
                 .getIcon(item, 0),
             TstItems.MegaTreeFarmModeBeacon.getFrameIcon(),
             item.getItemSpriteNumber());

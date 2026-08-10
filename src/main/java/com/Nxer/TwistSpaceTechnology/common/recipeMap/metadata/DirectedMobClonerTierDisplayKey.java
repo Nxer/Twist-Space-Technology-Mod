@@ -17,6 +17,6 @@ public final class DirectedMobClonerTierDisplayKey extends RecipeMetadataKey<Int
 
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
-        recipeInfo.drawText(StatCollector.translateToLocalFormatted("GT5U.nei.tier", cast(value, 1)));
+        recipeInfo.drawText(StatCollector.translateToLocalFormatted("MegaTreeFarm.nei.structureTier", cast(value, 1)));
     }
 }

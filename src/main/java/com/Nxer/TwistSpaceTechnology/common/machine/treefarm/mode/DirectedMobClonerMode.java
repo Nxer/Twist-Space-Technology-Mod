@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
@@ -14,10 +15,9 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFake
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
-import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.common.items.ItemIntegratedCircuit;
 
 public final class DirectedMobClonerMode implements IEcoSphereMode {
 
@@ -37,73 +37,61 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
     }
 
     @Override
-    public Fluid getDefaultFluidArea() {
-        return FluidRegistry.getFluid("lifeessence");
-    }
-
-    @Override
     public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
-        if (hasDebugItem(machine)) return processDebug(machine, euTier);
+        if (hasDebugItem(machine)) return processDebug(machine);
         machine.resetDirectedMobClonerDebugRun();
-        if (!hasIntegratedCircuit(machine))
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_correct_Circuit"));
+
+        // Missing and invalid circuit sums both use the fallback life-essence recipe.
         int recipeId = TstUtils.getIntegratedCircuitConfigurationSum(machine.getStoredInputs());
-        if (recipeId == 0) {
-            EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport.consumeFluidForParallel(
-                machine,
-                FluidRegistry.getFluid("lifeessence"),
-                DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
-                euTier);
-            if (parallelResult == null)
-                return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_enough_input"));
-            long lifeEssenceAmount = machine.isTierTwo() ? parallelResult.fluidCost()
-                : (10L + XSTR.XSTR_INSTANCE.nextInt(991)) * parallelResult.parallel();
-            FluidStack lifeEssence = BloodMagicHelper
-                .getLifeEssence((int) Math.min(Integer.MAX_VALUE, lifeEssenceAmount));
-            if (lifeEssence == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_recipe"));
-            return EcoSphereModeResult.standard(
-                SimpleCheckRecipeResult.ofSuccess("generating_life_essence"),
-                new ItemStack[0],
-                new FluidStack[] { lifeEssence },
-                parallelResult.tier());
-        }
+        if (!DirectedMobClonerRecipeCache.isValidRecipeId(recipeId)) return processFallback(machine, euTier);
+        // Numbered cloning recipes require the tier-two structure.
         if (!machine.isTierTwo())
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("mega_tree_farm_tier_two_required"));
+            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.insufficientMachineTier(2));
         boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
         boolean bossRecipe = DirectedMobClonerRecipeCache.isBossRecipe(recipeId);
-        if (bossRecipe && !infiniteUpgrade)
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
+        // Boss recipes additionally require the upgraded cloning beacon.
+        if (bossRecipe && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
         if (infiniteUpgrade) voltageTier += 4;
+        // Every tier above the recipe offset adds one perfect overclock.
         int tierOffset = bossRecipe ? 6 : 4;
         int maximumOverclocks = Math.max(0, voltageTier - tierOffset);
+        Fluid lifeEssenceFluid = FluidRegistry.getFluid("lifeessence");
         EcoSphereModeSupport.PerfectOverclockResult overclockResult = EcoSphereModeSupport
             .consumeFluidForPerfectOverclock(
                 machine,
-                FluidRegistry.getFluid("lifeessence"),
+                lifeEssenceFluid,
                 DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
                 maximumOverclocks);
-        if (overclockResult == null)
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_enough_input"));
+        if (overclockResult == null) return EcoSphereModeResult.failure(
+            EcoSphereModeSupport.missingFluid(lifeEssenceFluid, DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL));
         return DirectedMobClonerRecipeCache
             .process(machine, recipeId, overclockResult.tier(), overclockResult.multiplier(), infiniteUpgrade);
     }
 
-    private static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine, int euTier) {
+    private static EcoSphereModeResult processFallback(TST_MegaTreeFarm machine, int euTier) {
+        Fluid lifeEssenceFluid = FluidRegistry.getFluid("lifeessence");
+        long fluidPerParallel = machine
+            .applyStructureFluidDiscount(DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL);
+        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
+            .consumeFluidForParallel(machine, lifeEssenceFluid, fluidPerParallel, euTier);
+        // The lowest power tier runs two parallels, so startup requires twice the per-parallel life essence.
+        if (parallelResult == null) return EcoSphereModeResult
+            .failure(EcoSphereModeSupport.missingFluid(lifeEssenceFluid, fluidPerParallel * 2));
+
+        FluidStack lifeEssence = BloodMagicHelper
+            .getLifeEssence((int) Math.min(Integer.MAX_VALUE, parallelResult.fluidCost()));
+        if (lifeEssence == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
+        return EcoSphereModeResult.standard(
+            SimpleCheckRecipeResult.ofSuccess("generating_life_essence"),
+            new ItemStack[0],
+            new FluidStack[] { lifeEssence },
+            parallelResult.tier());
+    }
+
+    private static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine) {
         int recipeId = machine.beginDirectedMobClonerDebugRun();
-        EcoSphereModeResult result;
-        if (recipeId == 0) {
-            FluidStack lifeEssence = BloodMagicHelper.getLifeEssence(20);
-            if (lifeEssence == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_recipe"));
-            result = new EcoSphereModeResult(
-                SimpleCheckRecipeResult.ofSuccess("generating_life_essence"),
-                new ItemStack[0],
-                new FluidStack[] { lifeEssence },
-                EcoSphereModeSupport.calculateEut(euTier),
-                5);
-        } else {
-            result = DirectedMobClonerRecipeCache.processDebug(machine, recipeId);
-        }
+        EcoSphereModeResult result = DirectedMobClonerRecipeCache.processDebug(machine, recipeId);
         if (result.result()
             .wasSuccessful()) {
             machine.advanceDirectedMobClonerDebugRun(recipeId >= DirectedMobClonerRecipeCache.getLastRecipeId());
@@ -119,10 +107,4 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         return false;
     }
 
-    private static boolean hasIntegratedCircuit(TST_MegaTreeFarm machine) {
-        for (ItemStack input : machine.getStoredInputs()) {
-            if (input != null && input.getItem() instanceof ItemIntegratedCircuit) return true;
-        }
-        return false;
-    }
 }

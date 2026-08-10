@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.github.bsideup.jabel.Desugar;
 import com.kuba6000.mobsinfo.api.MobDrop;
 import com.kuba6000.mobsinfo.api.MobRecipe;
 import com.kuba6000.mobsinfo.api.event.PostMobRegistrationEvent;
@@ -30,7 +32,9 @@ import com.kuba6000.mobsinfo.api.utils.ModUtils;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.objects.XSTR;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerRecipeCache {
@@ -83,7 +87,7 @@ public final class DirectedMobClonerRecipeCache {
         for (MobDrop drop : sourceDrops) {
             if (drop.stack == null || drop.stack.getItem() == null
                 || drop.playerOnly
-                || DirectedMobClonerDropWhenExclusion.contains(drop.stack)) continue;
+                || DropWhenExclusion.contains(drop.stack)) continue;
             double durabilityExpectation = calculateDurabilityExpectation(drop, damageWeight);
             ItemStack sanitized = sanitizeCachedDrop(drop.stack);
             DirectedMobClonerDropConversion.ConversionResult conversion = DirectedMobClonerDropConversion
@@ -222,6 +226,10 @@ public final class DirectedMobClonerRecipeCache {
         return recipe != null && recipe.boss();
     }
 
+    public static boolean isValidRecipeId(int recipeId) {
+        return recipeId >= 1 && recipeId <= getLastRecipeId();
+    }
+
     public static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
         long multiplier, boolean infiniteUpgrade) {
         return process(machine, recipeId, effectiveTier, multiplier, infiniteUpgrade, MODE_RECIPE_DURATION);
@@ -229,8 +237,7 @@ public final class DirectedMobClonerRecipeCache {
 
     public static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine, int recipeId) {
         boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
-        if (isBossRecipe(recipeId) && !infiniteUpgrade)
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
+        if (isBossRecipe(recipeId) && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
         if (infiniteUpgrade) voltageTier += 4;
         int overclocks = Math.max(0, voltageTier - (isBossRecipe(recipeId) ? 6 : 4));
@@ -240,9 +247,8 @@ public final class DirectedMobClonerRecipeCache {
     private static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
         long multiplier, boolean infiniteUpgrade, int duration) {
         CachedRecipe recipe = recipesById.get(recipeId);
-        if (recipe == null) return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("no_recipe"));
-        if (recipe.boss() && !infiniteUpgrade)
-            return EcoSphereModeResult.failure(SimpleCheckRecipeResult.ofFailure("boss_upgrade_required"));
+        if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        if (recipe.boss() && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
 
         List<ItemStack> outputs = new ArrayList<>();
         double durationMultiplier = (double) MODE_RECIPE_DURATION
@@ -276,6 +282,49 @@ public final class DirectedMobClonerRecipeCache {
         if (value <= 0 || multiplier <= 0) return 0;
         if (value > Long.MAX_VALUE / multiplier) return Long.MAX_VALUE;
         return value * multiplier;
+    }
+
+    private enum DropWhenExclusion {
+
+        CRYSTALLIZED_ESSENCE("Thaumcraft", "ItemCrystalEssence"),
+        OPENBLOCKS_TROPHY("OpenBlocks", "trophy"),
+        WEAK_BLOOD_SHARD("AWWayofTime", "weakBloodShard"),
+        DRACONIC_MOB_SOUL("DraconicEvolution", "mobSoul"),
+        FORBIDDEN_EMERALD_FRAGMENT("ForbiddenMagic", "FMResource", 0),
+        FORBIDDEN_SIN_SHARDS("ForbiddenMagic", "NetherShard"),
+        WITCHERY_TORN_PAGE("witchery", "ingredient", 160),
+        TCONSTRUCT_RED_HEART("TConstruct", "heartCanister", 1),
+        TCONSTRUCT_YELLOW_HEART("TConstruct", "heartCanister", 3),
+        ETFUTURUM_WITHER_ROSE("etfuturum", "wither_rose"),
+        EXTRA_UTILITIES_SOUL_FRAGMENT("ExtraUtilities", "mini-soul", 3);
+
+        private static final int ANY_META = -1;
+
+        private final String modId;
+        private final String registryName;
+        private final int metadata;
+
+        DropWhenExclusion(String modId, String registryName) {
+            this(modId, registryName, ANY_META);
+        }
+
+        DropWhenExclusion(String modId, String registryName, int metadata) {
+            this.modId = modId;
+            this.registryName = registryName;
+            this.metadata = metadata;
+        }
+
+        private static boolean contains(ItemStack stack) {
+            if (stack == null || stack.getItem() == null) return false;
+            GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+            if (identifier == null) return false;
+            for (DropWhenExclusion exclusion : values()) {
+                if (!exclusion.modId.equalsIgnoreCase(identifier.modId)) continue;
+                if (!exclusion.registryName.equals(identifier.name)) continue;
+                if (exclusion.metadata == ANY_META || exclusion.metadata == stack.getItemDamage()) return true;
+            }
+            return false;
+        }
     }
 
     private static final class PendingRecipe {
@@ -324,48 +373,9 @@ public final class DirectedMobClonerRecipeCache {
         }
     }
 
-    private static final class CachedRecipe {
-
-        private final int id;
-        private final String mobName;
-        private final String localizedName;
-        private final boolean boss;
-        private final int eecDuration;
-        private final List<CachedDrop> drops;
-
-        private CachedRecipe(int id, String mobName, String localizedName, boolean boss, int eecDuration,
-            List<CachedDrop> drops) {
-            this.id = id;
-            this.mobName = mobName;
-            this.localizedName = localizedName;
-            this.boss = boss;
-            this.eecDuration = eecDuration;
-            this.drops = drops;
-        }
-
-        private int id() {
-            return id;
-        }
-
-        private String mobName() {
-            return mobName;
-        }
-
-        private String localizedName() {
-            return localizedName;
-        }
-
-        private boolean boss() {
-            return boss;
-        }
-
-        private int eecDuration() {
-            return eecDuration;
-        }
-
-        private List<CachedDrop> drops() {
-            return drops;
-        }
+    @Desugar
+    private record CachedRecipe(int id, String mobName, String localizedName, boolean boss, int eecDuration,
+        List<CachedDrop> drops) {
 
         private ItemStack firstOutput() {
             return drops.isEmpty() ? null
@@ -375,35 +385,8 @@ public final class DirectedMobClonerRecipeCache {
         }
     }
 
-    private static final class CachedDrop {
-
-        private final ItemStack stack;
-        private final int chance;
-        private final double durabilityExpectation;
-        private final double probabilityMultiplier;
-
-        private CachedDrop(ItemStack stack, int chance, double durabilityExpectation, double probabilityMultiplier) {
-            this.stack = stack;
-            this.chance = chance;
-            this.durabilityExpectation = durabilityExpectation;
-            this.probabilityMultiplier = probabilityMultiplier;
-        }
-
-        private ItemStack stack() {
-            return stack;
-        }
-
-        private int chance() {
-            return chance;
-        }
-
-        private double durabilityExpectation() {
-            return durabilityExpectation;
-        }
-
-        private double probabilityMultiplier() {
-            return probabilityMultiplier;
-        }
-    }
+    @Desugar
+    private record CachedDrop(ItemStack stack, int chance, double durabilityExpectation,
+        double probabilityMultiplier) {}
 
 }

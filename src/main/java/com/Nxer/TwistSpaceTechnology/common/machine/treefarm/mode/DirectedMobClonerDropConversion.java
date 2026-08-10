@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.github.bsideup.jabel.Desugar;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Materials;
@@ -250,17 +251,11 @@ public enum DirectedMobClonerDropConversion {
         }
     }
 
-    public static final class ConversionResult {
+    @Desugar
+    public record ConversionResult(boolean matched, List<ConvertedOutput> outputs) {
 
         private static final ConversionResult UNMATCHED = new ConversionResult(false, Collections.emptyList());
         private static final ConversionResult DISCARDED = new ConversionResult(true, Collections.emptyList());
-        private final boolean matched;
-        private final List<ConvertedOutput> outputs;
-
-        private ConversionResult(boolean matched, List<ConvertedOutput> outputs) {
-            this.matched = matched;
-            this.outputs = outputs;
-        }
 
         private static ConversionResult unmatched() {
             return UNMATCHED;
@@ -273,32 +268,8 @@ public enum DirectedMobClonerDropConversion {
         private static ConversionResult converted(List<ConvertedOutput> outputs) {
             return new ConversionResult(true, outputs);
         }
-
-        public boolean matched() {
-            return matched;
-        }
-
-        public List<ConvertedOutput> outputs() {
-            return outputs;
-        }
     }
 
-    public static final class ConvertedOutput {
-
-        private final ItemStack stack;
-        private final double probabilityMultiplier;
-
-        private ConvertedOutput(ItemStack stack, double probabilityMultiplier) {
-            this.stack = stack;
-            this.probabilityMultiplier = probabilityMultiplier;
-        }
-
-        public ItemStack stack() {
-            return stack;
-        }
-
-        public double probabilityMultiplier() {
-            return probabilityMultiplier;
-        }
-    }
+    @Desugar
+    public record ConvertedOutput(ItemStack stack, double probabilityMultiplier) {}
 }
