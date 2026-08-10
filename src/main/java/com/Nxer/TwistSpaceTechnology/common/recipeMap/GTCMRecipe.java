@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.recipeMap;
 
+import static com.Nxer.TwistSpaceTechnology.config.Config.Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Optional;
@@ -366,13 +368,19 @@ public class GTCMRecipe {
     // #tr tst.recipe.advCircuitAssemblyLineRecipes
     // # Adv Circuit Assembly Line (Actual recipe pool at runtime)
     // #zh_CN 进阶电路装配线(运行时实际配方池)
-    public static final RecipeMap<RecipeMapBackend> advCircuitAssemblyLineRecipes = RecipeMapBuilder
-        .of("tst.recipe.advCircuitAssemblyLineRecipes")
-        .maxIO(6, 1, 1, 0)
-        .minInputs(1, 1)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
-        .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
-        .build();
+    public static final RecipeMap<RecipeMapBackend> advCircuitAssemblyLineRecipes = Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe
+        ? RecipeMapBuilder.of("tst.recipe.advCircuitAssemblyLineRecipes")
+            .maxIO(6, 1, 1, 0)
+            .minInputs(1, 1)
+            .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.AdvCircuitAssemblyLine.get(1)))
+            .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
+            .build()
+        : RecipeMapBuilder.of("tst.recipe.advCircuitAssemblyLineRecipes")
+            .maxIO(6, 1, 1, 0)
+            .minInputs(1, 1)
+            .disableRegisterNEI()
+            .progressBar(GTUITextures.PROGRESSBAR_CIRCUIT_ASSEMBLER)
+            .build();
 
     // #tr tst.recipe.RapidHeatExchangeRecipes
     // # Rapid Heat Exchange

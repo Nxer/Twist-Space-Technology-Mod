@@ -149,13 +149,16 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         clearHatches();
+        mSetTier = 0;
 
         if (checkPiece(STRUCTURE_PIECE_GAS, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, errors)) {
             mSetTier = 1;
-        } else
+        } else {
+            clearHatches();
             if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
                 mSetTier = 2;
             }
+        }
 
         if (mSetTier == 0) return;
 

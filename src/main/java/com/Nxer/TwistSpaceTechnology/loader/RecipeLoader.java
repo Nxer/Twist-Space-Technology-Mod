@@ -37,7 +37,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaSolarPane
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaStoneBreakerRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MegaUniversalSpaceStationRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MicroSpaceTimeFabricatorioRecipePool;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.NeutronActivatorWithEURecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.PreciseHighEnergyPhotonicQuantumMasterRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.RapidHeatExchangeRecipePool;
@@ -54,6 +54,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidHeaterRe
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FluidSolidifierRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.FusionReactorRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.MixerRecipePool;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NACRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.NanoForgeRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.ParticleColliderRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.QFTRecipePool;
@@ -104,12 +105,12 @@ public class RecipeLoader {
         SpaceAssemblerRecipePool.loadRecipes();
         TCRecipePool.loadRecipes();
         FluidSolidifierRecipePool.loadRecipes();
+        NACRecipePool.loadRecipes();
         DragonBloodRecipe.loadRecipes();
         DTPFRecipePool.loadRecipes();
         // TST Recipe Map
         IntensifyChemicalDistorterRecipePool.loadRecipes();
         PreciseHighEnergyPhotonicQuantumMasterRecipePool.loadRecipes();
-        MiracleTopRecipePool.loadRecipes();
         CrystallineInfinitierRecipePool.loadRecipes();
         DSPRecipePool.loadRecipes();
         MegaUniversalSpaceStationRecipePool.loadRecipes();
@@ -129,7 +130,6 @@ public class RecipeLoader {
         BloodyHellRecipePool.loadRecipes();
         MegaStoneBreakerRecipePool.loadRecipes();
         IndustrialAlchemyTowerRecipePool.loadRecipes();
-        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         RapidHeatExchangeRecipePool.loadRecipes();
         DeployedNanoCoreRecipePool.loadRecipes();
         SimpleFurnaceFuelPool.loadRecipes();
@@ -165,6 +165,8 @@ public class RecipeLoader {
 
         StellarForgeRecipePool.loadOnServerStarted();
         TreeGrowthSimulatorWithoutToolFakeRecipe.loadRecipes();
+        MiracleTopRecipePool.loadRecipes();
+        CircuitAssemblyLineWithoutImprintRecipePool.loadRecipes();
         if (Config.Enable_IndustrialMagicMatrix) {
             new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
