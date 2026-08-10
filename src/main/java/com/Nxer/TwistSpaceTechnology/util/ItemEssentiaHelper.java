@@ -209,18 +209,28 @@ public class ItemEssentiaHelper {
 
     /**
      * Check whether the given {@link ItemStack} is a glass ampoule
-     * ({@code ItemEssence} damage=1) or a {@code ItemCrystalEssence}.
-     * <p>
-     * Both types carry {@link Aspect} data in NBT and need to be converted
-     * to {@link ItemAspect} for NEI display.
+     * ({@code ItemEssence} damage=1).<br>
+     * Ampoules carry {@link Aspect} data in NBT and are converted by default.
      *
      * @param stack The item to check.
-     * @return True if the item is a glass ampoule or crystal essence.
+     * @return True if the item is a glass ampoule.
      */
     public static boolean isGlassAmpoule(ItemStack stack) {
         if (stack == null || stack.stackSize <= 0) return false;
-        return (stack.getItem() instanceof thaumcraft.common.items.ItemEssence && stack.getItemDamage() == 1)
-            || stack.getItem() instanceof thaumcraft.common.items.ItemCrystalEssence;
+        return stack.getItem() instanceof thaumcraft.common.items.ItemEssence && stack.getItemDamage() == 1;
+    }
+
+    /**
+     * Check whether the given {@link ItemStack} is a {@code ItemCrystalEssence}.<br>
+     * Crystal essences also carry {@link Aspect} data, but their conversion is optional
+     * (off by default) because they are actual items rather than empty containers.
+     *
+     * @param stack The item to check.
+     * @return True if the item is a crystal essence.
+     */
+    public static boolean isCrystalEssence(ItemStack stack) {
+        if (stack == null || stack.stackSize <= 0) return false;
+        return stack.getItem() instanceof thaumcraft.common.items.ItemCrystalEssence;
     }
 
     // ========================================================
@@ -284,18 +294,22 @@ public class ItemEssentiaHelper {
     }
 
     /**
-     * Scan a pattern's NBT and replace any glass ampoule or {@code ItemCrystalEssence}
+     * Scan a pattern's NBT and replace glass ampoules and/or {@code ItemCrystalEssence}
      * entries in both {@code "in"} and {@code "out"} lists with {@link ItemAspect}.
+     * The two conversions are independent and gated separately.
      * <p>
      * This is the public entry point called by the Mixin.
      *
-     * @param tag The pattern's NBTTagCompound.
+     * @param tag                   The pattern's NBTTagCompound.
+     * @param convertGlassAmpoule   Whether to convert glass ampoules.
+     * @param convertCrystalEssence Whether to convert crystal essences.
      * @return True if any replacement was made.
      */
-    public static boolean convertPatternNBT(NBTTagCompound tag) {
+    public static boolean convertPatternNBT(NBTTagCompound tag, boolean convertGlassAmpoule,
+        boolean convertCrystalEssence) {
         boolean modified = false;
-        if (convertPatternNBTList(tag, "in")) modified = true;
-        if (convertPatternNBTList(tag, "out")) modified = true;
+        if (convertPatternNBTList(tag, "in", convertGlassAmpoule, convertCrystalEssence)) modified = true;
+        if (convertPatternNBTList(tag, "out", convertGlassAmpoule, convertCrystalEssence)) modified = true;
         return modified;
     }
 
@@ -309,11 +323,14 @@ public class ItemEssentiaHelper {
      * (AE2's {@code getInputs()} iterates the full list, no length limit).</li>
      * </ol>
      *
-     * @param tag The parent NBTTagCompound.
-     * @param key The list key, either {@code "in"} or {@code "out"}.
+     * @param tag                   The parent NBTTagCompound.
+     * @param key                   The list key, either {@code "in"} or {@code "out"}.
+     * @param convertGlassAmpoule   Whether to convert glass ampoules.
+     * @param convertCrystalEssence Whether to convert crystal essences.
      * @return True if any replacement was made.
      */
-    private static boolean convertPatternNBTList(NBTTagCompound tag, String key) {
+    private static boolean convertPatternNBTList(NBTTagCompound tag, String key, boolean convertGlassAmpoule,
+        boolean convertCrystalEssence) {
         if (!tag.hasKey(key)) return false;
 
         NBTTagList list = tag.getTagList(key, net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
@@ -343,7 +360,8 @@ public class ItemEssentiaHelper {
             long realCount = itemTag.hasKey("Cnt") ? itemTag.getLong("Cnt") : 1L;
             mcStack.stackSize = (int) Math.max(1L, Math.min(realCount, Integer.MAX_VALUE));
 
-            if (!isGlassAmpoule(mcStack)) {
+            if (!((isGlassAmpoule(mcStack) && convertGlassAmpoule)
+                || (isCrystalEssence(mcStack) && convertCrystalEssence))) {
                 slots[i] = itemTag;
                 continue;
             }

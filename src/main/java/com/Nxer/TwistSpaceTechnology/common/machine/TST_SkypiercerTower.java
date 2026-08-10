@@ -52,7 +52,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
@@ -495,7 +494,18 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
     @Override
     public String getMachineModeName() {
-        return StatCollector.translateToLocal("SkypiercerTower.mode." + machineMode);
+        return TextEnums.tr("SkypiercerTower.mode." + machineMode);
+        // spotless:off
+        // #tr SkypiercerTower.mode.0
+        // #en_US Passive Mode
+        // #zh_CN 被动模式
+        // #tr SkypiercerTower.mode.1
+        // #en_US Crystal Essence Mode
+        // #zh_CN 晶化源质模式
+        // #tr SkypiercerTower.mode.2
+        // #en_US Essentia Mode
+        // #zh_CN 源质模式
+        // spotless:on
     }
 
     @Override

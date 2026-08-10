@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.ASPECT_SLOT_OFF;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SkypiercerTower;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
@@ -32,7 +34,6 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
 
     private static final int CELL_SIZE = 18;
     private static final int COLS = 10;
-    private static final int TOOLTIP_DELAY = 500;
 
     public TST_Gui_SkypiercerTower(TST_SkypiercerTower multiblock) {
         super(multiblock);
@@ -60,7 +61,12 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 }
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(IKey.lang("SkypiercerTower.UI.AspectSelection.name")))
+            .tooltipBuilder(t -> t.addLine(TextEnums.tr("SkypiercerTower.UI.AspectSelection.name")))
+            // spotless:off
+            // #tr SkypiercerTower.UI.AspectSelection.name
+            // #en_US Aspect Selection
+            // #zh_CN 源质选择
+            // spotless:on
             .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 
@@ -142,7 +148,12 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 syncer.setValue(!syncer.getValue());
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(IKey.lang("SkypiercerTower.UI.AspectSelection.SelectAll")))
+            .tooltipBuilder(t -> t.addLine(TextEnums.tr("SkypiercerTower.UI.AspectSelection.SelectAll")))
+            // spotless:off
+            // #tr SkypiercerTower.UI.AspectSelection.SelectAll
+            // #en_US Select All / Deselect All
+            // #zh_CN 全选/取消全选
+            // spotless:on
             .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 
@@ -167,10 +178,7 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 syncer.setValue(!syncer.getValue());
                 return true;
             })
-            .tooltipBuilder(t -> {
-                t.addLine(IKey.lang(aspect.getName()));
-                t.addLine(IKey.lang("Tag: " + aspect.getTag()));
-            })
+            .tooltipBuilder(t -> { t.addLine(IKey.lang(aspect.getName())); })
             .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 }

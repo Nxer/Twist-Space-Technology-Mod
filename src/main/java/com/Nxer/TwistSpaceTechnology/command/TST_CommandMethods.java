@@ -170,6 +170,19 @@ public class TST_CommandMethods implements IDSP_IO {
 
         help_dsp_setSolarSail(sender);
         sender.addChatMessage(
+            new ChatComponentText(
+                "↓ [AE&TC] Toggle AE2 pattern conversion on encode: glass ampoules / crystal essences → aspects. ↓"));
+        sender.addChatMessage(
+            new ChatComponentText(
+                "/tst ae_pattern_conversion " + EnumChatFormatting.GREEN
+                    + "<status>"
+                    + EnumChatFormatting.RESET
+                    + "  or  "
+                    + EnumChatFormatting.AQUA
+                    + "<ampoule|crystal> "
+                    + EnumChatFormatting.GREEN
+                    + "<on|off>"));
+        sender.addChatMessage(
             new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------------------------"));
     }
 
