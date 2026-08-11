@@ -42,8 +42,8 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
         EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
             .consumeFluidForParallel(machine, CropsNHFluids.enrichedFertilizer, fertilizerPerParallel, euTier);
         // The lowest power tier runs two parallels, so startup requires twice the per-parallel fertilizer.
-        if (parallelResult == null) return EcoSphereModeResult
-            .failure(EcoSphereModeSupport.missingFluid(CropsNHFluids.enrichedFertilizer, fertilizerPerParallel * 2));
+        if (parallelResult == null) return EcoSphereModeResult.failure(
+            EcoSphereModeSupport.missingFluid(machine, CropsNHFluids.enrichedFertilizer, fertilizerPerParallel * 2));
 
         return EcoSphereModeResult.standard(
             CheckRecipeResultRegistry.SUCCESSFUL,

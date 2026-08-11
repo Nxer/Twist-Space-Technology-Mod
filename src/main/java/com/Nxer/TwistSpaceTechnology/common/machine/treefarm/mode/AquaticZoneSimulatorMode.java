@@ -24,6 +24,7 @@ import com.github.bsideup.jabel.Desugar;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
@@ -47,6 +48,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
         // Read the input fluid once to select the recipe and its fluid cost.
         AquaticRecipe recipe = selectRecipe(machine);
+        if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         if (recipe.growsAlgae() && machine.getModeBeaconTier() < 2)
             return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
 
@@ -55,9 +57,10 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         long fluidPerParallel = machine.applyStructureFluidDiscount(recipe.fluidPerParallel());
         EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
             .consumeFluidForParallel(machine, recipe.fluid(), fluidPerParallel, euTier);
+
         // The lowest power tier runs two parallels, so startup requires twice the per-parallel fluid.
-        if (parallelResult == null)
-            return EcoSphereModeResult.failure(EcoSphereModeSupport.missingFluid(recipe.fluid(), fluidPerParallel * 2));
+        if (parallelResult == null) return EcoSphereModeResult
+            .failure(EcoSphereModeSupport.missingFluid(machine, recipe.fluid(), fluidPerParallel * 2));
 
         List<ItemStack> outputs = recipe.growsAlgae() ? processUnknownWaterOutputs(parallelResult, focusStack)
             : processStandardOutputs(machine, parallelResult, focusStack);
@@ -75,10 +78,14 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             if (input.getFluid() == unknownWater) {
                 return new AquaticRecipe(unknownWater, AquaticZoneSimulatorFakeRecipe.UNKNOWN_WATER_PER_PARALLEL, true);
             }
-            if (input.getFluid() == distilledWater) break;
+            if (input.getFluid() == distilledWater) {
+                return new AquaticRecipe(
+                    distilledWater,
+                    AquaticZoneSimulatorFakeRecipe.DISTILLED_WATER_PER_PARALLEL,
+                    false);
+            }
         }
-        // Missing or unsupported fluids fall back to the normal distilled-water requirement.
-        return new AquaticRecipe(distilledWater, AquaticZoneSimulatorFakeRecipe.DISTILLED_WATER_PER_PARALLEL, false);
+        return null;
     }
 
     private static CheckRecipeResult getRunningResult(boolean growsAlgae, ItemStack focusStack) {
@@ -119,6 +126,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         for (ItemStack recipeStack : AquaticZoneSimulatorFakeRecipe.WatersOutputs) {
             ItemStack output = recipeStack.copy();
             int chance = AquaticZoneSimulatorFakeRecipe.WatersChances.get(getItemStackString(output));
+            if (focusMode) chance = output.isItemEqual(focusStack) ? chance * 50 : Math.max(chance / 50, 1);
             int random = XSTR.XSTR_INSTANCE.nextInt(AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE);
             double tierChance = Math.log(parallelResult.tier() + 2) / Math.log(2);
             if (machine.isOffspring(output)) {
@@ -127,7 +135,6 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
                 addSplitStack(outputs, output, 1);
                 continue;
             }
-            if (focusMode) chance = output.isItemEqual(focusStack) ? chance * 50 : Math.max(chance / 50, 1);
             addRandomOutput(outputs, output, chance, random, tierChance, parallelResult.multiplier());
         }
         return outputs;
@@ -139,7 +146,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         long maximumInputPower = (long) Integer.MAX_VALUE * Integer.MAX_VALUE;
         int maximumInputTier = (int) Math.floor(TstUtils.calculateVoltageTier(maximumInputPower));
         double maxTierChance = Math.log(maxVoltageTier + 2) / Math.log(2);
-        double probability = 0.0005 * baseChance * tierChance / maxTierChance;
+        double probability = 0.00005 * baseChance * tierChance / maxTierChance;
         if (machine.isTierTwo()) probability *= AquaticZoneSimulatorFakeRecipe.OFFSPRING_TIER_TWO_MULTIPLIER;
 
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
@@ -147,19 +154,18 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             .max(0, Math.min(1, (double) (voltageTier - maxVoltageTier) / (maximumInputTier - maxVoltageTier)));
         // Voltage gain rises slowly near MAX and reaches 1.6x at the maximum input power.
         double voltageMultiplier = 1 + 0.6 * voltageProgress * voltageProgress;
-        return toChancePoints(probability * voltageMultiplier);
-    }
-
-    private static int toChancePoints(double probability) {
         return (int) Math.min(
             AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE,
-            Math.round(probability * AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE));
+            Math.round(probability * voltageMultiplier * AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE));
     }
 
     private static void addRandomOutput(List<ItemStack> outputs, ItemStack template, int chance, int random,
         double tierChance, double multiplier) {
         if (random > chance * tierChance) return;
-        long amount = (long) (template.stackSize * multiplier * chance * random / 1_000_000d);
+        double amountScale = (double) AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE
+            * AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE
+            / 100;
+        long amount = (long) (template.stackSize * multiplier * chance * random / amountScale);
         addSplitStack(outputs, template, amount);
     }
 
@@ -167,8 +173,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         Map<String, Integer> availableOutputs = unknownWaterRecipe ? AquaticZoneSimulatorFakeRecipe.UnknownWaterChances
             : AquaticZoneSimulatorFakeRecipe.WatersChances;
         for (ItemStack input : machine.getStoredInputs()) {
-            // Offspring is a progression reward and cannot be selected as a focus target.
-            if (input == null || input.getItem() == null || machine.isOffspring(input)) continue;
+            if (input == null || input.getItem() == null) continue;
             if (availableOutputs.containsKey(getItemStackString(input))) return input;
         }
         return null;

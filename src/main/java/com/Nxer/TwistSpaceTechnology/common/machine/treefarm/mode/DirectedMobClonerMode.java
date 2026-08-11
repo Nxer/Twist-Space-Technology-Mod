@@ -64,7 +64,8 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                 DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
                 maximumOverclocks);
         if (overclockResult == null) return EcoSphereModeResult.failure(
-            EcoSphereModeSupport.missingFluid(lifeEssenceFluid, DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL));
+            EcoSphereModeSupport
+                .missingFluid(machine, lifeEssenceFluid, DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL));
         return DirectedMobClonerRecipeCache
             .process(machine, recipeId, overclockResult.tier(), overclockResult.multiplier(), infiniteUpgrade);
     }
@@ -77,7 +78,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
             .consumeFluidForParallel(machine, lifeEssenceFluid, fluidPerParallel, euTier);
         // The lowest power tier runs two parallels, so startup requires twice the per-parallel life essence.
         if (parallelResult == null) return EcoSphereModeResult
-            .failure(EcoSphereModeSupport.missingFluid(lifeEssenceFluid, fluidPerParallel * 2));
+            .failure(EcoSphereModeSupport.missingFluid(machine, lifeEssenceFluid, fluidPerParallel * 2));
 
         FluidStack lifeEssence = BloodMagicHelper
             .getLifeEssence((int) Math.min(Integer.MAX_VALUE, parallelResult.fluidCost()));
