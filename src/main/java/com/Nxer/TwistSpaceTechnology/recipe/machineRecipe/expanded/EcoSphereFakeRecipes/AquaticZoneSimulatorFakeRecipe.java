@@ -32,7 +32,7 @@ public class AquaticZoneSimulatorFakeRecipe {
     public static final int UNKNOWN_WATER_PER_PARALLEL = 10000;
     public static final int UNKNOWN_WATER_ALGAE_BASE_OUTPUT = 3;
     public static final int UNKNOWN_WATER_EMPTY_WEIGHT = 18;
-    public static final int CHANCE_SCALE = 10000;
+    public static final int CHANCE_SCALE = 100000;
     public static final int OFFSPRING_TIER_TWO_MULTIPLIER = 41;
 
     static FluidStack DistilledWaterStack = FluidRegistry

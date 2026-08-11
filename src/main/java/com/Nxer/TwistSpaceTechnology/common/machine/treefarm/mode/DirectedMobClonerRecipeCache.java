@@ -2,7 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,13 +32,13 @@ import com.kuba6000.mobsinfo.api.utils.ModUtils;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerRecipeCache {
 
     private static final int EEC_MIN_DURATION = 55;
+    private static final int MOB_INFO_CHANCE_SCALE = 10_000;
     private static final long EEC_RECIPE_EUT = 1920L;
     private static final double EEC_DIAMOND_SPIKES_DAMAGE = 9d;
     private static final Map<String, PendingRecipe> PENDING_RECIPES = new LinkedHashMap<>();
@@ -95,14 +94,18 @@ public final class DirectedMobClonerRecipeCache {
             if (!conversion.matched()) {
                 if (sanitized.isItemStackDamageable()) sanitized.setItemDamage(0);
                 drops.add(
-                    new CachedDrop(sanitized, Math.max(0, Math.min(10000, drop.chance)), durabilityExpectation, 1d));
+                    new CachedDrop(
+                        sanitized,
+                        Math.max(0, Math.min(MOB_INFO_CHANCE_SCALE, drop.chance)),
+                        durabilityExpectation,
+                        1d));
                 continue;
             }
             for (DirectedMobClonerDropConversion.ConvertedOutput converted : conversion.outputs()) {
                 drops.add(
                     new CachedDrop(
                         converted.stack(),
-                        Math.max(0, Math.min(CHANCE_SCALE, drop.chance)),
+                        Math.max(0, Math.min(MOB_INFO_CHANCE_SCALE, drop.chance)),
                         durabilityExpectation,
                         converted.probabilityMultiplier()));
             }
@@ -251,31 +254,22 @@ public final class DirectedMobClonerRecipeCache {
         if (recipe.boss() && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
 
         List<ItemStack> outputs = new ArrayList<>();
-        double durationMultiplier = (double) MODE_RECIPE_DURATION
-            / ((double) recipe.eecDuration() * recipe.eecDuration());
+        double durationMultiplier = 100 / ((double) recipe.eecDuration() * recipe.eecDuration());
         for (CachedDrop drop : recipe.drops()) {
-            int chance = drop.chance();
-            long amount = drop.stack().stackSize;
-            long successfulOperations = calculateChanceBasedOperations(
-                multiplier,
-                chance,
-                durationMultiplier * drop.durabilityExpectation() * drop.probabilityMultiplier());
-            EcoSphereModeSupport.addSplitStack(outputs, drop.stack(), multiplySaturated(amount, successfulOperations));
+            double outputAmount = drop.stack().stackSize * (double) multiplier
+                * drop.chance()
+                / MOB_INFO_CHANCE_SCALE
+                * durationMultiplier
+                * drop.durabilityExpectation()
+                * drop.probabilityMultiplier();
+            long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
+            EcoSphereModeSupport.addSplitStack(outputs, drop.stack(), amount);
         }
         return new EcoSphereModeResult(
             SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
             outputs.toArray(new ItemStack[0]),
             multiplySaturated(EEC_RECIPE_EUT, multiplier),
             duration);
-    }
-
-    private static long calculateChanceBasedOperations(long parallel, int chance, double chanceMultiplier) {
-        double expectedOperations = parallel * chance * chanceMultiplier / 10000d;
-        if (expectedOperations >= Long.MAX_VALUE) return Long.MAX_VALUE;
-        long operations = (long) Math.floor(expectedOperations);
-        int remainder = (int) Math.floor((expectedOperations - operations) * 10000d);
-        if (remainder > 0 && remainder > XSTR.XSTR_INSTANCE.nextInt(10000)) operations++;
-        return operations;
     }
 
     private static long multiplySaturated(long value, long multiplier) {
