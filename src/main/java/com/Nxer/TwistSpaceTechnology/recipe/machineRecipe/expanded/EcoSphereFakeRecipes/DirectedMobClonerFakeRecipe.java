@@ -11,8 +11,8 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerRecipeNumberKey;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerTierDisplayKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import crazypants.enderio.EnderIO;
@@ -43,7 +43,7 @@ public final class DirectedMobClonerFakeRecipe {
                 .itemInputs(circuit)
                 .itemOutputs(createDisplayOutputs(entry.getValue()))
                 .fluidInputs(lifeEssence)
-                .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 2)
+                .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 2)
                 .metadata(
                     MegaTreeFarmBeaconRequirementKey.INSTANCE,
                     entry.getValue()
@@ -70,7 +70,7 @@ public final class DirectedMobClonerFakeRecipe {
             .itemOutputs(lifeBucket)
             .fluidInputs(lifeEssenceInput)
             .fluidOutputs(lifeEssence)
-            .metadata(DirectedMobClonerTierDisplayKey.INSTANCE, 1)
+            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
             .metadata(MegaTreeFarmBeaconRequirementKey.INSTANCE, 1)
             .metadata(DirectedMobClonerRecipeNumberKey.INSTANCE, 0)
             .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, false)

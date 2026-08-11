@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerRecipeNumberKey;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerTierDisplayKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
@@ -22,8 +22,8 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
     @Override
     public void drawDescription(@NotNull RecipeDisplayInfo recipeInfo) {
         drawDurationInfo(recipeInfo);
-        DirectedMobClonerTierDisplayKey.INSTANCE
-            .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(DirectedMobClonerTierDisplayKey.INSTANCE));
+        MegaTreeFarmTierRequirementKey.INSTANCE
+            .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(MegaTreeFarmTierRequirementKey.INSTANCE));
         MegaTreeFarmBeaconRequirementKey.INSTANCE
             .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(MegaTreeFarmBeaconRequirementKey.INSTANCE));
         DirectedMobClonerRecipeNumberKey.INSTANCE
