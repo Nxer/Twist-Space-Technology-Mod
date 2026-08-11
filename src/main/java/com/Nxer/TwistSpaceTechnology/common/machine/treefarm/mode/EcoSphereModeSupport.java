@@ -27,8 +27,9 @@ public final class EcoSphereModeSupport {
         return (long) (8d * Math.pow(4, tier) * 15 / 16);
     }
 
-    public static CheckRecipeResult missingFluid(Fluid requiredFluid, long amount) {
+    public static CheckRecipeResult missingFluid(TST_MegaTreeFarm machine, Fluid requiredFluid, long amount) {
         if (requiredFluid == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        if (getAvailableFluid(machine, requiredFluid) <= 0) return CheckRecipeResultRegistry.NO_RECIPE;
         return SimpleResultWithText
             .outOfFluid(new FluidStack(requiredFluid, (int) Math.min(Integer.MAX_VALUE, amount)));
     }
@@ -36,8 +37,8 @@ public final class EcoSphereModeSupport {
     public static ParallelResult consumeFluidForParallel(TST_MegaTreeFarm machine, Fluid requiredFluid,
         long fluidPerParallel, int powerTier) {
         if (requiredFluid == null || fluidPerParallel <= 0 || powerTier < 1) return null;
-        if (!machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
         long availableFluid = getAvailableFluid(machine, requiredFluid);
+        if (availableFluid <= 0 || !machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
         long fluidParallel = availableFluid / fluidPerParallel;
         if (fluidParallel < 2) return null;
         int fluidTier = 63 - Long.numberOfLeadingZeros(fluidParallel);
@@ -56,8 +57,8 @@ public final class EcoSphereModeSupport {
     public static PerfectOverclockResult consumeFluidForPerfectOverclock(TST_MegaTreeFarm machine, Fluid requiredFluid,
         long fluidPerOperation, int maximumOverclocks) {
         if (requiredFluid == null || fluidPerOperation <= 0 || maximumOverclocks < 0) return null;
-        if (!machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
         long availableFluid = getAvailableFluid(machine, requiredFluid);
+        if (availableFluid <= 0 || !machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
         long fluidOperations = availableFluid / fluidPerOperation;
         if (fluidOperations < 1) return null;
         int fluidOverclocks = 0;

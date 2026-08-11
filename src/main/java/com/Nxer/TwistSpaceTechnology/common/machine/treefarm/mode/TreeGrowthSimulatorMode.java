@@ -24,6 +24,7 @@ import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.enums.Mods;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.util.GTModHandler;
 import gregtech.common.items.ItemIntegratedCircuit;
@@ -55,20 +56,17 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         FluidStack inputFluid = findInputFluid(machine);
 
         // The lowest power tier runs two parallels, so this and later startup checks require twice the fluid.
-        if (inputFluid == null) return EcoSphereModeResult
-            .failure(EcoSphereModeSupport.missingFluid(FluidRegistry.WATER, fluidPerParallel * 2));
+        if (inputFluid == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
 
         Fluid requiredFluid = inputFluid.getFluid();
         if (requiredFluid != FluidRegistry.WATER) {
             SpecialTreeRecipe specialRecipe = findSpecialRecipe(requiredFluid);
-            if (specialRecipe == null) return EcoSphereModeResult
-                .failure(EcoSphereModeSupport.missingFluid(FluidRegistry.WATER, fluidPerParallel * 2));
+            if (specialRecipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
             // Special trees require the upgraded tree beacon.
             if (machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
             fluidPerParallel = machine.applyStructureFluidDiscount(specialRecipe.amount);
             outputPerMode = specialRecipe.outputs;
         }
-
         // Read output circuits once and reuse the selected tree parts below.
         EnumSet<Mode> selectedModes = findSelectedModes(machine);
         if (selectedModes.isEmpty()) return EcoSphereModeResult.failure(MissingTreeOutputSelection);
@@ -79,8 +77,8 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
         EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
             .consumeFluidForParallel(machine, requiredFluid, fluidPerParallel, euTier);
-        if (parallelResult == null)
-            return EcoSphereModeResult.failure(EcoSphereModeSupport.missingFluid(requiredFluid, fluidPerParallel * 2));
+        if (parallelResult == null) return EcoSphereModeResult
+            .failure(EcoSphereModeSupport.missingFluid(machine, requiredFluid, fluidPerParallel * 2));
         float focusBonus = selectedModes.size() < availableOutputs
             ? 1 + (float) (availableOutputs - selectedModes.size()) / selectedModes.size() / 3
             : 1;
