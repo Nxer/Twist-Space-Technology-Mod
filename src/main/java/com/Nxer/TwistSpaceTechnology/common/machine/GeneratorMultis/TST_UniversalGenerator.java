@@ -155,6 +155,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
             mSetTier = 1;
         } else {
             clearHatches();
+            if (errors != null) errors.clear();
             if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
                 mSetTier = 2;
             }
