@@ -50,6 +50,7 @@ dependencies {
     implementation(gtnh("Universal-Singularities"))
     implementation(gtnh("MagicBees"))
     implementation(gtnh("ThaumicEnergistics"))
+    implementation(gtnh("AspectRecipeIndex"))
     implementation(gtnh("Botania"))
     implementation(gtnh("supersolarpanels"))
     implementation(gtnh("Electro-Magic-Tools"))

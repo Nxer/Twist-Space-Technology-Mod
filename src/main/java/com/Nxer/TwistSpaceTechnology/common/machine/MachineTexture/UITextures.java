@@ -33,4 +33,11 @@ public class UITextures {
     public static final UITexture HESTTD_NEIPic = UITexture.fullImage(TST_ID, "icons/Pictures/rapid_heat_exchanger");
     public static final com.gtnewhorizons.modularui.api.drawable.UITexture HESTTD_NEIPic_MUI1 = com.gtnewhorizons.modularui.api.drawable.UITexture
         .fullImage(TST_ID, "icons/Pictures/rapid_heat_exchanger");
+    public static final UITexture ASPECT_SLOT_OFF = UITexture.fullImage(TST_ID, "icons/UITextures/aspect_slot_off");
+    public static final UITexture SKYPIERCER_MODE_PASSIVE = UITexture
+        .fullImage(TST_ID, "icons/UITextures/ST_mode_passive");
+    public static final UITexture SKYPIERCER_MODE_CRYSTAL = UITexture
+        .fullImage(TST_ID, "icons/UITextures/ST_mode_crystal");
+    public static final UITexture SKYPIERCER_MODE_ESSENTIA = UITexture
+        .fullImage(TST_ID, "icons/UITextures/ST_mode_essentia");
 }

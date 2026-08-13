@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 import net.minecraft.block.Block;
 
 import com.Nxer.TwistSpaceTechnology.common.block.BlockArcaneHole;
+import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockEyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.common.block.BlockLaserBeacon;
@@ -66,7 +67,6 @@ public class TstBlocks {
 
     public static final Block BlockLargeSolarBoilerRender = new BlockLargeSolarBoilerRender();
 
-    // public static final BlockEssentiaDiscretizer BlockEssentiaDiscretizer = new
-    // BlockEssentiaDiscretizer().register();
+    public static final BlockEssentiaDiscretizer BlockEssentiaDiscretizer = new BlockEssentiaDiscretizer().register();
 
 }
