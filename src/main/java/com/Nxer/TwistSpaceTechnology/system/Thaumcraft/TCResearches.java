@@ -81,7 +81,7 @@ public class TCResearches {
             (new AspectList()).merge(Aspect.EARTH, 1)
                 .merge(Aspect.MECHANISM, 1)
                 .merge(Aspect.MAGIC, 1),
-            -1,
+            4,
             -2,
             3,
             GTCMItemList.ElvenWorkshop.get(1, 0)).setParents("BH_GAIA_PYLON")
@@ -99,7 +99,7 @@ public class TCResearches {
                 (new AspectList()).merge(Aspect.EARTH, 1)
                     .merge(Aspect.MECHANISM, 1)
                     .merge(Aspect.MAGIC, 1),
-                1,
+                -4,
                 -2,
                 5,
                 GTCMItemList.IndustrialMagicMatrix.get(1, 0))/* .setParents("ICHORIUM") */
@@ -132,8 +132,8 @@ public class TCResearches {
                     .merge(Aspect.PLANT, 1)
                     .merge(Aspect.ELDRITCH, 1)
                     .merge(Aspect.FLESH, 1),
-                2,
                 0,
+                -3,
                 10,
                 GTCMItemList.MegaTreeFarm.get(1, 0)).setPages(
                     // spotless:off
@@ -154,6 +154,66 @@ public class TCResearches {
                     .setParents("TST_WELCOME")
                     .setConcealed()
                     .registerResearchItem();
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_1
+            // # Eco-Sphere Mode Beacon: Arboreal Genesis
+            // #zh_CN 生态圈模式信标: 原木拟生
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_1
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_1.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_1",
+                -2,
+                -4,
+                GTCMItemList.MegaTreeFarmModeBeacon1.get(1),
+                "ECO_SPHERE_SIMULATOR");
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_2
+            // # Eco-Sphere Mode Beacon: Aquatic Simulation
+            // #zh_CN 生态圈模式信标: 水域模拟
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_2
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_2.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_2",
+                1,
+                -6,
+                GTCMItemList.MegaTreeFarmModeBeacon2.get(1),
+                "ECO_SPHERE_SIMULATOR");
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_3
+            // # Eco-Sphere Mode Beacon: Artificial Greenhouse
+            // #zh_CN 生态圈模式信标: 人工温室
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_3
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_3.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_3",
+                -1,
+                -6,
+                GTCMItemList.MegaTreeFarmModeBeacon3.get(1),
+                "ECO_SPHERE_SIMULATOR");
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_4
+            // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+            // #zh_CN 生态圈模式信标: 定向克隆
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_4
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_4.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_4",
+                2,
+                -4,
+                GTCMItemList.MegaTreeFarmModeBeacon4.get(1),
+                "ECO_SPHERE_SIMULATOR");
 
             // Offspring
             new ResearchItem(
@@ -169,7 +229,7 @@ public class TCResearches {
                     .merge(Aspect.EXCHANGE, 1)
                     .merge(Aspect.LIFE, 1),
                 3,
-                0,
+                -6,
                 10,
                 GTCMItemList.OffSpring.get(1, 0))
                     // #tr tc.research_text.OFFSPRING.1
@@ -177,8 +237,7 @@ public class TCResearches {
                     // #zh_CN 这是什么?
                     .setPages(new ResearchPage("tc.research_text.OFFSPRING.1"))
                     .setHidden()
-                    .setAspectTriggers(EVOLUTION)
-                    .setParents("ECO_SPHERE_SIMULATOR")
+                    .setParents("ECO_SPHERE_MODE_BEACON_2")
                     .registerResearchItem();
 
             // Evolution
@@ -194,8 +253,8 @@ public class TCResearches {
                 (new AspectList()).add(EVOLUTION, 1)
                     .add(Aspect.LIFE, 1)
                     .add(Aspect.EXCHANGE, 1),
-                4,
-                -1,
+                6,
+                -4,
                 5,
                 Mods.Gendustry.isModLoaded() ? GTModHandler.getModItem(Mods.Gendustry.ID, "LiquidDNABucket", 1)
                     : new ItemStack(Items.water_bucket, 1))
@@ -205,8 +264,7 @@ public class TCResearches {
                             // # <LINE>A sense of familiarity?
                             // #zh_CN <LINE>似曾相识?
                             new ResearchPage("tc.research_text.EVOLUTIO.1"))
-                        .setParents("OFFSPRING")
-                        .setConcealed()
+                        .setHidden()
                         .setRound()
                         .registerResearchItem();
 
@@ -229,7 +287,7 @@ public class TCResearches {
                     .add(Aspect.WATER, 1)
                     .add(Aspect.EXCHANGE, 1),
                 5,
-                0,
+                -6,
                 10,
                 GTCMItemList.FountOfEcology.get(1, 0)).setPages(
                     // spotless:off
@@ -244,6 +302,36 @@ public class TCResearches {
                     new ResearchPage("tc.research_text.FONT_OF_ECOLOGY.2"),
                     new ResearchPage(infusionRecipeFontOfEcology))
                     .setParents("OFFSPRING")
+                    .setSiblings("ECO_SPHERE_TIER_TWO")
+                    .setHidden()
+                    .registerResearchItem();
+
+            // #tr tc.research_name.ECO_SPHERE_MODE_BEACON_5
+            // # Eco-Sphere Mode Beacon: Directed Mob Cloning
+            // #zh_CN 生态圈模式信标: 定向克隆
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_5
+            // # Placeholder
+            // #zh_CN 占位符
+            // #tr tc.research_text.ECO_SPHERE_MODE_BEACON_5.1
+            // # Placeholder
+            // #zh_CN 占位符
+            registerModeBeaconResearch(
+                "ECO_SPHERE_MODE_BEACON_5",
+                4,
+                -4,
+                GTCMItemList.MegaTreeFarmModeBeacon5.get(1),
+                "ECO_SPHERE_MODE_BEACON_4");
+
+            new ResearchItem(
+                "ECO_SPHERE_TIER_TWO",
+                "TST",
+                new AspectList(),
+                7,
+                -6,
+                5,
+                GTCMItemList.AsepticGreenhouseCasing.get(1))
+                    .setPages(new ResearchPage("tc.research_text.ECO_SPHERE_TIER_TWO.1"))
+                    .setParents("FONT_OF_ECOLOGY")
                     .setConcealed()
                     .registerResearchItem();
         }
@@ -262,8 +350,8 @@ public class TCResearches {
                 new AspectList().merge(Aspect.LIFE, 1)
                     .merge(Aspect.MECHANISM, 1)
                     .merge(Aspect.MAGIC, 1),
-                1,
-                2,
+                4,
+                -1,
                 5,
                 GTCMItemList.BloodyHell.get(1, 0)).setPages(
                     // #tr tc.research_text.BLOODY_HELL.1
@@ -287,8 +375,8 @@ public class TCResearches {
                     new AspectList().merge(Aspect.LIFE, 1)
                         .merge(Aspect.MAGIC, 1)
                         .merge(Aspect.TOOL, 1),
-                    2,
-                    3,
+                    6,
+                    0,
                     5,
                     GTCMItemList.BloodOrbHatch.get(1, 0)).setPages(
                         // #tr tc.research_text.BLOOD_HATCH.1
@@ -313,8 +401,8 @@ public class TCResearches {
                 new AspectList().merge(Aspect.LIFE, 1)
                     .merge(Aspect.MAGIC, 1)
                     .merge(Aspect.TOOL, 1),
-                2,
-                5,
+                6,
+                -1,
                 5,
                 new ItemStack(TstBlocks.TimeBendingSpeedRune)).setPages(
                     // spotless:off
@@ -343,8 +431,8 @@ public class TCResearches {
                         .merge(Aspect.ENTROPY, 1)
                         .merge(Aspect.ORDER, 1)
                         .merge(Aspect.EXCHANGE, 1),
+                    -4,
                     -1,
-                    2,
                     9,
                     GTCMItemList.IndustrialAlchemyTower.get(1)).setPages(
                         // spotless:off
@@ -370,8 +458,8 @@ public class TCResearches {
                 new AspectList().merge(Aspect.DARKNESS, 4)
                     .merge(Aspect.VOID, 4)
                     .merge(Aspect.SENSES, 8),
-                -2,
-                2,
+                -6,
+                -1,
                 1,
                 new ItemStack(TstBlocks.BlockArcaneHole)).setPages(
                     // spotless:off
@@ -381,7 +469,7 @@ public class TCResearches {
                 // spotless:on
                     new ResearchPage(TextEnums.tr("tc.research_text.TST_ARCANE_HOLE.1")),
                     new ResearchPage(crucibleRecipeArcaneHole))
-                    .setParents("TST_WELCOME")
+                    .setParents(existingParentOrRoot("INDUSTRIAL_ALCHEMY_TOWER"))
                     .setSecondary()
                     .registerResearchItem();
         }
@@ -399,8 +487,8 @@ public class TCResearches {
                     .merge(Aspect.HUNGER, 1)
                     .merge(Aspect.MINE, 1)
                     .merge(Aspect.AURA, 1),
-                -2,
-                4,
+                -4,
+                0,
                 9,
                 GTCMItemList.PrimordialDisjunctus.get(1)).setPages(
                     // spotless:off
@@ -427,8 +515,8 @@ public class TCResearches {
                     .merge(Aspect.MAGIC, 1)
                     .merge(Aspect.AURA, 1)
                     .merge(Aspect.ENERGY, 1),
-                -2,
-                6,
+                -4,
+                1,
                 9,
                 GTCMItemList.SkypiercerTower.get(1)).setPages(
                     // spotless:off
@@ -516,8 +604,8 @@ public class TCResearches {
                     .merge(Aspect.HUNGER, 1)
                     .merge(Aspect.MOTION, 1)
                     .merge(Aspect.EXCHANGE, 1),
-                -2,
-                8,
+                -4,
+                2,
                 9,
                 GTCMItemList.InfusionMaterialDispenser.get(1)).setPages(
                     // spotless:off
@@ -575,4 +663,13 @@ public class TCResearches {
     private static String existingParentOrRoot(String researchKey) {
         return ResearchCategories.getResearch(researchKey) == null ? ROOT_RESEARCH : researchKey;
     }
+
+    private static void registerModeBeaconResearch(String key, int column, int row, ItemStack icon, String... parents) {
+        new ResearchItem(key, "TST", new AspectList(), column, row, 5, icon)
+            .setPages(new ResearchPage("tc.research_text." + key + ".1"))
+            .setParents(parents)
+            .setConcealed()
+            .registerResearchItem();
+    }
+
 }

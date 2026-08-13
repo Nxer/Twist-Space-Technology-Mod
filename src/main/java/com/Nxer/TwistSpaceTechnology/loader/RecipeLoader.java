@@ -26,6 +26,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.CrystallineIn
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DSPRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.DeployedNanoCoreRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.ArtificialGreenHouseFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.ElvenWorkshopRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.HyperSpacetimeTransformerRecipePool;
@@ -124,6 +125,7 @@ public class RecipeLoader {
         StellarForgeRecipePool.loadRecipes();
         HyperSpacetimeTransformerRecipePool.loadRecipes();
         AquaticZoneSimulatorFakeRecipe.loadRecipes();
+        ArtificialGreenHouseFakeRecipe.loadRecipes();
         NeutronActivatorWithEURecipePool.loadRecipes();
         MassFabricatorGenesisRecipePool.loadRecipes();
         MicroSpaceTimeFabricatorioRecipePool.loadRecipes();
@@ -172,7 +174,5 @@ public class RecipeLoader {
         }
     }
 
-    public static void loadRecipemixin() {
-        // new Mode3SimulatorFakeRecipe().loadRecipes();
-    }
+    public static void loadRecipemixin() {}
 }

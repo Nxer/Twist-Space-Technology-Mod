@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -49,6 +50,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.util.GTUtility;
+import gregtech.common.items.ItemIntegratedCircuit;
 
 /**
  * <h1>The Twist-Space-Technology Utilities.</h1>
@@ -164,6 +166,64 @@ public class TstUtils {
         return StatCollector.translateToLocal(key);
     }
 
+    private static final EnumChatFormatting[] RAINBOW_COLORS = { EnumChatFormatting.RED, EnumChatFormatting.GOLD,
+        EnumChatFormatting.YELLOW, EnumChatFormatting.GREEN, EnumChatFormatting.AQUA, EnumChatFormatting.BLUE,
+        EnumChatFormatting.LIGHT_PURPLE };
+
+    /**
+     * Applies an animated rainbow to the full text.
+     *
+     * @param text the text to color
+     * @return the text with a time-based rainbow color sequence
+     */
+    public static String animatedRainbowText(String text) {
+        return animatedRainbowText(text, 0);
+    }
+
+    /**
+     * Applies an animated rainbow from the requested character index.
+     * Characters before the index keep their original formatting.
+     *
+     * @param text       the text to color
+     * @param startIndex the first character to color
+     * @return the text with a time-based rainbow color sequence
+     */
+    public static String animatedRainbowText(String text, int startIndex) {
+        return animatedRainbowText(text, startIndex, 200L);
+    }
+
+    /**
+     * Applies an animated rainbow from the requested character index at the requested speed.
+     *
+     * @param text              the text to color
+     * @param startIndex        the first character to color
+     * @param animationInterval milliseconds between color shifts
+     * @return the text with a time-based rainbow color sequence
+     */
+    public static String animatedRainbowText(String text, int startIndex, long animationInterval) {
+        if (text == null || text.isEmpty()) return text;
+
+        int safeStartIndex = Math.max(0, Math.min(startIndex, text.length()));
+        long safeAnimationInterval = Math.max(1L, animationInterval);
+        int colorOffset = (int) ((System.currentTimeMillis() / safeAnimationInterval) % RAINBOW_COLORS.length);
+        StringBuilder result = new StringBuilder(text.length() * 3);
+        result.append(text, 0, safeStartIndex);
+
+        int coloredCharacterIndex = 0;
+        for (int index = safeStartIndex; index < text.length(); index++) {
+            char character = text.charAt(index);
+            if (Character.isWhitespace(character)) {
+                result.append(character);
+                continue;
+            }
+            result.append(RAINBOW_COLORS[(colorOffset + coloredCharacterIndex) % RAINBOW_COLORS.length])
+                .append(character);
+            coloredCharacterIndex++;
+        }
+        return result.append(EnumChatFormatting.RESET)
+            .toString();
+    }
+
     /**
      * Build the machine info data array.
      *
@@ -206,7 +266,19 @@ public class TstUtils {
      * @return Which voltage tier the machine's maximum EU/t from its energy hatches should be in.
      */
     public static int getMachineTotalPowerTier(@NotNull MTEExtendedPowerMultiBlockBase<?> machine) {
-        return (int) Math.ceil(calculateVoltageTier(getMachineTotalPower(machine)));
+        return getPowerTier(getMachineTotalPower(machine));
+    }
+
+    public static int getPowerTier(long power) {
+        if (power <= 8) return 0;
+        int tier = 0;
+        long tierPower = 8;
+        while (power > tierPower) {
+            tier++;
+            if (tierPower > Long.MAX_VALUE / 4) return tier;
+            tierPower *= 4;
+        }
+        return tier;
     }
 
     /**
@@ -494,6 +566,19 @@ public class TstUtils {
             }
         }
         return newStack.toArray(new ItemStack[0]);
+    }
+
+    /**
+     * Sum the configuration value of every integrated circuit in the given item stacks.
+     * Each stack contributes its configuration value multiplied by its stack size.
+     */
+    public static int getIntegratedCircuitConfigurationSum(Iterable<ItemStack> itemStacks) {
+        int total = 0;
+        for (ItemStack itemStack : itemStacks) {
+            if (itemStack == null || !(itemStack.getItem() instanceof ItemIntegratedCircuit)) continue;
+            total += itemStack.getItemDamage() * itemStack.stackSize;
+        }
+        return total;
     }
 
     /**

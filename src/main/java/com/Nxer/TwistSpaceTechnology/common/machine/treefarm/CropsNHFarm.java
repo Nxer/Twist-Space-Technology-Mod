@@ -26,7 +26,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.gtnewhorizon.cropsnh.api.ICropCard;
 import com.gtnewhorizon.cropsnh.api.ISeedData;
+import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
 import com.gtnewhorizon.cropsnh.tileentity.TileEntityCropSticks;
 import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 
@@ -82,7 +84,28 @@ public class CropsNHFarm {
 
     public boolean createCropCache(ItemStack seed) {
         if (isCached(seed)) return true;
-        return createCrop(seed) || createVanillaCrop(seed);
+        if (createCrop(seed) || createVanillaCrop(seed)) return true;
+
+        // Use the CropsNH alternate-seed registry when a crop cannot be simulated as a normal block crop.
+        ICropCard crop = CropRegistry.instance.fromAlternateSeed(seed);
+        return crop != null && createAlternateSeedCrop(seed, crop);
+    }
+
+    private boolean createAlternateSeedCrop(ItemStack seedStack, ICropCard crop) {
+        List<Pair<ItemStack, Double>> toCache = new ArrayList<>();
+        for (Map.Entry<ItemStack, Integer> entry : crop.getDropTable()
+            .entrySet()) {
+            ItemStack stack = entry.getKey();
+            if (stack == null || stack.getItem() == null) continue;
+            double amount = stack.stackSize * entry.getValue() / 10_000d;
+            if (amount > 0) toCache.add(Pair.of(stack.copy(), amount));
+        }
+        if (toCache.isEmpty()) return false;
+
+        output = toCache.toArray(new Pair[0]);
+        lastCache = seedStack.copy();
+        seedData = null;
+        return true;
     }
 
     public boolean isCached(ItemStack seed) {
@@ -211,8 +234,8 @@ public class CropsNHFarm {
                 ItemStack seedSafe = seedStack.copy();
                 seedSafe.stackSize = 1;
                 // first check if we dropped an item identical to our seed item.
-                int inputSeedDropCountAfterRemoval = (int) Math.round(simulator.get(TST_ItemID.create(seedSafe)))
-                    - NUMBER_OF_DROPS_TO_SIMULATE;
+                double simulatedSeedDrops = simulator.getOrDefault(TST_ItemID.create(seedSafe), 0d);
+                int inputSeedDropCountAfterRemoval = (int) Math.round(simulatedSeedDrops) - NUMBER_OF_DROPS_TO_SIMULATE;
                 if (inputSeedDropCountAfterRemoval > 0) {
                     simulator.put(TST_ItemID.create(seedSafe), (double) inputSeedDropCountAfterRemoval);
                 } else {

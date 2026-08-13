@@ -1,19 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
-import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.UnknowWater;
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NotEnoughWater;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
-import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -23,83 +16,66 @@ import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.util.GTStructureUtility.chainAllGlasses;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
-import static gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
-import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
+import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.CropsNHFarm;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.AquaticZoneSimulatorMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.ArtificialGreenHouseMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DirectedMobClonerMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.IEcoSphereMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.cleanroommc.modularui.drawable.UITexture;
-import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
-import forestry.api.arboriculture.ITree;
-import forestry.api.arboriculture.TreeManager;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
-import gregtech.api.enums.Mods;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
-import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
-import gregtech.api.structure.error.StructureErrors;
-import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.common.items.ItemIntegratedCircuit;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
-import ic2.core.init.BlocksItems;
-import ic2.core.init.InternalName;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
@@ -119,31 +95,107 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     // region Structure
 
+    public static final int MODE_RECIPE_DURATION = 20;
+    private static final int MODE_BEACON_CHECK_INTERVAL = 20;
+
     private int controllerTier = 0;
-    boolean checkWaterFinish = false;
-    boolean checkAirFinish = false;
-    boolean isFocusMode = false;
+    private int boundMode = -1;
+    private int pendingMode = -1;
+    private boolean modeBeaconPresent = false;
+    private boolean cleaningRequested = false;
+    private boolean cleaningRunActive = false;
+    private boolean cleaningCompleted = false;
+    private int directedMobClonerDebugRecipeId = 0;
+    private boolean directedMobClonerDebugActive = false;
+    private boolean directedMobClonerDebugStopPending = false;
+    private long availableInputPower = 0;
+    private String fluidAreaFluidName = "";
+    private boolean fluidAreaInitialized = false;
+    private int fluidAreaFillDuration = 0;
+    private FluidStack missingFluidAreaInput;
     private static ItemStack FountOfEcology;
     private static ItemStack Offspring;
-    // public ESSFakePlayer ESSPlayer = null;
-    // public final Random rand = new FastRandom();
-
-    public long fertilizerToConsume = 0;
-    public long waterToConsume = 0;
 
     @Override
     public int totalMachineMode() {
         /*
-         * 0 - Tree Growth Simulator
-         * 1 - Aqua Zone Simulator
+         * 0 - Arboreal Genesis
+         * 1 - Aquatic Simulation
          * 2 - Green House Simulator
+         * 3 - Directed Mob Cloning
          */
-        return 3;
+        return 4;
     }
 
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT/* , GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT */ };
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT };
+
+    public boolean isTierTwo() {
+        return getStructureTier() >= 2;
+    }
+
+    public int getStructureTier() {
+        return controllerTier + 1;
+    }
+
+    public int getModeBeaconTier() {
+        ItemStack beacon = getControllerSlot();
+        if (getModeFromBeacon(beacon) < 0) return 0;
+        return beacon.getItemDamage() % 2 + 1;
+    }
+
+    public boolean hasDirectedMobClonerInfiniteUpgrade() {
+        return getModeFromBeacon(getControllerSlot()) == 3 && hasSecondaryModeBeacon();
+    }
+
+    public boolean hasSecondaryModeBeacon() {
+        return getModeBeaconTier() == 2;
+    }
+
+    public long applyStructureFluidDiscount(long fluidAmount) {
+        return isTierTwo() ? Math.max(1, fluidAmount / 10) : fluidAmount;
+    }
+
+    public long getAvailableInputPower() {
+        return availableInputPower;
+    }
+
+    public int beginDirectedMobClonerDebugRun() {
+        if (!directedMobClonerDebugActive) {
+            directedMobClonerDebugActive = true;
+            directedMobClonerDebugRecipeId = 1;
+            directedMobClonerDebugStopPending = false;
+            markDirty();
+        }
+        return directedMobClonerDebugRecipeId;
+    }
+
+    public void advanceDirectedMobClonerDebugRun(boolean lastRecipe) {
+        if (lastRecipe) {
+            directedMobClonerDebugStopPending = true;
+        } else {
+            directedMobClonerDebugRecipeId++;
+        }
+        markDirty();
+    }
+
+    public void resetDirectedMobClonerDebugRun() {
+        if (!directedMobClonerDebugActive && directedMobClonerDebugRecipeId == 0 && !directedMobClonerDebugStopPending)
+            return;
+        directedMobClonerDebugActive = false;
+        directedMobClonerDebugRecipeId = 0;
+        directedMobClonerDebugStopPending = false;
+        markDirty();
+    }
+
+    public int getStandardModeDuration() {
+        return MODE_RECIPE_DURATION;
+    }
+
+    public boolean isOffspring(ItemStack stack) {
+        return stack != null && Offspring != null && stack.isItemEqual(Offspring);
+    }
 
     @Override
     public UITexture[] getMachineModeIcons() {
@@ -161,27 +213,36 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     public String getMachineModeName() {
         // #tr EcoSphereSimulator.modeMsg.0
-        // # Tree Growth Simulator
-        // #zh_CN 原木拟生模式
+        // # Arboreal Genesis
+        // #zh_CN 原木拟生
 
         // #tr EcoSphereSimulator.modeMsg.1
-        // # Aqua Zone Simulator
-        // #zh_CN 水域模拟模式
+        // # Aquatic Simulation
+        // #zh_CN 水域模拟
 
         // #tr EcoSphereSimulator.modeMsg.2
-        // # Artificial Green House
-        // #zh_CN 人工温室模式
+        // # Artificial Greenhouse
+        // #zh_CN 人工温室
 
         // #tr EcoSphereSimulator.modeMsg.3
-        // # Directed Mob Cloner
-        // #zh_CN 定向克隆模式
-        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + machineMode);
+        // # Directed Mob Cloning
+        // #zh_CN 定向克隆
+        if (cleaningRequested || cleaningRunActive) return tr("MegaTreeFarm.mode.cleaning");
+        return modeBeaconPresent && boundMode >= 0 && boundMode < MACHINE_MODES.length
+            ? MACHINE_MODES[boundMode].getDisplayName()
+            : tr("MegaTreeFarm.mode.waiting");
     }
 
     @Override
     public void setMachineMode(int index) {
-        super.setMachineMode(index);
-        SetRemoveWater();
+        if (boundMode < 0) return;
+        machineMode = boundMode;
+        clearFluidAreaForMode();
+    }
+
+    @Override
+    public boolean supportsMachineModeSwitch() {
+        return false;
     }
 
     // @Override
@@ -200,12 +261,30 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         super.onFirstTick(aBaseMetaTileEntity);
         if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
         if (Offspring == null) Offspring = GTCMItemList.OffSpring.get(1);
+        // Sync the installed beacon when the machine loads.
+        if (aBaseMetaTileEntity.isServerSide()) updateModeBeaconBinding();
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        boolean serverSide = aBaseMetaTileEntity.isServerSide();
+        // Check once per second while a recipe is active so beacon changes can stop it early.
+        if (serverSide && mMaxProgresstime > 0 && aTick % MODE_BEACON_CHECK_INTERVAL == 0) {
+            updateModeBeaconBinding();
+        }
+        if (serverSide && cleaningRunActive && mMaxProgresstime > 0 && mProgresstime + 1 >= mMaxProgresstime)
+            cleaningCompleted = true;
+        // Run the normal machine tick after a possible mode change has stopped the old recipe.
         super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0 && controllerTier == 0) {
+        if (!serverSide) return;
+
+        if (directedMobClonerDebugStopPending && mMaxProgresstime <= 0) {
+            resetDirectedMobClonerDebugRun();
+            aBaseMetaTileEntity.disableWorking();
+        }
+        drainFluidAreaDuringCleaning();
+        completeCleaningIfReady();
+        if (aTick % 20 == 0 && controllerTier == 0) {
             ItemStack ControllerSlot = this.getControllerSlot();
             if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
                 controllerTier = 1;
@@ -220,21 +299,75 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
         float aX, float aY, float aZ) {
-        if (controllerTier == 0 && !aPlayer.isSneaking()) {
+        if (!aPlayer.isSneaking()) {
             ItemStack heldItem = aPlayer.getHeldItem();
-            if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
+            if (controllerTier == 0 && GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
                 aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, heldItem.stackSize));
-                if (getBaseMetaTileEntity().isServerSide()) {
+                IGregTechTileEntity base = getBaseMetaTileEntity();
+                if (base != null && base.isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();
-                    // schedule a structure check
                     mUpdated = true;
                 }
                 return true;
             }
         }
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
+    }
+
+    private void completeCleaningIfReady() {
+        if (!cleaningRunActive || mMaxProgresstime > 0) return;
+        if (!cleaningCompleted) {
+            cleaningRunActive = false;
+            cleaningRequested = true;
+            markDirty();
+            return;
+        }
+        cleaningRunActive = false;
+        cleaningCompleted = false;
+        if (pendingMode < 0) return;
+        // Bind the requested mode before GT starts the next recipe automatically.
+        boundMode = pendingMode;
+        machineMode = pendingMode;
+        pendingMode = -1;
+        clearFluidAreaForMode();
+    }
+
+    private void updateModeBeaconBinding() {
+        int requestedMode = getModeFromBeacon(getControllerSlot());
+        boolean wasPresent = modeBeaconPresent;
+        modeBeaconPresent = requestedMode >= 0;
+        if (wasPresent != modeBeaconPresent) markDirty();
+        if (!modeBeaconPresent) return;
+        if (cleaningRequested || cleaningRunActive) {
+            if (requestedMode != pendingMode) {
+                pendingMode = requestedMode;
+                markDirty();
+            }
+            return;
+        }
+        if (requestedMode == boundMode) return;
+        requestCleaning(requestedMode);
+    }
+
+    private void requestCleaning(int requestedMode) {
+        pendingMode = requestedMode;
+        cleaningRequested = true;
+        cleaningRunActive = false;
+        cleaningCompleted = false;
+        missingFluidAreaInput = null;
+        mProgresstime = 0;
+        mMaxProgresstime = 0;
+        mOutputItems = null;
+        mOutputFluids = null;
+        markDirty();
+    }
+
+    private static int getModeFromBeacon(ItemStack stack) {
+        if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.MegaTreeFarmModeBeacon) return -1;
+        int meta = stack.getItemDamage();
+        return meta >= 0 && meta <= 7 ? meta / 2 : -1;
     }
 
     @Override
@@ -252,8 +385,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         super.saveNBTData(aNBT);
         aNBT.setByte("mTier", (byte) controllerTier);
         aNBT.setByte("mMode", (byte) machineMode);
-        aNBT.setBoolean("checkWater", checkWaterFinish);
-        aNBT.setBoolean("checkAir", checkAirFinish);
+        aNBT.setInteger("boundMode", boundMode);
+        aNBT.setInteger("pendingMode", pendingMode);
+        aNBT.setBoolean("cleaningRequested", cleaningRequested);
+        aNBT.setBoolean("cleaningRunActive", cleaningRunActive);
+        aNBT.setBoolean("cleaningCompleted", cleaningCompleted);
+        aNBT.setInteger("directedMobClonerDebugRecipeId", directedMobClonerDebugRecipeId);
+        aNBT.setBoolean("directedMobClonerDebugActive", directedMobClonerDebugActive);
+        aNBT.setBoolean("directedMobClonerDebugStopPending", directedMobClonerDebugStopPending);
+        aNBT.setString("fluidAreaFluidName", fluidAreaFluidName);
+        aNBT.setBoolean("fluidAreaInitialized", fluidAreaInitialized);
     }
 
     @Override
@@ -261,8 +402,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         super.loadNBTData(aNBT);
         controllerTier = aNBT.getByte("mTier");
         machineMode = aNBT.getByte("mMode");
-        checkWaterFinish = aNBT.getBoolean("checkWater");
-        checkAirFinish = aNBT.getBoolean("checkAir");
+        boundMode = aNBT.hasKey("boundMode") ? aNBT.getInteger("boundMode") : -1;
+        pendingMode = aNBT.hasKey("pendingMode") ? aNBT.getInteger("pendingMode") : -1;
+        cleaningRequested = aNBT.getBoolean("cleaningRequested");
+        cleaningRunActive = aNBT.getBoolean("cleaningRunActive");
+        cleaningCompleted = aNBT.getBoolean("cleaningCompleted");
+        directedMobClonerDebugRecipeId = aNBT.getInteger("directedMobClonerDebugRecipeId");
+        directedMobClonerDebugActive = aNBT.getBoolean("directedMobClonerDebugActive");
+        directedMobClonerDebugStopPending = aNBT.getBoolean("directedMobClonerDebugStopPending");
+        fluidAreaFluidName = aNBT.getString("fluidAreaFluidName");
+        fluidAreaInitialized = aNBT.hasKey("fluidAreaInitialized") && aNBT.getBoolean("fluidAreaInitialized");
     }
 
     @Override
@@ -294,88 +443,45 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         tooltip.add(StatCollector.translateToLocalFormatted("tooltip.large_macerator.tier", tier));
     }
 
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        tag.setInteger("tier", controllerTier + 1);
-        if (machineMode == 2) {
-            tag.setLong("fertilizerToConsume", fertilizerToConsume);
-            tag.setLong("waterToConsume", waterToConsume);
-        }
-
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.hasKey("tier")) {
-            currentTip.add(
-                "Tier: " + EnumChatFormatting.YELLOW + formatNumber(tag.getInteger("tier")) + EnumChatFormatting.RESET);
-        }
-        if (tag.hasKey("fertilizerToConsume")) {
-            // #tr MegaTreeFarm.Waila.fertiConsume
-            // # Now consumption of Enriched Fertilizer is :
-            // #zh_CN 当前富集肥料消耗量：
-            currentTip.add(
-                tr("MegaTreeFarm.Waila.fertiConsume") + " " + formatNumber(tag.getLong("fertilizerToConsume")) + "L");
-            // #tr MegaTreeFarm.Waila.waterConsume
-            // # Now consumption of Water is :
-            // #zh_CN 当前水消耗量：
-            currentTip
-                .add(tr("MegaTreeFarm.Waila.waterConsume") + " " + formatNumber(tag.getLong("waterToConsume")) + "L");
-        }
-
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            if (!checkStructure(true, getBaseMetaTileEntity())) {
-                GTUtility.sendChatTrans(
-                    aPlayer,
-                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
-                return;
-            }
-            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, tool);
-        }
-    }
-
     private static final String STRUCTURE_PIECE_MAIN = "mainEcoSphereSimulator0";
     private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
-    private static final String STRUCTURE_PIECE_WATER = "waterEcoSphereSimulator";
     private static IStructureDefinition<TST_MegaTreeFarm> STRUCTURE_DEFINITION = null;
+
+    private static final int STRUCTURE_OFFSET_X = 16;
+    private static final int STRUCTURE_OFFSET_Y = 38;
+    private static final int STRUCTURE_OFFSET_Z = 7;
+    private static final int FLUID_AREA_OFFSET_X = 12;
+    private static final int FLUID_AREA_OFFSET_Y = 25;
+    private static final int FLUID_AREA_OFFSET_Z = 3;
 
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
-        int structureTier = stackSize.stackSize + controllerTier - 1;
-        if (structureTier > 1) structureTier = 1;
-        this.buildPiece("mainEcoSphereSimulator" + structureTier, stackSize, hintsOnly, 16, 38, 7);
+        int structureTier = Math.min(stackSize.stackSize + controllerTier - 1, 1);
+        this.buildPiece(
+            "mainEcoSphereSimulator" + structureTier,
+            stackSize,
+            hintsOnly,
+            STRUCTURE_OFFSET_X,
+            STRUCTURE_OFFSET_Y,
+            STRUCTURE_OFFSET_Z);
     }
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         int built;
-        int builtW;
-        int structureTier = stackSize.stackSize + controllerTier - 1;
-        if (structureTier > 1) structureTier = 1;
+        int structureTier = Math.min(stackSize.stackSize + controllerTier - 1, 1);
         built = survivalBuildPiece(
             "mainEcoSphereSimulator" + structureTier,
             stackSize,
-            16,
-            38,
-            7,
+            STRUCTURE_OFFSET_X,
+            STRUCTURE_OFFSET_Y,
+            STRUCTURE_OFFSET_Z,
             elementBudget,
             env,
             false,
             true);
-        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
-        if (built >= 0) return built;
-        return built + builtW;
+        return built;
 
     }
 
@@ -383,15 +489,12 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         // setDebugEnabled(true);
-        if (!checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7, errors)) {
-            return;
-        }
-        if (!checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9, errors)) {
-            // #tr TST_MegaTreeFarm.StructureErrors.no_water_block
-            // # Place a water block at the specific location on the top of the machine structure.
-            // #zh_CN 在机器结构顶部的特定位置放置水方块
-            errors.add(StructureErrors.of("TST_MegaTreeFarm.StructureErrors.no_water_block"));
-        }
+        checkPiece(
+            "mainEcoSphereSimulator" + controllerTier,
+            STRUCTURE_OFFSET_X,
+            STRUCTURE_OFFSET_Y,
+            STRUCTURE_OFFSET_Z,
+            errors);
     }
 
     @Override
@@ -400,7 +503,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
-                .addShape(STRUCTURE_PIECE_WATER, transpose(water))
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(MetaBlockCasing01, 9))
                 .addElement('C', ofBlock(MetaBlockCasing01, 10))
@@ -432,7 +534,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 .addElement(
                     'O',
                     ofBlock(ModBlocksHandler.PurpleLight.getLeft(), ModBlocksHandler.PurpleLight.getRight()))
-                .addElement('P', ofBlock(BlocksItems.getFluidBlock(InternalName.fluidDistilledWater), 0))
                 .addElement(
                     'Q',
                     ofChain(
@@ -631,51 +732,207 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         {"            ddddddddd            ","            dsssssssd            ","           ddd     ddd           ","           ddddddddddd           ","           ddddddddddd           ","         ddddddddddddddd         ","        ddd  ddddddd  ddd        ","       dd     ddddd     dd       ","      dd      ddddd      dd      ","     dd     dd     dd     dd     ","     dd   dd         dd   dd     ","  dddd    d           d    dddd  ","dddddd   d    EJJJE    d   dddddd","dsddddd  d   FMMMMMF   d  dddddsd","ds dddddd   EMMMMMMME   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   EMMMMMMME   dddddd sd","dsddddd  d   FMMMMMF   d  dddddsd","dddddd   d    EJJJE    d   dddddd","  dddd    d           d    dddd  ","     dd   dd         dd   dd     ","     dd     dd     dd     dd     ","      dd      ddddd      dd      ","       dd     ddddd     dd       ","        ddd  ddddddd  ddd        ","         ddddddddddddddd         ","           ddddddddddd           ","           ddddddddddd           ","           ddd     ddd           ","            dsssssssd            ","            ddddddddd            "},
         {"            BBBBBBBBB            ","          BBB       BBB          ","        BBBBBB     BBBBBB        ","      BB  BBBBBBBBBBBBB  BB      ","     B   BBBBBBBBBBBBBBB   B     ","    B   BBBBBBBBBBBBBBBBB   B    ","   B   BBBB  BBBBBBB  BBBB   B   ","   B  BBB     BBBBB     BBB  B   ","  B  BBB      BBBBB      BBB  B  ","  B BBB     BB     BB     BBB B  "," BBBBBB   BB         BB   BBBBBB "," BBBBB    B           B    BBBBB ","BBBBBB   B    EEEEE    B   BBBBBB","B BBBBB  B   EFFFFFE   B  BBBBB B","B  BBBBBB   EFFMMMFFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFFMMMFFE   BBBBBB  B","B BBBBB  B   EFFFFFE   B  BBBBB B","BBBBBB   B    EEEEE    B   BBBBBB"," BBBBB    B           B    BBBBB "," BBBBBB   BB         BB   BBBBBB ","  B BBB     BB     BB     BBB B  ","  B  BBB      BBBBB      BBB  B  ","   B  BBB     BBBBB     BBB  B   ","   B   BBBB  BBBBBBB  BBBB   B   ","    B   BBBBBBBBBBBBBBBBB   B    ","     B   BBBBBBBBBBBBBBB   B     ","      BB  BBBBBBBBBBBBB  BB      ","        BBBBBB     BBBBBB        ","          BBB       BBB          ","            BBBBBBBBB            "}
     };
-    private final String[][] water = new String[][]{
-        {"P"}
-    };
-
-    // Only Use for checkwater()
+    // Defines the visible fluid area inside the Eco-Sphere.
     private final String[][] StructureWater = new String[][]{
-        {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
-        {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
-        {"ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ"},
-        {"ZZZZZZZZZZPPPPPZZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZZPPPPPZZZZZZZZZZ"},
-        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZPPPPPPPPPZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZPPPPPPPPPZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
-        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
-        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZPPPZZZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZZZPPPZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
-        {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
+        {"         PPPPPPP         ","      PPPPPPPPPPPPP      ","     PPPPPPPPPPPPPPP     ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP"," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","     PPPPPPPPPPPPPPP     ","      PPPPPPPPPPPPP      ","         PPPPPPP         "},
+        {"         PPPPPPP         ","      PPPPPPPPPPPPP      ","     PPPPPPPPPPPPPPP     ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP"," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","     PPPPPPPPPPPPPPP     ","      PPPPPPPPPPPPP      ","         PPPPPPP         "},
+        {"         PPPPPPP         ","       PPPPPPPPPPP       ","     PPPPPPPPPPPPPPP     ","    PPPPPPPPPPPPPPPPP    ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP"," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","    PPPPPPPPPPPPPPPPP    ","     PPPPPPPPPPPPPPP     ","       PPPPPPPPPPP       ","         PPPPPPP         "},
+        {"          PPPPP          ","       PPPPPPPPPPP       ","     PPPPPPPPPPPPPPP     ","    PPPPPPPPPPPPPPPPP    ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP","PPPPPPPPPPPPPPPPPPPPPPPPP"," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","    PPPPPPPPPPPPPPPPP    ","     PPPPPPPPPPPPPPP     ","       PPPPPPPPPPP       ","          PPPPP          "},
+        {"                         ","        PPPPPPPPP        ","      PPPPPPPPPPPPP      ","    PPPPPPPPPPPPPPPPP    ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","    PPPPPPPPPPPPPPPPP    ","      PPPPPPPPPPPPP      ","        PPPPPPPPP        ","                         "},
+        {"                         ","         PPPPPPP         ","      PPPPPPPPPPPPP      ","     PPPPPPPPPPPPPPP     ","    PPPPPPPPPPPPPPPPP    ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","    PPPPPPPPPPPPPPPPP    ","     PPPPPPPPPPPPPPP     ","      PPPPPPPPPPPPP      ","         PPPPPPP         ","                         "},
+        {"                         ","           PPP           ","       PPPPPPPPPPP       ","      PPPPPPPPPPPPP      ","    PPPPPPPPPPPPPPPPP    ","    PPPPPPPPPPPPPPPPP    ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP "," PPPPPPPPPPPPPPPPPPPPPPP ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","    PPPPPPPPPPPPPPPPP    ","    PPPPPPPPPPPPPPPPP    ","      PPPPPPPPPPPPP      ","       PPPPPPPPPPP       ","           PPP           ","                         "},
+        {"                         ","                         ","         PPPPPPP         ","       PPPPPPPPPPP       ","     PPPPPPPPPPPPPPP     ","    PPPPPPPPPPPPPPPPP    ","    PPPPPPPPPPPPPPPPP    ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","  PPPPPPPPPPPPPPPPPPPPP  ","   PPPPPPPPPPPPPPPPPPP   ","   PPPPPPPPPPPPPPPPPPP   ","    PPPPPPPPPPPPPPPPP    ","    PPPPPPPPPPPPPPPPP    ","     PPPPPPPPPPPPPPP     ","       PPPPPPPPPPP       ","         PPPPPPP         ","                         ","                         "},
     };
 
     // spotless:on
 
-    private void SetRemoveWater() {
+    private void clearFluidAreaForMode() {
+        // Keep the Eco-Sphere empty until a recipe selects and fills its required fluid.
+        setFluidAreaBlock(Blocks.air);
+        fluidAreaFluidName = "";
+        fluidAreaInitialized = true;
+        fluidAreaFillDuration = 0;
+        missingFluidAreaInput = null;
+        markDirty();
+        mUpdated = true;
+    }
 
-        // checkType = true, check Water
-        boolean checkType = machineMode != 0;
-        if (checkType && checkWaterFinish) return;
-        if (!checkType && checkAirFinish) return;
-        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] StructureDef = StructureWater;
-        Block Air = Blocks.air;
-        Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
-        boolean isFlipped = this.getFlip()
-            .isHorizontallyFlipped();
-        int OffSetX = 12;
-        int OffSetY = 25;
-        int OffSetZ = 3;
-        if (checkType && !checkWaterFinish) {
-            checkAirFinish = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
-            checkWaterFinish = true;
-        } else if (!checkType && !checkAirFinish) {
-            checkWaterFinish = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
-            checkAirFinish = true;
+    private void prepareFluidAreaForCleaning() {
+        // Allow the structure check to accept air while the old fluid drains away.
+        fluidAreaInitialized = false;
+        fluidAreaFillDuration = 0;
+        missingFluidAreaInput = null;
+        markDirty();
+    }
+
+    private void drainFluidAreaDuringCleaning() {
+        if (!cleaningRunActive || mMaxProgresstime <= 0) return;
+        final int fluidAreaBlocksPerSecond = 180;
+        int layerStartTick = 0;
+
+        // Drain from the top layer to the bottom during the start of the existing cleaning cycle.
+        for (int layer = 0; layer < StructureWater.length; layer++) {
+            if (mProgresstime == layerStartTick + 1) setFluidAreaLayer(layer, Blocks.air);
+            int blockCount = getFluidAreaLayerBlockCount(layer);
+            layerStartTick += Math.max(1, (blockCount * 20 + fluidAreaBlocksPerSecond - 1) / fluidAreaBlocksPerSecond);
+        }
+    }
+
+    public boolean prepareFluidAreaForConsumption(Fluid consumedFluid) {
+        IEcoSphereMode mode = getBoundMode();
+        if (mode == null || !mode.displaysFluidArea()) return true;
+        return prepareFluidArea(consumedFluid);
+    }
+
+    private IEcoSphereMode getBoundMode() {
+        return boundMode >= 0 && boundMode < MACHINE_MODES.length ? MACHINE_MODES[boundMode] : null;
+    }
+
+    private boolean prepareFluidArea(Fluid targetFluid) {
+        final int fluidAreaBlockCost = 1000;
+        final int fluidAreaBlocksPerSecond = 180;
+        fluidAreaFillDuration = 0;
+        if (targetFluid == null || targetFluid.getBlock() == null) {
+            fluidAreaInitialized = false;
+            missingFluidAreaInput = targetFluid == null ? null : new FluidStack(targetFluid, fluidAreaBlockCost);
+            return false;
         }
 
+        String targetName = targetFluid.getName();
+        Block targetBlock = targetFluid.getBlock();
+        if (!targetName.equals(fluidAreaFluidName)) {
+            // A fluid change uses the same cleaning and drain animation as a beacon change.
+            if (!fluidAreaFluidName.isEmpty()) {
+                requestCleaning(boundMode);
+                return false;
+            }
+            fluidAreaFluidName = targetName;
+            fluidAreaInitialized = false;
+        }
+
+        // Fill from the bottom layer to the top layer.
+        for (int layer = StructureWater.length - 1; layer >= 0; layer--) {
+            if (checkFluidAreaLayer(layer, targetBlock, false)) continue;
+
+            int blockCount = getFluidAreaLayerBlockCount(layer);
+            long fluidCost = (long) blockCount * fluidAreaBlockCost;
+            if (!EcoSphereModeSupport.drainFluid(this, targetFluid, fluidCost)) {
+                fluidAreaInitialized = false;
+                missingFluidAreaInput = new FluidStack(targetFluid, (int) Math.min(Integer.MAX_VALUE, fluidCost));
+                getBaseMetaTileEntity().disableWorking();
+                markDirty();
+                return false;
+            }
+
+            // Place the whole layer only after its complete fluid cost has been paid.
+            setFluidAreaLayer(layer, targetBlock);
+            fluidAreaFillDuration = Math
+                .max(1, (blockCount * 20 + fluidAreaBlocksPerSecond - 1) / fluidAreaBlocksPerSecond);
+            missingFluidAreaInput = null;
+            markDirty();
+            mUpdated = true;
+            return false;
+        }
+
+        if (!fluidAreaInitialized || missingFluidAreaInput != null) {
+            fluidAreaInitialized = true;
+            missingFluidAreaInput = null;
+            markDirty();
+        }
+        return true;
+    }
+
+    private static int getFluidAreaLayerBlockCount(int layer) {
+        return switch (layer) {
+            case 0, 1 -> 501;
+            case 2 -> 489;
+            case 3 -> 481;
+            case 4 -> 445;
+            case 5 -> 429;
+            case 6 -> 397;
+            case 7 -> 357;
+            default -> 0;
+        };
+    }
+
+    private void setFluidAreaBlock(Block block) {
+        for (int layer = 0; layer < StructureWater.length; layer++) setFluidAreaLayer(layer, block);
+    }
+
+    private void setFluidAreaLayer(int layer, Block block) {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        int directionX = base.getFrontFacing().offsetX;
+        int directionZ = base.getFrontFacing().offsetZ;
+        int xDirection = directionX == 0 ? (directionZ == 1 ? -1 : 1) : directionX;
+        int zDirection = directionZ == 0 ? directionX : directionZ;
+        boolean horizontallyFlipped = getFlip().isHorizontallyFlipped();
+        World world = base.getWorld();
+        for (int z = 0; z < StructureWater[layer].length; z++) {
+            for (int x = 0; x < StructureWater[layer][z].length(); x++) {
+                if (StructureWater[layer][z].charAt(x) != 'P') continue;
+                int offsetX = (FLUID_AREA_OFFSET_X - x) * xDirection;
+                int offsetY = FLUID_AREA_OFFSET_Y - layer;
+                int offsetZ = (FLUID_AREA_OFFSET_Z - z) * zDirection;
+                if (directionX != 0) {
+                    int swapped = offsetX;
+                    offsetX = offsetZ;
+                    offsetZ = swapped;
+                }
+                if (horizontallyFlipped) {
+                    if (directionX != 0) offsetZ = -offsetZ;
+                    else offsetX = -offsetX;
+                }
+                world.setBlock(
+                    base.getXCoord() + offsetX,
+                    base.getYCoord() + offsetY,
+                    base.getZCoord() + offsetZ,
+                    block);
+            }
+        }
+    }
+
+    private boolean checkFluidAreaLayer(int layer, Block expectedBlock, boolean allowAir) {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        int directionX = base.getFrontFacing().offsetX;
+        int directionZ = base.getFrontFacing().offsetZ;
+        int xDirection = directionX == 0 ? (directionZ == 1 ? -1 : 1) : directionX;
+        int zDirection = directionZ == 0 ? directionX : directionZ;
+        boolean horizontallyFlipped = getFlip().isHorizontallyFlipped();
+        World world = base.getWorld();
+        for (int z = 0; z < StructureWater[layer].length; z++) {
+            for (int x = 0; x < StructureWater[layer][z].length(); x++) {
+                if (StructureWater[layer][z].charAt(x) != 'P') continue;
+                int offsetX = (FLUID_AREA_OFFSET_X - x) * xDirection;
+                int offsetY = FLUID_AREA_OFFSET_Y - layer;
+                int offsetZ = (FLUID_AREA_OFFSET_Z - z) * zDirection;
+                if (directionX != 0) {
+                    int swapped = offsetX;
+                    offsetX = offsetZ;
+                    offsetZ = swapped;
+                }
+                if (horizontallyFlipped) {
+                    if (directionX != 0) offsetZ = -offsetZ;
+                    else offsetX = -offsetX;
+                }
+                Block foundBlock = world
+                    .getBlock(base.getXCoord() + offsetX, base.getYCoord() + offsetY, base.getZCoord() + offsetZ);
+                if (foundBlock != expectedBlock && (!allowAir || foundBlock != Blocks.air)) return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRemoval() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base != null && base.isServerSide()) {
+            setFluidAreaBlock(Blocks.air);
+            fluidAreaFluidName = "";
+            fluidAreaInitialized = false;
+            fluidAreaFillDuration = 0;
+            missingFluidAreaInput = null;
+        }
+        super.onRemoval();
     }
 
     // region Processing Logic
@@ -700,8 +957,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays
-            .asList(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes, GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
+        List<RecipeMap<?>> recipeMaps = new ArrayList<>(MACHINE_MODES.length);
+        for (IEcoSphereMode mode : MACHINE_MODES) recipeMaps.add(mode.getRecipeMap());
+        return recipeMaps;
     }
 
     @Override
@@ -719,154 +977,8 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return false;
     }
 
-    private static int getTierMultiplier(int tier) {
-        return (int) Math
-            .floor(3 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
-    }
-
-    /**
-     * Use the highest bonus from the original Recipe.
-     */
-
-    public static int getModeMultiplier(Mode mode) {
-        return switch (mode) {
-            case LOG -> 20;
-            case SAPLING -> 3;
-            case LEAVES -> 8;
-            case FRUIT -> 1;
-        };
-
-    }
-
-    public Map<Integer, Mode> damageModeMap = new HashMap<>();
-    {
-        damageModeMap.put(1, Mode.LOG);
-        damageModeMap.put(2, Mode.SAPLING);
-        damageModeMap.put(3, Mode.LEAVES);
-        damageModeMap.put(4, Mode.FRUIT);
-    }
-
-    public int getModeOutput(Mode mode) {
-        for (ItemStack stack : getStoredInputs()) {
-            if (stack.getItem() instanceof ItemIntegratedCircuit && stack.getItemDamage() > 0) {
-                Mode mappedMode = damageModeMap.get(stack.getItemDamage());
-                if (mode == mappedMode) {
-                    return 1;
-                }
-            }
-        }
-        return -1;
-    }
-
-    public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
-        String key = getItemStackString(sapling);
-        EnumMap<Mode, ItemStack> ProductMap = treeProductsMap.get(key);
-        if (ProductMap != null) {
-            return ProductMap;
-        }
-        return getOutputsForForestrySapling(sapling);
-    }
-
-    public static String getItemStackString(ItemStack aStack) {
-        return Item.itemRegistry.getNameForObject(aStack.getItem()) + ":" + aStack.getItemDamage();
-
-    }
-
-    public static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling) {
-        // copy form GTPP_TGS
-        ITree tree = TreeManager.treeRoot.getMember(sapling);
-        if (tree == null) return null;
-
-        String speciesUUID = tree.getIdent();
-
-        EnumMap<Mode, ItemStack> defaultMap = treeProductsMap.get("Forestry:sapling:" + speciesUUID);
-        if (defaultMap == null) return null;
-
-        // We need to make a new map so that we don't modify the stored amounts of outputs.
-        EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(Mode.class);
-
-        ItemStack log = defaultMap.get(Mode.LOG);
-        if (log != null) {
-            double height = Math.max(
-                3 * (tree.getGenome()
-                    .getHeight() - 1),
-                0) + 1;
-            double girth = tree.getGenome()
-                .getGirth();
-
-            log = log.copy();
-            log.stackSize = (int) (log.stackSize * height * girth);
-            adjustedMap.put(Mode.LOG, log);
-        }
-
-        ItemStack saplingOut = defaultMap.get(Mode.SAPLING);
-        if (saplingOut != null) {
-            // Lowest = 0.01 ... Average = 0.05 ... Highest = 0.3
-            double fertility = tree.getGenome()
-                .getFertility() * 10;
-
-            // Return a copy of the *input* sapling, retaining its genetics.
-            int stackSize = Math.max(1, (int) (saplingOut.stackSize * fertility));
-            saplingOut = sapling.copy();
-            saplingOut.stackSize = stackSize;
-            adjustedMap.put(Mode.SAPLING, saplingOut);
-        }
-
-        ItemStack leaves = defaultMap.get(Mode.LEAVES);
-        if (leaves != null) {
-            adjustedMap.put(Mode.LEAVES, leaves.copy());
-        }
-
-        ItemStack fruit = defaultMap.get(Mode.FRUIT);
-        if (fruit != null) {
-            // Lowest = 0.025 ... Average = 0.2 ... Highest = 0.4
-            double yield = tree.getGenome()
-                .getYield() * 10;
-
-            fruit = fruit.copy();
-            fruit.stackSize = (int) (fruit.stackSize * yield);
-            adjustedMap.put(Mode.FRUIT, fruit);
-        }
-
-        return adjustedMap;
-    }
-
-    /**
-     * Attempts to drain the multi of a given fluid, will only return true if all fluid is consumed.
-     *
-     * @param toConsume    A fluid stack of the fluid to consume.
-     * @param drainPartial True to allow partial consumption.
-     * @return True when all the fluid has been consumed.
-     */
-    private boolean tryDrain(FluidStack toConsume, boolean drainPartial) {
-
-        if (toConsume == null || toConsume.amount <= 0) return true;
-
-        List<FluidStack> fluids = this.getStoredFluids();
-        List<FluidStack> fluidsToUse = new ArrayList<>(fluids.size());
-        int remaining = toConsume.amount;
-
-        for (FluidStack fluid : fluids) {
-            if (fluid.isFluidEqual(toConsume)) {
-                remaining -= fluid.amount;
-                fluidsToUse.add(fluid);
-                if (remaining <= 0) break;
-            }
-        }
-
-        if (!drainPartial && remaining > 0) return false;
-
-        boolean success = remaining <= 0;
-        remaining = toConsume.amount - Math.max(0, remaining);
-
-        for (FluidStack fluid : fluidsToUse) {
-            int used = Math.min(remaining, fluid.amount);
-            fluid.amount -= used;
-            remaining -= used;
-        }
-
-        return success;
-    }
+    private static final IEcoSphereMode[] MACHINE_MODES = { new TreeGrowthSimulatorMode(),
+        new AquaticZoneSimulatorMode(), new ArtificialGreenHouseMode(), new DirectedMobClonerMode() };
 
     @Override
     public GTCM_ProcessingLogic createProcessingLogic() {
@@ -875,349 +987,65 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             @Override
             @Nonnull
             public CheckRecipeResult process() {
+                // Finish a mode change before GT chains directly into the next recipe.
+                completeCleaningIfReady();
+                // Always use the latest beacon before starting the next recipe.
+                updateModeBeaconBinding();
+                if (inputItems == null) inputItems = new ItemStack[0];
+                if (inputFluids == null) inputFluids = new FluidStack[0];
 
-                if (inputItems == null) {
-                    inputItems = new ItemStack[0];
-                }
-
-                if (inputFluids == null) {
-                    inputFluids = new FluidStack[0];
-                }
-
-                SetRemoveWater();
-                EuTier = (int) Math.max(0, Math.log((double) availableVoltage * availableAmperage / 8d) / Math.log(4d));
-
+                availableInputPower = availableVoltage * availableAmperage;
+                EuTier = (int) Math.max(0, Math.log((double) availableInputPower / 8d) / Math.log(4d));
                 updateSlots();
-
                 if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
-                tierMultiplier = getTierMultiplier(EuTier);
-                return switch (machineMode) {
-                    case 0 -> TreeGrowthSimulator();
-                    case 1 -> AquaticZoneSimulator();
-                    case 2 -> IndustrialFarmSimulator();
-                    default -> SimpleCheckRecipeResult.ofFailure("Invalid_machine_mode");
-                };
+                if (cleaningRequested) return startCleaning();
+                if (!modeBeaconPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
+                    // #tr GT5U.gui.text.recipe_result.mega_tree_farm_waiting_for_mode_beacon
+                    // # Waiting For Mode Beacon
+                    // #zh_CN 等待模式信标
+                    return SimpleCheckRecipeResult.ofFailure("mega_tree_farm_waiting_for_mode_beacon");
+                }
+                machineMode = boundMode;
+                tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
+                EcoSphereModeResult modeResult = MACHINE_MODES[machineMode].process(TST_MegaTreeFarm.this, EuTier);
+                if (!modeResult.result()
+                    .wasSuccessful()) {
+                    if (cleaningRequested) return startCleaning();
+                    if (fluidAreaFillDuration > 0) {
+                        // Wait for this layer before the next layer starts filling.
+                        outputItems = new ItemStack[0];
+                        outputFluids = new FluidStack[0];
+                        calculatedEut = 0;
+                        duration = fluidAreaFillDuration;
+                        // #tr GT5U.gui.text.recipe_result.mega_tree_farm_filling_fluid_area
+                        // # Filling Eco-Sphere fluid area
+                        // #zh_CN 生态圈流体灌注中
+                        return SimpleCheckRecipeResult.ofSuccess("mega_tree_farm_filling_fluid_area");
+                    }
+                    if (missingFluidAreaInput != null) return SimpleResultWithText.outOfFluid(missingFluidAreaInput);
+                    return modeResult.result();
+                }
+                outputItems = modeResult.outputs();
+                outputFluids = modeResult.fluidOutputs();
+                calculatedEut = modeResult.eut();
+                duration = modeResult.duration();
+                return modeResult.result();
             }
 
-            private CheckRecipeResult TreeGrowthSimulator() {
-                ItemStack sapling = getControllerSlot();
-                if (sapling == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
-                EnumMap<Mode, ItemStack> outputPerMode = queryTreeProduct(sapling);
-                if (outputPerMode == null) return SimpleCheckRecipeResult.ofFailure("no_sapling");
-
-                int tierTemp = EuTier;
-
-                // different liquid = different output
-                Fluid RecipeLiquid = null;
-                int RecipeLiquidCost = 1000;
-                ArrayList<FluidStack> InputFluids = getStoredFluids();
-                for (FluidStack aFluid : InputFluids) {
-                    if (aFluid.getFluid()
-                        .equals(FluidRegistry.WATER)) {
-                        // Normal Trees
-                        RecipeLiquid = FluidRegistry.WATER;
-                        break;
-                    }
-                    if (Mods.GalaxySpace.isModLoaded() && aFluid.getFluid()
-                        .equals(UnknowWater)) {
-                        // Normal to BarnardaC`
-                        RecipeLiquid = UnknowWater;
-                        sapling = GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 1);
-                        outputPerMode = queryTreeProduct(sapling);
-                        break;
-                    }
-                    if (aFluid.getFluid()
-                        .equals(FluidRegistry.getFluid("temporalfluid")) && Mods.TwilightForest.isModLoaded()) {
-                        // Normal to Time Tree
-                        RecipeLiquid = FluidRegistry.getFluid("temporalfluid");
-                        RecipeLiquidCost = 1000;
-                        sapling = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
-                        outputPerMode = queryTreeProduct(sapling);
-                        break;
-                    }
-                    if (aFluid.getFluid()
-                        .equals(FluidRegistry.getFluid("ic2uumatter"))) {
-                        // Random
-                        Random random = new Random();
-                        RecipeLiquid = FluidRegistry.getFluid("ic2uumatter");
-                        EnumMap<Mode, ItemStack> outputPerModeTemp = new EnumMap<>(Mode.class);
-                        for (int i = 0; i < Mode.values().length; i++) {
-                            int num = random.nextInt(allProducts[i].length);
-                            outputPerModeTemp.put(damageModeMap.get(i + 1), allProducts[i][num]);
-                        }
-                        outputPerMode = outputPerModeTemp;
-                        break;
-                    }
-                }
-                if (RecipeLiquid == null) return SimpleCheckRecipeResult.ofFailure("no_fluid");
-
-                if (controllerTier > 0) RecipeLiquidCost /= 10;
-
-                // multi input hatch available
-                long inputWaterAmount = 0;
-                ArrayList<FluidStack> WaterHatchStack = new ArrayList<>();
-                for (FluidStack aFluid : InputFluids) {
-                    if (aFluid.getFluid()
-                        .equals(RecipeLiquid)) {
-                        inputWaterAmount += aFluid.amount;
-                        WaterHatchStack.add(aFluid);
-                    }
-                }
-                if (inputWaterAmount < Math.pow(2, EuTier) * RecipeLiquidCost) {
-                    tierTemp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
-                    if (tierTemp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
-                    tierMultiplier = getTierMultiplier(tierTemp);
-                }
-                long costWaterAmount = (long) (Math.pow(2, tierTemp) * RecipeLiquidCost);
-                if (inputWaterAmount < costWaterAmount) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
-
-                for (FluidStack aFluid : WaterHatchStack) {
-                    if (costWaterAmount > aFluid.amount) {
-                        costWaterAmount -= aFluid.amount;
-                        aFluid.amount = 0;
-                    } else {
-                        aFluid.amount -= (int) costWaterAmount;
-                        break;
-                    }
-                }
-
-                // output < recipe, output++
-                int outputNum = 0;
-                int availableNum = 0;
-                for (Mode mode : Mode.values()) {
-                    if (getModeOutput(mode) > 0) outputNum++;
-                    if (outputPerMode.get(mode) != null) availableNum++;
-                }
-                float extraOutput = 1;
-                if (outputNum < availableNum) extraOutput = 1 + (float) (availableNum - outputNum) / outputNum / 3;
-
-                // get running output
-                List<ItemStack> outputs = new ArrayList<>();
-                for (Mode mode : Mode.values()) {
-                    int checkMode = getModeOutput(mode);
-                    ItemStack output = outputPerMode.get(mode);
-                    if (output == null) continue; // This sapling has no output in this mode.
-                    int ModeMultiplier = getModeMultiplier(mode);
-                    if (checkMode < 0) continue; // No valid Circuit for this mode found.
-
-                    ItemStack out = output.copy();
-                    long outputStackSize = (long) (out.stackSize * ModeMultiplier
-                        * tierMultiplier
-                        * checkMode
-                        * extraOutput);
-                    while (outputStackSize > Integer.MAX_VALUE) {
-                        ItemStack outUnion = out.copy();
-                        outUnion.stackSize = Integer.MAX_VALUE;
-                        outputs.add(outUnion);
-                        outputStackSize -= Integer.MAX_VALUE;
-                    }
-                    out.stackSize = (int) outputStackSize;
-                    outputs.add(out);
-                }
-
-                if (outputs.isEmpty()) {
-                    // No outputs can be produced With the Circuit.
-                    return SimpleCheckRecipeResult.ofFailure("no_correct_Circuit");
-                }
-
-                for (ItemStack stack : outputs) {
-                    if (stack.stackSize < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input_fluid");
-                }
-                outputItems = outputs.toArray(new ItemStack[0]);
-
-                duration = controllerTier > 0 ? 20 : 100;
-                calculatedEut = (long) (8 * Math.pow(4, tierTemp) * 15 / 16);
-                return SimpleCheckRecipeResult.ofSuccess("growing_trees");
+            private CheckRecipeResult startCleaning() {
+                final int tierOneCleaningDuration = 20 * 280;
+                final int tierTwoCleaningDuration = 20 * 40;
+                cleaningRequested = false;
+                cleaningRunActive = true;
+                cleaningCompleted = false;
+                prepareFluidAreaForCleaning();
+                outputItems = new ItemStack[0];
+                outputFluids = new FluidStack[0];
+                calculatedEut = 0;
+                duration = isTierTwo() ? tierTwoCleaningDuration : tierOneCleaningDuration;
+                return SimpleCheckRecipeResult.ofSuccess("mega_tree_farm_cleaning");
             }
-
-            private CheckRecipeResult AquaticZoneSimulator() {
-                int tier_temp = EuTier;
-
-                Fluid RecipeLiquid = FluidRegistry.WATER;
-                int RecipeLiquidCost = 10000;
-                if (controllerTier > 0) RecipeLiquidCost /= 10;
-                ArrayList<FluidStack> InputFluids = getStoredFluids();
-                long inputWaterAmount = 0;
-                ArrayList<FluidStack> WaterHatchStack = new ArrayList<>();
-                for (FluidStack aFluid : InputFluids) {
-                    if (aFluid.getFluid()
-                        .equals(RecipeLiquid)) {
-                        inputWaterAmount += aFluid.amount;
-                        WaterHatchStack.add(aFluid);
-                    }
-                }
-                if (inputWaterAmount < Math.pow(2, EuTier) * RecipeLiquidCost) {
-                    tier_temp = (int) Math.floor(Math.log((double) inputWaterAmount / RecipeLiquidCost) / Math.log(2));
-                    if (tier_temp < 1) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
-                    tierMultiplier = getTierMultiplier(tier_temp);
-                }
-                long costWaterAmount = (long) (Math.pow(2, tier_temp) * RecipeLiquidCost);
-                if (inputWaterAmount < costWaterAmount) return SimpleCheckRecipeResult.ofFailure("no_enough_input");
-
-                for (FluidStack aFluid : WaterHatchStack) {
-                    if (costWaterAmount > aFluid.amount) {
-                        costWaterAmount -= aFluid.amount;
-                        aFluid.amount = 0;
-                    } else {
-                        aFluid.amount -= (int) costWaterAmount;
-                        break;
-                    }
-                }
-
-                ItemStack controllerStack = getControllerSlot();
-                isFocusMode = false;
-                if (controllerStack != null)
-                    isFocusMode = WatersChances.containsKey(getItemStackString(controllerStack))
-                // && !controllerStack.isItemEqual(Offspring)
-                ;
-
-                // get running output
-                List<ItemStack> outputs = new ArrayList<>();
-                for (ItemStack recipeStack : WatersOutputs) {
-                    ItemStack aStack = recipeStack.copy();
-                    int aChance = WatersChances.get(getItemStackString(aStack));
-                    if (isFocusMode) {
-                        if (controllerStack != null && aStack.isItemEqual(controllerStack)) aChance *= 50;
-                        else aChance = Math.max(aChance / 50, 1);
-                    }
-                    int aRandom = XSTR.XSTR_INSTANCE.nextInt(10000);
-                    long outputStackSize;
-                    double aNum = Math.log(tier_temp + 2) / Math.log(2);
-                    if (aRandom > aChance * aNum) continue;
-                    else outputStackSize = (long) (aStack.stackSize * tierMultiplier * aChance * aRandom / 1000000);
-                    if (aStack.isItemEqual(Offspring)) {
-                        if (outputStackSize > 3)
-                            // when voltage > uxv can output offspring
-                            outputStackSize = 1;
-                        else continue;
-                    }
-
-                    while (outputStackSize > Integer.MAX_VALUE) {
-                        ItemStack outUnion = aStack.copy();
-                        outUnion.stackSize = Integer.MAX_VALUE;
-                        outputs.add(outUnion);
-                        outputStackSize -= Integer.MAX_VALUE;
-                    }
-                    aStack.stackSize = (int) outputStackSize;
-                    outputs.add(aStack);
-                }
-
-                outputItems = outputs.toArray(new ItemStack[0]);
-
-                duration = controllerTier > 0 ? 20 : 100;
-                calculatedEut = (long) (8 * Math.pow(4, tier_temp) * 15 / 16);
-
-                if (isFocusMode) return SimpleCheckRecipeResult.ofSuccess("focus_on");
-                return SimpleCheckRecipeResult.ofSuccess("fishing");
-            }
-
-            /**
-             * Process CropsNH Seeds.
-             * Buffed by fertilizer, consumption = voltage * seed tier ^2 * basic value 8,
-             * and output multiplier by fertilizer = consumption ^ 0.5 , meanwhile the water cost = 1000L * fertilizer
-             * consumption.
-             * Another the voltage multiplier = voltage tier ^ 2 .
-             *
-             */
-            public CheckRecipeResult IndustrialFarmSimulator() {
-                TST_MegaTreeFarm.this.fertilizerToConsume = 0;
-                TST_MegaTreeFarm.this.waterToConsume = 0;
-                ItemStack seedStack = getControllerSlot();
-                if (seedStack == null) return NoSeedInController;
-
-                if (!cropsNHFarm.createCropCache(seedStack)) return NoSeedInController;
-
-                long fertilizerAmount = 0;
-                long waterAmount = 0;
-                List<FluidStack> fertilizerList = new ArrayList<>();
-                List<FluidStack> waterList = new ArrayList<>();
-
-                for (FluidStack f : getStoredFluids()) {
-                    if (f.getFluid() == CropsNHFluids.enrichedFertilizer && f.amount > 0) {
-                        fertilizerAmount += f.amount;
-                        fertilizerList.add(f);
-                    } else if (f.getFluid() == FluidRegistry.WATER && f.amount > 0) {
-                        waterAmount += f.amount;
-                        waterList.add(f);
-                    }
-                }
-
-                if (waterList.isEmpty() || waterAmount < 1000_000) return NotEnoughWater;
-                // TODO fertilizer consumption and dynamic multiplier calculations
-
-                /*
-                 * Process CropsNH Seeds.
-                 * Buffed by fertilizer, consumption = voltage * seed tier ^2 * basic value 8,
-                 * and output multiplier by fertilizer = consumption ^ 0.5 , meanwhile the water cost = 1000L *
-                 * fertilizer consumption.
-                 * Another the voltage multiplier = voltage tier ^ 2 .
-                 */
-                int seedTier = cropsNHFarm.seedData != null ? cropsNHFarm.seedData.getCrop()
-                    .getTier() : 1;
-                // max fertilizer can use
-                int fertilizerConsumption = EuTier * seedTier * seedTier * 8;
-
-                if (fertilizerConsumption * 1000L > fertilizerAmount) {
-                    fertilizerConsumption = (int) fertilizerAmount / 1000;
-                }
-                long fertilizerToConsume = fertilizerConsumption * 1000L;
-
-                // water consumption is 1k times of fertilizer
-                long waterToConsume = 0;
-                if (fertilizerConsumption > waterAmount / 1000_000) {
-                    waterToConsume = waterAmount;
-                    fertilizerConsumption = (int) waterToConsume / 1000_000;
-                    fertilizerToConsume = fertilizerConsumption * 1000;
-                } else {
-                    waterToConsume = fertilizerConsumption * 1000_000L;
-                }
-                if (waterToConsume < 1000_000) waterToConsume = 1000_000;
-
-                double fertilizerMultiplier = Math.pow(fertilizerConsumption, 0.25d);
-                // Outputs bonus of this machine in this status.
-                int multiplier = (int) (tierMultiplier * Math.max(fertilizerMultiplier, 1));
-
-                // output
-                if (!cropsNHFarm.isValid()) return CheckRecipeResultRegistry.INTERNAL_ERROR;
-
-                // consume water and fertilizer
-                TST_MegaTreeFarm.this.fertilizerToConsume = fertilizerToConsume;
-                TST_MegaTreeFarm.this.waterToConsume = waterToConsume;
-                if (fertilizerToConsume > 0) {
-                    for (FluidStack f : fertilizerList) {
-                        if (f.amount >= fertilizerToConsume) {
-                            f.amount -= fertilizerToConsume;
-                            fertilizerToConsume = 0;
-                            break;
-                        } else {
-                            fertilizerToConsume -= f.amount;
-                            f.amount = 0;
-                        }
-                    }
-                }
-
-                for (FluidStack f : waterList) {
-                    if (f.amount >= waterToConsume) {
-                        f.amount -= waterToConsume;
-                        waterToConsume = 0;
-                        break;
-                    } else {
-                        waterToConsume -= f.amount;
-                        f.amount = 0;
-                    }
-                }
-
-                if (fertilizerToConsume > 0 || waterToConsume > 0) return CheckRecipeResultRegistry.INTERNAL_ERROR;
-
-                this.outputItems = cropsNHFarm.getOutputStacks(multiplier);
-
-                this.calculatedEut = (long) (8d * Math.pow(4, EuTier) * 15 / 16);
-                this.duration = controllerTier > 0 ? 20 : 100;
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
         };
-
     }
 
     public final CropsNHFarm cropsNHFarm = new CropsNHFarm();
@@ -1254,58 +1082,53 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // # {\BLUE}Fishing
     // #zh_CN {\BLUE}捕鱼中
 
+    // #tr GT5U.gui.text.recipe_result.growing_algae
+    // # {\GREEN}Growing Algae
+    // #zh_CN {\GREEN}藻类生长中
+
     // #tr GT5U.gui.text.recipe_result.Invalid_Seed
     // # Invalid Seed
     // #zh_CN 无效种子
 
+    // These GT result keys are used directly by the Eco-Sphere GUI and must exist in TST language resources.
+
+    // #tr GT5U.gui.text.recipe_result.success
+    // # Processing recipe
+    // #zh_CN 配方处理中
+
+    // #tr GT5U.gui.text.recipe_result.mega_tree_farm_cleaning
+    // # Eco-Sphere cleaning in progress
+    // #zh_CN 生态圈清理中
+
+    // #tr GT5U.gui.text.recipe_result.processing_mob_drops
+    // # Processing mob drops
+    // #zh_CN 生物掉落处理中
+
+    // #tr GT5U.gui.text.recipe_result.generating_life_essence
+    // # Generating Life Essence
+    // #zh_CN 生命本源生成中
+
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
+        int extraLines = missingFluidAreaInput == null ? 3 : 4;
+        String[] ret = new String[origin.length + extraLines];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "tierMultiplier"
             + " : "
             + EnumChatFormatting.GOLD
             + (int) this.tierMultiplier;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("MegaTreeFarm.gui.currentRecipe")
+            + " : "
+            + EnumChatFormatting.GOLD
+            + getMachineModeName();
+        if (missingFluidAreaInput != null) {
+            ret[origin.length + 3] = EnumChatFormatting.RED + SimpleResultWithText.outOfFluid(missingFluidAreaInput)
+                .getDisplayString();
+        }
         return ret;
     }
 
-    // private static class ESSFakePlayer extends FakePlayer {
-    //
-    // TST_EcoSphereSimulator mte;
-    // ItemStack currentWeapon;
-    //
-    // public ESSFakePlayer(TST_EcoSphereSimulator mte) {
-    // super(
-    // (WorldServer) mte.getBaseMetaTileEntity()
-    // .getWorld(),
-    // new GameProfile(
-    // UUID.nameUUIDFromBytes("[EEC Fake Player]".getBytes(StandardCharsets.UTF_8)),
-    // "[EEC Fake Player]"));
-    // this.mte = mte;
-    // }
-    //
-    // @Override
-    // public void renderBrokenItemStack(ItemStack p_70669_1_) {}
-    //
-    // @Override
-    // public Random getRNG() {
-    // return mte.rand;
-    // }
-    //
-    // @Override
-    // public void destroyCurrentEquippedItem() {}
-    //
-    // @Override
-    // public ItemStack getCurrentEquippedItem() {
-    // return currentWeapon;
-    // }
-    //
-    // @Override
-    // public ItemStack getHeldItem() {
-    // return currentWeapon;
-    // }
-    // }
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
@@ -1314,7 +1137,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
         tt.addMachineType(tr("Tooltip_EcoSphereSimulator_MachineType"))
             // #tr Tooltip_EcoSphereSimulator_Controller
-            // # Controller block for the Eco-Sphere Growth Simulator
+            // # Controller block for the Eco-Sphere Simulator
             // #zh_CN 拟似生态圈的控制方块
             .addInfo(tr("Tooltip_EcoSphereSimulator_Controller"))
             // #tr Tooltip_EcoSphereSimulator.0.01
