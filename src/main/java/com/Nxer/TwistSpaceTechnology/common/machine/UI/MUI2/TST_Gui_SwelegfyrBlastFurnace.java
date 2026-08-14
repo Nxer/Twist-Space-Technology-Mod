@@ -12,7 +12,6 @@ import net.minecraft.util.StatCollector;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
 import com.cleanroommc.modularui.api.widget.IWidget;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
@@ -49,11 +48,11 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
     }
 
     public IWidget createRapidHeatingButton(PanelSyncManager syncManager) {
-        IntSyncValue machineModeSyncer = (IntSyncValue) syncManager.getSyncHandlerFromMapKey("machineMode:0");
-        BooleanSyncValue rapidHeatingButtonSyncer = (BooleanSyncValue) syncManager
-            .getSyncHandlerFromMapKey("rapidHeatingButtonSyncer:0");
-        BooleanSyncValue updatedMachineGetter = (BooleanSyncValue) syncManager
-            .getSyncHandlerFromMapKey("updatedMachineGetter:0");
+        IntSyncValue machineModeSyncer = syncManager.findSyncHandler("machineMode", IntSyncValue.class);
+        BooleanSyncValue rapidHeatingButtonSyncer = syncManager
+            .findSyncHandler("rapidHeatingButtonSyncer", BooleanSyncValue.class);
+        BooleanSyncValue updatedMachineGetter = syncManager
+            .findSyncHandler("updatedMachineGetter", BooleanSyncValue.class);
 
         return new ToggleButton() {
 
@@ -66,11 +65,9 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
         }.size(18, 18)
             .value(rapidHeatingButtonSyncer)
             .overlay(new DynamicDrawable(() -> {
-                TwistSpaceTechnology.LOG.info("updatedMachineGetter.getValue() = {}", updatedMachineGetter.getValue());
                 if (!updatedMachineGetter.getValue() || machineModeSyncer.getValue() != 1) {
                     return SBF_RapidHeating_Forbidden;
                 }
-
                 return rapidHeatingButtonSyncer.getValue() ? SBF_RapidHeating_On : SBF_RapidHeating_Off;
             }))
             .tooltipBuilder(a -> a.add(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating")));
@@ -80,11 +77,11 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
     }
 
     public IWidget createHoldingHeatButton(PanelSyncManager syncManager) {
-        IntSyncValue machineModeSyncer = (IntSyncValue) syncManager.getSyncHandlerFromMapKey("machineMode:0");
-        BooleanSyncValue updatedMachineGetter = (BooleanSyncValue) syncManager
-            .getSyncHandlerFromMapKey("updatedMachineGetter:0");
-        BooleanSyncValue holdingHeatButtonSyncer = (BooleanSyncValue) syncManager
-            .getSyncHandlerFromMapKey("holdingHeatButtonSyncer:0");
+        IntSyncValue machineModeSyncer = syncManager.findSyncHandler("machineMode", IntSyncValue.class);
+        BooleanSyncValue updatedMachineGetter = syncManager
+            .findSyncHandler("updatedMachineGetter", BooleanSyncValue.class);
+        BooleanSyncValue holdingHeatButtonSyncer = syncManager
+            .findSyncHandler("holdingHeatButtonSyncer", BooleanSyncValue.class);
 
         return new ToggleButton() {
 

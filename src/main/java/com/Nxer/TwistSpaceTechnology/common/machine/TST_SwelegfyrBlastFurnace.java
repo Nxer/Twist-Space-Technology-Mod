@@ -557,12 +557,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     return CheckRecipeResults.RapidHeating;
                 } else {
                     // Heating finish, as holding mode running
-                    correctBlazeCost = mHeatingCapacity / 20;
-                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true))
-                        return shutDownOfMissingPyrotheum(correctBlazeCost * 10);
-
-                    duration = 200;
-                    return CheckRecipeResults.RapidHeatFinish;
+                    // correctBlazeCost = mHeatingCapacity / 20;
+                    // if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true))
+                    // return shutDownOfMissingPyrotheum(correctBlazeCost * 10);
+                    //
+                    // duration = 200;
+                    // return CheckRecipeResults.RapidHeatFinish;
+                    isRapidHeating = false;
+                    isHoldingHeat = true;
+                    return CheckRecipeResultRegistry.NO_RECIPE;
                 }
             }
 
@@ -851,6 +854,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public void setRapidHeating(boolean b) {
         isRapidHeating = b;
+        if (b) isHoldingHeat = false;
     }
 
     // public ButtonWidget createHoldingHeatButton(IWidgetBuilder<?> builder) {
@@ -898,6 +902,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public void setHoldingHeat(boolean b) {
         isHoldingHeat = b;
+        if (b) isRapidHeating = false;
     }
 
     @Override
