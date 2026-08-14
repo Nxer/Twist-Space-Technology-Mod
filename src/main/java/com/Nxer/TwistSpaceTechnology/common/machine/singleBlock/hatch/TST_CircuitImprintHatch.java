@@ -40,9 +40,11 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
             // #tr Tooltips.CircuitImprintHatch.01
             // # Extra imprint circuit input for TST Advanced Circuit Assembly Line
             // #zh_CN TST进阶电路装配线的额外压印电路输入
+
             // #tr Tooltips.CircuitImprintHatch.02
             // # Adds
             // #zh_CN 为压印电路增加
+
             // #tr Tooltips.CircuitImprintHatch.03
             // # extra slots for imprint circuits
             // #zh_CN 个额外插槽

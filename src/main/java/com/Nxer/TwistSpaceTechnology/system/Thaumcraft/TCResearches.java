@@ -1098,6 +1098,7 @@ public class TCResearches {
          * // #tr tc.research_name.ESSENTIA_DISCRETIZER
          * // # Essentia Discretizer
          * // #zh_CN 源质离散器
+         *
          * // #tr tc.research_text.ESSENTIA_DISCRETIZER
          * // # Free movement!
          * // #zh_CN 自由流动!
@@ -1108,6 +1109,7 @@ public class TCResearches {
          * crystallizer and the fluid discretizer, and by melding mind with machine, the Essentia Discretizer has come
          * into being!
          * // #zh_CN 作为一名进修过科技的魔法使,你常常为源质发配感到头疼,而源质结晶后所展现的特性正是你所需的,通过对结晶器与流体离散器的研究,配合大脑与电路的控制,源质离散器就此而生!
+         *
          * // #tr tc.research_text.ESSENTIA_DISCRETIZER.1
          * // # Getting back to the point, the Essentia Discretizer is a container that monitors both item and fluid
          * channels, operating with the highest priority. When either item-based or fluid-based essentia enters, the

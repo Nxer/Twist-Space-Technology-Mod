@@ -3136,6 +3136,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // #tr Tooltip_IndustrialMagicMatrix_23
                 // # Infusion Provider
                 // #zh_CN 注魔供应器
+
                 // #tr Tooltip_IndustrialMagicMatrix_23.1
                 // # §bAny magic mechanical block
                 // #zh_CN §b任意魔法机械方块
@@ -3150,6 +3151,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // #tr Tooltip_IndustrialMagicMatrix_25
                 // # Essentia diffusion unit
                 // #zh_CN 源质扩散单元
+
                 // #tr Tooltip_IndustrialMagicMatrix_25.1
                 // # Each level provides 4^tier parallel
                 // #zh_CN §b每级提供4^tier的并行

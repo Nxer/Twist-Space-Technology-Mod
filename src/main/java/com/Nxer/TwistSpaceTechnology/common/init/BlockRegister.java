@@ -180,6 +180,7 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.9.name
         // # Reinforced Stone Brick Casing
         // #zh_CN 强化石砖机械方块
+
         // #tr Tooltip_ReinforcedStoneBrickCasing
         // # Just a stone?
         // #zh_CN 只是块石头?
@@ -190,6 +191,7 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.10.name
         // # Composite Farm Casing
         // #zh_CN 复合农场机械方块
+
         // #tr Tooltip_CompositeFarmCasing
         // # A force stronger than four combined.
         // #zh_CN 一个更比四个强
@@ -210,6 +212,7 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.13.name
         // # Aseptic Greenhouse Casing
         // #zh_CN 无菌温室机械方块
+
         // #tr Tooltip_AsepticGreenhouseCasing
         // # Absolutely Clean!
         // #zh_CN 一尘不染!
@@ -220,6 +223,7 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.14.name
         // # Reinforced Bedrock Casing
         // #zh_CN 强化基岩机械方块
+
         // #tr Tooltip_ReinforcedBedrockCasing
         // # Stronger than bedrock!
         // #zh_CN 比磐石更坚！
@@ -230,6 +234,7 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.15.name
         // # Swelegfyr Casing
         // #zh_CN 熯焱机械方块
+
         // #tr Tooltip_SwelegfyrCasing
         // # {\GOLD}Withstands the inferno!
         // #zh_CN {\GOLD}御火而生!
@@ -329,6 +334,7 @@ public class BlockRegister {
         // #tr tile.StabilisationFieldGenerator.0.name
         // # Stabilisation Field Generator Framework
         // #zh_CN 稳定力场发生器框架
+
         // #tr Tooltip_StabilisationFieldGenerator.0
         // # The Beginning?
         // #zh_CN 开始了?
@@ -340,6 +346,7 @@ public class BlockRegister {
         // #tr tile.StabilisationFieldGenerator.1.name
         // # Stabilisation Field Generator UEV Tier
         // #zh_CN 稳定力场发生器(UEV)
+
         // #tr Tooltip_StabilisationFieldGenerator.1
         // # The Beginning
         // #zh_CN 开始了
@@ -351,6 +358,7 @@ public class BlockRegister {
         // #tr tile.StabilisationFieldGenerator.2.name
         // # Stabilisation Field Generator UIV Tier
         // #zh_CN 稳定力场发生器(UIV)
+
         // #tr Tooltip_StabilisationFieldGenerator.2
         // # How Did We Get Here?
         // #zh_CN 为什么会变成这样呢？
@@ -362,6 +370,7 @@ public class BlockRegister {
         // #tr tile.StabilisationFieldGenerator.3.name
         // # Stabilisation Field Generator UMV Tier
         // #zh_CN 稳定力场发生器(UMV)
+
         // #tr Tooltip_StabilisationFieldGenerator.3
         // # We Need to Go Deeper
         // #zh_CN 我们需要再深入些
@@ -373,6 +382,7 @@ public class BlockRegister {
         // #tr tile.StabilisationFieldGenerator.4.name
         // # Stabilisation Field Generator UXV Tier
         // #zh_CN 稳定力场发生器(UXV)
+
         // #tr Tooltip_StabilisationFieldGenerator.4
         // # The End?
         // #zh_CN 结束了?
@@ -384,6 +394,7 @@ public class BlockRegister {
         // #tr tile.StabilisationFieldGenerator.5.name
         // # Stabilisation Field Generator MAX Tier
         // #zh_CN 稳定力场发生器(MAX)
+
         // #tr Tooltip_StabilisationFieldGenerator.5
         // # The End
         // #zh_CN 结束了
@@ -395,6 +406,7 @@ public class BlockRegister {
         // #tr tile.EnergySustainmentMatrix.0.name
         // # Energy Sustainment Matrix Framework
         // #zh_CN 能量维持矩阵框架
+
         // #tr Tooltip_EnergySustainmentMatrix.0
         // # With Our Powers Combined
         // #zh_CN 小心轻放
@@ -405,6 +417,7 @@ public class BlockRegister {
         // #tr tile.EnergySustainmentMatrix.1.name
         // # Energy Sustainment Matrix UEV Tier
         // #zh_CN 能量维持矩阵(UEV)
+
         // #tr Tooltip_EnergySustainmentMatrix.1
         // # Infinator
         // #zh_CN 无尽工程师
@@ -415,6 +428,7 @@ public class BlockRegister {
         // #tr tile.EnergySustainmentMatrix.2.name
         // # Energy Sustainment Matrix UIV Tier
         // #zh_CN 能量维持矩阵(UIV)
+
         // #tr Tooltip_EnergySustainmentMatrix.2
         // # Subspace Cube
         // #zh_CN 亚空间立方体
@@ -425,6 +439,7 @@ public class BlockRegister {
         // #tr tile.EnergySustainmentMatrix.3.name
         // # Energy Sustainment Matrix UMV Tier
         // #zh_CN 能量维持矩阵(UMV)
+
         // #tr Tooltip_EnergySustainmentMatrix.3
         // # Paradox
         // #zh_CN 悖论
@@ -435,6 +450,7 @@ public class BlockRegister {
         // #tr tile.EnergySustainmentMatrix.4.name
         // # Energy Sustainment Matrix UXV Tier
         // #zh_CN 能量维持矩阵(UXV)
+
         // #tr Tooltip_EnergySustainmentMatrix.4
         // # Lava Topic
         // #zh_CN 热门话题
@@ -445,6 +461,7 @@ public class BlockRegister {
         // #tr tile.EnergySustainmentMatrix.5.name
         // # Energy Sustainment Matrix MAX Tier
         // #zh_CN 能量维持矩阵(MAX)
+
         // #tr Tooltip_EnergySustainmentMatrix.5
         // # Great Horizons From Up Here
         // #zh_CN 这上面的视野不错

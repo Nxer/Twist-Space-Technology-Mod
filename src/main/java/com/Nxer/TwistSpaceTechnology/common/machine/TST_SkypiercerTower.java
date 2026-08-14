@@ -991,6 +991,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #tr Tooltip_SkypiercerTower_InfusionProvider
             // #en_US Replace any chemically inert machine casing.Only one is allowed.
             // #zh_CN 任何舱室替换化学惰性方块,只允许有一个.
+
             // #tr Tooltip.InfusionProvider
             // # Infusion Provider
             // #zh_CN 注魔供应器
@@ -998,6 +999,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #tr Tooltip_SkypiercerTower_EssentiaOutputHatch
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
+
             // #tr Tooltip.EssentiaOutputHatch
             // # Essentia Output Hatch
             // #zh_CN 源质输出仓

@@ -47,6 +47,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.0.name
         // # Test Item
         // #zh_CN 测试物品
+
         // #tr tooltips.TestItem0.line1
         // # A test item, no use.
         // #zh_CN A test item, no use.
@@ -55,6 +56,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.1.name
         // # Space Warper
         // #zh_CN 空间翘曲器
+
         // #tr tooltips.SpaceWarper.line1
         // # Power of gravitation !
         // #zh_CN {\DARK_BLUE}Power of gravitation !
@@ -64,6 +66,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.2.name
         // # Gravitational Constraint Optical Quantum Crystal
         // #zh_CN 引力约束光量子晶体
+
         // #tr tooltips.OpticalSOC.line1
         // # These Photons have their own mind.
         // #zh_CN 这些光子有他们自己的想法.
@@ -73,6 +76,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.3.name
         // # Mold (Singularity)
         // #zh_CN 模具 (奇点)
+
         // #tr tooltips.MoldSingularity.line1
         // # Mold for making Singularity
         // #zh_CN 用来制作奇点的模具
@@ -82,6 +86,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.4.name
         // # Particle Trap - SpaceTime Shield
         // #zh_CN 粒子阱 - 时空鞘
+
         // #tr tooltips.ParticleTrapTimeSpaceShield.line1
         // # Constrain the operator(the photon) to a miniature spacetime.
         // #zh_CN 将算子(光子)限制在一个微型时空中.
@@ -91,6 +96,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.5.name
         // # Lapotron Shard
         // #zh_CN 兰波顿碎片
+
         // #tr tooltips.LapotronShard.line1
         // # Even though it's just a shard, the energy fluctuations inside are also visible to the naked eye.
         // #zh_CN 尽管只是一块碎片, 它里面的能量波动也是肉眼可见的.
@@ -100,6 +106,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.6.name
         // # Perfect Lapotron Crystal
         // #zh_CN 完美兰波顿水晶
+
         // #tr tooltips.PerfectLapotronCrystal.line1
         // # Immaculate !
         // #zh_CN 完美无瑕 !
@@ -109,6 +116,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.7.name
         // # Energy Crystal Shard
         // #zh_CN 能量水晶碎片
+
         // #tr tooltips.EnergyCrystalShard.line1
         // # A red crystal shard, doesn't look like anything special.
         // #zh_CN 一块红色的水晶碎片, 看起来没什么特殊的.
@@ -118,6 +126,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.8.name
         // # Perfect Energy Crystal
         // #zh_CN 完美能量水晶
+
         // #tr tooltips.PerfectEnergyCrystal.line1
         // # As it grew in size, it displayed incredible traits on energy control.
         // #zh_CN 随着体型变大，它在能量控制方面表现出了不可思议的特性.
@@ -127,6 +136,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.9.name
         // # Solar Sail
         // #zh_CN 太阳帆
+
         // #tr tooltips.SolarSail.line1
         // # Collect and concentrate light energy.
         // #zh_CN 收集并浓缩光能.
@@ -136,6 +146,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.10.name
         // # Dyson Sphere Frame Component
         // #zh_CN 戴森球框架部件
+
         // #tr tooltips.DysonSphereFrameComponent.line1
         // # Stellar gravity can't destroy these structures, even black hole.
         // #zh_CN 恒星的引力无法破坏这些结构, 黑洞也不行.
@@ -145,6 +156,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.11.name
         // # Small Launch Vehicle
         // #zh_CN 小型运载火箭
+
         // #tr tooltips.SmallLaunchVehicle.line1
         // # Subtle and sophisticated.
         // #zh_CN 巧妙且精致.
@@ -154,6 +166,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.12.name
         // # Empty Small Launch Vehicle
         // #zh_CN 空的小型运载火箭
+
         // #tr tooltips.EmptySmallLaunchVehicle.line1
         // # Subtle and sophisticated but Empty.
         // #zh_CN 巧妙且精致, 但是是空的.
@@ -163,6 +176,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.13.name
         // # Critical Photon
         // #zh_CN 临界光子
+
         // #tr tooltips.CriticalPhoton.line1
         // # The future has arrived.
         // #zh_CN 未来已至.
@@ -172,6 +186,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.14.name
         // # Antimatter
         // #zh_CN 反物质
+
         // #tr tooltips.Antimatter.line1
         // # The Other Side of Matter.
         // #zh_CN 物质的另一面.
@@ -181,6 +196,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.15.name
         // # Annihilation Constrainer
         // #zh_CN 湮灭约束器
+
         // #tr tooltips.AnnihilationConstrainer.line1
         // # Encourage indirect operation.
         // #zh_CN 鼓励间接操纵.
@@ -190,6 +206,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.16.name
         // # Antimatter Fuel Rod
         // #zh_CN 反物质燃料棒
+
         // #tr tooltips.AntimatterFuelRod.line1
         // # More...
         // #zh_CN More...
@@ -199,6 +216,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.17.name
         // # Stellar Construction Frame Material
         // #zh_CN 恒星结构框架材料
+
         // #tr tooltips.StellarConstructionFrameMaterial.line1
         // # Perfect and expensive.
         // #zh_CN 完美且昂贵.
@@ -208,12 +226,15 @@ public class ItemRegister {
         // #tr item.MetaItem01.18.name
         // # Gravitational Lens
         // #zh_CN 引力透镜
+
         // #tr tooltips.GravitationalLens.line1
         // # Its twisted and powerful gravitational field is shielded in a container.
         // #zh_CN 其扭曲而强大的引力场被屏蔽在容器中.
+
         // #tr tooltips.GravitationalLens.line2
         // # It is usually utilized to work and alter spatial structures,
         // #zh_CN 通常会利用它来加工和改变空间结构,
+
         // #tr tooltips.GravitationalLens.line3
         // # but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.
         // #zh_CN  但也不妨碍有些人会拿它聚焦阳光点火玩.
@@ -226,6 +247,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.19.name
         // # Purple Magnolia Petal
         // #zh_CN 紫玉兰花瓣
+
         // #tr tooltips.PurpleMagnoliaPetal.line1
         // # Petals falling from Alfheim...
         // #zh_CN {\ITALIC}{\GRAY}于精灵之乡飘落...
@@ -235,6 +257,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.20.name
         // # Purple Magnolia Sapling
         // #zh_CN 紫玉兰树苗
+
         // #tr tooltips.PurpleMagnoliaSapling.line1
         // # Not plantable. Need to be on CropsNH crop sticks.
         // #zh_CN 不可种植.需要使用CropsNH作物架.
@@ -244,6 +267,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.21.name
         // # Void Pollen
         // #zh_CN 虚空花粉
+
         // #tr tooltips.VoidPollen.line1
         // # Pollen yet to be arisen.
         // #zh_CN 未有之花的花粉.
@@ -253,6 +277,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.22.name
         // # Primitive Man's SpaceTime Distortion Device
         // #zh_CN 原始人的时空扭曲装置
+
         // #tr tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1
         // # Anyway...
         // #zh_CN 反正吧...
@@ -267,6 +292,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.24.name
         // # Ball Lightning Upgrade Chip
         // #zh_CN 球状闪电升级芯片
+
         // #tr tooltips.ItemBallLightningUpgradeChip.line1
         // # Power, give me, more power!
         // #zh_CN {\AQUA}Power, give me, more power!
@@ -276,6 +302,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.25.name
         // # Energy Shard
         // #zh_CN 能量碎片
+
         // #tr EnergyShard.tooltips.01
         // # A piece of pure energy, from dark...
         // #zh_CN 一片纯净的能量, 来自黑暗的...
@@ -284,6 +311,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.26.name
         // # Silicon-based Neuron
         // #zh_CN 硅基神经元
+
         // #tr SiliconBasedNeuron.tooltips.01
         // # Very... uh, natural.
         // #zh_CN 非常的... 呃, 自然.
@@ -292,6 +320,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.27.name
         // # Matter Recombinator
         // #zh_CN 物质重组器
+
         // #tr MatterRecombinator.tooltips.01
         // # The fundamental unit of material manipulation at the scale of elementary particles.
         // #zh_CN 基本粒子尺度上物质操作的基本单元.
@@ -300,12 +329,15 @@ public class ItemRegister {
         // #tr item.MetaItem01.28.name
         // # Core Element
         // #zh_CN 核心素
+
         // #tr CoreElement.tooltips.01
         // # Adding core elements to the singularization reaction of strange matter
         // #zh_CN 在奇异物质的奇异化反应中加入核心素,
+
         // #tr CoreElement.tooltips.02
         // # can slow down the singularization reaction
         // #zh_CN 可以慢化奇异化反应,
+
         // #tr CoreElement.tooltips.03
         // # and make it proceed in an orderly manner.
         // #zh_CN 使其有序进行.
@@ -314,9 +346,11 @@ public class ItemRegister {
         // #tr item.MetaItem01.29.name
         // # Strange Annihilation Fuel Rod
         // #zh_CN 奇异湮灭燃料棒
+
         // #tr StrangeAnnihilationFuelRod.tooltips.01
         // # Using strange matter as the main annihilation reaction raw material,
         // #zh_CN 使用了奇异物质为主要的湮灭反应原料,
+
         // #tr StrangeAnnihilationFuelRod.tooltips.02
         // # the energy density and output power are greatly improved.
         // #zh_CN 能量密度和输出功率均大幅提高.
@@ -357,6 +391,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.38.name
         // # Perfect Engraved Energy Chip
         // #zh_CN 完美铭刻能量芯片
+
         // #tr PerfectEngravedEnergyChip.tooltips.01
         // # Excellent conductive chip
         // #zh_CN 优秀的导能芯片
@@ -368,6 +403,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.40.name
         // # Perfect Engraved Laptron Chip
         // #zh_CN 完美铭刻兰波顿芯片
+
         // #tr PerfectEngravedLaptronChip.tooltips.01
         // # Excellent energy storage chip
         // #zh_CN 优秀的储能芯片
@@ -920,6 +956,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.0.name
         // # Rune of Vigilance
         // #zh_CN 恂戒符文
+
         // #tr tooltips.Rune_of_Vigilance.line1
         // # Vigilance.
         // #zh_CN {\RED}笼中之鸟从未意识到警戒的重要性。
@@ -927,6 +964,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.1.name
         // # Rune of Erelong
         // #zh_CN 须臾符文
+
         // #tr tooltips.Rune_of_Erelong.line1
         // # Erelong.
         // #zh_CN {\DARK_BLUE}永恒不过是一刻的缩影。
@@ -934,6 +972,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.2.name
         // # Rune of Ether
         // #zh_CN 以太符文
+
         // #tr tooltips.Rune_of_Ether.line1
         // # Ether.
         // #zh_CN {\AQUA}对未来最大的慷慨，是把一切献给现在。
@@ -941,6 +980,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.3.name
         // # Rune of Perdition
         // #zh_CN 永劫符文
+
         // #tr tooltips.Rune_of_Perdition.line1
         // # Perdition.
         // #zh_CN {\DARK_RED}永远不为从未存在的救赎祈祷。
@@ -1001,6 +1041,7 @@ public class ItemRegister {
         // #tr item.MetaItemNamedCircuit.0.name
         // # Ultimate Energy Flow Circuit
         // #zh_CN 终极能量流电路
+
         // #tr UltimateEnergyFlowCircuit.tooltips.01
         // # The ultimate choice for high-load circuits
         // #zh_CN 高负载电路的终极选择
