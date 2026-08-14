@@ -1,10 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.getModeMultiplier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.queryTimeTreeProduct;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.queryTreeProduct;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey.INSTANCE;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
 import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.GTValues;
@@ -79,13 +79,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
         ArrayList<ItemStack> allSaplingWithTagCopy = new ArrayList<>();
         for (ItemStack aSapling : allSaplingsIn) {
-            ItemStack aStack = aSapling.copy();
-            aStack.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"
-            // #tr ESS.TreeGrowthSimulator.nei.tooltip.7
-            // # Any Sapling
-            // #zh_CN 任意树苗
-            ));
-            allSaplingWithTagCopy.add(aStack);
+            allSaplingWithTagCopy.add(aSapling.copy());
         }
         allSaplingWithTag = allSaplingWithTagCopy.toArray(new ItemStack[0]);
 
@@ -245,7 +239,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .special(specialStacks)
-            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
+            .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
             .metadata(INSTANCE, requiredTier)
             .fake()
             .duration(MODE_RECIPE_DURATION)

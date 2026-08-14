@@ -243,7 +243,7 @@ public class GTCMRecipe {
         .specialSlotSensitive()
         .frontend(TST_TreeGrowthSimulatorFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.EcoSphereSimulator.get(1)))
         .build();
 
     // #tr tst.recipe.AquaticZoneSimulatorFakeRecipes
@@ -255,7 +255,7 @@ public class GTCMRecipe {
         .minInputs(0, 1)
         .frontend(TST_AquaticZoneSimulatorFronted::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.EcoSphereSimulator.get(1)))
         .build();
 
     // #tr tst.recipe.ArtificialGreenHouseFakeRecipes
@@ -267,7 +267,7 @@ public class GTCMRecipe {
         .minInputs(1, 1)
         .frontend(TST_ArtificialGreenHouseFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.EcoSphereSimulator.get(1)))
         .build();
 
     // #tr tst.recipe.DirectedMobClonerFakeRecipes
@@ -279,7 +279,7 @@ public class GTCMRecipe {
         .minInputs(0, 0)
         .frontend(TST_DirectedMobClonerFrontend::new)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW)
-        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MegaTreeFarm.get(1)))
+        .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.EcoSphereSimulator.get(1)))
         .build();
 
     // #tr tst.recipe.StrangeMatterAggregatorRecipes

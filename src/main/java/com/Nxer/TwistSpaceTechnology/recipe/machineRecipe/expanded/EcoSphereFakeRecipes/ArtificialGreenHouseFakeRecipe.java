@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
 import com.gtnewhorizon.cropsnh.farming.SeedStats;
 import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
@@ -54,7 +54,7 @@ public final class ArtificialGreenHouseFakeRecipe {
         if (seed == null || seed.getItem() == null || outputs == null) return;
         ItemStack input = copyOne(seed);
         input.stackSize = 0;
-        List<ItemStack> products = outputs.entrySet()
+        List<Map.Entry<ItemStack, Integer>> displayedOutputs = outputs.entrySet()
             .stream()
             .filter(
                 entry -> entry.getKey() != null && entry.getKey()
@@ -62,9 +62,17 @@ public final class ArtificialGreenHouseFakeRecipe {
             // Match the CropsNH crop page: most likely drops appear first in the 3x3 grid.
             .sorted(Map.Entry.<ItemStack, Integer>comparingByValue(Comparator.reverseOrder()))
             .limit(9)
-            .map(entry -> copyOne(entry.getKey()))
             .collect(Collectors.toList());
-        if (products.isEmpty()) return;
+        if (displayedOutputs.isEmpty()) return;
+
+        ItemStack[] products = displayedOutputs.stream()
+            .map(
+                entry -> entry.getKey()
+                    .copy())
+            .toArray(ItemStack[]::new);
+        int[] outputChances = displayedOutputs.stream()
+            .mapToInt(Map.Entry::getValue)
+            .toArray();
 
         FluidStack requiredFluid = new FluidStack(
             CropsNHFluids.enrichedFertilizer,
@@ -72,10 +80,11 @@ public final class ArtificialGreenHouseFakeRecipe {
         if (requiredFluid.getFluid() == null) return;
         GTValues.RA.stdBuilder()
             .itemInputs(input)
-            .itemOutputs(products.toArray(new ItemStack[0]))
+            .itemOutputs(products)
+            .outputChances(outputChances)
             .fluidInputs(requiredFluid)
-            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
-            .metadata(MegaTreeFarmBeaconRequirementKey.INSTANCE, hybrid ? 2 : 1)
+            .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
+            .metadata(EcoSphereSimulatorBeaconRequirementKey.INSTANCE, hybrid ? 2 : 1)
             .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .fake()

@@ -378,7 +378,7 @@ public class Config {
 
     // endregion
 
-    public static boolean Enable_MegaTreeFarm = true;
+    public static boolean Enable_EcoSphereSimulator = true;
 
     // region Infinite Air Hatch
 

@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.getItemStackString;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmBeaconRequirementKey.INSTANCE;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.MegaTreeFarmTierRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
@@ -170,7 +170,7 @@ public class AquaticZoneSimulatorFakeRecipe {
                 .itemInputs(focusInput)
                 .itemOutputs(output.copy())
                 .fluidInputs(unknownWater.copy())
-                .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
+                .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
                 .metadata(INSTANCE, 2)
                 .fake()
                 .duration(MODE_RECIPE_DURATION)
@@ -204,7 +204,7 @@ public class AquaticZoneSimulatorFakeRecipe {
         GTValues.RA.stdBuilder()
             .itemOutputs(jellyfish)
             .fluidInputs(DistilledWaterStack)
-            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
+            .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
             .metadata(INSTANCE, 1)
             .fake()
             .duration(MODE_RECIPE_DURATION)
@@ -230,7 +230,7 @@ public class AquaticZoneSimulatorFakeRecipe {
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
-            .metadata(MegaTreeFarmTierRequirementKey.INSTANCE, 1)
+            .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
             .metadata(INSTANCE, 1)
             .fake()
             .duration(MODE_RECIPE_DURATION)

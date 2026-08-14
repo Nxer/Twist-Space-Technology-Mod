@@ -67,6 +67,7 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
@@ -77,20 +78,20 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
-public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
+public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator> {
 
     // region Class Constructor
-    public TST_MegaTreeFarm(int aID, String aName, String aNameRegional) {
+    public TST_EcoSphereSimulator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
 
-    public TST_MegaTreeFarm(String aName) {
+    public TST_EcoSphereSimulator(String aName) {
         super(aName);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_MegaTreeFarm(this.mName);
+        return new TST_EcoSphereSimulator(this.mName);
     }
 
     // region Structure
@@ -227,10 +228,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         // #tr EcoSphereSimulator.modeMsg.3
         // # Directed Mob Cloning
         // #zh_CN 定向克隆
-        if (cleaningRequested || cleaningRunActive) return tr("MegaTreeFarm.mode.cleaning");
+        if (cleaningRequested || cleaningRunActive) return tr("EcoSphereSimulator.mode.cleaning");
         return modeBeaconPresent && boundMode >= 0 && boundMode < MACHINE_MODES.length
             ? MACHINE_MODES[boundMode].getDisplayName()
-            : tr("MegaTreeFarm.mode.waiting");
+            : tr("EcoSphereSimulator.mode.waiting");
     }
 
     @Override
@@ -365,7 +366,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     private static int getModeFromBeacon(ItemStack stack) {
-        if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.MegaTreeFarmModeBeacon) return -1;
+        if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.EcoSphereModeBeacon) return -1;
         int meta = stack.getItemDamage();
         return meta >= 0 && meta <= 7 ? meta / 2 : -1;
     }
@@ -445,7 +446,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     private static final String STRUCTURE_PIECE_MAIN = "mainEcoSphereSimulator0";
     private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
-    private static IStructureDefinition<TST_MegaTreeFarm> STRUCTURE_DEFINITION = null;
+    private static IStructureDefinition<TST_EcoSphereSimulator> STRUCTURE_DEFINITION = null;
 
     private static final int STRUCTURE_OFFSET_X = 16;
     private static final int STRUCTURE_OFFSET_Y = 38;
@@ -498,9 +499,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public IStructureDefinition<TST_MegaTreeFarm> getStructureDefinition() {
+    public IStructureDefinition<TST_EcoSphereSimulator> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_EcoSphereSimulator>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
                 .addElement('A', chainAllGlasses())
@@ -538,9 +539,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'Q',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .hint(1)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -548,9 +549,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'q',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .hint(1)
                             .casingIndex(MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -558,9 +559,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'R',
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .hint(2)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -568,9 +569,9 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                     'r',
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                        HatchElementBuilder.<TST_EcoSphereSimulator>builder()
                             .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .adder(TST_EcoSphereSimulator::addToMachineList)
                             .hint(2)
                             .casingIndex(MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -997,17 +998,18 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 availableInputPower = availableVoltage * availableAmperage;
                 EuTier = (int) Math.max(0, Math.log((double) availableInputPower / 8d) / Math.log(4d));
                 updateSlots();
-                if (EuTier < 1) return SimpleCheckRecipeResult.ofFailure("no_energy");
+                if (EuTier < 1) return CheckRecipeResultRegistry.insufficientPower(32);
                 if (cleaningRequested) return startCleaning();
                 if (!modeBeaconPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
-                    // #tr GT5U.gui.text.recipe_result.mega_tree_farm_waiting_for_mode_beacon
+                    // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_mode_beacon
                     // # Waiting For Mode Beacon
                     // #zh_CN 等待模式信标
-                    return SimpleCheckRecipeResult.ofFailure("mega_tree_farm_waiting_for_mode_beacon");
+                    return SimpleCheckRecipeResult.ofFailure("eco_sphere_simulator_waiting_for_mode_beacon");
                 }
                 machineMode = boundMode;
                 tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
-                EcoSphereModeResult modeResult = MACHINE_MODES[machineMode].process(TST_MegaTreeFarm.this, EuTier);
+                EcoSphereModeResult modeResult = MACHINE_MODES[machineMode]
+                    .process(TST_EcoSphereSimulator.this, EuTier);
                 if (!modeResult.result()
                     .wasSuccessful()) {
                     if (cleaningRequested) return startCleaning();
@@ -1017,10 +1019,10 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                         outputFluids = new FluidStack[0];
                         calculatedEut = 0;
                         duration = fluidAreaFillDuration;
-                        // #tr GT5U.gui.text.recipe_result.mega_tree_farm_filling_fluid_area
+                        // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_filling_fluid_area
                         // # Filling Eco-Sphere fluid area
                         // #zh_CN 生态圈流体灌注中
-                        return SimpleCheckRecipeResult.ofSuccess("mega_tree_farm_filling_fluid_area");
+                        return SimpleCheckRecipeResult.ofSuccess("eco_sphere_simulator_filling_fluid_area");
                     }
                     if (missingFluidAreaInput != null) return SimpleResultWithText.outOfFluid(missingFluidAreaInput);
                     return modeResult.result();
@@ -1043,70 +1045,15 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
                 outputFluids = new FluidStack[0];
                 calculatedEut = 0;
                 duration = isTierTwo() ? tierTwoCleaningDuration : tierOneCleaningDuration;
-                return SimpleCheckRecipeResult.ofSuccess("mega_tree_farm_cleaning");
+                // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_cleaning
+                // # Eco-Sphere cleaning in progress
+                // #zh_CN 生态圈清理中
+                return SimpleCheckRecipeResult.ofSuccess("eco_sphere_simulator_cleaning");
             }
         };
     }
 
     public final CropsNHFarm cropsNHFarm = new CropsNHFarm();
-
-    // #tr GT5U.gui.text.recipe_result.no_energy
-    // # No power
-    // #zh_CN 能源不足
-
-    // #tr GT5U.gui.text.recipe_result.no_sapling
-    // # Missing Sapling
-    // #zh_CN 缺失树苗
-
-    // #tr GT5U.gui.text.recipe_result.no_fluid
-    // # Missing Fluid
-    // #zh_CN 缺失流体
-
-    // #tr GT5U.gui.text.recipe_result.no_enough_input
-    // # No Enough Fluid
-    // #zh_CN 输入流体不足
-
-    // #tr GT5U.gui.text.recipe_result.no_correct_Circuit
-    // # No Match Circuit
-    // #zh_CN 没有匹配的电路板
-
-    // #tr GT5U.gui.text.recipe_result.growing_trees
-    // # {\GREEN}Growing Trees
-    // #zh_CN {\GREEN}原木拟生中
-
-    // #tr GT5U.gui.text.recipe_result.focus_on
-    // # {\BLUE}Targeting
-    // #zh_CN {\BLUE}定向中
-
-    // #tr GT5U.gui.text.recipe_result.fishing
-    // # {\BLUE}Fishing
-    // #zh_CN {\BLUE}捕鱼中
-
-    // #tr GT5U.gui.text.recipe_result.growing_algae
-    // # {\GREEN}Growing Algae
-    // #zh_CN {\GREEN}藻类生长中
-
-    // #tr GT5U.gui.text.recipe_result.Invalid_Seed
-    // # Invalid Seed
-    // #zh_CN 无效种子
-
-    // These GT result keys are used directly by the Eco-Sphere GUI and must exist in TST language resources.
-
-    // #tr GT5U.gui.text.recipe_result.success
-    // # Processing recipe
-    // #zh_CN 配方处理中
-
-    // #tr GT5U.gui.text.recipe_result.mega_tree_farm_cleaning
-    // # Eco-Sphere cleaning in progress
-    // #zh_CN 生态圈清理中
-
-    // #tr GT5U.gui.text.recipe_result.processing_mob_drops
-    // # Processing mob drops
-    // #zh_CN 生物掉落处理中
-
-    // #tr GT5U.gui.text.recipe_result.generating_life_essence
-    // # Generating Life Essence
-    // #zh_CN 生命本源生成中
 
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
@@ -1118,7 +1065,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             + EnumChatFormatting.GOLD
             + (int) this.tierMultiplier;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("MegaTreeFarm.gui.currentRecipe")
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.currentRecipe")
             + " : "
             + EnumChatFormatting.GOLD
             + getMachineModeName();

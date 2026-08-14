@@ -67,7 +67,7 @@ public class CommonProxy {
         }
 
         TCLoader.preInit();
-        if (TCLoader.TC_Installed && Config.Enable_MegaTreeFarm) {
+        if (TCLoader.TC_Installed && Config.Enable_EcoSphereSimulator) {
             FMLCommonHandler.instance()
                 .bus()
                 .register(new TCResearchEventHandler());

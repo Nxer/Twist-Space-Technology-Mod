@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
+import codechicken.nei.NEIClientUtils;
+import codechicken.nei.recipe.GuiRecipe;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
@@ -71,29 +73,28 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
     @Override
     public @NotNull List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
-        // Fluid Stack
-        if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
-            // #tr ESS.AquaticZoneSimulator.nei.tooltip.0
-            // # Input fluid to simulate waters
-            // #zh_CN 输入流体以模拟水域
-            super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
+        if (!(NEIClientUtils.getGuiContainer() instanceof GuiRecipe<?>guiRecipe)) return currentTip;
+
+        for (var input : neiCachedRecipe.mInputs) {
+            if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
+                || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
+            if (positionedStack.isFluid()) {
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
+                // #tr ESS.AquaticZoneSimulator.nei.tooltip.0
+                // # Input fluid to simulate waters
+                // #zh_CN 输入流体以模拟水域
+            } else {
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.1"));
+                // #tr ESS.AquaticZoneSimulator.nei.tooltip.1
+                // # Put in an input bus to direct this output
+                // #zh_CN 放入输入总线以定向此产物
+            }
             return currentTip;
         }
 
-        // Input Stack
-        if (stack == neiCachedRecipe.mInputs.get(0).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.1")
-            // #tr ESS.AquaticZoneSimulator.nei.tooltip.1
-            // # Place in machine controller slot to target aquaculture
-            // #zh_CN 放入控制器插槽以定向产物
-            );
-            return currentTip;
-        }
-
-        // Output Stack
-        if (neiCachedRecipe.mOutputs.stream()
-            .anyMatch(output -> stack == output.item)) {
+        for (var output : neiCachedRecipe.mOutputs) {
+            if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
+                || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
             // #tr ESS.AquaticZoneSimulator.nei.tooltip.2
             // # Recipe size determines output chance.

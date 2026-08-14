@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
-import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MegaTreeFarmModeBeacon;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereModeBeacon;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -27,7 +27,7 @@ public class ItemRegister {
 
     public static void registryItems() {
         Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
-            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask, MegaTreeFarmModeBeacon };
+            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask, EcoSphereModeBeacon };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -951,37 +951,50 @@ public class ItemRegister {
         // #tr item.MetaItemIzumik.0.name
         // # {\BLUE}{\BOLD}Fount Of Ecology
         // #zh_CN {\BLUE}{\BOLD}生态泉源
-        // #tr FountOfEcology.tooltips.01
-        // # {\AQUA}A unique looking jellyfish
-        // #zh_CN {\AQUA}一只长相奇特的水母
-        // #tr FountOfEcology.tooltips.02
-        // # {\AQUA}Well......
-        // #zh_CN {\AQUA}等下......
-        // #tr FountOfEcology.tooltips.03
-        // # {\GOLD}A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
-        // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
-        // #tr FountOfEcology.tooltips.04
-        // # {\GOLD}"The Afterborn Firstborn", Seaborn
-        // #zh_CN {\GOLD}"后生的出初生" 海嗣
-        GTCMItemList.FountOfEcology.set(MetaItemIzumik.registerVariantWithTooltips(0, new String[]{tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02")}, new String[]{tr("FountOfEcology.tooltips.03"), tr("FountOfEcology.tooltips.04")}));
+        GTCMItemList.FountOfEcology.set(MetaItemIzumik.registerVariantWithTooltips(
+            0,
+            new String[] {
+                // #tr FountOfEcology.tooltips.01
+                // # {\AQUA}A unique looking jellyfish
+                // #zh_CN {\AQUA}一只长相奇特的水母
+                tr("FountOfEcology.tooltips.01"),
+                // #tr FountOfEcology.tooltips.02
+                // # {\AQUA}Well......
+                // #zh_CN {\AQUA}等下......
+                tr("FountOfEcology.tooltips.02") },
+            new String[] {
+                // #tr FountOfEcology.tooltips.03
+                // # {\GOLD}A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
+                // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
+                tr("FountOfEcology.tooltips.03"),
+                // #tr FountOfEcology.tooltips.04
+                // # {\GOLD}"The Afterborn Firstborn", Seaborn
+                // #zh_CN {\GOLD}"后生的出初生" 海嗣
+                tr("FountOfEcology.tooltips.04") }));
 
         // #tr item.MetaItemIzumik.1.name
         // # {\DARK_AQUA}"Offspring"
         // #zh_CN {\DARK_AQUA}"子代"
-        // #tr Offspring.tooltips.01
-        // # {\AQUA}A weak little jellyfish
-        // #zh_CN {\AQUA}一只弱不禁风的小水母
-        // #tr Offspring.tooltips.02
-        // # {\AQUA}Seems to be containing additional information
-        // #zh_CN {\AQUA}似乎包含着额外的信息
-        // #tr Offspring.tooltips.03
-        // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
-        // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
-        // #tr Offspring.tooltips.04
-        // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
-        // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
-
-        GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(1, new String[]{tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02")}, new String[]{tr("Offspring.tooltips.03"), tr("Offspring.tooltips.04")}));
+        GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(
+            1,
+            new String[] {
+                // #tr Offspring.tooltips.01
+                // # {\AQUA}A weak little jellyfish
+                // #zh_CN {\AQUA}一只弱不禁风的小水母
+                tr("Offspring.tooltips.01"),
+                // #tr Offspring.tooltips.02
+                // # {\AQUA}Seems to be containing additional information
+                // #zh_CN {\AQUA}似乎包含着额外的信息
+                tr("Offspring.tooltips.02") },
+            new String[] {
+                // #tr Offspring.tooltips.03
+                // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
+                // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
+                tr("Offspring.tooltips.03"),
+                // #tr Offspring.tooltips.04
+                // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
+                // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
+                tr("Offspring.tooltips.04") }));
 
         /*    ---Meta Item Named Circuit---    */
 
@@ -1057,45 +1070,45 @@ public class ItemRegister {
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
 
-        // #tr item.MegaTreeFarmModeBeacon.0.name
+        // #tr item.EcoSphereModeBeacon.0.name
         // # Eco-Sphere Mode Beacon: Arboreal Genesis
         // #zh_CN 生态圈模式信标: 原木拟生
-        GTCMItemList.MegaTreeFarmModeBeacon1.set(MegaTreeFarmModeBeacon.registerVariant(0));
+        GTCMItemList.EcoSphereModeBeacon1.set(EcoSphereModeBeacon.registerVariant(0));
 
-        // #tr item.MegaTreeFarmModeBeacon.1.name
+        // #tr item.EcoSphereModeBeacon.1.name
         // # Eco-Sphere Mode Beacon: Arboreal Genesis
         // #zh_CN 生态圈模式信标: 原木拟生
-        GTCMItemList.MegaTreeFarmModeBeacon2.set(MegaTreeFarmModeBeacon.registerVariant(1));
+        GTCMItemList.EcoSphereModeBeacon2.set(EcoSphereModeBeacon.registerVariant(1));
 
-        // #tr item.MegaTreeFarmModeBeacon.2.name
+        // #tr item.EcoSphereModeBeacon.2.name
         // # Eco-Sphere Mode Beacon: Aquatic Simulation
         // #zh_CN 生态圈模式信标: 水域模拟
-        GTCMItemList.MegaTreeFarmModeBeacon3.set(MegaTreeFarmModeBeacon.registerVariant(2));
+        GTCMItemList.EcoSphereModeBeacon3.set(EcoSphereModeBeacon.registerVariant(2));
 
-        // #tr item.MegaTreeFarmModeBeacon.3.name
+        // #tr item.EcoSphereModeBeacon.3.name
         // # Eco-Sphere Mode Beacon: Aquatic Simulation
         // #zh_CN 生态圈模式信标: 水域模拟
-        GTCMItemList.MegaTreeFarmModeBeacon4.set(MegaTreeFarmModeBeacon.registerVariant(3));
+        GTCMItemList.EcoSphereModeBeacon4.set(EcoSphereModeBeacon.registerVariant(3));
 
-        // #tr item.MegaTreeFarmModeBeacon.4.name
+        // #tr item.EcoSphereModeBeacon.4.name
         // # Eco-Sphere Mode Beacon: Artificial Greenhouse
         // #zh_CN 生态圈模式信标: 人工温室
-        GTCMItemList.MegaTreeFarmModeBeacon5.set(MegaTreeFarmModeBeacon.registerVariant(4));
+        GTCMItemList.EcoSphereModeBeacon5.set(EcoSphereModeBeacon.registerVariant(4));
 
-        // #tr item.MegaTreeFarmModeBeacon.5.name
+        // #tr item.EcoSphereModeBeacon.5.name
         // # Eco-Sphere Mode Beacon: Artificial Greenhouse
         // #zh_CN 生态圈模式信标: 人工温室
-        GTCMItemList.MegaTreeFarmModeBeacon6.set(MegaTreeFarmModeBeacon.registerVariant(5));
+        GTCMItemList.EcoSphereModeBeacon6.set(EcoSphereModeBeacon.registerVariant(5));
 
-        // #tr item.MegaTreeFarmModeBeacon.6.name
+        // #tr item.EcoSphereModeBeacon.6.name
         // # Eco-Sphere Mode Beacon: Directed Mob Cloning
         // #zh_CN 生态圈模式信标: 定向克隆
-        GTCMItemList.MegaTreeFarmModeBeacon7.set(MegaTreeFarmModeBeacon.registerVariant(6));
+        GTCMItemList.EcoSphereModeBeacon7.set(EcoSphereModeBeacon.registerVariant(6));
 
-        // #tr item.MegaTreeFarmModeBeacon.7.name
+        // #tr item.EcoSphereModeBeacon.7.name
         // # Eco-Sphere Mode Beacon: Directed Mob Cloning
         // #zh_CN 生态圈模式信标: 定向克隆
-        GTCMItemList.MegaTreeFarmModeBeacon8.set(MegaTreeFarmModeBeacon.registerVariant(7));
+        GTCMItemList.EcoSphereModeBeacon8.set(EcoSphereModeBeacon.registerVariant(7));
 
         // endregion
     }

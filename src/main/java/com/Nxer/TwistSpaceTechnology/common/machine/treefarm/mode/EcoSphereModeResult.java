@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.calculateEut;
 
 import net.minecraft.item.ItemStack;

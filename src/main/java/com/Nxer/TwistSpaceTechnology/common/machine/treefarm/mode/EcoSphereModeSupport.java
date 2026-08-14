@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.github.bsideup.jabel.Desugar;
 
@@ -27,14 +27,14 @@ public final class EcoSphereModeSupport {
         return (long) (8d * Math.pow(4, tier) * 15 / 16);
     }
 
-    public static CheckRecipeResult missingFluid(TST_MegaTreeFarm machine, Fluid requiredFluid, long amount) {
+    public static CheckRecipeResult missingFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {
         if (requiredFluid == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
         if (getAvailableFluid(machine, requiredFluid) <= 0) return CheckRecipeResultRegistry.NO_RECIPE;
         return SimpleResultWithText
             .outOfFluid(new FluidStack(requiredFluid, (int) Math.min(Integer.MAX_VALUE, amount)));
     }
 
-    public static ParallelResult consumeFluidForParallel(TST_MegaTreeFarm machine, Fluid requiredFluid,
+    public static ParallelResult consumeFluidForParallel(TST_EcoSphereSimulator machine, Fluid requiredFluid,
         long fluidPerParallel, int powerTier) {
         if (requiredFluid == null || fluidPerParallel <= 0 || powerTier < 1) return null;
         long availableFluid = getAvailableFluid(machine, requiredFluid);
@@ -54,8 +54,8 @@ public final class EcoSphereModeSupport {
         return new ParallelResult(effectiveTier, parallel, getTierMultiplier(effectiveTier), fluidCost);
     }
 
-    public static PerfectOverclockResult consumeFluidForPerfectOverclock(TST_MegaTreeFarm machine, Fluid requiredFluid,
-        long fluidPerOperation, int maximumOverclocks) {
+    public static PerfectOverclockResult consumeFluidForPerfectOverclock(TST_EcoSphereSimulator machine,
+        Fluid requiredFluid, long fluidPerOperation, int maximumOverclocks) {
         if (requiredFluid == null || fluidPerOperation <= 0 || maximumOverclocks < 0) return null;
         long availableFluid = getAvailableFluid(machine, requiredFluid);
         if (availableFluid <= 0 || !machine.prepareFluidAreaForConsumption(requiredFluid)) return null;
@@ -98,7 +98,7 @@ public final class EcoSphereModeSupport {
         outputs.add(split);
     }
 
-    private static long getAvailableFluid(TST_MegaTreeFarm machine, Fluid requiredFluid) {
+    private static long getAvailableFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid) {
         long available = 0;
         for (FluidStack fluid : machine.getStoredFluids()) {
             if (fluid != null && fluid.getFluid() == requiredFluid) available += fluid.amount;
@@ -106,7 +106,7 @@ public final class EcoSphereModeSupport {
         return available;
     }
 
-    public static boolean drainFluid(TST_MegaTreeFarm machine, Fluid requiredFluid, long amount) {
+    public static boolean drainFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {
         List<FluidStack> matching = new java.util.ArrayList<>();
         long available = 0;
         for (FluidStack fluid : machine.getStoredFluids()) {

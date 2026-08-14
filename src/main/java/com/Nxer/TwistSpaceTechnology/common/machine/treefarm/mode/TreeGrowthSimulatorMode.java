@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.github.bsideup.jabel.Desugar;
@@ -43,7 +43,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     }
 
     @Override
-    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
+    public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
         // A valid sapling is required before selecting a tree recipe.
         EnumMap<Mode, ItemStack> outputPerMode = findTreeProduct(machine);
         if (outputPerMode == null) return EcoSphereModeResult.failure(MissingSaplingInput);
@@ -93,12 +93,15 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         }
         if (outputs.isEmpty()) return EcoSphereModeResult.failure(MissingTreeOutputSelection);
         return EcoSphereModeResult.standard(
+            // #tr GT5U.gui.text.recipe_result.growing_trees
+            // # {\GREEN}Growing Trees
+            // #zh_CN {\GREEN}原木拟生中
             SimpleCheckRecipeResult.ofSuccess("growing_trees"),
             outputs.toArray(new ItemStack[0]),
             parallelResult.tier());
     }
 
-    private static EnumMap<Mode, ItemStack> findTreeProduct(TST_MegaTreeFarm machine) {
+    private static EnumMap<Mode, ItemStack> findTreeProduct(TST_EcoSphereSimulator machine) {
         for (ItemStack input : machine.getStoredInputs()) {
             if (input == null || input.getItem() == null) continue;
             EnumMap<Mode, ItemStack> outputs = queryTreeProduct(input);
@@ -107,7 +110,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         return null;
     }
 
-    private static FluidStack findInputFluid(TST_MegaTreeFarm machine) {
+    private static FluidStack findInputFluid(TST_EcoSphereSimulator machine) {
         for (FluidStack fluidStack : machine.getStoredFluids()) {
             if (fluidStack != null && fluidStack.getFluid() != null && fluidStack.amount > 0) return fluidStack;
         }
@@ -170,7 +173,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         };
     }
 
-    private static EnumSet<Mode> findSelectedModes(TST_MegaTreeFarm machine) {
+    private static EnumSet<Mode> findSelectedModes(TST_EcoSphereSimulator machine) {
         Mode[] modes = Mode.values();
         EnumSet<Mode> selectedModes = EnumSet.noneOf(Mode.class);
         for (ItemStack input : machine.getStoredInputs()) {

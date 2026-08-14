@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.github.bsideup.jabel.Desugar;
@@ -233,12 +233,12 @@ public final class DirectedMobClonerRecipeCache {
         return recipeId >= 1 && recipeId <= getLastRecipeId();
     }
 
-    public static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
+    public static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int recipeId, int effectiveTier,
         long multiplier, boolean infiniteUpgrade) {
         return process(machine, recipeId, effectiveTier, multiplier, infiniteUpgrade, MODE_RECIPE_DURATION);
     }
 
-    public static EcoSphereModeResult processDebug(TST_MegaTreeFarm machine, int recipeId) {
+    public static EcoSphereModeResult processDebug(TST_EcoSphereSimulator machine, int recipeId) {
         boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
         if (isBossRecipe(recipeId) && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
         int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
@@ -247,7 +247,7 @@ public final class DirectedMobClonerRecipeCache {
         return process(machine, recipeId, overclocks, EcoSphereModeSupport.powerOfFour(overclocks), infiniteUpgrade, 5);
     }
 
-    private static EcoSphereModeResult process(TST_MegaTreeFarm machine, int recipeId, int effectiveTier,
+    private static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int recipeId, int effectiveTier,
         long multiplier, boolean infiniteUpgrade, int duration) {
         CachedRecipe recipe = recipesById.get(recipeId);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
@@ -266,6 +266,9 @@ public final class DirectedMobClonerRecipeCache {
             EcoSphereModeSupport.addSplitStack(outputs, drop.stack(), amount);
         }
         return new EcoSphereModeResult(
+            // #tr GT5U.gui.text.recipe_result.processing_mob_drops
+            // # Processing mob drops
+            // #zh_CN 生物掉落处理中
             SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
             outputs.toArray(new ItemStack[0]),
             multiplySaturated(EEC_RECIPE_EUT, multiplier),

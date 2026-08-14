@@ -18,6 +18,9 @@ public final class DirectedMobClonerOutputInfoKey extends RecipeMetadataKey<Bool
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
         if (cast(value, false)) {
+            // #tr DirectedMobCloner.nei.perfectOverclock
+            // # Executes with perfect overclock
+            // #zh_CN 执行无损超频
             recipeInfo.drawText(TextEnums.tr("DirectedMobCloner.nei.perfectOverclock"));
             return;
         }

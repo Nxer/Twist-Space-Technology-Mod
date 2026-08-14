@@ -63,22 +63,22 @@ public final class CheckRecipeResults {
     public static final CheckRecipeResult NotEnoughWater = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NotEnoughWater");
 
-    // #tr CheckRecipeResult.MegaTreeFarm.MissingTreeOutputSelection
+    // #tr CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection
     // # Missing circuit input
     // #zh_CN 缺失输入电路板
     public static final CheckRecipeResult MissingTreeOutputSelection = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.MegaTreeFarm.MissingTreeOutputSelection");
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection");
 
-    // #tr CheckRecipeResult.MegaTreeFarm.MissingSaplingInput
+    // #tr CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput
     // # Missing sapling input
     // #zh_CN 缺失树苗输入
     public static final CheckRecipeResult MissingSaplingInput = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.MegaTreeFarm.MissingSaplingInput");
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
 
-    // #tr CheckRecipeResult.MegaTreeFarm.ModeBeaconInputMismatch
+    // #tr CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch
     // # Requires a higher-tier mode beacon
     // #zh_CN 需要更高等级的模式信标
     public static final CheckRecipeResult ModeBeaconInputMismatch = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.MegaTreeFarm.ModeBeaconInputMismatch");
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch");
 
 }

@@ -22,7 +22,11 @@ public final class TCResearchEventHandler {
     private static final String EVOLUTION_RESEARCH = "EVOLUTIO";
     private static final String OFFSPRING_RESEARCH = "OFFSPRING";
     private static final String FONT_OF_ECOLOGY_RESEARCH = "FONT_OF_ECOLOGY";
-    private static final String AQUATIC_MODE_BEACON_RESEARCH = "ECO_SPHERE_MODE_BEACON_2";
+    private static final String AQUATIC_MODE_BEACON_RESEARCH = "ECO_SPHERE_MODE_BEACON_3";
+    private static final String ECO_SPHERE_MODE_BEACON_8_RESEARCH = "ECO_SPHERE_MODE_BEACON_8";
+    private static final String DIRECTED_CLONING_PROTOCOL_RESEARCH = "ECO_SPHERE_DIRECTED_CLONING_PROTOCOL";
+    private static final String ECO_SPHERE_MODE_BEACON_7_RESEARCH = "ECO_SPHERE_MODE_BEACON_7";
+    private static final String ECO_SPHERE_TIER_TWO_RESEARCH = "ECO_SPHERE_TIER_TWO";
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -34,6 +38,8 @@ public final class TCResearchEventHandler {
         unlockEvolutionResearch(player, playerName);
         unlockOffspringResearch(player, playerName);
         revealFontOfEcologyResearch(player, playerName);
+        revealDirectedCloningResearch(player, playerName, DIRECTED_CLONING_PROTOCOL_RESEARCH);
+        revealDirectedCloningResearch(player, playerName, ECO_SPHERE_MODE_BEACON_8_RESEARCH);
     }
 
     private static void unlockEvolutionResearch(EntityPlayerMP player, String playerName) {
@@ -59,6 +65,16 @@ public final class TCResearchEventHandler {
             || !hasScannedOffspring(playerName)) return;
 
         completeResearch(player, "@" + FONT_OF_ECOLOGY_RESEARCH);
+    }
+
+    private static void revealDirectedCloningResearch(EntityPlayerMP player, String playerName, String researchKey) {
+        if (ResearchManager.isResearchComplete(playerName, researchKey)
+            || ResearchManager.isResearchComplete(playerName, "@" + researchKey)
+            || (!ResearchManager.isResearchComplete(playerName, ECO_SPHERE_MODE_BEACON_7_RESEARCH)
+                && !ResearchManager.isResearchComplete(playerName, ECO_SPHERE_TIER_TWO_RESEARCH)))
+            return;
+
+        completeResearch(player, "@" + researchKey);
     }
 
     private static boolean hasScannedOffspring(String playerName) {

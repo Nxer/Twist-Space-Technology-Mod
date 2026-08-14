@@ -105,10 +105,10 @@ public class TCRecipePool {
                     new ItemStack(blockMetalDevice, 1, 12) });
 
             /* ECO_SPHERE_SIMULATOR */
-            if (Config.Enable_MegaTreeFarm) {
+            if (Config.Enable_EcoSphereSimulator) {
                 infusionRecipeEcoSphereSimulator = ThaumcraftApi.addInfusionCraftingRecipe(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.MegaTreeFarm.get(1),
+                    GTCMItemList.EcoSphereSimulator.get(1),
                     100,
                     (new AspectList()).merge(Aspect.MECHANISM, 256)
                         .merge(Aspect.TREE, 1024)

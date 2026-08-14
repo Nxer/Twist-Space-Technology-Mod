@@ -24,7 +24,7 @@ import fox.spiteful.avaritia.render.CosmicItemRenderer;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
-public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
+public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
 
     private static final float CONTENT_SCALE = 0.875F;
     private static final float ITEM_THICKNESS = 1.0F / 16.0F;
@@ -32,7 +32,7 @@ public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return item != null && item.getItem() == TstItems.MegaTreeFarmModeBeacon;
+        return item != null && item.getItem() == TstItems.EcoSphereModeBeacon;
     }
 
     @Override
@@ -51,7 +51,7 @@ public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
             type,
             Objects.requireNonNull(item.getItem())
                 .getIcon(item, 0),
-            TstItems.MegaTreeFarmModeBeacon.getFrameIcon(),
+            TstItems.EcoSphereModeBeacon.getFrameIcon(),
             item.getItemSpriteNumber());
 
         // Pick the item shown in the center from the beacon metadata.
@@ -80,7 +80,7 @@ public final class MegaTreeFarmModeBeaconRenderer implements IItemRenderer {
         GL11.glPopMatrix();
 
         // Draw the frame last so it always stays above the center item.
-        renderLayerIcon(type, TstItems.MegaTreeFarmModeBeacon.getFrameIcon(), item.getItemSpriteNumber(), 2);
+        renderLayerIcon(type, TstItems.EcoSphereModeBeacon.getFrameIcon(), item.getItemSpriteNumber(), 2);
     }
 
     private static void applyLayerDepth(ItemRenderType type, float offset) {

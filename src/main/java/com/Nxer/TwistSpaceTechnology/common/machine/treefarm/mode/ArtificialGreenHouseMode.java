@@ -6,7 +6,7 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.ArtificialGreenHouseFakeRecipe;
 import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
@@ -27,7 +27,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
     }
 
     @Override
-    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
+    public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
         // Build the crop cache once from the first valid seed in the input buses.
         if (!findSeed(machine)) return EcoSphereModeResult.failure(NoSeedInController);
         if (!machine.cropsNHFarm.isValid())
@@ -51,7 +51,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
             parallelResult.tier());
     }
 
-    private static boolean findSeed(TST_MegaTreeFarm machine) {
+    private static boolean findSeed(TST_EcoSphereSimulator machine) {
         for (ItemStack input : machine.getStoredInputs()) {
             if (input != null && input.getItem() != null && machine.cropsNHFarm.createCropCache(input)) return true;
         }

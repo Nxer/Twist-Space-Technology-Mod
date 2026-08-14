@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
@@ -45,7 +45,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     }
 
     @Override
-    public EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier) {
+    public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
         // Read the input fluid once to select the recipe and its fluid cost.
         AquaticRecipe recipe = selectRecipe(machine);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
@@ -70,7 +70,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             parallelResult.tier());
     }
 
-    private static AquaticRecipe selectRecipe(TST_MegaTreeFarm machine) {
+    private static AquaticRecipe selectRecipe(TST_EcoSphereSimulator machine) {
         Fluid distilledWater = FluidRegistry.getFluid("ic2distilledwater");
         Fluid unknownWater = FluidRegistry.getFluid("unknowwater");
         for (FluidStack input : machine.getStoredFluids()) {
@@ -89,11 +89,27 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     }
 
     private static CheckRecipeResult getRunningResult(boolean growsAlgae, ItemStack focusStack) {
-        if (focusStack == null) return SimpleCheckRecipeResult.ofSuccess(growsAlgae ? "growing_algae" : "fishing");
+        if (focusStack == null) {
+            // #tr GT5U.gui.text.recipe_result.growing_algae
+            // # {\GREEN}Growing Algae
+            // #zh_CN {\GREEN}藻类生长中
+
+            // #tr GT5U.gui.text.recipe_result.fishing
+            // # {\BLUE}Fishing
+            // #zh_CN {\BLUE}捕鱼中
+            return SimpleCheckRecipeResult.ofSuccess(growsAlgae ? "growing_algae" : "fishing");
+        }
         return SimpleResultWithText.ofSuccessText(
+            // #tr GT5U.gui.text.recipe_result.focus_on
+            // # {\BLUE}Targeting
+            // #zh_CN {\BLUE}定向中
+
             StatCollector.translateToLocal("GT5U.gui.text.recipe_result.focus_on") + "\n"
-                + StatCollector.translateToLocal("MegaTreeFarm.gui.focusOn")
-                + ": "
+            // #tr EcoSphereSimulator.gui.focusOn
+            // # On :
+            // #zh_CN 定向目标
+                + StatCollector.translateToLocal("EcoSphereSimulator.gui.focusOn")
+                + " "
                 + focusStack.getDisplayName());
     }
 
@@ -119,7 +135,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         return outputs;
     }
 
-    private static List<ItemStack> processStandardOutputs(TST_MegaTreeFarm machine,
+    private static List<ItemStack> processStandardOutputs(TST_EcoSphereSimulator machine,
         EcoSphereModeSupport.ParallelResult parallelResult, ItemStack focusStack) {
         boolean focusMode = focusStack != null;
         List<ItemStack> outputs = new ArrayList<>();
@@ -140,7 +156,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         return outputs;
     }
 
-    private static int calculateOffspringChance(TST_MegaTreeFarm machine, int baseChance, double tierChance) {
+    private static int calculateOffspringChance(TST_EcoSphereSimulator machine, int baseChance, double tierChance) {
         if (machine.getAvailableInputPower() <= Integer.MAX_VALUE) return 0;
         int maxVoltageTier = (int) Math.floor(TstUtils.calculateVoltageTier((double) Integer.MAX_VALUE + 1));
         long maximumInputPower = (long) Integer.MAX_VALUE * Integer.MAX_VALUE;
@@ -169,7 +185,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         addSplitStack(outputs, template, amount);
     }
 
-    private static ItemStack findFocusStack(TST_MegaTreeFarm machine, boolean unknownWaterRecipe) {
+    private static ItemStack findFocusStack(TST_EcoSphereSimulator machine, boolean unknownWaterRecipe) {
         Map<String, Integer> availableOutputs = unknownWaterRecipe ? AquaticZoneSimulatorFakeRecipe.UnknownWaterChances
             : AquaticZoneSimulatorFakeRecipe.WatersChances;
         for (ItemStack input : machine.getStoredInputs()) {

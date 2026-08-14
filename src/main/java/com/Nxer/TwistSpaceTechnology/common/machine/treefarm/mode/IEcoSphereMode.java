@@ -1,12 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 
 import gregtech.api.recipe.RecipeMap;
 
 public interface IEcoSphereMode {
 
-    EcoSphereModeResult process(TST_MegaTreeFarm machine, int euTier);
+    EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier);
 
     RecipeMap<?> getRecipeMap();
 

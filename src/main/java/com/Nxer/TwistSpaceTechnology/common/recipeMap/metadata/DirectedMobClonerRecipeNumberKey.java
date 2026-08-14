@@ -17,9 +17,10 @@ public final class DirectedMobClonerRecipeNumberKey extends RecipeMetadataKey<In
 
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
-        // #tr MegaTreeFarm.nei.recipeNumber
+        // #tr EcoSphereSimulator.nei.recipeNumber
         // # Recipe Number: %s
         // #zh_CN 配方编号: %s
-        recipeInfo.drawText(StatCollector.translateToLocalFormatted("MegaTreeFarm.nei.recipeNumber", cast(value, 0)));
+        recipeInfo
+            .drawText(StatCollector.translateToLocalFormatted("EcoSphereSimulator.nei.recipeNumber", cast(value, 0)));
     }
 }
