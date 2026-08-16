@@ -638,4 +638,14 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         }
         return new ITexture[] { casingTexturePages[0][11] };
     }
+
+    // GT 5.09.54: no-arg protectsExcessItem/protectsExcessFluid removed from GT machine base classes;
+    // default semantics are 'false' (same as IVoidable default)
+    public boolean protectsExcessItem() {
+        return false;
+    }
+
+    public boolean protectsExcessFluid() {
+        return false;
+    }
 }

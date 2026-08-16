@@ -379,7 +379,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
         if (mainMachine instanceof IVoidable m) {
-            return m.getFluidOutputSlots(toOutput);
+            return m.getOutputHatches(toOutput); // GT 5.09.54 renamed getFluidOutputSlots -> getOutputHatches
         }
         return Collections.emptyList();
     }
@@ -403,7 +403,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
     @Override
     public boolean canDumpFluidToME() {
         if (mainMachine instanceof IVoidable m) {
-            return m.canDumpFluidToME();
+            return m.canDumpFluidToME(Collections.emptyList()); // GT 5.09.54: canDumpFluidToME now takes List<FluidId>
         }
         return false;
     }

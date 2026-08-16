@@ -609,4 +609,10 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             .toolTipFinisher(ModName);
         return tt;
     }
+
+    // GT 5.09.54: dumpFluid(List,FluidStack,boolean) removed from GT machine base class (moved into
+    // MEOutputHatchTransaction). Old dump path is disabled; outputs go through normal output hatches.
+    public boolean dumpFluid(List<?> targetHatches, FluidStack aLiquid, boolean simulate) {
+        return false;
+    }
 }
