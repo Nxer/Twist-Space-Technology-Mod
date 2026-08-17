@@ -2482,3 +2482,7 @@ FountOfEcology.tooltips.01=§b一只长相奇特的水母
 FountOfEcology.tooltips.03=§6临近进化奇点的完美生物 大群的建言者与引航者
 Offspring.tooltips.01=§b一只弱不禁风的小水母
 Offspring.tooltips.03=§d伊祖米克进化分支中衍生出的子代
+tile.MetaBlockCasing02.6.name=环境隔离机械方块
+Tooltip_EnvironmentalIsolationCasing=隔绝外界影响, 维持稳定的内部环境.
+Tooltip_EcoSphereSimulator_StructurePreview=完整蓝图包含以空气标注的动态流体区域
+Tooltip_EcoSphereSimulator_FluidArea=动态流体区域；无需放置方块

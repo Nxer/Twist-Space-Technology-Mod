@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,6 +27,19 @@ public final class EcoSphereModeSupport {
 
     public static long calculateEut(int tier) {
         return (long) (8d * Math.pow(4, tier) * 15 / 16);
+    }
+
+    public static FluidStack findFirstValidFluid(TST_EcoSphereSimulator machine, Predicate<Fluid> validator) {
+        return selectFirstValidFluid(machine, input -> validator.test(input.getFluid()) ? input : null);
+    }
+
+    public static <T> T selectFirstValidFluid(TST_EcoSphereSimulator machine, Function<FluidStack, T> selector) {
+        for (FluidStack input : machine.getStoredFluids()) {
+            if (input == null || input.amount <= 0 || input.getFluid() == null) continue;
+            T result = selector.apply(input);
+            if (result != null) return result;
+        }
+        return null;
     }
 
     public static CheckRecipeResult missingFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {

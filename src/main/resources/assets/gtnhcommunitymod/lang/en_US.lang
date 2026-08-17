@@ -2482,3 +2482,7 @@ FountOfEcology.tooltips.01=§bA unique looking jellyfish
 FountOfEcology.tooltips.03=§6A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
 Offspring.tooltips.01=§bA weak little jellyfish
 Offspring.tooltips.03=§dThe offspring derived from Izu'mik's evolutionary branches
+tile.MetaBlockCasing02.6.name=Environmental Isolation Casing
+Tooltip_EnvironmentalIsolationCasing=Isolates external influences to maintain stable internal conditions.
+Tooltip_EcoSphereSimulator_StructurePreview=The complete blueprint includes the animated fluid area marked as air
+Tooltip_EcoSphereSimulator_FluidArea=Animated fluid area; no blocks are required

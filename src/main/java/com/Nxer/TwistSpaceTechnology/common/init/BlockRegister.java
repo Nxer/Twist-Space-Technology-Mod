@@ -272,6 +272,17 @@ public class BlockRegister {
         // #zh_CN 机械强化黑曜石
         GTCMItemList.MechanicallyEnhancedObsidian.set(MetaBlockCasing02.registerVariant(5));
 
+        // #tr tile.MetaBlockCasing02.6.name
+        // # Environmental Isolation Casing
+        // #zh_CN 环境隔离机械方块
+
+        // #tr Tooltip_EnvironmentalIsolationCasing
+        // # Isolates external influences to maintain stable internal conditions.
+        // #zh_CN 隔绝外界影响, 维持稳定的内部环境.
+        GTCMItemList.EnvironmentalIsolationCasing.set(
+            MetaBlockCasing02
+                .registerVariantWithTooltips(6, new String[] { TextEnums.tr("Tooltip_EnvironmentalIsolationCasing") }));
+
         // region SpaceTimeOscillator
 
         // #tr tile.SpaceTimeOscillator.0.name

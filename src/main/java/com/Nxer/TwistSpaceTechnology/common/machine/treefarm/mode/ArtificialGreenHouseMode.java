@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.Check
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -39,8 +40,11 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
         long baseFertilizerCost = hybridSeed ? ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL
             : ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL;
         long fertilizerPerParallel = machine.applyStructureFluidDiscount(baseFertilizerCost);
+        FluidStack fertilizerInput = EcoSphereModeSupport
+            .findFirstValidFluid(machine, fluid -> fluid == CropsNHFluids.enrichedFertilizer);
+        if (fertilizerInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
-            .consumeFluidForParallel(machine, CropsNHFluids.enrichedFertilizer, fertilizerPerParallel, euTier);
+            .consumeFluidForParallel(machine, fertilizerInput.getFluid(), fertilizerPerParallel, euTier);
         // The lowest power tier runs two parallels, so startup requires twice the per-parallel fertilizer.
         if (parallelResult == null) return EcoSphereModeResult.failure(
             EcoSphereModeSupport.missingFluid(machine, CropsNHFluids.enrichedFertilizer, fertilizerPerParallel * 2));

@@ -52,20 +52,18 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         long fluidPerParallel = machine
             .applyStructureFluidDiscount(TreeGrowthSimulatorWithoutToolFakeRecipe.WATER_PER_PARALLEL);
 
-        // The first available fluid decides whether this is a normal or special recipe.
-        FluidStack inputFluid = findInputFluid(machine);
+        // Use the first input fluid that matches a normal or special tree recipe.
+        TreeFluidSelection fluidSelection = findInputFluid(machine);
 
         // The lowest power tier runs two parallels, so this and later startup checks require twice the fluid.
-        if (inputFluid == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        if (fluidSelection == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
 
-        Fluid requiredFluid = inputFluid.getFluid();
-        if (requiredFluid != FluidRegistry.WATER) {
-            SpecialTreeRecipe specialRecipe = findSpecialRecipe(requiredFluid);
-            if (specialRecipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        Fluid requiredFluid = fluidSelection.input.getFluid();
+        if (fluidSelection.specialRecipe != null) {
             // Special trees require the upgraded tree beacon.
             if (machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
-            fluidPerParallel = machine.applyStructureFluidDiscount(specialRecipe.amount);
-            outputPerMode = specialRecipe.outputs;
+            fluidPerParallel = machine.applyStructureFluidDiscount(fluidSelection.specialRecipe.amount);
+            outputPerMode = fluidSelection.specialRecipe.outputs;
         }
         // Read output circuits once and reuse the selected tree parts below.
         EnumSet<Mode> selectedModes = findSelectedModes(machine);
@@ -110,11 +108,12 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         return null;
     }
 
-    private static FluidStack findInputFluid(TST_EcoSphereSimulator machine) {
-        for (FluidStack fluidStack : machine.getStoredFluids()) {
-            if (fluidStack != null && fluidStack.getFluid() != null && fluidStack.amount > 0) return fluidStack;
-        }
-        return null;
+    private static TreeFluidSelection findInputFluid(TST_EcoSphereSimulator machine) {
+        return EcoSphereModeSupport.selectFirstValidFluid(machine, input -> {
+            if (input.getFluid() == FluidRegistry.WATER) return new TreeFluidSelection(input, null);
+            SpecialTreeRecipe specialRecipe = findSpecialRecipe(input.getFluid());
+            return specialRecipe == null ? null : new TreeFluidSelection(input, specialRecipe);
+        });
     }
 
     private static SpecialTreeRecipe findSpecialRecipe(Fluid fluid) {
@@ -163,6 +162,9 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     private record SpecialTreeRecipe(long amount, EnumMap<Mode, ItemStack> outputs) {
 
     }
+
+    @Desugar
+    private record TreeFluidSelection(FluidStack input, SpecialTreeRecipe specialRecipe) {}
 
     public static int getModeMultiplier(Mode mode) {
         return switch (mode) {

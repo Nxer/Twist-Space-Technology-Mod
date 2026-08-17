@@ -46,7 +46,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
 
     @Override
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
-        // Read the input fluid once to select the recipe and its fluid cost.
+        // Use the first input fluid that matches an aquatic recipe.
         AquaticRecipe recipe = selectRecipe(machine);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         if (recipe.growsAlgae() && machine.getModeBeaconTier() < 2)
@@ -73,19 +73,12 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     private static AquaticRecipe selectRecipe(TST_EcoSphereSimulator machine) {
         Fluid distilledWater = FluidRegistry.getFluid("ic2distilledwater");
         Fluid unknownWater = FluidRegistry.getFluid("unknowwater");
-        for (FluidStack input : machine.getStoredFluids()) {
-            if (input == null || input.amount <= 0) continue;
-            if (input.getFluid() == unknownWater) {
-                return new AquaticRecipe(unknownWater, AquaticZoneSimulatorFakeRecipe.UNKNOWN_WATER_PER_PARALLEL, true);
-            }
-            if (input.getFluid() == distilledWater) {
-                return new AquaticRecipe(
-                    distilledWater,
-                    AquaticZoneSimulatorFakeRecipe.DISTILLED_WATER_PER_PARALLEL,
-                    false);
-            }
-        }
-        return null;
+        FluidStack input = EcoSphereModeSupport
+            .findFirstValidFluid(machine, fluid -> fluid == unknownWater || fluid == distilledWater);
+        if (input == null) return null;
+        return input.getFluid() == unknownWater
+            ? new AquaticRecipe(unknownWater, AquaticZoneSimulatorFakeRecipe.UNKNOWN_WATER_PER_PARALLEL, true)
+            : new AquaticRecipe(distilledWater, AquaticZoneSimulatorFakeRecipe.DISTILLED_WATER_PER_PARALLEL, false);
     }
 
     private static CheckRecipeResult getRunningResult(boolean growsAlgae, ItemStack focusStack) {

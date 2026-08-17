@@ -58,10 +58,13 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         int tierOffset = bossRecipe ? 6 : 4;
         int maximumOverclocks = Math.max(0, voltageTier - tierOffset);
         Fluid lifeEssenceFluid = FluidRegistry.getFluid("lifeessence");
+        FluidStack lifeEssenceInput = EcoSphereModeSupport
+            .findFirstValidFluid(machine, fluid -> fluid == lifeEssenceFluid);
+        if (lifeEssenceInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         EcoSphereModeSupport.PerfectOverclockResult overclockResult = EcoSphereModeSupport
             .consumeFluidForPerfectOverclock(
                 machine,
-                lifeEssenceFluid,
+                lifeEssenceInput.getFluid(),
                 DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
                 maximumOverclocks);
         if (overclockResult == null) return EcoSphereModeResult.failure(
@@ -73,10 +76,12 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
     private static EcoSphereModeResult processFallback(TST_EcoSphereSimulator machine, int euTier) {
         Fluid bloodFluid = FluidRegistry.getFluid("blood");
+        FluidStack bloodInput = EcoSphereModeSupport.findFirstValidFluid(machine, fluid -> fluid == bloodFluid);
+        if (bloodInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         long fluidPerParallel = machine
             .applyStructureFluidDiscount(DirectedMobClonerFakeRecipe.FALLBACK_BLOOD_PER_PARALLEL);
         EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
-            .consumeFluidForParallel(machine, bloodFluid, fluidPerParallel, euTier);
+            .consumeFluidForParallel(machine, bloodInput.getFluid(), fluidPerParallel, euTier);
         // The lowest power tier runs two parallels, so startup requires twice the per-parallel blood.
         if (parallelResult == null) return EcoSphereModeResult
             .failure(EcoSphereModeSupport.missingFluid(machine, bloodFluid, fluidPerParallel * 2));

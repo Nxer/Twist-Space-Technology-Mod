@@ -234,6 +234,7 @@ public enum GTCMItemList {
     BoropheneBasedNanowireCompositeThermalConductiveCasing,
     NeutroniumPipeCasing,
     MechanicallyEnhancedObsidian,
+    EnvironmentalIsolationCasing,
     Laser_Beacon,
     // endregion
 

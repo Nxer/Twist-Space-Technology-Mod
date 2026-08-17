@@ -1098,7 +1098,6 @@ public class TCResearches {
          * // #tr tc.research_name.ESSENTIA_DISCRETIZER
          * // # Essentia Discretizer
          * // #zh_CN 源质离散器
-         *
          * // #tr tc.research_text.ESSENTIA_DISCRETIZER
          * // # Free movement!
          * // #zh_CN 自由流动!
