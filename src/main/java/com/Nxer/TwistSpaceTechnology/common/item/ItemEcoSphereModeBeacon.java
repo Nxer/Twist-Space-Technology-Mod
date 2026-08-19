@@ -19,7 +19,7 @@ public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
     @Override
     public String getItemStackDisplayName(ItemStack itemStack) {
         String displayName = super.getItemStackDisplayName(itemStack);
-        if ((itemStack.getItemDamage() & 1) == 0) return displayName;
+        if (itemStack.getItemDamage() >= 8 || (itemStack.getItemDamage() & 1) == 0) return displayName;
 
         int separatorIndex = Math.max(displayName.lastIndexOf(':'), displayName.lastIndexOf('\uFF1A'));
         int rainbowStartIndex = separatorIndex < 0 ? 0 : separatorIndex + 1;

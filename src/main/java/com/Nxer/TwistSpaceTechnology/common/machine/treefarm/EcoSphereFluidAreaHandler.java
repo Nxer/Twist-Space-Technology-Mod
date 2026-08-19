@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
+package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -76,8 +76,8 @@ public final class EcoSphereFluidAreaHandler {
         int[] offset = areaOffsets.get(area);
         int directionX = base.getFrontFacing().offsetX;
         int directionZ = base.getFrontFacing().offsetZ;
-        int xDirection = directionX == 0 ? (directionZ == 1 ? -1 : 1) : directionX;
-        int zDirection = directionZ == 0 ? directionX : directionZ;
+        int xDirection = getXDirection(directionX, directionZ);
+        int zDirection = getZDirection(directionX, directionZ);
         boolean horizontallyFlipped = machine.isFluidAreaHorizontallyFlipped();
         World world = base.getWorld();
         // Apply the controller facing so the same local shape works in every direction.
@@ -217,8 +217,8 @@ public final class EcoSphereFluidAreaHandler {
         int[] offset = areaOffsets.get(area);
         int directionX = base.getFrontFacing().offsetX;
         int directionZ = base.getFrontFacing().offsetZ;
-        int xDirection = directionX == 0 ? (directionZ == 1 ? -1 : 1) : directionX;
-        int zDirection = directionZ == 0 ? directionX : directionZ;
+        int xDirection = getXDirection(directionX, directionZ);
+        int zDirection = getZDirection(directionX, directionZ);
         boolean horizontallyFlipped = machine.isFluidAreaHorizontallyFlipped();
         World world = base.getWorld();
         boolean changed = false;
@@ -278,8 +278,8 @@ public final class EcoSphereFluidAreaHandler {
         int[] offset = areaOffsets.get(area);
         int directionX = base.getFrontFacing().offsetX;
         int directionZ = base.getFrontFacing().offsetZ;
-        int blockOffsetX = (offset[0] - x) * (directionX == 0 ? (directionZ == 1 ? -1 : 1) : directionX);
-        int blockOffsetZ = (offset[2] - z) * (directionZ == 0 ? directionX : directionZ);
+        int blockOffsetX = (offset[0] - x) * getXDirection(directionX, directionZ);
+        int blockOffsetZ = (offset[2] - z) * getZDirection(directionX, directionZ);
         if (directionX != 0) {
             int swapped = blockOffsetX;
             blockOffsetX = blockOffsetZ;
@@ -295,6 +295,17 @@ public final class EcoSphereFluidAreaHandler {
                 base.getYCoord() + offset[1] - layer,
                 base.getZCoord() + blockOffsetZ,
                 block);
+    }
+
+    private static int getXDirection(int directionX, int directionZ) {
+        if (directionX != 0) return directionX;
+        if (directionZ == 1) return -1;
+        return 1;
+    }
+
+    private static int getZDirection(int directionX, int directionZ) {
+        if (directionZ != 0) return directionZ;
+        return directionX;
     }
 
     // Cache flowing block counts because every fill uses the same static layout.

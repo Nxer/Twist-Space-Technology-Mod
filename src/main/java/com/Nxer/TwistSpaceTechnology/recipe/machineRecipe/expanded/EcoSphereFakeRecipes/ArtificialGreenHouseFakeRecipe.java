@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.GREENHOUSE_MODE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.cacheRecipeFluids;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -35,6 +37,7 @@ public final class ArtificialGreenHouseFakeRecipe {
             registerHybridSeedRecipes(crop);
             registerNormalSeedRecipes(crop);
         }
+        cacheRecipeFluids(GREENHOUSE_MODE, GTCMRecipe.ArtificialGreenHouseFakeRecipes);
     }
 
     private static void registerHybridSeedRecipes(ICropCard crop) {

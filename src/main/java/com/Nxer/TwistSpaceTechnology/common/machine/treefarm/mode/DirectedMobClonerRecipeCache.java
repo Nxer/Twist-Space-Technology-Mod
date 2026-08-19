@@ -1,7 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,13 +12,17 @@ import java.util.Map;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereSpecialUpgrade;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DirectedMobClonerDropConversion.ConvertedOutput;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.github.bsideup.jabel.Desugar;
 import com.kuba6000.mobsinfo.api.MobDrop;
 import com.kuba6000.mobsinfo.api.MobRecipe;
@@ -32,14 +35,14 @@ import com.kuba6000.mobsinfo.api.utils.ModUtils;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerRecipeCache {
 
     private static final int EEC_MIN_DURATION = 55;
     private static final int MOB_INFO_CHANCE_SCALE = 10_000;
-    private static final long EEC_RECIPE_EUT = 1920L;
+    private static final int NORMAL_RECIPE_BASE_TIER = 4;
+    private static final int BOSS_RECIPE_BASE_TIER = 6;
     private static final double EEC_DIAMOND_SPIKES_DAMAGE = 9d;
     private static final Map<String, PendingRecipe> PENDING_RECIPES = new LinkedHashMap<>();
     private static volatile Map<Integer, CachedRecipe> recipesById = Collections.emptyMap();
@@ -84,31 +87,25 @@ public final class DirectedMobClonerRecipeCache {
         List<CachedDrop> drops = new ArrayList<>();
         int damageWeight = calculateDamageWeight(sourceDrops);
         for (MobDrop drop : sourceDrops) {
-            if (drop.stack == null || drop.stack.getItem() == null
-                || drop.playerOnly
-                || DropWhenExclusion.contains(drop.stack)) continue;
+            if (drop.stack == null || drop.stack.getItem() == null || DropWhenExclusion.contains(drop.stack)) continue;
+            boolean mobHead = drop.playerOnly && drop.stack.getItem() == Items.skull;
+            if (drop.playerOnly && !mobHead) continue;
             double durabilityExpectation = calculateDurabilityExpectation(drop, damageWeight);
             ItemStack sanitized = sanitizeCachedDrop(drop.stack);
             DirectedMobClonerDropConversion.ConversionResult conversion = DirectedMobClonerDropConversion
                 .convert(sanitized);
-            if (!conversion.matched()) {
-                if (sanitized.isItemStackDamageable()) sanitized.setItemDamage(0);
-                drops.add(
-                    new CachedDrop(
-                        sanitized,
-                        Math.max(0, Math.min(MOB_INFO_CHANCE_SCALE, drop.chance)),
-                        durabilityExpectation,
-                        1d));
-                continue;
-            }
-            for (DirectedMobClonerDropConversion.ConvertedOutput converted : conversion.outputs()) {
-                drops.add(
-                    new CachedDrop(
-                        converted.stack(),
-                        Math.max(0, Math.min(MOB_INFO_CHANCE_SCALE, drop.chance)),
-                        durabilityExpectation,
-                        converted.probabilityMultiplier()));
-            }
+            if (sanitized.isItemStackDamageable()) sanitized.setItemDamage(0);
+            List<ConvertedOutput> convertedOutputs = Collections.emptyList();
+            if (conversion.matched()) convertedOutputs = conversion.outputs();
+            drops.add(
+                new CachedDrop(
+                    sanitized,
+                    convertedOutputs,
+                    conversion.matched(),
+                    conversion.matched() && sanitized.isItemStackDamageable(),
+                    mobHead,
+                    Math.max(0, Math.min(MOB_INFO_CHANCE_SCALE, drop.chance)),
+                    durabilityExpectation));
         }
         return Collections.unmodifiableList(drops);
     }
@@ -220,50 +217,47 @@ public final class DirectedMobClonerRecipeCache {
         DirectedMobClonerFakeRecipe.rebuildFakeRecipes(displaysById);
     }
 
-    public static int getLastRecipeId() {
-        return recipesById.isEmpty() ? 0 : recipesById.size();
+    static CachedRecipe findRecipe(int recipeId) {
+        return recipesById.get(recipeId);
     }
 
-    public static boolean isBossRecipe(int recipeId) {
-        CachedRecipe recipe = recipesById.get(recipeId);
-        return recipe != null && recipe.boss();
+    static Iterable<CachedRecipe> getDebugRecipes() {
+        return recipesById.values();
     }
 
-    public static boolean isValidRecipeId(int recipeId) {
-        return recipeId >= 1 && recipeId <= getLastRecipeId();
+    static EcoSphereModeResult process(TST_EcoSphereSimulator machine, CachedRecipe recipe, long parallel,
+        long parallelFromEUt) {
+        return process(machine, recipe, parallel, parallelFromEUt, MODE_RECIPE_DURATION);
     }
 
-    public static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int recipeId, int effectiveTier,
-        long multiplier, boolean infiniteUpgrade) {
-        return process(machine, recipeId, effectiveTier, multiplier, infiniteUpgrade, MODE_RECIPE_DURATION);
-    }
-
-    public static EcoSphereModeResult processDebug(TST_EcoSphereSimulator machine, int recipeId) {
-        boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
-        if (isBossRecipe(recipeId) && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
-        int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
-        if (infiniteUpgrade) voltageTier += 4;
-        int overclocks = Math.max(0, voltageTier - (isBossRecipe(recipeId) ? 6 : 4));
-        return process(machine, recipeId, overclocks, EcoSphereModeSupport.powerOfFour(overclocks), infiniteUpgrade, 5);
-    }
-
-    private static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int recipeId, int effectiveTier,
-        long multiplier, boolean infiniteUpgrade, int duration) {
-        CachedRecipe recipe = recipesById.get(recipeId);
-        if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        if (recipe.boss() && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
-
+    private static EcoSphereModeResult process(TST_EcoSphereSimulator machine, CachedRecipe recipe, long parallel,
+        long parallelFromEUt, int duration) {
         List<ItemStack> outputs = new ArrayList<>();
         double durationMultiplier = 100 / ((double) recipe.eecDuration() * recipe.eecDuration());
         for (CachedDrop drop : recipe.drops()) {
-            double outputAmount = drop.stack().stackSize * (double) multiplier
-                * drop.chance()
-                / MOB_INFO_CHANCE_SCALE
-                * durationMultiplier
-                * drop.durabilityExpectation()
-                * drop.probabilityMultiplier();
-            long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
-            EcoSphereModeSupport.addSplitStack(outputs, drop.stack(), amount);
+            if (drop.mobHead() && !machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.ALLOW_MOB_HEAD_DROPS)) continue;
+            boolean pulverize = drop.conversionMatched() && (!drop.requiresPulverizeUpgrade()
+                || machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT));
+            if (pulverize) {
+                for (ConvertedOutput converted : drop.convertedOutputs()) {
+                    double outputAmount = converted.stack().stackSize * (double) parallel
+                        * drop.chance()
+                        / MOB_INFO_CHANCE_SCALE
+                        * durationMultiplier
+                        * drop.durabilityExpectation()
+                        * converted.probabilityMultiplier();
+                    long amount = toSaturatedLong(outputAmount);
+                    EcoSphereModeSupport.addSplitStack(outputs, converted.stack(), amount);
+                }
+            } else {
+                double outputAmount = drop.stack().stackSize * (double) parallel
+                    * drop.chance()
+                    / MOB_INFO_CHANCE_SCALE
+                    * durationMultiplier
+                    * drop.durabilityExpectation();
+                long amount = toSaturatedLong(outputAmount);
+                EcoSphereModeSupport.addSplitStack(outputs, drop.stack(), amount);
+            }
         }
         return new EcoSphereModeResult(
             // #tr GT5U.gui.text.recipe_result.processing_mob_drops
@@ -271,7 +265,7 @@ public final class DirectedMobClonerRecipeCache {
             // #zh_CN 生物掉落处理中
             SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
             outputs.toArray(new ItemStack[0]),
-            multiplySaturated(EEC_RECIPE_EUT, multiplier),
+            multiplySaturated(EcoSphereModeSupport.calculateEut(recipe.baseTier()), parallelFromEUt),
             duration);
     }
 
@@ -279,6 +273,11 @@ public final class DirectedMobClonerRecipeCache {
         if (value <= 0 || multiplier <= 0) return 0;
         if (value > Long.MAX_VALUE / multiplier) return Long.MAX_VALUE;
         return value * multiplier;
+    }
+
+    private static long toSaturatedLong(double value) {
+        if (value >= Long.MAX_VALUE) return Long.MAX_VALUE;
+        return (long) value;
     }
 
     private enum DropWhenExclusion {
@@ -371,19 +370,23 @@ public final class DirectedMobClonerRecipeCache {
     }
 
     @Desugar
-    private record CachedRecipe(int id, String mobName, String localizedName, boolean boss, int eecDuration,
+    record CachedRecipe(int id, String mobName, String localizedName, boolean boss, int eecDuration,
         List<CachedDrop> drops) {
 
+        int baseTier() {
+            return boss ? BOSS_RECIPE_BASE_TIER : NORMAL_RECIPE_BASE_TIER;
+        }
+
         private ItemStack firstOutput() {
-            return drops.isEmpty() ? null
-                : drops.get(0)
-                    .stack()
-                    .copy();
+            if (drops.isEmpty()) return null;
+            return drops.get(0)
+                .stack()
+                .copy();
         }
     }
 
     @Desugar
-    private record CachedDrop(ItemStack stack, int chance, double durabilityExpectation,
-        double probabilityMultiplier) {}
+    record CachedDrop(ItemStack stack, List<ConvertedOutput> convertedOutputs, boolean conversionMatched,
+        boolean requiresPulverizeUpgrade, boolean mobHead, int chance, double durabilityExpectation) {}
 
 }

@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.CLONER_MODE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.cacheRecipeFluids;
 
 import java.util.Map;
 
@@ -23,6 +25,11 @@ public final class DirectedMobClonerFakeRecipe {
     public static final int LIFE_ESSENCE_PER_PARALLEL = 100;
     public static final int FALLBACK_BLOOD_PER_PARALLEL = 100;
     public static final int FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL = 100;
+    public static final FluidStack BLOOD_STACK = FluidRegistry.getFluidStack("blood", FALLBACK_BLOOD_PER_PARALLEL);
+    public static final FluidStack LIFE_ESSENCE_STACK = FluidRegistry
+        .getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
+    public static final FluidStack FALLBACK_LIFE_ESSENCE_OUTPUT_STACK = FluidRegistry
+        .getFluidStack("lifeessence", FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL);
 
     private DirectedMobClonerFakeRecipe() {}
 
@@ -32,7 +39,7 @@ public final class DirectedMobClonerFakeRecipe {
         registerFallbackRecipe();
         for (Map.Entry<Integer, MobRecipeDisplay> entry : recipesById.entrySet()) {
             ItemStack circuit = GTUtility.getIntegratedCircuit(0);
-            FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
+            FluidStack lifeEssence = LIFE_ESSENCE_STACK == null ? null : LIFE_ESSENCE_STACK.copy();
             if (lifeEssence == null) continue;
             GTValues.RA.stdBuilder()
                 .itemInputs(circuit)
@@ -50,11 +57,13 @@ public final class DirectedMobClonerFakeRecipe {
                 .fake()
                 .addTo(GTCMRecipe.DirectedMobClonerFakeRecipes);
         }
+        cacheRecipeFluids(CLONER_MODE, GTCMRecipe.DirectedMobClonerFakeRecipes);
     }
 
     private static void registerFallbackRecipe() {
-        FluidStack bloodInput = FluidRegistry.getFluidStack("blood", FALLBACK_BLOOD_PER_PARALLEL);
-        FluidStack lifeEssence = FluidRegistry.getFluidStack("lifeessence", FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL);
+        FluidStack bloodInput = BLOOD_STACK == null ? null : BLOOD_STACK.copy();
+        FluidStack lifeEssence = FALLBACK_LIFE_ESSENCE_OUTPUT_STACK == null ? null
+            : FALLBACK_LIFE_ESSENCE_OUTPUT_STACK.copy();
         if (bloodInput == null || lifeEssence == null) return;
         GTValues.RA.stdBuilder()
             .fluidInputs(bloodInput)

@@ -1,13 +1,14 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport.getItemStackString;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.AQUATIC_MODE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.cacheRecipeFluids;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport.getItemStackString;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,6 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.GTValues;
@@ -30,14 +30,12 @@ public class AquaticZoneSimulatorFakeRecipe {
 
     public static final int DISTILLED_WATER_PER_PARALLEL = 10000;
     public static final int UNKNOWN_WATER_PER_PARALLEL = 10000;
-    public static final int UNKNOWN_WATER_ALGAE_BASE_OUTPUT = 3;
-    public static final int UNKNOWN_WATER_EMPTY_WEIGHT = 18;
     public static final int CHANCE_SCALE = 100000;
-    public static final int OFFSPRING_TIER_TWO_MULTIPLIER = 41;
-
-    static FluidStack DistilledWaterStack = FluidRegistry
+    public static final FluidStack DISTILLED_WATER_STACK = FluidRegistry
         .getFluidStack("ic2distilledwater", DISTILLED_WATER_PER_PARALLEL);
-    private static final ItemStack Offspring = GTCMItemList.OffSpring.get(1);
+    public static final FluidStack UNKNOWN_WATER_STACK = FluidRegistry
+        .getFluidStack("unknowwater", UNKNOWN_WATER_PER_PARALLEL);
+    public static final ItemStack OFFSPRING = GTCMItemList.OffSpring.get(1);
     public static ArrayList<ItemStack> WatersOutputs = new ArrayList<>();
     public static HashMap<String, Integer> WatersChances = new HashMap<>();
     public static final List<ItemStack> UnknownWaterOutputs = new ArrayList<>();
@@ -87,13 +85,17 @@ public class AquaticZoneSimulatorFakeRecipe {
 
     public static void loadRecipes() {
         initStatics();
-        loadAquaticZoneFakeRecipes();
-        loadUnknownWaterRecipe();
-        loadOffspringFakeRecipe();
-        loadAquaticZoneTrueRecipes();
+        loadFakeRecipes(WatersOutputs, DISTILLED_WATER_STACK, 1);
+        loadFakeRecipes(UnknownWaterOutputs, UNKNOWN_WATER_STACK, 2);
+        loadOutputChances(WatersOutputs, WatersChances, 0);
+        WatersOutputs.add(OFFSPRING);
+        WatersChances.put(getItemStackString(OFFSPRING), 1);
+        loadOutputChances(UnknownWaterOutputs, UnknownWaterChances, 18);
+        cacheRecipeFluids(AQUATIC_MODE, GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
     }
 
     static void initStatics() {
+        // Distilled Water
         WatersOutputs.clear();
         WatersChances.clear();
         Collections.addAll(
@@ -126,26 +128,13 @@ public class AquaticZoneSimulatorFakeRecipe {
         for (TST_ItemID aquaticItem : AquaticItems) {
             WatersOutputs.add(aquaticItem.getItemStackWithoutNBT(4));
         }
-        deduplicateWatersOutputs();
-    }
 
-    private static void deduplicateWatersOutputs() {
-        Map<String, ItemStack> uniqueOutputs = new LinkedHashMap<>();
-        for (ItemStack stack : WatersOutputs) {
-            if (stack == null || stack.getItem() == null) continue;
-            uniqueOutputs.putIfAbsent(getItemStackString(stack), stack);
-        }
-        WatersOutputs.clear();
-        WatersOutputs.addAll(uniqueOutputs.values());
-    }
-
-    static void loadUnknownWaterRecipe() {
+        // Unknown Water
         UnknownWaterOutputs.clear();
         UnknownWaterChances.clear();
         if (!Mods.GalaxySpace.isModLoaded()) return;
         for (int meta = 0; meta < 6; meta++) {
-            ItemStack algae = GTModHandler
-                .getModItem(Mods.GalaxySpace.ID, "tcetiedandelions", UNKNOWN_WATER_ALGAE_BASE_OUTPUT, meta);
+            ItemStack algae = GTModHandler.getModItem(Mods.GalaxySpace.ID, "tcetiedandelions", 3, meta);
             if (algae != null) UnknownWaterOutputs.add(algae);
         }
         Collections.addAll(
@@ -156,82 +145,35 @@ public class AquaticZoneSimulatorFakeRecipe {
             GregtechItemList.GoldenBrownAlgaeBiomass.get(10),
             GregtechItemList.RedAlgaeBiomass.get(9));
         UnknownWaterOutputs.removeIf(stack -> stack == null || stack.getItem() == null);
-        FluidStack unknownWater = FluidRegistry.getFluidStack("unknowwater", UNKNOWN_WATER_PER_PARALLEL);
-        if (unknownWater == null || UnknownWaterOutputs.size() != 11) return;
-        int totalWeight = UNKNOWN_WATER_EMPTY_WEIGHT;
-        for (ItemStack output : UnknownWaterOutputs) totalWeight += output.stackSize;
-        int basicChance = CHANCE_SCALE / totalWeight;
-        for (ItemStack output : UnknownWaterOutputs) {
-            int chance = basicChance * output.stackSize;
-            UnknownWaterChances.put(getItemStackString(output), chance);
+    }
+
+    static void loadFakeRecipes(List<ItemStack> outputs, FluidStack inputFluid, int requiredBeaconTier) {
+        if (inputFluid == null || outputs.isEmpty()) return;
+        for (ItemStack output : outputs) {
             ItemStack focusInput = output.copy();
             focusInput.stackSize = 0;
-            GTValues.RA.stdBuilder()
-                .itemInputs(focusInput)
-                .itemOutputs(output.copy())
-                .fluidInputs(unknownWater.copy())
-                .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-                .metadata(INSTANCE, 2)
-                .fake()
-                .duration(MODE_RECIPE_DURATION)
-                .eut(0)
-                .addTo(GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
+            addFakeRecipe(focusInput, output, inputFluid, requiredBeaconTier);
         }
     }
 
-    static void loadAquaticZoneFakeRecipes() {
-        if (DistilledWaterStack == null) return;
-        for (ItemStack aStack : WatersOutputs) {
-            ItemStack Input = aStack.copy();
-            Input.stackSize = 0;
-            // addEnchantmentLight(Input);
-            addFakeRecipe(Input, aStack, DistilledWaterStack);
+    static void loadOutputChances(List<ItemStack> outputs, Map<String, Integer> chances, int emptyWeight) {
+        if (outputs.isEmpty()) return;
+        int totalWeight = emptyWeight;
+        for (ItemStack output : outputs) totalWeight += output.stackSize;
+        int basicChance = CHANCE_SCALE / totalWeight;
+        for (ItemStack output : outputs) {
+            chances.put(getItemStackString(output), basicChance * output.stackSize);
         }
     }
 
-    static void loadOffspringFakeRecipe() {
-        if (DistilledWaterStack == null) return;
-        ItemStack jellyfish = Mods.PamsHarvestCraft.isModLoaded()
-            ? GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "jellyfishrawItem", OFFSPRING_TIER_TWO_MULTIPLIER, 0)
-            : null;
-        if (jellyfish == null && Offspring != null) jellyfish = Offspring.copy();
-        if (jellyfish == null) return;
-        jellyfish.stackSize = OFFSPRING_TIER_TWO_MULTIPLIER;
-        jellyfish.setStackDisplayName(TextEnums.tr("MegaTreeFarm.nei.strangeJellyfish"));
-        // #tr MegaTreeFarm.nei.strangeJellyfish
-        // # Strange Jellyfish??
-        // #zh_CN 奇怪的水母？？
-        GTValues.RA.stdBuilder()
-            .itemOutputs(jellyfish)
-            .fluidInputs(DistilledWaterStack)
-            .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-            .metadata(INSTANCE, 1)
-            .fake()
-            .duration(MODE_RECIPE_DURATION)
-            .eut(0)
-            .addTo(GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
-    }
-
-    static void loadAquaticZoneTrueRecipes() {
-        // generate recipe chance
-        int TotalSize = 0;
-        for (ItemStack aStack : WatersOutputs) TotalSize += aStack.stackSize;
-        int BasicSize = CHANCE_SCALE / TotalSize;
-        for (ItemStack aStack : WatersOutputs) {
-            if (aStack == null) continue;
-            WatersChances.put(getItemStackString(aStack), BasicSize * aStack.stackSize);
-        }
-        WatersOutputs.add(Offspring);
-        WatersChances.put(getItemStackString(Offspring), 1);
-    }
-
-    static void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid) {
+    static void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid,
+        int requiredBeaconTier) {
         GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-            .metadata(INSTANCE, 1)
+            .metadata(INSTANCE, requiredBeaconTier)
             .fake()
             .duration(MODE_RECIPE_DURATION)
             .eut(0)

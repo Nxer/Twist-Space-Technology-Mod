@@ -3,10 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static bartworks.common.loaders.ItemRegistry.bw_realglas;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereFluidAreaHandler.FluidArea.LOWER_SOURCE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereFluidAreaHandler.FluidArea.MAIN_SOURCE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereFluidAreaHandler.FluidArea.UPPER_SOURCE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereFluidAreaHandler.MAIN_SOURCE_LAST_LAYER;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.FluidArea.LOWER_SOURCE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.FluidArea.MAIN_SOURCE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.FluidArea.UPPER_SOURCE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.MAIN_SOURCE_LAST_LAYER;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -31,6 +31,8 @@ import static vazkii.botania.common.block.ModBlocks.seaLamp;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -56,14 +58,19 @@ import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.CropsNHFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereSpecialUpgrade;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereUpgradeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.AquaticZoneSimulatorMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.ArtificialGreenHouseMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.CropsNHFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DebugMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DirectedMobClonerMode;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereFluidAreaHandler;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeResult;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.EcoSphereModeSupport;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -77,6 +84,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -89,7 +97,9 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
+import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
@@ -112,7 +122,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     // region Structure
 
-    public static final int MODE_RECIPE_DURATION = 20;
+    public static final int MODE_RECIPE_DURATION = 20 * 5;
     private static final int MODE_BEACON_CHECK_INTERVAL = 20;
 
     private int controllerTier = 0;
@@ -121,16 +131,16 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     private boolean modeBeaconPresent = false;
     private boolean cleaningRequested = false;
     private boolean cleaningRunActive = false;
-    private int directedMobClonerDebugRecipeId = 0;
-    private boolean directedMobClonerDebugActive = false;
-    private boolean directedMobClonerDebugStopPending = false;
+    private boolean debugItemInstalled = false;
     private long availableInputPower = 0;
     private String fluidAreaFluidName = "";
     private boolean fluidAreaInitialized = false;
     private int fluidAreaFillDuration = 0;
     private FluidStack missingFluidAreaInput;
+    private TST_EcoSphereInputInterfaceHatch ecoSphereInputInterface;
+    private TST_EcoSphereUpgradeInterfaceHatch ecoSphereUpgradeInterface;
+    private EcoSphereUpgradeResult installedUpgrades = EcoSphereUpgradeResult.EMPTY;
     private static ItemStack FountOfEcology;
-    private static ItemStack Offspring;
 
     @Override
     public int totalMachineMode() {
@@ -161,7 +171,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return beacon.getItemDamage() % 2 + 1;
     }
 
-    public boolean hasDirectedMobClonerInfiniteUpgrade() {
+    public boolean hasDirectedMobClonerTierTwoBeacon() {
         return getModeFromBeacon(getControllerSlot()) == 3 && hasSecondaryModeBeacon();
     }
 
@@ -169,44 +179,29 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return getModeBeaconTier() == 2;
     }
 
-    public long applyStructureFluidDiscount(long fluidAmount) {
-        return isTierTwo() ? Math.max(1, fluidAmount / 10) : fluidAmount;
+    public long applyFluidDiscount(long fluidAmount) {
+        return installedUpgrades.applyFluidDiscount(fluidAmount);
     }
 
-    public long getAvailableInputPower() {
-        return availableInputPower;
+    // Mode processing starts only after both required interfaces pass structure validation.
+    public ItemStack[] getModeInputs() {
+        return ecoSphereInputInterface.getModeInputs();
     }
 
-    public int beginDirectedMobClonerDebugRun() {
-        if (!directedMobClonerDebugActive) {
-            directedMobClonerDebugActive = true;
-            directedMobClonerDebugRecipeId = 1;
-            directedMobClonerDebugStopPending = false;
-            markDirty();
-        }
-        return directedMobClonerDebugRecipeId;
+    public EnumSet<Mode> getSelectedTreeOutputs() {
+        return ecoSphereInputInterface.getSelectedTreeOutputs();
     }
 
-    public void advanceDirectedMobClonerDebugRun(boolean lastRecipe) {
-        if (lastRecipe) {
-            directedMobClonerDebugStopPending = true;
-        } else {
-            directedMobClonerDebugRecipeId++;
-        }
-        markDirty();
+    public int getCloningRecipeId() {
+        return ecoSphereInputInterface.getCloningRecipeId();
     }
 
-    public void resetDirectedMobClonerDebugRun() {
-        if (!directedMobClonerDebugActive && directedMobClonerDebugRecipeId == 0 && !directedMobClonerDebugStopPending)
-            return;
-        directedMobClonerDebugActive = false;
-        directedMobClonerDebugRecipeId = 0;
-        directedMobClonerDebugStopPending = false;
-        markDirty();
+    public int getAquaticTargetingMultiplier() {
+        return ecoSphereInputInterface.getAquaticTargetingMultiplier();
     }
 
-    public boolean isOffspring(ItemStack stack) {
-        return stack != null && Offspring != null && stack.isItemEqual(Offspring);
+    public boolean hasSpecialUpgrade(EcoSphereSpecialUpgrade upgrade) {
+        return installedUpgrades.hasSpecialUpgrade(upgrade);
     }
 
     @Override
@@ -232,9 +227,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         // # Directed Mob Cloning
         // #zh_CN 定向克隆
         if (cleaningRequested || cleaningRunActive) return tr("EcoSphereSimulator.mode.cleaning");
-        return modeBeaconPresent && boundMode >= 0 && boundMode < MACHINE_MODES.length
-            ? MACHINE_MODES[boundMode].getDisplayName()
-            : tr("EcoSphereSimulator.mode.waiting");
+        if (!modeBeaconPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
+            return tr("EcoSphereSimulator.mode.waiting");
+        }
+        return MACHINE_MODES[boundMode].getDisplayName();
     }
 
     @Override
@@ -264,7 +260,6 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
-        if (Offspring == null) Offspring = GTCMItemList.OffSpring.get(1);
         // Sync the installed beacon when the machine loads.
         if (aBaseMetaTileEntity.isServerSide()) updateModeBeaconBinding();
     }
@@ -272,18 +267,15 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         boolean serverSide = aBaseMetaTileEntity.isServerSide();
-        // Check once per second while a recipe is active so beacon changes can stop it early.
-        if (serverSide && mMaxProgresstime > 0 && aTick % MODE_BEACON_CHECK_INTERVAL == 0) {
+        // Keep both interface UIs synchronized while the machine is idle or running.
+        if (serverSide && aTick % MODE_BEACON_CHECK_INTERVAL == 0) {
             updateModeBeaconBinding();
+            refreshEcoSphereInterfaces();
         }
         // Run the normal machine tick after a possible mode change has stopped the old recipe.
         super.onPostTick(aBaseMetaTileEntity, aTick);
         if (!serverSide) return;
 
-        if (directedMobClonerDebugStopPending && mMaxProgresstime <= 0) {
-            resetDirectedMobClonerDebugRun();
-            aBaseMetaTileEntity.disableWorking();
-        }
         if (aTick % 20 == 0 && controllerTier == 0) {
             ItemStack ControllerSlot = this.getControllerSlot();
             if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
@@ -299,8 +291,23 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
         float aX, float aY, float aZ) {
+        ItemStack heldItem = aPlayer.getHeldItem();
+        ItemStack debugItem = GTCMItemList.TestItem0.get(1);
+        if (!aPlayer.isSneaking() && GTUtility.areStacksEqual(debugItem, heldItem)) {
+            if (aBaseMetaTileEntity.isServerSide() && !debugItemInstalled) {
+                debugItemInstalled = true;
+                DebugMode.reset(this);
+                heldItem.stackSize--;
+                if (heldItem.stackSize <= 0) {
+                    aPlayer.inventory.setInventorySlotContents(aPlayer.inventory.currentItem, null);
+                }
+                aBaseMetaTileEntity.enableWorking();
+                markDirty();
+                aPlayer.inventory.markDirty();
+            }
+            return true;
+        }
         if (!aPlayer.isSneaking()) {
-            ItemStack heldItem = aPlayer.getHeldItem();
             if (controllerTier == 0 && GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
                 controllerTier = 1;
                 aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, heldItem.stackSize));
@@ -334,11 +341,26 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         requestCleaning(requestedMode);
     }
 
+    private void refreshEcoSphereInterfaces() {
+        int interfaceMode = -1;
+        if (modeBeaconPresent) interfaceMode = getModeFromBeacon(getControllerSlot());
+        ItemStack[] upgrades = new ItemStack[0];
+        if (ecoSphereUpgradeInterface != null) {
+            ecoSphereUpgradeInterface.setMachineState(interfaceMode, getStructureTier());
+            upgrades = ecoSphereUpgradeInterface.getUpgrades();
+        }
+        installedUpgrades = new EcoSphereUpgradeResult(upgrades, interfaceMode);
+        if (ecoSphereInputInterface != null) {
+            ecoSphereInputInterface.setMachineState(interfaceMode, installedUpgrades.getCapacityUpgrades());
+        }
+    }
+
     // Stop the current recipe and queue the requested mode for cleaning.
     private void requestCleaning(int requestedMode) {
         pendingMode = requestedMode;
         cleaningRequested = true;
         cleaningRunActive = false;
+        DebugMode.reset(this);
         missingFluidAreaInput = null;
         mProgresstime = 0;
         mMaxProgresstime = 0;
@@ -348,7 +370,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     // Map the eight beacon items to the four machine modes.
-    private static int getModeFromBeacon(ItemStack stack) {
+    public static int getModeFromBeacon(ItemStack stack) {
         if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.EcoSphereModeBeacon) return -1;
         int meta = stack.getItemDamage();
         return meta >= 0 && meta <= 7 ? meta / 2 : -1;
@@ -373,9 +395,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         aNBT.setInteger("pendingMode", pendingMode);
         aNBT.setBoolean("cleaningRequested", cleaningRequested);
         aNBT.setBoolean("cleaningRunActive", cleaningRunActive);
-        aNBT.setInteger("directedMobClonerDebugRecipeId", directedMobClonerDebugRecipeId);
-        aNBT.setBoolean("directedMobClonerDebugActive", directedMobClonerDebugActive);
-        aNBT.setBoolean("directedMobClonerDebugStopPending", directedMobClonerDebugStopPending);
+        aNBT.setBoolean("debugItemInstalled", debugItemInstalled);
         aNBT.setString("fluidAreaFluidName", fluidAreaFluidName);
         aNBT.setBoolean("fluidAreaInitialized", fluidAreaInitialized);
     }
@@ -389,9 +409,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         pendingMode = aNBT.hasKey("pendingMode") ? aNBT.getInteger("pendingMode") : -1;
         cleaningRequested = aNBT.getBoolean("cleaningRequested");
         cleaningRunActive = aNBT.getBoolean("cleaningRunActive");
-        directedMobClonerDebugRecipeId = aNBT.getInteger("directedMobClonerDebugRecipeId");
-        directedMobClonerDebugActive = aNBT.getBoolean("directedMobClonerDebugActive");
-        directedMobClonerDebugStopPending = aNBT.getBoolean("directedMobClonerDebugStopPending");
+        debugItemInstalled = aNBT.getBoolean("debugItemInstalled");
         fluidAreaFluidName = aNBT.getString("fluidAreaFluidName");
         fluidAreaInitialized = aNBT.hasKey("fluidAreaInitialized") && aNBT.getBoolean("fluidAreaInitialized");
     }
@@ -485,6 +503,14 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             STRUCTURE_OFFSET_Y,
             STRUCTURE_OFFSET_Z,
             errors);
+        refreshEcoSphereInterfaces();
+    }
+
+    @Override
+    public void clearHatches() {
+        super.clearHatches();
+        ecoSphereInputInterface = null;
+        ecoSphereUpgradeInterface = null;
     }
 
     @Override
@@ -583,7 +609,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     ofChain(
                         ofBlock(ModBlocks.blockCasings2Misc, 15),
                         HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .anyOf(InputBus, OutputBus, InputHatch, OutputHatch)
+                            .atLeast(EcoSphereHatchElement.InputInterface, EcoSphereHatchElement.UpgradeInterface)
                             .hint(3)
                             .casingIndex(TAE.getIndexFromPage(1, 15))
                             .build()))
@@ -592,7 +618,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     ofChain(
                         ofBlock(MetaBlockCasing01, 13),
                         HatchElementBuilder.<TST_EcoSphereSimulator>builder()
-                            .anyOf(InputBus, OutputBus, InputHatch, OutputHatch)
+                            .atLeast(EcoSphereHatchElement.InputInterface, EcoSphereHatchElement.UpgradeInterface)
                             .hint(3)
                             .casingIndex(MetaBlockCasing01.getTextureIndex(13))
                             .build()))
@@ -657,7 +683,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     O -> withChannel...(ExtraUtilities:greenscreen, ...); // channel selects hint meta 0-15
     Q/q -> oak plank positions: item and fluid input/output hatches
     R/r -> birch plank positions: energy and exotic energy hatches
-    T/t -> spruce plank positions: reserved special hatches, currently the same as Q/q
+    T/t -> spruce plank positions: Eco-Sphere input and upgrade interfaces
     The cleaning extension is removed only by the cleaning animation.
     Additional animated fluid positions are defined separately from the original main fluid area.
     The independent position is filled for every machine mode.
@@ -808,7 +834,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         fluidAreaFillDuration = 0;
         if (targetFluid == null || targetFluid.getBlock() == null) {
             fluidAreaInitialized = false;
-            missingFluidAreaInput = targetFluid == null ? null : new FluidStack(targetFluid, fluidAreaBlockCost);
+            missingFluidAreaInput = null;
+            if (targetFluid != null) missingFluidAreaInput = new FluidStack(targetFluid, fluidAreaBlockCost);
             return false;
         }
 
@@ -948,12 +975,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             fluidAreaInitialized = false;
             fluidAreaFillDuration = 0;
             missingFluidAreaInput = null;
+            DebugMode.reset(this);
         }
         super.onRemoval();
     }
 
     // region Processing Logic
-    double tierMultiplier = 1;
+    long parallelFromEUt = 1;
     int EuTier = 1;
 
     @Override
@@ -997,6 +1025,22 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     private static final IEcoSphereMode[] MACHINE_MODES = { new TreeGrowthSimulatorMode(),
         new AquaticZoneSimulatorMode(), new ArtificialGreenHouseMode(), new DirectedMobClonerMode() };
 
+    private boolean addEcoSphereInputInterface(IGregTechTileEntity tileEntity, int casingIndex) {
+        if (ecoSphereInputInterface != null
+            || !(tileEntity.getMetaTileEntity() instanceof TST_EcoSphereInputInterfaceHatch hatch)) return false;
+        hatch.updateTexture(casingIndex);
+        ecoSphereInputInterface = hatch;
+        return true;
+    }
+
+    private boolean addEcoSphereUpgradeInterface(IGregTechTileEntity tileEntity, int casingIndex) {
+        if (ecoSphereUpgradeInterface != null
+            || !(tileEntity.getMetaTileEntity() instanceof TST_EcoSphereUpgradeInterfaceHatch hatch)) return false;
+        hatch.updateTexture(casingIndex);
+        ecoSphereUpgradeInterface = hatch;
+        return true;
+    }
+
     @Override
     public GTCM_ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
@@ -1006,13 +1050,15 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             public CheckRecipeResult process() {
                 // Always use the latest beacon before starting the next recipe.
                 updateModeBeaconBinding();
+                // Read upgrades first because fluid efficiency can raise the fluid-limited parallel count.
+                refreshEcoSphereInterfaces();
                 if (inputItems == null) inputItems = new ItemStack[0];
                 if (inputFluids == null) inputFluids = new FluidStack[0];
 
                 availableInputPower = availableVoltage * availableAmperage;
                 EuTier = (int) Math.max(0, Math.log((double) availableInputPower / 8d) / Math.log(4d));
                 updateSlots();
-                if (EuTier < 1) return CheckRecipeResultRegistry.insufficientPower(32);
+                if (!debugItemInstalled && EuTier < 1) return CheckRecipeResultRegistry.insufficientPower(32);
                 if (cleaningRequested || cleaningRunActive) {
                     CheckRecipeResult cleaningResult = processCleaning();
                     if (cleaningResult != null) return cleaningResult;
@@ -1024,7 +1070,22 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     return SimpleCheckRecipeResult.ofFailure("eco_sphere_simulator_waiting_for_mode_beacon");
                 }
                 machineMode = boundMode;
-                tierMultiplier = EcoSphereModeSupport.getTierMultiplier(EuTier);
+                if (debugItemInstalled) {
+                    EcoSphereModeResult debugResult = DebugMode
+                        .process(TST_EcoSphereSimulator.this, machineMode, getModeBeaconTier());
+                    if (debugResult.result()
+                        .wasSuccessful()) return applyModeResult(debugResult);
+                    DebugMode.reset(TST_EcoSphereSimulator.this);
+                    getBaseMetaTileEntity().disableWorking();
+                    markDirty();
+                    return debugResult.result();
+                }
+                DebugMode.reset(TST_EcoSphereSimulator.this);
+                if (isTierTwo()) {
+                    parallelFromEUt = EcoSphereModeSupport.getPerfectOverclockParallelFromEUt(EuTier);
+                } else {
+                    parallelFromEUt = EcoSphereModeSupport.getParallelFromEUt(EuTier);
+                }
                 EcoSphereModeResult modeResult = MACHINE_MODES[machineMode]
                     .process(TST_EcoSphereSimulator.this, EuTier);
                 if (!modeResult.result()
@@ -1043,6 +1104,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     if (missingFluidAreaInput != null) return SimpleResultWithText.outOfFluid(missingFluidAreaInput);
                     return modeResult.result();
                 }
+                modeResult = installedUpgrades.applyTo(modeResult);
+                return applyModeResult(modeResult);
+            }
+
+            private CheckRecipeResult applyModeResult(EcoSphereModeResult modeResult) {
+                if (!modeResult.result()
+                    .wasSuccessful()) return modeResult.result();
                 outputItems = modeResult.outputs();
                 outputFluids = modeResult.fluidOutputs();
                 calculatedEut = modeResult.eut();
@@ -1066,8 +1134,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 }
 
                 Fluid placedFluid = FluidRegistry.getFluid(fluidAreaFluidName);
-                int cleaningDuration = getFluidAreaHandler()
-                    .clearNextCleaningLayer(withMainArea, placedFluid == null ? null : placedFluid.getBlock());
+                Block placedFluidBlock = placedFluid == null ? null : placedFluid.getBlock();
+                int cleaningDuration = getFluidAreaHandler().clearNextCleaningLayer(withMainArea, placedFluidBlock);
                 if (cleaningDuration <= 0) {
                     // Only expose the new mode after every old fluid layer is gone.
                     cleaningRunActive = false;
@@ -1099,6 +1167,44 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         };
     }
 
+    private enum EcoSphereHatchElement implements IHatchElement<TST_EcoSphereSimulator> {
+
+        InputInterface(TST_EcoSphereSimulator::addEcoSphereInputInterface, TST_EcoSphereInputInterfaceHatch.class) {
+
+            @Override
+            public long count(TST_EcoSphereSimulator machine) {
+                return machine.ecoSphereInputInterface == null ? 0 : 1;
+            }
+        },
+        UpgradeInterface(TST_EcoSphereSimulator::addEcoSphereUpgradeInterface,
+            TST_EcoSphereUpgradeInterfaceHatch.class) {
+
+            @Override
+            public long count(TST_EcoSphereSimulator machine) {
+                return machine.ecoSphereUpgradeInterface == null ? 0 : 1;
+            }
+        };
+
+        private final IGTHatchAdder<TST_EcoSphereSimulator> adder;
+        private final List<Class<? extends IMetaTileEntity>> hatchClasses;
+
+        EcoSphereHatchElement(IGTHatchAdder<TST_EcoSphereSimulator> adder,
+            Class<? extends IMetaTileEntity> hatchClass) {
+            this.adder = adder;
+            hatchClasses = Collections.singletonList(hatchClass);
+        }
+
+        @Override
+        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
+            return hatchClasses;
+        }
+
+        @Override
+        public IGTHatchAdder<TST_EcoSphereSimulator> adder() {
+            return adder;
+        }
+    }
+
     public final CropsNHFarm cropsNHFarm = new CropsNHFarm();
 
     public String[] getInfoData() {
@@ -1106,10 +1212,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         int extraLines = missingFluidAreaInput == null ? 3 : 4;
         String[] ret = new String[origin.length + extraLines];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "tierMultiplier"
+        ret[origin.length] = EnumChatFormatting.AQUA + "parallelFromEUt"
             + " : "
             + EnumChatFormatting.GOLD
-            + (int) this.tierMultiplier;
+            + this.parallelFromEUt;
         ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
         ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.currentRecipe")
             + " : "

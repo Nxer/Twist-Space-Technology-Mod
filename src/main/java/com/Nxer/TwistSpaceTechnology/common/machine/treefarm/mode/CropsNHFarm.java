@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
+package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
 
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.gtnewhorizon.cropsnh.tileentity.TileEntityCropSticks.BASE_GROWTH_SPEED;
@@ -26,6 +26,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
 import com.gtnewhorizon.cropsnh.api.ISeedData;
 import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
@@ -35,60 +36,55 @@ import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.mixin.interfaces.accessors.IBlockStemAccessor;
 
-public class CropsNHFarm {
+public final class CropsNHFarm {
 
-    public static final int MEGA_TREE_FARM_MULTIPLIER = 16384;
+    private static final int MEGA_TREE_FARM_MULTIPLIER = 16384;
 
-    public ItemStack lastCache = null;
-    public ISeedData seedData = null;
+    private ItemStack lastCache = null;
+    private ISeedData seedData = null;
 
-    public Pair<ItemStack, Double>[] output = new Pair[0];
+    private Pair<ItemStack, Double>[] output = new Pair[0];
 
-    public ItemStack[] getOutputStacks(double multiplier) {
-        if (output == null || output.length == 0) {
+    private static ItemStack[] getOutputStacks(Pair<ItemStack, Double>[] cachedOutput, double multiplier) {
+        if (cachedOutput == null || cachedOutput.length == 0) {
             return new ItemStack[0];
         }
 
-        List<ItemStack> o = new ArrayList<>();
+        List<ItemStack> outputs = new ArrayList<>();
 
-        for (Pair<ItemStack, Double> p : output) {
-            if (p == null) continue;
-            ItemStack op = p.getKey();
-            if (op == null) continue;
+        for (Pair<ItemStack, Double> entry : cachedOutput) {
+            if (entry == null) continue;
+            ItemStack output = entry.getKey();
+            if (output == null) continue;
             // get actual amount of this stack to output
-            long a = (long) Math.ceil(p.getValue() * multiplier);
-            if (a < 1) continue;
+            long amount = (long) Math.ceil(entry.getValue() * multiplier);
+            if (amount < 1) continue;
 
-            if (a <= Integer.MAX_VALUE) {
-                o.add(setStackSize(op.copy(), (int) a));
+            if (amount <= Integer.MAX_VALUE) {
+                outputs.add(setStackSize(output.copy(), (int) amount));
             } else {
-                while (a > Integer.MAX_VALUE) {
-                    o.add(setStackSize(op.copy(), Integer.MAX_VALUE));
-                    a -= Integer.MAX_VALUE;
+                while (amount > Integer.MAX_VALUE) {
+                    outputs.add(setStackSize(output.copy(), Integer.MAX_VALUE));
+                    amount -= Integer.MAX_VALUE;
                 }
-                if (a > 0) {
-                    o.add(setStackSize(op.copy(), (int) a));
+                if (amount > 0) {
+                    outputs.add(setStackSize(output.copy(), (int) amount));
                 }
             }
         }
 
-        if (o.isEmpty()) return new ItemStack[0];
-
-        return o.toArray(new ItemStack[0]);
+        return outputs.toArray(new ItemStack[0]);
 
     }
 
-    public boolean isValid() {
-        return output != null && output.length > 0;
-    }
-
-    public boolean createCropCache(ItemStack seed) {
-        if (isCached(seed)) return true;
-        if (createCrop(seed) || createVanillaCrop(seed)) return true;
-
-        // Use the CropsNH alternate-seed registry when a crop cannot be simulated as a normal block crop.
-        ICropCard crop = CropRegistry.instance.fromAlternateSeed(seed);
-        return crop != null && createAlternateSeedCrop(seed, crop);
+    public CropCache getCropCache(ItemStack seed) {
+        if (seed == null || seed.getItem() == null) return null;
+        if (!isCached(seed) && !createCrop(seed) && !createVanillaCrop(seed)) {
+            // Use the CropsNH alternate-seed registry when a crop cannot be simulated as a normal block crop.
+            ICropCard crop = CropRegistry.instance.fromAlternateSeed(seed);
+            if (crop == null || !createAlternateSeedCrop(seed, crop)) return null;
+        }
+        return new CropCache(seedData != null, output.clone());
     }
 
     private boolean createAlternateSeedCrop(ItemStack seedStack, ICropCard crop) {
@@ -108,12 +104,12 @@ public class CropsNHFarm {
         return true;
     }
 
-    public boolean isCached(ItemStack seed) {
+    private boolean isCached(ItemStack seed) {
         if (lastCache == null || seed == null) return false;
         return areItemStacksEqual(lastCache, seed);
     }
 
-    public boolean createCrop(ItemStack seedStack) {
+    private boolean createCrop(ItemStack seedStack) {
         ISeedData seed = CropsNHUtils.getAnalyzedSeedData(seedStack);
         if (seed == null) return false;
 
@@ -123,7 +119,7 @@ public class CropsNHFarm {
             tProgressPerCycle = 1;
             TwistSpaceTechnology.LOG
                 .info("Creating Crop but get a invalid num tProgressPerCycle={} in seed {}", tProgressPerCycle, seed);
-        } ;
+        }
 
         // calc avg drop stack size increase
         double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(
@@ -164,7 +160,7 @@ public class CropsNHFarm {
 
     private static final int NUMBER_OF_DROPS_TO_SIMULATE = 10;
 
-    public boolean createVanillaCrop(ItemStack seedStack) {
+    private boolean createVanillaCrop(ItemStack seedStack) {
 
         if (seedStack == null || seedStack.stackSize < 1) return false;
         Item seedItem = seedStack.getItem();
@@ -267,7 +263,7 @@ public class CropsNHFarm {
 
     }
 
-    public static double getGrowthProgressPerCycle(ISeedData aCrop) {
+    private static double getGrowthProgressPerCycle(ISeedData aCrop) {
         // calc unscaled growth speed of crops.
         int tUnscaledGrowthSpeed = aCrop.getStats()
             .getGrowth() + BASE_GROWTH_SPEED;
@@ -277,11 +273,19 @@ public class CropsNHFarm {
         // this is intentional balancing and shouldn't be included in the future mega multi.
         int cropGrowthDuration = aCrop.getCrop()
             .getGrowthDuration();
-        int growthTicksPerHarvest = (cropGrowthDuration / tUnscaledGrowthSpeed)
-            + (cropGrowthDuration % tUnscaledGrowthSpeed == 0 ? 0 : 1);
+        int growthTicksPerHarvest = cropGrowthDuration / tUnscaledGrowthSpeed;
+        if (cropGrowthDuration % tUnscaledGrowthSpeed != 0) growthTicksPerHarvest++;
         // calculate percent progress per growth tick
         double growthPercentPerGrowthTick = 1.0d / growthTicksPerHarvest;
         // scale it to the cycle's rate and apply growth speed multipliers
         return growthPercentPerGrowthTick * CYCLE_TICK_RATE_SCALAR;
+    }
+
+    @Desugar
+    public record CropCache(boolean hybrid, Pair<ItemStack, Double>[] cachedOutput) {
+
+        public ItemStack[] getOutputStacks(double multiplier) {
+            return CropsNHFarm.getOutputStacks(cachedOutput, multiplier);
+        }
     }
 }

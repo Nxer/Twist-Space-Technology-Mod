@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
+package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 

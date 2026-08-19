@@ -175,6 +175,12 @@ public enum GTCMItemList {
     EcoSphereModeBeacon6,
     EcoSphereModeBeacon7,
     EcoSphereModeBeacon8,
+    EcoSphereFluidEfficiencyUpgrade,
+    EcoSphereOutputBoostUpgrade,
+    EcoSphereSpeedUpgrade,
+    EcoSphereCapacityUpgrade,
+    EcoSphereAutoPulverizeUpgrade,
+    EcoSphereMobHeadUpgrade,
 
     LvFlask,
     MvFlask,
@@ -501,6 +507,8 @@ public enum GTCMItemList {
     SolidifyHatch_UHV,
     CircuitImprintHatchT1,
     CircuitImprintHatchT2,
+    EcoSphereInputInterface,
+    EcoSphereUpgradeInterface,
 
     // endregion
 

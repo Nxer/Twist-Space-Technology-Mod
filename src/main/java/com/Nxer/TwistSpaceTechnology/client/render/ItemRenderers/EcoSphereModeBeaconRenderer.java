@@ -16,6 +16,7 @@ import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
@@ -109,7 +110,7 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
             case 5 -> getGaiaWart();
             case 6 -> new ItemStack(Items.diamond_sword);
             case 7 -> new ItemStack(LudicrousItems.infinity_sword);
-            default -> new ItemStack(Items.diamond_sword);
+            default -> GTCMItemList.TestItem0.get(1);
         };
     }
 

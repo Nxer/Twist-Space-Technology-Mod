@@ -5,18 +5,21 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
+import gregtech.api.enums.GTValues;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
@@ -39,58 +42,57 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
     @Override
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
-        if (hasDebugItem(machine)) return processDebug(machine);
-        machine.resetDirectedMobClonerDebugRun();
+        FluidStack fluidInput = EcoSphereFluidCache.findFirstValidFluid(machine);
+        if (fluidInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        Fluid inputFluid = fluidInput.getFluid();
+        FluidStack bloodInput = DirectedMobClonerFakeRecipe.BLOOD_STACK;
+        if (bloodInput != null && inputFluid == bloodInput.getFluid())
+            return processFallback(machine, bloodInput, euTier);
 
-        // The tier-one structure always runs recipe zero, regardless of circuit input.
-        if (!machine.isTierTwo()) return processFallback(machine, euTier);
+        FluidStack lifeEssenceInput = DirectedMobClonerFakeRecipe.LIFE_ESSENCE_STACK;
+        if (lifeEssenceInput == null || inputFluid != lifeEssenceInput.getFluid() || !machine.isTierTwo())
+            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
 
-        // Missing and invalid circuit sums both use the fallback life-essence recipe.
-        int recipeId = TstUtils.getIntegratedCircuitConfigurationSum(machine.getStoredInputs());
-        if (!DirectedMobClonerRecipeCache.isValidRecipeId(recipeId)) return processFallback(machine, euTier);
-        boolean infiniteUpgrade = machine.hasDirectedMobClonerInfiniteUpgrade();
-        boolean bossRecipe = DirectedMobClonerRecipeCache.isBossRecipe(recipeId);
+        // Numbered recipes are selected only after life essence wins the shared fluid scan.
+        int recipeId = machine.getCloningRecipeId();
+        DirectedMobClonerRecipeCache.CachedRecipe recipe = DirectedMobClonerRecipeCache.findRecipe(recipeId);
+        if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        boolean tierTwoBeacon = machine.hasDirectedMobClonerTierTwoBeacon();
         // Boss recipes additionally require the upgraded cloning beacon.
-        if (bossRecipe && !infiniteUpgrade) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
-        int voltageTier = (int) Math.floor(TstUtils.calculateVoltageTier(machine.getAvailableInputPower()));
-        if (infiniteUpgrade) voltageTier += 4;
-        // Every tier above the recipe offset adds one perfect overclock.
-        int tierOffset = bossRecipe ? 6 : 4;
-        int maximumOverclocks = Math.max(0, voltageTier - tierOffset);
-        Fluid lifeEssenceFluid = FluidRegistry.getFluid("lifeessence");
-        FluidStack lifeEssenceInput = EcoSphereModeSupport
-            .findFirstValidFluid(machine, fluid -> fluid == lifeEssenceFluid);
-        if (lifeEssenceInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        EcoSphereModeSupport.PerfectOverclockResult overclockResult = EcoSphereModeSupport
-            .consumeFluidForPerfectOverclock(
-                machine,
-                lifeEssenceInput.getFluid(),
-                DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL,
-                maximumOverclocks);
-        if (overclockResult == null) return EcoSphereModeResult.failure(
-            EcoSphereModeSupport
-                .missingFluid(machine, lifeEssenceFluid, DirectedMobClonerFakeRecipe.LIFE_ESSENCE_PER_PARALLEL));
-        return DirectedMobClonerRecipeCache
-            .process(machine, recipeId, overclockResult.tier(), overclockResult.multiplier(), infiniteUpgrade);
+        if (recipe.boss() && !tierTwoBeacon) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+        int baseTier = recipe.baseTier();
+        int overclocks = euTier - baseTier;
+        if (overclocks < 0)
+            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.insufficientPower(GTValues.V[baseTier]));
+        long parallelFromEUt = EcoSphereModeSupport.powerOfFour(overclocks);
+        return EcoSphereModeSupport.processRecipeWithParallelLimit(
+            machine,
+            lifeEssenceInput.getFluid(),
+            lifeEssenceInput.amount,
+            euTier,
+            parallelFromEUt,
+            parallelResult -> DirectedMobClonerRecipeCache
+                .process(machine, recipe, parallelResult.parallel(), parallelFromEUt));
     }
 
-    private static EcoSphereModeResult processFallback(TST_EcoSphereSimulator machine, int euTier) {
-        Fluid bloodFluid = FluidRegistry.getFluid("blood");
-        FluidStack bloodInput = EcoSphereModeSupport.findFirstValidFluid(machine, fluid -> fluid == bloodFluid);
-        if (bloodInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        long fluidPerParallel = machine
-            .applyStructureFluidDiscount(DirectedMobClonerFakeRecipe.FALLBACK_BLOOD_PER_PARALLEL);
-        EcoSphereModeSupport.ParallelResult parallelResult = EcoSphereModeSupport
-            .consumeFluidForParallel(machine, bloodInput.getFluid(), fluidPerParallel, euTier);
-        // The lowest power tier runs two parallels, so startup requires twice the per-parallel blood.
-        if (parallelResult == null) return EcoSphereModeResult
-            .failure(EcoSphereModeSupport.missingFluid(machine, bloodFluid, fluidPerParallel * 2));
+    private static EcoSphereModeResult processFallback(TST_EcoSphereSimulator machine, FluidStack bloodInput,
+        int euTier) {
+        return EcoSphereModeSupport.processModeRecipeWithTier(
+            machine,
+            bloodInput.getFluid(),
+            bloodInput.amount,
+            euTier,
+            parallelResult -> createFallbackResult(machine, parallelResult));
+    }
 
-        long outputAmount = parallelResult.parallel()
-            > Integer.MAX_VALUE / DirectedMobClonerFakeRecipe.FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL
-                ? Integer.MAX_VALUE
-                : parallelResult.parallel() * DirectedMobClonerFakeRecipe.FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL;
-        FluidStack lifeEssence = BloodMagicHelper.getLifeEssence((int) outputAmount);
+    private static EcoSphereModeResult createFallbackResult(TST_EcoSphereSimulator machine,
+        EcoSphereModeSupport.ParallelResult parallelResult) {
+        FluidStack outputTemplate = DirectedMobClonerFakeRecipe.FALLBACK_LIFE_ESSENCE_OUTPUT_STACK;
+        if (outputTemplate == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
+        int outputAmount = Integer.MAX_VALUE;
+        if (parallelResult.parallel() <= Integer.MAX_VALUE / outputTemplate.amount)
+            outputAmount = (int) (outputTemplate.amount * parallelResult.parallel());
+        FluidStack lifeEssence = BloodMagicHelper.getLifeEssence(outputAmount);
         if (lifeEssence == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
         // #tr GT5U.gui.text.recipe_result.generating_life_essence
         // # Generating Life Essence
@@ -99,32 +101,16 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         // #tr EcoSphereSimulator.gui.tierOneCloningRecipe
         // # Tier I Structure: Recipe Number 0 Only
         // #zh_CN 一级结构: 仅执行配方编号 0
-        return EcoSphereModeResult.standard(
-            machine.isTierTwo() ? SimpleCheckRecipeResult.ofSuccess("generating_life_essence")
-                : SimpleResultWithText.ofSuccessText(
-                    translateToLocal("GT5U.gui.text.recipe_result.generating_life_essence") + "\n"
-                        + translateToLocal("EcoSphereSimulator.gui.tierOneCloningRecipe")),
-            new ItemStack[0],
-            new FluidStack[] { lifeEssence },
-            parallelResult.tier());
-    }
-
-    private static EcoSphereModeResult processDebug(TST_EcoSphereSimulator machine) {
-        int recipeId = machine.beginDirectedMobClonerDebugRun();
-        EcoSphereModeResult result = DirectedMobClonerRecipeCache.processDebug(machine, recipeId);
-        if (result.result()
-            .wasSuccessful()) {
-            machine.advanceDirectedMobClonerDebugRun(recipeId >= DirectedMobClonerRecipeCache.getLastRecipeId());
+        CheckRecipeResult runningResult;
+        if (machine.isTierTwo()) {
+            runningResult = SimpleCheckRecipeResult.ofSuccess("generating_life_essence");
+        } else {
+            runningResult = SimpleResultWithText.ofSuccessText(
+                translateToLocal("GT5U.gui.text.recipe_result.generating_life_essence") + "\n"
+                    + translateToLocal("EcoSphereSimulator.gui.tierOneCloningRecipe"));
         }
-        return result;
-    }
-
-    private static boolean hasDebugItem(TST_EcoSphereSimulator machine) {
-        ItemStack debugItem = GTCMItemList.TestItem0.get(1);
-        for (ItemStack input : machine.getStoredInputs()) {
-            if (input != null && input.isItemEqual(debugItem)) return true;
-        }
-        return false;
+        return EcoSphereModeResult
+            .standard(runningResult, new ItemStack[0], new FluidStack[] { lifeEssence }, parallelResult.tier());
     }
 
 }

@@ -1151,6 +1151,36 @@ public class ItemRegister {
         // #zh_CN 生态圈模式信标: 定向克隆
         GTCMItemList.EcoSphereModeBeacon8.set(EcoSphereModeBeacon.registerVariant(7));
 
+        // #tr item.EcoSphereModeBeacon.8.name
+        // # Eco-Sphere Fluid Efficiency Upgrade
+        // #zh_CN 生态圈流体减免升级
+        GTCMItemList.EcoSphereFluidEfficiencyUpgrade.set(EcoSphereModeBeacon.registerVariant(8));
+
+        // #tr item.EcoSphereModeBeacon.9.name
+        // # Eco-Sphere Output Upgrade
+        // #zh_CN 生态圈产量升级
+        GTCMItemList.EcoSphereOutputBoostUpgrade.set(EcoSphereModeBeacon.registerVariant(9));
+
+        // #tr item.EcoSphereModeBeacon.10.name
+        // # Eco-Sphere Speed Upgrade
+        // #zh_CN 生态圈速度升级
+        GTCMItemList.EcoSphereSpeedUpgrade.set(EcoSphereModeBeacon.registerVariant(10));
+
+        // #tr item.EcoSphereModeBeacon.11.name
+        // # Eco-Sphere Capacity Upgrade
+        // #zh_CN 生态圈扩容升级
+        GTCMItemList.EcoSphereCapacityUpgrade.set(EcoSphereModeBeacon.registerVariant(11));
+
+        // #tr item.EcoSphereModeBeacon.12.name
+        // # Eco-Sphere Equipment Pulverization Upgrade
+        // #zh_CN 生态圈装备磨粉升级
+        GTCMItemList.EcoSphereAutoPulverizeUpgrade.set(EcoSphereModeBeacon.registerVariant(12));
+
+        // #tr item.EcoSphereModeBeacon.13.name
+        // # Eco-Sphere Mob Head Upgrade
+        // #zh_CN 生态圈怪物头颅升级
+        GTCMItemList.EcoSphereMobHeadUpgrade.set(EcoSphereModeBeacon.registerVariant(13));
+
         // endregion
     }
 

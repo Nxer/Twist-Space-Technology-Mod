@@ -91,6 +91,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart_Focusing;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
@@ -386,6 +388,26 @@ public final class MachineLoader {
                     // # Eco-Sphere Simulator
                     // #zh_CN 拟似生态圈
                     TextEnums.tr("NameEcoSphereSimulator")));
+
+            // #tr NameEcoSphereInputInterface
+            // # Eco-Sphere Input Interface
+            // #zh_CN 生态圈输入接口
+            GTCMItemList.EcoSphereInputInterface.set(
+                new TST_EcoSphereInputInterfaceHatch(
+                    18849,
+                    "NameEcoSphereInputInterface",
+                    TextEnums.tr("NameEcoSphereInputInterface"),
+                    10));
+
+            // #tr NameEcoSphereUpgradeInterface
+            // # Eco-Sphere Upgrade Interface
+            // #zh_CN 生态圈升级接口
+            GTCMItemList.EcoSphereUpgradeInterface.set(
+                new TST_EcoSphereUpgradeInterfaceHatch(
+                    18850,
+                    "NameEcoSphereUpgradeInterface",
+                    TextEnums.tr("NameEcoSphereUpgradeInterface"),
+                    10));
         }
 
         GTCMItemList.ExtremeCraftCenter

@@ -3,6 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.item;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.minecraft.item.ItemStack;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
@@ -18,6 +20,12 @@ public class ItemAdderIzumik extends AbstractTstMetaItem implements IHasVariantA
         // #zh_CN Meta Item Izumik
         super("MetaItemIzumik");
         setTextureName("gtnhcommunitymod:MetaItem01/0");
+    }
+
+    @Override
+    public int getItemStackLimit(ItemStack stack) {
+        return stack != null && (stack.getItemDamage() == 0 || stack.getItemDamage() == 1) ? 1
+            : super.getItemStackLimit(stack);
     }
 
     @Override
