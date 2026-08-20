@@ -191,9 +191,10 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 TST_CommandMethods.INSTANCE.dsp_info(sender);
             }
 
-            // Dump the inventory of the chest currently pointed at by the player.
             case "dump_container" -> {
                 TST_CommandMethods.INSTANCE.dumpContainer(sender);
+            }
+
             case "ae_pattern_conversion" -> {
                 processPatternConversion(sender, args, 1);
             }
@@ -205,7 +206,8 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
     }
 
     private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info",
-        "dump_container" };
+        "dump_container", "ae_pattern_conversion" };
+
     private void processPatternConversion(ICommandSender sender, String[] args, int actionIndex) {
         String playerName = sender.getCommandSenderName();
         if (args.length < actionIndex + 1) {
@@ -278,9 +280,6 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
             }
         }
     }
-
-    private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info",
-        "ae_pattern_conversion" };
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
