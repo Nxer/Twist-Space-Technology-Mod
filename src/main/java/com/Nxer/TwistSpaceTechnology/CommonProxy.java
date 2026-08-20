@@ -51,6 +51,10 @@ import gregtech.common.render.GTBlockTextureBuilder;
 
 public class CommonProxy {
 
+    public void copyToClipboard(String text) {}
+
+    public void sendContainerDumpTarget() {}
+
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
         if (Config.activateCombatStats) {
