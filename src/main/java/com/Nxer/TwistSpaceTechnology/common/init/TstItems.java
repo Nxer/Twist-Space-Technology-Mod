@@ -24,8 +24,6 @@ public class TstItems {
     public static final ItemAdderIzumik MetaItemIzumik = new ItemAdderIzumik();
     public static final ItemAdderFlask MetaItemFlask = new ItemAdderFlask();
     public static final ItemNamedCircuit MetaItemNamedCircuit = new ItemNamedCircuit();
-    // public static final ItemPartEssentiaPatternTerminalEx EssentiaPatternTerminalEx = new
-    // ItemPartEssentiaPatternTerminalEx();
 
     // #tr item.ProofOfHeroes.name
     // # 英雄の証
