@@ -190,14 +190,19 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 TST_CommandMethods.INSTANCE.dsp_info(sender);
             }
 
+            // Dump the inventory of the chest currently pointed at by the player.
+            case "dump_container" -> {
+                TST_CommandMethods.INSTANCE.dumpContainer(sender);
+            }
+
             default -> {
                 sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
             }
         }
     }
 
-    private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode",
-        "dsp_info" };
+    private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info",
+        "dump_container" };
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
