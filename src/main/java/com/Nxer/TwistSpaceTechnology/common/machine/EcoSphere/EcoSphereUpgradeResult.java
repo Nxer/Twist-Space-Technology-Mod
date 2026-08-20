@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
+package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
 import java.util.EnumMap;
 import java.util.EnumSet;

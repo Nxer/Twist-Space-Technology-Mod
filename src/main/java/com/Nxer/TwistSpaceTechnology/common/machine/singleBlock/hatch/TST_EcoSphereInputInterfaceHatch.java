@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
@@ -58,14 +59,16 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     private static final int AQUATIC_MAX_SLOTS = 16;
     private static final int GREENHOUSE_INPUT_START = AQUATIC_INPUT_START + AQUATIC_MAX_SLOTS;
     private static final int GREENHOUSE_MAX_SLOTS = 16;
-    private static final int MAX_INPUT_SLOTS = GREENHOUSE_INPUT_START + GREENHOUSE_MAX_SLOTS;
+    private static final int CLONING_WEAPON_START = GREENHOUSE_INPUT_START + GREENHOUSE_MAX_SLOTS;
+    private static final int CLONING_MAX_WEAPON_SLOTS = 4;
+    private static final int MAX_INPUT_SLOTS = CLONING_WEAPON_START + CLONING_MAX_WEAPON_SLOTS;
     private static final int AQUATIC_BASE_SLOTS = 1;
     private static final int GREENHOUSE_BASE_SLOTS = 1;
     private static final InputSlotLayout EMPTY_INPUT_LAYOUT = new InputSlotLayout(0, 0, 0, 0);
     private static final InputSlotLayout[] MODE_INPUT_LAYOUTS = { new InputSlotLayout(TREE_INPUT_SLOT, 1, 1, 0),
         new InputSlotLayout(AQUATIC_INPUT_START, AQUATIC_BASE_SLOTS, AQUATIC_MAX_SLOTS, 5),
         new InputSlotLayout(GREENHOUSE_INPUT_START, GREENHOUSE_BASE_SLOTS, GREENHOUSE_MAX_SLOTS, 5),
-        EMPTY_INPUT_LAYOUT };
+        new InputSlotLayout(CLONING_WEAPON_START, 0, CLONING_MAX_WEAPON_SLOTS, 1) };
 
     private final boolean[] selectedTreeOutputs = new boolean[Mode.values().length];
     private int machineMode = -1;
@@ -188,6 +191,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         return cloningRecipeId;
     }
 
+    public ItemStack[] getCloningWeapons() {
+        return getModeInputs();
+    }
+
     public int getAquaticTargetingMultiplier() {
         ItemStack[] targets = getModeInputs();
         if (targets.length == 0) return 0;
@@ -231,6 +238,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private boolean isInputValid(int index, ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
+        if (machineMode == 3) return DirectedMobClonerWeaponHandler.isSupportedWeapon(stack);
         if (machineMode != 1) return true;
         int firstSlot = getFirstInputSlot();
         for (int i = firstSlot; i < firstSlot + getActiveInputSlots(); i++) {
@@ -284,6 +292,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         addAquaticSlots(builder);
         addGreenhouseSlots(builder);
         addCloningRecipeInput(builder);
+        addCloningWeaponSlots(builder);
     }
 
     private void dropInventoryRange(int firstSlot, int endSlot) {
@@ -366,7 +375,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
             @Override
             public int getSlotStackLimit() {
-                return 64;
+                return requiredMode == 3 ? 1 : 64;
             }
 
             @Override
@@ -395,8 +404,8 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
             // #zh_CN 配方编号
             TextWidget.localised("EcoSphereInputInterface.gui.recipeNumber")
                 .setTextAlignment(Alignment.Center)
-                .setPos(38, 21)
-                .setSize(100, 14)
+                .setPos(8, 21)
+                .setSize(80, 14)
                 .setEnabled(widget -> machineMode == 3))
             .widget(new TextFieldWidget() {
 
@@ -426,8 +435,14 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
                 .setTextAlignment(Alignment.Center)
                 .setTextColor(Color.WHITE.normal)
                 .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD)
-                .setPos(58, 39)
+                .setPos(18, 39)
                 .setSize(60, 18)
                 .setEnabled(widget -> machineMode == 3));
+    }
+
+    private void addCloningWeaponSlots(ModularWindow.Builder builder) {
+        for (int index = 0; index < CLONING_MAX_WEAPON_SLOTS; index++) {
+            builder.widget(createInputSlot(CLONING_WEAPON_START + index, 106 + index % 2 * 18, 30 + index / 2 * 18, 3));
+        }
     }
 }

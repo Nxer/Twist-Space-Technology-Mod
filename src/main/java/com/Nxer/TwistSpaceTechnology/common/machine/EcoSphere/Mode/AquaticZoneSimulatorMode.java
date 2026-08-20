@@ -1,7 +1,7 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
+package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport.addSplitStack;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport.getItemStackString;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addSplitStack;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.getItemStackString;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 
 import java.util.ArrayList;
@@ -14,11 +14,11 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeResult;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;

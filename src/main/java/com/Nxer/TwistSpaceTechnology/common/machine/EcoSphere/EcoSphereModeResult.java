@@ -1,7 +1,7 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
+package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.calculateEut;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport.calculateEut;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

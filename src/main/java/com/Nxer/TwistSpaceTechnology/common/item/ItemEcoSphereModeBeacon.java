@@ -11,6 +11,8 @@ public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
 
     private IIcon backgroundIcon;
     private IIcon frameIcon;
+    private IIcon upgradeBackgroundIcon;
+    private IIcon upgradeFrameIcon;
 
     public ItemEcoSphereModeBeacon() {
         super("EcoSphereModeBeacon");
@@ -35,6 +37,10 @@ public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
         this.backgroundIcon = register
             .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/mode_beacon_background");
         this.frameIcon = register.registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/frame");
+        this.upgradeBackgroundIcon = register
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/upgrade_background");
+        this.upgradeFrameIcon = register
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/upgrade_frame");
         for (int meta : usedMetaIds) {
             iconMap.put(meta, backgroundIcon);
         }
@@ -47,5 +53,13 @@ public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
 
     public IIcon getFrameIcon() {
         return frameIcon;
+    }
+
+    public IIcon getUpgradeBackgroundIcon() {
+        return upgradeBackgroundIcon;
+    }
+
+    public IIcon getUpgradeFrameIcon() {
+        return upgradeFrameIcon;
     }
 }

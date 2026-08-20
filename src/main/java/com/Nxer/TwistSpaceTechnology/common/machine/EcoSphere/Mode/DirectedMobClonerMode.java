@@ -1,17 +1,25 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode;
+package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 import static net.minecraft.util.StatCollector.translateToLocal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUpgrade;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponEffects;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeResult;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
@@ -65,14 +73,54 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         if (overclocks < 0)
             return EcoSphereModeResult.failure(CheckRecipeResultRegistry.insufficientPower(GTValues.V[baseTier]));
         long parallelFromEUt = EcoSphereModeSupport.powerOfFour(overclocks);
+        boolean pulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
+        WeaponEffects weaponEffects = DirectedMobClonerWeaponHandler.process(machine.getCloningWeapons());
+        double durationMultiplier = 100 / ((double) recipe.eecDuration() * recipe.eecDuration());
+        long baseEut = EcoSphereModeSupport.calculateEut(baseTier);
+        long eut = baseEut > Long.MAX_VALUE / parallelFromEUt ? Long.MAX_VALUE : baseEut * parallelFromEUt;
         return EcoSphereModeSupport.processRecipeWithParallelLimit(
             machine,
             lifeEssenceInput.getFluid(),
             lifeEssenceInput.amount,
             euTier,
             parallelFromEUt,
-            parallelResult -> DirectedMobClonerRecipeCache
-                .process(machine, recipe, parallelResult.parallel(), parallelFromEUt));
+            parallelResult -> {
+                List<ItemStack> outputs = new ArrayList<>();
+                for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
+                    List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0
+                        ? recipe.ordinaryOutputs()
+                        : recipe.equipmentOutputs(pulverize);
+                    for (DirectedMobClonerRecipeCache.CachedOutput output : outputTable) {
+                        double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
+                            * output.chance()
+                            / 10_000
+                            * durationMultiplier
+                            * output.durabilityExpectation()
+                            * output.probabilityMultiplier();
+                        long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
+                        EcoSphereModeSupport.addSplitStack(outputs, output.stack(), amount);
+                    }
+                }
+                for (DirectedMobClonerRecipeCache.CachedSpecialOutput output : recipe.specialOutputs()) {
+                    double extraChance = output.extraChance(weaponEffects);
+                    if (extraChance <= 0d) continue;
+                    double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
+                        * extraChance
+                        / 10_000
+                        * durationMultiplier
+                        * output.durabilityExpectation();
+                    long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
+                    EcoSphereModeSupport.addSplitStack(outputs, output.stack(), amount);
+                }
+                return new EcoSphereModeResult(
+                    // #tr GT5U.gui.text.recipe_result.processing_mob_drops
+                    // # Processing mob drops
+                    // #zh_CN 生物掉落处理中
+                    SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
+                    outputs.toArray(new ItemStack[0]),
+                    eut,
+                    MODE_RECIPE_DURATION);
+            });
     }
 
     private static EcoSphereModeResult processFallback(TST_EcoSphereSimulator machine, FluidStack bloodInput,

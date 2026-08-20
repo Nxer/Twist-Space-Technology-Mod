@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
+package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
 import net.minecraft.item.ItemStack;
 
@@ -11,9 +11,8 @@ public enum EcoSphereUpgradeType {
     FLUID_EFFICIENCY(8, 0b1111, null),
     OUTPUT_BOOST(9, 0b1111, null),
     SPEED(10, 0b1111, null),
-    CAPACITY(11, 0b0110, null),
-    AUTO_PULVERIZE_EQUIPMENT(12, 0b1000, EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT),
-    ALLOW_MOB_HEAD_DROPS(13, 0b1000, EcoSphereSpecialUpgrade.ALLOW_MOB_HEAD_DROPS);
+    CAPACITY(11, 0b1110, null),
+    AUTO_PULVERIZE_EQUIPMENT(12, 0b1000, EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
 
     @Getter
     private final int metadata;

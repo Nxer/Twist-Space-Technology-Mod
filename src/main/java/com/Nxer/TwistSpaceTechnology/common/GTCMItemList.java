@@ -180,7 +180,6 @@ public enum GTCMItemList {
     EcoSphereSpeedUpgrade,
     EcoSphereCapacityUpgrade,
     EcoSphereAutoPulverizeUpgrade,
-    EcoSphereMobHeadUpgrade,
 
     LvFlask,
     MvFlask,

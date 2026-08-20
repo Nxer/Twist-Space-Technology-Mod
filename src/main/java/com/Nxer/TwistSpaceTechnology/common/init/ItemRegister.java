@@ -1176,11 +1176,6 @@ public class ItemRegister {
         // #zh_CN 生态圈装备磨粉升级
         GTCMItemList.EcoSphereAutoPulverizeUpgrade.set(EcoSphereModeBeacon.registerVariant(12));
 
-        // #tr item.EcoSphereModeBeacon.13.name
-        // # Eco-Sphere Mob Head Upgrade
-        // #zh_CN 生态圈怪物头颅升级
-        GTCMItemList.EcoSphereMobHeadUpgrade.set(EcoSphereModeBeacon.registerVariant(13));
-
         // endregion
     }
 

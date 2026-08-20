@@ -1,11 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.TREE_MODE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.cacheRecipeFluids;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.getModeMultiplier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.queryTimeTreeProduct;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.queryTreeProduct;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.TREE_MODE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidCache.cacheRecipeFluids;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.getModeMultiplier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.queryTimeTreeProduct;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode.queryTreeProduct;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
 import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 

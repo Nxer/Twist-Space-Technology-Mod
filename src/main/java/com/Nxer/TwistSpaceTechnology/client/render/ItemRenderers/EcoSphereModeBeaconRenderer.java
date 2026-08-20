@@ -1,7 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers;
 
-import java.util.Objects;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderHelper;
@@ -22,6 +20,7 @@ import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
 import fox.spiteful.avaritia.items.LudicrousItems;
 import fox.spiteful.avaritia.render.CosmicItemRenderer;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
@@ -47,16 +46,16 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
 
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+        int meta = item.getItemDamage();
+        boolean upgrade = meta >= 8;
+        IIcon background = upgrade ? TstItems.EcoSphereModeBeacon.getUpgradeBackgroundIcon()
+            : TstItems.EcoSphereModeBeacon.getBackgroundIcon();
+        IIcon frame = upgrade ? TstItems.EcoSphereModeBeacon.getUpgradeFrameIcon()
+            : TstItems.EcoSphereModeBeacon.getFrameIcon();
         // Draw the background first so every beacon has the same solid base.
-        renderBase(
-            type,
-            Objects.requireNonNull(item.getItem())
-                .getIcon(item, 0),
-            TstItems.EcoSphereModeBeacon.getFrameIcon(),
-            item.getItemSpriteNumber());
+        renderBase(type, background, frame, item.getItemSpriteNumber());
 
         // Pick the item shown in the center from the beacon metadata.
-        int meta = item.getItemDamage();
         ItemStack displayStack = getDisplayStack(meta);
 
         // Keep all center-item changes inside this matrix.
@@ -81,7 +80,7 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
         GL11.glPopMatrix();
 
         // Draw the frame last so it always stays above the center item.
-        renderLayerIcon(type, TstItems.EcoSphereModeBeacon.getFrameIcon(), item.getItemSpriteNumber(), 2);
+        renderLayerIcon(type, frame, item.getItemSpriteNumber(), 2);
     }
 
     private static void applyLayerDepth(ItemRenderType type, float offset) {
@@ -110,6 +109,10 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
             case 5 -> getGaiaWart();
             case 6 -> new ItemStack(Items.diamond_sword);
             case 7 -> new ItemStack(LudicrousItems.infinity_sword);
+            case 8 -> ItemList.Cell_Empty.get(1);
+            case 9 -> new ItemStack(Items.wheat);
+            case 10 -> new ItemStack(Items.sugar);
+            case 11 -> getModuleOutputUpgrade();
             default -> GTCMItemList.TestItem0.get(1);
         };
     }
@@ -131,6 +134,13 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
     private static ItemStack getGaiaWart() {
         ItemStack gaiaWart = CropsNHItemList.gaiaWart.get(1);
         return gaiaWart == null ? new ItemStack(Items.nether_wart) : gaiaWart;
+    }
+
+    private static ItemStack getModuleOutputUpgrade() {
+        ItemStack upgrade = Mods.StevesCarts2.isModLoaded()
+            ? GTModHandler.getModItem(Mods.StevesCarts2.ID, "upgrade", 1, 8)
+            : null;
+        return upgrade == null ? new ItemStack(Blocks.chest) : upgrade;
     }
 
     // spotless:off

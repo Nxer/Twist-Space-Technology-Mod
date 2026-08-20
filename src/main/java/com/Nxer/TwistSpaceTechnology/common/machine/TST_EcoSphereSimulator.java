@@ -3,10 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static bartworks.common.loaders.ItemRegistry.bw_realglas;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.FluidArea.LOWER_SOURCE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.FluidArea.MAIN_SOURCE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.FluidArea.UPPER_SOURCE;
-import static com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler.MAIN_SOURCE_LAST_LAYER;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.FluidArea.LOWER_SOURCE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.FluidArea.MAIN_SOURCE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.FluidArea.UPPER_SOURCE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler.MAIN_SOURCE_LAST_LAYER;
 import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -56,22 +56,22 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidAreaHandler;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUpgrade;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereUpgradeResult;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.AquaticZoneSimulatorMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.ArtificialGreenHouseMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DebugMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DirectedMobClonerMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.CropsNHFarm;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereFluidAreaHandler;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeResult;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereModeSupport;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereSpecialUpgrade;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.EcoSphereUpgradeResult;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.IEcoSphereMode;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.AquaticZoneSimulatorMode;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.ArtificialGreenHouseMode;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.CropsNHFarm;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DebugMode;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.DirectedMobClonerMode;
-import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.mode.TreeGrowthSimulatorMode;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
@@ -194,6 +194,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     public int getCloningRecipeId() {
         return ecoSphereInputInterface.getCloningRecipeId();
+    }
+
+    public ItemStack[] getCloningWeapons() {
+        return ecoSphereInputInterface.getCloningWeapons();
     }
 
     public int getAquaticTargetingMultiplier() {
@@ -1076,7 +1080,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     if (debugResult.result()
                         .wasSuccessful()) return applyModeResult(debugResult);
                     DebugMode.reset(TST_EcoSphereSimulator.this);
-                    getBaseMetaTileEntity().disableWorking();
+                    if (getBaseMetaTileEntity() != null) {
+                        getBaseMetaTileEntity().disableWorking();
+                    }
                     markDirty();
                     return debugResult.result();
                 }
