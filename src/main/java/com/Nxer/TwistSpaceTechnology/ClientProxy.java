@@ -12,6 +12,7 @@ import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
+import com.Nxer.TwistSpaceTechnology.loader.NEIConfigLoader;
 import com.Nxer.TwistSpaceTechnology.loader.RendereLoader;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpTargetPacket;
@@ -22,6 +23,10 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy {
+
+    public ClientProxy() {
+        NEIConfigLoader.registerPreloadHook();
+    }
 
     @Override
     public void copyToClipboard(String text) {
