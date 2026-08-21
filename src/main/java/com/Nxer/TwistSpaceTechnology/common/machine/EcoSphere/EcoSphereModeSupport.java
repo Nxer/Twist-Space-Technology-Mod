@@ -69,7 +69,10 @@ public final class EcoSphereModeSupport {
         long fluidPerOperation = machine.applyFluidDiscount(baseFluidPerOperation);
         long parallel = consumeFluidForParallel(machine, requiredFluid, fluidPerOperation, parallelFromEUt);
         if (parallel <= 0) return EcoSphereModeResult.failure(missingFluid(machine, requiredFluid, fluidPerOperation));
-        return processor.apply(new ParallelResult(powerTier, parallel));
+        EcoSphereModeResult result = processor.apply(new ParallelResult(powerTier, parallel));
+        if (result.result()
+            .wasSuccessful()) machine.setCurrentParallel(parallel);
+        return result;
     }
 
     private static long consumeFluidForParallel(TST_EcoSphereSimulator machine, Fluid requiredFluid,

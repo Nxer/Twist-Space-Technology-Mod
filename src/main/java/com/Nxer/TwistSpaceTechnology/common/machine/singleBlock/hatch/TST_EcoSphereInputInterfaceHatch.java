@@ -22,7 +22,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
@@ -238,7 +237,6 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private boolean isInputValid(int index, ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
-        if (machineMode == 3) return DirectedMobClonerWeaponHandler.isSupportedWeapon(stack);
         if (machineMode != 1) return true;
         int firstSlot = getFirstInputSlot();
         for (int i = firstSlot; i < firstSlot + getActiveInputSlots(); i++) {

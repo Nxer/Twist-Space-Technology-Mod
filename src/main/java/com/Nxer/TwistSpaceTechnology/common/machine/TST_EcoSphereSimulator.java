@@ -132,7 +132,6 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     private boolean cleaningRequested = false;
     private boolean cleaningRunActive = false;
     private boolean debugItemInstalled = false;
-    private long availableInputPower = 0;
     private String fluidAreaFluidName = "";
     private boolean fluidAreaInitialized = false;
     private int fluidAreaFillDuration = 0;
@@ -986,7 +985,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     // region Processing Logic
     long parallelFromEUt = 1;
+    long currentParallel;
     int EuTier = 1;
+
+    public void setCurrentParallel(long parallel) {
+        currentParallel = parallel;
+    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -1052,6 +1056,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             @Override
             @Nonnull
             public CheckRecipeResult process() {
+                currentParallel = 0;
                 // Always use the latest beacon before starting the next recipe.
                 updateModeBeaconBinding();
                 // Read upgrades first because fluid efficiency can raise the fluid-limited parallel count.
@@ -1059,8 +1064,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 if (inputItems == null) inputItems = new ItemStack[0];
                 if (inputFluids == null) inputFluids = new FluidStack[0];
 
-                availableInputPower = availableVoltage * availableAmperage;
-                EuTier = (int) Math.max(0, Math.log((double) availableInputPower / 8d) / Math.log(4d));
+                EuTier = getTotalPowerTier();
                 updateSlots();
                 if (!debugItemInstalled && EuTier < 1) return CheckRecipeResultRegistry.insufficientPower(32);
                 if (cleaningRequested || cleaningRunActive) {
@@ -1215,20 +1219,24 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
-        int extraLines = missingFluidAreaInput == null ? 3 : 4;
+        int extraLines = missingFluidAreaInput == null ? 4 : 5;
         String[] ret = new String[origin.length + extraLines];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + "parallelFromEUt"
             + " : "
             + EnumChatFormatting.GOLD
             + this.parallelFromEUt;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.currentRecipe")
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "currentParallel"
+            + " : "
+            + EnumChatFormatting.GOLD
+            + this.currentParallel;
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.currentRecipe")
             + " : "
             + EnumChatFormatting.GOLD
             + getMachineModeName();
         if (missingFluidAreaInput != null) {
-            ret[origin.length + 3] = EnumChatFormatting.RED + SimpleResultWithText.outOfFluid(missingFluidAreaInput)
+            ret[origin.length + 4] = EnumChatFormatting.RED + SimpleResultWithText.outOfFluid(missingFluidAreaInput)
                 .getDisplayString();
         }
         return ret;

@@ -13,14 +13,17 @@ import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerDropConversion.ConvertedOutput;
-import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponEffects;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.FunctionTag;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponTags;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 import com.kuba6000.mobsinfo.api.IChanceModifier;
 import com.kuba6000.mobsinfo.api.MobDrop;
@@ -33,6 +36,7 @@ import com.kuba6000.mobsinfo.api.utils.ModUtils;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public final class DirectedMobClonerRecipeCache {
 
@@ -40,7 +44,7 @@ public final class DirectedMobClonerRecipeCache {
     private static final int NORMAL_RECIPE_BASE_TIER = 4;
     private static final int BOSS_RECIPE_BASE_TIER = 6;
     private static final double EEC_DIAMOND_SPIKES_DAMAGE = 9d;
-    private static final WeaponEffects NO_WEAPON_EFFECTS = DirectedMobClonerWeaponHandler.process(new ItemStack[0]);
+    private static final WeaponTags NO_WEAPON_TAGS = DirectedMobClonerWeaponHandler.process(new ItemStack[0]);
     private static final Map<String, PendingRecipe> PENDING_RECIPES = new LinkedHashMap<>();
     private static volatile Map<Integer, CachedRecipe> recipesById = Collections.emptyMap();
     private static boolean registered;
@@ -85,19 +89,23 @@ public final class DirectedMobClonerRecipeCache {
         List<CachedOutput> ordinaryOutputs = new ArrayList<>();
         List<CachedOutput> pulverizableOutputs = new ArrayList<>();
         List<CachedOutput> pulverizedOutputs = new ArrayList<>();
-        List<CachedSpecialOutput> special = new ArrayList<>();
+        Map<TST_ItemID, SpecialOutputBuilder> specialOutputs = new LinkedHashMap<>();
+        ItemStack firstBaseOutput = null;
         int damageWeight = calculateDamageWeight(sourceDrops);
         for (MobDrop drop : sourceDrops) {
             if (drop.stack == null || drop.stack.getItem() == null) continue;
 
             double durabilityExpectation = calculateDurabilityExpectation(drop, damageWeight);
-            List<CachedChanceModifier> modifiers = cacheChanceModifiers(drop.chanceModifiers);
-            boolean weaponDependent = drop.playerOnly || drop.lootable;
+            List<CachedChanceModifier> modifiers = cacheChanceModifiers(drop);
+            boolean weaponDependent = drop.playerOnly;
             for (CachedChanceModifier modifier : modifiers) weaponDependent |= modifier.weaponDependent();
 
             ItemStack outputTemplate = sanitizeCachedDrop(drop.stack);
-            double baseChance = evaluateChance(drop, modifiers, NO_WEAPON_EFFECTS);
+            double baseChance = evaluateChance(drop, modifiers, NO_WEAPON_TAGS);
             if (baseChance > 0d) {
+                if (firstBaseOutput == null && !NeiDisplayExclusion.contains(outputTemplate)) {
+                    firstBaseOutput = outputTemplate.copy();
+                }
                 CachedOutput output = cacheOutput(outputTemplate, baseChance, durabilityExpectation, 1d);
                 DirectedMobClonerDropConversion.ConversionResult conversion = DirectedMobClonerDropConversion
                     .convert(outputTemplate);
@@ -110,23 +118,29 @@ public final class DirectedMobClonerRecipeCache {
                 }
             }
             if (weaponDependent) {
-                special.add(
-                    new CachedSpecialOutput(
-                        outputTemplate,
-                        baseChance,
-                        durabilityExpectation,
-                        drop.chance,
-                        drop.playerOnly,
-                        drop.lootable,
-                        modifiers));
+                CachedActivationRoute activation = new CachedActivationRoute(
+                    baseChance,
+                    durabilityExpectation,
+                    drop.chance,
+                    drop.playerOnly,
+                    modifiers);
+                specialOutputs
+                    .computeIfAbsent(
+                        TST_ItemID.create(outputTemplate),
+                        ignored -> new SpecialOutputBuilder(outputTemplate))
+                    .add(activation);
             }
         }
+
+        List<CachedSpecialOutput> special = new ArrayList<>(specialOutputs.size());
+        for (SpecialOutputBuilder output : specialOutputs.values()) special.add(output.build());
 
         return new CachedOutputLists(
             immutableOutputs(ordinaryOutputs),
             immutableOutputs(pulverizableOutputs),
             immutableOutputs(pulverizedOutputs),
-            Collections.unmodifiableList(special));
+            Collections.unmodifiableList(special),
+            firstBaseOutput);
     }
 
     private static ItemStack sanitizeCachedDrop(ItemStack source) {
@@ -156,17 +170,18 @@ public final class DirectedMobClonerRecipeCache {
         return new CachedOutput(stack, Math.max(0d, chance), durabilityExpectation, probabilityMultiplier);
     }
 
-    private static List<CachedChanceModifier> cacheChanceModifiers(List<IChanceModifier> sourceModifiers) {
+    private static List<CachedChanceModifier> cacheChanceModifiers(MobDrop drop) {
+        List<IChanceModifier> sourceModifiers = drop.chanceModifiers;
         if (sourceModifiers == null || sourceModifiers.isEmpty()) return Collections.emptyList();
         List<CachedChanceModifier> modifiers = new ArrayList<>(sourceModifiers.size());
         for (IChanceModifier modifier : sourceModifiers) {
-            CachedChanceModifier cached = cacheChanceModifier(modifier);
+            CachedChanceModifier cached = cacheChanceModifier(modifier, drop.stack);
             if (cached != null) modifiers.add(cached);
         }
         return Collections.unmodifiableList(modifiers);
     }
 
-    private static CachedChanceModifier cacheChanceModifier(IChanceModifier modifier) {
+    private static CachedChanceModifier cacheChanceModifier(IChanceModifier modifier, ItemStack output) {
         if (modifier == null) return null;
         Class<?> modifierClass = modifier.getClass();
         String className = modifierClass.getName();
@@ -220,15 +235,24 @@ public final class DirectedMobClonerRecipeCache {
             return baseChance == null ? CachedChanceModifier.DISABLED
                 : new CachedChanceModifier(ModifierType.DRACONIC_SOUL, null, -1, 0, baseChance.doubleValue() * 100d);
         }
-        if (className.endsWith("TinkersConstruct$BeheadingModifier")) {
+        if (modifierClass == IChanceModifier.DropsOnlyInDimension.class) {
+            Number dimension = readField(modifier, "dimension", Number.class);
+            if (dimension == null) return CachedChanceModifier.DISABLED;
+            if (dimension.intValue() == 1) return new CachedChanceModifier(ModifierType.END_DROP, null, -1, 0, 0d);
+            if (dimension.intValue() == -1) return new CachedChanceModifier(ModifierType.NETHER_DROP, null, -1, 0, 0d);
+            return CachedChanceModifier.DISABLED;
+        }
+        if (output != null && output.getItem() == Items.skull
+            && "BeheadingModifier".equals(modifierClass.getSimpleName())) {
             Number chancePerLevel = readField(modifier, "m1", Number.class);
-            return chancePerLevel == null ? CachedChanceModifier.DISABLED
-                : new CachedChanceModifier(
-                    ModifierType.TINKERS_BEHEADING,
-                    null,
-                    -1,
-                    0,
-                    chancePerLevel.doubleValue() * 100d);
+            Number maximumChance = readField(modifier, "m2", Number.class);
+            if (chancePerLevel == null || maximumChance == null) return CachedChanceModifier.DISABLED;
+            double chance = chancePerLevel.doubleValue() * 100d;
+            return new CachedChanceModifier(ModifierType.TINKERS_BEHEADING, null, -1, 0, chance);
+        }
+        if (className.endsWith("ForbiddenMagic$NonPlayerEntity")
+            || className.endsWith("BloodMagic$MinorDemonGruntShards")) {
+            return new CachedChanceModifier(ModifierType.PASS_THROUGH, null, -1, 0, 0d);
         }
         if (className.endsWith("ForbiddenMagic$EachLevelOfGivesFocus") || modifier instanceof IChanceModifier.OrBiome) {
             return null;
@@ -252,13 +276,12 @@ public final class DirectedMobClonerRecipeCache {
         return null;
     }
 
-    private static double evaluateChance(MobDrop drop, List<CachedChanceModifier> modifiers, WeaponEffects effects) {
-        if (drop.playerOnly && !effects.hasWeapon()) return 0d;
+    private static double evaluateChance(MobDrop drop, List<CachedChanceModifier> modifiers, WeaponTags tags) {
+        if (drop.playerOnly && !tags.hasWeapon()) return 0d;
         double chance = drop.chance;
         for (CachedChanceModifier modifier : modifiers) {
-            chance = modifier.apply(chance, effects);
+            chance = modifier.apply(chance, tags);
         }
-        if (drop.lootable) chance += effects.getEnchantmentLevel(Enchantment.looting.effectId) * 5_000d;
         return Math.max(0d, chance);
     }
 
@@ -432,21 +455,22 @@ public final class DirectedMobClonerRecipeCache {
             return pulverizeEquipment ? cachedOutputs.pulverizedOutputs() : cachedOutputs.pulverizableOutputs();
         }
 
-        public List<CachedSpecialOutput> specialOutputs() {
-            return cachedOutputs.specialOutputs();
+        public List<CachedOutput> activatedOutputs(WeaponTags tags) {
+            List<CachedOutput> outputs = new ArrayList<>();
+            double allOutputsBonus = tags.get(FunctionTag.ALL_OUTPUTS_CHANCE_BONUS);
+            for (CachedSpecialOutput output : cachedOutputs.specialOutputs()) {
+                CachedOutput activated = output.activate(tags);
+                if (activated == null) continue;
+                double chance = activated.chance();
+                if (!output.hasBaseOutput()) chance += allOutputsBonus;
+                outputs.add(new CachedOutput(activated.stack(), chance, activated.durabilityExpectation(), 1d));
+            }
+            return outputs;
         }
 
         private ItemStack firstOutput() {
-            List<CachedOutput> outputs = cachedOutputs.ordinaryOutputs();
-            if (outputs.isEmpty()) outputs = cachedOutputs.pulverizableOutputs();
-            if (!outputs.isEmpty()) return outputs.get(0)
-                .stack()
-                .copy();
-            List<CachedSpecialOutput> specialOutputs = cachedOutputs.specialOutputs();
-            return specialOutputs.isEmpty() ? null
-                : specialOutputs.get(0)
-                    .stack()
-                    .copy();
+            ItemStack output = cachedOutputs.firstBaseOutput();
+            return output == null ? null : output.copy();
         }
     }
 
@@ -455,17 +479,58 @@ public final class DirectedMobClonerRecipeCache {
         double probabilityMultiplier) {}
 
     @Desugar
-    public record CachedSpecialOutput(ItemStack stack, double baseChance, double durabilityExpectation,
-        int originalChance, boolean playerOnly, boolean lootable, List<CachedChanceModifier> modifiers) {
+    private record CachedSpecialOutput(ItemStack stack, boolean hasBaseOutput,
+        List<CachedActivationRoute> activations) {
 
-        public double extraChance(WeaponEffects effects) {
-            if (playerOnly && !effects.hasWeapon()) return 0d;
+        private CachedOutput activate(WeaponTags tags) {
+            CachedActivationRoute strongest = null;
+            double highestChance = 0d;
+            for (CachedActivationRoute activation : activations) {
+                double chance = activation.extraChance(tags);
+                if (chance <= highestChance) continue;
+                highestChance = chance;
+                strongest = activation;
+            }
+            return strongest == null ? null
+                : new CachedOutput(stack, highestChance, strongest.durabilityExpectation(), 1d);
+        }
+    }
+
+    @Desugar
+    private record CachedActivationRoute(double baseChance, double durabilityExpectation, int originalChance,
+        boolean playerOnly, List<CachedChanceModifier> modifiers) {
+
+        private double extraChance(WeaponTags tags) {
+            if (playerOnly && !tags.hasWeapon()) return 0d;
             double chance = originalChance;
             for (CachedChanceModifier modifier : modifiers) {
-                chance = modifier.apply(chance, effects);
+                chance = modifier.apply(chance, tags);
             }
-            if (lootable) chance += effects.getEnchantmentLevel(Enchantment.looting.effectId) * 5_000d;
             return Math.max(0d, chance - baseChance);
+        }
+    }
+
+    private static final class SpecialOutputBuilder {
+
+        private final ItemStack stack;
+        private final List<CachedActivationRoute> activations = new ArrayList<>();
+        private boolean hasBaseOutput;
+
+        private SpecialOutputBuilder(ItemStack stack) {
+            this.stack = stack;
+        }
+
+        private SpecialOutputBuilder add(CachedActivationRoute activation) {
+            hasBaseOutput |= activation.baseChance() > 0d;
+            activations.add(activation);
+            return this;
+        }
+
+        private CachedSpecialOutput build() {
+            return new CachedSpecialOutput(
+                stack,
+                hasBaseOutput,
+                Collections.unmodifiableList(new ArrayList<>(activations)));
         }
     }
 
@@ -478,6 +543,9 @@ public final class DirectedMobClonerRecipeCache {
         AVARITIA_SKULL_SWORD,
         DRACONIC_SOUL,
         TINKERS_BEHEADING,
+        END_DROP,
+        NETHER_DROP,
+        PASS_THROUGH,
         DISABLED
     }
 
@@ -494,35 +562,80 @@ public final class DirectedMobClonerRecipeCache {
 
         private boolean weaponDependent() {
             return switch (type) {
-                case REQUIRE_WEAPON, OR_WEAPON, REQUIRE_ENCHANTMENT, ENCHANTMENT_BONUS, AVARITIA_SKULL_SWORD, DRACONIC_SOUL, TINKERS_BEHEADING -> true;
+                case REQUIRE_WEAPON, OR_WEAPON, REQUIRE_ENCHANTMENT, ENCHANTMENT_BONUS, AVARITIA_SKULL_SWORD, DRACONIC_SOUL, TINKERS_BEHEADING, END_DROP, NETHER_DROP -> true;
                 default -> false;
             };
         }
 
-        private double apply(double chance, WeaponEffects effects) {
+        private double apply(double chance, WeaponTags tags) {
             return switch (type) {
                 case SET_CHANCE -> value;
-                case REQUIRE_WEAPON -> effects.hasWeapon(item) ? chance : 0d;
-                case OR_WEAPON -> effects.hasWeapon(item) ? value : chance;
-                case REQUIRE_ENCHANTMENT -> effects.getEnchantmentLevel(enchantmentId) >= enchantmentLevel ? chance
-                    : 0d;
-                case ENCHANTMENT_BONUS -> effects.getEnchantmentLevel(enchantmentId) > 0 ? chance + value : chance;
-                case AVARITIA_SKULL_SWORD -> effects.hasAvaritiaSkullSword() ? chance : 0d;
-                case DRACONIC_SOUL -> value * effects.getDraconicSoulMultiplier();
-                case TINKERS_BEHEADING -> value * effects.getBeheadingLevel();
+                case REQUIRE_WEAPON -> tags.hasWeapon(item) ? chance : 0d;
+                case OR_WEAPON -> tags.hasWeapon(item) ? value : chance;
+                case REQUIRE_ENCHANTMENT -> tags.getEnchantmentLevel(enchantmentId) >= enchantmentLevel ? chance : 0d;
+                case ENCHANTMENT_BONUS -> tags.getEnchantmentLevel(enchantmentId) > 0 ? chance + value : chance;
+                case AVARITIA_SKULL_SWORD -> tags.get(FunctionTag.AVARITIA_SKULL_CHANCE);
+                case DRACONIC_SOUL -> value * tags.get(FunctionTag.DRACONIC_SOUL_MULTIPLIER);
+                case TINKERS_BEHEADING -> value * tags.get(FunctionTag.TINKERS_BEHEADING_LEVEL);
+                case END_DROP -> tags.get(FunctionTag.END_DROP_CHANCE) > 0d ? chance : 0d;
+                case NETHER_DROP -> tags.get(FunctionTag.NETHER_DROP_CHANCE) > 0d ? chance : 0d;
+                case PASS_THROUGH -> chance;
                 case DISABLED -> 0d;
             };
         }
     }
 
+    private enum NeiDisplayExclusion {
+
+        CRYSTALLIZED_ESSENCE("Thaumcraft", "ItemCrystalEssence"),
+        OPENBLOCKS_TROPHY("OpenBlocks", "trophy"),
+        WEAK_BLOOD_SHARD("AWWayofTime", "weakBloodShard"),
+        DRACONIC_MOB_SOUL("DraconicEvolution", "mobSoul"),
+        FORBIDDEN_EMERALD_FRAGMENT("ForbiddenMagic", "FMResource", 0),
+        FORBIDDEN_SIN_SHARDS("ForbiddenMagic", "NetherShard"),
+        WITCHERY_TORN_PAGE("witchery", "ingredient", 160),
+        TCONSTRUCT_RED_HEART("TConstruct", "heartCanister", 1),
+        TCONSTRUCT_YELLOW_HEART("TConstruct", "heartCanister", 3),
+        ETFUTURUM_WITHER_ROSE("etfuturum", "wither_rose"),
+        EXTRA_UTILITIES_SOUL_FRAGMENT("ExtraUtilities", "mini-soul", 3);
+
+        private static final int ANY_META = -1;
+
+        private final String modId;
+        private final String registryName;
+        private final int metadata;
+
+        NeiDisplayExclusion(String modId, String registryName) {
+            this(modId, registryName, ANY_META);
+        }
+
+        NeiDisplayExclusion(String modId, String registryName, int metadata) {
+            this.modId = modId;
+            this.registryName = registryName;
+            this.metadata = metadata;
+        }
+
+        private static boolean contains(ItemStack stack) {
+            GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+            if (identifier == null) return false;
+            for (NeiDisplayExclusion exclusion : values()) {
+                if (!exclusion.modId.equalsIgnoreCase(identifier.modId)) continue;
+                if (!exclusion.registryName.equals(identifier.name)) continue;
+                if (exclusion.metadata == ANY_META || exclusion.metadata == stack.getItemDamage()) return true;
+            }
+            return false;
+        }
+    }
+
     @Desugar
     private record CachedOutputLists(List<CachedOutput> ordinaryOutputs, List<CachedOutput> pulverizableOutputs,
-        List<CachedOutput> pulverizedOutputs, List<CachedSpecialOutput> specialOutputs) {
+        List<CachedOutput> pulverizedOutputs, List<CachedSpecialOutput> specialOutputs, ItemStack firstBaseOutput) {
 
         private static final CachedOutputLists EMPTY = new CachedOutputLists(
             Collections.emptyList(),
             Collections.emptyList(),
             Collections.emptyList(),
-            Collections.emptyList());
+            Collections.emptyList(),
+            null);
     }
 }

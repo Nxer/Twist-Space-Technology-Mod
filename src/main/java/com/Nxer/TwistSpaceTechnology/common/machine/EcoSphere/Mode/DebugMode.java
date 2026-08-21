@@ -29,7 +29,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResul
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler;
-import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponEffects;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponTags;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
@@ -57,11 +57,11 @@ public final class DebugMode {
     public static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int mode, int beaconTier) {
         int tier = beaconTier >= 2 ? 2 : 1;
         boolean autoPulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
-        WeaponEffects weaponEffects = DirectedMobClonerWeaponHandler
+        WeaponTags weaponTags = DirectedMobClonerWeaponHandler
             .process(mode == 3 ? machine.getCloningWeapons() : new ItemStack[0]);
-        DebugProfile outputProfile = new DebugProfile(mode, tier, autoPulverize, weaponEffects);
+        DebugProfile outputProfile = new DebugProfile(mode, tier, autoPulverize, weaponTags);
         List<DebugOutput> cachedOutputs = OUTPUT_CACHE
-            .computeIfAbsent(outputProfile, ignored -> collectOutputs(mode, tier, autoPulverize, weaponEffects));
+            .computeIfAbsent(outputProfile, ignored -> collectOutputs(mode, tier, autoPulverize, weaponTags));
         DebugState state = MACHINE_STATES.get(machine);
         if (state == null || !state.outputProfile.equals(outputProfile)) {
             if (state != null) state.close();
@@ -85,6 +85,7 @@ public final class DebugMode {
                 output.amount());
         }
         if (state.lineIndex >= state.lines.size()) state.close();
+        machine.setCurrentParallel(DEBUG_PARALLEL);
         return new EcoSphereModeResult(
             SimpleResultWithText.ofSuccessText("debugRUN"),
             outputs.toArray(new ItemStack[0]),
@@ -151,14 +152,14 @@ public final class DebugMode {
     }
 
     private static List<DebugOutput> collectOutputs(int mode, int beaconTier, boolean autoPulverize,
-        WeaponEffects weaponEffects) {
+        WeaponTags weaponTags) {
         // Merge identical outputs before applying the fixed debug parallel count.
         Map<TST_ItemID, Long> outputAmounts = new LinkedHashMap<>();
         switch (mode) {
             case 0 -> collectTreeOutputs(outputAmounts, beaconTier);
             case 1 -> collectAquaticOutputs(outputAmounts, beaconTier);
             case 2 -> collectGreenhouseOutputs(outputAmounts, beaconTier);
-            case 3 -> collectClonerOutputs(outputAmounts, beaconTier, autoPulverize, weaponEffects);
+            case 3 -> collectClonerOutputs(outputAmounts, beaconTier, autoPulverize, weaponTags);
             default -> {}
         }
 
@@ -212,7 +213,7 @@ public final class DebugMode {
     }
 
     private static void collectClonerOutputs(Map<TST_ItemID, Long> outputs, int beaconTier, boolean autoPulverize,
-        WeaponEffects weaponEffects) {
+        WeaponTags weaponTags) {
         for (DirectedMobClonerRecipeCache.CachedRecipe recipe : DirectedMobClonerRecipeCache.getDebugRecipes()) {
             // The secondary cloning beacon adds boss recipes to the same numbered pool.
             if (recipe.boss() && beaconTier < 2) continue;
@@ -224,9 +225,9 @@ public final class DebugMode {
                     if (stack != null) collect(outputs, stack, stack.stackSize);
                 }
             }
-            for (DirectedMobClonerRecipeCache.CachedSpecialOutput output : recipe.specialOutputs()) {
+            for (DirectedMobClonerRecipeCache.CachedOutput output : recipe.activatedOutputs(weaponTags)) {
                 ItemStack stack = output.stack();
-                if (stack != null && output.extraChance(weaponEffects) > 0d) collect(outputs, stack, stack.stackSize);
+                if (stack != null) collect(outputs, stack, stack.stackSize);
             }
         }
     }
@@ -261,7 +262,7 @@ public final class DebugMode {
     private record DebugLine(String text, DebugOutput output) {}
 
     @Desugar
-    private record DebugProfile(int mode, int beaconTier, boolean autoPulverize, WeaponEffects weaponEffects) {}
+    private record DebugProfile(int mode, int beaconTier, boolean autoPulverize, WeaponTags weaponTags) {}
 
     private static final class DebugState {
 

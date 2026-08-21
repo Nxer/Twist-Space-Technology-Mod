@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler;
 
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
@@ -20,54 +22,59 @@ public final class DirectedMobClonerWeaponHandler {
 
     private DirectedMobClonerWeaponHandler() {}
 
-    public static WeaponEffects process(ItemStack[] weapons) {
-        if (weapons == null || weapons.length == 0) return WeaponEffects.EMPTY;
+    public static WeaponTags process(ItemStack[] weapons) {
+        if (weapons == null || weapons.length == 0) return WeaponTags.EMPTY;
         Set<Item> weaponTypes = new HashSet<>();
         Map<Integer, Integer> enchantmentLevels = new HashMap<>();
-        int beheadingLevel = 0;
-        double draconicSoulMultiplier = 0d;
+        EnumMap<FunctionTag, Double> functions = new EnumMap<>(FunctionTag.class);
         for (ItemStack weapon : weapons) {
             if (weapon == null || weapon.getItem() == null) continue;
-            // Weapon identities form a set; enchantments and special attributes keep only their highest value.
             Item item = weapon.getItem();
             weaponTypes.add(item);
             for (Map.Entry<Integer, Integer> enchantment : EnchantmentHelper.getEnchantments(weapon)
                 .entrySet()) {
                 enchantmentLevels.merge(enchantment.getKey(), enchantment.getValue(), Math::max);
             }
-            beheadingLevel = Math.max(beheadingLevel, getTinkersBeheadingLevel(weapon));
+            functions.merge(
+                FunctionTag.ALL_OUTPUTS_CHANCE_BONUS,
+                getEnchantmentLevel(weapon, Enchantment.looting.effectId) * 5_000d,
+                Math::max);
+            functions.merge(FunctionTag.TINKERS_BEHEADING_LEVEL, (double) getTinkersBeheadingLevel(weapon), Math::max);
             int reaperLevel = getEnchantmentLevel(weapon, CachedReferences.DRACONIC_REAPER);
-            draconicSoulMultiplier = Math.max(draconicSoulMultiplier, reaperLevel + getDraconicWeaponBonus(item));
+            functions.merge(
+                FunctionTag.DRACONIC_SOUL_MULTIPLIER,
+                reaperLevel + (double) getDraconicWeaponBonus(item),
+                Math::max);
+            if (item == CachedReferences.AVARITIA_SKULL_SWORD) {
+                functions.put(FunctionTag.AVARITIA_SKULL_CHANCE, 10_000d);
+            }
+            if (matches(weapon, CachedReferences.WITCHING_GADGETS_END_DEVICE)) {
+                functions.put(FunctionTag.END_DROP_CHANCE, 10_000d);
+            }
+            if (matches(weapon, CachedReferences.WITCHING_GADGETS_NETHER_DEVICE)) {
+                functions.put(FunctionTag.NETHER_DROP_CHANCE, 10_000d);
+            }
         }
-        return weaponTypes.isEmpty() ? WeaponEffects.EMPTY
-            : new WeaponEffects(weaponTypes, enchantmentLevels, beheadingLevel, draconicSoulMultiplier);
+        return weaponTypes.isEmpty() ? WeaponTags.EMPTY : new WeaponTags(weaponTypes, enchantmentLevels, functions);
     }
 
-    public static boolean isSupportedWeapon(ItemStack stack) {
-        if (stack == null || stack.getItem() == null) return false;
-        Item item = stack.getItem();
-        return Enchantment.looting.canApply(stack) || stack.isItemStackDamageable()
-            || item == CachedReferences.AVARITIA_SKULL_SWORD
-            || item == CachedReferences.DRACONIC_STAFF
-            || item == CachedReferences.DRACONIC_SWORD
-            || item == CachedReferences.DRACONIC_BOW
-            || item == CachedReferences.WYVERN_SWORD
-            || item == CachedReferences.WYVERN_BOW;
+    private static boolean matches(ItemStack stack, ItemStack reference) {
+        return stack != null && reference != null
+            && stack.getItem() == reference.getItem()
+            && stack.getItemDamage() == reference.getItemDamage();
     }
 
     private static int getTinkersBeheadingLevel(ItemStack weapon) {
-        if (CachedReferences.TINKERS_TOOL == null || !CachedReferences.TINKERS_TOOL.isInstance(weapon.getItem())) {
-            return 0;
-        }
-        int level = 0;
         NBTTagCompound root = weapon.getTagCompound();
-        if (root != null && root.hasKey("InfiTool")) {
-            level = Math.max(
-                0,
-                root.getCompoundTag("InfiTool")
-                    .getInteger("Beheading"));
-        }
-        return weapon.getItem() == CachedReferences.TINKERS_CLEAVER ? level + 2 : level;
+        if (root == null || !root.hasKey("InfiTool")) return 0;
+        int level = Math.max(
+            0,
+            root.getCompoundTag("InfiTool")
+                .getInteger("Beheading"));
+        GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(weapon.getItem());
+        if (identifier != null && "TConstruct".equalsIgnoreCase(identifier.modId) && "cleaver".equals(identifier.name))
+            level += 2;
+        return level;
     }
 
     private static int getDraconicWeaponBonus(Item item) {
@@ -103,33 +110,31 @@ public final class DirectedMobClonerWeaponHandler {
         }
     }
 
-    private static Class<?> loadOptionalClass(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException | LinkageError ignored) {
-            return null;
-        }
+    public enum FunctionTag {
+        ALL_OUTPUTS_CHANCE_BONUS,
+        TINKERS_BEHEADING_LEVEL,
+        DRACONIC_SOUL_MULTIPLIER,
+        AVARITIA_SKULL_CHANCE,
+        END_DROP_CHANCE,
+        NETHER_DROP_CHANCE
     }
 
-    public static final class WeaponEffects {
+    public static final class WeaponTags {
 
-        private static final WeaponEffects EMPTY = new WeaponEffects(
+        private static final WeaponTags EMPTY = new WeaponTags(
             Collections.emptySet(),
             Collections.emptyMap(),
-            0,
-            0d);
+            new EnumMap<>(FunctionTag.class));
 
         private final Set<Item> weaponTypes;
         private final Map<Integer, Integer> enchantmentLevels;
-        private final int beheadingLevel;
-        private final double draconicSoulMultiplier;
+        private final Map<FunctionTag, Double> functions;
 
-        private WeaponEffects(Set<Item> weaponTypes, Map<Integer, Integer> enchantmentLevels, int beheadingLevel,
-            double draconicSoulMultiplier) {
+        private WeaponTags(Set<Item> weaponTypes, Map<Integer, Integer> enchantmentLevels,
+            EnumMap<FunctionTag, Double> functions) {
             this.weaponTypes = Collections.unmodifiableSet(new HashSet<>(weaponTypes));
             this.enchantmentLevels = Collections.unmodifiableMap(new HashMap<>(enchantmentLevels));
-            this.beheadingLevel = beheadingLevel;
-            this.draconicSoulMultiplier = draconicSoulMultiplier;
+            this.functions = Collections.unmodifiableMap(new EnumMap<>(functions));
         }
 
         public boolean hasWeapon(Item item) {
@@ -144,35 +149,23 @@ public final class DirectedMobClonerWeaponHandler {
             return enchantmentLevels.getOrDefault(enchantmentId, 0);
         }
 
-        public boolean hasAvaritiaSkullSword() {
-            return hasWeapon(CachedReferences.AVARITIA_SKULL_SWORD);
-        }
-
-        public int getBeheadingLevel() {
-            return beheadingLevel;
-        }
-
-        public double getDraconicSoulMultiplier() {
-            return draconicSoulMultiplier;
+        public double get(FunctionTag tag) {
+            return functions.getOrDefault(tag, 0d);
         }
 
         @Override
         public boolean equals(Object object) {
             if (this == object) return true;
-            if (!(object instanceof WeaponEffects other)) return false;
-            return beheadingLevel == other.beheadingLevel
-                && Double.compare(draconicSoulMultiplier, other.draconicSoulMultiplier) == 0
-                && weaponTypes.equals(other.weaponTypes)
-                && enchantmentLevels.equals(other.enchantmentLevels);
+            if (!(object instanceof WeaponTags other)) return false;
+            return weaponTypes.equals(other.weaponTypes) && enchantmentLevels.equals(other.enchantmentLevels)
+                && functions.equals(other.functions);
         }
 
         @Override
         public int hashCode() {
             int result = weaponTypes.hashCode();
             result = 31 * result + enchantmentLevels.hashCode();
-            result = 31 * result + beheadingLevel;
-            long multiplierBits = Double.doubleToLongBits(draconicSoulMultiplier);
-            return 31 * result + (int) (multiplierBits ^ multiplierBits >>> 32);
+            return 31 * result + functions.hashCode();
         }
     }
 
@@ -186,9 +179,20 @@ public final class DirectedMobClonerWeaponHandler {
         private static final Item DRACONIC_BOW = findModItem(Mods.DraconicEvolution, "draconicBow");
         private static final Item DRACONIC_STAFF = findModItem(Mods.DraconicEvolution, "draconicStaffOfPower");
         private static final int DRACONIC_REAPER = getOptionalEnchantmentId("com.brandon3055.draconicevolution.common.handler.ConfigHandler", "reaperEnchantID");
-        private static final Class<?> TINKERS_TOOL = loadOptionalClass("tconstruct.library.tools.ToolCore");
-        private static final Item TINKERS_CLEAVER = findModItem(Mods.TinkerConstruct, "cleaver");
+        private static final ItemStack WITCHING_GADGETS_END_DEVICE = findModStack(
+            Mods.WitchingGadgets,
+            "WG_MetalDevice",
+            12);
+        private static final ItemStack WITCHING_GADGETS_NETHER_DEVICE = findModStack(
+            Mods.WitchingGadgets,
+            "WG_MetalDevice",
+            7);
         // spotless:on
         private CachedReferences() {}
+    }
+
+    private static ItemStack findModStack(Mods mod, String registryName, int meta) {
+        if (!mod.isModLoaded()) return null;
+        return GTModHandler.getModItem(mod.ID, registryName, 1, meta);
     }
 }
