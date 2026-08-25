@@ -83,8 +83,8 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.TAE;
-import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
+import gregtech.api.interfaces.INEIPreviewModifier;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -104,7 +104,8 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
-public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator> {
+public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator>
+    implements INEIPreviewModifier {
 
     // region Class Constructor
     public TST_EcoSphereSimulator(int aID, String aName, String aNameRegional) {
@@ -478,6 +479,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     @Override
+    public void onPreviewConstruct(@NotNull ItemStack trigger) {
+        controllerTier = Math.min(trigger.stackSize - 1, 1);
+    }
+
+    @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         int built;
@@ -632,18 +638,26 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return STRUCTURE_DEFINITION;
     }
 
+    private ITexture getCasingTexture() {
+        return controllerTier == 0 ? TextureFactory.blockBuilder()
+            .setFromBlock(ModBlocks.blockCasings2Misc, 15)
+            .useWorldCoord()
+            .build()
+            : TextureFactory.blockBuilder()
+                .setFromBlock(MetaBlockCasing01, 13)
+                .useWorldCoord()
+                .build();
+    }
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
         int colorIndex, boolean aActive, boolean redstoneLevel) {
         if (side == aFacing) {
             if (aActive) {
-                return new ITexture[] {
-                    Textures.BlockIcons.getCasingTextureForId(
-                        controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                        .extFacing()
-                        .build(),
+                return new ITexture[] { getCasingTexture(), TextureFactory.builder()
+                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
+                    .extFacing()
+                    .build(),
                     TextureFactory.builder()
                         .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
                         .extFacing()
@@ -651,17 +665,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                         .build() };
             }
 
-            return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(
-                    controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
-                TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                    .extFacing()
-                    .build() };
+            return new ITexture[] { getCasingTexture(), TextureFactory.builder()
+                .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
+                .extFacing()
+                .build() };
         }
 
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(
-            controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)) };
+        return new ITexture[] { getCasingTexture() };
     }
 
     // spotless:off
