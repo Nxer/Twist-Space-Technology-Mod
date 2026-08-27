@@ -193,7 +193,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             var c = filterValidMTEs(mInputBusses);
             var d = filterValidMTEs(mOutputBusses);
             boolean item_me = true;
-            boolean fluid_me = canDumpFluidToME();
+            boolean fluid_me = true; // GT 5.09.54 (GTNH 2.9.0-beta2): no-arg canDumpFluidToME() removed from machine base class
             if ((a.size() != b.size() && (!item_me)) || (c.size() != d.size() && (!fluid_me))) {
                 stopMachine();
             }
