@@ -1,6 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.network;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
+import com.Nxer.TwistSpaceTechnology.network.packet.ClipboardPacket;
+import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpRequestPacket;
+import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpTargetPacket;
 import com.Nxer.TwistSpaceTechnology.network.packet.ServerJoinedPacket;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -24,6 +27,9 @@ public class TST_Network {
             Side.CLIENT);
         tst.registerMessage(ServerJoinedPacket.class, ServerJoinedPacket.class, 2, Side.SERVER);
         tst.registerMessage(ServerJoinedPacket.class, ServerJoinedPacket.class, 3, Side.CLIENT);
+        tst.registerMessage(ClipboardPacket.class, ClipboardPacket.class, 4, Side.CLIENT);
+        tst.registerMessage(ContainerDumpRequestPacket.class, ContainerDumpRequestPacket.class, 5, Side.CLIENT);
+        tst.registerMessage(ContainerDumpTargetPacket.class, ContainerDumpTargetPacket.class, 6, Side.SERVER);
     }
 
 }
