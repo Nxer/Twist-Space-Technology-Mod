@@ -695,11 +695,13 @@ public final class ContainerItemSourceResolver {
         }
 
         // Werkstoff-style get(OrePrefixes, amount); only probe the stack's own prefixes.
+        // Werkstoff.get() throws and logs "NO SUCH ITEM!" when the prefix is not generated, so gate on hasItemType().
         for (Method method : methods) {
             if (!"get".equals(method.getName()) || method.getParameterTypes().length != 2
                 || method.getParameterTypes()[0] != OrePrefixes.class) continue;
             for (ParsedOreDictName parsed : parsedList) {
                 if (parsed == null || parsed.prefix == null) continue;
+                if (!supportsPrefix(owner, parsed.prefix)) continue;
                 ItemStack generated = invoke(method, owner, parsed.prefix, stack.stackSize);
                 if (sameIdentity(generated, stack)) {
                     return ownerType + "."
@@ -799,6 +801,8 @@ public final class ContainerItemSourceResolver {
 
     private static ItemStack invokeGet(Object owner, OrePrefixes prefix, int size) {
         if (owner == null) return null;
+        // Werkstoff.get() throws and logs "NO SUCH ITEM!" when the prefix is not generated, so gate on hasItemType().
+        if (!supportsPrefix(owner, prefix)) return null;
         for (Method method : owner.getClass()
             .getMethods()) {
             if (!"get".equals(method.getName()) || method.getParameterTypes().length != 2) continue;
@@ -812,6 +816,21 @@ public final class ContainerItemSourceResolver {
             }
         }
         return null;
+    }
+
+    /**
+     * True when the owner generates items for the prefix. Used before calling {@code get(prefix, size)} on
+     * Werkstoffe, which throw and log an error for prefixes they do not generate.
+     */
+    private static boolean supportsPrefix(Object owner, OrePrefixes prefix) {
+        try {
+            Method method = owner.getClass()
+                .getMethod("hasItemType", OrePrefixes.class);
+            return Boolean.TRUE.equals(method.invoke(owner, prefix));
+        } catch (Throwable ignored) {
+            // Non-Werkstoff owners: let get() decide.
+            return true;
+        }
     }
 
     private static boolean hasStaticField(Class<?> type, String name) {
