@@ -912,11 +912,15 @@ public class TCResearches {
                 -6,
                 -1,
                 1,
-                new ItemStack(TstBlocks.BlockArcaneHole))
-                    .setPages(
-                        new ResearchPage(TextEnums.tr("tc.research_text.TST_ARCANE_HOLE.1")),
-                        new ResearchPage(crucibleRecipeArcaneHole))
-                    .setParents(existingParentOrRoot("INDUSTRIAL_ALCHEMY_TOWER"))
+                new ItemStack(TstBlocks.BlockArcaneHole)).setPages(
+                    // spotless:off
+                    // #tr tc.research_text.TST_ARCANE_HOLE.1
+                    // # Can be used to replace the warded glass on both sides of industrial alchemy tower. Perhaps it's still a good building block?
+                    // #zh_CN 可以用来替代工业炼金塔两侧的守卫者玻璃。或许还是一种不错的建筑方块？
+                    // spotless:on
+                    new ResearchPage(TextEnums.tr("tc.research_text.TST_ARCANE_HOLE.1")),
+                    new ResearchPage(crucibleRecipeArcaneHole))
+                    .setParents("TST_WELCOME")
                     .setSecondary()
                     .registerResearchItem();
         }
