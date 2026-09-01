@@ -52,8 +52,8 @@ public final class CheckRecipeResults {
         .ofSuccess("CheckRecipeResult.RapidHeatFinish");
 
     // #tr CheckRecipeResult.NoSeedInController
-    // # There is no valid seed in controller block slot.
-    // #zh_CN 没有在主机内识别到可用的种子
+    // # Missing seed input
+    // #zh_CN 缺失种子输入
     public static final CheckRecipeResult NoSeedInController = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NoSeedInController");
 
@@ -62,5 +62,23 @@ public final class CheckRecipeResults {
     // #zh_CN 没有输入足够的水
     public static final CheckRecipeResult NotEnoughWater = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NotEnoughWater");
+
+    // #tr CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection
+    // # Missing circuit input
+    // #zh_CN 缺失输入电路板
+    public static final CheckRecipeResult MissingTreeOutputSelection = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection");
+
+    // #tr CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput
+    // # Missing sapling input
+    // #zh_CN 缺失树苗输入
+    public static final CheckRecipeResult MissingSaplingInput = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
+
+    // #tr CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch
+    // # Requires a higher-tier mode beacon
+    // #zh_CN 需要更高等级的模式信标
+    public static final CheckRecipeResult ModeBeaconInputMismatch = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch");
 
 }

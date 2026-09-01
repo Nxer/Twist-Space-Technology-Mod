@@ -20,6 +20,32 @@ public class NEIHandler {
 
     public static void IMCSender() {
         API.addRecipeCatalyst(GTCMItemList.HephaestusAtelier.get(1), "smelting");
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereModeBeacon1.get(1),
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereModeBeacon2.get(1),
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereModeBeacon3.get(1),
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereModeBeacon4.get(1),
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereModeBeacon5.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereModeBeacon6.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(GTCMItemList.EcoSphereModeBeacon7.get(1), "tst.recipe.DirectedMobClonerFakeRecipes", -10);
+        API.addRecipeCatalyst(GTCMItemList.EcoSphereModeBeacon8.get(1), "tst.recipe.DirectedMobClonerFakeRecipes", -10);
 
         /*
          * sendCatalyst("mc.recipe.furnace", "gregtech:gt.blockmachines:19037", -10);

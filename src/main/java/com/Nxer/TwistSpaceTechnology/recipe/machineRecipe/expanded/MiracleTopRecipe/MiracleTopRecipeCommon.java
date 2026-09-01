@@ -464,16 +464,23 @@ public final class MiracleTopRecipeCommon {
         }
     }
 
-    static boolean hasCircuitOreDict(ItemStack stack) {
-        if (stack == null) return false;
+    public static String getCircuitOreDict(ItemStack stack) {
+        if (stack == null) return null;
 
-        for (int oreId : OreDictionary.getOreIDs(stack)) {
-            if (circuitGTOreDict.contains(OreDictionary.getOreName(oreId))) {
-                return true;
-            }
+        if (circuitGTOreDict.isEmpty()) {
+            MiracleTopRecipeInitialization.initializeGTCircuitOreDict();
         }
 
-        return false;
+        for (int oreId : OreDictionary.getOreIDs(stack)) {
+            String oreName = OreDictionary.getOreName(oreId);
+            if (circuitGTOreDict.contains(oreName)) return oreName;
+        }
+
+        return null;
+    }
+
+    static boolean hasCircuitOreDict(ItemStack stack) {
+        return getCircuitOreDict(stack) != null;
     }
 
 }

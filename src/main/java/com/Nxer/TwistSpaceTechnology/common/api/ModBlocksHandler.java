@@ -51,11 +51,6 @@ public final class ModBlocksHandler {
 
     // endregion
 
-    // region ProjRed|Illumination
-    public static Pair<Block, Integer> PurpleLight;
-
-    // endregion
-
     // region Blood Arsenal
 
     public static Pair<Block, Integer> BloodInfusedDiamondBlock;
@@ -75,6 +70,7 @@ public final class ModBlocksHandler {
 
     // region Extra Utilities
     public static Pair<Block, Integer> CarvedEminenceStone;
+    public static Block GreenScreen;
 
     // endregion
 
@@ -143,13 +139,6 @@ public final class ModBlocksHandler {
             soil = Pair.of(Blocks.dirt, 0);
         }
 
-        if (Mods.ProjectRedIllumination.isModLoaded()) {
-            PurpleLight = Pair
-                .of(Block.getBlockFromName(Mods.ProjectRedIllumination.ID + ":projectred.illumination.lamp"), 10);
-        } else {
-            PurpleLight = Pair.of(Blocks.redstone_lamp, 0);
-        }
-
         if (Mods.BloodArsenal.isModLoaded()) {
             BloodInfusedDiamondBlock = Pair
                 .of(Block.getBlockFromName(Mods.BloodArsenal.ID + ":blood_infused_diamond_block"), 0);
@@ -179,8 +168,10 @@ public final class ModBlocksHandler {
 
         if (Mods.ExtraUtilities.isModLoaded()) {
             CarvedEminenceStone = Pair.of(Block.getBlockFromName(Mods.ExtraUtilities + ":decorativeBlock1"), 14);
+            GreenScreen = Block.getBlockFromName(Mods.ExtraUtilities.ID + ":greenscreen");
         } else {
             CarvedEminenceStone = Pair.of(Blocks.soul_sand, 0);
+            GreenScreen = Blocks.redstone_lamp;
         }
 
         if (Mods.EnderIO.isModLoaded()) {

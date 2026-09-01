@@ -15,6 +15,7 @@ import com.Nxer.TwistSpaceTechnology.common.cropsNH.Crops;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.ic2Crop.CropInfo;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemYamato;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialFix;
@@ -33,6 +34,7 @@ import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.system.DimensionSystem.DimensionSystemInit;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
+import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearchEventHandler;
 import com.Nxer.TwistSpaceTechnology.util.PatternConversionWorldSavedData;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
@@ -46,6 +48,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import gregtech.api.enums.Mods;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.render.GTBlockTextureBuilder;
 
@@ -69,6 +72,13 @@ public class CommonProxy {
         }
 
         TCLoader.preInit();
+        if (TCLoader.TC_Installed && Config.Enable_EcoSphereSimulator) {
+            FMLCommonHandler.instance()
+                .bus()
+                .register(new TCResearchEventHandler());
+        }
+
+        if (Mods.MobsInfo.isModLoaded()) DirectedMobClonerRecipeCache.init();
     }
 
     public void init(FMLInitializationEvent event) {

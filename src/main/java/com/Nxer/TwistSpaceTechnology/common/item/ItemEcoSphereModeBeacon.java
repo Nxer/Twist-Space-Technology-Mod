@@ -1,0 +1,65 @@
+package com.Nxer.TwistSpaceTechnology.common.item;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
+
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+
+public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
+
+    private IIcon backgroundIcon;
+    private IIcon frameIcon;
+    private IIcon upgradeBackgroundIcon;
+    private IIcon upgradeFrameIcon;
+
+    public ItemEcoSphereModeBeacon() {
+        super("EcoSphereModeBeacon");
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack itemStack) {
+        String displayName = super.getItemStackDisplayName(itemStack);
+        if (itemStack.getItemDamage() >= 8 || (itemStack.getItemDamage() & 1) == 0) return displayName;
+
+        int separatorIndex = Math.max(displayName.lastIndexOf(':'), displayName.lastIndexOf('\uFF1A'));
+        int rainbowStartIndex = separatorIndex < 0 ? 0 : separatorIndex + 1;
+        while (rainbowStartIndex < displayName.length()
+            && Character.isWhitespace(displayName.charAt(rainbowStartIndex))) {
+            rainbowStartIndex++;
+        }
+        return TstUtils.animatedRainbowText(displayName, rainbowStartIndex);
+    }
+
+    @Override
+    public void registerIcons(IIconRegister register) {
+        this.backgroundIcon = register
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/mode_beacon_background");
+        this.frameIcon = register.registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/frame");
+        this.upgradeBackgroundIcon = register
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/upgrade_background");
+        this.upgradeFrameIcon = register
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/upgrade_frame");
+        for (int meta : usedMetaIds) {
+            iconMap.put(meta, backgroundIcon);
+        }
+        this.itemIcon = backgroundIcon;
+    }
+
+    public IIcon getBackgroundIcon() {
+        return backgroundIcon;
+    }
+
+    public IIcon getFrameIcon() {
+        return frameIcon;
+    }
+
+    public IIcon getUpgradeBackgroundIcon() {
+        return upgradeBackgroundIcon;
+    }
+
+    public IIcon getUpgradeFrameIcon() {
+        return upgradeFrameIcon;
+    }
+}

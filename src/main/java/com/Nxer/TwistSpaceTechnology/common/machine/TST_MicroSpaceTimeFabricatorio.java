@@ -482,6 +482,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name
             // # Input Bus of The Seed of Space and Time
             // #zh_CN 时空之种输入总线
+
             // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location
             // # Replace the casing at the front of controller block
             // #zh_CN 替换主方块正前方结构方块

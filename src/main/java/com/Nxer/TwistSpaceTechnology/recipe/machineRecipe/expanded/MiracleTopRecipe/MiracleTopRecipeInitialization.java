@@ -242,6 +242,10 @@ public final class MiracleTopRecipeInitialization {
         targetModifyOreDict.add(OrePrefixes.pipeQuadruple);
         targetModifyOreDict.add(OrePrefixes.pipeNonuple);
 
+        initializeGTCircuitOreDict();
+    }
+
+    static void initializeGTCircuitOreDict() {
         addGTCircuitOreDictNames(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.ULV, 1));
         addGTCircuitOreDictNames(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.LV, 1));
         addGTCircuitOreDictNames(GTOreDictUnificator.get(OrePrefixes.circuit, Materials.MV, 1));

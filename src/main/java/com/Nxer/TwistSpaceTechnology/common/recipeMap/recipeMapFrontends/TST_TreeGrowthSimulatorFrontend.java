@@ -6,14 +6,16 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
+import codechicken.nei.NEIClientUtils;
+import codechicken.nei.recipe.GuiRecipe;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
-import gregtech.api.util.GTRecipe;
 import gregtech.common.gui.modularui.UIHelper;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm;
 import gregtech.nei.GTNEIDefaultHandler;
@@ -39,6 +41,14 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
             uiPropertiesBuilder.addNEITransferRect(new Rectangle(72, 18, SLOT_SIZE * 2, SLOT_SIZE))
                 .progressBarPos(new Pos2d(CENTER_X - 10, INPUTS_Y + SLOT_SIZE / 2)),
             neiPropertiesBuilder.neiSpecialInfoFormatter(new MegaTreeGrowthSimulator_SpecialValueFormatter()));
+    }
+
+    @Override
+    public void drawDescription(RecipeDisplayInfo recipeInfo) {
+        drawDurationInfo(recipeInfo);
+        drawMetadataInfo(recipeInfo);
+        drawSpecialInfo(recipeInfo);
+        drawRecipeOwnerInfo(recipeInfo);
     }
 
     @Override
@@ -69,29 +79,8 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
     @Override
     public List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
-        // Special Stack
-        if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 2).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
-            // #tr ESP.TreeGrowthSimulator.nei.tooltip.0
-            // # Place in machine controller slot
-            // #zh_CN 放入控制器插槽
-            super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
-            return currentTip;
-        }
-        // Fluid Stack
-        else if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.1"));
-            // #tr ESP.TreeGrowthSimulator.nei.tooltip.1
-            // # Input fluid to grow trees
-            // #zh_CN 输入流体以拟生树木
-            super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
-            return currentTip;
-        }
+        if (!(NEIClientUtils.getGuiContainer() instanceof GuiRecipe<?>guiRecipe)) return currentTip;
 
-        GTRecipe recipe = neiCachedRecipe.mRecipe;
-
-        // Inputs
-        int slot = 0;
         String[] tooltipInputs = { TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.2"),
             // #tr ESP.TreeGrowthSimulator.nei.tooltip.2
             // # Place in an input bus to harvest logs
@@ -110,36 +99,46 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
             // #zh_CN 放入输入总线以收获果实
         };
 
-        for (int mode = 0; mode < MTETreeFarm.Mode.values().length; ++mode) {
-            if (mode < recipe.mInputs.length && recipe.mInputs[mode] != null) {
-                // There is a valid input in this mode.
-                if (slot < neiCachedRecipe.mInputs.size() && stack == neiCachedRecipe.mInputs.get(slot).item) {
-                    currentTip.add(EnumChatFormatting.YELLOW + tooltipInputs[mode]);
-                    return currentTip;
+        for (var input : neiCachedRecipe.mInputs) {
+            if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
+                || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
+            if (positionedStack.isFluid()) {
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.1"));
+                // #tr ESP.TreeGrowthSimulator.nei.tooltip.1
+                // # Input fluid to grow trees
+                // #zh_CN 输入流体以拟生树木
+            } else if (positionedStack.isInput()) {
+                int circuitConfiguration = positionedStack.item.getItemDamage();
+                if (circuitConfiguration >= 1 && circuitConfiguration <= tooltipInputs.length) {
+                    currentTip.add(EnumChatFormatting.YELLOW + tooltipInputs[circuitConfiguration - 1]);
                 }
-                ++slot;
+            } else {
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
+                // #tr ESP.TreeGrowthSimulator.nei.tooltip.0
+                // # Place in input bus
+                // #zh_CN 放入输入总线
+                if (neiCachedRecipe.mRecipe.mFluidInputs.length > 0
+                    && neiCachedRecipe.mRecipe.mFluidInputs[0].getFluid() != FluidRegistry.WATER) {
+                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"));
+                    // #tr ESS.TreeGrowthSimulator.nei.tooltip.7
+                    // # Any Sapling
+                    // #zh_CN 任意树苗
+                }
             }
+            return currentTip;
         }
 
-        // Outputs
-        slot = 0;
-        for (int mode = 0; mode < MTETreeFarm.Mode.values().length; ++mode) {
-            if (mode < recipe.mOutputs.length && recipe.mOutputs[mode] != null) {
-                // There is a valid output in this mode.
-                if (slot < neiCachedRecipe.mOutputs.size() && stack == neiCachedRecipe.mOutputs.get(slot).item) {
-                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.6")
-                    // #tr ESS.TreeGrowthSimulator.nei.tooltip.6
-                    // # Requires correct Integrated Circuit to harvest
-                    // #zh_CN 需要正确的编程电路才能收获
-                    );
-                    return currentTip;
-                }
-                ++slot;
-            }
+        for (var output : neiCachedRecipe.mOutputs) {
+            if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
+                || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.6")
+            // #tr ESS.TreeGrowthSimulator.nei.tooltip.6
+            // # Requires correct Integrated Circuit to harvest
+            // #zh_CN 需要正确的编程电路才能收获
+            );
+            return currentTip;
         }
-
         return currentTip;
-
     }
 
     public static class MegaTreeGrowthSimulator_SpecialValueFormatter implements INEISpecialInfoFormatter {

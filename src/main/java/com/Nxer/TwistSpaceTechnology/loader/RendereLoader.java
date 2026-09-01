@@ -9,6 +9,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 
+import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.EcoSphereModeBeaconRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.PowerChairRenderer;
 import com.Nxer.TwistSpaceTechnology.client.render.ItemRenderers.YamatoRenderer;
@@ -37,6 +38,7 @@ public class RendereLoader {
         MinecraftForgeClient.registerItemRenderer(
             TstItems.Yamato,
             new YamatoRenderer(YamatoModel, new ResourceLocation("gtnhcommunitymod", "model/Yamato.png")));
+        MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereModeBeacon, new EcoSphereModeBeaconRenderer());
     }
 
     public static void registerTileEntityRenderers() {
