@@ -8,6 +8,7 @@ import com.Nxer.TwistSpaceTechnology.combat.DamageEventHandler;
 import com.Nxer.TwistSpaceTechnology.combat.PlayerEventHandler;
 import com.Nxer.TwistSpaceTechnology.combat.items.ItemRegister;
 import com.Nxer.TwistSpaceTechnology.command.CombatRework_Command;
+import com.Nxer.TwistSpaceTechnology.command.ContainerDumpMode;
 import com.Nxer.TwistSpaceTechnology.command.TST_AdminCommand;
 import com.Nxer.TwistSpaceTechnology.command.TST_Command;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
@@ -53,7 +54,7 @@ public class CommonProxy {
 
     public void copyToClipboard(String text) {}
 
-    public void sendContainerDumpTarget() {}
+    public void sendContainerDumpTarget(ContainerDumpMode mode) {}
 
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());

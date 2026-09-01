@@ -55,22 +55,32 @@ public class TST_CommandMethods implements IDSP_IO {
     }
 
     /**
-     * Usage: /tst dump_container
+     * Usage: /tst get_container_items <source|getModItem>
      *
-     * Reads the chest under the player's crosshair in slot order. Items use
-     * ModID,ItemID,stackSize,meta[,NBT]; GT fluid display stacks use FluidName,amount.
+     * Reads the chest under the crosshair in slot order. Source mode emits the best form per item:
+     * material form (ore dict with a material prefix, resolved through GT/GT++/BartWorks), then mod class
+     * form (ItemList, GTCMItemList, MaterialsTST, TstBlocks, ...), then ModItem.getModItem.
+     * getModItem mode always emits ModItem.getModItem. GT fluid display stacks use FluidName,amount.
      * Chat shows at most 32 entries while the clipboard always receives the complete list.
      */
     public void dumpContainer(ICommandSender sender) {
+        dumpContainer(sender, ContainerDumpMode.GET_MOD_ITEM);
+    }
+
+    public void dumpContainer(ICommandSender sender, ContainerDumpMode mode) {
         if (!(sender instanceof EntityPlayerMP)) {
             sender.addChatMessage(new ChatComponentText("This command can only be used by a player."));
             return;
         }
 
-        TST_Network.tst.sendTo(new ContainerDumpRequestPacket(), (EntityPlayerMP) sender);
+        TST_Network.tst.sendTo(new ContainerDumpRequestPacket(mode), (EntityPlayerMP) sender);
     }
 
     public void dumpContainer(EntityPlayerMP player, int x, int y, int z) {
+        dumpContainer(player, x, y, z, ContainerDumpMode.GET_MOD_ITEM);
+    }
+
+    public void dumpContainer(EntityPlayerMP player, int x, int y, int z, ContainerDumpMode mode) {
         if (y < 0 || player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) > 64.0D) {
             player.addChatMessage(new ChatComponentText("Point at a chest first."));
             return;
@@ -87,7 +97,7 @@ public class TST_CommandMethods implements IDSP_IO {
             ItemStack stack = inventory.getStackInSlot(slot);
             if (stack == null || stack.getItem() == null) continue;
 
-            String formatted = formatStack(stack);
+            String formatted = formatStack(stack, mode);
             if (formatted == null) continue;
             lines.add(formatted);
         }
@@ -98,6 +108,19 @@ public class TST_CommandMethods implements IDSP_IO {
         }
         if (lines.size() > visibleLines) player.addChatMessage(new ChatComponentText("..."));
         if (lines.isEmpty()) player.addChatMessage(new ChatComponentText("The chest is empty."));
+
+        if (mode == ContainerDumpMode.SOURCE) {
+            int sourceCount = 0;
+            for (String line : lines) {
+                if (!line.startsWith("ModItem.getModItem(")) sourceCount++;
+            }
+            player.addChatMessage(
+                new ChatComponentText(
+                    "Source mode: " + sourceCount
+                        + "/"
+                        + lines.size()
+                        + " items resolved to source forms; the rest fell back to getModItem."));
+        }
 
         TST_Network.tst.sendTo(new ClipboardPacket(String.join("\n", lines)), player);
     }
@@ -150,16 +173,44 @@ public class TST_CommandMethods implements IDSP_IO {
         return inventory;
     }
 
-    private static String formatStack(ItemStack stack) {
+    private static String formatStack(ItemStack stack, ContainerDumpMode mode) {
         FluidStack fluidStack = getFluidDisplayStack(stack);
-        if (fluidStack != null) return fluidStack.getFluid()
-            .getName() + ","
-            + fluidStack.amount;
+        if (fluidStack != null) {
+            if (mode == ContainerDumpMode.SOURCE) {
+                // Fluids: class form first, then the fluid-name form.
+                String fluidSource = ContainerItemSourceResolver.resolveFluid(fluidStack);
+                if (fluidSource != null) return fluidSource;
+            }
+            return fluidStack.getFluid()
+                .getName() + ","
+                + fluidStack.amount;
+        }
 
         GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(stack.getItem());
         if (identifier == null) return null;
-        String output = identifier.modId + "," + identifier.name + "," + stack.stackSize + "," + stack.getItemDamage();
-        return stack.getTagCompound() == null ? output : output + "," + stack.getTagCompound();
+        if (mode == ContainerDumpMode.SOURCE) {
+            String source = ContainerItemSourceResolver.resolve(stack);
+            if (source != null) return appendNbt(source, stack);
+        }
+        // TST's own getModItem wrapper has a fallback item and works better than the raw GT call.
+        String output = "ModItem.getModItem(\"" + escape(identifier.modId)
+            + "\", \""
+            + escape(identifier.name)
+            + "\", "
+            + stack.stackSize
+            + ", "
+            + stack.getItemDamage()
+            + ")";
+        return appendNbt(output, stack);
+    }
+
+    private static String appendNbt(String output, ItemStack stack) {
+        return stack.getTagCompound() == null ? output : output + " /* NBT: " + stack.getTagCompound() + " */";
+    }
+
+    private static String escape(String value) {
+        return value.replace("\\", "\\\\")
+            .replace("\"", "\\\"");
     }
 
     private static FluidStack getFluidDisplayStack(ItemStack stack) {
@@ -309,7 +360,7 @@ public class TST_CommandMethods implements IDSP_IO {
                     + "amount "
                     + EnumChatFormatting.AQUA
                     + "<dimID> <team name>"));
-        sender.addChatMessage(new ChatComponentText("/tst dump_container - dump the pointed chest in slot order"));
+        sender.addChatMessage(new ChatComponentText("/tst get_container_items <source|getModItem>"));
 
         help_dsp_setSolarSail(sender);
         sender.addChatMessage(
