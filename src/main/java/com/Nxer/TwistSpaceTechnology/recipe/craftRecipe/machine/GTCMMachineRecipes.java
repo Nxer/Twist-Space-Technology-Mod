@@ -181,6 +181,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.config.Config;
@@ -3342,17 +3343,17 @@ public class GTCMMachineRecipes {
             800_000,
             4,
             new Object[]{
-                GTOreDictUnificator.get(OrePrefixes.frameGt,Materials.Neutronium,2),
+                GTOreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 2),
                 ItemList.neutroniumHeatCapacitor.get(1),
                 ItemList.Neutron_Reflector.get(64),
                 ItemList.UHTResistantMesh.get(24),
 
                 ItemRefer.Advanced_Radiation_Protection_Plate.get(36),
-                ItemList.Electric_Piston_UV.get(4),
-                ItemList.Field_Generator_UV.get(2),
-                GTOreDictUnificator.get(OrePrefixes.ring,Materials.CosmicNeutronium,64),
+                ItemList.Electric_Piston_ZPM.get(4),
+                ItemList.Field_Generator_ZPM.get(2),
+                GTOreDictUnificator.get(OrePrefixes.ring, Materials.CosmicNeutronium, 24),
 
-                GTOreDictUnificator.get(OrePrefixes.screw,Materials.Bedrockium,32)
+                GTOreDictUnificator.get(OrePrefixes.screw, Materials.Bedrockium, 12)
             },
             new FluidStack[]{
                 MaterialsAlloy.INDALLOY_140.getFluidStack(144 * 8),
@@ -3362,6 +3363,37 @@ public class GTCMMachineRecipes {
             GTCMItemList.ReinforcedIridiumAlloyCasing.get(1),
             20 * 15,
             (int) RECIPE_UV
+        );
+
+        TTRecipeAdder.addResearchableAssemblylineRecipe(
+            GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsTST.NeutroniumAlloy, 1),
+            128_000,
+            64,
+            1_600_000,
+            4,
+            new Object[]{
+                GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsTST.NeutroniumAlloy, 1),
+                GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveCasing.get(2),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.TengamPurified, 2),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Knightmetal, 8),
+
+                ItemList.Field_Generator_UV.get(1),
+                ItemList.Electric_Pump_UV.get(2),
+                ItemList.Electric_Piston_UHV.get(4),
+                GTOreDictUnificator.get(OrePrefixes.ring, Materials.TranscendentMetal, 12),
+
+                GTOreDictUnificator.get(OrePrefixes.pipeQuadruple, Materials.NetherStar, 6),
+                ItemRefer.Advanced_Radiation_Protection_Plate.get(24),
+                getModItem("GraviSuite", "itemSimpleItem", 12, 1)
+            },
+            new FluidStack[]{
+                RadoxPolymer.getMolten(1152),
+                Materials.SuperconductorUHVBase.getMolten(2304),
+                FluidRegistry.getFluidStack("cryotheum", 1_000_000)
+            },
+            GTCMItemList.EnvironmentalIsolationCasing.get(1),
+            20 * 30,
+            (int) RECIPE_UEV
         );
 
         // Manufacturing Center

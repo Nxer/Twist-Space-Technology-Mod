@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
@@ -135,6 +136,49 @@ public class TstUtils {
      */
     public static ItemStack newItemWithMeta(Block block, int meta) {
         return new ItemStack(block, 1, meta);
+    }
+
+    /**
+     * Create an {@link ItemStack} with a string NBT tag.
+     *
+     * @param item     the Item
+     * @param amount   the stack size
+     * @param meta     the meta value
+     * @param tagName  the NBT tag name
+     * @param tagValue the NBT string value
+     * @return the created ItemStack
+     */
+    public static ItemStack newItemStackWithNBT(Item item, int amount, int meta, String tagName, String tagValue) {
+        return newItemStackWithNBT(new ItemStack(item, amount, meta), tagName, tagValue);
+    }
+
+    /**
+     * Create an {@link ItemStack} with a string NBT tag.
+     *
+     * @param block    the Block
+     * @param amount   the stack size
+     * @param meta     the meta value
+     * @param tagName  the NBT tag name
+     * @param tagValue the NBT string value
+     * @return the created ItemStack
+     */
+    public static ItemStack newItemStackWithNBT(Block block, int amount, int meta, String tagName, String tagValue) {
+        return newItemStackWithNBT(new ItemStack(block, amount, meta), tagName, tagValue);
+    }
+
+    /**
+     * Add a string NBT tag to an existing {@link ItemStack}.
+     *
+     * @param itemStack the ItemStack
+     * @param tagName   the NBT tag name
+     * @param tagValue  the NBT string value
+     * @return the given ItemStack with the NBT tag
+     */
+    public static ItemStack newItemStackWithNBT(ItemStack itemStack, String tagName, String tagValue) {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setString(tagName, tagValue);
+        itemStack.setTagCompound(tag);
+        return itemStack;
     }
 
     // endregion
