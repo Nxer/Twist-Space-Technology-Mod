@@ -35,6 +35,7 @@ import com.Nxer.TwistSpaceTechnology.system.DimensionSystem.DimensionSystemInit;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSavedData;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearchEventHandler;
+import com.Nxer.TwistSpaceTechnology.util.PatternConversionWorldSavedData;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
@@ -52,6 +53,10 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.common.render.GTBlockTextureBuilder;
 
 public class CommonProxy {
+
+    public void copyToClipboard(String text) {}
+
+    public void sendContainerDumpTarget() {}
 
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
@@ -79,6 +84,7 @@ public class CommonProxy {
     public void init(FMLInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new DSP_WorldSavedData());
+        MinecraftForge.EVENT_BUS.register(new PatternConversionWorldSavedData());
 
         if (Config.activateCombatStats) {
             MinecraftForge.EVENT_BUS.register(DamageEventHandler.instance);

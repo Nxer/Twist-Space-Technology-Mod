@@ -1,15 +1,32 @@
 package com.Nxer.TwistSpaceTechnology.command;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryLargeChest;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.network.TST_Network;
+import com.Nxer.TwistSpaceTechnology.network.packet.ClipboardPacket;
+import com.Nxer.TwistSpaceTechnology.network.packet.ContainerDumpRequestPacket;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class TST_CommandMethods implements IDSP_IO {
 
@@ -35,6 +52,131 @@ public class TST_CommandMethods implements IDSP_IO {
                     + " , Planetary Coefficient : "
                     + EnumChatFormatting.GREEN
                     + planet.planetaryCoefficient));
+    }
+
+    /**
+     * Usage: /tst dump_container
+     *
+     * Reads the chest under the player's crosshair in slot order. Items use
+     * ModID,ItemID,stackSize,meta[,NBT]; GT fluid display stacks use FluidName,amount.
+     * Chat shows at most 32 entries while the clipboard always receives the complete list.
+     */
+    public void dumpContainer(ICommandSender sender) {
+        if (!(sender instanceof EntityPlayerMP)) {
+            sender.addChatMessage(new ChatComponentText("This command can only be used by a player."));
+            return;
+        }
+
+        TST_Network.tst.sendTo(new ContainerDumpRequestPacket(), (EntityPlayerMP) sender);
+    }
+
+    public void dumpContainer(EntityPlayerMP player, int x, int y, int z) {
+        if (y < 0 || player.getDistanceSq(x + 0.5D, y + 0.5D, z + 0.5D) > 64.0D) {
+            player.addChatMessage(new ChatComponentText("Point at a chest first."));
+            return;
+        }
+
+        IInventory inventory = getInventory(player.worldObj.getTileEntity(x, y, z));
+        if (inventory == null) {
+            player.addChatMessage(new ChatComponentText("The targeted chest has no readable inventory."));
+            return;
+        }
+
+        List<String> lines = new ArrayList<>();
+        for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
+            ItemStack stack = inventory.getStackInSlot(slot);
+            if (stack == null || stack.getItem() == null) continue;
+
+            String formatted = formatStack(stack);
+            if (formatted == null) continue;
+            lines.add(formatted);
+        }
+
+        int visibleLines = Math.min(32, lines.size());
+        for (int line = 0; line < visibleLines; line++) {
+            player.addChatMessage(new ChatComponentText(lines.get(line)));
+        }
+        if (lines.size() > visibleLines) player.addChatMessage(new ChatComponentText("..."));
+        if (lines.isEmpty()) player.addChatMessage(new ChatComponentText("The chest is empty."));
+
+        TST_Network.tst.sendTo(new ClipboardPacket(String.join("\n", lines)), player);
+    }
+
+    private static IInventory getInventory(TileEntity tileEntity) {
+        if (!(tileEntity instanceof IInventory)) return null;
+
+        if (tileEntity instanceof TileEntityChest) return getVanillaChestInventory((TileEntityChest) tileEntity);
+        return (IInventory) tileEntity;
+    }
+
+    private static IInventory getVanillaChestInventory(TileEntityChest chest) {
+        IInventory inventory = chest;
+        int x = chest.xCoord;
+        int y = chest.yCoord;
+        int z = chest.zCoord;
+
+        // Match vanilla double-chest ordering so the west/north half always precedes east/south.
+        if (chest.getWorldObj()
+            .getBlock(x - 1, y, z) == chest.getBlockType()) {
+            inventory = new InventoryLargeChest(
+                "container.chestDouble",
+                (TileEntityChest) chest.getWorldObj()
+                    .getTileEntity(x - 1, y, z),
+                inventory);
+        } else if (chest.getWorldObj()
+            .getBlock(x + 1, y, z) == chest.getBlockType()) {
+                inventory = new InventoryLargeChest(
+                    "container.chestDouble",
+                    inventory,
+                    (TileEntityChest) chest.getWorldObj()
+                        .getTileEntity(x + 1, y, z));
+            }
+
+        if (chest.getWorldObj()
+            .getBlock(x, y, z - 1) == chest.getBlockType()) {
+            inventory = new InventoryLargeChest(
+                "container.chestDouble",
+                (TileEntityChest) chest.getWorldObj()
+                    .getTileEntity(x, y, z - 1),
+                inventory);
+        } else if (chest.getWorldObj()
+            .getBlock(x, y, z + 1) == chest.getBlockType()) {
+                inventory = new InventoryLargeChest(
+                    "container.chestDouble",
+                    inventory,
+                    (TileEntityChest) chest.getWorldObj()
+                        .getTileEntity(x, y, z + 1));
+            }
+        return inventory;
+    }
+
+    private static String formatStack(ItemStack stack) {
+        FluidStack fluidStack = getFluidDisplayStack(stack);
+        if (fluidStack != null) return fluidStack.getFluid()
+            .getName() + ","
+            + fluidStack.amount;
+
+        GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+        if (identifier == null) return null;
+        String output = identifier.modId + "," + identifier.name + "," + stack.stackSize + "," + stack.getItemDamage();
+        return stack.getTagCompound() == null ? output : output + "," + stack.getTagCompound();
+    }
+
+    private static FluidStack getFluidDisplayStack(ItemStack stack) {
+        GameRegistry.UniqueIdentifier identifier = GameRegistry.findUniqueIdentifierFor(stack.getItem());
+        if (identifier == null || !"gregtech".equals(identifier.modId)
+            || !"gt.GregTech_FluidDisplay".equals(identifier.name)) return null;
+
+        Fluid fluid = FluidRegistry.getFluid(stack.getItemDamage());
+        if (fluid == null || stack.getTagCompound() == null) return null;
+
+        long amountPerItem = stack.getTagCompound()
+            .getLong("mFluidDisplayAmount");
+        if (amountPerItem < 0L || stack.stackSize <= 0 || amountPerItem > Integer.MAX_VALUE / (long) stack.stackSize)
+            return null;
+
+        // Heat and state are display metadata; stacked displays multiply only the fluid amount.
+        return new FluidStack(fluid, (int) (amountPerItem * stack.stackSize));
     }
 
     public void dsp_setNode(ICommandSender sender, String amount, String dim, String aName) {
@@ -167,8 +309,22 @@ public class TST_CommandMethods implements IDSP_IO {
                     + "amount "
                     + EnumChatFormatting.AQUA
                     + "<dimID> <team name>"));
+        sender.addChatMessage(new ChatComponentText("/tst dump_container - dump the pointed chest in slot order"));
 
         help_dsp_setSolarSail(sender);
+        sender.addChatMessage(
+            new ChatComponentText(
+                "↓ [AE&TC] Toggle AE2 pattern conversion on encode: glass ampoules / crystal essences → aspects. ↓"));
+        sender.addChatMessage(
+            new ChatComponentText(
+                "/tst ae_pattern_conversion " + EnumChatFormatting.GREEN
+                    + "<status>"
+                    + EnumChatFormatting.RESET
+                    + "  or  "
+                    + EnumChatFormatting.AQUA
+                    + "<ampoule|crystal> "
+                    + EnumChatFormatting.GREEN
+                    + "<on|off>"));
         sender.addChatMessage(
             new ChatComponentText(EnumChatFormatting.BLUE + "-----------------------------------------------"));
     }

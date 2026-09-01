@@ -17,6 +17,7 @@ import net.minecraft.util.EnumChatFormatting;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.PatternConversionWorldSavedData;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 
 public final class TST_Command extends CommandBase implements IDSP_IO {
@@ -190,18 +191,117 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 TST_CommandMethods.INSTANCE.dsp_info(sender);
             }
 
+            case "dump_container" -> {
+                TST_CommandMethods.INSTANCE.dumpContainer(sender);
+            }
+
+            case "ae_pattern_conversion" -> {
+                processPatternConversion(sender, args, 1);
+            }
+
             default -> {
                 sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
             }
         }
     }
 
-    private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode",
-        "dsp_info" };
+    private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info",
+        "dump_container", "ae_pattern_conversion" };
+
+    private void processPatternConversion(ICommandSender sender, String[] args, int actionIndex) {
+        String playerName = sender.getCommandSenderName();
+        if (args.length < actionIndex + 1) {
+            sender.addChatMessage(
+                new ChatComponentText("Usage: /tst ae_pattern_conversion <status|ampoule <on|off>|crystal <on|off>>"));
+            return;
+        }
+
+        switch (args[actionIndex]) {
+            case "status" -> {
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        "AE2 pattern conversion status:" + " ampoule "
+                            + (PatternConversionWorldSavedData.isPatternConversionEnabledFor(playerName) ? "ENABLED"
+                                : "DISABLED")
+                            + ", crystal essence "
+                            + (PatternConversionWorldSavedData.isCrystalConversionEnabledFor(playerName) ? "ENABLED"
+                                : "DISABLED")
+                            + "."));
+            }
+            case "ampoule" -> {
+                if (args.length < actionIndex + 2) {
+                    sender.addChatMessage(new ChatComponentText("Usage: /tst ae_pattern_conversion ampoule <on|off>"));
+                    return;
+                }
+                switch (args[actionIndex + 1]) {
+                    case "on" -> {
+                        PatternConversionWorldSavedData.setPatternConversionEnabled(playerName, true);
+                        sender.addChatMessage(new ChatComponentText("AE2 ampoule conversion is now ENABLED for you."));
+                    }
+                    case "off" -> {
+                        PatternConversionWorldSavedData.setPatternConversionEnabled(playerName, false);
+                        sender.addChatMessage(new ChatComponentText("AE2 ampoule conversion is now DISABLED for you."));
+                    }
+                    default -> {
+                        sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
+                        sender.addChatMessage(
+                            new ChatComponentText("Usage: /tst ae_pattern_conversion ampoule <on|off>"));
+                    }
+                }
+            }
+            case "crystal" -> {
+                if (args.length < actionIndex + 2) {
+                    sender.addChatMessage(new ChatComponentText("Usage: /tst ae_pattern_conversion crystal <on|off>"));
+                    return;
+                }
+                switch (args[actionIndex + 1]) {
+                    case "on" -> {
+                        PatternConversionWorldSavedData.setCrystalConversionEnabled(playerName, true);
+                        sender.addChatMessage(
+                            new ChatComponentText("AE2 crystal essence conversion is now ENABLED for you."));
+                    }
+                    case "off" -> {
+                        PatternConversionWorldSavedData.setCrystalConversionEnabled(playerName, false);
+                        sender.addChatMessage(
+                            new ChatComponentText("AE2 crystal essence conversion is now DISABLED for you."));
+                    }
+                    default -> {
+                        sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
+                        sender.addChatMessage(
+                            new ChatComponentText("Usage: /tst ae_pattern_conversion crystal <on|off>"));
+                    }
+                }
+            }
+            default -> {
+                sender.addChatMessage(TstSharedLocalization.Command.invalidCommand());
+                sender.addChatMessage(
+                    new ChatComponentText(
+                        "Usage: /tst ae_pattern_conversion <status|ampoule <on|off>|crystal <on|off>>"));
+            }
+        }
+    }
 
     @Override
     public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
         List<String> l = new ArrayList<>();
+        // Second level under AE_pattern_conversion: suggest status/ampoule/crystal.
+        if (args.length == 2 && "ae_pattern_conversion".equals(args[0])) {
+            String sub = args[1].trim();
+            String[] subCommands = { "status", "ampoule", "crystal" };
+            Stream.of(subCommands)
+                .filter(s -> sub.isEmpty() || s.startsWith(sub))
+                .forEach(l::add);
+            return l;
+        }
+        // Third level: suggest on|off after ampoule/crystal.
+        if (args.length == 3 && "ae_pattern_conversion".equals(args[0])) {
+            String sub = args[2].trim();
+            String[] subCommands = { "on", "off" };
+            Stream.of(subCommands)
+                .filter(s -> sub.isEmpty() || s.startsWith(sub))
+                .forEach(l::add);
+            return l;
+        }
         String text = args.length == 0 ? "" : args[0].trim();
         if (args.length == 0 || args.length == 1 && (text.isEmpty() || Stream.of(Commands)
             .anyMatch(s -> s.startsWith(text)))) {
