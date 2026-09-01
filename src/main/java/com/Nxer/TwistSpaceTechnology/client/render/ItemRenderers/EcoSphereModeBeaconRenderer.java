@@ -21,13 +21,18 @@ import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 import fox.spiteful.avaritia.items.LudicrousItems;
 import fox.spiteful.avaritia.render.CosmicItemRenderer;
 import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
+import gregtech.api.interfaces.IGT_ItemWithMaterialRenderer;
 import gregtech.api.util.GTModHandler;
+import gregtech.common.render.items.InfinityRenderer;
 
 public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
 
     private static final float CONTENT_SCALE = 0.875F;
     private static final float ITEM_THICKNESS = 1.0F / 16.0F;
+    /** Shrinks GT's 36px halo down to the 16px frame area. */
+    private static final float HALO_SCALE = 16.0F / 36.0F;
     private static final CosmicItemRenderer COSMIC_RENDERER = new CosmicItemRenderer();
 
     @Override
@@ -73,6 +78,10 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
                 COSMIC_RENDERER.renderItem(type, displayStack, data);
             }
             restoreLayerDepth(type);
+        } else if (meta == 12) {
+            // Auto-Pulverize upgrade: the center Infinity dust reuses GT's Infinity effect,
+            // but only inside the frame; the frame itself stays on top and the base below.
+            renderInfinityItem(type, displayStack);
         } else {
             // Draw normal center items as flat front and back layers.
             renderVanillaItem(type, displayStack);
@@ -111,10 +120,18 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
             case 7 -> new ItemStack(LudicrousItems.infinity_sword);
             case 8 -> ItemList.Cell_Empty.get(1);
             case 9 -> new ItemStack(Items.wheat);
-            case 10 -> new ItemStack(Items.sugar);
+            case 10 -> getNodeUpgrade();
             case 11 -> getModuleOutputUpgrade();
+            case 12 -> Materials.Infinity.getDust(1);
             default -> GTCMItemList.TestItem0.get(1);
         };
+    }
+
+    private static ItemStack getNodeUpgrade() {
+        ItemStack upgrade = Mods.ExtraUtilities.isModLoaded()
+            ? GTModHandler.getModItem(Mods.ExtraUtilities.ID, "nodeUpgrade", 1, 0)
+            : null;
+        return upgrade == null ? new ItemStack(Items.sugar) : upgrade;
     }
 
     private static ItemStack getTimewoodSapling() {
@@ -186,6 +203,35 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
 
         IIcon icon = displayStack.getIconIndex();
         renderLayerIcon(type, icon, displayStack.getItemSpriteNumber(), 1);
+    }
+
+    private static void renderInfinityItem(ItemRenderType type, ItemStack displayStack) {
+        if (type != ItemRenderType.INVENTORY) {
+            // The Infinity effect is inventory-only; held and dropped items stay as normal center items.
+            renderVanillaItem(type, displayStack);
+            return;
+        }
+
+        IIcon overlay = null;
+        IIcon icon = null;
+        if (displayStack.getItem() instanceof IGT_ItemWithMaterialRenderer aMaterialItem) {
+            int meta = displayStack.getItemDamage();
+            overlay = aMaterialItem.getOverlayIcon(meta, 0);
+            icon = aMaterialItem.getIcon(meta, 0);
+        }
+
+        // GT's sequence for inventories: halo, pulse, item. The halo is shrunk to the frame area.
+        // The item body uses RenderItem.renderItemIntoGUI, which binds the right texture atlas.
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(8.0F, 8.0F, 0.0F);
+        GL11.glScalef(HALO_SCALE, HALO_SCALE, 1.0F);
+        GL11.glTranslatef(-8.0F, -8.0F, 0.0F);
+        InfinityRenderer.renderHalo();
+        GL11.glPopMatrix();
+        GL11.glPopAttrib();
+        InfinityRenderer.renderPulse(overlay, icon);
+        renderVanillaItem(type, displayStack);
     }
 
     private static void renderBase(ItemRenderType type, IIcon background, IIcon frame, int spriteNumber) {
