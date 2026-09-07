@@ -7,49 +7,31 @@ import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.Sp
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
-import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.google.common.collect.Sets;
 
 import bartworks.system.material.WerkstoffLoader;
 import goodgenerator.items.GGMaterial;
-import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.StoneType;
+import gregtech.api.objects.ItemData;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 import ic2.core.Ic2Items;
 
 public class OP_NormalProcessing {
-
-    /**
-     * Ore stone types enum
-     */
-    public static final Set<OrePrefixes> basicStoneTypes = Sets.newHashSet(
-        OrePrefixes.ore,
-        OrePrefixes.oreBasalt,
-        OrePrefixes.oreBlackgranite,
-        OrePrefixes.oreRedgranite,
-        OrePrefixes.oreMarble,
-        OrePrefixes.oreNetherrack,
-        OrePrefixes.oreEndstone);
-
-    public static final Set<OrePrefixes> basicStoneTypesExceptNormalStone = Sets.newHashSet(
-        OrePrefixes.oreBasalt,
-        OrePrefixes.oreBlackgranite,
-        OrePrefixes.oreRedgranite,
-        OrePrefixes.oreMarble,
-        OrePrefixes.oreNetherrack,
-        OrePrefixes.oreEndstone);
 
     public static final Map<Materials, ItemStack> processingLineMaterials = new HashMap<>();
 
@@ -91,20 +73,7 @@ public class OP_NormalProcessing {
             Materials.NaquadahEnriched,
             Materials.Naquadria);
 
-        // generate normal materials' ore processing recipes
-        for (int i = 0; i < GregTechAPI.sGeneratedMaterials.length; i++) {
-            if (GregTechAPI.sGeneratedMaterials[i] == null) continue;
-
-            Materials material = GregTechAPI.sGeneratedMaterials[i];
-
-            // rule out special materials
-            if (!specialProcesses.isEmpty() && specialProcesses.contains(material)) {
-                specialProcesses.remove(material);
-                continue;
-            }
-            // generate recipes
-            processOreRecipe(material, i);
-        }
+        processOreDictionaryRecipes(specialProcesses);
 
         OP_GTPP_OreHandler.processGTPPOreRecipes();
         OP_Bartworks_OreHandler.processBWOreRecipes();
@@ -124,15 +93,7 @@ public class OP_NormalProcessing {
                 WerkstoffMaterialPool.CeriumOreConcentrate.get(OrePrefixes.dust, 11) };
             ItemStack[] outputsRich = new ItemStack[] {
                 WerkstoffMaterialPool.CeriumOreConcentrate.get(OrePrefixes.dust, 22) };
-            // registry raw ore item style
-            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Cerium, 1), outputs);
-            for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GTOreDictUnificator.get(prefixes, Materials.Cerium, 1) == null) continue;
-                registryOreProcessRecipe(
-                    GTOreDictUnificator.get(prefixes, Materials.Cerium, 1),
-                    isRich(prefixes) ? outputsRich : outputs
-                );
-            }
+            registryOreDictionaryRecipes(Materials.Cerium, outputs, outputsRich);
         }
 
         // Samarium Ore
@@ -141,15 +102,7 @@ public class OP_NormalProcessing {
                 WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 11) };
             ItemStack[] outputsRich = new ItemStack[] {
                 WerkstoffMaterialPool.SamariumOreConcentrate.get(OrePrefixes.dust, 22) };
-            // registry raw ore item style
-            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Samarium, 1), outputs);
-            for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GTOreDictUnificator.get(prefixes, Materials.Samarium, 1) == null) continue;
-                registryOreProcessRecipe(
-                    GTOreDictUnificator.get(prefixes, Materials.Samarium, 1),
-                    isRich(prefixes) ? outputsRich : outputs
-                );
-            }
+            registryOreDictionaryRecipes(Materials.Samarium, outputs, outputsRich);
         }
 
         // Naquadah Ore
@@ -158,15 +111,7 @@ public class OP_NormalProcessing {
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 3), };
             ItemStack[] outputsRich = new ItemStack[] { GGMaterial.naquadahEarth.get(OrePrefixes.dust, 16),
                 GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 8), };
-            // registry raw ore item style
-            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Naquadah, 1), outputs);
-            for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GTOreDictUnificator.get(prefixes, Materials.Naquadah, 1) == null) continue;
-                registryOreProcessRecipe(
-                    GTOreDictUnificator.get(prefixes, Materials.Naquadah, 1),
-                    isRich(prefixes) ? outputsRich : outputs
-                );
-            }
+            registryOreDictionaryRecipes(Materials.Naquadah, outputs, outputsRich);
         }
 
         // Enriched Naquadah Ore
@@ -175,15 +120,7 @@ public class OP_NormalProcessing {
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 3) };
             ItemStack[] outputsRich = new ItemStack[] { GGMaterial.enrichedNaquadahEarth.get(OrePrefixes.dust, 16),
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 6) };
-            // registry raw ore item style
-            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.NaquadahEnriched, 1), outputs);
-            for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GTOreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1) == null) continue;
-                registryOreProcessRecipe(
-                    GTOreDictUnificator.get(prefixes, Materials.NaquadahEnriched, 1),
-                    isRich(prefixes) ? outputsRich : outputs
-                );
-            }
+            registryOreDictionaryRecipes(Materials.NaquadahEnriched, outputs, outputsRich);
         }
 
         // Naquadria Ore
@@ -192,15 +129,7 @@ public class OP_NormalProcessing {
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 3), };
             ItemStack[] outputsRich = new ItemStack[] { GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 16),
                 GGMaterial.naquadriaEarth.get(OrePrefixes.dust, 6), };
-            // registry raw ore item style
-            registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, Materials.Naquadria, 1), outputs);
-            for (OrePrefixes prefixes : basicStoneTypes) {
-                if (GTOreDictUnificator.get(prefixes, Materials.Naquadria, 1) == null) continue;
-                registryOreProcessRecipe(
-                    GTOreDictUnificator.get(prefixes, Materials.Naquadria, 1),
-                    isRich(prefixes) ? outputsRich : outputs
-                );
-            }
+            registryOreDictionaryRecipes(Materials.Naquadria, outputs, outputsRich);
         }
 
         // Tinker Construct
@@ -242,32 +171,83 @@ public class OP_NormalProcessing {
     }
 
     /**
-     * Generate normal ore recipes
+     * Generate normal ore recipes from OreDictionary.
      *
-     * @param material The ore's Material.
-     * @param ID       The material ID.
+     * @param excludedMaterials The special Materials to exclude.
      */
-    public static void processOreRecipe(Materials material, int ID) {
-        if (GTOreDictUnificator.get(OrePrefixes.ore, material, 1) == null) return;
-        ItemStack[] outputs = getOutputs(material, false);
-        ItemStack[] outputsRich = getOutputs(material, true);
-
-        // registry normal stone ore
-        registryOreProcessRecipe(getModItem("gregtech", "gt.blockores", 1, ID), outputs);
-
-        // registry raw ore item style
-        registryOreProcessRecipe(GTOreDictUnificator.get(OrePrefixes.rawOre, material, 1), outputs);
-
-        // registry gt stone ore
-        for (OrePrefixes prefixes : basicStoneTypesExceptNormalStone) {
-            if (GTOreDictUnificator.get(prefixes, material, 1) == null) {
-                TwistSpaceTechnology.LOG.info("Failed to get ore: material=" + material + " , prefixes=" + prefixes);
-                continue;
+    private static void processOreDictionaryRecipes(Set<Materials> excludedMaterials) {
+        Map<Materials, ItemStack[]> outputs = new HashMap<>();
+        Map<Materials, ItemStack[]> outputsRich = new HashMap<>();
+        Set<Integer> registered = new HashSet<>();
+        for (String oreName : OreDictionary.getOreNames()) {
+            if (!isProcessableOreName(oreName)) continue;
+            for (ItemStack oreStack : OreDictionary.getOres(oreName)) {
+                ItemData association = GTOreDictUnificator.getAssociation(oreStack);
+                if (association == null || association.mMaterial == null || association.mMaterial.mMaterial == null)
+                    continue;
+                Materials material = association.mMaterial.mMaterial.mMaterialInto;
+                if (material == null || excludedMaterials.contains(material)) continue;
+                int stackId = GTUtility.stackToInt(oreStack);
+                if (!registered.add(stackId)) continue;
+                ItemStack[] normalOutputs = outputs.computeIfAbsent(material, key -> getOutputs(key, false));
+                if (normalOutputs.length == 0) continue;
+                ItemStack[] richOutputs = outputsRich.computeIfAbsent(material, key -> getOutputs(key, true));
+                registryOreProcessRecipe(
+                    GTUtility.copyAmountUnsafe(1, oreStack),
+                    isRichOre(association.mPrefix) ? richOutputs : normalOutputs);
             }
-            registryOreProcessRecipe(
-                GTOreDictUnificator.get(prefixes, material, 1),
-                isRich(prefixes) ? outputsRich : outputs);
         }
+    }
+
+    /**
+     * Register special ore recipes from OreDictionary.
+     *
+     * @param material    The ore's Material.
+     * @param outputs     The normal ore outputs.
+     * @param outputsRich The rich ore outputs.
+     */
+    private static void registryOreDictionaryRecipes(Materials material, ItemStack[] outputs, ItemStack[] outputsRich) {
+        Set<Integer> registered = new HashSet<>();
+        for (String oreName : OreDictionary.getOreNames()) {
+            if (!isProcessableOreName(oreName)) continue;
+            for (ItemStack oreStack : OreDictionary.getOres(oreName)) {
+                ItemData association = GTOreDictUnificator.getAssociation(oreStack);
+                if (association == null || association.mMaterial == null
+                    || association.mMaterial.mMaterial == null
+                    || association.mMaterial.mMaterial.mMaterialInto != material) continue;
+                if (!registered.add(GTUtility.stackToInt(oreStack))) continue;
+                registryOreProcessRecipe(
+                    GTUtility.copyAmountUnsafe(1, oreStack),
+                    isRichOre(association.mPrefix) ? outputsRich : outputs);
+            }
+        }
+    }
+
+    /**
+     * Check is this OreDictionary name a processable ore style.
+     *
+     * @param oreName The OreDictionary name to check.
+     * @return True is processable ore.
+     */
+    private static boolean isProcessableOreName(String oreName) {
+        return oreName != null
+            && (oreName.startsWith("rawOre") || oreName.startsWith("ore") && !oreName.startsWith("oreSmall")
+                && !oreName.startsWith("orePoor")
+                && !oreName.startsWith("oreNormal"));
+    }
+
+    /**
+     * Check is this OrePrefix a rich ore style.
+     *
+     * @param prefix The OrePrefix to check.
+     * @return True is rich ore.
+     */
+    private static boolean isRichOre(OrePrefixes prefix) {
+        if (prefix == OrePrefixes.oreRich) return true;
+        for (StoneType stoneType : StoneType.values()) {
+            if (stoneType.getPrefix() == prefix) return stoneType.isRich();
+        }
+        return false;
     }
 
     /**
@@ -287,11 +267,11 @@ public class OP_NormalProcessing {
         // check byproduct
         if (!material.mOreByProducts.isEmpty()) {
             // the basic output the material
-            outputs.add(getDustStack(material, 4));
+            addValidOutput(outputs, getDustStack(material, 4));
             if (material.mOreByProducts.size() == 1) {
                 for (Materials byproduct : material.mOreByProducts) {
                     if (byproduct == null) continue;
-                    outputs.add(getDustStack(byproduct, 3));
+                    addValidOutput(outputs, getDustStack(byproduct, 3));
                 }
             } else {
                 for (Materials byproduct : material.mOreByProducts) {
@@ -299,25 +279,25 @@ public class OP_NormalProcessing {
                         || byproduct == Materials.Endstone
                         || byproduct == Materials.Stone) continue;
 
-                    outputs.add(getDustStack(byproduct, 2));
+                    addValidOutput(outputs, getDustStack(byproduct, 2));
                 }
             }
 
         } else {
-            outputs.add(getDustStack(material, 8));
+            addValidOutput(outputs, getDustStack(material, 8));
         }
 
         // check gem style
         if (GTOreDictUnificator.get(OrePrefixes.gem, material, 1) != null) {
             if (GTOreDictUnificator.get(OrePrefixes.gemExquisite, material, 1) != null) {
                 // has gem style
-                outputs.add(GTOreDictUnificator.get(OrePrefixes.gemExquisite, material, 1));
-                outputs.add(GTOreDictUnificator.get(OrePrefixes.gemFlawless, material, 2));
-                outputs.add(GTOreDictUnificator.get(OrePrefixes.gem, material, 2));
+                addValidOutput(outputs, GTOreDictUnificator.get(OrePrefixes.gemExquisite, material, 1));
+                addValidOutput(outputs, GTOreDictUnificator.get(OrePrefixes.gemFlawless, material, 2));
+                addValidOutput(outputs, GTOreDictUnificator.get(OrePrefixes.gem, material, 2));
 
             } else {
                 // just normal gem
-                outputs.add(GTOreDictUnificator.get(OrePrefixes.gem, material, 4));
+                addValidOutput(outputs, GTOreDictUnificator.get(OrePrefixes.gem, material, 4));
             }
         }
 
@@ -330,6 +310,16 @@ public class OP_NormalProcessing {
         return outputs.toArray(new ItemStack[0]);
     }
 
+    /**
+     * Check is this ItemStack a valid output.
+     *
+     * @param outputs The output list to add to.
+     * @param output  The output ItemStack to check.
+     */
+    private static void addValidOutput(List<ItemStack> outputs, ItemStack output) {
+        if (output != null) outputs.add(output);
+    }
+
     public static void registryOreProcessRecipe(ItemStack input, ItemStack[] output) {
         if (input == null) return;
         TST_RecipeBuilder.builder()
@@ -340,15 +330,4 @@ public class OP_NormalProcessing {
             .duration(OreProcessRecipeDuration)
             .addTo(GTCMRecipe.OreProcessingRecipes);
     }
-
-    /**
-     * Check is this OrePrefix is rich ore style.
-     *
-     * @param prefixes The style to check.
-     * @return True is rich ore.
-     */
-    public static boolean isRich(OrePrefixes prefixes) {
-        return prefixes == OrePrefixes.oreNetherrack || prefixes == OrePrefixes.oreEndstone;
-    }
-
 }
