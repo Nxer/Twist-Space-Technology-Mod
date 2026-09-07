@@ -30,6 +30,7 @@ import static thaumcraft.common.lib.research.ResearchManager.getResearchForPlaye
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -173,8 +174,19 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 }
 
                 aspectProvider.clear();
-                aspects = tcRecipe.getInputAspects();
-                if (aspects.visSize() == 0) {
+                AspectList recipeAspects = tcRecipe.getInputAspects();
+                aspects = new AspectList();
+                try {
+                    for (Aspect aspect : recipeAspects.getAspects()) {
+                        int amount = recipeAspects.getAmount(aspect);
+                        if (amount > 0) {
+                            aspects.add(aspect, amount);
+                        }
+                    }
+                } catch (ConcurrentModificationException ignored) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+                if (aspects.getAspects().length == 0) {
                     return CheckRecipeResultRegistry.SUCCESSFUL;
                 }
                 if (mTileInfusionProvider.isEmpty()) {
@@ -200,7 +212,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         }
                     }
 
-                    if (aspectMaxParallel.get(aspect) == 0) {
+                    if (aspectMaxParallel.getOrDefault(aspect, 0) == 0) {
                         return Essentia_InsentiaL;
                     }
                 }
