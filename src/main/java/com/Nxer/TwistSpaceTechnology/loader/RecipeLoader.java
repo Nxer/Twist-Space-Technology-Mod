@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.loader;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerRecipeCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.GT_TileEntity_MegaBrickedBlastFurnace;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.recipe.commonRecipe.ShapedCraftRecipePool;
@@ -68,6 +69,8 @@ import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHa
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
+
+import gregtech.api.enums.Mods;
 
 public class RecipeLoader {
 
@@ -172,6 +175,7 @@ public class RecipeLoader {
         if (Config.Enable_IndustrialMagicMatrix) {
             new IndustrialMagicMatrixRecipePool().loadRecipes();
         }
+        if (Mods.MobsInfo.isModLoaded()) DirectedMobClonerRecipeCache.registerFakeRecipes();
     }
 
     public static void loadRecipemixin() {}

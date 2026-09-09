@@ -9,11 +9,12 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache;
@@ -23,13 +24,12 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 
-import gregtech.api.enums.Mods;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
-import gregtech.api.util.GTModHandler;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
@@ -46,117 +46,125 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     @Override
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
-        // A valid sapling is required before selecting a tree recipe.
-        EnumMap<Mode, ItemStack> normalOutputs = findTreeProduct(machine);
-        if (normalOutputs == null) return EcoSphereModeResult.failure(MissingSaplingInput);
+        // Every valid input sapling is processed in one operation, so different saplings
+        // produce their own tree products together. Duplicate saplings are counted once.
+        EnumSet<Mode> selectedInputs = machine.getSelectedTreeOutputs();
+        List<SaplingProducts> saplings = new ArrayList<>();
+        Set<TST_ItemID> seenSaplings = new HashSet<>();
+        for (ItemStack input : machine.getModeInputs()) {
+            if (!seenSaplings.add(TST_ItemID.create(input))) continue;
+            EnumMap<Mode, ItemStack> products = queryTreeProduct(input);
+            if (products != null) saplings.add(new SaplingProducts(input, products));
+        }
+        if (saplings.isEmpty()) return EcoSphereModeResult.failure(MissingSaplingInput);
 
         FluidStack fluidInput = EcoSphereFluidCache.findFirstValidFluid(machine);
         if (fluidInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
 
-        TreeRecipe recipe = findRecipe(fluidInput.getFluid(), normalOutputs);
+        TreeFluidRecipe recipe = findRecipe(fluidInput);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         if (machine.getModeBeaconTier() < recipe.requiredBeaconTier())
             return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
 
-        // Ignore selected tree parts that the resolved tree cannot produce.
-        EnumSet<Mode> selectedModes = EnumSet.noneOf(Mode.class);
-        for (Mode mode : machine.getSelectedTreeOutputs()) {
-            if (recipe.outputs()
-                .get(mode) != null) selectedModes.add(mode);
-        }
-        if (selectedModes.isEmpty()) return EcoSphereModeResult.failure(MissingTreeOutputSelection);
-        int availableOutputs = 0;
-        for (ItemStack output : recipe.outputs()
-            .values()) {
-            if (output != null) availableOutputs++;
+        List<EnumMap<Mode, ItemStack>> productSets = new ArrayList<>();
+        List<Integer> saplingCounts = new ArrayList<>();
+        if (recipe.uuMatter()) {
+            // UU matter ignores saplings and picks one random product per mode.
+            productSets.add(buildUuProducts());
+            saplingCounts.add(1);
+        } else {
+            for (SaplingProducts sapling : saplings) {
+                productSets.add(recipe.timeFluid() ? queryTimeTreeProduct(sapling.sapling()) : sapling.products());
+                saplingCounts.add(sapling.sapling().stackSize);
+            }
         }
 
-        final float focusBonus;
-        if (selectedModes.size() < availableOutputs) {
-            focusBonus = 1 + (float) (availableOutputs - selectedModes.size()) / selectedModes.size() / 3;
-        } else {
-            focusBonus = 1;
-        }
-        FluidStack recipeFluid = recipe.fluidInput();
         return EcoSphereModeSupport.processModeRecipeWithTier(
             machine,
-            recipeFluid.getFluid(),
-            recipeFluid.amount,
+            recipe.fluid()
+                .getFluid(),
+            recipe.fluid().amount,
             euTier,
-            parallelResult -> processOutputs(recipe, selectedModes, focusBonus, parallelResult));
+            parallelResult -> processOutputs(productSets, saplingCounts, selectedInputs, parallelResult));
     }
 
-    private static EcoSphereModeResult processOutputs(TreeRecipe recipe, EnumSet<Mode> selectedModes, float focusBonus,
-        EcoSphereModeSupport.ParallelResult parallelResult) {
+    @Desugar
+    private record SaplingProducts(ItemStack sapling, EnumMap<Mode, ItemStack> products) {}
+
+    private static EcoSphereModeResult processOutputs(List<EnumMap<Mode, ItemStack>> productSets,
+        List<Integer> saplingCounts, EnumSet<Mode> selectedInputs, EcoSphereModeSupport.ParallelResult parallelResult) {
         List<ItemStack> outputs = new ArrayList<>();
-        for (Mode mode : selectedModes) {
-            ItemStack output = recipe.outputs()
-                .get(mode);
-            long amount = (long) (output.stackSize * getModeMultiplier(mode) * parallelResult.parallel() * focusBonus);
-            addSplitStack(outputs, output, amount);
+        for (int index = 0; index < productSets.size(); index++) {
+            EnumMap<Mode, ItemStack> products = productSets.get(index);
+            int saplingCount = saplingCounts.get(index);
+            EnumSet<Mode> selected = EnumSet.noneOf(Mode.class);
+            for (Mode mode : selectedInputs) {
+                if (products.get(mode) != null) selected.add(mode);
+            }
+            if (selected.isEmpty()) continue;
+
+            int availableOutputs = 0;
+            for (ItemStack output : products.values()) {
+                if (output != null) availableOutputs++;
+            }
+            final float focusBonus;
+            if (selected.size() < availableOutputs) {
+                focusBonus = 1 + (float) (availableOutputs - selected.size()) / selected.size() / 3;
+            } else {
+                focusBonus = 1;
+            }
+            for (Mode mode : selected) {
+                ItemStack output = products.get(mode);
+                long amount = (long) (output.stackSize * saplingCount
+                    * getModeMultiplier(mode)
+                    * parallelResult.parallel()
+                    * focusBonus);
+                addSplitStack(outputs, output, amount);
+            }
         }
         if (outputs.isEmpty()) return EcoSphereModeResult.failure(MissingTreeOutputSelection);
         return EcoSphereModeResult.standard(
-            // #tr GT5U.gui.text.recipe_result.growing_trees
+            // #tr GT5U.gui.text.recipe_result.tst_ess_growing_trees
             // # {\GREEN}Growing Trees
-            // #zh_CN {\GREEN}原木拟生中
-            SimpleCheckRecipeResult.ofSuccess("growing_trees"),
+            // #zh_CN {\GREEN}树木生长中
+            SimpleCheckRecipeResult.ofSuccess("tst_ess_growing_trees"),
             outputs.toArray(new ItemStack[0]),
             parallelResult.tier());
     }
 
-    private static EnumMap<Mode, ItemStack> findTreeProduct(TST_EcoSphereSimulator machine) {
-        for (ItemStack input : machine.getModeInputs()) {
-            if (input == null || input.getItem() == null) continue;
-            EnumMap<Mode, ItemStack> outputs = queryTreeProduct(input);
-            if (outputs != null) return outputs;
-        }
-        return null;
-    }
-
-    private static TreeRecipe findRecipe(Fluid fluid, EnumMap<Mode, ItemStack> normalOutputs) {
+    private static TreeFluidRecipe findRecipe(FluidStack fluid) {
         FluidStack water = TreeGrowthSimulatorWithoutToolFakeRecipe.WATER_STACK;
-        if (water != null && fluid == water.getFluid()) return new TreeRecipe(water, 1, normalOutputs);
-        return findSpecialRecipe(fluid);
+        if (water != null && fluid.getFluid() == water.getFluid()) return new TreeFluidRecipe(water, 1, false, false);
+        FluidStack temporalFluid = TreeGrowthSimulatorWithoutToolFakeRecipe.TEMPORAL_FLUID_STACK;
+        if (temporalFluid != null && fluid.getFluid() == temporalFluid.getFluid())
+            return new TreeFluidRecipe(temporalFluid, 2, true, false);
+        FluidStack deathWater = TreeGrowthSimulatorWithoutToolFakeRecipe.DEATH_WATER_STACK;
+        if (deathWater != null && fluid.getFluid() == deathWater.getFluid())
+            return new TreeFluidRecipe(deathWater, 2, false, false);
+        FluidStack unknownWater = TreeGrowthSimulatorWithoutToolFakeRecipe.UNKNOWN_WATER_STACK;
+        if (unknownWater != null && fluid.getFluid() == unknownWater.getFluid())
+            return new TreeFluidRecipe(unknownWater, 2, false, false);
+        FluidStack uuMatter = TreeGrowthSimulatorWithoutToolFakeRecipe.UU_MATTER_STACK;
+        if (uuMatter != null && fluid.getFluid() == uuMatter.getFluid()
+            && TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts != null)
+            return new TreeFluidRecipe(uuMatter, 2, false, true);
+        return null;
     }
 
-    private static TreeRecipe findSpecialRecipe(Fluid fluid) {
-        FluidStack temporalFluid = TreeGrowthSimulatorWithoutToolFakeRecipe.TEMPORAL_FLUID_STACK;
-        if (temporalFluid != null && fluid == temporalFluid.getFluid()) {
-            ItemStack specialSapling = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
-            EnumMap<Mode, ItemStack> outputs = specialSapling == null ? null : queryTimeTreeProduct(specialSapling);
-            if (outputs != null) return new TreeRecipe(temporalFluid, 2, outputs);
-        }
-        FluidStack deathWater = TreeGrowthSimulatorWithoutToolFakeRecipe.DEATH_WATER_STACK;
-        if (deathWater != null && fluid == deathWater.getFluid()) {
-            ItemStack taintedSapling = GTModHandler.getModItem(Mods.ForbiddenMagic.ID, "TaintSapling", 1, 0);
-            EnumMap<Mode, ItemStack> outputs = taintedSapling == null ? null : queryTreeProduct(taintedSapling);
-            if (outputs != null) return new TreeRecipe(deathWater, 2, outputs);
-        }
-        FluidStack unknownWater = TreeGrowthSimulatorWithoutToolFakeRecipe.UNKNOWN_WATER_STACK;
-        if (unknownWater != null && fluid == unknownWater.getFluid()) {
-            ItemStack barnardaCSapling = GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 0);
-            EnumMap<Mode, ItemStack> outputs = barnardaCSapling == null ? null : queryTreeProduct(barnardaCSapling);
-            if (outputs != null) return new TreeRecipe(unknownWater, 2, outputs);
-        }
-        FluidStack uuMatter = TreeGrowthSimulatorWithoutToolFakeRecipe.UU_MATTER_STACK;
-        if (uuMatter != null && fluid == uuMatter.getFluid()
-            && TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts != null) {
-            Random random = new Random();
-            EnumMap<Mode, ItemStack> randomOutputs = new EnumMap<>(Mode.class);
-            for (Mode mode : Mode.values()) {
-                ItemStack[] candidates = TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts[mode.ordinal()];
-                if (candidates != null && candidates.length > 0) {
-                    randomOutputs.put(mode, candidates[random.nextInt(candidates.length)]);
-                }
+    private static EnumMap<Mode, ItemStack> buildUuProducts() {
+        Random random = new Random();
+        EnumMap<Mode, ItemStack> randomOutputs = new EnumMap<>(Mode.class);
+        for (Mode mode : Mode.values()) {
+            ItemStack[] candidates = TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts[mode.ordinal()];
+            if (candidates != null && candidates.length > 0) {
+                randomOutputs.put(mode, candidates[random.nextInt(candidates.length)]);
             }
-            if (!randomOutputs.isEmpty()) return new TreeRecipe(uuMatter, 2, randomOutputs);
         }
-        return null;
+        return randomOutputs;
     }
 
     @Desugar
-    private record TreeRecipe(FluidStack fluidInput, int requiredBeaconTier, EnumMap<Mode, ItemStack> outputs) {}
+    private record TreeFluidRecipe(FluidStack fluid, int requiredBeaconTier, boolean timeFluid, boolean uuMatter) {}
 
     public static int getModeMultiplier(Mode mode) {
         return switch (mode) {
@@ -178,7 +186,8 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         EnumMap<Mode, ItemStack> productMap = queryTreeProduct(sapling);
         if (productMap == null) return null;
         EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(productMap);
-        ItemStack timewoodClock = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFMagicLogSpecial", 1, 0);
+        ItemStack timewoodClock = gregtech.api.util.GTModHandler
+            .getModItem(gregtech.api.enums.Mods.TwilightForest.ID, "tile.TFMagicLogSpecial", 1, 0);
         if (timewoodClock != null) adjustedMap.put(Mode.FRUIT, timewoodClock);
         return adjustedMap;
     }

@@ -22,7 +22,7 @@ import gregtech.api.util.GTUtility;
 
 public final class DirectedMobClonerFakeRecipe {
 
-    public static final int LIFE_ESSENCE_PER_PARALLEL = 100;
+    public static final int LIFE_ESSENCE_PER_PARALLEL = 80;
     public static final int FALLBACK_BLOOD_PER_PARALLEL = 100;
     public static final int FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL = 100;
     public static final FluidStack BLOOD_STACK = FluidRegistry.getFluidStack("blood", FALLBACK_BLOOD_PER_PARALLEL);

@@ -25,6 +25,5 @@ public final class DirectedMobClonerOutputInfoKey extends RecipeMetadataKey<Bool
             return;
         }
         recipeInfo.drawText(TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"));
-        recipeInfo.drawText(TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.2"));
     }
 }

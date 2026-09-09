@@ -12,10 +12,10 @@ import static goodgenerator.loader.Loaders.huiCircuit;
 import static gregtech.api.enums.ItemList.Automation_ChestBuffer_IV;
 import static gregtech.api.enums.ItemList.Machine_IV_Assembler;
 import static gregtech.api.enums.ItemList.TreeGrowSimulator;
-import static gregtech.api.enums.MetaTileEntityIDs.CropsNHCropManagerUEV;
 import static gregtech.api.enums.TCAspects.ELECTRUM;
 import static gregtech.api.enums.TCAspects.RADIO;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Industrial_AlloyBlastSmelter;
+import static kubatech.api.enums.ItemList.ExtremeEntityCrusher;
 import static kubatech.api.enums.ItemList.ExtremeIndustrialGreenhouse;
 import static thaumcraft.common.config.ConfigBlocks.blockMetalDevice;
 import static thaumcraft.common.config.ConfigBlocks.blockStoneDevice;
@@ -31,13 +31,16 @@ import com.Nxer.TwistSpaceTechnology.common.block.BlockEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.dreammaster.item.NHItemList;
+import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
+import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GTOreDictUnificator;
 import gtPlusPlus.core.material.MaterialsAlloy;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.aspects.AspectList;
@@ -134,17 +137,19 @@ public class TCRecipePool {
                     "ECO_SPHERE_SIMULATOR",
                     GTCMItemList.EcoSphereSimulator.get(1),
                     50,
-                    (new AspectList()).merge(Aspect.MECHANISM, 256)
-                        .merge(Aspect.TREE, 1024)
+                    (new AspectList()).merge((Aspect) ELECTRUM.mAspect, 8192)
+                        .merge(Aspect.MECHANISM, 8192)
+                        .merge(Aspect.TREE, 4096)
                         .merge(Aspect.HARVEST, 2048)
-                        .merge(Aspect.WATER, 1024)
+                        .merge(Aspect.WATER, 4096)
                         .merge(Aspect.LIFE, 2048)
-                        .merge(Aspect.PLANT, 1024)
+                        .merge(Aspect.PLANT, 4096)
                         .merge(Aspect.CROP, 2048)
-                        .merge(Aspect.FLESH, 1024)
+                        .merge(Aspect.FLESH, 4096)
                         .merge(Aspect.WEAPON, 2048)
-                        .merge((Aspect) ELECTRUM.mAspect, 8192),
-
+                        .merge(Aspect.ENERGY, 1024)
+                        .merge(Aspect.LIGHT, 1024)
+                        .merge(Aspect.AURA, 256),
                     new ItemStack(ConfigItems.itemEldritchObject, 1, 3),
                     new ItemStack[] {
                         GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Ichorium, 1L),
@@ -218,17 +223,17 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_1",
                     GTCMItemList.EcoSphereModeBeacon1.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(Aspect.PLANT, 512)
-                        .merge(Aspect.TREE, 512)
-                        .merge(Aspect.ORDER, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.PLANT, 128)
+                        .merge(Aspect.TREE, 128)
+                        .merge(Aspect.ORDER, 64),
                     ItemList.Circuit_Board_Bio.get(1),
                     new ItemStack[] {
                         TreeGrowSimulator.get(1),
                         new ItemStack(ConfigItems.itemAxeElemental, 1, 0),
                         new ItemStack(ModBlocks.pylon, 1, 1),
-                        getModItem("miscutils", "item.BasicAgrichemItem", 1, 8),
+                        GregtechItemList.Compost.get(1),
                         new ItemStack(ModItems.manaResource, 1, 5),
                         NHItemList.CircuitUV.get(1),
                     });
@@ -237,11 +242,11 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_2",
                     GTCMItemList.EcoSphereModeBeacon2.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(getAspect("permutatio", 512))
-                        .merge(getAspect("vitium", 512))
-                        .merge(Aspect.ENTROPY, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(getAspect("permutatio", 128))
+                        .merge(getAspect("vitium", 128))
+                        .merge(Aspect.ENTROPY, 64),
                     GTCMItemList.EcoSphereModeBeacon1.get(1),
                     new ItemStack[] {
                         getModItem("gendustry", "MutatronAdv", 1, 0),
@@ -256,11 +261,11 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_3",
                     GTCMItemList.EcoSphereModeBeacon3.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(Aspect.LIFE, 512)
-                        .merge(Aspect.SLIME, 512)
-                        .merge(Aspect.ORDER, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.LIFE, 128)
+                        .merge(Aspect.SLIME, 128)
+                        .merge(Aspect.ORDER, 64),
                     ItemList.Circuit_Board_Bio.get(1),
                     new ItemStack[] {
                         ItemList.FishingPort.get(1),
@@ -275,11 +280,11 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_4",
                     GTCMItemList.EcoSphereModeBeacon4.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(getAspect("luxuria", 512))
-                        .merge(getAspect("alienis", 512))
-                        .merge(Aspect.ENTROPY, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(getAspect("luxuria", 128))
+                        .merge(getAspect("alienis", 128))
+                        .merge(Aspect.ENTROPY, 64),
                     GTCMItemList.EcoSphereModeBeacon3.get(1),
                     new ItemStack[] {
                         getModItem(Mods.NewHorizonsCoreMod.ID, "TCetiESeaweedExtract", 1, 0),
@@ -294,11 +299,11 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_5",
                     GTCMItemList.EcoSphereModeBeacon5.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(Aspect.CROP, 512)
-                        .merge(Aspect.PLANT, 512)
-                        .merge(Aspect.ORDER, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.CROP, 128)
+                        .merge(Aspect.PLANT, 128)
+                        .merge(Aspect.ORDER, 64),
                     ItemList.Circuit_Board_Bio.get(1),
                     new ItemStack[] {
                         ExtremeIndustrialGreenhouse.get(1),
@@ -313,16 +318,16 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_6",
                     GTCMItemList.EcoSphereModeBeacon6.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(Aspect.POISON, 512)
-                        .merge(getAspect("invidia", 512))
-                        .merge(Aspect.ENTROPY, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.POISON, 128)
+                        .merge(getAspect("invidia", 128))
+                        .merge(Aspect.ENTROPY, 64),
                     GTCMItemList.EcoSphereModeBeacon5.get(1),
                     new ItemStack[] {
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, CropsNHCropManagerUEV.ID),
-                        getModItem(Mods.CropsNH.ID, "goldfish", 1, 0),
-                        getModItem(Mods.CropsNH.ID, "cropsnh.seedBed", 1, 9),
+                        CropsNHItemList.CropManager_UEV.get(1),
+                        CropsNHItemList.goldfish.get(1),
+                        CropsNHItemList.SeedBed_UEV.get(1),
                         new ItemStack(ModItems.obedienceStick, 1),
                         new ItemStack(ModBlocks.enchantedSoil, 1),
                         NHItemList.CircuitUEV.get(1)
@@ -332,14 +337,14 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_7",
                     GTCMItemList.EcoSphereModeBeacon7.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(Aspect.HUNGER, 512)
-                        .merge(Aspect.FLESH, 512)
-                        .merge(Aspect.ORDER, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(Aspect.HUNGER, 128)
+                        .merge(Aspect.FLESH, 128)
+                        .merge(Aspect.ORDER, 64),
                     ItemList.Circuit_Board_Bio.get(1),
                     new ItemStack[] {
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, 14201),
+                        ExtremeEntityCrusher.get(1),
                         newItemStackWithNBT(getModItem(Mods.BloodArsenal.ID, "compacted_mrs", 1, 0), "ritualName", "AW013Suffering"),
                         GTCMItemList.BloodyCasing2.get(1),
                         ItemList.NameRemover.get(1),
@@ -353,11 +358,11 @@ public class TCRecipePool {
                     "ECO_SPHERE_MODE_BEACON_8",
                     GTCMItemList.EcoSphereModeBeacon8.get(1),
                     40,
-                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 1024)
-                        .merge(Aspect.MECHANISM, 1024)
-                        .merge(getAspect("superbia", 512))
-                        .merge(getAspect("ira", 512))
-                        .merge(Aspect.ENTROPY, 256),
+                    new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
+                        .merge(Aspect.MECHANISM, 256)
+                        .merge(getAspect("superbia", 128))
+                        .merge(getAspect("ira", 128))
+                        .merge(Aspect.ENTROPY, 64),
                     GTCMItemList.EcoSphereModeBeacon7.get(1),
                     new ItemStack[] {
                         getModItem(Mods.Thaumcraft.ID, "ItemGolemPlacer", 1, 4),
@@ -374,53 +379,53 @@ public class TCRecipePool {
                     "ECO_SPHERE_SIMULATOR",
                     GTCMItemList.EcoSphereFluidEfficiencyUpgrade.get(1),
                     40,
-                    new AspectList().merge(getAspect("nebrisum", 1024))
-                        .merge(getAspect("perfodio", 1024))
-                        .merge(getAspect("vacuos", 512))
-                        .merge(getAspect("sano", 512))
-                        .merge(getAspect("aqua", 256)),
+                    new AspectList().merge(getAspect("nebrisum", 256))
+                        .merge(getAspect("perfodio", 256))
+                        .merge(getAspect("vacuos", 128))
+                        .merge(getAspect("sano", 128))
+                        .merge(getAspect("aqua", 64)),
                     getModItem(Mods.DraconicEvolution.ID, "draconiumEnergyCore", 1, 0),
                     new ItemStack[] {
                         getModItem(Mods.ThaumicHorizons.ID, "lensWater", 1, 0),
                         getModItem("ae2fc", "fluid_part", 1, 7),
                         getModItem(Mods.Thaumcraft.ID, "ItemGolemUpgrade", 1, 3),
-                        getModItem(Mods.KekzTech.ID, "kekztech_tfftstoragefield_block", 1, 8),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.03", 1, 6389),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32667) });
+                        ItemRefer.Fluid_Storage_Core_T7.get(1),
+                        GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.CallistoIce, 1),
+                        ItemList.FluidRegulator_UV.get(1) });
 
                 infusionRecipeEcoSphereOutputBoostUpgrade = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
                     GTCMItemList.EcoSphereOutputBoostUpgrade.get(1),
                     40,
-                    new AspectList().merge(getAspect("nebrisum", 1024))
-                        .merge(getAspect("perfodio", 1024))
-                        .merge(getAspect("meto", 512))
-                        .merge(getAspect("iter", 512))
-                        .merge(getAspect("terra", 256)),
+                    new AspectList().merge(getAspect("nebrisum", 256))
+                        .merge(getAspect("perfodio", 256))
+                        .merge(getAspect("meto", 128))
+                        .merge(getAspect("iter", 128))
+                        .merge(getAspect("terra", 64)),
                     getModItem(Mods.DraconicEvolution.ID, "draconiumEnergyCore", 1, 0),
                     new ItemStack[] {
                         getModItem("Automagy", "blockMirrorAlt", 1, 0),
                         getModItem(Mods.AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 60),
                         getModItem(Mods.Thaumcraft.ID, "ItemGolemUpgrade", 1, 1),
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, 129),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.03", 1, 6394),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32638) });
+                        ItemList.Quantum_Chest_EV.get(1),
+                        GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.InfinityCatalyst, 1),
+                        ItemList.Conveyor_Module_UHV.get(1) });
 
                 infusionRecipeEcoSphereSpeedUpgrade = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
                     GTCMItemList.EcoSphereSpeedUpgrade.get(1),
                     40,
-                    new AspectList().merge(getAspect("lucrum", 1024))
-                        .merge(getAspect("nebrisum", 1024))
-                        .merge(getAspect("tempus", 512))
-                        .merge(getAspect("vinculum", 512))
-                        .merge(getAspect("aer", 256)),
+                    new AspectList().merge(getAspect("lucrum", 256))
+                        .merge(getAspect("nebrisum", 256))
+                        .merge(getAspect("tempus", 128))
+                        .merge(getAspect("vinculum", 128))
+                        .merge(getAspect("aer", 64)),
                     getModItem(Mods.DraconicEvolution.ID, "draconiumEnergyCore", 1, 0),
                     new ItemStack[] {
                         getModItem(Mods.TwilightForest.ID, "tile.TFMagicLogSpecial", 1, 0),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32679),
+                        ItemList.Field_Generator_UEV.get(1),
                         getModItem(Mods.AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 56),
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, 11107),
+                        ItemList.AcceleratorUV.get(1),
                         getEnchantedCapacitor(),
                         getModItem(Mods.TaintedMagic.ID, "ItemFocusTime", 1, 0) });
 
@@ -428,37 +433,37 @@ public class TCRecipePool {
                     "ECO_SPHERE_SIMULATOR",
                     GTCMItemList.EcoSphereCapacityUpgrade.get(1),
                     40,
-                    new AspectList().merge(getAspect("lucrum", 1024))
-                        .merge(getAspect("nebrisum", 1024))
-                        .merge(getAspect("caelum", 512))
-                        .merge(getAspect("humanus", 512))
-                        .merge(getAspect("motus", 256)),
+                    new AspectList().merge(getAspect("lucrum", 256))
+                        .merge(getAspect("nebrisum", 256))
+                        .merge(getAspect("caelum", 128))
+                        .merge(getAspect("humanus", 128))
+                        .merge(getAspect("motus", 64)),
                     getModItem(Mods.DraconicEvolution.ID, "draconiumEnergyCore", 1, 0),
                     new ItemStack[] {
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, 5734),
                         getModItem(Mods.AppliedEnergistics2.ID, "item.ItemExtremeStorageCell.Quantum", 1, 0),
-                        getModItem(Mods.StorageDrawers.ID, "upgradeDowngrade", 1, 0),
+                        ItemList.Robot_Arm_UEV.get(1),
+                        GregtechItemList.Laser_Lens_Special.get(1),
                         getModItem("ae2fc", "super_stock_replenisher", 1, 0),
-                        new ItemStack(huiCircuit, 1, 4),
-                        getModItem("miscutils", "MU-metaitem.01", 1, 32105) });
+                        getModItem(Mods.StorageDrawers.ID, "upgradeDowngrade", 1, 0),
+                        ItemRefer.HiC_T5.get(1) });
 
                 infusionRecipeEcoSphereAutoPulverizeUpgrade = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
                     GTCMItemList.EcoSphereAutoPulverizeUpgrade.get(1),
                     40,
-                    new AspectList().merge(getAspect("instrumentum", 1024))
-                        .merge(getAspect("custom2", 1024))
-                        .merge(getAspect("strontio", 512))
-                        .merge(getAspect("mortuus", 512))
-                        .merge(getAspect("perditio", 256)),
+                    new AspectList().merge(getAspect("instrumentum", 256))
+                        .merge(getAspect("custom2", 256))
+                        .merge(getAspect("strontio", 128))
+                        .merge(getAspect("mortuus", 128))
+                        .merge(getAspect("perditio", 64)),
                     getModItem(Mods.DraconicEvolution.ID, "draconiumEnergyCore", 1, 1),
                     new ItemStack[] {
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, 19036),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32723),
+                        GTCMItemList.MegaMacerator.get(1),
+                        ItemList.Component_Grinder_Tungsten.get(1),
                         getModItem(Mods.Thaumcraft.ID, "ItemEldritchObject", 1, 0),
-                        getModItem(Mods.GregTech.ID, "gt.blockmachines", 1, 9309),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32659),
-                        getModItem(Mods.GregTech.ID, "gt.metaitem.01", 1, 32104) });
+                        ItemList.Automation_SuperBuffer_MAX.get(1),
+                        ItemList.Sensor_UEV.get(1),
+                        ItemList.T3Sawblade.get(1) });
 
                 infusionRecipeFontOfEcology = addInfusionCraftingRecipeAspectNotNull(
                     "FONT_OF_ECOLOGY",

@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
+import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.AQUATIC_MODE;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.cacheRecipeFluids;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.getItemStackString;
@@ -23,13 +24,12 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Mods;
-import gregtech.api.util.GTModHandler;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
 public class AquaticZoneSimulatorFakeRecipe {
 
     public static final int DISTILLED_WATER_PER_PARALLEL = 10000;
-    public static final int UNKNOWN_WATER_PER_PARALLEL = 10000;
+    public static final int UNKNOWN_WATER_PER_PARALLEL = 5000;
     public static final int CHANCE_SCALE = 100000;
     public static final FluidStack DISTILLED_WATER_STACK = FluidRegistry
         .getFluidStack("ic2distilledwater", DISTILLED_WATER_PER_PARALLEL);
@@ -79,7 +79,7 @@ public class AquaticZoneSimulatorFakeRecipe {
     }
 
     private static void addAquaticItem(String modId, String itemName, int meta) {
-        ItemStack stack = GTModHandler.getModItem(modId, itemName, 1, meta);
+        ItemStack stack = getModItem(modId, itemName, 1, meta);
         if (stack != null) AquaticItems.add(TST_ItemID.createNoNBT(stack));
     }
 
@@ -100,31 +100,31 @@ public class AquaticZoneSimulatorFakeRecipe {
         WatersChances.clear();
         Collections.addAll(
             WatersOutputs,
-            GTModHandler.getModItem(Mods.Minecraft.ID, "waterlily", 1, 0),
-            GTModHandler.getModItem(Mods.Minecraft.ID, "vine", 3, 0),
-            GTModHandler.getModItem(Mods.Minecraft.ID, "bone", 3, 0),
-            GTModHandler.getModItem(Mods.Minecraft.ID, "dye", 2, 0));
+            getModItem(Mods.Minecraft.ID, "waterlily", 1, 0),
+            getModItem(Mods.Minecraft.ID, "vine", 3, 0),
+            getModItem(Mods.Minecraft.ID, "bone", 3, 0),
+            getModItem(Mods.Minecraft.ID, "dye", 2, 0));
         if (Mods.BiomesOPlenty.isModLoaded()) {
             Collections.addAll(
                 WatersOutputs,
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 0),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 1),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 2),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 12),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 13),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 14),
-                GTModHandler.getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 15));
+                getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 0),
+                getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 1),
+                getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 2),
+                getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
+                getModItem(Mods.BiomesOPlenty.ID, "lilyBop", 1, 3),
+                getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 12),
+                getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 13),
+                getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 14),
+                getModItem(Mods.BiomesOPlenty.ID, "coral1", 2, 15));
         }
         if (Mods.PamsHarvestCraft.isModLoaded()) Collections.addAll(
             WatersOutputs,
-            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "cranberryItem", 1, 0),
-            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "riceItem", 1, 0),
-            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "seaweedItem", 5, 0),
-            GTModHandler.getModItem(Mods.PamsHarvestCraft.ID, "waterchestnutItem", 2, 0));
-        if (Mods.TwilightForest.isModLoaded()) Collections
-            .addAll(WatersOutputs, GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
+            getModItem(Mods.PamsHarvestCraft.ID, "cranberryItem", 1, 0),
+            getModItem(Mods.PamsHarvestCraft.ID, "riceItem", 1, 0),
+            getModItem(Mods.PamsHarvestCraft.ID, "seaweedItem", 5, 0),
+            getModItem(Mods.PamsHarvestCraft.ID, "waterchestnutItem", 2, 0));
+        if (Mods.TwilightForest.isModLoaded())
+            Collections.addAll(WatersOutputs, getModItem(Mods.TwilightForest.ID, "tile.HugeLilyPad", 1, 0));
         for (TST_ItemID aquaticItem : AquaticItems) {
             WatersOutputs.add(aquaticItem.getItemStackWithoutNBT(4));
         }
@@ -134,7 +134,7 @@ public class AquaticZoneSimulatorFakeRecipe {
         UnknownWaterChances.clear();
         if (!Mods.GalaxySpace.isModLoaded()) return;
         for (int meta = 0; meta < 6; meta++) {
-            ItemStack algae = GTModHandler.getModItem(Mods.GalaxySpace.ID, "tcetiedandelions", 3, meta);
+            ItemStack algae = getModItem(Mods.GalaxySpace.ID, "tcetiedandelions", 3, meta);
             if (algae != null) UnknownWaterOutputs.add(algae);
         }
         Collections.addAll(

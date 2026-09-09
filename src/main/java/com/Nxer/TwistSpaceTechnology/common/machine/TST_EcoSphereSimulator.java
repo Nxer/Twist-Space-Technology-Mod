@@ -103,6 +103,7 @@ import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
+import lombok.Setter;
 
 public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator>
     implements INEIPreviewModifier {
@@ -200,8 +201,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return ecoSphereInputInterface.getCloningWeapons();
     }
 
-    public int getAquaticTargetingMultiplier() {
-        return ecoSphereInputInterface.getAquaticTargetingMultiplier();
+    public int getAquaticFocusWeight() {
+        return ecoSphereInputInterface.getAquaticFocusWeight();
     }
 
     public boolean hasSpecialUpgrade(EcoSphereSpecialUpgrade upgrade) {
@@ -994,13 +995,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     // region Processing Logic
+    @Setter
     long parallelFromEUt = 1;
+    @Setter
     long currentParallel;
     int EuTier = 1;
-
-    public void setCurrentParallel(long parallel) {
-        currentParallel = parallel;
-    }
 
     @Override
     protected boolean isEnablePerfectOverclock() {
@@ -1088,6 +1087,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     return SimpleCheckRecipeResult.ofFailure("eco_sphere_simulator_waiting_for_mode_beacon");
                 }
                 machineMode = boundMode;
+
                 if (debugItemInstalled) {
                     EcoSphereModeResult debugResult = DebugMode
                         .process(TST_EcoSphereSimulator.this, machineMode, getModeBeaconTier());
@@ -1101,11 +1101,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     return debugResult.result();
                 }
                 DebugMode.reset(TST_EcoSphereSimulator.this);
-                if (isTierTwo()) {
-                    parallelFromEUt = EcoSphereModeSupport.getPerfectOverclockParallelFromEUt(EuTier);
-                } else {
-                    parallelFromEUt = EcoSphereModeSupport.getParallelFromEUt(EuTier);
-                }
+
+                parallelFromEUt = EcoSphereModeSupport.getParallelFromEUt(EuTier, isTierTwo());
                 EcoSphereModeResult modeResult = MACHINE_MODES[machineMode]
                     .process(TST_EcoSphereSimulator.this, EuTier);
                 if (!modeResult.result()

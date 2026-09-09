@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
@@ -23,7 +22,6 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 
-import gregtech.api.enums.GTValues;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -31,6 +29,11 @@ import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerMode implements IEcoSphereMode {
+
+    /** Looting X granted by the tier-2 cloning beacon. */
+    private static final int LOOTING_T2_LEVEL = 10;
+    /** Maximum looting level used anywhere in the yield bonus. */
+    private static final int LOOTING_CAP_LEVEL = 10;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -50,10 +53,17 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
     @Override
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
         int recipeId = machine.getCloningRecipeId();
-        FluidStack bloodInput = DirectedMobClonerFakeRecipe.BLOOD_STACK;
+
+        // Recipe #0 converts blood to life essence and runs on both structure tiers.
         if (recipeId == 0) {
+            FluidStack bloodInput = DirectedMobClonerFakeRecipe.BLOOD_STACK;
             if (bloodInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
-            return processFallback(machine, bloodInput, euTier);
+            return EcoSphereModeSupport.processModeRecipeWithTier(
+                machine,
+                bloodInput.getFluid(),
+                bloodInput.amount,
+                euTier,
+                parallelResult -> createFallbackResult(machine, parallelResult));
         }
 
         FluidStack lifeEssenceInput = DirectedMobClonerFakeRecipe.LIFE_ESSENCE_STACK;
@@ -62,26 +72,26 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
         DirectedMobClonerRecipeCache.CachedRecipe recipe = DirectedMobClonerRecipeCache.findRecipe(recipeId);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        boolean tierTwoBeacon = machine.hasDirectedMobClonerTierTwoBeacon();
-        // Boss recipes additionally require the upgraded cloning beacon.
-        if (recipe.boss() && !tierTwoBeacon) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
-        int baseTier = recipe.baseTier();
-        int overclocks = euTier - baseTier;
-        if (overclocks < 0)
-            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.insufficientPower(GTValues.V[baseTier]));
-        long parallelFromEUt = EcoSphereModeSupport.powerOfFour(overclocks);
         boolean pulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
         WeaponTags weaponTags = DirectedMobClonerWeaponHandler.process(machine.getCloningWeapons());
-        double allOutputsBonus = weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.ALL_OUTPUTS_CHANCE_BONUS);
-        double durationMultiplier = 100 / ((double) recipe.eecDuration() * recipe.eecDuration());
-        long baseEut = EcoSphereModeSupport.calculateEut(baseTier);
-        long eut = baseEut > Long.MAX_VALUE / parallelFromEUt ? Long.MAX_VALUE : baseEut * parallelFromEUt;
-        return EcoSphereModeSupport.processRecipeWithParallelLimit(
+        // The Avaritia Cosmos sword counts as the tier-2 cloning beacon.
+        boolean tierTwo = machine.hasDirectedMobClonerTierTwoBeacon()
+            || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;
+        // Boss recipes additionally require the tier-2 cloning beacon.
+        if (recipe.boss() && !tierTwo) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+
+        // Looting X semantics: the tier-2 beacon and the Cosmos sword (inherent Looting X) both grant it; any source
+        // caps at Looting X.
+        double lootingBonus = weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.ALL_OUTPUTS_CHANCE_BONUS);
+        double tierTwoBonus = tierTwo ? LOOTING_T2_LEVEL * 5_000d : 0;
+        double allOutputsBonus = Math.min(LOOTING_CAP_LEVEL * 5_000d, Math.max(lootingBonus, tierTwoBonus));
+        // 36x EEC at 20 HP, about 4x at 300 HP each run in 5s.
+        double durationMultiplier = 36 * 15125d / 1024d / ((double) recipe.eecDuration() * recipe.eecDuration());
+        return EcoSphereModeSupport.processModeRecipeWithTier(
             machine,
             lifeEssenceInput.getFluid(),
             lifeEssenceInput.amount,
             euTier,
-            parallelFromEUt,
             parallelResult -> {
                 List<ItemStack> outputs = new ArrayList<>();
                 for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
@@ -91,7 +101,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                     for (DirectedMobClonerRecipeCache.CachedOutput output : outputTable) {
                         double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
                             * (output.chance() + allOutputsBonus)
-                            / 10_000
+                            / 10_000d
                             * durationMultiplier
                             * output.durabilityExpectation()
                             * output.probabilityMultiplier();
@@ -102,7 +112,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                 for (DirectedMobClonerRecipeCache.CachedOutput output : recipe.activatedOutputs(weaponTags)) {
                     double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
                         * output.chance()
-                        / 10_000
+                        / 10_000d
                         * durationMultiplier
                         * output.durabilityExpectation();
                     long amount;
@@ -115,25 +125,14 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                     }
                     EcoSphereModeSupport.addSplitStack(outputs, output.stack(), amount);
                 }
-                return new EcoSphereModeResult(
+                return EcoSphereModeResult.standard(
                     // #tr GT5U.gui.text.recipe_result.processing_mob_drops
                     // # Processing mob drops
                     // #zh_CN 生物掉落处理中
                     SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
                     outputs.toArray(new ItemStack[0]),
-                    eut,
-                    MODE_RECIPE_DURATION);
+                    parallelResult.tier());
             });
-    }
-
-    private static EcoSphereModeResult processFallback(TST_EcoSphereSimulator machine, FluidStack bloodInput,
-        int euTier) {
-        return EcoSphereModeSupport.processModeRecipeWithTier(
-            machine,
-            bloodInput.getFluid(),
-            bloodInput.amount,
-            euTier,
-            parallelResult -> createFallbackResult(machine, parallelResult));
     }
 
     private static EcoSphereModeResult createFallbackResult(TST_EcoSphereSimulator machine,

@@ -21,8 +21,18 @@ public final class EcoSphereModeSupport {
     private EcoSphereModeSupport() {}
 
     private static int calculateTierOneParallel(int tier) {
+        // Special tier-1 parallel curve; perfect overclock overtakes it around UEV.
         return (int) Math
             .floor(2 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
+    }
+
+    private static long calculateTierTwoParallel(int tier) {
+        // Tier 1 (LV) is the one-parallel baseline: parallel = 4^(tier - 1).
+        int exponent = tier - 1;
+        // 4^n equals 2^(2n); cap large exponents at 2^62 to avoid overflowing a signed long.
+        if (exponent <= 0) return 1;
+        if (exponent >= 31) return 1L << 62;
+        return 1L << (exponent * 2);
     }
 
     public static long calculateEut(int tier) {
@@ -30,12 +40,11 @@ public final class EcoSphereModeSupport {
         return (long) (2d * Math.pow(4, tier + 1) * 15 / 16);
     }
 
-    public static long getParallelFromEUt(int tier) {
-        return calculateTierOneParallel(tier);
-    }
-
-    public static long getPerfectOverclockParallelFromEUt(int tier) {
-        return powerOfFour(tier - 1);
+    public static long getParallelFromEUt(int euTier, boolean structureTier) {
+        // LV is the one-parallel baseline for both structure tiers.
+        if (euTier <= 1) return 1;
+        if (structureTier) return calculateTierTwoParallel(euTier);
+        return calculateTierOneParallel(euTier);
     }
 
     public static CheckRecipeResult missingFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {
@@ -47,12 +56,7 @@ public final class EcoSphereModeSupport {
 
     public static EcoSphereModeResult processModeRecipeWithTier(TST_EcoSphereSimulator machine, Fluid requiredFluid,
         long baseFluidPerParallel, int powerTier, Function<ParallelResult, EcoSphereModeResult> processor) {
-        long parallelFromEUt;
-        if (machine.isTierTwo()) {
-            parallelFromEUt = getPerfectOverclockParallelFromEUt(powerTier);
-        } else {
-            parallelFromEUt = getParallelFromEUt(powerTier);
-        }
+        long parallelFromEUt = getParallelFromEUt(powerTier, machine.isTierTwo());
         return processRecipeWithParallelLimit(
             machine,
             requiredFluid,
@@ -91,13 +95,6 @@ public final class EcoSphereModeSupport {
         }
         if (!drainFluid(machine, requiredFluid, fluidCost)) return 0;
         return parallel;
-    }
-
-    public static long powerOfFour(int exponent) {
-        // 4^n equals 2^(2n); cap large exponents at 2^62 to avoid overflowing a signed long.
-        if (exponent <= 0) return 1;
-        if (exponent >= 31) return 1L << 62;
-        return 1L << (exponent * 2);
     }
 
     public static void addSplitStack(List<ItemStack> outputs, ItemStack template, long amount) {

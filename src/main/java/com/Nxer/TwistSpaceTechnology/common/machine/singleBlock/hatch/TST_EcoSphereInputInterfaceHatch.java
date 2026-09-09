@@ -7,9 +7,10 @@ import static gregtech.api.util.GTUtility.dropItemToBlockPos;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,8 +23,12 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
+import com.gtnewhorizon.cropsnh.api.ICropCard;
+import com.gtnewhorizon.cropsnh.api.ISeedData;
+import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
+import com.gtnewhorizon.cropsnh.tileentity.TileEntityCropSticks;
+import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
 import com.gtnewhorizons.modularui.api.drawable.ItemDrawable;
 import com.gtnewhorizons.modularui.api.drawable.shapes.Rectangle;
@@ -49,29 +54,31 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
+import lombok.Getter;
 
 @SkipGenerateDescription
 public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements IAddUIWidgets {
 
     private static final int TREE_INPUT_SLOT = 0;
     private static final int AQUATIC_INPUT_START = 1;
-    private static final int AQUATIC_MAX_SLOTS = 16;
+    private static final int AQUATIC_MAX_SLOTS = 4;
     private static final int GREENHOUSE_INPUT_START = AQUATIC_INPUT_START + AQUATIC_MAX_SLOTS;
-    private static final int GREENHOUSE_MAX_SLOTS = 16;
+    private static final int GREENHOUSE_MAX_SLOTS = 4;
     private static final int CLONING_WEAPON_START = GREENHOUSE_INPUT_START + GREENHOUSE_MAX_SLOTS;
     private static final int CLONING_MAX_WEAPON_SLOTS = 4;
     private static final int MAX_INPUT_SLOTS = CLONING_WEAPON_START + CLONING_MAX_WEAPON_SLOTS;
-    private static final int AQUATIC_BASE_SLOTS = 1;
-    private static final int GREENHOUSE_BASE_SLOTS = 1;
+    // Capacity upgrades still add one slot per upgrade; they additionally multiply the per-slot stack limit by 4.
+    // Cloning keeps 1 stack per slot regardless of upgrades.
     private static final InputSlotLayout EMPTY_INPUT_LAYOUT = new InputSlotLayout(0, 0, 0, 0);
-    private static final InputSlotLayout[] MODE_INPUT_LAYOUTS = { new InputSlotLayout(TREE_INPUT_SLOT, 1, 1, 0),
-        new InputSlotLayout(AQUATIC_INPUT_START, AQUATIC_BASE_SLOTS, AQUATIC_MAX_SLOTS, 5),
-        new InputSlotLayout(GREENHOUSE_INPUT_START, GREENHOUSE_BASE_SLOTS, GREENHOUSE_MAX_SLOTS, 5),
+    private static final InputSlotLayout[] MODE_INPUT_LAYOUTS = { new InputSlotLayout(TREE_INPUT_SLOT, 1, 4, 1),
+        new InputSlotLayout(AQUATIC_INPUT_START, 1, AQUATIC_MAX_SLOTS, 1),
+        new InputSlotLayout(GREENHOUSE_INPUT_START, 1, GREENHOUSE_MAX_SLOTS, 1),
         new InputSlotLayout(CLONING_WEAPON_START, 0, CLONING_MAX_WEAPON_SLOTS, 1) };
 
     private final boolean[] selectedTreeOutputs = new boolean[Mode.values().length];
     private int machineMode = -1;
     private int capacityUpgrades = 0;
+    @Getter
     private int cloningRecipeId = 0;
 
     public TST_EcoSphereInputInterfaceHatch(int id, String name, String nameRegional, int tier) {
@@ -143,40 +150,136 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     public void setMachineState(int mode, int installedCapacityUpgrades) {
         int newCapacityUpgrades = Math.max(0, Math.min(4, installedCapacityUpgrades));
-        if (mode != machineMode || newCapacityUpgrades != capacityUpgrades) {
-            // Preserve inactive modes, but eject inaccessible inputs when their mode is selected again.
+        if (mode == machineMode && newCapacityUpgrades < capacityUpgrades) {
+            // Eject excess stacks when the per-slot stack limit shrinks (capacity upgrades removed).
+            // Switching the mode beacon must NOT eject any stored items; they stay in their slots.
             int firstSlot = getFirstInputSlot(mode);
             int activeSlots = getActiveInputSlots(mode, newCapacityUpgrades);
-            dropInventoryRange(firstSlot + activeSlots, firstSlot + getMaxInputSlots(mode));
+            int slotLimit = getSlotStackLimit(mode, newCapacityUpgrades);
+            for (int slot = firstSlot; slot < firstSlot + activeSlots; slot++) {
+                ItemStack stack = mInventory[slot];
+                if (stack == null || stack.stackSize <= slotLimit) continue;
+                ItemStack excess = stack.copy();
+                excess.stackSize = stack.stackSize - slotLimit;
+                stack.stackSize = slotLimit;
+                IGregTechTileEntity base = getBaseMetaTileEntity();
+                if (base != null && base.isServerSide() && base.getWorld() != null) {
+                    dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), excess);
+                }
+            }
         }
         machineMode = mode;
         capacityUpgrades = newCapacityUpgrades;
+    }
+
+    /**
+     * Maximum stack size per slot for the given mode and capacity upgrade count.
+     * Tree/aquatic/greenhouse: 1 base, x4 per capacity upgrade, capped at 64. Cloning stays at 1.
+     */
+    public static int getSlotStackLimit(int mode, int capacityUpgrades) {
+        if (mode == 3) return 1;
+        int limit = 1;
+        for (int i = 0; i < capacityUpgrades; i++) {
+            limit *= 4;
+        }
+        return Math.min(64, limit);
     }
 
     public ItemStack[] getModeInputs() {
         int slots = getActiveInputSlots();
         int firstSlot = getFirstInputSlot();
         List<ItemStack> inputs = new ArrayList<>(slots);
-        Set<TST_ItemID> greenhouseInputs = machineMode == 2 ? new HashSet<>() : null;
+        // For greenhouse mode: deduplicate by crop IDENTITY and keep only the highest-rated seed stack.
+        // key -> the current best stack; score map is kept separately because ItemStack equality is NBT-aware.
+        Map<String, ItemStack> bestStacks = machineMode == 2 ? new LinkedHashMap<>() : null;
+        Map<String, Double> bestScores = machineMode == 2 ? new HashMap<>() : null;
         ItemStack aquaticTarget = null;
         for (int i = firstSlot; i < firstSlot + slots; i++) {
             ItemStack stack = mInventory[i];
             if (stack == null || stack.stackSize <= 0) continue;
             if (machineMode == 1) {
+                // Only one target kind may be focused; skip slots holding different items.
                 if (aquaticTarget != null && !aquaticTarget.isItemEqual(stack)) continue;
                 aquaticTarget = stack;
             }
-            if (greenhouseInputs != null) {
-                if (!greenhouseInputs.add(TST_ItemID.create(stack))) continue;
-                ItemStack seed = stack.copy();
-                seed.stackSize = 1;
-                inputs.add(seed);
+            if (bestStacks != null) {
+                // A hybrid seed and its alternate seed of the same crop share one identity; keep the
+                // best-scoring stack so identical slots never stack their output twice.
+                String key = getGreenhouseSeedIdentity(stack);
+                double score = getGreenhouseSeedOutputScore(stack);
+                ItemStack existing = bestStacks.get(key);
+                if (existing == null || score > bestScores.getOrDefault(key, Double.NEGATIVE_INFINITY)) {
+                    bestStacks.put(key, stack.copy());
+                    bestScores.put(key, score);
+                }
             } else {
                 inputs.add(stack);
             }
         }
+        if (bestStacks != null) inputs.addAll(bestStacks.values());
         return inputs.toArray(new ItemStack[0]);
     }
+
+    /**
+     * Resolves the greenhouse deduplication identity of a seed stack.
+     * Hybrid seeds (ItemGenericSeed with crop nbt) and alternate seeds (raw crop items) that map to the
+     * same CropsNH crop share the same "cropsnh:{id}" key, so they cannot be stacked twice. Stacks that
+     * have no CropsNH identity (e.g. vanilla plantable crops) fall back to their raw item id.
+     */
+    private static String getGreenhouseSeedIdentity(ItemStack stack) {
+        ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(stack);
+        if (seedData != null) return "cropsnh:" + seedData.getCrop()
+            .getId();
+        ICropCard crop = CropRegistry.instance.fromAlternateSeed(stack);
+        if (crop != null) return "cropsnh:" + crop.getId();
+        return "minecraft:" + stack.getItem()
+            .getUnlocalizedName();
+    }
+
+    /**
+     * Approximates the expected output per cycle of a greenhouse seed stack, mirroring the CropsNH
+     * farm chain: harvest = (1 + avgDropIncrease) * chance * avgDropRounds, progress = per-tick growth
+     * fraction * CYCLE_TICK_RATE_SCALAR. Alternate seeds (no stats) are scored with the default 1/1/1
+     * chain times the ALTERNATE_SEED_EFFICIENCY penalty, so a bred hybrid seed always outranks feeding
+     * the raw crop item. Only the ranking matters here, absolute values are irrelevant.
+     */
+    private static double getGreenhouseSeedOutputScore(ItemStack stack) {
+        ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(stack);
+        if (seedData != null) {
+            ICropCard crop = seedData.getCrop();
+            int gain = seedData.getStats()
+                .getGain();
+            double avgDropRounds = TileEntityCropSticks.getAvgDropRounds(crop, gain);
+            double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(gain);
+            int growthRate = TileEntityCropSticks.getGrowthRate(
+                TileEntityCropSticks.MAX_NUTRIENT_SCORE,
+                crop.getTier(),
+                seedData.getStats()
+                    .getGrowth());
+            if (growthRate <= 0) return -1;
+            int growthTicks = crop.getGrowthDuration() / growthRate;
+            if (crop.getGrowthDuration() % growthRate != 0) growthTicks++;
+            double progress = (1.0d / growthTicks) * (100.0d / 256.0d);
+            return avgDropIncrease * avgDropRounds * progress;
+        }
+        ICropCard crop = CropRegistry.instance.fromAlternateSeed(stack);
+        if (crop != null) {
+            // Score as default 1/1/1 stats through the full chain times the alternate-seed penalty.
+            int growthRate = TileEntityCropSticks
+                .getGrowthRate(TileEntityCropSticks.MAX_NUTRIENT_SCORE, crop.getTier(), 1);
+            if (growthRate <= 0) return -1;
+            int growthTicks = crop.getGrowthDuration() / growthRate;
+            if (crop.getGrowthDuration() % growthRate != 0) growthTicks++;
+            double progress = (1.0d / growthTicks) * (100.0d / 256.0d);
+            double avgDropRounds = TileEntityCropSticks.getAvgDropRounds(crop, 1);
+            double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(1);
+            return avgDropIncrease * avgDropRounds * progress * ALTERNATE_SEED_EFFICIENCY_SCORE;
+        }
+        // Non-CropsNH stacks (vanilla plantable) can't be ranked; keep them as-is.
+        return 0;
+    }
+
+    private static final double ALTERNATE_SEED_EFFICIENCY_SCORE = 0.25d;
 
     public EnumSet<Mode> getSelectedTreeOutputs() {
         EnumSet<Mode> selected = EnumSet.noneOf(Mode.class);
@@ -186,22 +289,18 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         return selected;
     }
 
-    public int getCloningRecipeId() {
-        return cloningRecipeId;
-    }
-
     public ItemStack[] getCloningWeapons() {
         return getModeInputs();
     }
 
-    public int getAquaticTargetingMultiplier() {
+    public int getAquaticFocusWeight() {
         ItemStack[] targets = getModeInputs();
         if (targets.length == 0) return 0;
-        boolean rareTarget = GTCMItemList.OffSpring.equal(targets[0]) || GTCMItemList.FountOfEcology.equal(targets[0]);
-        if (rareTarget) return targets.length * 41;
         int itemCount = 0;
         for (ItemStack target : targets) itemCount += target.stackSize;
-        return itemCount;
+        // Only one target kind is allowed (same-kind slot check), so the first target defines the type.
+        // Offspring (the only rare target) weighs x41 per item, other targets x1 per item.
+        return GTCMItemList.OffSpring.equal(targets[0]) ? itemCount * 41 : itemCount;
     }
 
     private int getActiveInputSlots() {
@@ -226,10 +325,6 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         return getInputSlotLayout(mode).firstSlot();
     }
 
-    private static int getMaxInputSlots(int mode) {
-        return getInputSlotLayout(mode).maximumSlots();
-    }
-
     private static InputSlotLayout getInputSlotLayout(int mode) {
         if (mode < 0 || mode >= MODE_INPUT_LAYOUTS.length) return EMPTY_INPUT_LAYOUT;
         return MODE_INPUT_LAYOUTS[mode];
@@ -237,7 +332,9 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private boolean isInputValid(int index, ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
+        // Offspring only stacks by 1 (item-owned limit).
         if (machineMode != 1) return true;
+        // Only one target kind may be focused: reject items differing from already placed targets.
         int firstSlot = getFirstInputSlot();
         for (int i = firstSlot; i < firstSlot + getActiveInputSlots(); i++) {
             if (i == index || mInventory[i] == null) continue;
@@ -273,7 +370,6 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         builder.widget(new FakeSyncWidget.IntegerSyncer(() -> machineMode, value -> machineMode = value))
             .widget(new FakeSyncWidget.IntegerSyncer(() -> capacityUpgrades, value -> capacityUpgrades = value))
             .widget(createWaitingText())
-            .widget(createInputSlot(TREE_INPUT_SLOT, 47, 35, 0))
             .widget(
                 new ButtonWidget().setOnClick(
                     (clickData, widget) -> { if (clickData.mouseButton == 0) dropInventoryRange(0, MAX_INPUT_SLOTS); })
@@ -286,6 +382,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
                     .setPos(7, 63)
                     .setSize(16, 16));
 
+        addTreeInputSlots(builder);
         addTreeOutputButtons(builder);
         addAquaticSlots(builder);
         addGreenhouseSlots(builder);
@@ -357,14 +454,24 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     }
 
     private void addAquaticSlots(ModularWindow.Builder builder) {
+        // 2x2 grid centered in the window (176px wide).
         for (int index = 0; index < AQUATIC_MAX_SLOTS; index++) {
-            builder.widget(createInputSlot(AQUATIC_INPUT_START + index, 52 + index % 4 * 18, 8 + index / 4 * 18, 1));
+            builder.widget(createInputSlot(AQUATIC_INPUT_START + index, 70 + index % 2 * 18, 26 + index / 2 * 18, 1));
         }
     }
 
     private void addGreenhouseSlots(ModularWindow.Builder builder) {
+        // 2x2 grid centered in the window.
         for (int index = 0; index < GREENHOUSE_MAX_SLOTS; index++) {
-            builder.widget(createInputSlot(GREENHOUSE_INPUT_START + index, 52 + index % 4 * 18, 8 + index / 4 * 18, 2));
+            builder
+                .widget(createInputSlot(GREENHOUSE_INPUT_START + index, 70 + index % 2 * 18, 26 + index / 2 * 18, 2));
+        }
+    }
+
+    private void addTreeInputSlots(ModularWindow.Builder builder) {
+        // 2x2 grid centered in the area left of the tree output buttons.
+        for (int index = 0; index < 4; index++) {
+            builder.widget(createInputSlot(TREE_INPUT_SLOT + index, 34 + index % 2 * 18, 26 + index / 2 * 18, 0));
         }
     }
 
@@ -373,7 +480,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
             @Override
             public int getSlotStackLimit() {
-                return requiredMode == 3 ? 1 : 64;
+                return TST_EcoSphereInputInterfaceHatch.getSlotStackLimit(requiredMode, capacityUpgrades);
             }
 
             @Override

@@ -23,8 +23,12 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFake
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class ArtificialGreenHouseMode implements IEcoSphereMode {
+
+    // Applied after crop-specific growth and drop calculations, before shared upgrade and random output scaling.
+    private static final double OUTPUT_SCALE = 40.0d;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -55,11 +59,17 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
         Function<EcoSphereModeSupport.ParallelResult, EcoSphereModeResult> processor = parallelResult -> {
             List<ItemStack> outputs = new ArrayList<>();
             for (CropsNHFarm.CropCache crop : crops) {
-                Collections.addAll(outputs, crop.getOutputStacks(parallelResult.parallel()));
+                // Cached yields already include environmental growth progress and the non-hybrid efficiency penalty.
+                Collections.addAll(
+                    outputs,
+                    crop.getOutputStacks(parallelResult.parallel() * (double) crop.seedCount() * OUTPUT_SCALE));
             }
             if (outputs.isEmpty()) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
             return EcoSphereModeResult.standard(
-                CheckRecipeResultRegistry.SUCCESSFUL,
+                // #tr GT5U.gui.text.recipe_result.tst_ess_growing_crops
+                // # {\GREEN}Growing Crops
+                // #zh_CN {\GREEN}作物生长中
+                SimpleCheckRecipeResult.ofSuccess("tst_ess_growing_crops"),
                 outputs.toArray(new ItemStack[0]),
                 parallelResult.tier());
         };
@@ -70,8 +80,10 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
     private static List<CropsNHFarm.CropCache> findCrops(TST_EcoSphereSimulator machine) {
         List<CropsNHFarm.CropCache> crops = new ArrayList<>();
         for (ItemStack input : machine.getModeInputs()) {
-            CropsNHFarm.CropCache crop = machine.cropsNHFarm.getCropCache(input);
-            if (crop != null) crops.add(crop);
+            ItemStack seed = input.copy();
+            seed.stackSize = 1;
+            CropsNHFarm.CropCache crop = machine.cropsNHFarm.getCropCache(seed);
+            if (crop != null) crops.add(crop.withSeedCount(input.stackSize));
         }
         return crops;
     }

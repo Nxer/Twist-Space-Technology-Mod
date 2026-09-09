@@ -148,15 +148,10 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
             return Arrays.asList(
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"),
                 // #tr ESS.TreeGrowthSimulator.nei.info.1
-                // # Output is further boosted
-                // #zh_CN 产量随电压等级进一步提高
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.2")
-            // #tr ESS.TreeGrowthSimulator.nei.info.2
-            // # by machine energy tier
-            // #zh_CN {\SPACE}
-            );
+                // # Boosted by higher voltage
+                // #zh_CN 产量随电压提高
+                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"));
         }
     }
 }

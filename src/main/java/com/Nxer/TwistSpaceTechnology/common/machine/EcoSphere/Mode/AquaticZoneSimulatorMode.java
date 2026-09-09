@@ -69,8 +69,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             } else {
                 outputs = processStandardOutputs(parallelResult, targeting);
             }
-            ItemStack focusStack = null;
-            if (targeting != null) focusStack = targeting.stack();
+            ItemStack focusStack = targeting == null ? null : targeting.stack();
             return EcoSphereModeResult.standard(
                 getRunningResult(recipe.recipeType(), focusStack),
                 outputs.toArray(new ItemStack[0]),
@@ -180,7 +179,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         long maximumInputPower = (long) Integer.MAX_VALUE * Integer.MAX_VALUE;
         int maximumInputTier = (int) Math.floor(TstUtils.calculateVoltageTier(maximumInputPower));
         double maxTierChance = Math.log(maxVoltageTier + 2) / Math.log(2);
-        double probability = 0.00025 * baseChance * tierChance / maxTierChance;
+        double probability = 0.0002 * baseChance * tierChance / maxTierChance;
 
         double voltageProgress = Math
             .max(0, Math.min(1, (double) (voltageTier - maxVoltageTier) / (maximumInputTier - maxVoltageTier)));
@@ -211,9 +210,9 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         for (ItemStack input : machine.getModeInputs()) {
             if (input == null || input.getItem() == null) continue;
             if (availableOutputs.containsKey(getItemStackString(input))) {
-                int multiplier = machine.getAquaticTargetingMultiplier();
-                if (multiplier <= 0) return null;
-                return new TargetingSelection(input, multiplier);
+                int weight = machine.getAquaticFocusWeight();
+                if (weight <= 0) return null;
+                return new TargetingSelection(input, weight);
             }
         }
         return null;

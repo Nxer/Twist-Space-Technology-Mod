@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import fox.spiteful.avaritia.items.LudicrousItems;
 import gregtech.api.enums.Mods;
 import gregtech.api.util.GTModHandler;
 
@@ -47,6 +48,9 @@ public final class DirectedMobClonerWeaponHandler {
                 Math::max);
             if (item == CachedReferences.AVARITIA_SKULL_SWORD) {
                 functions.put(FunctionTag.AVARITIA_SKULL_CHANCE, 10_000d);
+            }
+            if (item == CachedReferences.AVARITIA_COSMOS_SWORD) {
+                functions.put(FunctionTag.HAS_COSMOS, 1d);
             }
             if (matches(weapon, CachedReferences.WITCHING_GADGETS_END_DEVICE)) {
                 functions.put(FunctionTag.END_DROP_CHANCE, 10_000d);
@@ -115,6 +119,7 @@ public final class DirectedMobClonerWeaponHandler {
         TINKERS_BEHEADING_LEVEL,
         DRACONIC_SOUL_MULTIPLIER,
         AVARITIA_SKULL_CHANCE,
+        HAS_COSMOS,
         END_DROP_CHANCE,
         NETHER_DROP_CHANCE
     }
@@ -172,21 +177,16 @@ public final class DirectedMobClonerWeaponHandler {
     private static final class CachedReferences {
 
         // spotless:off
-        private static final Item AVARITIA_SKULL_SWORD = findModItem(Mods.Avaritia, "Skull_Sword");
+        private static final Item AVARITIA_SKULL_SWORD = LudicrousItems.skull_sword;
+        private static final Item AVARITIA_COSMOS_SWORD = LudicrousItems.infinity_sword;
         private static final Item WYVERN_SWORD = findModItem(Mods.DraconicEvolution, "wyvernSword");
         private static final Item WYVERN_BOW = findModItem(Mods.DraconicEvolution, "wyvernBow");
         private static final Item DRACONIC_SWORD = findModItem(Mods.DraconicEvolution, "draconicSword");
         private static final Item DRACONIC_BOW = findModItem(Mods.DraconicEvolution, "draconicBow");
         private static final Item DRACONIC_STAFF = findModItem(Mods.DraconicEvolution, "draconicStaffOfPower");
         private static final int DRACONIC_REAPER = getOptionalEnchantmentId("com.brandon3055.draconicevolution.common.handler.ConfigHandler", "reaperEnchantID");
-        private static final ItemStack WITCHING_GADGETS_END_DEVICE = findModStack(
-            Mods.WitchingGadgets,
-            "WG_MetalDevice",
-            12);
-        private static final ItemStack WITCHING_GADGETS_NETHER_DEVICE = findModStack(
-            Mods.WitchingGadgets,
-            "WG_MetalDevice",
-            7);
+        private static final ItemStack WITCHING_GADGETS_END_DEVICE = findModStack(Mods.WitchingGadgets, "WG_MetalDevice", 12);
+        private static final ItemStack WITCHING_GADGETS_NETHER_DEVICE = findModStack(Mods.WitchingGadgets, "WG_MetalDevice", 7);
         // spotless:on
         private CachedReferences() {}
     }

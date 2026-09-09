@@ -23,11 +23,13 @@ import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
+import com.gtnewhorizons.modularui.common.widget.ButtonWidget;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
 import gregtech.GTMod;
+import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
@@ -116,6 +118,10 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
         // Ignore the temporary unbound state so replacing a beacon does not eject every upgrade.
         if (machineMode >= 0 && mode >= 0 && mode != machineMode) dropUpgradesInvalidForMode(mode);
         if (machineMode == mode && structureTier == newStructureTier) return;
+        // Eject upgrades that no longer fit when the structure tier shrinks (4 slots -> 1 slot).
+        if (mode >= 0 && machineMode == mode && newStructureTier < structureTier) {
+            dropInventoryRange(newStructureTier >= 2 ? 4 : 1, MAX_UPGRADE_SLOTS);
+        }
         machineMode = mode;
         structureTier = newStructureTier;
         IGregTechTileEntity base = getBaseMetaTileEntity();
@@ -189,6 +195,21 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
         structureTier = Math.max(1, savedStructureTier);
     }
 
+    private void dropInventoryRange(int firstSlot, int endSlot) {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base == null || !base.isServerSide() || base.getWorld() == null) return;
+
+        boolean changed = false;
+        for (int slot = Math.max(0, firstSlot); slot < Math.min(endSlot, mInventory.length); slot++) {
+            ItemStack stack = mInventory[slot];
+            if (stack == null || stack.stackSize <= 0) continue;
+            dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), stack);
+            mInventory[slot] = null;
+            changed = true;
+        }
+        if (changed) base.markDirty();
+    }
+
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         SlotWidget[] upgradeSlots = new SlotWidget[MAX_UPGRADE_SLOTS];
@@ -204,6 +225,20 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
                     upgradeSlots[index].setPosSilent(getUpgradeSlotPosition(index));
                 }
             }))
+            .widget(
+                new ButtonWidget()
+                    .setOnClick(
+                        (clickData, widget) -> {
+                            if (clickData.mouseButton == 0) dropInventoryRange(0, MAX_UPGRADE_SLOTS);
+                        })
+                    .setPlayClickSound(true)
+                    .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_EXPORT)
+                    // #tr EcoSphereUpgradeInterface.gui.dropAllItems
+                    // # Drop all stored items
+                    // #zh_CN 清空所有物品
+                    .addTooltip(StatCollector.translateToLocal("EcoSphereUpgradeInterface.gui.dropAllItems"))
+                    .setPos(7, 63)
+                    .setSize(16, 16))
             .widget(
                 TextWidget
                     .dynamicString(

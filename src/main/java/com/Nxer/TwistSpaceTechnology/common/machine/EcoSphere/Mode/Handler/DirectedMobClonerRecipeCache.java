@@ -41,9 +41,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public final class DirectedMobClonerRecipeCache {
 
     private static final int EEC_MIN_DURATION = 55;
-    private static final int NORMAL_RECIPE_BASE_TIER = 4;
-    private static final int BOSS_RECIPE_BASE_TIER = 6;
     private static final double EEC_DIAMOND_SPIKES_DAMAGE = 9d;
+    private static final double PLAYER_ONLY_CHANCE_MULTIPLIER = 0.1d;
     private static final WeaponTags NO_WEAPON_TAGS = DirectedMobClonerWeaponHandler.process(new ItemStack[0]);
     private static final Map<String, PendingRecipe> PENDING_RECIPES = new LinkedHashMap<>();
     private static volatile Map<Integer, CachedRecipe> recipesById = Collections.emptyMap();
@@ -86,9 +85,7 @@ public final class DirectedMobClonerRecipeCache {
 
     private static CachedOutputLists buildCachedOutputs(List<MobDrop> sourceDrops) {
         // The conversion enum is the equipment whitelist; keep each runtime source in its own cache table.
-        List<CachedOutput> ordinaryOutputs = new ArrayList<>();
-        List<CachedOutput> pulverizableOutputs = new ArrayList<>();
-        List<CachedOutput> pulverizedOutputs = new ArrayList<>();
+        Map<OutputGroupKey, BaseOutputBuilder> baseOutputs = new LinkedHashMap<>();
         Map<TST_ItemID, SpecialOutputBuilder> specialOutputs = new LinkedHashMap<>();
         ItemStack firstBaseOutput = null;
         int damageWeight = calculateDamageWeight(sourceDrops);
@@ -106,16 +103,17 @@ public final class DirectedMobClonerRecipeCache {
                 if (firstBaseOutput == null && !NeiDisplayExclusion.contains(outputTemplate)) {
                     firstBaseOutput = outputTemplate.copy();
                 }
-                CachedOutput output = cacheOutput(outputTemplate, baseChance, durabilityExpectation, 1d);
-                DirectedMobClonerDropConversion.ConversionResult conversion = DirectedMobClonerDropConversion
-                    .convert(outputTemplate);
-                if (conversion.matched()) {
-                    pulverizableOutputs.add(output);
-                    pulverizedOutputs
-                        .addAll(cacheConvertedOutputs(conversion.outputs(), baseChance, durabilityExpectation));
-                } else {
-                    ordinaryOutputs.add(output);
-                }
+                baseOutputs
+                    .computeIfAbsent(
+                        new OutputGroupKey(
+                            TST_ItemID.create(outputTemplate),
+                            outputTemplate.stackSize,
+                            drop.type,
+                            drop.damages,
+                            drop.lootable,
+                            modifiers),
+                        ignored -> new BaseOutputBuilder(outputTemplate))
+                    .add(baseChance, durabilityExpectation);
             }
             if (weaponDependent) {
                 CachedActivationRoute activation = new CachedActivationRoute(
@@ -129,6 +127,23 @@ public final class DirectedMobClonerRecipeCache {
                         TST_ItemID.create(outputTemplate),
                         ignored -> new SpecialOutputBuilder(outputTemplate))
                     .add(activation);
+            }
+        }
+
+        List<CachedOutput> ordinaryOutputs = new ArrayList<>();
+        List<CachedOutput> pulverizableOutputs = new ArrayList<>();
+        List<CachedOutput> pulverizedOutputs = new ArrayList<>();
+        // Enchanted and unenchanted variants become the same sanitized item, but remain mutually exclusive outcomes.
+        for (BaseOutputBuilder outputBuilder : baseOutputs.values()) {
+            CachedOutput output = outputBuilder.build();
+            DirectedMobClonerDropConversion.ConversionResult conversion = DirectedMobClonerDropConversion
+                .convert(output.stack());
+            if (conversion.matched()) {
+                pulverizableOutputs.add(output);
+                pulverizedOutputs.addAll(
+                    cacheConvertedOutputs(conversion.outputs(), output.chance(), output.durabilityExpectation()));
+            } else {
+                ordinaryOutputs.add(output);
             }
         }
 
@@ -369,6 +384,9 @@ public final class DirectedMobClonerRecipeCache {
         }
         recipesById = Collections.unmodifiableMap(rebuilt);
         PENDING_RECIPES.clear();
+    }
+
+    public static void registerFakeRecipes() {
         Map<Integer, DirectedMobClonerFakeRecipe.MobRecipeDisplay> displaysById = new LinkedHashMap<>();
         for (CachedRecipe recipe : recipesById.values()) {
             displaysById.put(
@@ -443,10 +461,6 @@ public final class DirectedMobClonerRecipeCache {
     public record CachedRecipe(int id, String mobName, String localizedName, boolean boss, int eecDuration,
         CachedOutputLists cachedOutputs) {
 
-        public int baseTier() {
-            return boss ? BOSS_RECIPE_BASE_TIER : NORMAL_RECIPE_BASE_TIER;
-        }
-
         public List<CachedOutput> ordinaryOutputs() {
             return cachedOutputs.ordinaryOutputs();
         }
@@ -479,6 +493,35 @@ public final class DirectedMobClonerRecipeCache {
         double probabilityMultiplier) {}
 
     @Desugar
+    private record OutputGroupKey(TST_ItemID itemId, int stackSize, MobDrop.DropType dropType,
+        Map<Integer, Integer> damages, boolean lootable, List<CachedChanceModifier> modifiers) {}
+
+    private static final class BaseOutputBuilder {
+
+        private final ItemStack stack;
+        private double totalChance;
+        private double chanceWeightedDurability;
+        private int routeCount;
+
+        private BaseOutputBuilder(ItemStack stack) {
+            this.stack = stack;
+        }
+
+        private BaseOutputBuilder add(double chance, double durabilityExpectation) {
+            totalChance += chance;
+            chanceWeightedDurability += chance * durabilityExpectation;
+            routeCount++;
+            return this;
+        }
+
+        private CachedOutput build() {
+            double averageChance = totalChance / routeCount;
+            double averageDurability = chanceWeightedDurability / totalChance;
+            return cacheOutput(stack, averageChance, averageDurability, 1d);
+        }
+    }
+
+    @Desugar
     private record CachedSpecialOutput(ItemStack stack, boolean hasBaseOutput,
         List<CachedActivationRoute> activations) {
 
@@ -506,6 +549,7 @@ public final class DirectedMobClonerRecipeCache {
             for (CachedChanceModifier modifier : modifiers) {
                 chance = modifier.apply(chance, tags);
             }
+            if (playerOnly) chance *= PLAYER_ONLY_CHANCE_MULTIPLIER;
             return Math.max(0d, chance - baseChance);
         }
     }

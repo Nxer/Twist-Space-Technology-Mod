@@ -107,9 +107,7 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
 
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
-            return Arrays.asList(
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"),
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.2"));
+            return Arrays.asList(TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"));
         }
     }
 }
