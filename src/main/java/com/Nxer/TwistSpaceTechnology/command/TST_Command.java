@@ -191,8 +191,17 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
                 TST_CommandMethods.INSTANCE.dsp_info(sender);
             }
 
-            case "dump_container" -> {
-                TST_CommandMethods.INSTANCE.dumpContainer(sender);
+            case "get_container_items" -> {
+                if (args.length < 2) {
+                    sender.addChatMessage(new ChatComponentText("Usage: /tst get_container_items <source|getModItem>"));
+                    break;
+                }
+                ContainerDumpMode mode = ContainerDumpMode.parse(args[1]);
+                if (mode == null) {
+                    sender.addChatMessage(new ChatComponentText("Usage: /tst get_container_items <source|getModItem>"));
+                    break;
+                }
+                TST_CommandMethods.INSTANCE.dumpContainer(sender, mode);
             }
 
             case "ae_pattern_conversion" -> {
@@ -206,7 +215,7 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
     }
 
     private final String[] Commands = { "help", "team_join", "dsp_check", "dsp_setSolarSail", "dsp_setNode", "dsp_info",
-        "dump_container", "ae_pattern_conversion" };
+        "get_container_items", "ae_pattern_conversion" };
 
     private void processPatternConversion(ICommandSender sender, String[] args, int actionIndex) {
         String playerName = sender.getCommandSenderName();
@@ -307,6 +316,12 @@ public final class TST_Command extends CommandBase implements IDSP_IO {
             .anyMatch(s -> s.startsWith(text)))) {
             Stream.of(Commands)
                 .filter(s -> text.isEmpty() || s.startsWith(text))
+                .forEach(l::add);
+        }
+        if (args.length == 2 && "get_container_items".equals(args[0])) {
+            String mode = args[1].trim();
+            Stream.of("source", "getModItem")
+                .filter(s -> mode.isEmpty() || s.startsWith(mode))
                 .forEach(l::add);
         }
         return l;

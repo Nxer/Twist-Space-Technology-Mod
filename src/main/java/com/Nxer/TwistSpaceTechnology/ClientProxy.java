@@ -10,6 +10,7 @@ import com.Nxer.TwistSpaceTechnology.client.render.EyeOfWoodRender;
 import com.Nxer.TwistSpaceTechnology.client.render.LargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.client.render.TileArcaneHoleRender;
 import com.Nxer.TwistSpaceTechnology.client.sound.SoundLoader;
+import com.Nxer.TwistSpaceTechnology.command.ContainerDumpMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_BigBroArray;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
 import com.Nxer.TwistSpaceTechnology.loader.NEIConfigLoader;
@@ -34,13 +35,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void sendContainerDumpTarget() {
+    public void sendContainerDumpTarget(ContainerDumpMode mode) {
         MovingObjectPosition target = Minecraft.getMinecraft().objectMouseOver;
         if (target == null || target.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) {
-            TST_Network.tst.sendToServer(new ContainerDumpTargetPacket(0, -1, 0));
+            TST_Network.tst.sendToServer(new ContainerDumpTargetPacket(0, -1, 0, mode));
             return;
         }
-        TST_Network.tst.sendToServer(new ContainerDumpTargetPacket(target.blockX, target.blockY, target.blockZ));
+        TST_Network.tst.sendToServer(new ContainerDumpTargetPacket(target.blockX, target.blockY, target.blockZ, mode));
     }
 
     @Override
