@@ -1,8 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.UnknowWater;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.getModeMultiplier;
-import static com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm.queryTreeProduct;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.TREE_MODE;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.cacheRecipeFluids;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.getModeMultiplier;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.queryTimeTreeProduct;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.queryTreeProduct;
+import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
 import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
@@ -18,6 +22,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.enums.GTValues;
@@ -29,10 +34,19 @@ import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
-    static FluidStack WaterStack = Materials.Water.getFluid(1000);
-    static FluidStack TemporalLiquidStack = new FluidStack(FluidRegistry.getFluid("temporalfluid"), 100);
-    static FluidStack DeathWaterStack = new FluidStack(FluidRegistry.getFluid("fluiddeath"), 1000);
-    static FluidStack UUMatterStack = Materials.UUMatter.getFluid(500);
+    public static final int WATER_PER_PARALLEL = 2000;
+    public static final int TEMPORAL_FLUID_PER_PARALLEL = 100;
+    public static final int DEATH_WATER_PER_PARALLEL = 1000;
+    public static final int UNKNOWN_WATER_PER_PARALLEL = 1000;
+    public static final int UU_MATTER_PER_PARALLEL = 500;
+    public static final FluidStack WATER_STACK = Materials.Water.getFluid(WATER_PER_PARALLEL);
+    public static final FluidStack TEMPORAL_FLUID_STACK = FluidRegistry
+        .getFluidStack("temporalfluid", TEMPORAL_FLUID_PER_PARALLEL);
+    public static final FluidStack DEATH_WATER_STACK = FluidRegistry
+        .getFluidStack("fluiddeath", DEATH_WATER_PER_PARALLEL);
+    public static final FluidStack UNKNOWN_WATER_STACK = FluidRegistry
+        .getFluidStack("unknowwater", UNKNOWN_WATER_PER_PARALLEL);
+    public static final FluidStack UU_MATTER_STACK = Materials.UUMatter.getFluid(UU_MATTER_PER_PARALLEL);
 
     static ItemStack[] IntegratedCircuitStack = { GTUtility.getIntegratedCircuit(1), GTUtility.getIntegratedCircuit(2),
         GTUtility.getIntegratedCircuit(3), GTUtility.getIntegratedCircuit(4), };
@@ -48,6 +62,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         initStatic();
         loadTreeFarmWithoutToolRecipe();
         loadManualRecipes();
+        cacheRecipeFluids(TREE_MODE, GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
     }
 
     static void initStatic() {
@@ -71,13 +86,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
         ArrayList<ItemStack> allSaplingWithTagCopy = new ArrayList<>();
         for (ItemStack aSapling : allSaplingsIn) {
-            ItemStack aStack = aSapling.copy();
-            aStack.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"
-            // #tr ESS.TreeGrowthSimulator.nei.tooltip.7
-            // # Any Sapling
-            // #zh_CN 任意树苗
-            ));
-            allSaplingWithTagCopy.add(aStack);
+            allSaplingWithTagCopy.add(aSapling.copy());
         }
         allSaplingWithTag = allSaplingWithTagCopy.toArray(new ItemStack[0]);
 
@@ -111,21 +120,30 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
     static void loadTreeFarmWithoutToolRecipe() {
         for (ItemStack Sapling : allSaplingsIn) {
-            addFakeRecipe(Sapling, new ItemStack[] { Sapling }, WaterStack);
+            addFakeRecipe(Sapling, new ItemStack[] { Sapling }, WATER_STACK, 1);
         }
     }
 
     static void loadManualRecipes() {
-        // Barnarda C
-        if (Mods.GalaxySpace.isModLoaded()) addSpecialFakeRecipe(
-            GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 1),
-            new FluidStack(UnknowWater, 1000));
         // Time
-        if (Mods.TwilightForest.isModLoaded()) addSpecialFakeRecipe(
-            GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5),
-            TemporalLiquidStack);
-        // Death Water
-        // Thaumic Tentacle?
+        ItemStack timeSapling = Mods.TwilightForest.isModLoaded()
+            ? GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 0, 5)
+            : null;
+        if (timeSapling != null && TEMPORAL_FLUID_STACK != null) {
+            addSpecialFakeRecipe(timeSapling, TEMPORAL_FLUID_STACK);
+        }
+        ItemStack taintedSapling = Mods.ForbiddenMagic.isModLoaded()
+            ? GTModHandler.getModItem(Mods.ForbiddenMagic.ID, "TaintSapling", 0, 0)
+            : null;
+        if (taintedSapling != null && DEATH_WATER_STACK != null) {
+            addSpecialFakeRecipe(taintedSapling, DEATH_WATER_STACK);
+        }
+        ItemStack barnardaCSapling = Mods.GalaxySpace.isModLoaded()
+            ? GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 0, 0)
+            : null;
+        if (barnardaCSapling != null && UNKNOWN_WATER_STACK != null) {
+            addSpecialFakeRecipe(barnardaCSapling, UNKNOWN_WATER_STACK);
+        }
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
@@ -157,11 +175,12 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         ));
         addEnchantmentLight(FruitSymbol);
 
-        addFakeRecipe(
+        if (UU_MATTER_STACK != null) addFakeRecipe(
             IntegratedCircuitStack,
             new ItemStack[] { LogSymbol, SaplingSymbol, LeavesSymbol, FruitSymbol },
             allSaplingWithTag,
-            UUMatterStack);
+            UU_MATTER_STACK,
+            2);
     }
 
     public static void addEnchantmentLight(ItemStack aStack) {
@@ -175,12 +194,19 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         tag.setTag("ench", enchantments);
     }
 
-    static void addSpecialFakeRecipe(ItemStack SpecialSapling, FluidStack SpecialFluid) {
-        addFakeRecipe(SpecialSapling, allSaplingWithTag, SpecialFluid);
+    static void addSpecialFakeRecipe(ItemStack specialSapling, FluidStack specialFluid) {
+        EnumMap<Mode, ItemStack> productMap = specialFluid.getFluid() == TEMPORAL_FLUID_STACK.getFluid()
+            ? queryTimeTreeProduct(specialSapling)
+            : queryTreeProduct(specialSapling);
+        addFakeRecipe(productMap, allSaplingWithTag, specialFluid, 2);
     }
 
-    static void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid) {
-        EnumMap<Mode, ItemStack> ProductMap = queryTreeProduct(Sapling);
+    static void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid, int requiredTier) {
+        addFakeRecipe(queryTreeProduct(Sapling), specialStacks, inputFluid, requiredTier);
+    }
+
+    static void addFakeRecipe(EnumMap<Mode, ItemStack> ProductMap, ItemStack[] specialStacks, FluidStack inputFluid,
+        int requiredTier) {
 
         // ItemStack[] inputStacks = new ItemStack[Mode.values().length];
         // ItemStack[] outputStacks = new ItemStack[Mode.values().length];
@@ -207,18 +233,20 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         }
         var i = input.toArray(new ItemStack[0]);
         var o = output.toArray(new ItemStack[0]);
-        addFakeRecipe(i, o, specialStacks, inputFluid);
+        addFakeRecipe(i, o, specialStacks, inputFluid, requiredTier);
     }
 
     static void addFakeRecipe(ItemStack[] inputStacks, ItemStack[] outputStacks, ItemStack[] specialStacks,
-        FluidStack inputFluid) {
+        FluidStack inputFluid, int requiredTier) {
         GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .special(specialStacks)
+            .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
+            .metadata(INSTANCE, requiredTier)
             .fake()
-            .duration(20 * 5)
+            .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .addTo(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes);
     }

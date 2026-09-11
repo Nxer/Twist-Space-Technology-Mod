@@ -403,6 +403,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // #tr Tooltip_AdvCircuitAssemblyLine.6
             // # Imprint circuit hatch
             // #zh_CN 压印电路仓
+
             // #tr Tooltip_AdvCircuitAssemblyLine.7
             // # Grate machine casing next to the controller
             // #zh_CN 主机旁的格栅机械方块

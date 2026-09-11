@@ -1820,6 +1820,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 // #tr Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch
                 // # Input Hatch of SpaceTime Maintenance Fluid
                 // #zh_CN 时空维护流体输入仓
+
                 // #tr Tooltip_StrangeMatterAggregator.structure.Left
                 // # Left area beside the controller block
                 // #zh_CN 主方块左侧区域
@@ -1827,6 +1828,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 // #tr Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus
                 // # Input Bus of Core Element and Annihilation Constrainer
                 // #zh_CN 核心素和湮灭约束器输入总线
+
                 // #tr Tooltip_StrangeMatterAggregator.structure.Right
                 // # Right area beside the controller block
                 // #zh_CN 主方块右侧区域

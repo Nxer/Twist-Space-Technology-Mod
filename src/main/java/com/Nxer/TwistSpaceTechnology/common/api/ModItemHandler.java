@@ -171,7 +171,7 @@ public class ModItemHandler {
         public static ItemStack getModItem(String modID, String itemName, int amount, int meta) {
             ItemStack r = GTModHandler.getModItem(modID, itemName, amount, meta);
             if (r == null) {
-                r = createFallbackItem(modID, itemName + ":" + meta, 1);
+                r = createFallbackItem(modID, itemName + " : " + meta + " | ", 1);
             }
             return r;
         }

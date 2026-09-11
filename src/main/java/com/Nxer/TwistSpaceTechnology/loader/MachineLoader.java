@@ -43,6 +43,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
@@ -63,7 +64,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaSolarPanelFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
@@ -91,6 +91,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart_Focusing;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
@@ -377,15 +379,35 @@ public final class MachineLoader {
                     TextEnums.tr("NameIndustrialMagnetarSeparator")));
         }
 
-        if (Config.Enable_MegaTreeFarm) {
-            GTCMItemList.MegaTreeFarm.set(
-                new TST_MegaTreeFarm(
+        if (Config.Enable_EcoSphereSimulator) {
+            GTCMItemList.EcoSphereSimulator.set(
+                new TST_EcoSphereSimulator(
                     19051,
-                    "NameMegaTreeFarm",
-                    // #tr NameMegaTreeFarm
-                    // # Eco-Sphere Growth Simulator
+                    "NameEcoSphereSimulator",
+                    // #tr NameEcoSphereSimulator
+                    // # Eco-Sphere Simulator
                     // #zh_CN 拟似生态圈
-                    TextEnums.tr("NameMegaTreeFarm")));
+                    TextEnums.tr("NameEcoSphereSimulator")));
+
+            // #tr NameEcoSphereInputInterface
+            // # Eco-Sphere Input Interface
+            // #zh_CN 生态圈输入接口
+            GTCMItemList.EcoSphereInputInterface.set(
+                new TST_EcoSphereInputInterfaceHatch(
+                    18849,
+                    "NameEcoSphereInputInterface",
+                    TextEnums.tr("NameEcoSphereInputInterface"),
+                    10));
+
+            // #tr NameEcoSphereUpgradeInterface
+            // # Eco-Sphere Upgrade Interface
+            // #zh_CN 生态圈升级接口
+            GTCMItemList.EcoSphereUpgradeInterface.set(
+                new TST_EcoSphereUpgradeInterfaceHatch(
+                    18850,
+                    "NameEcoSphereUpgradeInterface",
+                    TextEnums.tr("NameEcoSphereUpgradeInterface"),
+                    10));
         }
 
         GTCMItemList.ExtremeCraftCenter

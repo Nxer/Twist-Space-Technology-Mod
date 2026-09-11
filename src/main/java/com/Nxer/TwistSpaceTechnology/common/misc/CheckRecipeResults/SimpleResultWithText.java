@@ -21,14 +21,28 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 
 public class SimpleResultWithText implements CheckRecipeResult {
 
+    // #tr GT5U.gui.text.recipe_result.out_of_fluid
+    // # Missing %s: %s L required
+    // #zh_CN 缺失%s：需要%s L
+
+    // #tr GT5U.gui.text.recipe_result.out_of_item
+    // # Missing %s: %s required
+    // #zh_CN 缺失%s：需要%s个
+
     private boolean success;
     private String key;
     private boolean persistsOnShutdown;
+    private boolean rawText;
 
     SimpleResultWithText(boolean success, String key, boolean persistsOnShutdown) {
+        this(success, key, persistsOnShutdown, false);
+    }
+
+    private SimpleResultWithText(boolean success, String key, boolean persistsOnShutdown, boolean rawText) {
         this.success = success;
         this.key = key;
         this.persistsOnShutdown = persistsOnShutdown;
+        this.rawText = rawText;
     }
 
     SimpleResultWithText(boolean success, FluidStack stack, boolean persistsOnShutdown) {
@@ -64,7 +78,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
     @Override
     @Nonnull
     public String getDisplayString() {
-        return Objects.requireNonNull(TextEnums.tr(key));
+        return rawText ? Objects.requireNonNull(key) : Objects.requireNonNull(TextEnums.tr(key));
     }
 
     @Override
@@ -72,6 +86,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
         tag.setBoolean("success", success);
         tag.setBoolean("persistsOnShutdown", persistsOnShutdown);
         tag.setString("key", key);
+        tag.setBoolean("rawText", rawText);
 
         return tag;
     }
@@ -81,6 +96,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
         success = tag.getBoolean("success");
         persistsOnShutdown = tag.getBoolean("persistsOnShutdown");
         key = tag.getString("key");
+        rawText = tag.getBoolean("rawText");
     }
 
     @Override
@@ -94,6 +110,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
         buffer.writeBoolean(success);
         NetworkUtils.writeStringSafe(buffer, key);
         buffer.writeBoolean(persistsOnShutdown);
+        buffer.writeBoolean(rawText);
     }
 
     @Override
@@ -101,6 +118,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
         success = buffer.readBoolean();
         key = NetworkUtils.readStringSafe(buffer);
         persistsOnShutdown = buffer.readBoolean();
+        rawText = buffer.readBoolean();
     }
 
     @Override
@@ -114,7 +132,8 @@ public class SimpleResultWithText implements CheckRecipeResult {
         if (o == null || getClass() != o.getClass()) return false;
         if (o instanceof SimpleResultWithText that) {
             return success == that.success && Objects.equals(key, that.key)
-                && persistsOnShutdown == that.persistsOnShutdown;
+                && persistsOnShutdown == that.persistsOnShutdown
+                && rawText == that.rawText;
         }
         return false;
     }
@@ -126,6 +145,11 @@ public class SimpleResultWithText implements CheckRecipeResult {
     @Nonnull
     public static CheckRecipeResult ofSuccess(String key) {
         return new SimpleResultWithText(true, key, false);
+    }
+
+    @Nonnull
+    public static CheckRecipeResult ofSuccessText(String text) {
+        return new SimpleResultWithText(true, text, false, true);
     }
 
     /**

@@ -492,6 +492,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_off
         // # Rendering off
         // #zh_CN 渲染特效关闭
+
         // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_on
         // # Rendering on
         // #zh_CN 渲染特效开启
@@ -936,21 +937,27 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         // #tr Tooltip_METEOR_MINER_CONTROLLER.tier.0
         // # Incomplete Structure
         // #zh_CN 结构未成型
+
         // #tr Tooltip_METEOR_MINER_CONTROLLER.tier.1
         // # Current Tier: {\WHITE}1
         // #zh_CN 当前等级: {\WHITE}1
+
         // #tr Tooltip_METEOR_MINER_CONTROLLER.tier.2
         // # Current Tier: {\WHITE}2
         // #zh_CN 当前等级: {\WHITE}2
+
         // #tr Tooltip_METEOR_MINER_CONTROLLER.fortune.0
         // # Augment: {\WHITE}No Augment Applied
         // #zh_CN 增强效果: 无增强
+
         // #tr Tooltip_METEOR_MINER_CONTROLLER.fortune.1
         // # Augment: {\WHITE}Fortune I
         // #zh_CN 增强效果: 时运I
+
         // #tr Tooltip_METEOR_MINER_CONTROLLER.fortune.2
         // # Augment: {\WHITE}Fortune II
         // #zh_CN 增强效果: 时运II
+
         // #tr Tooltip_METEOR_MINER_CONTROLLER.fortune.3
         // # Augment: {\WHITE}Fortune III
         // #zh_CN 增强效果: 时运III
