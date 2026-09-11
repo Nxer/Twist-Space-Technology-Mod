@@ -55,13 +55,15 @@ public final class DebugMode {
     private DebugMode() {}
 
     public static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int mode, int beaconTier) {
-        int tier = beaconTier >= 2 ? 2 : 1;
+        int tier = mode == 3 ? Math.max(1, Math.min(3, beaconTier)) : beaconTier >= 2 ? 2 : 1;
+        boolean tierTwo = machine.isTierTwo();
         boolean autoPulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
         WeaponTags weaponTags = DirectedMobClonerWeaponHandler
             .process(mode == 3 ? machine.getCloningWeapons() : new ItemStack[0]);
-        DebugProfile outputProfile = new DebugProfile(mode, tier, autoPulverize, weaponTags);
+        // Structure tier changes cloning authorization and therefore belongs in the cache key.
+        DebugProfile outputProfile = new DebugProfile(mode, tier, tierTwo, autoPulverize, weaponTags);
         List<DebugOutput> cachedOutputs = OUTPUT_CACHE
-            .computeIfAbsent(outputProfile, ignored -> collectOutputs(mode, tier, autoPulverize, weaponTags));
+            .computeIfAbsent(outputProfile, ignored -> collectOutputs(mode, tier, tierTwo, autoPulverize, weaponTags));
         DebugState state = MACHINE_STATES.get(machine);
         if (state == null || !state.outputProfile.equals(outputProfile)) {
             if (state != null) state.close();
@@ -151,7 +153,7 @@ public final class DebugMode {
         return identifier.modId + ':' + identifier.name + ':' + stack.getItemDamage();
     }
 
-    private static List<DebugOutput> collectOutputs(int mode, int beaconTier, boolean autoPulverize,
+    private static List<DebugOutput> collectOutputs(int mode, int beaconTier, boolean tierTwo, boolean autoPulverize,
         WeaponTags weaponTags) {
         // Merge identical outputs before applying the fixed debug parallel count.
         Map<TST_ItemID, Long> outputAmounts = new LinkedHashMap<>();
@@ -159,7 +161,7 @@ public final class DebugMode {
             case 0 -> collectTreeOutputs(outputAmounts, beaconTier);
             case 1 -> collectAquaticOutputs(outputAmounts, beaconTier);
             case 2 -> collectGreenhouseOutputs(outputAmounts, beaconTier);
-            case 3 -> collectClonerOutputs(outputAmounts, beaconTier, autoPulverize, weaponTags);
+            case 3 -> collectClonerOutputs(outputAmounts, beaconTier, tierTwo, autoPulverize, weaponTags);
             default -> {}
         }
 
@@ -212,11 +214,14 @@ public final class DebugMode {
         }
     }
 
-    private static void collectClonerOutputs(Map<TST_ItemID, Long> outputs, int beaconTier, boolean autoPulverize,
-        WeaponTags weaponTags) {
+    private static void collectClonerOutputs(Map<TST_ItemID, Long> outputs, int beaconTier, boolean tierTwo,
+        boolean autoPulverize, WeaponTags weaponTags) {
+        if (!tierTwo || beaconTier < 2) return;
+        boolean bossAccess = beaconTier >= 3
+            || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;
         for (DirectedMobClonerRecipeCache.CachedRecipe recipe : DirectedMobClonerRecipeCache.getDebugRecipes()) {
-            // The secondary cloning beacon adds boss recipes to the same numbered pool.
-            if (recipe.boss() && beaconTier < 2) continue;
+            // Tier III or the Infinity Sword adds boss recipes to the same numbered pool.
+            if (recipe.boss() && !bossAccess) continue;
             for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
                 List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0 ? recipe.ordinaryOutputs()
                     : recipe.equipmentOutputs(autoPulverize);
@@ -262,7 +267,8 @@ public final class DebugMode {
     private record DebugLine(String text, DebugOutput output) {}
 
     @Desugar
-    private record DebugProfile(int mode, int beaconTier, boolean autoPulverize, WeaponTags weaponTags) {}
+    private record DebugProfile(int mode, int beaconTier, boolean tierTwo, boolean autoPulverize,
+        WeaponTags weaponTags) {}
 
     private static final class DebugState {
 

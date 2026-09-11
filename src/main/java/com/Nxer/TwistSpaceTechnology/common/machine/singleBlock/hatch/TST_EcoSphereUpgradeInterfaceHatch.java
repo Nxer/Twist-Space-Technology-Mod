@@ -115,8 +115,6 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
 
     public void setMachineState(int mode, int tier) {
         int newStructureTier = Math.max(1, tier);
-        // Ignore the temporary unbound state so replacing a beacon does not eject every upgrade.
-        if (machineMode >= 0 && mode >= 0 && mode != machineMode) dropUpgradesInvalidForMode(mode);
         if (machineMode == mode && structureTier == newStructureTier) return;
         // Eject upgrades that no longer fit when the structure tier shrinks (4 slots -> 1 slot).
         if (mode >= 0 && machineMode == mode && newStructureTier < structureTier) {
@@ -126,23 +124,6 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
         structureTier = newStructureTier;
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (base != null && base.isServerSide()) base.markDirty();
-    }
-
-    private void dropUpgradesInvalidForMode(int mode) {
-        IGregTechTileEntity base = getBaseMetaTileEntity();
-        if (base == null || !base.isServerSide() || base.getWorld() == null) return;
-
-        boolean changed = false;
-        for (int slot = 0; slot < mInventory.length; slot++) {
-            ItemStack stack = mInventory[slot];
-            if (stack == null || stack.stackSize <= 0) continue;
-            EcoSphereUpgradeType type = EcoSphereUpgradeType.fromStack(stack);
-            if (type != null && type.isAllowedForMode(mode)) continue;
-            dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), stack);
-            mInventory[slot] = null;
-            changed = true;
-        }
-        if (changed) base.markDirty();
     }
 
     public ItemStack[] getUpgrades() {
@@ -163,7 +144,8 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
 
     private boolean isUpgradeValid(int index, ItemStack stack) {
         EcoSphereUpgradeType type = EcoSphereUpgradeType.fromStack(stack);
-        if (type == null || !type.isAllowedForMode(machineMode)) return false;
+        // Mode mismatch disables the effect but must not reject or eject a valid upgrade item.
+        if (type == null) return false;
         if (type.getSpecialUpgrade() == null) return true;
         for (int i = 0; i < getActiveSlots(); i++) {
             if (i != index && type.matches(mInventory[i])) return false;

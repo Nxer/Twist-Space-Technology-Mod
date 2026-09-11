@@ -8,14 +8,16 @@ import lombok.Getter;
 
 public enum EcoSphereUpgradeType {
 
-    FLUID_EFFICIENCY(8, 0b1111, null),
-    OUTPUT_BOOST(9, 0b1111, null),
-    SPEED(10, 0b1111, null),
-    CAPACITY(11, 0b1111, null),
-    AUTO_PULVERIZE_EQUIPMENT(12, 0b1000, EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
+    FLUID_EFFICIENCY(0, 0b1111, null),
+    OUTPUT_BOOST(1, 0b1111, null),
+    SPEED(2, 0b1111, null),
+    CAPACITY(3, 0b1111, null),
+    AUTO_PULVERIZE_EQUIPMENT(4, 0b1000, EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT),
+    BLOOD_ORB_NETWORK(5, 0b1000, EcoSphereSpecialUpgrade.BLOOD_ORB_NETWORK);
 
     @Getter
     private final int metadata;
+    // Bit n authorizes this upgrade's mode-specific effect in machine mode n.
     private final int allowedModes;
     @Getter
     private final EcoSphereSpecialUpgrade specialUpgrade;
@@ -31,7 +33,7 @@ public enum EcoSphereUpgradeType {
     }
 
     public boolean matches(ItemStack stack) {
-        return stack != null && stack.getItem() == TstItems.EcoSphereModeBeacon && stack.getItemDamage() == metadata;
+        return stack != null && stack.getItem() == TstItems.EcoSphereUpgrade && stack.getItemDamage() == metadata;
     }
 
     public static EcoSphereUpgradeType fromStack(ItemStack stack) {

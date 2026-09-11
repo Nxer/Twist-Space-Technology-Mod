@@ -559,7 +559,7 @@ public class TCResearches {
                 4,
                 -10,
                 5,
-                GTCMItemList.EcoSphereModeBeacon8.get(1))
+                GTCMItemList.EcoSphereModeBeacon9.get(1))
                     .setPages(
                         new ResearchPage(TextEnums.tr("tc.research_text.ECO_SPHERE_MODE_BEACON_8.1")),
                         new ResearchPage(TextEnums.tr("tc.research_text.ECO_SPHERE_MODE_BEACON_8.2")),

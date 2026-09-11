@@ -32,8 +32,6 @@ public final class EcoSphereFluidAreaHandler {
     private FluidArea activeCleaningArea;
     private int activeCleaningLayer;
     private int[] flowingBlockCounts;
-    private boolean upperFlowUpdated;
-    private boolean lowerFlowUpdated;
 
     // Keep every fluid shape and offset in one handler for all machine modes.
     public EcoSphereFluidAreaHandler(TST_EcoSphereSimulator machine) {
@@ -99,25 +97,17 @@ public final class EcoSphereFluidAreaHandler {
                 int worldX = base.getXCoord() + blockOffsetX;
                 int worldY = base.getYCoord() + blockOffsetY;
                 int worldZ = base.getZCoord() + blockOffsetZ;
-                if (world.getBlock(worldX, worldY, worldZ) != expectedBlock
+                Block actualBlock = world.getBlock(worldX, worldY, worldZ);
+                if (!matchesExpectedBlock(actualBlock, expectedBlock)
                     || world.getBlockMetadata(worldX, worldY, worldZ) != 0) return false;
             }
         }
         return true;
     }
 
-    // Place one source or cleaning layer and refresh each flowing source only once.
+    // Place one complete source layer.
     public void setLayer(FluidArea area, int layer, Block block) {
         setPattern(area, areas.get(area)[layer], layer, null, block);
-        if (block == Blocks.air) return;
-        if (area == FluidArea.UPPER_SOURCE && !upperFlowUpdated) {
-            upperFlowUpdated = true;
-            pulseFlowUpdates(UPPER_FLOW_UPDATE_POSITIONS, block);
-        }
-        if (area == FluidArea.LOWER_SOURCE && !lowerFlowUpdated) {
-            lowerFlowUpdated = true;
-            pulseFlowUpdates(LOWER_FLOW_UPDATE_POSITIONS, block);
-        }
     }
 
     // Remove only source blocks that this fluid area may have placed.
@@ -132,12 +122,10 @@ public final class EcoSphereFluidAreaHandler {
         }
     }
 
-    // Reset the top-down cleaning cursor and allow a new fill animation to refresh its sources.
+    // Reset the top-down cleaning cursor.
     public void startCleaning(boolean withMain) {
         activeCleaningArea = withMain ? FluidArea.WITH_MAIN : FluidArea.WITHOUT_MAIN;
         activeCleaningLayer = 0;
-        upperFlowUpdated = false;
-        lowerFlowUpdated = false;
     }
 
     // Clear one planned layer and return the delay before the next cleaning step.
@@ -222,6 +210,9 @@ public final class EcoSphereFluidAreaHandler {
         boolean horizontallyFlipped = machine.isFluidAreaHorizontallyFlipped();
         World world = base.getWorld();
         boolean changed = false;
+        // Neighbor updates during cleanup let fast fluids change later cells before this loop reaches them.
+        // Flag 2 sends the block changes to clients without resuming fluid simulation mid-layer.
+        int updateFlags = block == Blocks.air ? 2 : 3;
         // Use the same facing transform as the source-layer check.
         for (int z = 0; z < pattern.length; z++) {
             for (int x = 0; x < pattern[z].length(); x++) {
@@ -240,19 +231,20 @@ public final class EcoSphereFluidAreaHandler {
                 int worldX = base.getXCoord() + blockOffsetX;
                 int worldY = base.getYCoord() + offset[1] - layer;
                 int worldZ = base.getZCoord() + blockOffsetZ;
-                if (expectedBlock != null && world.getBlock(worldX, worldY, worldZ) != expectedBlock) continue;
-                if (world.setBlock(worldX, worldY, worldZ, block)) changed = true;
+                Block actualBlock = world.getBlock(worldX, worldY, worldZ);
+                if (expectedBlock != null && !matchesExpectedBlock(actualBlock, expectedBlock)) continue;
+                if (world.setBlock(worldX, worldY, worldZ, block, 0, updateFlags)) changed = true;
             }
         }
         return changed;
     }
 
-    // Briefly replace fixed stream blocks so Minecraft schedules fluid updates at both ends.
-    private void pulseFlowUpdates(int[][] positions, Block fluidBlock) {
-        for (int[] position : positions) {
-            setBlock(FluidArea.WITHOUT_MAIN, position[0], position[1], position[2], fluidBlock);
-            setBlock(FluidArea.WITHOUT_MAIN, position[0], position[1], position[2], Blocks.air);
-        }
+    // Treat static and flowing water as the same display fluid during checks and cleanup.
+    private static boolean matchesExpectedBlock(Block actualBlock, Block expectedBlock) {
+        if (actualBlock == expectedBlock) return true;
+        boolean actualIsWater = actualBlock == Blocks.water || actualBlock == Blocks.flowing_water;
+        boolean expectedIsWater = expectedBlock == Blocks.water || expectedBlock == Blocks.flowing_water;
+        return actualIsWater && expectedIsWater;
     }
 
     // Map a position between two local shapes and test whether the target shape marks it.
@@ -269,32 +261,6 @@ public final class EcoSphereFluidAreaHandler {
             && x >= 0
             && x < pattern[layer][z].length()
             && pattern[layer][z].charAt(x) != ' ';
-    }
-
-    // Replace one local position while respecting controller facing and horizontal mirroring.
-    private void setBlock(FluidArea area, int x, int layer, int z, Block block) {
-        IGregTechTileEntity base = machine.getBaseMetaTileEntity();
-        if (base == null) return;
-        int[] offset = areaOffsets.get(area);
-        int directionX = base.getFrontFacing().offsetX;
-        int directionZ = base.getFrontFacing().offsetZ;
-        int blockOffsetX = (offset[0] - x) * getXDirection(directionX, directionZ);
-        int blockOffsetZ = (offset[2] - z) * getZDirection(directionX, directionZ);
-        if (directionX != 0) {
-            int swapped = blockOffsetX;
-            blockOffsetX = blockOffsetZ;
-            blockOffsetZ = swapped;
-        }
-        if (machine.isFluidAreaHorizontallyFlipped()) {
-            if (directionX != 0) blockOffsetZ = -blockOffsetZ;
-            else blockOffsetX = -blockOffsetX;
-        }
-        base.getWorld()
-            .setBlock(
-                base.getXCoord() + blockOffsetX,
-                base.getYCoord() + offset[1] - layer,
-                base.getZCoord() + blockOffsetZ,
-                block);
     }
 
     private static int getXDirection(int directionX, int directionZ) {
@@ -338,16 +304,6 @@ public final class EcoSphereFluidAreaHandler {
     }
 
     // spotless:off
-    private static final int[][] UPPER_FLOW_UPDATE_POSITIONS = {
-        { 14, 0, 10 },
-        { 10, 0, 14 },
-        { 18, 0, 14 },
-        { 14, 0, 18 }
-    };
-    private static final int[][] LOWER_FLOW_UPDATE_POSITIONS = {
-        { 14, 25, 14 }
-    };
-
     private static final int[] STRUCTURE_FLUID_AREA_WITHOUT_MAIN_OFFSET = { 14, 37, 5 };
     private static final String[][] StructureFluidAreaWithoutMain = new String[][] {
         {"                             ","                             ","                             ","                             ","                             ","                             ","                             ","              w              ","              w              ","              w              ","              w              ","              w              ","                             ","                             ","       wwwww     wwwww       ","                             ","                             ","              w              ","              w              ","              w              ","              w              ","              w              ","                             ","                             ","                             ","                             ","                             ","                             ","                             "},

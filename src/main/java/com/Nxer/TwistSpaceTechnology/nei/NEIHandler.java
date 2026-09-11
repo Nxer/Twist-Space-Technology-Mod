@@ -46,6 +46,7 @@ public class NEIHandler {
             -10);
         API.addRecipeCatalyst(GTCMItemList.EcoSphereModeBeacon7.get(1), "tst.recipe.DirectedMobClonerFakeRecipes", -10);
         API.addRecipeCatalyst(GTCMItemList.EcoSphereModeBeacon8.get(1), "tst.recipe.DirectedMobClonerFakeRecipes", -10);
+        API.addRecipeCatalyst(GTCMItemList.EcoSphereModeBeacon9.get(1), "tst.recipe.DirectedMobClonerFakeRecipes", -10);
 
         /*
          * sendCatalyst("mc.recipe.furnace", "gregtech:gt.blockmachines:19037", -10);

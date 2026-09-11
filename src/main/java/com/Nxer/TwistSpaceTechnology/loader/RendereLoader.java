@@ -39,6 +39,7 @@ public class RendereLoader {
             TstItems.Yamato,
             new YamatoRenderer(YamatoModel, new ResourceLocation("gtnhcommunitymod", "model/Yamato.png")));
         MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereModeBeacon, new EcoSphereModeBeaconRenderer());
+        MinecraftForgeClient.registerItemRenderer(TstItems.EcoSphereUpgrade, new EcoSphereModeBeaconRenderer());
     }
 
     public static void registerTileEntityRenderers() {

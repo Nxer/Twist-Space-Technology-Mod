@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereModeBeacon;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -26,8 +27,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
-            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask, EcoSphereModeBeacon };
+        // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
+        Item[] itemsToReg = { MetaItem01, EcoSphereModeBeacon, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
+            MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
+            MetaItemFlask, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -1112,69 +1115,99 @@ public class ItemRegister {
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
 
         // #tr item.EcoSphereModeBeacon.0.name
-        // # Eco-Sphere Mode Beacon: Arboreal Genesis
-        // #zh_CN 生态圈模式信标: 原木拟生
+        // # Eco-Sphere Execution Protocol: Arboreal Genesis
+        // #zh_CN 生态圈执行协议: 原木拟生
         GTCMItemList.EcoSphereModeBeacon1.set(EcoSphereModeBeacon.registerVariant(0));
 
         // #tr item.EcoSphereModeBeacon.1.name
-        // # Eco-Sphere Mode Beacon: Arboreal Genesis
-        // #zh_CN 生态圈模式信标: 原木拟生
+        // # Eco-Sphere Execution Protocol: Arboreal Genesis
+        // #zh_CN 生态圈执行协议: 原木拟生
         GTCMItemList.EcoSphereModeBeacon2.set(EcoSphereModeBeacon.registerVariant(1));
 
         // #tr item.EcoSphereModeBeacon.2.name
-        // # Eco-Sphere Mode Beacon: Aquatic Simulation
-        // #zh_CN 生态圈模式信标: 水域模拟
+        // # Eco-Sphere Execution Protocol: Aquatic Simulation
+        // #zh_CN 生态圈执行协议: 水域模拟
         GTCMItemList.EcoSphereModeBeacon3.set(EcoSphereModeBeacon.registerVariant(2));
 
         // #tr item.EcoSphereModeBeacon.3.name
-        // # Eco-Sphere Mode Beacon: Aquatic Simulation
-        // #zh_CN 生态圈模式信标: 水域模拟
+        // # Eco-Sphere Execution Protocol: Aquatic Simulation
+        // #zh_CN 生态圈执行协议: 水域模拟
         GTCMItemList.EcoSphereModeBeacon4.set(EcoSphereModeBeacon.registerVariant(3));
 
         // #tr item.EcoSphereModeBeacon.4.name
-        // # Eco-Sphere Mode Beacon: Artificial Greenhouse
-        // #zh_CN 生态圈模式信标: 人工温室
+        // # Eco-Sphere Execution Protocol: Artificial Greenhouse
+        // #zh_CN 生态圈执行协议: 人工温室
         GTCMItemList.EcoSphereModeBeacon5.set(EcoSphereModeBeacon.registerVariant(4));
 
         // #tr item.EcoSphereModeBeacon.5.name
-        // # Eco-Sphere Mode Beacon: Artificial Greenhouse
-        // #zh_CN 生态圈模式信标: 人工温室
+        // # Eco-Sphere Execution Protocol: Artificial Greenhouse
+        // #zh_CN 生态圈执行协议: 人工温室
         GTCMItemList.EcoSphereModeBeacon6.set(EcoSphereModeBeacon.registerVariant(5));
 
         // #tr item.EcoSphereModeBeacon.6.name
-        // # Eco-Sphere Mode Beacon: Directed Mob Cloning
-        // #zh_CN 生态圈模式信标: 定向克隆
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
         GTCMItemList.EcoSphereModeBeacon7.set(EcoSphereModeBeacon.registerVariant(6));
 
         // #tr item.EcoSphereModeBeacon.7.name
-        // # Eco-Sphere Mode Beacon: Directed Mob Cloning
-        // #zh_CN 生态圈模式信标: 定向克隆
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
         GTCMItemList.EcoSphereModeBeacon8.set(EcoSphereModeBeacon.registerVariant(7));
 
         // #tr item.EcoSphereModeBeacon.8.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereModeBeacon9.set(EcoSphereModeBeacon.registerVariant(8));
+        EcoSphereModeBeacon.setTooltips(
+            8,
+            new String[] {
+                // #tr item.EcoSphereModeBeacon.8.tooltip.0
+                // # Upgraded
+                // #zh_CN 已升级
+                tr("item.EcoSphereModeBeacon.8.tooltip.0") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.0.name
         // # Eco-Sphere Fluid Efficiency Upgrade
         // #zh_CN 生态圈流体减免升级
-        GTCMItemList.EcoSphereFluidEfficiencyUpgrade.set(EcoSphereModeBeacon.registerVariant(8));
+        GTCMItemList.EcoSphereFluidEfficiencyUpgrade.set(EcoSphereUpgrade.registerVariant(0));
 
-        // #tr item.EcoSphereModeBeacon.9.name
+        // #tr item.EcoSphereUpgrade.1.name
         // # Eco-Sphere Output Upgrade
         // #zh_CN 生态圈产量升级
-        GTCMItemList.EcoSphereOutputBoostUpgrade.set(EcoSphereModeBeacon.registerVariant(9));
+        GTCMItemList.EcoSphereOutputBoostUpgrade.set(EcoSphereUpgrade.registerVariant(1));
 
-        // #tr item.EcoSphereModeBeacon.10.name
-        // # Eco-Sphere Speed Upgrade
-        // #zh_CN 生态圈速度升级
-        GTCMItemList.EcoSphereSpeedUpgrade.set(EcoSphereModeBeacon.registerVariant(10));
-
-        // #tr item.EcoSphereModeBeacon.11.name
+        // #tr item.EcoSphereUpgrade.3.name
         // # Eco-Sphere Capacity Upgrade
         // #zh_CN 生态圈扩容升级
-        GTCMItemList.EcoSphereCapacityUpgrade.set(EcoSphereModeBeacon.registerVariant(11));
+        GTCMItemList.EcoSphereCapacityUpgrade.set(EcoSphereUpgrade.registerVariant(2));
 
-        // #tr item.EcoSphereModeBeacon.12.name
+        // #tr item.EcoSphereUpgrade.2.name
+        // # Eco-Sphere Speed Upgrade
+        // #zh_CN 生态圈速度升级
+        GTCMItemList.EcoSphereSpeedUpgrade.set(EcoSphereUpgrade.registerVariant(3));
+
+        // #tr item.EcoSphereUpgrade.4.name
         // # Eco-Sphere Equipment Pulverization Upgrade
         // #zh_CN 生态圈装备磨粉升级
-        GTCMItemList.EcoSphereAutoPulverizeUpgrade.set(EcoSphereModeBeacon.registerVariant(12));
+        GTCMItemList.EcoSphereAutoPulverizeUpgrade.set(EcoSphereUpgrade.registerVariant(4));
+
+        // #tr item.EcoSphereUpgrade.5.name
+        // # Eco-Sphere Blood Orb Network Upgrade
+        // #zh_CN 生态圈气血宝珠网络升级
+        GTCMItemList.EcoSphereBloodOrbNetworkUpgrade.set(EcoSphereUpgrade.registerVariant(5));
+        EcoSphereUpgrade.setTooltips(
+            5,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.5.tooltip.0
+                // # Opens one cloning weapon slot and enables Blood Orb network access
+                // #zh_CN 开启一个克隆武器槽位并启用气血宝珠网络访问
+                tr("item.EcoSphereUpgrade.5.tooltip.0"),
+                // #tr item.EcoSphereUpgrade.5.tooltip.1
+                // # Place the orb in a weapon slot; normal Blood Orbs must be bound
+                // #zh_CN 将宝珠放入武器槽; 普通气血宝珠必须已绑定
+                tr("item.EcoSphereUpgrade.5.tooltip.1") },
+            false);
 
         // endregion
     }

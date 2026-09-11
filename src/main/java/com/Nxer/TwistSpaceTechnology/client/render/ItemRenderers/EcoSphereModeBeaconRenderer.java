@@ -18,6 +18,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 import com.gtnewhorizon.cropsnh.api.CropsNHItemList;
 
+import WayofTime.alchemicalWizardry.ModItems;
 import fox.spiteful.avaritia.items.LudicrousItems;
 import fox.spiteful.avaritia.render.CosmicItemRenderer;
 import gregtech.api.enums.ItemList;
@@ -37,12 +38,13 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return item != null && item.getItem() == TstItems.EcoSphereModeBeacon;
+        return item != null
+            && (item.getItem() == TstItems.EcoSphereModeBeacon || item.getItem() == TstItems.EcoSphereUpgrade);
     }
 
     @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-        ItemStack displayStack = getDisplayStack(item.getItemDamage());
+        ItemStack displayStack = getDisplayStack(item);
         if (displayStack.getItem() == LudicrousItems.infinity_sword) {
             return COSMIC_RENDERER.shouldUseRenderHelper(type, displayStack, helper);
         }
@@ -52,21 +54,20 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         int meta = item.getItemDamage();
-        boolean upgrade = meta >= 8;
-        IIcon background = upgrade ? TstItems.EcoSphereModeBeacon.getUpgradeBackgroundIcon()
+        boolean upgrade = item.getItem() == TstItems.EcoSphereUpgrade;
+        IIcon background = upgrade ? TstItems.EcoSphereUpgrade.getBackgroundIcon()
             : TstItems.EcoSphereModeBeacon.getBackgroundIcon();
-        IIcon frame = upgrade ? TstItems.EcoSphereModeBeacon.getUpgradeFrameIcon()
-            : TstItems.EcoSphereModeBeacon.getFrameIcon();
+        IIcon frame = upgrade ? TstItems.EcoSphereUpgrade.getFrameIcon() : TstItems.EcoSphereModeBeacon.getFrameIcon();
         // Draw the background first so every beacon has the same solid base.
         renderBase(type, background, frame, item.getItemSpriteNumber());
 
         // Pick the item shown in the center from the beacon metadata.
-        ItemStack displayStack = getDisplayStack(meta);
+        ItemStack displayStack = getDisplayStack(item);
 
         // Keep all center-item changes inside this matrix.
         GL11.glPushMatrix();
         // Center and resize the item so it stays inside the frame.
-        applyContentTransform(type, meta);
+        applyContentTransform(type, upgrade ? -1 : meta);
         if (displayStack.getItem() == LudicrousItems.infinity_sword) {
             // Keep the original cosmic effect for the Infinity Sword.
             applyLayerDepth(type, -1.0F);
@@ -78,7 +79,7 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
                 COSMIC_RENDERER.renderItem(type, displayStack, data);
             }
             restoreLayerDepth(type);
-        } else if (meta == 12) {
+        } else if (upgrade && meta == 4) {
             // Auto-Pulverize upgrade: the center Infinity dust reuses GT's Infinity effect,
             // but only inside the frame; the frame itself stays on top and the base below.
             renderInfinityItem(type, displayStack);
@@ -107,7 +108,20 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
         }
     }
 
-    private static ItemStack getDisplayStack(int meta) {
+    private static ItemStack getDisplayStack(ItemStack item) {
+        int meta = item.getItemDamage();
+        if (item.getItem() == TstItems.EcoSphereUpgrade) {
+            return switch (meta) {
+                case 0 -> ItemList.Cell_Empty.get(1);
+                case 1 -> new ItemStack(Items.wheat);
+                case 2 -> getNodeUpgrade();
+                case 3 -> getModuleOutputUpgrade();
+                case 4 -> Materials.Infinity.getDust(1);
+                case 5 -> new ItemStack(ModItems.weakBloodOrb);
+                default -> GTCMItemList.TestItem0.get(1);
+            };
+        }
+
         // Each metadata value uses one familiar item as its mode icon.
         return switch (meta) {
             case 0 -> new ItemStack(Item.getItemFromBlock(Blocks.sapling), 1, 0);
@@ -116,13 +130,9 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
             case 3 -> getUnknownLiquidBucket();
             case 4 -> new ItemStack(Items.wheat_seeds);
             case 5 -> getGaiaWart();
-            case 6 -> new ItemStack(Items.diamond_sword);
-            case 7 -> new ItemStack(LudicrousItems.infinity_sword);
-            case 8 -> ItemList.Cell_Empty.get(1);
-            case 9 -> new ItemStack(Items.wheat);
-            case 10 -> getNodeUpgrade();
-            case 11 -> getModuleOutputUpgrade();
-            case 12 -> Materials.Infinity.getDust(1);
+            case 6 -> new ItemStack(ModItems.weakBloodShard);
+            case 7 -> new ItemStack(Items.diamond_sword);
+            case 8 -> new ItemStack(LudicrousItems.infinity_sword);
             default -> GTCMItemList.TestItem0.get(1);
         };
     }

@@ -7,10 +7,7 @@ import static gregtech.api.util.GTUtility.dropItemToBlockPos;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -23,12 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.input.Keyboard;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.github.bsideup.jabel.Desugar;
-import com.gtnewhorizon.cropsnh.api.ICropCard;
-import com.gtnewhorizon.cropsnh.api.ISeedData;
-import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
-import com.gtnewhorizon.cropsnh.tileentity.TileEntityCropSticks;
-import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
 import com.gtnewhorizons.modularui.api.drawable.ItemDrawable;
 import com.gtnewhorizons.modularui.api.drawable.shapes.Rectangle;
@@ -133,7 +126,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     @Override
     public int getInventoryStackLimit() {
-        return 64;
+        return machineMode == 3 ? 1 : 64;
     }
 
     @Override
@@ -150,23 +143,34 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     public void setMachineState(int mode, int installedCapacityUpgrades) {
         int newCapacityUpgrades = Math.max(0, Math.min(4, installedCapacityUpgrades));
-        if (mode == machineMode && newCapacityUpgrades < capacityUpgrades) {
-            // Eject excess stacks when the per-slot stack limit shrinks (capacity upgrades removed).
-            // Switching the mode beacon must NOT eject any stored items; they stay in their slots.
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (mode >= 0 && base != null && base.isServerSide() && base.getWorld() != null) {
             int firstSlot = getFirstInputSlot(mode);
             int activeSlots = getActiveInputSlots(mode, newCapacityUpgrades);
             int slotLimit = getSlotStackLimit(mode, newCapacityUpgrades);
+            boolean changed = false;
+            if (mode == machineMode && newCapacityUpgrades < capacityUpgrades) {
+                // Only slots disabled by an actual same-mode capacity loss are ejected.
+                int oldActiveSlots = getActiveInputSlots(mode, capacityUpgrades);
+                for (int slot = firstSlot + activeSlots; slot < firstSlot + oldActiveSlots; slot++) {
+                    ItemStack stack = mInventory[slot];
+                    if (stack == null || stack.stackSize <= 0) continue;
+                    dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), stack);
+                    mInventory[slot] = null;
+                    changed = true;
+                }
+            }
+            // Always enforce the current limit; a transient mode state can hide the previous capacity decrease.
             for (int slot = firstSlot; slot < firstSlot + activeSlots; slot++) {
                 ItemStack stack = mInventory[slot];
                 if (stack == null || stack.stackSize <= slotLimit) continue;
                 ItemStack excess = stack.copy();
                 excess.stackSize = stack.stackSize - slotLimit;
                 stack.stackSize = slotLimit;
-                IGregTechTileEntity base = getBaseMetaTileEntity();
-                if (base != null && base.isServerSide() && base.getWorld() != null) {
-                    dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), excess);
-                }
+                dropItemToBlockPos(base.getWorld(), base.getXCoord(), base.getYCoord(), base.getZCoord(), excess);
+                changed = true;
             }
+            if (changed) base.markDirty();
         }
         machineMode = mode;
         capacityUpgrades = newCapacityUpgrades;
@@ -189,10 +193,6 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         int slots = getActiveInputSlots();
         int firstSlot = getFirstInputSlot();
         List<ItemStack> inputs = new ArrayList<>(slots);
-        // For greenhouse mode: deduplicate by crop IDENTITY and keep only the highest-rated seed stack.
-        // key -> the current best stack; score map is kept separately because ItemStack equality is NBT-aware.
-        Map<String, ItemStack> bestStacks = machineMode == 2 ? new LinkedHashMap<>() : null;
-        Map<String, Double> bestScores = machineMode == 2 ? new HashMap<>() : null;
         ItemStack aquaticTarget = null;
         for (int i = firstSlot; i < firstSlot + slots; i++) {
             ItemStack stack = mInventory[i];
@@ -202,84 +202,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
                 if (aquaticTarget != null && !aquaticTarget.isItemEqual(stack)) continue;
                 aquaticTarget = stack;
             }
-            if (bestStacks != null) {
-                // A hybrid seed and its alternate seed of the same crop share one identity; keep the
-                // best-scoring stack so identical slots never stack their output twice.
-                String key = getGreenhouseSeedIdentity(stack);
-                double score = getGreenhouseSeedOutputScore(stack);
-                ItemStack existing = bestStacks.get(key);
-                if (existing == null || score > bestScores.getOrDefault(key, Double.NEGATIVE_INFINITY)) {
-                    bestStacks.put(key, stack.copy());
-                    bestScores.put(key, score);
-                }
-            } else {
-                inputs.add(stack);
-            }
+            inputs.add(stack);
         }
-        if (bestStacks != null) inputs.addAll(bestStacks.values());
         return inputs.toArray(new ItemStack[0]);
     }
-
-    /**
-     * Resolves the greenhouse deduplication identity of a seed stack.
-     * Hybrid seeds (ItemGenericSeed with crop nbt) and alternate seeds (raw crop items) that map to the
-     * same CropsNH crop share the same "cropsnh:{id}" key, so they cannot be stacked twice. Stacks that
-     * have no CropsNH identity (e.g. vanilla plantable crops) fall back to their raw item id.
-     */
-    private static String getGreenhouseSeedIdentity(ItemStack stack) {
-        ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(stack);
-        if (seedData != null) return "cropsnh:" + seedData.getCrop()
-            .getId();
-        ICropCard crop = CropRegistry.instance.fromAlternateSeed(stack);
-        if (crop != null) return "cropsnh:" + crop.getId();
-        return "minecraft:" + stack.getItem()
-            .getUnlocalizedName();
-    }
-
-    /**
-     * Approximates the expected output per cycle of a greenhouse seed stack, mirroring the CropsNH
-     * farm chain: harvest = (1 + avgDropIncrease) * chance * avgDropRounds, progress = per-tick growth
-     * fraction * CYCLE_TICK_RATE_SCALAR. Alternate seeds (no stats) are scored with the default 1/1/1
-     * chain times the ALTERNATE_SEED_EFFICIENCY penalty, so a bred hybrid seed always outranks feeding
-     * the raw crop item. Only the ranking matters here, absolute values are irrelevant.
-     */
-    private static double getGreenhouseSeedOutputScore(ItemStack stack) {
-        ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(stack);
-        if (seedData != null) {
-            ICropCard crop = seedData.getCrop();
-            int gain = seedData.getStats()
-                .getGain();
-            double avgDropRounds = TileEntityCropSticks.getAvgDropRounds(crop, gain);
-            double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(gain);
-            int growthRate = TileEntityCropSticks.getGrowthRate(
-                TileEntityCropSticks.MAX_NUTRIENT_SCORE,
-                crop.getTier(),
-                seedData.getStats()
-                    .getGrowth());
-            if (growthRate <= 0) return -1;
-            int growthTicks = crop.getGrowthDuration() / growthRate;
-            if (crop.getGrowthDuration() % growthRate != 0) growthTicks++;
-            double progress = (1.0d / growthTicks) * (100.0d / 256.0d);
-            return avgDropIncrease * avgDropRounds * progress;
-        }
-        ICropCard crop = CropRegistry.instance.fromAlternateSeed(stack);
-        if (crop != null) {
-            // Score as default 1/1/1 stats through the full chain times the alternate-seed penalty.
-            int growthRate = TileEntityCropSticks
-                .getGrowthRate(TileEntityCropSticks.MAX_NUTRIENT_SCORE, crop.getTier(), 1);
-            if (growthRate <= 0) return -1;
-            int growthTicks = crop.getGrowthDuration() / growthRate;
-            if (crop.getGrowthDuration() % growthRate != 0) growthTicks++;
-            double progress = (1.0d / growthTicks) * (100.0d / 256.0d);
-            double avgDropRounds = TileEntityCropSticks.getAvgDropRounds(crop, 1);
-            double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(1);
-            return avgDropIncrease * avgDropRounds * progress * ALTERNATE_SEED_EFFICIENCY_SCORE;
-        }
-        // Non-CropsNH stacks (vanilla plantable) can't be ranked; keep them as-is.
-        return 0;
-    }
-
-    private static final double ALTERNATE_SEED_EFFICIENCY_SCORE = 0.25d;
 
     public EnumSet<Mode> getSelectedTreeOutputs() {
         EnumSet<Mode> selected = EnumSet.noneOf(Mode.class);
@@ -290,7 +216,19 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     }
 
     public ItemStack[] getCloningWeapons() {
-        return getModeInputs();
+        List<ItemStack> weapons = new ArrayList<>();
+        // The orb pays LP costs but must not contribute weapon or looting tags.
+        for (ItemStack stack : getModeInputs()) {
+            if (!BloodMagicHelper.isBloodOrb(stack)) weapons.add(stack);
+        }
+        return weapons.toArray(new ItemStack[0]);
+    }
+
+    public ItemStack getCloningBloodOrb() {
+        for (ItemStack stack : getModeInputs()) {
+            if (BloodMagicHelper.isBloodOrb(stack)) return stack;
+        }
+        return null;
     }
 
     public int getAquaticFocusWeight() {
@@ -332,6 +270,13 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private boolean isInputValid(int index, ItemStack stack) {
         if (stack == null || stack.getItem() == null) return false;
+        if (machineMode == 3 && BloodMagicHelper.isBloodOrb(stack)) {
+            int firstSlot = getFirstInputSlot();
+            for (int i = firstSlot; i < firstSlot + CLONING_MAX_WEAPON_SLOTS; i++) {
+                if (i != index && BloodMagicHelper.isBloodOrb(mInventory[i])) return false;
+            }
+            return true;
+        }
         // Offspring only stacks by 1 (item-owned limit).
         if (machineMode != 1) return true;
         // Only one target kind may be focused: reject items differing from already placed targets.

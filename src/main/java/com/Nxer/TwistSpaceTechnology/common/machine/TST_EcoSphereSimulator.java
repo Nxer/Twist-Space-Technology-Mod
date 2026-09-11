@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.stream.IntStream;
 
 import javax.annotation.Nonnull;
@@ -88,6 +89,7 @@ import gregtech.api.interfaces.INEIPreviewModifier;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -99,6 +101,8 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.VoidProtectionHelper;
+import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
@@ -133,6 +137,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     private boolean modeBeaconPresent = false;
     private boolean cleaningRequested = false;
     private boolean cleaningRunActive = false;
+    // Pending survives output checks; active survives the run until recipe-0 output is routed.
+    private boolean activeRecipeZeroLpOutput = false;
+    private boolean pendingRecipeZeroLpOutput = false;
+    // Recipe inputs are reserved during calculation and committed only after output protection succeeds.
+    private BooleanSupplier pendingRecipeConsumption;
     private boolean debugItemInstalled = false;
     private String fluidAreaFluidName = "";
     private boolean fluidAreaInitialized = false;
@@ -169,19 +178,25 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public int getModeBeaconTier() {
         ItemStack beacon = getControllerSlot();
         if (getModeFromBeacon(beacon) < 0) return 0;
-        return beacon.getItemDamage() % 2 + 1;
+        int meta = beacon.getItemDamage();
+        // Modes 0-2 alternate T1/T2; cloning metas 6-8 map directly to tiers 1-3.
+        return meta <= 5 ? meta % 2 + 1 : meta - 5;
     }
 
-    public boolean hasDirectedMobClonerTierTwoBeacon() {
-        return getModeFromBeacon(getControllerSlot()) == 3 && hasSecondaryModeBeacon();
+    public boolean hasDirectedMobClonerTierThreeBeacon() {
+        return getModeFromBeacon(getControllerSlot()) == 3 && getModeBeaconTier() >= 3;
     }
 
     public boolean hasSecondaryModeBeacon() {
-        return getModeBeaconTier() == 2;
+        return getModeBeaconTier() >= 2;
     }
 
     public long applyFluidDiscount(long fluidAmount) {
         return installedUpgrades.applyFluidDiscount(fluidAmount);
+    }
+
+    public void setPendingRecipeConsumption(BooleanSupplier consumption) {
+        pendingRecipeConsumption = consumption;
     }
 
     // Mode processing starts only after both required interfaces pass structure validation.
@@ -199,6 +214,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     public ItemStack[] getCloningWeapons() {
         return ecoSphereInputInterface.getCloningWeapons();
+    }
+
+    public ItemStack getCloningBloodOrb() {
+        if (!hasSpecialUpgrade(EcoSphereSpecialUpgrade.BLOOD_ORB_NETWORK) || ecoSphereInputInterface == null)
+            return null;
+        return ecoSphereInputInterface.getCloningBloodOrb();
     }
 
     public int getAquaticFocusWeight() {
@@ -328,6 +349,31 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
     }
 
+    @Override
+    protected void addFluidOutputs(FluidStack[] outputs) {
+        // Intercept GT's completion-time fluid ejection so interrupted recipes never credit LP.
+        boolean routeLpOutput = activeRecipeZeroLpOutput;
+        try {
+            if (routeLpOutput) {
+                outputs = DirectedMobClonerMode.routeLifeEssenceLpOutputToNetwork(getCloningBloodOrb(), outputs);
+            }
+            super.addFluidOutputs(outputs);
+        } finally {
+            if (routeLpOutput) {
+                activeRecipeZeroLpOutput = false;
+                markDirty();
+            }
+        }
+    }
+
+    @Override
+    public void stopMachine(ShutDownReason reason) {
+        activeRecipeZeroLpOutput = false;
+        pendingRecipeZeroLpOutput = false;
+        pendingRecipeConsumption = null;
+        super.stopMachine(reason);
+    }
+
     // Detect beacon changes and route every mode switch through the cleaning sequence.
     private void updateModeBeaconBinding() {
         int requestedMode = getModeFromBeacon(getControllerSlot());
@@ -365,6 +411,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         pendingMode = requestedMode;
         cleaningRequested = true;
         cleaningRunActive = false;
+        activeRecipeZeroLpOutput = false;
+        pendingRecipeZeroLpOutput = false;
+        pendingRecipeConsumption = null;
         DebugMode.reset(this);
         missingFluidAreaInput = null;
         mProgresstime = 0;
@@ -374,11 +423,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         markDirty();
     }
 
-    // Map the eight beacon items to the four machine modes.
+    // Map the nine beacon items to the four machine modes.
     public static int getModeFromBeacon(ItemStack stack) {
         if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.EcoSphereModeBeacon) return -1;
         int meta = stack.getItemDamage();
-        return meta >= 0 && meta <= 7 ? meta / 2 : -1;
+        if (meta >= 0 && meta <= 5) return meta / 2;
+        return meta >= 6 && meta <= 8 ? 3 : -1;
     }
 
     @Override
@@ -400,6 +450,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         aNBT.setInteger("pendingMode", pendingMode);
         aNBT.setBoolean("cleaningRequested", cleaningRequested);
         aNBT.setBoolean("cleaningRunActive", cleaningRunActive);
+        aNBT.setBoolean("activeRecipeZeroLpOutput", activeRecipeZeroLpOutput);
         aNBT.setBoolean("debugItemInstalled", debugItemInstalled);
         aNBT.setString("fluidAreaFluidName", fluidAreaFluidName);
         aNBT.setBoolean("fluidAreaInitialized", fluidAreaInitialized);
@@ -414,6 +465,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         pendingMode = aNBT.hasKey("pendingMode") ? aNBT.getInteger("pendingMode") : -1;
         cleaningRequested = aNBT.getBoolean("cleaningRequested");
         cleaningRunActive = aNBT.getBoolean("cleaningRunActive");
+        activeRecipeZeroLpOutput = aNBT.getBoolean("activeRecipeZeroLpOutput");
         debugItemInstalled = aNBT.getBoolean("debugItemInstalled");
         fluidAreaFluidName = aNBT.getString("fluidAreaFluidName");
         fluidAreaInitialized = aNBT.hasKey("fluidAreaInitialized") && aNBT.getBoolean("fluidAreaInitialized");
@@ -842,11 +894,18 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return boundMode >= 0 && boundMode < MACHINE_MODES.length ? MACHINE_MODES[boundMode] : null;
     }
 
+    // Tree and greenhouse displays use dynamic water so their five source blocks start flowing naturally.
+    private static Block getFluidAreaBlock(Fluid fluid, boolean fillMainArea) {
+        if (!fillMainArea && fluid == FluidRegistry.WATER) return Blocks.flowing_water;
+        return fluid == null ? null : fluid.getBlock();
+    }
+
     // Fill one required layer per processing step and skip all checks after NBT marks completion.
     private boolean prepareFluidArea(Fluid targetFluid, boolean fillMainArea) {
         final int fluidAreaBlockCost = 1000;
         fluidAreaFillDuration = 0;
-        if (targetFluid == null || targetFluid.getBlock() == null) {
+        Block targetBlock = getFluidAreaBlock(targetFluid, fillMainArea);
+        if (targetFluid == null || targetBlock == null) {
             fluidAreaInitialized = false;
             missingFluidAreaInput = null;
             if (targetFluid != null) missingFluidAreaInput = new FluidStack(targetFluid, fluidAreaBlockCost);
@@ -854,7 +913,6 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         }
 
         String targetName = targetFluid.getName();
-        Block targetBlock = targetFluid.getBlock();
         if (!targetName.equals(fluidAreaFluidName)) {
             // A fluid change uses the same cleaning and drain animation as a beacon change.
             if (!fluidAreaFluidName.isEmpty()) {
@@ -964,7 +1022,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         EcoSphereFluidAreaHandler fluidArea = getFluidAreaHandler();
         int blockCount = fluidArea.countLayerBlocks(area, layer);
         long fluidCost = (long) blockCount * fluidAreaBlockCost;
-        if (!EcoSphereModeSupport.drainFluid(this, targetFluid, fluidCost)) {
+        // Only Life Essence may substitute bound-network LP for physical structure fluid.
+        boolean consumed = targetFluid == FluidRegistry.getFluid("lifeessence")
+            ? DirectedMobClonerMode.consumeLifeEssenceForFluidArea(this, fluidCost)
+            : EcoSphereModeSupport.drainFluid(this, targetFluid, fluidCost);
+        if (!consumed) {
             fluidAreaInitialized = false;
             missingFluidAreaInput = new FluidStack(targetFluid, (int) Math.min(Integer.MAX_VALUE, fluidCost));
             getBaseMetaTileEntity().disableWorking();
@@ -984,7 +1046,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (base != null && base.isServerSide()) {
             Fluid placedFluid = FluidRegistry.getFluid(fluidAreaFluidName);
-            if (placedFluid != null) getFluidAreaHandler().clearPlacedSources(placedFluid.getBlock());
+            IEcoSphereMode mode = getBoundMode();
+            boolean withMainArea = mode != null && mode.displaysFluidArea();
+            Block placedFluidBlock = getFluidAreaBlock(placedFluid, withMainArea);
+            if (placedFluidBlock != null) getFluidAreaHandler().clearPlacedSources(placedFluidBlock);
             fluidAreaFluidName = "";
             fluidAreaInitialized = false;
             fluidAreaFillDuration = 0;
@@ -1058,6 +1123,53 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return true;
     }
 
+    private CheckRecipeResult checkModeOutputCapacity(EcoSphereModeResult modeResult, boolean recipeZeroLpOutput) {
+        FluidStack[] fluidOutputs = modeResult.fluidOutputs();
+        if (recipeZeroLpOutput) {
+            // Void protection only reserves hatch space for output the LP network cannot accept.
+            fluidOutputs = DirectedMobClonerMode
+                .getRecipeZeroFluidOutputsForCapacityCheck(getCloningBloodOrb(), fluidOutputs);
+        }
+        VoidProtectionHelper outputProtection = new VoidProtectionHelper().setMachine(this)
+            .setItemOutputs(modeResult.outputs())
+            .setFluidOutputs(fluidOutputs)
+            .setMaxParallel(1)
+            .build();
+        if (outputProtection.isItemFull()) return CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
+        if (outputProtection.isFluidFull()) return CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private boolean commitPendingRecipeConsumption() {
+        BooleanSupplier consumption = pendingRecipeConsumption;
+        pendingRecipeConsumption = null;
+        return consumption != null && consumption.getAsBoolean();
+    }
+
+    @Override
+    protected @NotNull CheckRecipeResult postCheckRecipe(@NotNull CheckRecipeResult result,
+        @NotNull ProcessingLogic logic) {
+        result = super.postCheckRecipe(result, logic);
+        if (!result.wasSuccessful()) {
+            pendingRecipeZeroLpOutput = false;
+            pendingRecipeConsumption = null;
+            currentParallel = 0;
+            return result;
+        }
+        if (pendingRecipeConsumption == null) return result;
+
+        boolean recipeZeroLpOutput = pendingRecipeZeroLpOutput;
+        pendingRecipeZeroLpOutput = false;
+        // Commit reserved inputs only after GT and custom void protection accept the recipe.
+        if (!commitPendingRecipeConsumption()) {
+            currentParallel = 0;
+            return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        }
+        activeRecipeZeroLpOutput = recipeZeroLpOutput;
+        if (recipeZeroLpOutput) markDirty();
+        return result;
+    }
+
     @Override
     public GTCM_ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
@@ -1066,6 +1178,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             @Nonnull
             public CheckRecipeResult process() {
                 currentParallel = 0;
+                pendingRecipeZeroLpOutput = false;
+                pendingRecipeConsumption = null;
+                if (activeRecipeZeroLpOutput) {
+                    activeRecipeZeroLpOutput = false;
+                    markDirty();
+                }
                 // Always use the latest beacon before starting the next recipe.
                 updateModeBeaconBinding();
                 // Read upgrades first because fluid efficiency can raise the fluid-limited parallel count.
@@ -1103,6 +1221,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 DebugMode.reset(TST_EcoSphereSimulator.this);
 
                 parallelFromEUt = EcoSphereModeSupport.getParallelFromEUt(EuTier, isTierTwo());
+                boolean recipeZeroLpOutput = machineMode == 3 && getCloningRecipeId() == 0;
                 EcoSphereModeResult modeResult = MACHINE_MODES[machineMode]
                     .process(TST_EcoSphereSimulator.this, EuTier);
                 if (!modeResult.result()
@@ -1121,17 +1240,32 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     if (missingFluidAreaInput != null) return SimpleResultWithText.outOfFluid(missingFluidAreaInput);
                     return modeResult.result();
                 }
-                modeResult = installedUpgrades.applyTo(modeResult);
-                return applyModeResult(modeResult);
+                modeResult = installedUpgrades.applyTo(modeResult, recipeZeroLpOutput);
+                CheckRecipeResult outputCapacityResult = checkModeOutputCapacity(modeResult, recipeZeroLpOutput);
+                if (!outputCapacityResult.wasSuccessful()) {
+                    pendingRecipeConsumption = null;
+                    currentParallel = 0;
+                    return outputCapacityResult;
+                }
+                if (pendingRecipeConsumption == null) {
+                    currentParallel = 0;
+                    return CheckRecipeResultRegistry.INTERNAL_ERROR;
+                }
+                return applyModeResult(modeResult, recipeZeroLpOutput);
             }
 
             private CheckRecipeResult applyModeResult(EcoSphereModeResult modeResult) {
+                return applyModeResult(modeResult, false);
+            }
+
+            private CheckRecipeResult applyModeResult(EcoSphereModeResult modeResult, boolean recipeZeroLpOutput) {
                 if (!modeResult.result()
                     .wasSuccessful()) return modeResult.result();
                 outputItems = modeResult.outputs();
                 outputFluids = modeResult.fluidOutputs();
                 calculatedEut = modeResult.eut();
                 duration = modeResult.duration();
+                pendingRecipeZeroLpOutput = recipeZeroLpOutput;
                 return modeResult.result();
             }
 
@@ -1151,7 +1285,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 }
 
                 Fluid placedFluid = FluidRegistry.getFluid(fluidAreaFluidName);
-                Block placedFluidBlock = placedFluid == null ? null : placedFluid.getBlock();
+                Block placedFluidBlock = getFluidAreaBlock(placedFluid, withMainArea);
                 int cleaningDuration = getFluidAreaHandler().clearNextCleaningLayer(withMainArea, placedFluidBlock);
                 if (cleaningDuration <= 0) {
                     // Only expose the new mode after every old fluid layer is gone.
