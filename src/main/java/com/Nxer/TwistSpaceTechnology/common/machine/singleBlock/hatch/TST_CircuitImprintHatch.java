@@ -131,9 +131,7 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
-        if (aNBT.getByte("mCircuitUpdated") != 1) {
-            refreshImprint();
-        }
+        refreshImprint();
     }
 
     @Override
@@ -143,8 +141,8 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
     }
 
     @Override
-    public void setInventorySlotContents(int aIndex, ItemStack aStack) {
-        super.setInventorySlotContents(aIndex, aStack);
+    public void onContentsChanged(int aIndex) {
+        super.onContentsChanged(aIndex);
         refreshImprint();
     }
 
