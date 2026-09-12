@@ -45,7 +45,10 @@ public final class DirectedMobClonerFakeRecipe {
                 .itemInputs(circuit)
                 .itemOutputs(createDisplayOutputs(entry.getValue()))
                 .fluidInputs(lifeEssence)
-                .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 2)
+                .metadata(
+                    EcoSphereSimulatorTierRequirementKey.INSTANCE,
+                    entry.getValue()
+                        .boss() ? 2 : 1)
                 // Advertise only protocol tiers; the Infinity Sword alternative remains hidden runtime behavior.
                 .metadata(
                     EcoSphereSimulatorBeaconRequirementKey.INSTANCE,

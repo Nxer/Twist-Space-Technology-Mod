@@ -92,7 +92,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
         // init allOuts
         for (ItemStack aSapling : allSaplingsIn) {
-            EnumMap<Mode, ItemStack> productMap = queryTreeProduct(aSapling);
+            EnumMap<Mode, ItemStack> productMap = queryTreeProduct(aSapling, false);
             for (Mode mode : Mode.values()) {
                 ItemStack aStack = productMap.get(mode);
                 if (aStack == null) continue;
@@ -197,12 +197,12 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
     static void addSpecialFakeRecipe(ItemStack specialSapling, FluidStack specialFluid) {
         EnumMap<Mode, ItemStack> productMap = specialFluid.getFluid() == TEMPORAL_FLUID_STACK.getFluid()
             ? queryTimeTreeProduct(specialSapling)
-            : queryTreeProduct(specialSapling);
+            : queryTreeProduct(specialSapling, false);
         addFakeRecipe(productMap, allSaplingWithTag, specialFluid, 2);
     }
 
     static void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid, int requiredTier) {
-        addFakeRecipe(queryTreeProduct(Sapling), specialStacks, inputFluid, requiredTier);
+        addFakeRecipe(queryTreeProduct(Sapling, false), specialStacks, inputFluid, requiredTier);
     }
 
     static void addFakeRecipe(EnumMap<Mode, ItemStack> ProductMap, ItemStack[] specialStacks, FluidStack inputFluid,

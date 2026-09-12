@@ -182,6 +182,7 @@ public enum GTCMItemList {
     EcoSphereSpeedUpgrade,
     EcoSphereAutoPulverizeUpgrade,
     EcoSphereBloodOrbNetworkUpgrade,
+    EcoSphereMaxPlantGeneticsUpgrade,
 
     LvFlask,
     MvFlask,

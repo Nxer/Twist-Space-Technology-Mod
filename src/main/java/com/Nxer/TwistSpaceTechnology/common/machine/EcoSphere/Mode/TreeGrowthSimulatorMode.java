@@ -9,10 +9,10 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
@@ -46,16 +47,17 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     @Override
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
-        // Every valid input sapling is processed in one operation, so different saplings
-        // produce their own tree products together. Duplicate saplings are counted once.
+        // Every valid input sapling is processed in one operation. Duplicate saplings use only the largest stack.
         EnumSet<Mode> selectedInputs = machine.getSelectedTreeOutputs();
-        List<SaplingProducts> saplings = new ArrayList<>();
-        Set<TST_ItemID> seenSaplings = new HashSet<>();
+        Map<TST_ItemID, SaplingProducts> selectedSaplings = new LinkedHashMap<>();
         for (ItemStack input : machine.getModeInputs()) {
-            if (!seenSaplings.add(TST_ItemID.create(input))) continue;
-            EnumMap<Mode, ItemStack> products = queryTreeProduct(input);
-            if (products != null) saplings.add(new SaplingProducts(input, products));
+            TST_ItemID saplingId = TST_ItemID.create(input);
+            SaplingProducts current = selectedSaplings.get(saplingId);
+            if (current != null && current.sapling().stackSize >= input.stackSize) continue;
+            EnumMap<Mode, ItemStack> products = queryTreeProduct(input, false);
+            if (products != null) selectedSaplings.put(saplingId, new SaplingProducts(input, products));
         }
+        List<SaplingProducts> saplings = new ArrayList<>(selectedSaplings.values());
         if (saplings.isEmpty()) return EcoSphereModeResult.failure(MissingSaplingInput);
 
         FluidStack fluidInput = EcoSphereFluidCache.findFirstValidFluid(machine);
@@ -68,14 +70,22 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
         List<EnumMap<Mode, ItemStack>> productSets = new ArrayList<>();
         List<Integer> saplingCounts = new ArrayList<>();
+        boolean maximizeForestry = recipe.normalWater()
+            && machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.MAXIMIZE_PLANT_GENETICS);
         if (recipe.uuMatter()) {
             // UU matter ignores saplings and picks one random product per mode.
             productSets.add(buildUuProducts());
             saplingCounts.add(1);
         } else {
             for (SaplingProducts sapling : saplings) {
-                productSets.add(recipe.timeFluid() ? queryTimeTreeProduct(sapling.sapling()) : sapling.products());
-                saplingCounts.add(sapling.sapling().stackSize);
+                EnumMap<Mode, ItemStack> products = sapling.products();
+                if (recipe.timeFluid()) {
+                    products = queryTimeTreeProduct(sapling.sapling());
+                } else if (maximizeForestry) {
+                    products = queryTreeProduct(sapling.sapling(), true);
+                }
+                productSets.add(products);
+                saplingCounts.add(Math.min(sapling.sapling().stackSize, 64));
             }
         }
 
@@ -134,20 +144,21 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     private static TreeFluidRecipe findRecipe(FluidStack fluid) {
         FluidStack water = TreeGrowthSimulatorWithoutToolFakeRecipe.WATER_STACK;
-        if (water != null && fluid.getFluid() == water.getFluid()) return new TreeFluidRecipe(water, 1, false, false);
+        if (water != null && fluid.getFluid() == water.getFluid())
+            return new TreeFluidRecipe(water, 1, true, false, false);
         FluidStack temporalFluid = TreeGrowthSimulatorWithoutToolFakeRecipe.TEMPORAL_FLUID_STACK;
         if (temporalFluid != null && fluid.getFluid() == temporalFluid.getFluid())
-            return new TreeFluidRecipe(temporalFluid, 2, true, false);
+            return new TreeFluidRecipe(temporalFluid, 2, false, true, false);
         FluidStack deathWater = TreeGrowthSimulatorWithoutToolFakeRecipe.DEATH_WATER_STACK;
         if (deathWater != null && fluid.getFluid() == deathWater.getFluid())
-            return new TreeFluidRecipe(deathWater, 2, false, false);
+            return new TreeFluidRecipe(deathWater, 2, false, false, false);
         FluidStack unknownWater = TreeGrowthSimulatorWithoutToolFakeRecipe.UNKNOWN_WATER_STACK;
         if (unknownWater != null && fluid.getFluid() == unknownWater.getFluid())
-            return new TreeFluidRecipe(unknownWater, 2, false, false);
+            return new TreeFluidRecipe(unknownWater, 2, false, false, false);
         FluidStack uuMatter = TreeGrowthSimulatorWithoutToolFakeRecipe.UU_MATTER_STACK;
         if (uuMatter != null && fluid.getFluid() == uuMatter.getFluid()
             && TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts != null)
-            return new TreeFluidRecipe(uuMatter, 2, false, true);
+            return new TreeFluidRecipe(uuMatter, 2, false, false, true);
         return null;
     }
 
@@ -164,7 +175,8 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     }
 
     @Desugar
-    private record TreeFluidRecipe(FluidStack fluid, int requiredBeaconTier, boolean timeFluid, boolean uuMatter) {}
+    private record TreeFluidRecipe(FluidStack fluid, int requiredBeaconTier, boolean normalWater, boolean timeFluid,
+        boolean uuMatter) {}
 
     public static int getModeMultiplier(Mode mode) {
         return switch (mode) {
@@ -175,15 +187,15 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         };
     }
 
-    public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
+    public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling, boolean maximizeForestry) {
         String key = EcoSphereModeSupport.getItemStackString(sapling);
         EnumMap<Mode, ItemStack> productMap = gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap
             .get(key);
-        return productMap != null ? productMap : getOutputsForForestrySapling(sapling);
+        return productMap != null ? productMap : getOutputsForForestrySapling(sapling, maximizeForestry);
     }
 
     public static EnumMap<Mode, ItemStack> queryTimeTreeProduct(ItemStack sapling) {
-        EnumMap<Mode, ItemStack> productMap = queryTreeProduct(sapling);
+        EnumMap<Mode, ItemStack> productMap = queryTreeProduct(sapling, false);
         if (productMap == null) return null;
         EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(productMap);
         ItemStack timewoodClock = gregtech.api.util.GTModHandler
@@ -192,7 +204,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         return adjustedMap;
     }
 
-    private static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling) {
+    private static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling, boolean maximizeForestry) {
         forestry.api.arboriculture.ITree tree = forestry.api.arboriculture.TreeManager.treeRoot.getMember(sapling);
         if (tree == null) return null;
         EnumMap<Mode, ItemStack> defaultMap = gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap
@@ -201,23 +213,24 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(Mode.class);
         ItemStack log = defaultMap.get(Mode.LOG);
         if (log != null) {
-            double height = Math.max(
-                3 * (tree.getGenome()
-                    .getHeight() - 1),
-                0) + 1;
+            double treeHeight = maximizeForestry ? 2.0
+                : tree.getGenome()
+                    .getHeight();
+            int treeGirth = maximizeForestry ? 10
+                : tree.getGenome()
+                    .getGirth();
+            double height = Math.max(3 * (treeHeight - 1), 0) + 1;
             log = log.copy();
-            log.stackSize = (int) (log.stackSize * height
-                * tree.getGenome()
-                    .getGirth());
+            log.stackSize = (int) (log.stackSize * height * treeGirth);
             adjustedMap.put(Mode.LOG, log);
         }
         ItemStack saplingOut = defaultMap.get(Mode.SAPLING);
         if (saplingOut != null) {
             saplingOut = sapling.copy();
-            saplingOut.stackSize = Math.max(
-                1,
-                (int) (defaultMap.get(Mode.SAPLING).stackSize * tree.getGenome()
-                    .getFertility() * 10));
+            double fertility = maximizeForestry ? 0.3
+                : tree.getGenome()
+                    .getFertility();
+            saplingOut.stackSize = Math.max(1, (int) (defaultMap.get(Mode.SAPLING).stackSize * fertility * 10));
             adjustedMap.put(Mode.SAPLING, saplingOut);
         }
         ItemStack leaves = defaultMap.get(Mode.LEAVES);
@@ -225,8 +238,10 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         ItemStack fruit = defaultMap.get(Mode.FRUIT);
         if (fruit != null) {
             fruit = fruit.copy();
-            fruit.stackSize = (int) (fruit.stackSize * tree.getGenome()
-                .getYield() * 10);
+            double yield = maximizeForestry ? 0.4
+                : tree.getGenome()
+                    .getYield();
+            fruit.stackSize = (int) (fruit.stackSize * yield * 10);
             adjustedMap.put(Mode.FRUIT, fruit);
         }
         return adjustedMap;

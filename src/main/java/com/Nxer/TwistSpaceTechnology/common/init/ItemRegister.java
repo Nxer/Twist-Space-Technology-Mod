@@ -1196,6 +1196,11 @@ public class ItemRegister {
         // # Eco-Sphere Blood Orb Network Upgrade
         // #zh_CN 生态圈气血宝珠网络升级
         GTCMItemList.EcoSphereBloodOrbNetworkUpgrade.set(EcoSphereUpgrade.registerVariant(5));
+
+        // #tr item.EcoSphereUpgrade.6.name
+        // # Eco-Sphere Plant Genetics Maximization Upgrade
+        // #zh_CN 生态圈植物基因满级升级
+        GTCMItemList.EcoSphereMaxPlantGeneticsUpgrade.set(EcoSphereUpgrade.registerVariant(6));
         EcoSphereUpgrade.setTooltips(
             5,
             new String[] {

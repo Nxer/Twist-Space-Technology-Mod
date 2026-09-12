@@ -73,11 +73,9 @@ public final class EcoSphereUpgradeResult {
         double outputMultiplier = getOutputMultiplier();
         for (ItemStack output : outputs) {
             if (output == null) continue;
-            double outputScale = outputMultiplier;
             ItemStack offspring = AquaticZoneSimulatorFakeRecipe.OFFSPRING;
-            if (offspring == null || !output.isItemEqual(offspring)) {
-                outputScale *= 0.85 + XSTR.XSTR_INSTANCE.nextDouble() * 0.15;
-            }
+            if (offspring != null && output.isItemEqual(offspring)) continue;
+            double outputScale = outputMultiplier * (0.85 + XSTR.XSTR_INSTANCE.nextDouble() * 0.15);
             output.stackSize = multiplySaturated(output.stackSize, outputScale);
         }
         return outputs;

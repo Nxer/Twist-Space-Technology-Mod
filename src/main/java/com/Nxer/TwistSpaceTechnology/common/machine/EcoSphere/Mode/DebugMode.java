@@ -182,9 +182,11 @@ public final class DebugMode {
         ItemStack timeTree = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
         if (timeTree != null) collectTreeRecipe(outputs, TreeGrowthSimulatorMode.queryTimeTreeProduct(timeTree));
         ItemStack taintedTree = GTModHandler.getModItem(Mods.ForbiddenMagic.ID, "TaintSapling", 1, 0);
-        if (taintedTree != null) collectTreeRecipe(outputs, TreeGrowthSimulatorMode.queryTreeProduct(taintedTree));
+        if (taintedTree != null)
+            collectTreeRecipe(outputs, TreeGrowthSimulatorMode.queryTreeProduct(taintedTree, false));
         ItemStack barnardaCTree = GTModHandler.getModItem(Mods.GalaxySpace.ID, "barnardaCsapling", 1, 0);
-        if (barnardaCTree != null) collectTreeRecipe(outputs, TreeGrowthSimulatorMode.queryTreeProduct(barnardaCTree));
+        if (barnardaCTree != null)
+            collectTreeRecipe(outputs, TreeGrowthSimulatorMode.queryTreeProduct(barnardaCTree, false));
     }
 
     private static void collectTreeRecipe(Map<TST_ItemID, Long> outputs, EnumMap<Mode, ItemStack> products) {
@@ -216,12 +218,12 @@ public final class DebugMode {
 
     private static void collectClonerOutputs(Map<TST_ItemID, Long> outputs, int beaconTier, boolean tierTwo,
         boolean autoPulverize, WeaponTags weaponTags) {
-        if (!tierTwo || beaconTier < 2) return;
+        if (beaconTier < 2) return;
         boolean bossAccess = beaconTier >= 3
             || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;
         for (DirectedMobClonerRecipeCache.CachedRecipe recipe : DirectedMobClonerRecipeCache.getDebugRecipes()) {
-            // Tier III or the Infinity Sword adds boss recipes to the same numbered pool.
-            if (recipe.boss() && !bossAccess) continue;
+            // Boss recipes additionally require the tier-II structure and tier-III authorization.
+            if (recipe.boss() && (!tierTwo || !bossAccess)) continue;
             for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
                 List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0 ? recipe.ordinaryOutputs()
                     : recipe.equipmentOutputs(autoPulverize);

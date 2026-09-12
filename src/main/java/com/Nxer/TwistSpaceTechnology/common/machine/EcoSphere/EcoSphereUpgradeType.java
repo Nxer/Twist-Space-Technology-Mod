@@ -13,7 +13,8 @@ public enum EcoSphereUpgradeType {
     SPEED(2, 0b1111, null),
     CAPACITY(3, 0b1111, null),
     AUTO_PULVERIZE_EQUIPMENT(4, 0b1000, EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT),
-    BLOOD_ORB_NETWORK(5, 0b1000, EcoSphereSpecialUpgrade.BLOOD_ORB_NETWORK);
+    BLOOD_ORB_NETWORK(5, 0b1000, EcoSphereSpecialUpgrade.BLOOD_ORB_NETWORK),
+    MAXIMIZE_PLANT_GENETICS(6, 0b0101, EcoSphereSpecialUpgrade.MAXIMIZE_PLANT_GENETICS);
 
     @Getter
     private final int metadata;

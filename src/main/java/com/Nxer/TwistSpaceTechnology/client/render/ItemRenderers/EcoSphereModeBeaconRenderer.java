@@ -118,6 +118,7 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
                 case 3 -> getModuleOutputUpgrade();
                 case 4 -> Materials.Infinity.getDust(1);
                 case 5 -> new ItemStack(ModItems.weakBloodOrb);
+                case 6 -> CropsNHItemList.plantCure.get(1);
                 default -> GTCMItemList.TestItem0.get(1);
             };
         }

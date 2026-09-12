@@ -6,20 +6,32 @@ import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.ArtificialGreenHouseFakeRecipe;
+import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.github.bsideup.jabel.Desugar;
+import com.gtnewhorizon.cropsnh.api.ICropCard;
+import com.gtnewhorizon.cropsnh.api.ISeedData;
+import com.gtnewhorizon.cropsnh.api.ISeedStats;
+import com.gtnewhorizon.cropsnh.farming.SeedStats;
+import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
+import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -29,6 +41,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     // Applied after crop-specific growth and drop calculations, before shared upgrade and random output scaling.
     private static final double OUTPUT_SCALE = 40.0d;
+    private static final SeedStats MAX_SEED_STATS = new SeedStats((byte) 31, (byte) 31, (byte) 31, true);
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -78,14 +91,48 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
     }
 
     private static List<CropsNHFarm.CropCache> findCrops(TST_EcoSphereSimulator machine) {
-        List<CropsNHFarm.CropCache> crops = new ArrayList<>();
+        Map<Object, CropSelection> selectedCrops = new LinkedHashMap<>();
+        boolean maximizeGenetics = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.MAXIMIZE_PLANT_GENETICS);
         for (ItemStack input : machine.getModeInputs()) {
             ItemStack seed = input.copy();
             seed.stackSize = 1;
+
+            // CropsNH stores different stats in NBT, so seeds of one registered crop share one selection slot.
+            ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(seed);
+            ICropCard cropType = seedData != null ? seedData.getCrop() : CropRegistry.instance.fromAlternateSeed(seed);
+            Object typeKey = cropType != null ? cropType : TST_ItemID.create(seed);
+            int statTotal = 0;
+            if (seedData != null) {
+                ISeedStats stats = seedData.getStats();
+                statTotal = stats.getGrowth() + stats.getGain() + stats.getResistance();
+            }
+            if (maximizeGenetics && seedData != null) {
+                NBTTagCompound seedTag = seed.getTagCompound();
+                if (seedTag == null) {
+                    seedTag = new NBTTagCompound();
+                    seed.setTagCompound(seedTag);
+                }
+                MAX_SEED_STATS.writeToNBT(seedTag);
+            }
             CropsNHFarm.CropCache crop = machine.cropsNHFarm.getCropCache(seed);
-            if (crop != null) crops.add(crop.withSeedCount(input.stackSize));
+            if (crop == null) continue;
+
+            int seedCount = Math.min(input.stackSize, 64);
+            CropSelection current = selectedCrops.get(typeKey);
+            if (current != null) {
+                if (current.crop()
+                    .seedCount() > seedCount) continue;
+                if (current.crop()
+                    .seedCount() == seedCount && current.statTotal() >= statTotal) continue;
+            }
+            selectedCrops.put(typeKey, new CropSelection(crop.withSeedCount(seedCount), statTotal));
         }
+        List<CropsNHFarm.CropCache> crops = new ArrayList<>(selectedCrops.size());
+        for (CropSelection selection : selectedCrops.values()) crops.add(selection.crop());
         return crops;
     }
+
+    @Desugar
+    private record CropSelection(CropsNHFarm.CropCache crop, int statTotal) {}
 
 }

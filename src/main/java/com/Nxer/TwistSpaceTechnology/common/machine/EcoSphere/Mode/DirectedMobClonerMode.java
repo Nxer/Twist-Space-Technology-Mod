@@ -70,8 +70,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         }
 
         FluidStack lifeEssenceInput = DirectedMobClonerFakeRecipe.LIFE_ESSENCE_STACK;
-        if (lifeEssenceInput == null || !machine.isTierTwo())
-            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        if (lifeEssenceInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         if (machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
 
         DirectedMobClonerRecipeCache.CachedRecipe recipe = DirectedMobClonerRecipeCache.findRecipe(recipeId);
@@ -81,8 +80,10 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         // The Infinity Sword keeps its existing role as an alternative boss prerequisite and source of Looting X.
         boolean tierThree = machine.hasDirectedMobClonerTierThreeBeacon()
             || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;
-        // Boss recipes require tier-3 authorization in addition to the tier-2 structure checked above.
-        if (recipe.boss() && !tierThree) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+        if (recipe.boss()) {
+            if (!machine.isTierTwo()) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+            if (!tierThree) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+        }
 
         // Looting X stays unchanged: either the tier-three beacon or the Infinity Sword grants it, capped at X.
         double lootingBonus = weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.ALL_OUTPUTS_CHANCE_BONUS);

@@ -75,6 +75,7 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipeEcoSphereBloodOrbNetworkUpgrade;
     public static InfusionRecipe infusionRecipeEcoSphereOutputBoostUpgrade;
     public static InfusionRecipe infusionRecipeEcoSphereAutoPulverizeUpgrade;
+    public static InfusionRecipe infusionRecipeEcoSphereMaxPlantGeneticsUpgrade;
     public static InfusionRecipe infusionRecipeFontOfEcology;
     public static InfusionRecipe infusionRecipeBloodyHell;
     public static InfusionRecipe infusionRecipeCoagulatedBloodCasing;
@@ -324,11 +325,11 @@ public class TCRecipePool {
                     new AspectList().merge((Aspect) ELECTRUM.mAspect, 256)
                         .merge(Aspect.MECHANISM, 256)
                         .merge(Aspect.POISON, 128)
-                        .merge(getAspect("invidia", 128))
+                        .merge(getAspect("gula", 128))
                         .merge(Aspect.ENTROPY, 64),
                     GTCMItemList.EcoSphereModeBeacon5.get(1),
                     new ItemStack[] {
-                        CropsNHItemList.CropManager_UEV.get(1),
+                        CropsNHItemList.CropManager_UHV.get(1),
                         CropsNHItemList.goldfish.get(1),
                         CropsNHItemList.SeedBed_UEV.get(1),
                         new ItemStack(ModItems.obedienceStick, 1),
@@ -396,10 +397,10 @@ public class TCRecipePool {
                     GTCMItemList.EcoSphereFluidEfficiencyUpgrade.get(1),
                     40,
                     new AspectList().merge(getAspect("lucrum", 256))
-                        .merge(getAspect("perfodio", 256))
-                        .merge(getAspect("vacuos", 128))
-                        .merge(getAspect("sano", 128))
-                        .merge(getAspect("aqua", 64)),
+                        .merge(Aspect.MINE, 256)
+                        .merge(Aspect.VOID, 128)
+                        .merge(Aspect.HEAL, 128)
+                        .merge(Aspect.WATER, 64),
                     getModItem(Mods.DraconicEvolution.ID, "draconiumEnergyCore", 1, 1),
                     new ItemStack[] {
                         getModItem(Mods.ThaumicHorizons.ID, "lensWater", 1, 0),
@@ -416,7 +417,7 @@ public class TCRecipePool {
                     new AspectList().merge(getAspect("nebrisum", 256))
                         .merge(getAspect("custom2", 256))
                         .merge(getAspect("tempus", 128))
-                        .merge(getAspect("gula", 128))
+                        .merge(Aspect.FLIGHT, 128)
                         .merge(EVOLUTION, 64),
                     GTCMItemList.EcoSphereFluidEfficiencyUpgrade.get(1),
                     new ItemStack[] {
@@ -498,6 +499,24 @@ public class TCRecipePool {
                         ItemList.Automation_SuperBuffer_MAX.get(1),
                         ItemList.Sensor_UEV.get(1),
                         ItemList.T3Sawblade.get(1) });
+
+                infusionRecipeEcoSphereMaxPlantGeneticsUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                    "ECO_SPHERE_SIMULATOR",
+                    GTCMItemList.EcoSphereMaxPlantGeneticsUpgrade.get(1),
+                    40,
+                    new AspectList().merge(getAspect("nebrisum", 256))
+                        .merge(getAspect("custom2", 256))
+                        .merge(getAspect("custom3", 128))
+                        .merge(getAspect("invidia", 128))
+                        .merge(EVOLUTION, 64),
+                    GTCMItemList.EcoSphereOutputBoostUpgrade.get(1),
+                    new ItemStack[] {
+                        new ItemStack(ConfigItems.itemFocusPrimal, 1, 0),
+                        getModItem("Genetics", "registry", 1, 0),
+                        ItemList.EnergisedTesseract.get(1),
+                        CropsNHItemList.CropBreeder_UEV.get(1),
+                        ItemList.Emitter_UEV.get(1),
+                        getModItem("Genetics", "database", 1, 0) });
 
                 infusionRecipeFontOfEcology = addInfusionCraftingRecipeAspectNotNull(
                     "FONT_OF_ECOLOGY",
