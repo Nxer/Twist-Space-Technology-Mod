@@ -79,8 +79,8 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
                 COSMIC_RENDERER.renderItem(type, displayStack, data);
             }
             restoreLayerDepth(type);
-        } else if (upgrade && meta == 4) {
-            // Auto-Pulverize upgrade: the center Infinity dust reuses GT's Infinity effect,
+        } else if (upgrade && meta == 6) {
+            // Output Pulverization upgrade: the center Infinity dust reuses GT's Infinity effect,
             // but only inside the frame; the frame itself stays on top and the base below.
             renderInfinityItem(type, displayStack);
         } else {
@@ -113,12 +113,12 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
         if (item.getItem() == TstItems.EcoSphereUpgrade) {
             return switch (meta) {
                 case 0 -> ItemList.Cell_Empty.get(1);
-                case 1 -> new ItemStack(Items.wheat);
-                case 2 -> getNodeUpgrade();
-                case 3 -> getModuleOutputUpgrade();
-                case 4 -> Materials.Infinity.getDust(1);
-                case 5 -> new ItemStack(ModItems.weakBloodOrb);
-                case 6 -> CropsNHItemList.plantCure.get(1);
+                case 1 -> getModuleOutputUpgrade();
+                case 2 -> new ItemStack(Items.wheat);
+                case 3 -> getNodeUpgrade();
+                case 4 -> new ItemStack(ModItems.weakBloodOrb);
+                case 5 -> CropsNHItemList.plantCure.get(1);
+                case 6 -> Materials.Infinity.getDust(1);
                 default -> GTCMItemList.TestItem0.get(1);
             };
         }

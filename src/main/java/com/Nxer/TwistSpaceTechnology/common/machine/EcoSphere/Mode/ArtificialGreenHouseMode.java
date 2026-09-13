@@ -92,7 +92,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     private static List<CropsNHFarm.CropCache> findCrops(TST_EcoSphereSimulator machine) {
         Map<Object, CropSelection> selectedCrops = new LinkedHashMap<>();
-        boolean maximizeGenetics = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.MAXIMIZE_PLANT_GENETICS);
+        boolean maximizeGenetics = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.PERFECT_GENETICS);
         for (ItemStack input : machine.getModeInputs()) {
             ItemStack seed = input.copy();
             seed.stackSize = 1;

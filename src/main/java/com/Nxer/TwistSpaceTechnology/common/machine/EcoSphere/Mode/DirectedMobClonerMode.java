@@ -75,8 +75,8 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
         DirectedMobClonerRecipeCache.CachedRecipe recipe = DirectedMobClonerRecipeCache.findRecipe(recipeId);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        boolean pulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT);
-        WeaponTags weaponTags = DirectedMobClonerWeaponHandler.process(machine.getCloningWeapons());
+        boolean pulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.OUTPUT_PULVERIZATION);
+        WeaponTags weaponTags = DirectedMobClonerWeaponHandler.process(machine.getCloningModifiers());
         // The Infinity Sword keeps its existing role as an alternative boss prerequisite and source of Looting X.
         boolean tierThree = machine.hasDirectedMobClonerTierThreeBeacon()
             || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;

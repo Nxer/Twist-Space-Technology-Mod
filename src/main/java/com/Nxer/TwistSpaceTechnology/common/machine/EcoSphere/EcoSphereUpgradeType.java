@@ -8,13 +8,13 @@ import lombok.Getter;
 
 public enum EcoSphereUpgradeType {
 
-    FLUID_EFFICIENCY(0, 0b1111, null),
-    OUTPUT_BOOST(1, 0b1111, null),
-    SPEED(2, 0b1111, null),
-    CAPACITY(3, 0b1111, null),
-    AUTO_PULVERIZE_EQUIPMENT(4, 0b1000, EcoSphereSpecialUpgrade.AUTO_PULVERIZE_EQUIPMENT),
-    BLOOD_ORB_NETWORK(5, 0b1000, EcoSphereSpecialUpgrade.BLOOD_ORB_NETWORK),
-    MAXIMIZE_PLANT_GENETICS(6, 0b0101, EcoSphereSpecialUpgrade.MAXIMIZE_PLANT_GENETICS);
+    FLUID_REDUCTION(0, 0b1111, null),
+    CAPACITY(1, 0b1111, null),
+    OUTPUT(2, 0b1111, null),
+    SPEED(3, 0b1111, null),
+    BLOOD_ORB(4, 0b1000, EcoSphereSpecialUpgrade.BLOOD_ORB),
+    PERFECT_GENETICS(5, 0b0101, EcoSphereSpecialUpgrade.PERFECT_GENETICS),
+    OUTPUT_PULVERIZATION(6, 0b1000, EcoSphereSpecialUpgrade.OUTPUT_PULVERIZATION);
 
     @Getter
     private final int metadata;

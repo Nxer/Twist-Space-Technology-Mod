@@ -1168,50 +1168,50 @@ public class ItemRegister {
             false);
 
         // #tr item.EcoSphereUpgrade.0.name
-        // # Eco-Sphere Fluid Efficiency Upgrade
-        // #zh_CN 生态圈流体减免升级
-        GTCMItemList.EcoSphereFluidEfficiencyUpgrade.set(EcoSphereUpgrade.registerVariant(0));
+        // # Eco-Sphere Upgrade: Fluid Reduction
+        // #zh_CN 生态圈升级: 流体减免
+        GTCMItemList.EcoSphereUpgrade1.set(EcoSphereUpgrade.registerVariant(0));
 
         // #tr item.EcoSphereUpgrade.1.name
-        // # Eco-Sphere Output Upgrade
-        // #zh_CN 生态圈产量升级
-        GTCMItemList.EcoSphereOutputBoostUpgrade.set(EcoSphereUpgrade.registerVariant(1));
-
-        // #tr item.EcoSphereUpgrade.3.name
-        // # Eco-Sphere Capacity Upgrade
-        // #zh_CN 生态圈扩容升级
-        GTCMItemList.EcoSphereCapacityUpgrade.set(EcoSphereUpgrade.registerVariant(2));
+        // # Eco-Sphere Upgrade: Capacity
+        // #zh_CN 生态圈升级: 扩容
+        GTCMItemList.EcoSphereUpgrade2.set(EcoSphereUpgrade.registerVariant(1));
 
         // #tr item.EcoSphereUpgrade.2.name
-        // # Eco-Sphere Speed Upgrade
-        // #zh_CN 生态圈速度升级
-        GTCMItemList.EcoSphereSpeedUpgrade.set(EcoSphereUpgrade.registerVariant(3));
+        // # Eco-Sphere Upgrade: Output
+        // #zh_CN 生态圈升级: 产量
+        GTCMItemList.EcoSphereUpgrade3.set(EcoSphereUpgrade.registerVariant(2));
+
+        // #tr item.EcoSphereUpgrade.3.name
+        // # Eco-Sphere Upgrade: Speed
+        // #zh_CN 生态圈升级: 速度
+        GTCMItemList.EcoSphereUpgrade4.set(EcoSphereUpgrade.registerVariant(3));
 
         // #tr item.EcoSphereUpgrade.4.name
-        // # Eco-Sphere Equipment Pulverization Upgrade
-        // #zh_CN 生态圈装备磨粉升级
-        GTCMItemList.EcoSphereAutoPulverizeUpgrade.set(EcoSphereUpgrade.registerVariant(4));
+        // # Eco-Sphere Upgrade: Blood Orb
+        // #zh_CN 生态圈升级: 气血宝珠
+        GTCMItemList.EcoSphereUpgrade5.set(EcoSphereUpgrade.registerVariant(4));
 
         // #tr item.EcoSphereUpgrade.5.name
-        // # Eco-Sphere Blood Orb Network Upgrade
-        // #zh_CN 生态圈气血宝珠网络升级
-        GTCMItemList.EcoSphereBloodOrbNetworkUpgrade.set(EcoSphereUpgrade.registerVariant(5));
+        // # Eco-Sphere Upgrade: Perfect Genetics
+        // #zh_CN 生态圈升级: 完美基因
+        GTCMItemList.EcoSphereUpgrade6.set(EcoSphereUpgrade.registerVariant(5));
 
         // #tr item.EcoSphereUpgrade.6.name
-        // # Eco-Sphere Plant Genetics Maximization Upgrade
-        // #zh_CN 生态圈植物基因满级升级
-        GTCMItemList.EcoSphereMaxPlantGeneticsUpgrade.set(EcoSphereUpgrade.registerVariant(6));
+        // # Eco-Sphere Upgrade: Output Pulverization
+        // #zh_CN 生态圈升级: 产物粉碎
+        GTCMItemList.EcoSphereUpgrade7.set(EcoSphereUpgrade.registerVariant(6));
         EcoSphereUpgrade.setTooltips(
-            5,
+            4,
             new String[] {
-                // #tr item.EcoSphereUpgrade.5.tooltip.0
-                // # Opens one cloning weapon slot and enables Blood Orb network access
-                // #zh_CN 开启一个克隆武器槽位并启用气血宝珠网络访问
-                tr("item.EcoSphereUpgrade.5.tooltip.0"),
-                // #tr item.EcoSphereUpgrade.5.tooltip.1
-                // # Place the orb in a weapon slot; normal Blood Orbs must be bound
-                // #zh_CN 将宝珠放入武器槽; 普通气血宝珠必须已绑定
-                tr("item.EcoSphereUpgrade.5.tooltip.1") },
+                // #tr item.EcoSphereUpgrade.4.tooltip.0
+                // # Opens one cloning auxiliary input slot and enables Blood Orb network access
+                // #zh_CN 开启一个克隆辅助输入槽位并启用气血宝珠网络访问
+                tr("item.EcoSphereUpgrade.4.tooltip.0"),
+                // #tr item.EcoSphereUpgrade.4.tooltip.1
+                // # Place the orb in an auxiliary input slot; normal Blood Orbs must be bound
+                // #zh_CN 将宝珠放入辅助输入槽位; 普通气血宝珠必须已绑定
+                tr("item.EcoSphereUpgrade.4.tooltip.1") },
             false);
 
         // endregion

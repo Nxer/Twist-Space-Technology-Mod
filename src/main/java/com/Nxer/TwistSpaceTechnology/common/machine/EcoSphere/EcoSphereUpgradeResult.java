@@ -27,7 +27,7 @@ public final class EcoSphereUpgradeResult {
             boolean allowedForMode = type.isAllowedForMode(mode);
             // The Blood Orb upgrade always provides its capacity effect, but only cloning enables its LP-network
             // effect.
-            if (!allowedForMode && type != EcoSphereUpgradeType.BLOOD_ORB_NETWORK) continue;
+            if (!allowedForMode && type != EcoSphereUpgradeType.BLOOD_ORB) continue;
             upgradeCounts.merge(type, 1, Integer::sum);
             if (allowedForMode && type.getSpecialUpgrade() != null) {
                 specialUpgrades.add(type.getSpecialUpgrade());
@@ -36,8 +36,8 @@ public final class EcoSphereUpgradeResult {
     }
 
     public long applyFluidDiscount(long amount) {
-        // The speed upgrade is crafted around, and retains, one fluid-efficiency upgrade.
-        int upgrades = getCount(EcoSphereUpgradeType.FLUID_EFFICIENCY) + getCount(EcoSphereUpgradeType.SPEED);
+        // The speed upgrade is crafted around, and retains, one fluid-reduction upgrade.
+        int upgrades = getCount(EcoSphereUpgradeType.FLUID_REDUCTION) + getCount(EcoSphereUpgradeType.SPEED);
         for (int i = 0; i < upgrades && amount > 1; i++) amount = Math.max(1, amount / 2);
         return amount;
     }
@@ -59,8 +59,7 @@ public final class EcoSphereUpgradeResult {
     }
 
     public int getCapacityUpgrades() {
-        int capacityUpgrades = getCount(EcoSphereUpgradeType.CAPACITY)
-            + getCount(EcoSphereUpgradeType.BLOOD_ORB_NETWORK);
+        int capacityUpgrades = getCount(EcoSphereUpgradeType.CAPACITY) + getCount(EcoSphereUpgradeType.BLOOD_ORB);
         return Math.min(4, capacityUpgrades);
     }
 
@@ -123,9 +122,8 @@ public final class EcoSphereUpgradeResult {
     }
 
     private double getOutputMultiplier() {
-        // Auto-pulverization is crafted around, and retains, one output-boost upgrade.
-        int upgrades = getCount(EcoSphereUpgradeType.OUTPUT_BOOST)
-            + getCount(EcoSphereUpgradeType.AUTO_PULVERIZE_EQUIPMENT);
+        // Output pulverization is crafted around, and retains, one output upgrade.
+        int upgrades = getCount(EcoSphereUpgradeType.OUTPUT) + getCount(EcoSphereUpgradeType.OUTPUT_PULVERIZATION);
         return Math.pow(1.5, upgrades);
     }
 

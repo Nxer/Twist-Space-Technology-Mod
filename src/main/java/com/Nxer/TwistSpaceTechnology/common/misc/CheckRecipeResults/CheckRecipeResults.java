@@ -52,32 +52,32 @@ public final class CheckRecipeResults {
         .ofSuccess("CheckRecipeResult.RapidHeatFinish");
 
     // #tr CheckRecipeResult.NoSeedInController
-    // # Missing seed input
-    // #zh_CN 缺失种子输入
+    // # No valid seed input detected
+    // #zh_CN 未检测到有效种子输入
     public static final CheckRecipeResult NoSeedInController = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NoSeedInController");
 
     // #tr CheckRecipeResult.NotEnoughWater
-    // # Not enough water has been input.
-    // #zh_CN 没有输入足够的水
+    // # Insufficient water supply
+    // #zh_CN 供水量不足
     public static final CheckRecipeResult NotEnoughWater = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NotEnoughWater");
 
     // #tr CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection
-    // # Missing circuit input
-    // #zh_CN 缺失输入电路板
+    // # No arboreal output category selected
+    // #zh_CN 未指定林木输出类别
     public static final CheckRecipeResult MissingTreeOutputSelection = SimpleResultWithText
         .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection");
 
     // #tr CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput
-    // # Missing sapling input
-    // #zh_CN 缺失树苗输入
+    // # No valid sapling input detected
+    // #zh_CN 未检测到有效树苗输入
     public static final CheckRecipeResult MissingSaplingInput = SimpleResultWithText
         .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
 
     // #tr CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch
-    // # Requires a higher-tier mode beacon
-    // #zh_CN 需要更高等级的模式信标
+    // # Execution protocol authorization level insufficient
+    // #zh_CN 当前执行协议授权等级不足
     public static final CheckRecipeResult ModeBeaconInputMismatch = SimpleResultWithText
         .ofFailure("CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch");
 

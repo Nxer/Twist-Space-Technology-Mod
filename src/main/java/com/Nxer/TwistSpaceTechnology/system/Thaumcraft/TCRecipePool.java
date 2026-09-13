@@ -69,13 +69,13 @@ public class TCRecipePool {
     public static InfusionRecipe infusionRecipeEcoSphereModeBeacon7;
     public static InfusionRecipe infusionRecipeEcoSphereModeBeacon8;
     public static InfusionRecipe infusionRecipeEcoSphereModeBeacon9;
-    public static InfusionRecipe infusionRecipeEcoSphereFluidEfficiencyUpgrade;
-    public static InfusionRecipe infusionRecipeEcoSphereSpeedUpgrade;
-    public static InfusionRecipe infusionRecipeEcoSphereCapacityUpgrade;
-    public static InfusionRecipe infusionRecipeEcoSphereBloodOrbNetworkUpgrade;
-    public static InfusionRecipe infusionRecipeEcoSphereOutputBoostUpgrade;
-    public static InfusionRecipe infusionRecipeEcoSphereAutoPulverizeUpgrade;
-    public static InfusionRecipe infusionRecipeEcoSphereMaxPlantGeneticsUpgrade;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade1;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade2;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade3;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade4;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade5;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade6;
+    public static InfusionRecipe infusionRecipeEcoSphereUpgrade7;
     public static InfusionRecipe infusionRecipeFontOfEcology;
     public static InfusionRecipe infusionRecipeBloodyHell;
     public static InfusionRecipe infusionRecipeCoagulatedBloodCasing;
@@ -392,9 +392,9 @@ public class TCRecipePool {
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.baseItems, 1, 29),
                         NHItemList.CircuitUIV.get(1) });
 
-                infusionRecipeEcoSphereFluidEfficiencyUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade1 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereFluidEfficiencyUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade1.get(1),
                     40,
                     new AspectList().merge(getAspect("lucrum", 256))
                         .merge(Aspect.MINE, 256)
@@ -410,16 +410,16 @@ public class TCRecipePool {
                         GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.CallistoIce, 1),
                         ItemList.Electric_Pump_UHV.get(1) });
 
-                infusionRecipeEcoSphereSpeedUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade4 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereSpeedUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade4.get(1),
                     40,
                     new AspectList().merge(getAspect("nebrisum", 256))
                         .merge(getAspect("custom2", 256))
                         .merge(getAspect("tempus", 128))
                         .merge(Aspect.FLIGHT, 128)
                         .merge(EVOLUTION, 64),
-                    GTCMItemList.EcoSphereFluidEfficiencyUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade1.get(1),
                     new ItemStack[] {
                         getModItem(Mods.TwilightForest.ID, "tile.TFMagicLogSpecial", 1, 0),
                         ItemList.Field_Generator_UEV.get(1),
@@ -428,9 +428,9 @@ public class TCRecipePool {
                         getEnchantedCapacitor(),
                         getModItem(Mods.TaintedMagic.ID, "ItemFocusTime", 1, 0) });
 
-                infusionRecipeEcoSphereCapacityUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade2 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereCapacityUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade2.get(1),
                     40,
                     new AspectList().merge(getAspect("lucrum", 256))
                         .merge(getAspect("perfodio", 256))
@@ -446,16 +446,16 @@ public class TCRecipePool {
                         ItemRefer.HiC_T5.get(1),
                         ItemList.Robot_Arm_UHV.get(1) });
 
-                infusionRecipeEcoSphereBloodOrbNetworkUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade5 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereBloodOrbNetworkUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade5.get(1),
                     40,
                     new AspectList().merge(getAspect("nebrisum", 256))
                         .merge(getAspect("custom2", 256))
                         .merge(getAspect("strontio", 128))
                         .merge(Aspect.MOTION, 128)
                         .merge(EVOLUTION, 64),
-                    GTCMItemList.EcoSphereCapacityUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade2.get(1),
                     new ItemStack[] {
                         new ItemStack(WayofTime.alchemicalWizardry.ModBlocks.blockAltar, 1),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.ritualDismantler, 1),
@@ -464,9 +464,9 @@ public class TCRecipePool {
                         GTCMItemList.BloodyCasing2.get(1),
                         getModItem(Mods.BloodArsenal.ID, "transparent_orb", 1, 0) });
 
-                infusionRecipeEcoSphereOutputBoostUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade3 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereOutputBoostUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade3.get(1),
                     40,
                     new AspectList().merge(getAspect("lucrum", 256))
                         .merge(getAspect("perfodio", 256))
@@ -482,16 +482,16 @@ public class TCRecipePool {
                         GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.InfinityCatalyst, 1),
                         ItemList.Conveyor_Module_UHV.get(1) });
 
-                infusionRecipeEcoSphereAutoPulverizeUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade7 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereAutoPulverizeUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade7.get(1),
                     40,
                     new AspectList().merge(getAspect("nebrisum", 256))
                         .merge(getAspect("custom2", 256))
                         .merge(getAspect("custom1", 128))
                         .merge(getAspect("vinculum", 128))
                         .merge(EVOLUTION, 64),
-                    GTCMItemList.EcoSphereOutputBoostUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade3.get(1),
                     new ItemStack[] {
                         GTCMItemList.MegaMacerator.get(1),
                         ItemList.Component_Grinder_Tungsten.get(1),
@@ -500,16 +500,16 @@ public class TCRecipePool {
                         ItemList.Sensor_UEV.get(1),
                         ItemList.T3Sawblade.get(1) });
 
-                infusionRecipeEcoSphereMaxPlantGeneticsUpgrade = addInfusionCraftingRecipeAspectNotNull(
+                infusionRecipeEcoSphereUpgrade6 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_SIMULATOR",
-                    GTCMItemList.EcoSphereMaxPlantGeneticsUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade6.get(1),
                     40,
                     new AspectList().merge(getAspect("nebrisum", 256))
                         .merge(getAspect("custom2", 256))
                         .merge(getAspect("custom3", 128))
                         .merge(getAspect("invidia", 128))
                         .merge(EVOLUTION, 64),
-                    GTCMItemList.EcoSphereOutputBoostUpgrade.get(1),
+                    GTCMItemList.EcoSphereUpgrade3.get(1),
                     new ItemStack[] {
                         new ItemStack(ConfigItems.itemFocusPrimal, 1, 0),
                         getModItem("Genetics", "registry", 1, 0),

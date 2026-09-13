@@ -57,16 +57,16 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     private static final int AQUATIC_MAX_SLOTS = 4;
     private static final int GREENHOUSE_INPUT_START = AQUATIC_INPUT_START + AQUATIC_MAX_SLOTS;
     private static final int GREENHOUSE_MAX_SLOTS = 4;
-    private static final int CLONING_WEAPON_START = GREENHOUSE_INPUT_START + GREENHOUSE_MAX_SLOTS;
-    private static final int CLONING_MAX_WEAPON_SLOTS = 4;
-    private static final int MAX_INPUT_SLOTS = CLONING_WEAPON_START + CLONING_MAX_WEAPON_SLOTS;
+    private static final int CLONING_AUXILIARY_INPUT_START = GREENHOUSE_INPUT_START + GREENHOUSE_MAX_SLOTS;
+    private static final int CLONING_MAX_AUXILIARY_INPUT_SLOTS = 4;
+    private static final int MAX_INPUT_SLOTS = CLONING_AUXILIARY_INPUT_START + CLONING_MAX_AUXILIARY_INPUT_SLOTS;
     // Capacity upgrades still add one slot per upgrade; they additionally multiply the per-slot stack limit by 4.
     // Cloning keeps 1 stack per slot regardless of upgrades.
     private static final InputSlotLayout EMPTY_INPUT_LAYOUT = new InputSlotLayout(0, 0, 0, 0);
     private static final InputSlotLayout[] MODE_INPUT_LAYOUTS = { new InputSlotLayout(TREE_INPUT_SLOT, 1, 4, 1),
         new InputSlotLayout(AQUATIC_INPUT_START, 1, AQUATIC_MAX_SLOTS, 1),
         new InputSlotLayout(GREENHOUSE_INPUT_START, 1, GREENHOUSE_MAX_SLOTS, 1),
-        new InputSlotLayout(CLONING_WEAPON_START, 0, CLONING_MAX_WEAPON_SLOTS, 1) };
+        new InputSlotLayout(CLONING_AUXILIARY_INPUT_START, 0, CLONING_MAX_AUXILIARY_INPUT_SLOTS, 1) };
 
     private final boolean[] selectedTreeOutputs = new boolean[Mode.values().length];
     private int machineMode = -1;
@@ -215,13 +215,13 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         return selected;
     }
 
-    public ItemStack[] getCloningWeapons() {
-        List<ItemStack> weapons = new ArrayList<>();
-        // The orb pays LP costs but must not contribute weapon or looting tags.
+    public ItemStack[] getCloningModifiers() {
+        List<ItemStack> modifiers = new ArrayList<>();
+        // The orb pays LP costs but must not contribute modifier or looting tags.
         for (ItemStack stack : getModeInputs()) {
-            if (!BloodMagicHelper.isBloodOrb(stack)) weapons.add(stack);
+            if (!BloodMagicHelper.isBloodOrb(stack)) modifiers.add(stack);
         }
-        return weapons.toArray(new ItemStack[0]);
+        return modifiers.toArray(new ItemStack[0]);
     }
 
     public ItemStack getCloningBloodOrb() {
@@ -272,7 +272,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         if (stack == null || stack.getItem() == null) return false;
         if (machineMode == 3 && BloodMagicHelper.isBloodOrb(stack)) {
             int firstSlot = getFirstInputSlot();
-            for (int i = firstSlot; i < firstSlot + CLONING_MAX_WEAPON_SLOTS; i++) {
+            for (int i = firstSlot; i < firstSlot + CLONING_MAX_AUXILIARY_INPUT_SLOTS; i++) {
                 if (i != index && BloodMagicHelper.isBloodOrb(mInventory[i])) return false;
             }
             return true;
@@ -332,7 +332,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
         addAquaticSlots(builder);
         addGreenhouseSlots(builder);
         addCloningRecipeInput(builder);
-        addCloningWeaponSlots(builder);
+        addCloningAuxiliaryInputSlots(builder);
     }
 
     private void dropInventoryRange(int firstSlot, int endSlot) {
@@ -490,9 +490,19 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
                 .setEnabled(widget -> machineMode == 3));
     }
 
-    private void addCloningWeaponSlots(ModularWindow.Builder builder) {
-        for (int index = 0; index < CLONING_MAX_WEAPON_SLOTS; index++) {
-            builder.widget(createInputSlot(CLONING_WEAPON_START + index, 106 + index % 2 * 18, 30 + index / 2 * 18, 3));
+    private void addCloningAuxiliaryInputSlots(ModularWindow.Builder builder) {
+        builder.widget(
+            // #tr EcoSphereInputInterface.gui.auxiliaryInputs
+            // # Auxiliary Inputs
+            // #zh_CN 辅助输入
+            TextWidget.localised("EcoSphereInputInterface.gui.auxiliaryInputs")
+                .setTextAlignment(Alignment.Center)
+                .setPos(88, 14)
+                .setSize(80, 14)
+                .setEnabled(widget -> machineMode == 3));
+        for (int index = 0; index < CLONING_MAX_AUXILIARY_INPUT_SLOTS; index++) {
+            builder.widget(
+                createInputSlot(CLONING_AUXILIARY_INPUT_START + index, 106 + index % 2 * 18, 30 + index / 2 * 18, 3));
         }
     }
 }

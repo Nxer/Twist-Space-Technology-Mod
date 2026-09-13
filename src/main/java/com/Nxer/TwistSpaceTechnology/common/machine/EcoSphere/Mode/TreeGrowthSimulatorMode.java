@@ -71,7 +71,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         List<EnumMap<Mode, ItemStack>> productSets = new ArrayList<>();
         List<Integer> saplingCounts = new ArrayList<>();
         boolean maximizeForestry = recipe.normalWater()
-            && machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.MAXIMIZE_PLANT_GENETICS);
+            && machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.PERFECT_GENETICS);
         if (recipe.uuMatter()) {
             // UU matter ignores saplings and picks one random product per mode.
             productSets.add(buildUuProducts());

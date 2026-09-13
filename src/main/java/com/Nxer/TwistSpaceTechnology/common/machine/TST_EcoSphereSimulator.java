@@ -212,13 +212,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return ecoSphereInputInterface.getCloningRecipeId();
     }
 
-    public ItemStack[] getCloningWeapons() {
-        return ecoSphereInputInterface.getCloningWeapons();
+    public ItemStack[] getCloningModifiers() {
+        return ecoSphereInputInterface.getCloningModifiers();
     }
 
     public ItemStack getCloningBloodOrb() {
-        if (!hasSpecialUpgrade(EcoSphereSpecialUpgrade.BLOOD_ORB_NETWORK) || ecoSphereInputInterface == null)
-            return null;
+        if (!hasSpecialUpgrade(EcoSphereSpecialUpgrade.BLOOD_ORB) || ecoSphereInputInterface == null) return null;
         return ecoSphereInputInterface.getCloningBloodOrb();
     }
 
@@ -1186,7 +1185,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 }
                 // Always use the latest beacon before starting the next recipe.
                 updateModeBeaconBinding();
-                // Read upgrades first because fluid efficiency can raise the fluid-limited parallel count.
+                // Read upgrades first because fluid reduction can raise the fluid-limited parallel count.
                 refreshEcoSphereInterfaces();
                 if (inputItems == null) inputItems = new ItemStack[0];
                 if (inputFluids == null) inputFluids = new FluidStack[0];
@@ -1200,8 +1199,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                 }
                 if (!modeBeaconPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
                     // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_mode_beacon
-                    // # Waiting For Mode Beacon
-                    // #zh_CN 等待模式信标
+                    // # No valid execution protocol detected
+                    // #zh_CN 未检测到有效执行协议
                     return SimpleCheckRecipeResult.ofFailure("eco_sphere_simulator_waiting_for_mode_beacon");
                 }
                 machineMode = boundMode;
