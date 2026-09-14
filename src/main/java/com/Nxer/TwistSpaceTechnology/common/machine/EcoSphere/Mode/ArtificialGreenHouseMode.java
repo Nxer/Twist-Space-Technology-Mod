@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache;
@@ -29,7 +28,6 @@ import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
 import com.gtnewhorizon.cropsnh.api.ISeedData;
 import com.gtnewhorizon.cropsnh.api.ISeedStats;
-import com.gtnewhorizon.cropsnh.farming.SeedStats;
 import com.gtnewhorizon.cropsnh.farming.registries.CropRegistry;
 import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 
@@ -41,7 +39,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     // Applied after crop-specific growth and drop calculations, before shared upgrade and random output scaling.
     private static final double OUTPUT_SCALE = 40.0d;
-    private static final SeedStats MAX_SEED_STATS = new SeedStats((byte) 31, (byte) 31, (byte) 31, true);
+    private static final int PERFECT_SEED_STAT = 31;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -57,14 +55,19 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
         List<CropsNHFarm.CropCache> crops = findCrops(machine);
         if (crops.isEmpty()) return EcoSphereModeResult.failure(NoSeedInController);
-        long baseFertilizerCost = 0;
+        // Each retained seed expands its crop parallel and pays the discounted per-seed fertilizer cost.
+        long fertilizerCostPerParallel = 0;
+        int inputParallelMultiplier = 0;
         for (CropsNHFarm.CropCache crop : crops) {
+            int fertilizerPerSeed;
             if (crop.hybrid()) {
                 if (machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
-                baseFertilizerCost += ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL;
+                fertilizerPerSeed = ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL;
             } else {
-                baseFertilizerCost += ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL;
+                fertilizerPerSeed = ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL;
             }
+            fertilizerCostPerParallel += machine.applyFluidDiscount(fertilizerPerSeed) * crop.seedCount();
+            inputParallelMultiplier += crop.seedCount();
         }
 
         FluidStack fertilizerInput = EcoSphereFluidCache.findFirstValidFluid(machine);
@@ -73,9 +76,8 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
             List<ItemStack> outputs = new ArrayList<>();
             for (CropsNHFarm.CropCache crop : crops) {
                 // Cached yields already include environmental growth progress and the non-hybrid efficiency penalty.
-                Collections.addAll(
-                    outputs,
-                    crop.getOutputStacks(parallelResult.parallel() * (double) crop.seedCount() * OUTPUT_SCALE));
+                long seedParallel = EcoSphereModeSupport.multiplyParallel(parallelResult.parallel(), crop.seedCount());
+                Collections.addAll(outputs, crop.getOutputStacks(seedParallel * OUTPUT_SCALE));
             }
             if (outputs.isEmpty()) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
             return EcoSphereModeResult.standard(
@@ -86,8 +88,13 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
                 outputs.toArray(new ItemStack[0]),
                 parallelResult.tier());
         };
-        return EcoSphereModeSupport
-            .processModeRecipeWithTier(machine, fertilizerInput.getFluid(), baseFertilizerCost, euTier, processor);
+        return EcoSphereModeSupport.processModeRecipeWithTierAndFluidCost(
+            machine,
+            fertilizerInput.getFluid(),
+            fertilizerCostPerParallel,
+            inputParallelMultiplier,
+            euTier,
+            processor);
     }
 
     private static List<CropsNHFarm.CropCache> findCrops(TST_EcoSphereSimulator machine) {
@@ -106,15 +113,8 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
                 ISeedStats stats = seedData.getStats();
                 statTotal = stats.getGrowth() + stats.getGain() + stats.getResistance();
             }
-            if (maximizeGenetics && seedData != null) {
-                NBTTagCompound seedTag = seed.getTagCompound();
-                if (seedTag == null) {
-                    seedTag = new NBTTagCompound();
-                    seed.setTagCompound(seedTag);
-                }
-                MAX_SEED_STATS.writeToNBT(seedTag);
-            }
-            CropsNHFarm.CropCache crop = machine.cropsNHFarm.getCropCache(seed);
+            int simulatedSeedStat = maximizeGenetics && seedData != null ? PERFECT_SEED_STAT : 0;
+            CropsNHFarm.CropCache crop = machine.cropsNHFarm.getCropCache(seed, simulatedSeedStat);
             if (crop == null) continue;
 
             int seedCount = Math.min(input.stackSize, 64);

@@ -56,20 +56,33 @@ public final class EcoSphereModeSupport {
 
     public static EcoSphereModeResult processModeRecipeWithTier(TST_EcoSphereSimulator machine, Fluid requiredFluid,
         long baseFluidPerParallel, int powerTier, Function<ParallelResult, EcoSphereModeResult> processor) {
+        return processModeRecipeWithTierAndFluidCost(
+            machine,
+            requiredFluid,
+            machine.applyFluidDiscount(baseFluidPerParallel),
+            1,
+            powerTier,
+            processor);
+    }
+
+    /** Processes a mode whose final fluid cost per EU-limited parallel has already been calculated. */
+    public static EcoSphereModeResult processModeRecipeWithTierAndFluidCost(TST_EcoSphereSimulator machine,
+        Fluid requiredFluid, long fluidPerParallel, int inputParallelMultiplier, int powerTier,
+        Function<ParallelResult, EcoSphereModeResult> processor) {
         long parallelFromEUt = getParallelFromEUt(powerTier, machine.isTierTwo());
         return processRecipeWithParallelLimit(
             machine,
             requiredFluid,
-            baseFluidPerParallel,
+            fluidPerParallel,
+            inputParallelMultiplier,
             powerTier,
             parallelFromEUt,
             processor);
     }
 
-    public static EcoSphereModeResult processRecipeWithParallelLimit(TST_EcoSphereSimulator machine,
-        Fluid requiredFluid, long baseFluidPerOperation, int powerTier, long parallelFromEUt,
+    private static EcoSphereModeResult processRecipeWithParallelLimit(TST_EcoSphereSimulator machine,
+        Fluid requiredFluid, long fluidPerOperation, int inputParallelMultiplier, int powerTier, long parallelFromEUt,
         Function<ParallelResult, EcoSphereModeResult> processor) {
-        long fluidPerOperation = machine.applyFluidDiscount(baseFluidPerOperation);
         long parallel = getParallelFromFluid(machine, requiredFluid, fluidPerOperation, parallelFromEUt);
         if (parallel <= 0) return EcoSphereModeResult.failure(missingFluid(machine, requiredFluid, fluidPerOperation));
         long fluidCost;
@@ -84,9 +97,14 @@ public final class EcoSphereModeSupport {
             .wasSuccessful()) {
             // Delay consumption until output protection accepts the generated result.
             machine.setPendingRecipeConsumption(() -> drainFluid(machine, requiredFluid, fluidCost));
-            machine.setCurrentParallel(parallel);
+            machine.setCurrentParallel(multiplyParallel(parallel, inputParallelMultiplier));
         }
         return result;
+    }
+
+    public static long multiplyParallel(long parallel, int inputCount) {
+        if (parallel <= 0 || inputCount <= 0) return 0;
+        return parallel > Long.MAX_VALUE / inputCount ? Long.MAX_VALUE : parallel * inputCount;
     }
 
     private static long getParallelFromFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid,

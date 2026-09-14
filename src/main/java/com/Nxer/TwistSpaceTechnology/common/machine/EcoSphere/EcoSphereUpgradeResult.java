@@ -25,9 +25,11 @@ public final class EcoSphereUpgradeResult {
             EcoSphereUpgradeType type = EcoSphereUpgradeType.fromStack(stack);
             if (type == null) continue;
             boolean allowedForMode = type.isAllowedForMode(mode);
-            // The Blood Orb upgrade always provides its capacity effect, but only cloning enables its LP-network
-            // effect.
-            if (!allowedForMode && type != EcoSphereUpgradeType.BLOOD_ORB) continue;
+            // Composite upgrades always retain their inherited base effect. Their special effect still follows the
+            // mode mask below.
+            if (!allowedForMode && type != EcoSphereUpgradeType.BLOOD_ORB
+                && type != EcoSphereUpgradeType.PERFECT_GENETICS
+                && type != EcoSphereUpgradeType.OUTPUT_PULVERIZATION) continue;
             upgradeCounts.merge(type, 1, Integer::sum);
             if (allowedForMode && type.getSpecialUpgrade() != null) {
                 specialUpgrades.add(type.getSpecialUpgrade());
@@ -70,14 +72,22 @@ public final class EcoSphereUpgradeResult {
     private ItemStack[] applyOutputScaling(ItemStack[] outputs) {
         if (outputs == null || outputs.length == 0) return outputs;
         double outputMultiplier = getOutputMultiplier();
+        List<ItemStack> scaledOutputs = new ArrayList<>(outputs.length);
         for (ItemStack output : outputs) {
-            if (output == null) continue;
+            if (output == null) {
+                scaledOutputs.add(null);
+                continue;
+            }
             ItemStack offspring = AquaticZoneSimulatorFakeRecipe.OFFSPRING;
-            if (offspring != null && output.isItemEqual(offspring)) continue;
+            if (offspring != null && output.isItemEqual(offspring)) {
+                scaledOutputs.add(output);
+                continue;
+            }
             double outputScale = outputMultiplier * (0.85 + XSTR.XSTR_INSTANCE.nextDouble() * 0.15);
-            output.stackSize = multiplySaturated(output.stackSize, outputScale);
+            EcoSphereModeSupport
+                .addSplitStack(scaledOutputs, output, multiplySaturated((long) output.stackSize, outputScale));
         }
-        return outputs;
+        return scaledOutputs.toArray(new ItemStack[0]);
     }
 
     private FluidStack[] applyOutputScaling(FluidStack[] outputs, int conversionDivisor) {
@@ -122,8 +132,9 @@ public final class EcoSphereUpgradeResult {
     }
 
     private double getOutputMultiplier() {
-        // Output pulverization is crafted around, and retains, one output upgrade.
-        int upgrades = getCount(EcoSphereUpgradeType.OUTPUT) + getCount(EcoSphereUpgradeType.OUTPUT_PULVERIZATION);
+        // Perfect genetics and output pulverization are crafted around, and retain, one output upgrade each.
+        int upgrades = getCount(EcoSphereUpgradeType.OUTPUT) + getCount(EcoSphereUpgradeType.PERFECT_GENETICS)
+            + getCount(EcoSphereUpgradeType.OUTPUT_PULVERIZATION);
         return Math.pow(1.5, upgrades);
     }
 
@@ -133,9 +144,4 @@ public final class EcoSphereUpgradeResult {
         return Math.max(1, (long) result);
     }
 
-    private static int multiplySaturated(int amount, double multiplier) {
-        double result = amount * multiplier;
-        if (result >= Integer.MAX_VALUE) return Integer.MAX_VALUE;
-        return Math.max(1, (int) result);
-    }
 }

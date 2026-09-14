@@ -61,6 +61,7 @@ public final class CropsNHFarm {
     };
 
     private ItemStack lastCache = null;
+    private int lastSimulatedSeedStat = 0;
     private ISeedData seedData = null;
 
     private Pair<ItemStack, Double>[] output = new Pair[0];
@@ -98,8 +99,12 @@ public final class CropsNHFarm {
     }
 
     public CropCache getCropCache(ItemStack seed) {
+        return getCropCache(seed, 0);
+    }
+
+    public CropCache getCropCache(ItemStack seed, int simulatedSeedStat) {
         if (seed == null || seed.getItem() == null) return null;
-        if (!isCached(seed) && !createCrop(seed)) {
+        if (!isCached(seed, simulatedSeedStat) && !createCrop(seed, simulatedSeedStat)) {
             ICropCard crop = CropRegistry.instance.fromAlternateSeed(seed);
             if (crop != null) {
                 if (!createAlternateSeedCrop(seed, crop)) return null;
@@ -107,6 +112,7 @@ public final class CropsNHFarm {
                 return null;
             }
         }
+        lastSimulatedSeedStat = simulatedSeedStat;
         return new CropCache(seedData != null, output.clone(), 1);
     }
 
@@ -162,17 +168,24 @@ public final class CropsNHFarm {
         return true;
     }
 
-    private boolean isCached(ItemStack seed) {
+    private boolean isCached(ItemStack seed, int simulatedSeedStat) {
         if (lastCache == null || seed == null) return false;
-        return areItemStacksEqual(lastCache, seed);
+        return lastSimulatedSeedStat == simulatedSeedStat && areItemStacksEqual(lastCache, seed);
     }
 
-    private boolean createCrop(ItemStack seedStack) {
+    private boolean createCrop(ItemStack seedStack, int simulatedSeedStat) {
         ISeedData seed = CropsNHUtils.getAnalyzedSeedData(seedStack);
         if (seed == null) return false;
 
+        int growth = simulatedSeedStat > 0 ? simulatedSeedStat
+            : seed.getStats()
+                .getGrowth();
+        int gain = simulatedSeedStat > 0 ? simulatedSeedStat
+            : seed.getStats()
+                .getGain();
+
         // calculate how much progress is done each cycle
-        double tProgressPerCycle = getGrowthProgressPerCycle(seed);
+        double tProgressPerCycle = getGrowthProgressPerCycle(seed, growth);
         if (tProgressPerCycle <= 0) {
             tProgressPerCycle = 1;
             TwistSpaceTechnology.LOG
@@ -180,15 +193,10 @@ public final class CropsNHFarm {
         }
 
         // calc avg drop stack size increase
-        double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(
-            seed.getStats()
-                .getGain());
+        double avgDropIncrease = TileEntityCropSticks.getAvgDropCountIncrease(gain);
 
         // calc average number of created drops per harvest
-        double avgDropCount = TileEntityCropSticks.getAvgDropRounds(
-            seed.getCrop(),
-            seed.getStats()
-                .getGain());
+        double avgDropCount = TileEntityCropSticks.getAvgDropRounds(seed.getCrop(), gain);
 
         List<Pair<ItemStack, Double>> toCache = new ArrayList<>();
 
@@ -324,6 +332,13 @@ public final class CropsNHFarm {
     }
 
     private static double getGrowthProgressPerCycle(ISeedData aCrop) {
+        return getGrowthProgressPerCycle(
+            aCrop,
+            aCrop.getStats()
+                .getGrowth());
+    }
+
+    private static double getGrowthProgressPerCycle(ISeedData aCrop, int growth) {
         // calc unscaled growth speed of crops.
         // All crops use the same amplified environmental score, so crops with more listed biome
         // preferences do not gain additional output merely because their preference list is longer.
@@ -331,8 +346,7 @@ public final class CropsNHFarm {
             SIMULATED_NUTRIENT_SCORE,
             aCrop.getCrop()
                 .getTier(),
-            aCrop.getStats()
-                .getGrowth());
+            growth);
         if (tUnscaledGrowthSpeed <= 0) return -1;
         // calculate percentage grown each tick up to 100% since growth
         // don't carry over if you wait to harvest in world crops.

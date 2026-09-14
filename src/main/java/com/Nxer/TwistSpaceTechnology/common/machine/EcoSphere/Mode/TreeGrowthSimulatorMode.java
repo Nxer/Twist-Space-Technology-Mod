@@ -35,6 +35,11 @@ import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
+    // Perfect genetics uses virtual traits beyond Forestry's registered allele limits.
+    private static final double PERFECT_TREE_HEIGHT = 4.0d;
+    private static final int PERFECT_TREE_GIRTH = 16;
+    private static final double PERFECT_TREE_FERTILITY = 0.6d;
+
     @Override
     public RecipeMap<?> getRecipeMap() {
         return GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes;
@@ -89,11 +94,20 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             }
         }
 
-        return EcoSphereModeSupport.processModeRecipeWithTier(
+        // Each retained sapling expands mode parallel and pays the discounted per-sapling fluid cost.
+        long fluidPerSapling = machine.applyFluidDiscount(recipe.fluid().amount);
+        long fluidCostPerParallel = 0;
+        int inputParallelMultiplier = 0;
+        for (int saplingCount : saplingCounts) {
+            fluidCostPerParallel += fluidPerSapling * saplingCount;
+            inputParallelMultiplier += saplingCount;
+        }
+        return EcoSphereModeSupport.processModeRecipeWithTierAndFluidCost(
             machine,
             recipe.fluid()
                 .getFluid(),
-            recipe.fluid().amount,
+            fluidCostPerParallel,
+            inputParallelMultiplier,
             euTier,
             parallelResult -> processOutputs(productSets, saplingCounts, selectedInputs, parallelResult));
     }
@@ -125,10 +139,11 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             }
             for (Mode mode : selected) {
                 ItemStack output = products.get(mode);
-                long amount = (long) (output.stackSize * saplingCount
-                    * getModeMultiplier(mode)
-                    * parallelResult.parallel()
-                    * focusBonus);
+                long saplingParallel = EcoSphereModeSupport.multiplyParallel(parallelResult.parallel(), saplingCount);
+                double outputAmount = output.stackSize * (double) getModeMultiplier(mode)
+                    * saplingParallel
+                    * focusBonus;
+                long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
                 addSplitStack(outputs, output, amount);
             }
         }
@@ -213,10 +228,10 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(Mode.class);
         ItemStack log = defaultMap.get(Mode.LOG);
         if (log != null) {
-            double treeHeight = maximizeForestry ? 2.0
+            double treeHeight = maximizeForestry ? PERFECT_TREE_HEIGHT
                 : tree.getGenome()
                     .getHeight();
-            int treeGirth = maximizeForestry ? 10
+            int treeGirth = maximizeForestry ? PERFECT_TREE_GIRTH
                 : tree.getGenome()
                     .getGirth();
             double height = Math.max(3 * (treeHeight - 1), 0) + 1;
@@ -227,7 +242,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         ItemStack saplingOut = defaultMap.get(Mode.SAPLING);
         if (saplingOut != null) {
             saplingOut = sapling.copy();
-            double fertility = maximizeForestry ? 0.3
+            double fertility = maximizeForestry ? PERFECT_TREE_FERTILITY
                 : tree.getGenome()
                     .getFertility();
             saplingOut.stackSize = Math.max(1, (int) (defaultMap.get(Mode.SAPLING).stackSize * fertility * 10));

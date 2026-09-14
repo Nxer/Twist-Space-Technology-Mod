@@ -165,6 +165,11 @@ public final class DebugMode {
             case 3 -> collectClonerOutputs(outputAmounts, beaconTier, tierTwo, pulverizeOutputs, weaponTags);
             default -> {}
         }
+        // Generic output upgrades stay disabled in debug, but pulverization retains its built-in output upgrade.
+        if (mode == 3 && pulverizeOutputs) {
+            outputAmounts.replaceAll(
+                (item, amount) -> amount >= Long.MAX_VALUE / 1.5d ? Long.MAX_VALUE : (long) (amount * 1.5d));
+        }
 
         List<DebugOutput> outputs = new ArrayList<>(outputAmounts.size());
         for (Map.Entry<TST_ItemID, Long> output : outputAmounts.entrySet()) {

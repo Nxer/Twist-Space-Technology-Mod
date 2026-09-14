@@ -332,7 +332,7 @@ public class TCRecipePool {
                         CropsNHItemList.CropManager_UHV.get(1),
                         CropsNHItemList.goldfish.get(1),
                         CropsNHItemList.SeedBed_UEV.get(1),
-                        new ItemStack(ModItems.obedienceStick, 1),
+                        GTCMItemList.VoidPollen.get(1),
                         new ItemStack(ModBlocks.enchantedSoil, 1),
                         NHItemList.CircuitUEV.get(1)
                     });
@@ -514,8 +514,8 @@ public class TCRecipePool {
                         new ItemStack(ConfigItems.itemFocusPrimal, 1, 0),
                         getModItem("Genetics", "registry", 1, 0),
                         ItemList.EnergisedTesseract.get(1),
-                        CropsNHItemList.CropBreeder_UEV.get(1),
-                        ItemList.Emitter_UEV.get(1),
+                        new ItemStack(ModItems.obedienceStick, 1),
+                        ItemList.Field_Generator_UEV.get(1),
                         getModItem("Genetics", "database", 1, 0) });
 
                 infusionRecipeFontOfEcology = addInfusionCraftingRecipeAspectNotNull(
