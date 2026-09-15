@@ -134,7 +134,17 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     public record FluidStackLong(FluidStack fluidStack, long amount) {}
 
     public boolean isMEOutputEnabled() {
-        return enableMEOutput;
+        if (enableMEOutput) return true;
+        boolean hasMEOutput = false;
+        for (MTEHatchOutputBus outputBus : validMTEList(mOutputBusses)) {
+            if (!(outputBus instanceof MTEHatchOutputBusME)) return false;
+            hasMEOutput = true;
+        }
+        for (MTEHatchOutput outputHatch : validMTEList(mOutputHatches)) {
+            if (!(outputHatch instanceof MTEHatchOutputME)) return false;
+            hasMEOutput = true;
+        }
+        return hasMEOutput;
     }
 
     public void setMEOutput(boolean enabled) {
