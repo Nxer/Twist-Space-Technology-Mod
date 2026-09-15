@@ -69,6 +69,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DebugMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DirectedMobClonerMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
@@ -103,6 +104,7 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
+import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.core.util.minecraft.ItemUtils;
@@ -127,6 +129,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_EcoSphereSimulator(this.mName);
+    }
+
+    @Override
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_EcoSphereSimulator(this);
     }
 
     // region Structure
@@ -895,6 +902,20 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return fluidAreaHandler;
     }
 
+    public void onClickFluidAreaClearingButton() {
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        if (base == null || !base.isServerSide()) return;
+        getFluidAreaHandler().clearCompleteFluidArea();
+        fluidAreaFluidName = "";
+        fluidAreaInitialized = false;
+        fluidAreaFillDuration = 0;
+        missingFluidAreaInput = null;
+        requestCleaning(boundMode);
+        base.disableWorking();
+        base.setActive(false);
+        mUpdated = true;
+    }
+
     // Keep fluid-area transforms aligned with the mirrored multiblock structure.
     public boolean isFluidAreaHorizontallyFlipped() {
         return getFlip().isHorizontallyFlipped();
@@ -1071,20 +1092,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         mUpdated = true;
     }
 
-    // Remove only placed fluid sources when the controller leaves the world.
+    // Release transient debug data when the controller leaves the world.
     @Override
     public void onRemoval() {
         IGregTechTileEntity base = getBaseMetaTileEntity();
         if (base != null && base.isServerSide()) {
-            Fluid placedFluid = FluidRegistry.getFluid(fluidAreaFluidName);
-            IEcoSphereMode mode = getBoundMode();
-            boolean withMainArea = mode != null && mode.displaysFluidArea();
-            Block placedFluidBlock = getFluidAreaBlock(placedFluid, withMainArea);
-            if (placedFluidBlock != null) getFluidAreaHandler().clearPlacedSources(placedFluidBlock);
-            fluidAreaFluidName = "";
-            fluidAreaInitialized = false;
-            fluidAreaFillDuration = 0;
-            missingFluidAreaInput = null;
             DebugMode.reset(this);
         }
         super.onRemoval();

@@ -2,7 +2,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -15,6 +18,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 public final class EcoSphereFluidAreaHandler {
+
+    private static final String[] STRUCTURE_FLUID_NAMES = { "ic2distilledwater", "unknowwater", "blood",
+        "lifeessence" };
 
     public enum FluidArea {
         WITHOUT_MAIN,
@@ -110,15 +116,18 @@ public final class EcoSphereFluidAreaHandler {
         setPattern(area, areas.get(area)[layer], layer, null, block);
     }
 
-    // Remove only source blocks that this fluid area may have placed.
-    public void clearPlacedSources(Block expectedBlock) {
-        if (expectedBlock == null) return;
-        for (FluidArea area : new FluidArea[] { FluidArea.UPPER_SOURCE, FluidArea.MAIN_SOURCE,
-            FluidArea.LOWER_SOURCE }) {
-            String[][] pattern = areas.get(area);
-            for (int layer = 0; layer < pattern.length; layer++) {
-                setPattern(area, pattern[layer], layer, expectedBlock, Blocks.air);
-            }
+    // Clear every valid display fluid from the complete static and flowing fluid area.
+    public void clearCompleteFluidArea() {
+        Set<Block> structureFluids = new HashSet<>();
+        structureFluids.add(Blocks.water);
+        structureFluids.add(Blocks.flowing_water);
+        for (String fluidName : STRUCTURE_FLUID_NAMES) {
+            Fluid fluid = FluidRegistry.getFluid(fluidName);
+            if (fluid != null && fluid.getBlock() != null) structureFluids.add(fluid.getBlock());
+        }
+        String[][] pattern = areas.get(FluidArea.WITH_MAIN);
+        for (int layer = 0; layer < pattern.length; layer++) {
+            setPattern(FluidArea.WITH_MAIN, pattern[layer], layer, structureFluids::contains, Blocks.air);
         }
     }
 
@@ -152,7 +161,7 @@ public final class EcoSphereFluidAreaHandler {
                 targetArea,
                 areas.get(targetArea)[cleaningStep[0]],
                 cleaningStep[0],
-                expectedBlock,
+                actualBlock -> matchesExpectedBlock(actualBlock, expectedBlock),
                 Blocks.air)) return cleaningStep[1];
         }
         return 0;
@@ -199,7 +208,8 @@ public final class EcoSphereFluidAreaHandler {
     }
 
     // Transform one local pattern and optionally replace only matching blocks.
-    private boolean setPattern(FluidArea area, String[] pattern, int layer, Block expectedBlock, Block block) {
+    private boolean setPattern(FluidArea area, String[] pattern, int layer, Predicate<Block> replacementFilter,
+        Block block) {
         IGregTechTileEntity base = machine.getBaseMetaTileEntity();
         if (base == null) return false;
         int[] offset = areaOffsets.get(area);
@@ -232,7 +242,7 @@ public final class EcoSphereFluidAreaHandler {
                 int worldY = base.getYCoord() + offset[1] - layer;
                 int worldZ = base.getZCoord() + blockOffsetZ;
                 Block actualBlock = world.getBlock(worldX, worldY, worldZ);
-                if (expectedBlock != null && !matchesExpectedBlock(actualBlock, expectedBlock)) continue;
+                if (replacementFilter != null && !replacementFilter.test(actualBlock)) continue;
                 if (world.setBlock(worldX, worldY, worldZ, block, 0, updateFlags)) changed = true;
             }
         }
