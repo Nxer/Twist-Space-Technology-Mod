@@ -28,7 +28,7 @@ import gregtech.api.interfaces.IGT_ItemWithMaterialRenderer;
 import gregtech.api.util.GTModHandler;
 import gregtech.common.render.items.InfinityRenderer;
 
-public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
+public final class EcoSphereItemRenderer implements IItemRenderer {
 
     private static final float CONTENT_SCALE = 0.875F;
     private static final float ITEM_THICKNESS = 1.0F / 16.0F;
@@ -39,7 +39,7 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return item != null
-            && (item.getItem() == TstItems.EcoSphereModeBeacon || item.getItem() == TstItems.EcoSphereUpgrade);
+            && (item.getItem() == TstItems.EcoSphereExecutionProtocol || item.getItem() == TstItems.EcoSphereUpgrade);
     }
 
     @Override
@@ -56,12 +56,13 @@ public final class EcoSphereModeBeaconRenderer implements IItemRenderer {
         int meta = item.getItemDamage();
         boolean upgrade = item.getItem() == TstItems.EcoSphereUpgrade;
         IIcon background = upgrade ? TstItems.EcoSphereUpgrade.getBackgroundIcon()
-            : TstItems.EcoSphereModeBeacon.getBackgroundIcon();
-        IIcon frame = upgrade ? TstItems.EcoSphereUpgrade.getFrameIcon() : TstItems.EcoSphereModeBeacon.getFrameIcon();
-        // Draw the background first so every beacon has the same solid base.
+            : TstItems.EcoSphereExecutionProtocol.getBackgroundIcon();
+        IIcon frame = upgrade ? TstItems.EcoSphereUpgrade.getFrameIcon()
+            : TstItems.EcoSphereExecutionProtocol.getFrameIcon();
+        // Draw the background first so every protocol and upgrade has the same solid base.
         renderBase(type, background, frame, item.getItemSpriteNumber());
 
-        // Pick the item shown in the center from the beacon metadata.
+        // Pick the item shown in the center from the component metadata.
         ItemStack displayStack = getDisplayStack(item);
 
         // Keep all center-item changes inside this matrix.

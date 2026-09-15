@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerMode implements IEcoSphereMode {
 
-    /** Looting X granted by the tier-3 cloning beacon. */
+    /** Looting X granted by the tier-3 cloning protocol. */
     private static final int LOOTING_TIER_THREE_LEVEL = 10;
     /** Maximum looting level used anywhere in the yield bonus. */
     private static final int LOOTING_CAP_LEVEL = 10;
@@ -71,21 +71,21 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
 
         FluidStack lifeEssenceInput = DirectedMobClonerFakeRecipe.LIFE_ESSENCE_STACK;
         if (lifeEssenceInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        if (machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+        if (machine.getExecutionProtocolTier() < 2) return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
 
         DirectedMobClonerRecipeCache.CachedRecipe recipe = DirectedMobClonerRecipeCache.findRecipe(recipeId);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
+        if (!machine.isTierTwo()) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         boolean pulverize = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.OUTPUT_PULVERIZATION);
         WeaponTags weaponTags = DirectedMobClonerWeaponHandler.process(machine.getCloningModifiers());
         // The Infinity Sword keeps its existing role as an alternative boss prerequisite and source of Looting X.
-        boolean tierThree = machine.hasDirectedMobClonerTierThreeBeacon()
+        boolean tierThree = machine.hasDirectedMobClonerTierThreeProtocol()
             || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;
         if (recipe.boss()) {
-            if (!machine.isTierTwo()) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-            if (!tierThree) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+            if (!tierThree) return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
         }
 
-        // Looting X stays unchanged: either the tier-three beacon or the Infinity Sword grants it, capped at X.
+        // Looting X stays unchanged: either the tier-three protocol or the Infinity Sword grants it, capped at X.
         double lootingBonus = weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.ALL_OUTPUTS_CHANCE_BONUS);
         double tierThreeBonus = tierThree ? LOOTING_TIER_THREE_LEVEL * 5_000d : 0;
         double allOutputsBonus = Math.min(LOOTING_CAP_LEVEL * 5_000d, Math.max(lootingBonus, tierThreeBonus));
@@ -307,16 +307,16 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         // # Generating Life Essence
         // #zh_CN 生命本源生成中
 
-        // #tr EcoSphereSimulator.gui.tierOneCloningRecipe
-        // # Tier I Structure: Recipe Number 0 Only
-        // #zh_CN 一级结构: 仅执行配方编号 0
+        // #tr EcoSphereSimulator.gui.tierOneCloningAddress
+        // # Tier I Structure: Initial Biological Address Only
+        // #zh_CN 一级结构: 仅执行初始生物地址
         CheckRecipeResult runningResult;
         if (machine.isTierTwo()) {
             runningResult = SimpleCheckRecipeResult.ofSuccess("generating_life_essence");
         } else {
             runningResult = SimpleResultWithText.ofSuccessText(
                 translateToLocal("GT5U.gui.text.recipe_result.generating_life_essence") + "\n"
-                    + translateToLocal("EcoSphereSimulator.gui.tierOneCloningRecipe"));
+                    + translateToLocal("EcoSphereSimulator.gui.tierOneCloningAddress"));
         }
         return EcoSphereModeResult.standard(
             runningResult,

@@ -21,11 +21,10 @@ public final class TCResearchEventHandler {
 
     private static final String EVOLUTION_RESEARCH = "EVOLUTIO";
     private static final String OFFSPRING_RESEARCH = "OFFSPRING";
-    private static final String FONT_OF_ECOLOGY_RESEARCH = "FONT_OF_ECOLOGY";
-    private static final String AQUATIC_MODE_BEACON_RESEARCH = "ECO_SPHERE_MODE_BEACON_3";
-    private static final String ECO_SPHERE_MODE_BEACON_8_RESEARCH = "ECO_SPHERE_MODE_BEACON_8";
-    private static final String DIRECTED_CLONING_PROTOCOL_RESEARCH = "ECO_SPHERE_DIRECTED_CLONING_PROTOCOL";
-    private static final String ECO_SPHERE_MODE_BEACON_7_RESEARCH = "ECO_SPHERE_MODE_BEACON_7";
+    private static final String FOUNT_OF_ECOLOGY_RESEARCH = "FOUNT_OF_ECOLOGY";
+    private static final String AQUATIC_EXECUTION_PROTOCOL_RESEARCH = "ECO_SPHERE_EXECUTION_PROTOCOL_3";
+    private static final String ECO_SPHERE_EXECUTION_PROTOCOL_8_RESEARCH = "ECO_SPHERE_EXECUTION_PROTOCOL_8";
+    private static final String ECO_SPHERE_EXECUTION_PROTOCOL_7_RESEARCH = "ECO_SPHERE_EXECUTION_PROTOCOL_7";
     private static final String ECO_SPHERE_TIER_TWO_RESEARCH = "ECO_SPHERE_TIER_TWO";
 
     @SubscribeEvent
@@ -37,9 +36,8 @@ public final class TCResearchEventHandler {
         String playerName = player.getCommandSenderName();
         unlockEvolutionResearch(player, playerName);
         unlockOffspringResearch(player, playerName);
-        revealFontOfEcologyResearch(player, playerName);
-        revealDirectedCloningResearch(player, playerName, DIRECTED_CLONING_PROTOCOL_RESEARCH);
-        revealDirectedCloningResearch(player, playerName, ECO_SPHERE_MODE_BEACON_8_RESEARCH);
+        revealFountOfEcologyResearch(player, playerName);
+        revealDirectedCloningResearch(player, playerName, ECO_SPHERE_EXECUTION_PROTOCOL_8_RESEARCH);
     }
 
     private static void unlockEvolutionResearch(EntityPlayerMP player, String playerName) {
@@ -52,25 +50,25 @@ public final class TCResearchEventHandler {
 
     private static void unlockOffspringResearch(EntityPlayerMP player, String playerName) {
         if (ResearchManager.isResearchComplete(playerName, OFFSPRING_RESEARCH)
-            || !ResearchManager.isResearchComplete(playerName, AQUATIC_MODE_BEACON_RESEARCH)
+            || !ResearchManager.isResearchComplete(playerName, AQUATIC_EXECUTION_PROTOCOL_RESEARCH)
             || !hasOffspring(player)) return;
 
         completeResearch(player, OFFSPRING_RESEARCH);
     }
 
-    private static void revealFontOfEcologyResearch(EntityPlayerMP player, String playerName) {
+    private static void revealFountOfEcologyResearch(EntityPlayerMP player, String playerName) {
         if (!ResearchManager.isResearchComplete(playerName, OFFSPRING_RESEARCH)
-            || ResearchManager.isResearchComplete(playerName, FONT_OF_ECOLOGY_RESEARCH)
-            || ResearchManager.isResearchComplete(playerName, "@" + FONT_OF_ECOLOGY_RESEARCH)
+            || ResearchManager.isResearchComplete(playerName, FOUNT_OF_ECOLOGY_RESEARCH)
+            || ResearchManager.isResearchComplete(playerName, "@" + FOUNT_OF_ECOLOGY_RESEARCH)
             || !hasScannedOffspring(playerName)) return;
 
-        completeResearch(player, "@" + FONT_OF_ECOLOGY_RESEARCH);
+        completeResearch(player, "@" + FOUNT_OF_ECOLOGY_RESEARCH);
     }
 
     private static void revealDirectedCloningResearch(EntityPlayerMP player, String playerName, String researchKey) {
         if (ResearchManager.isResearchComplete(playerName, researchKey)
             || ResearchManager.isResearchComplete(playerName, "@" + researchKey)
-            || (!ResearchManager.isResearchComplete(playerName, ECO_SPHERE_MODE_BEACON_7_RESEARCH)
+            || (!ResearchManager.isResearchComplete(playerName, ECO_SPHERE_EXECUTION_PROTOCOL_7_RESEARCH)
                 && !ResearchManager.isResearchComplete(playerName, ECO_SPHERE_TIER_TWO_RESEARCH)))
             return;
 

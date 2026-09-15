@@ -129,12 +129,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     // region Structure
 
     public static final int MODE_RECIPE_DURATION = 20 * 5;
-    private static final int MODE_BEACON_CHECK_INTERVAL = 20;
+    private static final int EXECUTION_PROTOCOL_CHECK_INTERVAL = 20;
 
     private int controllerTier = 0;
     private int boundMode = -1;
     private int pendingMode = -1;
-    private boolean modeBeaconPresent = false;
+    private boolean executionProtocolPresent = false;
     private boolean cleaningRequested = false;
     private boolean cleaningRunActive = false;
     // Pending survives output checks; active survives the run until recipe-0 output is routed.
@@ -157,7 +157,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         /*
          * 0 - Arboreal Genesis
          * 1 - Aquatic Simulation
-         * 2 - Green House Simulator
+         * 2 - Artificial Greenhouse
          * 3 - Directed Mob Cloning
          */
         return 4;
@@ -175,20 +175,20 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return controllerTier + 1;
     }
 
-    public int getModeBeaconTier() {
-        ItemStack beacon = getControllerSlot();
-        if (getModeFromBeacon(beacon) < 0) return 0;
-        int meta = beacon.getItemDamage();
+    public int getExecutionProtocolTier() {
+        ItemStack protocol = getControllerSlot();
+        if (getModeFromExecutionProtocol(protocol) < 0) return 0;
+        int meta = protocol.getItemDamage();
         // Modes 0-2 alternate T1/T2; cloning metas 6-8 map directly to tiers 1-3.
         return meta <= 5 ? meta % 2 + 1 : meta - 5;
     }
 
-    public boolean hasDirectedMobClonerTierThreeBeacon() {
-        return getModeFromBeacon(getControllerSlot()) == 3 && getModeBeaconTier() >= 3;
+    public boolean hasDirectedMobClonerTierThreeProtocol() {
+        return getModeFromExecutionProtocol(getControllerSlot()) == 3 && getExecutionProtocolTier() >= 3;
     }
 
-    public boolean hasSecondaryModeBeacon() {
-        return getModeBeaconTier() >= 2;
+    public boolean hasSecondaryExecutionProtocol() {
+        return getExecutionProtocolTier() >= 2;
     }
 
     public long applyFluidDiscount(long fluidAmount) {
@@ -251,8 +251,16 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         // #tr EcoSphereSimulator.modeMsg.3
         // # Directed Mob Cloning
         // #zh_CN 定向克隆
+
+        // #tr EcoSphereSimulator.mode.cleaning
+        // # Cleaning Habitat
+        // #zh_CN 栖息地清理中
+
+        // #tr EcoSphereSimulator.mode.waiting
+        // # Awaiting Execution Protocol
+        // #zh_CN 等待执行协议
         if (cleaningRequested || cleaningRunActive) return tr("EcoSphereSimulator.mode.cleaning");
-        if (!modeBeaconPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
+        if (!executionProtocolPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
             return tr("EcoSphereSimulator.mode.waiting");
         }
         return MACHINE_MODES[boundMode].getDisplayName();
@@ -285,16 +293,16 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
-        // Sync the installed beacon when the machine loads.
-        if (aBaseMetaTileEntity.isServerSide()) updateModeBeaconBinding();
+        // Sync the installed execution protocol when the machine loads.
+        if (aBaseMetaTileEntity.isServerSide()) updateExecutionProtocolBinding();
     }
 
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         boolean serverSide = aBaseMetaTileEntity.isServerSide();
         // Keep both interface UIs synchronized while the machine is idle or running.
-        if (serverSide && aTick % MODE_BEACON_CHECK_INTERVAL == 0) {
-            updateModeBeaconBinding();
+        if (serverSide && aTick % EXECUTION_PROTOCOL_CHECK_INTERVAL == 0) {
+            updateExecutionProtocolBinding();
             refreshEcoSphereInterfaces();
         }
         // Run the normal machine tick after a possible mode change has stopped the old recipe.
@@ -373,13 +381,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         super.stopMachine(reason);
     }
 
-    // Detect beacon changes and route every mode switch through the cleaning sequence.
-    private void updateModeBeaconBinding() {
-        int requestedMode = getModeFromBeacon(getControllerSlot());
-        boolean wasPresent = modeBeaconPresent;
-        modeBeaconPresent = requestedMode >= 0;
-        if (wasPresent != modeBeaconPresent) markDirty();
-        if (!modeBeaconPresent) return;
+    // Detect execution protocol changes and route every mode switch through the cleaning sequence.
+    private void updateExecutionProtocolBinding() {
+        int requestedMode = getModeFromExecutionProtocol(getControllerSlot());
+        boolean wasPresent = executionProtocolPresent;
+        executionProtocolPresent = requestedMode >= 0;
+        if (wasPresent != executionProtocolPresent) markDirty();
+        if (!executionProtocolPresent) return;
         if (cleaningRequested || cleaningRunActive) {
             if (requestedMode != pendingMode) {
                 pendingMode = requestedMode;
@@ -393,7 +401,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
     private void refreshEcoSphereInterfaces() {
         int interfaceMode = -1;
-        if (modeBeaconPresent) interfaceMode = getModeFromBeacon(getControllerSlot());
+        if (executionProtocolPresent) interfaceMode = getModeFromExecutionProtocol(getControllerSlot());
         ItemStack[] upgrades = new ItemStack[0];
         if (ecoSphereUpgradeInterface != null) {
             ecoSphereUpgradeInterface.setMachineState(interfaceMode, getStructureTier());
@@ -422,9 +430,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         markDirty();
     }
 
-    // Map the nine beacon items to the four machine modes.
-    public static int getModeFromBeacon(ItemStack stack) {
-        if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.EcoSphereModeBeacon) return -1;
+    // Map the nine execution protocol items to the four machine modes.
+    public static int getModeFromExecutionProtocol(ItemStack stack) {
+        if (stack == null || stack.stackSize <= 0 || stack.getItem() != TstItems.EcoSphereExecutionProtocol) return -1;
         int meta = stack.getItemDamage();
         if (meta >= 0 && meta <= 5) return meta / 2;
         return meta >= 6 && meta <= 8 ? 3 : -1;
@@ -913,7 +921,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
 
         String targetName = targetFluid.getName();
         if (!targetName.equals(fluidAreaFluidName)) {
-            // A fluid change uses the same cleaning and drain animation as a beacon change.
+            // A fluid change uses the same cleaning and drain animation as an execution protocol change.
             if (!fluidAreaFluidName.isEmpty()) {
                 requestCleaning(boundMode);
                 return false;
@@ -1183,8 +1191,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     activeRecipeZeroLpOutput = false;
                     markDirty();
                 }
-                // Always use the latest beacon before starting the next recipe.
-                updateModeBeaconBinding();
+                // Always use the latest execution protocol before starting the next recipe.
+                updateExecutionProtocolBinding();
                 // Read upgrades first because fluid reduction can raise the fluid-limited parallel count.
                 refreshEcoSphereInterfaces();
                 if (inputItems == null) inputItems = new ItemStack[0];
@@ -1197,17 +1205,17 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     CheckRecipeResult cleaningResult = processCleaning();
                     if (cleaningResult != null) return cleaningResult;
                 }
-                if (!modeBeaconPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
-                    // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_mode_beacon
+                if (!executionProtocolPresent || boundMode < 0 || boundMode >= MACHINE_MODES.length) {
+                    // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_execution_protocol
                     // # No valid execution protocol detected
                     // #zh_CN 未检测到有效执行协议
-                    return SimpleCheckRecipeResult.ofFailure("eco_sphere_simulator_waiting_for_mode_beacon");
+                    return SimpleCheckRecipeResult.ofFailure("eco_sphere_simulator_waiting_for_execution_protocol");
                 }
                 machineMode = boundMode;
 
                 if (debugItemInstalled) {
                     EcoSphereModeResult debugResult = DebugMode
-                        .process(TST_EcoSphereSimulator.this, machineMode, getModeBeaconTier());
+                        .process(TST_EcoSphereSimulator.this, machineMode, getExecutionProtocolTier());
                     if (debugResult.result()
                         .wasSuccessful()) return applyModeResult(debugResult);
                     DebugMode.reset(TST_EcoSphereSimulator.this);
@@ -1362,15 +1370,30 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         int extraLines = missingFluidAreaInput == null ? 4 : 5;
         String[] ret = new String[origin.length + extraLines];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "parallelFromEUt"
+        // #tr EcoSphereSimulator.gui.parallelFromEUt
+        // # Power-Limited Parallel
+        // #zh_CN 功率限制并行
+        ret[origin.length] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.parallelFromEUt")
             + " : "
             + EnumChatFormatting.GOLD
             + this.parallelFromEUt;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "currentParallel"
+        // #tr EcoSphereSimulator.gui.currentParallel
+        // # Current Parallel
+        // #zh_CN 当前并行
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.currentParallel")
             + " : "
             + EnumChatFormatting.GOLD
             + this.currentParallel;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + "Eu tier" + " : " + EnumChatFormatting.GOLD + this.EuTier;
+        // #tr EcoSphereSimulator.gui.powerTier
+        // # Power Tier
+        // #zh_CN 功率等级
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.powerTier")
+            + " : "
+            + EnumChatFormatting.GOLD
+            + this.EuTier;
+        // #tr EcoSphereSimulator.gui.currentRecipe
+        // # Current Simulation
+        // #zh_CN 当前模拟
         ret[origin.length + 3] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.currentRecipe")
             + " : "
             + EnumChatFormatting.GOLD
@@ -1386,8 +1409,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
         // #tr Tooltip_EcoSphereSimulator_MachineType
-        // # Tree Farm | Aquatic Farm | Green House | Mob Cloner
-        // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
+        // # Arboreal Genesis | Aquatic Simulation | Artificial Greenhouse | Directed Mob Cloning
+        // #zh_CN 原木拟生 | 水域模拟 | 人工温室 | 定向克隆
         tt.addMachineType(tr("Tooltip_EcoSphereSimulator_MachineType"))
             // #tr Tooltip_EcoSphereSimulator_Controller
             // # Controller block for the Eco-Sphere Simulator
@@ -1409,17 +1432,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // # {\SPACE}
             // #zh_CN {\SPACE}
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.04"))
-            // #tr Tooltip_EcoSphereSimulator.0.05
-            // # {\SPACE}
-            // #zh_CN {\SPACE}
-            .addInfo(tr("Tooltip_EcoSphereSimulator.0.05"))
             // #tr Tooltip_EcoSphereSimulator.0.06
             // # {\AQUA}The thaumaturges' latest masterpiece in the Integration of Magic and Electrical Engineering
             // #zh_CN {\AQUA}神秘使在魔电一体化领域的又一力作
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.06"))
             // #tr Tooltip_EcoSphereSimulator.0.07
-            // # {\AQUA}Simulate the growth and development cycle of samples using simple raw materials
-            // #zh_CN {\AQUA}通过简单的原材料就可以模拟样本的生长发育周期
+            // # {\AQUA}Reproduce selected environmental and biological processes from simple materials
+            // #zh_CN {\AQUA}以简单材料复现特定环境与生物过程
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.07"))
             .addSeparator()
             // #tr Tooltip_EcoSphereSimulator.0.08
@@ -1427,41 +1446,25 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // #zh_CN {\GOLD}拥有独特的超频增益方式
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.08"))
             // #tr Tooltip_EcoSphereSimulator.0.09
-            // # Recipe time is fixed
-            // #zh_CN 配方时间被固定
+            // # Each protocol has a fixed base cycle time
+            // #zh_CN 每种协议拥有固定的基础循环时间
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.09"))
             // #tr Tooltip_EcoSphereSimulator.0.10
-            // # The product increases nonlinearly with the increase of voltage
-            // #zh_CN 且产物随着电压的增加而非线性提升
+            // # Higher input power increases recipe parallelism nonlinearly
+            // #zh_CN 更高的输入功率会非线性提高配方并行
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.10"))
             // #tr Tooltip_EcoSphereSimulator.0.11
-            // # Use screwdriver to change mode
-            // #zh_CN 使用螺丝刀切换模式
+            // # Install an execution protocol in the controller to select the simulation
+            // #zh_CN 将执行协议装入主机以选择模拟内容
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.11"))
             // #tr Tooltip_EcoSphereSimulator.0.12
-            // # Need to pour a bucket of {\AQUA}distilled water {\GRAY}at the top to drive the machine
-            // #zh_CN 需要在顶端倒一桶{\AQUA}蒸馏水{\GRAY}来驱动机器
+            // # Operating media enter through input hatches; fluid-habitat protocols reproduce them in the chamber
+            // #zh_CN 运行介质由输入仓送入；流体栖息地协议会在舱室内将其复现
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.12"))
             // #tr Tooltip_EcoSphereSimulator.0.13
-            // # Secondary recipes incomplete
-            // #zh_CN 二级配方尚未完成
+            // # Requires one Eco-Sphere Input Interface and one Eco-Sphere Upgrade Interface
+            // #zh_CN 必须安装一个生态圈输入接口与一个生态圈升级接口
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.13"))
-            // #tr Tooltip_EcoSphereSimulator.0.14
-            // # {\GREEN}Green House Mode:
-            // #zh_CN {\GREEN}工业温室模式:
-            .addInfo(tr("Tooltip_EcoSphereSimulator.0.14"))
-            // #tr Tooltip_EcoSphereSimulator.0.15
-            // # {\SPACE}- supports both normal & CropsNH's crops
-            // #zh_CN {\SPACE}- 同时支持普通作物与CropsNH作物
-            .addInfo(tr("Tooltip_EcoSphereSimulator.0.15"))
-            // #tr Tooltip_EcoSphereSimulator.0.16
-            // # {\SPACE}- Can be boosted by supplying enriched fertilizer
-            // #zh_CN {\SPACE}- 提供富集肥料提高产量
-            .addInfo(tr("Tooltip_EcoSphereSimulator.0.16"))
-            // #tr Tooltip_EcoSphereSimulator.0.17
-            // # - Has a huge consumption of water
-            // #zh_CN {\SPACE}- 运行时消耗大量水
-            .addInfo(tr("Tooltip_EcoSphereSimulator.0.17"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
@@ -1476,6 +1479,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             .addInputBus(getBlueprintWithDot(1), 1)
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
+            // #tr Tooltip_EcoSphereSimulator_Interfaces
+            // # Eco-Sphere Input and Upgrade Interfaces
+            // #zh_CN 生态圈输入接口与升级接口
+            .addOtherStructurePart(tr("Tooltip_EcoSphereSimulator_Interfaces"), getBlueprintWithDot(3), 3)
             // #tr Tooltip_EcoSphereSimulator_FluidArea
             // # Animated fluid area; no blocks are required
             // #zh_CN 动态流体区域；无需放置方块

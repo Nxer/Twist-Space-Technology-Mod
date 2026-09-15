@@ -10,7 +10,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderFlask;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderIzumik;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemAdderRune;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
-import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereModeBeacon;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereExecutionProtocol;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
@@ -22,7 +22,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.TSTGeneratedItem;
 public class TstItems {
 
     public static final ItemAdder01 MetaItem01 = new ItemAdder01();
-    public static final ItemEcoSphereModeBeacon EcoSphereModeBeacon = new ItemEcoSphereModeBeacon();
+    public static final ItemEcoSphereExecutionProtocol EcoSphereExecutionProtocol = new ItemEcoSphereExecutionProtocol();
     public static final ItemEcoSphereUpgrade EcoSphereUpgrade = new ItemEcoSphereUpgrade();
     public static final ItemAdderRune MetaItemRune = new ItemAdderRune();
     public static final ItemAdderIzumik MetaItemIzumik = new ItemAdderIzumik();

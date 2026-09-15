@@ -353,8 +353,8 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     private Widget createWaitingText() {
         return TextWidget
             .dynamicString(
-                () -> StatCollector
-                    .translateToLocal("GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_mode_beacon"))
+                () -> StatCollector.translateToLocal(
+                    "GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_execution_protocol"))
             .setTextAlignment(Alignment.Center)
             .setDefaultColor(Color.WHITE.normal)
             .setPos(20, 35)
@@ -449,10 +449,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private void addCloningRecipeInput(ModularWindow.Builder builder) {
         builder.widget(
-            // #tr EcoSphereInputInterface.gui.recipeNumber
-            // # Recipe Number
-            // #zh_CN 配方编号
-            TextWidget.localised("EcoSphereInputInterface.gui.recipeNumber")
+            // #tr EcoSphereInputInterface.gui.biologicalAddress
+            // # Biological Address
+            // #zh_CN 生物地址
+            TextWidget.localised("EcoSphereInputInterface.gui.biologicalAddress")
                 .setTextAlignment(Alignment.Center)
                 .setPos(8, 21)
                 .setSize(80, 14)

@@ -6,7 +6,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGr
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.queryTimeTreeProduct;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.TreeGrowthSimulatorMode.queryTreeProduct;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE;
 import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProductsMap;
 
 import java.util.ArrayList;
@@ -147,29 +147,29 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
-        LogSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.0"
-        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.0
+        LogSymbol.setStackDisplayName(TextEnums.tr("EcoSphereSimulator.nei.arboreal.randomLogs"
+        // #tr EcoSphereSimulator.nei.arboreal.randomLogs
         // # Random logs
         // #zh_CN 随机原木
         ));
         addEnchantmentLight(LogSymbol);
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
-        SaplingSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.1"
-        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.1
+        SaplingSymbol.setStackDisplayName(TextEnums.tr("EcoSphereSimulator.nei.arboreal.randomSaplings"
+        // #tr EcoSphereSimulator.nei.arboreal.randomSaplings
         // # Random saplings
         // #zh_CN 随机树苗
         ));
         addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
-        LeavesSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.2"
-        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.2
+        LeavesSymbol.setStackDisplayName(TextEnums.tr("EcoSphereSimulator.nei.arboreal.randomLeaves"
+        // #tr EcoSphereSimulator.nei.arboreal.randomLeaves
         // # Random leaves
         // #zh_CN 随机树叶
         ));
         addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
-        FruitSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.3"
-        // #tr ESS.TreeGrowthSimulator.nei.fakeItem.3
+        FruitSymbol.setStackDisplayName(TextEnums.tr("EcoSphereSimulator.nei.arboreal.randomFruits"
+        // #tr EcoSphereSimulator.nei.arboreal.randomFruits
         // # Random fruits
         // #zh_CN 随机果实
         ));
@@ -201,12 +201,13 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         addFakeRecipe(productMap, allSaplingWithTag, specialFluid, 2);
     }
 
-    static void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid, int requiredTier) {
-        addFakeRecipe(queryTreeProduct(Sapling, false), specialStacks, inputFluid, requiredTier);
+    static void addFakeRecipe(ItemStack Sapling, ItemStack[] specialStacks, FluidStack inputFluid,
+        int requiredExecutionProtocolTier) {
+        addFakeRecipe(queryTreeProduct(Sapling, false), specialStacks, inputFluid, requiredExecutionProtocolTier);
     }
 
     static void addFakeRecipe(EnumMap<Mode, ItemStack> ProductMap, ItemStack[] specialStacks, FluidStack inputFluid,
-        int requiredTier) {
+        int requiredExecutionProtocolTier) {
 
         // ItemStack[] inputStacks = new ItemStack[Mode.values().length];
         // ItemStack[] outputStacks = new ItemStack[Mode.values().length];
@@ -233,18 +234,18 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         }
         var i = input.toArray(new ItemStack[0]);
         var o = output.toArray(new ItemStack[0]);
-        addFakeRecipe(i, o, specialStacks, inputFluid, requiredTier);
+        addFakeRecipe(i, o, specialStacks, inputFluid, requiredExecutionProtocolTier);
     }
 
     static void addFakeRecipe(ItemStack[] inputStacks, ItemStack[] outputStacks, ItemStack[] specialStacks,
-        FluidStack inputFluid, int requiredTier) {
+        FluidStack inputFluid, int requiredExecutionProtocolTier) {
         GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .special(specialStacks)
             .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-            .metadata(INSTANCE, requiredTier)
+            .metadata(INSTANCE, requiredExecutionProtocolTier)
             .fake()
             .duration(MODE_RECIPE_DURATION)
             .eut(0)

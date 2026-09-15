@@ -225,7 +225,7 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
                 TextWidget
                     .dynamicString(
                         () -> StatCollector.translateToLocal(
-                            "GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_mode_beacon"))
+                            "GT5U.gui.text.recipe_result.eco_sphere_simulator_waiting_for_execution_protocol"))
                     .setTextAlignment(Alignment.Center)
                     .setDefaultColor(Color.WHITE.normal)
                     .setPos(20, 35)

@@ -81,48 +81,49 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         if (!(NEIClientUtils.getGuiContainer() instanceof GuiRecipe<?>guiRecipe)) return currentTip;
 
-        String[] tooltipInputs = { TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.2"),
-            // #tr ESP.TreeGrowthSimulator.nei.tooltip.2
-            // # Place in an input bus to harvest logs
-            // #zh_CN 放入输入总线以收获原木
-            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.3"),
-            // #tr ESS.TreeGrowthSimulator.nei.tooltip.3
-            // # Place in an input bus to harvest saplings
-            // #zh_CN 放入输入总线以收获树苗
-            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.4"),
-            // #tr ESS.TreeGrowthSimulator.nei.tooltip.4
-            // # Place in an input bus to harvest leaves
-            // #zh_CN 放入输入总线以收获树叶
-            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.5")
-            // #tr ESS.TreeGrowthSimulator.nei.tooltip.5
-            // # Place in an input bus to harvest fruit
-            // #zh_CN 放入输入总线以收获果实
+        String[] tooltipInputs = { TextEnums.tr("EcoSphereSimulator.nei.arboreal.logs"),
+            // #tr EcoSphereSimulator.nei.arboreal.logs
+            // # Select logs in the input interface
+            // #zh_CN 在输入接口中选择原木
+            TextEnums.tr("EcoSphereSimulator.nei.arboreal.saplings"),
+            // #tr EcoSphereSimulator.nei.arboreal.saplings
+            // # Select saplings in the input interface
+            // #zh_CN 在输入接口中选择树苗
+            TextEnums.tr("EcoSphereSimulator.nei.arboreal.leaves"),
+            // #tr EcoSphereSimulator.nei.arboreal.leaves
+            // # Select leaves in the input interface
+            // #zh_CN 在输入接口中选择树叶
+            TextEnums.tr("EcoSphereSimulator.nei.arboreal.fruits")
+            // #tr EcoSphereSimulator.nei.arboreal.fruits
+            // # Select fruits in the input interface
+            // #zh_CN 在输入接口中选择果实
         };
 
         for (var input : neiCachedRecipe.mInputs) {
             if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             if (positionedStack.isFluid()) {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.1"));
-                // #tr ESP.TreeGrowthSimulator.nei.tooltip.1
-                // # Input fluid to grow trees
-                // #zh_CN 输入流体以拟生树木
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.arboreal.medium"));
+                // #tr EcoSphereSimulator.nei.arboreal.medium
+                // # Operating medium for arboreal genesis
+                // #zh_CN 原木拟生所需运行介质
             } else if (positionedStack.isInput()) {
                 int circuitConfiguration = positionedStack.item.getItemDamage();
                 if (circuitConfiguration >= 1 && circuitConfiguration <= tooltipInputs.length) {
                     currentTip.add(EnumChatFormatting.YELLOW + tooltipInputs[circuitConfiguration - 1]);
                 }
             } else {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
-                // #tr ESP.TreeGrowthSimulator.nei.tooltip.0
-                // # Place in input bus
-                // #zh_CN 放入输入总线
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.inputInterface"));
+                // #tr EcoSphereSimulator.nei.inputInterface
+                // # Submit through the input interface
+                // #zh_CN 通过输入接口提交
                 if (neiCachedRecipe.mRecipe.mFluidInputs.length > 0
                     && neiCachedRecipe.mRecipe.mFluidInputs[0].getFluid() != FluidRegistry.WATER) {
-                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"));
-                    // #tr ESS.TreeGrowthSimulator.nei.tooltip.7
-                    // # Any Sapling
-                    // #zh_CN 任意树苗
+                    currentTip
+                        .add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.arboreal.anySapling"));
+                    // #tr EcoSphereSimulator.nei.arboreal.anySapling
+                    // # Any valid sapling
+                    // #zh_CN 任意有效树苗
                 }
             }
             return currentTip;
@@ -131,10 +132,10 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         for (var output : neiCachedRecipe.mOutputs) {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.6")
-            // #tr ESS.TreeGrowthSimulator.nei.tooltip.6
-            // # Requires correct Integrated Circuit to harvest
-            // #zh_CN 需要正确的编程电路才能收获
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.arboreal.selection")
+            // #tr EcoSphereSimulator.nei.arboreal.selection
+            // # Enable this category in the input interface
+            // #zh_CN 需在输入接口中启用此类别
             );
             return currentTip;
         }
@@ -147,11 +148,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
-            return Arrays.asList(
-                // #tr ESS.TreeGrowthSimulator.nei.info.1
-                // # Boosted by higher voltage
-                // #zh_CN 产量随电压提高
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"));
+            return Arrays.asList(TextEnums.tr("EcoSphereSimulator.nei.parallel"));
         }
     }
 }

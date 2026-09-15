@@ -7,13 +7,13 @@ import net.minecraft.util.IIcon;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
-public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
+public final class ItemEcoSphereExecutionProtocol extends AbstractTstMetaItem {
 
     private IIcon backgroundIcon;
     private IIcon frameIcon;
 
-    public ItemEcoSphereModeBeacon() {
-        super("EcoSphereModeBeacon");
+    public ItemEcoSphereExecutionProtocol() {
+        super("EcoSphereExecutionProtocol");
     }
 
     @Override
@@ -34,9 +34,10 @@ public final class ItemEcoSphereModeBeacon extends AbstractTstMetaItem {
 
     @Override
     public void registerIcons(IIconRegister register) {
-        this.backgroundIcon = register
-            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/mode_beacon_background");
-        this.frameIcon = register.registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/frame");
+        this.backgroundIcon = register.registerIcon(
+            TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereExecutionProtocol/execution_protocol_background");
+        this.frameIcon = register
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereExecutionProtocol/frame");
         for (int meta : usedMetaIds) {
             iconMap.put(meta, backgroundIcon);
         }

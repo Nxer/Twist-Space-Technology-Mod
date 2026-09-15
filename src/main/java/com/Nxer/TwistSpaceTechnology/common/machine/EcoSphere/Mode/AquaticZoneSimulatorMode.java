@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addSplitStack;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.getItemStackString;
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +57,8 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         if (fluidInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         AquaticRecipe recipe = findRecipe(fluidInput.getFluid());
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        if (recipe.recipeType() == UNKNOWN_WATER_RECIPE && machine.getModeBeaconTier() < 2)
-            return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+        if (recipe.recipeType() == UNKNOWN_WATER_RECIPE && machine.getExecutionProtocolTier() < 2)
+            return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
 
         // Both distilled-water and unknown-water recipes support focusing on one output.
         TargetingSelection targeting = findTargetingSelection(machine, recipe.recipeType());
@@ -108,8 +108,8 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
 
             StatCollector.translateToLocal("GT5U.gui.text.recipe_result.focus_on") + "\n"
             // #tr EcoSphereSimulator.gui.focusOn
-            // # On :
-            // #zh_CN 目标 :
+            // # Target:
+            // #zh_CN 目标:
                 + StatCollector.translateToLocal("EcoSphereSimulator.gui.focusOn")
                 + " "
                 + focusStack.getDisplayName());

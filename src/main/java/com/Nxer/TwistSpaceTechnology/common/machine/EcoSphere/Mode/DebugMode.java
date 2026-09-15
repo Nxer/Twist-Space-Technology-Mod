@@ -54,8 +54,8 @@ public final class DebugMode {
 
     private DebugMode() {}
 
-    public static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int mode, int beaconTier) {
-        int tier = mode == 3 ? Math.max(1, Math.min(3, beaconTier)) : beaconTier >= 2 ? 2 : 1;
+    public static EcoSphereModeResult process(TST_EcoSphereSimulator machine, int mode, int executionProtocolTier) {
+        int tier = mode == 3 ? Math.max(1, Math.min(3, executionProtocolTier)) : executionProtocolTier >= 2 ? 2 : 1;
         boolean tierTwo = machine.isTierTwo();
         boolean pulverizeOutputs = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.OUTPUT_PULVERIZATION);
         WeaponTags weaponTags = DirectedMobClonerWeaponHandler
@@ -154,15 +154,15 @@ public final class DebugMode {
         return identifier.modId + ':' + identifier.name + ':' + stack.getItemDamage();
     }
 
-    private static List<DebugOutput> collectOutputs(int mode, int beaconTier, boolean tierTwo, boolean pulverizeOutputs,
-        WeaponTags weaponTags) {
+    private static List<DebugOutput> collectOutputs(int mode, int executionProtocolTier, boolean tierTwo,
+        boolean pulverizeOutputs, WeaponTags weaponTags) {
         // Merge identical outputs before applying the fixed debug parallel count.
         Map<TST_ItemID, Long> outputAmounts = new LinkedHashMap<>();
         switch (mode) {
-            case 0 -> collectTreeOutputs(outputAmounts, beaconTier);
-            case 1 -> collectAquaticOutputs(outputAmounts, beaconTier);
-            case 2 -> collectGreenhouseOutputs(outputAmounts, beaconTier);
-            case 3 -> collectClonerOutputs(outputAmounts, beaconTier, tierTwo, pulverizeOutputs, weaponTags);
+            case 0 -> collectTreeOutputs(outputAmounts, executionProtocolTier);
+            case 1 -> collectAquaticOutputs(outputAmounts, executionProtocolTier);
+            case 2 -> collectGreenhouseOutputs(outputAmounts, executionProtocolTier);
+            case 3 -> collectClonerOutputs(outputAmounts, executionProtocolTier, tierTwo, pulverizeOutputs, weaponTags);
             default -> {}
         }
         // Generic output upgrades stay disabled in debug, but pulverization retains its built-in output upgrade.
@@ -178,12 +178,12 @@ public final class DebugMode {
         return outputs;
     }
 
-    private static void collectTreeOutputs(Map<TST_ItemID, Long> outputs, int beaconTier) {
+    private static void collectTreeOutputs(Map<TST_ItemID, Long> outputs, int executionProtocolTier) {
         ItemStack[][] registeredProducts = TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
         if (registeredProducts != null) {
             for (ItemStack[] products : registeredProducts) collect(outputs, products);
         }
-        if (beaconTier < 2) return;
+        if (executionProtocolTier < 2) return;
 
         ItemStack timeTree = GTModHandler.getModItem(Mods.TwilightForest.ID, "tile.TFSapling", 1, 5);
         if (timeTree != null) collectTreeRecipe(outputs, TreeGrowthSimulatorMode.queryTimeTreeProduct(timeTree));
@@ -207,29 +207,29 @@ public final class DebugMode {
         }
     }
 
-    private static void collectAquaticOutputs(Map<TST_ItemID, Long> outputs, int beaconTier) {
+    private static void collectAquaticOutputs(Map<TST_ItemID, Long> outputs, int executionProtocolTier) {
         collect(outputs, AquaticZoneSimulatorFakeRecipe.WatersOutputs);
-        if (beaconTier >= 2) collect(outputs, AquaticZoneSimulatorFakeRecipe.UnknownWaterOutputs);
+        if (executionProtocolTier >= 2) collect(outputs, AquaticZoneSimulatorFakeRecipe.UnknownWaterOutputs);
     }
 
-    private static void collectGreenhouseOutputs(Map<TST_ItemID, Long> outputs, int beaconTier) {
+    private static void collectGreenhouseOutputs(Map<TST_ItemID, Long> outputs, int executionProtocolTier) {
         for (ICropCard crop : CropRegistry.instance.getAllInRegistrationOrder()) {
             Collection<ItemStack> alternateSeeds = crop.getAlternateSeeds();
             // Tier I can only reach crops that have a normal seed registration.
-            if (beaconTier < 2 && (alternateSeeds == null || alternateSeeds.isEmpty())) continue;
+            if (executionProtocolTier < 2 && (alternateSeeds == null || alternateSeeds.isEmpty())) continue;
             Map<ItemStack, Integer> dropTable = crop.getDropTable();
             if (dropTable != null) collect(outputs, dropTable.keySet());
         }
     }
 
-    private static void collectClonerOutputs(Map<TST_ItemID, Long> outputs, int beaconTier, boolean tierTwo,
+    private static void collectClonerOutputs(Map<TST_ItemID, Long> outputs, int executionProtocolTier, boolean tierTwo,
         boolean pulverizeOutputs, WeaponTags weaponTags) {
-        if (beaconTier < 2) return;
-        boolean bossAccess = beaconTier >= 3
+        if (executionProtocolTier < 2 || !tierTwo) return;
+        boolean bossAccess = executionProtocolTier >= 3
             || weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.HAS_COSMOS) > 0;
         for (DirectedMobClonerRecipeCache.CachedRecipe recipe : DirectedMobClonerRecipeCache.getDebugRecipes()) {
-            // Boss recipes additionally require the tier-II structure and tier-III authorization.
-            if (recipe.boss() && (!tierTwo || !bossAccess)) continue;
+            // Boss recipes additionally require tier-III authorization.
+            if (recipe.boss() && !bossAccess) continue;
             for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
                 List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0 ? recipe.ordinaryOutputs()
                     : recipe.equipmentOutputs(pulverizeOutputs);
@@ -275,7 +275,7 @@ public final class DebugMode {
     private record DebugLine(String text, DebugOutput output) {}
 
     @Desugar
-    private record DebugProfile(int mode, int beaconTier, boolean tierTwo, boolean pulverizeOutputs,
+    private record DebugProfile(int mode, int executionProtocolTier, boolean tierTwo, boolean pulverizeOutputs,
         WeaponTags weaponTags) {}
 
     private static final class DebugState {

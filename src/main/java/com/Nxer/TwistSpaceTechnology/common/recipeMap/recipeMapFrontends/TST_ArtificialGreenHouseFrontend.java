@@ -76,15 +76,12 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
             if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             if (positionedStack.isFluid()) {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.ArtificialGreenHouse.nei.tooltip.1"));
-                // #tr ESS.ArtificialGreenHouse.nei.tooltip.1
-                // # Input enriched fertilizer to cultivate crops
-                // #zh_CN 输入富集肥料以培育作物
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.greenhouse.medium"));
+                // #tr EcoSphereSimulator.nei.greenhouse.medium
+                // # Operating medium for greenhouse cultivation
+                // #zh_CN 温室培育所需运行介质
             } else {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.ArtificialGreenHouse.nei.tooltip.0"));
-                // #tr ESS.ArtificialGreenHouse.nei.tooltip.0
-                // # Place in an input bus
-                // #zh_CN 放入输入总线
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.inputInterface"));
             }
             return currentTip;
         }
@@ -92,10 +89,10 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
         for (var output : neiCachedRecipe.mOutputs) {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.ArtificialGreenHouse.nei.tooltip.2"));
-            // #tr ESS.ArtificialGreenHouse.nei.tooltip.2
-            // # Stack size and drop chance together determine the actual output
-            // #zh_CN 堆叠数量与掉落概率共同影响实际产量
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.greenhouse.yield"));
+            // #tr EcoSphereSimulator.nei.greenhouse.yield
+            // # Displayed stack size and chance represent base yield
+            // #zh_CN 显示堆叠数与概率代表基础产量
             return currentTip;
         }
         return currentTip;
@@ -107,7 +104,7 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
 
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
-            return Arrays.asList(TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"));
+            return Arrays.asList(TextEnums.tr("EcoSphereSimulator.nei.parallel"));
         }
     }
 }

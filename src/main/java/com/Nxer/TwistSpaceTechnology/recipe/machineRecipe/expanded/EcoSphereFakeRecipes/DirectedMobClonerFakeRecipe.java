@@ -13,7 +13,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerRecipeNumberKey;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorExecutionProtocolRequirementKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 
 import crazypants.enderio.EnderIO;
@@ -45,13 +45,10 @@ public final class DirectedMobClonerFakeRecipe {
                 .itemInputs(circuit)
                 .itemOutputs(createDisplayOutputs(entry.getValue()))
                 .fluidInputs(lifeEssence)
-                .metadata(
-                    EcoSphereSimulatorTierRequirementKey.INSTANCE,
-                    entry.getValue()
-                        .boss() ? 2 : 1)
+                .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 2)
                 // Advertise only protocol tiers; the Infinity Sword alternative remains hidden runtime behavior.
                 .metadata(
-                    EcoSphereSimulatorBeaconRequirementKey.INSTANCE,
+                    EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE,
                     entry.getValue()
                         .boss() ? 3 : 2)
                 .metadata(DirectedMobClonerRecipeNumberKey.INSTANCE, entry.getKey())
@@ -73,7 +70,7 @@ public final class DirectedMobClonerFakeRecipe {
             .fluidInputs(bloodInput)
             .fluidOutputs(lifeEssence)
             .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-            .metadata(EcoSphereSimulatorBeaconRequirementKey.INSTANCE, 1)
+            .metadata(EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE, 1)
             .metadata(DirectedMobClonerRecipeNumberKey.INSTANCE, 0)
             .metadata(DirectedMobClonerOutputInfoKey.INSTANCE, false)
             .duration(MODE_RECIPE_DURATION)

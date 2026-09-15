@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerOutputInfoKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.DirectedMobClonerRecipeNumberKey;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorExecutionProtocolRequirementKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
@@ -34,8 +34,9 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
         drawDurationInfo(recipeInfo);
         EcoSphereSimulatorTierRequirementKey.INSTANCE
             .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(EcoSphereSimulatorTierRequirementKey.INSTANCE));
-        EcoSphereSimulatorBeaconRequirementKey.INSTANCE
-            .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(EcoSphereSimulatorBeaconRequirementKey.INSTANCE));
+        EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE.drawInfo(
+            recipeInfo,
+            recipeInfo.recipe.getMetadata(EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE));
         DirectedMobClonerRecipeNumberKey.INSTANCE
             .drawInfo(recipeInfo, recipeInfo.recipe.getMetadata(DirectedMobClonerRecipeNumberKey.INSTANCE));
         DirectedMobClonerOutputInfoKey.INSTANCE
@@ -57,10 +58,10 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
             if (positionedStack.isFluid()) {
                 addFluidInputTooltip(currentTip, neiCachedRecipe.mRecipe.mFluidInputs);
             } else if (positionedStack.isInput()) {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("DirectedMobCloner.nei.tooltip.circuit"));
-                // #tr DirectedMobCloner.nei.tooltip.circuit
-                // # The sum of all programmed circuit configurations in the input buses determines the recipe number
-                // #zh_CN 输入总线内所有编程电路的配置值之和决定配方编号
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.cloning.addressInput"));
+                // #tr EcoSphereSimulator.nei.cloning.addressInput
+                // # Select this biological address in the input interface
+                // #zh_CN 在输入接口中选择此生物地址
             }
             return currentTip;
         }
@@ -73,14 +74,14 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)) continue;
             if (guiRecipe.isMouseOver(positionedStack, 0)) {
                 if (outputIndex == 0) {
-                    currentTip
-                        .add(EnumChatFormatting.YELLOW + TextEnums.tr("DirectedMobCloner.nei.tooltip.cloneTarget"));
-                    // #tr DirectedMobCloner.nei.tooltip.cloneTarget
+                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.cloning.target"));
+                    // #tr EcoSphereSimulator.nei.cloning.target
                     // # Cloning target
                     // #zh_CN 克隆目标
                 } else {
-                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("DirectedMobCloner.nei.tooltip.firstDrop"));
-                    // #tr DirectedMobCloner.nei.tooltip.firstDrop
+                    currentTip
+                        .add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.cloning.firstDrop"));
+                    // #tr EcoSphereSimulator.nei.cloning.firstDrop
                     // # The first valid drop of this target
                     // #zh_CN 该目标的第一个有效掉落物
                 }
@@ -96,15 +97,15 @@ public final class TST_DirectedMobClonerFrontend extends RecipeMapFrontend {
         String fluidName = fluidInputs[0].getFluid()
             .getName();
         if ("blood".equals(fluidName)) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("DirectedMobCloner.nei.tooltip.blood"));
-            // #tr DirectedMobCloner.nei.tooltip.blood
-            // # Input blood to generate Life Essence
-            // #zh_CN 输入血液以生成生命本源
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.cloning.blood"));
+            // #tr EcoSphereSimulator.nei.cloning.blood
+            // # Blood for initial reconstruction
+            // #zh_CN 用于初始重构的血液
         } else if ("lifeessence".equals(fluidName)) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("DirectedMobCloner.nei.tooltip.lifeEssence"));
-            // #tr DirectedMobCloner.nei.tooltip.lifeEssence
-            // # Input Life Essence to perform directed cloning
-            // #zh_CN 输入生命本源以执行定向克隆
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.cloning.lifeEssence"));
+            // #tr EcoSphereSimulator.nei.cloning.lifeEssence
+            // # Life Essence for directed cloning
+            // #zh_CN 用于定向克隆的生命本源
         }
     }
 }

@@ -79,15 +79,15 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
             if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             if (positionedStack.isFluid()) {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
-                // #tr ESS.AquaticZoneSimulator.nei.tooltip.0
-                // # Input fluid to simulate waters
-                // #zh_CN 输入流体以模拟水域
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.aquatic.medium"));
+                // #tr EcoSphereSimulator.nei.aquatic.medium
+                // # Operating medium for aquatic simulation
+                // #zh_CN 水域模拟所需运行介质
             } else {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.1"));
-                // #tr ESS.AquaticZoneSimulator.nei.tooltip.1
-                // # Put in an input bus to direct this output
-                // #zh_CN 放入输入总线以定向此产物
+                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.aquatic.focus"));
+                // #tr EcoSphereSimulator.nei.aquatic.focus
+                // # Register in the input interface to focus this output
+                // #zh_CN 在输入接口中登记以定向此产物
             }
             return currentTip;
         }
@@ -95,10 +95,10 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         for (var output : neiCachedRecipe.mOutputs) {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
-            // #tr ESS.AquaticZoneSimulator.nei.tooltip.2
-            // # Recipe size determines output chance.
-            // #zh_CN 配方数值决定输出权重
+            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.aquatic.weight")
+            // #tr EcoSphereSimulator.nei.aquatic.weight
+            // # Displayed stack size represents base output weight
+            // #zh_CN 显示堆叠数代表基础产出权重
             );
             return currentTip;
         }
@@ -111,7 +111,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
-            return Arrays.asList(TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"));
+            return Arrays.asList(TextEnums.tr("EcoSphereSimulator.nei.parallel"));
         }
     }
 }

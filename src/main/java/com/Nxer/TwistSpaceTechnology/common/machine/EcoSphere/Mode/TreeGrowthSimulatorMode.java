@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addSplitStack;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.MissingSaplingInput;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.MissingTreeOutputSelection;
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.ArrayList;
@@ -70,8 +70,8 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
         TreeFluidRecipe recipe = findRecipe(fluidInput);
         if (recipe == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
-        if (machine.getModeBeaconTier() < recipe.requiredBeaconTier())
-            return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+        if (machine.getExecutionProtocolTier() < recipe.requiredExecutionProtocolTier())
+            return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
 
         List<EnumMap<Mode, ItemStack>> productSets = new ArrayList<>();
         List<Integer> saplingCounts = new ArrayList<>();
@@ -190,8 +190,8 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     }
 
     @Desugar
-    private record TreeFluidRecipe(FluidStack fluid, int requiredBeaconTier, boolean normalWater, boolean timeFluid,
-        boolean uuMatter) {}
+    private record TreeFluidRecipe(FluidStack fluid, int requiredExecutionProtocolTier, boolean normalWater,
+        boolean timeFluid, boolean uuMatter) {}
 
     public static int getModeMultiplier(Mode mode) {
         return switch (mode) {

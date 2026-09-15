@@ -75,10 +75,10 @@ public final class CheckRecipeResults {
     public static final CheckRecipeResult MissingSaplingInput = SimpleResultWithText
         .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
 
-    // #tr CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch
+    // #tr CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch
     // # Execution protocol authorization level insufficient
     // #zh_CN 当前执行协议授权等级不足
-    public static final CheckRecipeResult ModeBeaconInputMismatch = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.EcoSphereSimulator.ModeBeaconInputMismatch");
+    public static final CheckRecipeResult ExecutionProtocolInputMismatch = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch");
 
 }

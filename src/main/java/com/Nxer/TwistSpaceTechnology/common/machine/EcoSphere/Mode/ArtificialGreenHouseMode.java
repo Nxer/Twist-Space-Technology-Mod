@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ModeBeaconInputMismatch;
+import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.NoSeedInController;
 import static net.minecraft.util.StatCollector.translateToLocal;
 
@@ -61,7 +61,8 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
         for (CropsNHFarm.CropCache crop : crops) {
             int fertilizerPerSeed;
             if (crop.hybrid()) {
-                if (machine.getModeBeaconTier() < 2) return EcoSphereModeResult.failure(ModeBeaconInputMismatch);
+                if (machine.getExecutionProtocolTier() < 2)
+                    return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
                 fertilizerPerSeed = ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL;
             } else {
                 fertilizerPerSeed = ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL;

@@ -2980,7 +2980,7 @@ public class GTCMMachineRecipes {
                 ItemList.neutroniumHeatCapacitor.get(1)
             },
             new FluidStack[]{
-                Materials.Grade8PurifiedWater.getFluid(8000),
+                Materials.Grade7PurifiedWater.getFluid(8000),
                 new FluidStack(FluidRegistry.getFluid("liquid helium"), 64000)
             },
             GTCMItemList.AsepticGreenhouseCasing.get(1),

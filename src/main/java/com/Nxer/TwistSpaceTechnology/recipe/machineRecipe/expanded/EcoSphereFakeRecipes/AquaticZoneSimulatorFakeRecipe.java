@@ -5,7 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFl
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereFluidCache.cacheRecipeFluids;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.getItemStackString;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator.MODE_RECIPE_DURATION;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey.INSTANCE;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -147,12 +147,12 @@ public class AquaticZoneSimulatorFakeRecipe {
         UnknownWaterOutputs.removeIf(stack -> stack == null || stack.getItem() == null);
     }
 
-    static void loadFakeRecipes(List<ItemStack> outputs, FluidStack inputFluid, int requiredBeaconTier) {
+    static void loadFakeRecipes(List<ItemStack> outputs, FluidStack inputFluid, int requiredExecutionProtocolTier) {
         if (inputFluid == null || outputs.isEmpty()) return;
         for (ItemStack output : outputs) {
             ItemStack focusInput = output.copy();
             focusInput.stackSize = 0;
-            addFakeRecipe(focusInput, output, inputFluid, requiredBeaconTier);
+            addFakeRecipe(focusInput, output, inputFluid, requiredExecutionProtocolTier);
         }
     }
 
@@ -167,13 +167,13 @@ public class AquaticZoneSimulatorFakeRecipe {
     }
 
     static void addFakeRecipe(ItemStack inputStacks, ItemStack outputStacks, FluidStack inputFluid,
-        int requiredBeaconTier) {
+        int requiredExecutionProtocolTier) {
         GTValues.RA.stdBuilder()
             .itemInputs(inputStacks)
             .itemOutputs(outputStacks)
             .fluidInputs(inputFluid)
             .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-            .metadata(INSTANCE, requiredBeaconTier)
+            .metadata(INSTANCE, requiredExecutionProtocolTier)
             .fake()
             .duration(MODE_RECIPE_DURATION)
             .eut(0)

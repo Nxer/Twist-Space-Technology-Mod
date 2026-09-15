@@ -21,7 +21,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorBeaconRequirementKey;
+import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorExecutionProtocolRequirementKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.EcoSphereSimulatorTierRequirementKey;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
 import com.gtnewhorizon.cropsnh.farming.SeedStats;
@@ -183,7 +183,7 @@ public final class ArtificialGreenHouseFakeRecipe {
             .outputChances(outputChances)
             .fluidInputs(requiredFluid)
             .metadata(EcoSphereSimulatorTierRequirementKey.INSTANCE, 1)
-            .metadata(EcoSphereSimulatorBeaconRequirementKey.INSTANCE, hybrid ? 2 : 1)
+            .metadata(EcoSphereSimulatorExecutionProtocolRequirementKey.INSTANCE, hybrid ? 2 : 1)
             .duration(MODE_RECIPE_DURATION)
             .eut(0)
             .fake()

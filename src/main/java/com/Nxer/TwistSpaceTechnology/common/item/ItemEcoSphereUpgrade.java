@@ -17,9 +17,9 @@ public final class ItemEcoSphereUpgrade extends AbstractTstMetaItem {
     @Override
     public void registerIcons(IIconRegister register) {
         this.backgroundIcon = register
-            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/upgrade_background");
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereUpgrade/upgrade_background");
         this.frameIcon = register
-            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereModeBeacon/upgrade_frame");
+            .registerIcon(TwistSpaceTechnology.RESOURCE_ROOT_ID + ":EcoSphereUpgrade/upgrade_frame");
         for (int meta : usedMetaIds) {
             iconMap.put(meta, backgroundIcon);
         }
