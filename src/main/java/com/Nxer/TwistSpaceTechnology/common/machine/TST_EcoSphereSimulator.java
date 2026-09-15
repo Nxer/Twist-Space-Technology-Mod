@@ -116,10 +116,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     // region Class Constructor
     public TST_EcoSphereSimulator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        setMEOutput(true);
     }
 
     public TST_EcoSphereSimulator(String aName) {
         super(aName);
+        setMEOutput(true);
     }
 
     @Override
@@ -167,11 +169,6 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT };
-
-    @Override
-    public boolean isMEOutputEnabled() {
-        return true;
-    }
 
     public boolean isTierTwo() {
         return getStructureTier() >= 2;
@@ -1399,7 +1396,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         System.arraycopy(origin, 0, ret, 0, origin.length);
         // #tr EcoSphereSimulator.gui.parallelFromEUt
         // # Power-Limited Parallel
-        // #zh_CN 功率限制并行
+        // #zh_CN 功率并行
         ret[origin.length] = EnumChatFormatting.AQUA + tr("EcoSphereSimulator.gui.parallelFromEUt")
             + " : "
             + EnumChatFormatting.GOLD
@@ -1492,6 +1489,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // # Requires one Eco-Sphere Input Interface and one Eco-Sphere Upgrade Interface
             // #zh_CN 必须安装一个生态圈输入接口与一个生态圈升级接口
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.13"))
+            // #tr Tooltip_EcoSphereSimulator_MEOutput
+            // # This multiblock can only output to ME output busses/hatches
+            // #zh_CN 该多方块只能通过ME输出总线或输出仓输出
+            .addInfo(tr("Tooltip_EcoSphereSimulator_MEOutput"))
             .addSeparator()
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)

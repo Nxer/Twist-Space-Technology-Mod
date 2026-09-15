@@ -16,6 +16,7 @@ import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.DynamicSyncHandler;
 import com.cleanroommc.modularui.value.sync.GenericListSyncHandler;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
@@ -46,7 +47,7 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
     @Override
     protected void registerSyncValues(PanelSyncManager syncManager) {
         super.registerSyncValues(syncManager);
-        if (!multiblock.isMEOutputEnabled()) return;
+        syncManager.syncValue("tstMEOutputEnabled", new BooleanSyncValue(multiblock::isMEOutputEnabled));
 
         syncManager.syncValue(
             "tstMEItemOutput",
@@ -73,8 +74,9 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
     @SuppressWarnings("unchecked")
     protected ListWidget<IWidget, ?> createTerminalTextWidget(PanelSyncManager syncManager, ModularPanel parent) {
         ListWidget<IWidget, ?> terminal = super.createTerminalTextWidget(syncManager, parent);
-        if (!multiblock.isMEOutputEnabled()) return terminal;
 
+        BooleanSyncValue meOutputEnabledSyncer = (BooleanSyncValue) syncManager
+            .getSyncHandlerFromMapKey("tstMEOutputEnabled:0");
         GenericListSyncHandler<ItemStackLong> itemOutputSyncer = (GenericListSyncHandler<ItemStackLong>) syncManager
             .getSyncHandlerFromMapKey("tstMEItemOutput:0");
         GenericListSyncHandler<FluidStackLong> fluidOutputSyncer = (GenericListSyncHandler<FluidStackLong>) syncManager
@@ -97,15 +99,16 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
                 .marginBottom(2)
                 .fullWidth()
                 .setEnabledIf(
-                    widget -> !itemOutputSyncer.getValue()
+                    widget -> meOutputEnabledSyncer.getBoolValue() && (!itemOutputSyncer.getValue()
                         .isEmpty()
                         || !fluidOutputSyncer.getValue()
                             .isEmpty()
-                        || maxProgressSyncer.getValue() > 0));
+                        || maxProgressSyncer.getValue() > 0)));
         terminal.child(
             new DynamicSyncedWidget<>().widthRel(0.85f)
                 .coverChildrenHeight(0)
-                .syncHandler(recipeHandler));
+                .syncHandler(recipeHandler)
+                .setEnabledIf(widget -> meOutputEnabledSyncer.getBoolValue()));
         return terminal;
     }
 

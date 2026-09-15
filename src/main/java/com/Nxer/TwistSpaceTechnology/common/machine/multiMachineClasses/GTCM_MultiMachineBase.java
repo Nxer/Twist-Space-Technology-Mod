@@ -107,7 +107,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     protected float euModifier = 1;
     protected float speedBonus = 1;
 
-    /** Enables long ME outputs and rejects non-ME output busses/hatches. */
+    /** Enables long ME outputs. */
     private boolean enableMEOutput = false;
 
     /** One long entry per item or fluid kind. */
@@ -801,9 +801,8 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     public String[] getInfoData() {
         String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
         String dEUMod = String.format("%.3f", this.getEuModifier() * 100) + "%";
-
         String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
+        String[] ret = new String[origin.length + 4];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         // #tr MachineInfoData.Parallels
         // # Parallels
@@ -826,31 +825,21 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             + ": "
             + EnumChatFormatting.GOLD
             + dEUMod;
+        // #tr MachineInfoData.HighCapacityOutput
+        // # High-Capacity Output
+        // #zh_CN 超大容量输出
+
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.HighCapacityOutput")
+            + ": "
+            + EnumChatFormatting.GOLD
+            + (isMEOutputEnabled() ? "On" : "Off");
         return ret;
-    }
-
-    private boolean isAllowedMEOutput(IGregTechTileEntity tileEntity) {
-        if (!isMEOutputEnabled() || tileEntity == null) return true;
-        IMetaTileEntity metaTileEntity = tileEntity.getMetaTileEntity();
-        if (metaTileEntity instanceof MTEHatchOutputBus) return metaTileEntity instanceof MTEHatchOutputBusME;
-        if (metaTileEntity instanceof MTEHatchOutput) return metaTileEntity instanceof MTEHatchOutputME;
-        return true;
-    }
-
-    @Override
-    public boolean addOutputBusToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
-        return isAllowedMEOutput(tileEntity) && super.addOutputBusToMachineList(tileEntity, baseCasingIndex);
-    }
-
-    @Override
-    public boolean addOutputHatchToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
-        return isAllowedMEOutput(tileEntity) && super.addOutputHatchToMachineList(tileEntity, baseCasingIndex);
     }
 
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return isAllowedMEOutput(aTileEntity) && (super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex));
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
     public boolean addEnergyHatchOrExoticEnergyHatchToMachineList(IGregTechTileEntity aTileEntity,
@@ -1077,45 +1066,6 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // endregion
 
-    // region Old MUI1 Machine Mode
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // for (int i = 0; i < totalMachineMode(); i++) {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
-    // }
-    // }
-
-    // public boolean canButtonSwitchMode() {
-    // return supportsMachineModeSwitch();
-    // }
-
-    // @Override
-    // public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
-    // if (!supportsMachineModeSwitch()) return null;
-    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-    // if (canButtonSwitchMode()) {
-    // onMachineModeSwitchClick();
-    // setMachineMode(nextMachineMode());
-    // }
-    // })
-    // .setPlayClickSound(supportsMachineModeSwitch())
-    // .setBackground(() -> {
-    // List<UITexture> ret = new ArrayList<>();
-    // if (supportsMachineModeSwitch()) {
-    // ret.add(GTUITextures.BUTTON_STANDARD);
-    // ret.add(getMachineModeIcon(getMachineMode()));
-    // } else return null;
-    // return ret.toArray(new IDrawable[0]);
-    // })
-    // .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
-    // .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(getMachineModeSwitchButtonPos())
-    // .setSize(16, 16);
-    // return (ButtonWidget) button;
-    // }
-
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
@@ -1223,7 +1173,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             }
         }
         if (tag.hasKey("modeTST")) {
-            currentTip.add("" + EnumChatFormatting.YELLOW +
+            currentTip.add(EnumChatFormatting.YELLOW +
             // #tr TST.machines.running_mode
             // # Running Mode :
             // #zh_CN 运行模式 :
