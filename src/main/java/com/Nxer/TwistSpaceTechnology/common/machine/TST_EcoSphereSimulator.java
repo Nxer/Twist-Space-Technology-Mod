@@ -88,6 +88,7 @@ import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.INEIPreviewModifier;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -108,6 +109,7 @@ import gtPlusPlus.core.util.minecraft.ItemUtils;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import lombok.Setter;
 
+@SkipGenerateDescription
 public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereSimulator>
     implements INEIPreviewModifier {
 
