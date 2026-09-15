@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
@@ -144,6 +145,11 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
         costingEUText = ZERO_STRING;
         prepareProcessing();
         if (!wirelessMode) return super.checkProcessing();
+        if (isMEOutputEnabled()) {
+            clearMEOutputQueues();
+            mOutputItems = null;
+            mOutputFluids = null;
+        }
 
         boolean succeeded = false;
         CheckRecipeResult finalResult = CheckRecipeResultRegistry.SUCCESSFUL;
@@ -191,11 +197,36 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
 
         costingEU = costingEU.add(costEU);
 
-        mOutputItems = ArrayUtils.addAll(mOutputItems, processingLogic.getOutputItems());
-        mOutputFluids = ArrayUtils.addAll(mOutputFluids, processingLogic.getOutputFluids());
+        if (isMEOutputEnabled()) {
+            mergeWirelessOutputsIntoMEQueue();
+        } else {
+            mOutputItems = ArrayUtils.addAll(mOutputItems, processingLogic.getOutputItems());
+            mOutputFluids = ArrayUtils.addAll(mOutputFluids, processingLogic.getOutputFluids());
+        }
 
         endRecipeProcessing();
         return result;
+    }
+
+    // Preserve each successful wireless cycle before the shared processing logic is reused.
+    private void mergeWirelessOutputsIntoMEQueue() {
+        if (processingLogic instanceof GTCM_ProcessingLogic tstLogic && tstLogic.hasLongOutputs()) {
+            for (ItemStackLong output : tstLogic.getLongItemOutputs()) {
+                mergeItemIntoMEOutputQueue(output.itemStack(), output.stackSize());
+            }
+            for (FluidStackLong output : tstLogic.getLongFluidOutputs()) {
+                mergeFluidIntoMEOutputQueue(output.fluidStack(), output.amount());
+            }
+            return;
+        }
+        ItemStack[] itemOutputs = processingLogic.getOutputItems();
+        if (itemOutputs != null) {
+            for (ItemStack output : itemOutputs) mergeItemIntoMEOutputQueue(output);
+        }
+        FluidStack[] fluidOutputs = processingLogic.getOutputFluids();
+        if (fluidOutputs != null) {
+            for (FluidStack output : fluidOutputs) mergeFluidIntoMEOutputQueue(output);
+        }
     }
 
     protected void prepareProcessing() {}
