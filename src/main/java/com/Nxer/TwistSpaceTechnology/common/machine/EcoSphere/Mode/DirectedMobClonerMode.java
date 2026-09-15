@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.Check
 import static net.minecraft.util.StatCollector.translateToLocal;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +19,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.Direc
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponTags;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.DirectedMobClonerFakeRecipe;
@@ -89,10 +92,10 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         double lootingBonus = weaponTags.get(DirectedMobClonerWeaponHandler.FunctionTag.ALL_OUTPUTS_CHANCE_BONUS);
         double tierThreeBonus = tierThree ? LOOTING_TIER_THREE_LEVEL * 5_000d : 0;
         double allOutputsBonus = Math.min(LOOTING_CAP_LEVEL * 5_000d, Math.max(lootingBonus, tierThreeBonus));
-        // 36x EEC at 20 HP, about 4x at 300 HP each run in 5s.
-        double durationMultiplier = 36 * 15125d / 1024d / ((double) recipe.eecDuration() * recipe.eecDuration());
+        // 1x EEC at 20 HP, about 1/9 x at 300 HP each run in 5s.
+        double durationMultiplier = 1 * 15125d / 1024d / ((double) recipe.eecDuration() * recipe.eecDuration());
         return processCloningRecipeWithLifeEssence(machine, lifeEssenceInput, euTier, parallelResult -> {
-            List<ItemStack> outputs = new ArrayList<>();
+            List<ItemStackLong> outputs = new ArrayList<>();
             for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
                 List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0 ? recipe.ordinaryOutputs()
                     : recipe.equipmentOutputs(pulverize);
@@ -104,7 +107,7 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                         * output.durabilityExpectation()
                         * output.probabilityMultiplier();
                     long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
-                    EcoSphereModeSupport.addSplitStack(outputs, output.stack(), amount);
+                    EcoSphereModeSupport.addItemOutput(outputs, output.stack(), amount);
                 }
             }
             for (DirectedMobClonerRecipeCache.CachedOutput output : recipe.activatedOutputs(weaponTags)) {
@@ -121,14 +124,14 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                     // Preserve low-probability special drops without rolling once for every parallel operation.
                     if (XSTR.XSTR_INSTANCE.nextDouble() < outputAmount - amount) amount++;
                 }
-                EcoSphereModeSupport.addSplitStack(outputs, output.stack(), amount);
+                EcoSphereModeSupport.addItemOutput(outputs, output.stack(), amount);
             }
             return EcoSphereModeResult.standard(
                 // #tr GT5U.gui.text.recipe_result.processing_mob_drops
                 // # Processing mob drops
                 // #zh_CN 生物掉落处理中
                 SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
-                outputs.toArray(new ItemStack[0]),
+                outputs,
                 parallelResult.tier());
         });
     }
@@ -239,6 +242,23 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         return remainingOutputs.toArray(new FluidStack[0]);
     }
 
+    /** Returns the Life Essence amount not accepted by the LP network. */
+    public static long routeLifeEssenceLpOutputToNetwork(ItemStack orb, FluidStack output, long amount) {
+        if (amount <= 0 || !isLifeEssenceOutput(output)
+            || amount % LP_NETWORK_CONVERSION_DIVISOR != 0
+            || !BloodMagicHelper.isBloodOrb(orb)
+            || BloodMagicHelper.getOrbOwnerName(orb) == null) return amount;
+
+        long remainingLp = amount / LP_NETWORK_CONVERSION_DIVISOR;
+        while (remainingLp > 0) {
+            int requestedLp = (int) Math.min(Integer.MAX_VALUE, remainingLp);
+            int addedLp = Math.max(0, Math.min(requestedLp, BloodMagicHelper.addBloodToNetwork(orb, requestedLp)));
+            remainingLp -= addedLp;
+            if (addedLp < requestedLp) break;
+        }
+        return remainingLp * LP_NETWORK_CONVERSION_DIVISOR;
+    }
+
     private static boolean isPreconvertedLpOutput(FluidStack output) {
         return isLifeEssenceOutput(output) && output.amount % LP_NETWORK_CONVERSION_DIVISOR == 0;
     }
@@ -267,6 +287,25 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         return remainingOutputs.toArray(new FluidStack[0]);
     }
 
+    public static List<FluidStackLong> getRecipeZeroFluidOutputsForCapacityCheck(ItemStack orb,
+        List<FluidStackLong> outputs) {
+        if (outputs.isEmpty()) return outputs;
+        long remainingNetworkCapacity = BloodMagicHelper.getOrbOwnerRemainingLpCapacity(orb);
+        List<FluidStackLong> remainingOutputs = new ArrayList<>(outputs.size());
+        for (FluidStackLong output : outputs) {
+            long remainingAmount = output.amount();
+            if (remainingNetworkCapacity > 0 && isLifeEssenceOutput(output.fluidStack())
+                && remainingAmount % LP_NETWORK_CONVERSION_DIVISOR == 0) {
+                long outputLp = remainingAmount / LP_NETWORK_CONVERSION_DIVISOR;
+                long networkLp = Math.min(outputLp, remainingNetworkCapacity);
+                remainingNetworkCapacity -= networkLp;
+                remainingAmount = (outputLp - networkLp) * LP_NETWORK_CONVERSION_DIVISOR;
+            }
+            EcoSphereModeSupport.addFluidOutput(remainingOutputs, output.fluidStack(), remainingAmount);
+        }
+        return remainingOutputs;
+    }
+
     private static void addLifeEssenceFromLp(List<FluidStack> outputs, FluidStack template, long lpAmount) {
         int maximumLpPerStack = Integer.MAX_VALUE / LP_NETWORK_CONVERSION_DIVISOR;
         while (lpAmount > 0) {
@@ -275,17 +314,6 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
             split.amount = splitLp * LP_NETWORK_CONVERSION_DIVISOR;
             outputs.add(split);
             lpAmount -= splitLp;
-        }
-    }
-
-    private static void addSplitPreconvertedLifeEssenceOutput(List<FluidStack> outputs, FluidStack template,
-        long amount) {
-        int maximumAmountPerStack = Integer.MAX_VALUE - Integer.MAX_VALUE % LP_NETWORK_CONVERSION_DIVISOR;
-        while (amount > 0) {
-            FluidStack split = template.copy();
-            split.amount = (int) Math.min(maximumAmountPerStack, amount);
-            outputs.add(split);
-            amount -= split.amount;
         }
     }
 
@@ -301,8 +329,8 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         } catch (ArithmeticException ignored) {
             return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
         }
-        List<FluidStack> lifeEssenceOutputs = new ArrayList<>();
-        addSplitPreconvertedLifeEssenceOutput(lifeEssenceOutputs, outputTemplate, outputAmount);
+        List<FluidStackLong> lifeEssenceOutputs = new ArrayList<>();
+        EcoSphereModeSupport.addFluidOutput(lifeEssenceOutputs, outputTemplate, outputAmount);
         // #tr GT5U.gui.text.recipe_result.generating_life_essence
         // # Generating Life Essence
         // #zh_CN 生命本源生成中
@@ -318,11 +346,8 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
                 translateToLocal("GT5U.gui.text.recipe_result.generating_life_essence") + "\n"
                     + translateToLocal("EcoSphereSimulator.gui.tierOneCloningAddress"));
         }
-        return EcoSphereModeResult.standard(
-            runningResult,
-            new ItemStack[0],
-            lifeEssenceOutputs.toArray(new FluidStack[0]),
-            parallelResult.tier());
+        return EcoSphereModeResult
+            .standard(runningResult, Collections.emptyList(), lifeEssenceOutputs, parallelResult.tier());
     }
 
 }

@@ -1,12 +1,17 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
+import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static gregtech.api.util.GTUtility.validMTEList;
+import static net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.LongPredicate;
 
 import javax.annotation.Nonnull;
 
@@ -14,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
@@ -32,6 +38,7 @@ import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
+import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 
@@ -45,16 +52,23 @@ import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
 import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
+import gregtech.api.metatileentity.implementations.MTEHatchOutput;
+import gregtech.api.metatileentity.implementations.MTEHatchOutputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.util.GTUtility;
+import gregtech.api.util.GTWaila;
+import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.gui.modularui.multiblock.base.MTEMultiBlockBaseGui;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 import gregtech.common.tileentities.machines.MTEHatchInputBusME;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
+import gregtech.common.tileentities.machines.outputme.MTEHatchOutputBusME;
+import gregtech.common.tileentities.machines.outputme.MTEHatchOutputME;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
@@ -93,6 +107,48 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     protected float euModifier = 1;
     protected float speedBonus = 1;
 
+    /** Enables long ME outputs and rejects non-ME output busses/hatches. */
+    private boolean enableMEOutput = false;
+
+    /** One long entry per item or fluid kind. */
+    protected final List<ItemStackLong> meOutputQueue = new ArrayList<>();
+    protected final List<FluidStackLong> meFluidOutputQueue = new ArrayList<>();
+
+    private static final String ME_ITEM_OUTPUTS_NBT = "tstMEItemOutputs";
+    private static final String ME_FLUID_OUTPUTS_NBT = "tstMEFluidOutputs";
+    private static final String ME_OUTPUT_STACK_NBT = "stack";
+    private static final String ME_OUTPUT_AMOUNT_NBT = "amount";
+    private static final String WAILA_ME_ITEM_LENGTH = "tstMEItemLength";
+    private static final String WAILA_ME_FLUID_LENGTH = "tstMEFluidLength";
+    private static final String WAILA_ME_ITEM_ICON = "tstMEItemIcon";
+    private static final String WAILA_ME_ITEM_NAME = "tstMEItemName";
+    private static final String WAILA_ME_ITEM_COUNT = "tstMEItemCount";
+    private static final String WAILA_ME_FLUID_ICON = "tstMEFluidIcon";
+    private static final String WAILA_ME_FLUID_NAME = "tstMEFluidName";
+    private static final String WAILA_ME_FLUID_COUNT = "tstMEFluidCount";
+
+    @Desugar
+    public record ItemStackLong(ItemStack itemStack, long stackSize) {}
+
+    @Desugar
+    public record FluidStackLong(FluidStack fluidStack, long amount) {}
+
+    public boolean isMEOutputEnabled() {
+        return enableMEOutput;
+    }
+
+    public void setMEOutput(boolean enabled) {
+        enableMEOutput = enabled;
+    }
+
+    public List<ItemStackLong> getMEItemOutputInfo() {
+        return Collections.unmodifiableList(meOutputQueue);
+    }
+
+    public List<FluidStackLong> getMEFluidOutputInfo() {
+        return Collections.unmodifiableList(meFluidOutputQueue);
+    }
+
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
@@ -100,6 +156,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         aNBT.setInteger("maxParallel", maxParallel);
         aNBT.setFloat("euModifier", euModifier);
         aNBT.setFloat("speedBonus", speedBonus);
+        saveMEOutputQueues(aNBT);
     }
 
     @Override
@@ -114,6 +171,55 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         speedBonus = aNBT.getFloat("speedBonus");
         if (speedBonus <= 0) {
             speedBonus = 1;
+        }
+        loadMEOutputQueues(aNBT);
+    }
+
+    private void saveMEOutputQueues(NBTTagCompound nbt) {
+        NBTTagList itemOutputs = new NBTTagList();
+        for (ItemStackLong entry : meOutputQueue) {
+            if (entry.itemStack() == null || entry.stackSize() <= 0) continue;
+            NBTTagCompound output = new NBTTagCompound();
+            output.setTag(
+                ME_OUTPUT_STACK_NBT,
+                entry.itemStack()
+                    .writeToNBT(new NBTTagCompound()));
+            output.setLong(ME_OUTPUT_AMOUNT_NBT, entry.stackSize());
+            itemOutputs.appendTag(output);
+        }
+        nbt.setTag(ME_ITEM_OUTPUTS_NBT, itemOutputs);
+
+        NBTTagList fluidOutputs = new NBTTagList();
+        for (FluidStackLong entry : meFluidOutputQueue) {
+            if (entry.fluidStack() == null || entry.amount() <= 0) continue;
+            NBTTagCompound output = new NBTTagCompound();
+            output.setTag(
+                ME_OUTPUT_STACK_NBT,
+                entry.fluidStack()
+                    .writeToNBT(new NBTTagCompound()));
+            output.setLong(ME_OUTPUT_AMOUNT_NBT, entry.amount());
+            fluidOutputs.appendTag(output);
+        }
+        nbt.setTag(ME_FLUID_OUTPUTS_NBT, fluidOutputs);
+    }
+
+    private void loadMEOutputQueues(NBTTagCompound nbt) {
+        meOutputQueue.clear();
+        NBTTagList itemOutputs = nbt.getTagList(ME_ITEM_OUTPUTS_NBT, TAG_COMPOUND);
+        for (int i = 0; i < itemOutputs.tagCount(); i++) {
+            NBTTagCompound output = itemOutputs.getCompoundTagAt(i);
+            ItemStack stack = ItemStack.loadItemStackFromNBT(output.getCompoundTag(ME_OUTPUT_STACK_NBT));
+            long amount = output.getLong(ME_OUTPUT_AMOUNT_NBT);
+            if (stack != null && amount > 0) meOutputQueue.add(new ItemStackLong(stack, amount));
+        }
+
+        meFluidOutputQueue.clear();
+        NBTTagList fluidOutputs = nbt.getTagList(ME_FLUID_OUTPUTS_NBT, TAG_COMPOUND);
+        for (int i = 0; i < fluidOutputs.tagCount(); i++) {
+            NBTTagCompound output = fluidOutputs.getCompoundTagAt(i);
+            FluidStack stack = FluidStack.loadFluidStackFromNBT(output.getCompoundTag(ME_OUTPUT_STACK_NBT));
+            long amount = output.getLong(ME_OUTPUT_AMOUNT_NBT);
+            if (stack != null && amount > 0) meFluidOutputQueue.add(new FluidStackLong(stack, amount));
         }
     }
 
@@ -227,10 +333,162 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         mMaxProgresstime = processingLogic.getDuration();
         setEnergyUsage(processingLogic);
 
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
+        if (isMEOutputEnabled()) {
+            if (processingLogic instanceof GTCM_ProcessingLogic tstLogic && tstLogic.hasLongOutputs()) {
+                replaceMEOutputQueues(tstLogic.getLongItemOutputs(), tstLogic.getLongFluidOutputs());
+            } else {
+                replaceMEOutputQueues(processingLogic.getOutputItems(), processingLogic.getOutputFluids());
+            }
+            // Avoid syncing split int stacks through GT's normal output arrays.
+            mOutputItems = null;
+            mOutputFluids = null;
+        } else {
+            mOutputItems = processingLogic.getOutputItems();
+            mOutputFluids = processingLogic.getOutputFluids();
+        }
 
         return result;
+    }
+
+    private void replaceMEOutputQueues(List<ItemStackLong> itemOutputs, List<FluidStackLong> fluidOutputs) {
+        clearMEOutputQueues();
+        for (ItemStackLong output : itemOutputs) {
+            mergeItemIntoMEOutputQueue(output.itemStack(), output.stackSize());
+        }
+        for (FluidStackLong output : fluidOutputs) {
+            mergeFluidIntoMEOutputQueue(output.fluidStack(), output.amount());
+        }
+    }
+
+    private void replaceMEOutputQueues(ItemStack[] itemOutputs, FluidStack[] fluidOutputs) {
+        clearMEOutputQueues();
+        if (itemOutputs != null) {
+            for (ItemStack stack : itemOutputs) {
+                if (stack == null || stack.stackSize <= 0) continue;
+                mergeItemIntoMEOutputQueue(stack);
+            }
+        }
+        if (fluidOutputs != null) {
+            for (FluidStack fluid : fluidOutputs) {
+                if (fluid == null || fluid.amount <= 0) continue;
+                mergeFluidIntoMEOutputQueue(fluid);
+            }
+        }
+    }
+
+    protected void mergeItemIntoMEOutputQueue(ItemStack stack) {
+        if (stack == null) return;
+        mergeItemIntoMEOutputQueue(stack, stack.stackSize);
+    }
+
+    protected void mergeItemIntoMEOutputQueue(ItemStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < meOutputQueue.size(); i++) {
+            ItemStackLong entry = meOutputQueue.get(i);
+            if (GTUtility.areStacksEqual(entry.itemStack(), stack)) {
+                long merged = entry.stackSize() > Long.MAX_VALUE - amount ? Long.MAX_VALUE : entry.stackSize() + amount;
+                meOutputQueue.set(i, new ItemStackLong(entry.itemStack(), merged));
+                return;
+            }
+        }
+        meOutputQueue.add(new ItemStackLong(GTUtility.copyAmountUnsafe(1, stack), amount));
+    }
+
+    protected void mergeFluidIntoMEOutputQueue(FluidStack fluid) {
+        if (fluid == null) return;
+        mergeFluidIntoMEOutputQueue(fluid, fluid.amount);
+    }
+
+    protected void mergeFluidIntoMEOutputQueue(FluidStack fluid, long amount) {
+        if (fluid == null || amount <= 0) return;
+        for (int i = 0; i < meFluidOutputQueue.size(); i++) {
+            FluidStackLong entry = meFluidOutputQueue.get(i);
+            if (entry.fluidStack()
+                .isFluidEqual(fluid)) {
+                long merged = entry.amount() > Long.MAX_VALUE - amount ? Long.MAX_VALUE : entry.amount() + amount;
+                meFluidOutputQueue.set(i, new FluidStackLong(entry.fluidStack(), merged));
+                return;
+            }
+        }
+        FluidStack template = fluid.copy();
+        template.amount = 1;
+        meFluidOutputQueue.add(new FluidStackLong(template, amount));
+    }
+
+    protected void clearMEOutputQueues() {
+        meOutputQueue.clear();
+        meFluidOutputQueue.clear();
+    }
+
+    protected CheckRecipeResult checkMEOutputCapacity(List<ItemStackLong> itemOutputs,
+        List<FluidStackLong> fluidOutputs) {
+        if (protectsExcessItem() && !canFitMEItemOutputs(itemOutputs)) {
+            return CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
+        }
+        if (protectsExcessFluid() && !canFitMEFluidOutputs(fluidOutputs)) {
+            return CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
+        }
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private boolean canFitMEItemOutputs(List<ItemStackLong> outputs) {
+        if (outputs == null || outputs.isEmpty()) return true;
+        List<MTEHatchOutputBusME> meBusses = getMEOutputBusses();
+        Map<MTEHatchOutputBusME, Long> reserved = new HashMap<>();
+        for (ItemStackLong output : outputs) {
+            if (output.itemStack() == null || output.stackSize() <= 0) continue;
+            long remaining = output.stackSize();
+            for (MTEHatchOutputBusME meBus : meBusses) {
+                var provider = meBus.getProvider();
+                long room = getLongCacheRoom(provider.getCachedAmount(), reserved.getOrDefault(meBus, 0L));
+                if (room <= 0) continue;
+                long accepted = Math.min(remaining, room);
+                if (provider.shouldCheck()) {
+                    accepted = findLargestAcceptedAmount(
+                        accepted,
+                        value -> provider.canStore(output.itemStack(), value));
+                } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
+                    .isAllowed(output.itemStack())) {
+                        continue;
+                    }
+                if (accepted <= 0) continue;
+                reserved.merge(meBus, accepted, Long::sum);
+                remaining -= accepted;
+                if (remaining <= 0) break;
+            }
+            if (remaining > 0) return false;
+        }
+        return true;
+    }
+
+    private boolean canFitMEFluidOutputs(List<FluidStackLong> outputs) {
+        if (outputs == null || outputs.isEmpty()) return true;
+        List<MTEHatchOutputME> meHatches = getMEOutputHatches();
+        Map<MTEHatchOutputME, Long> reserved = new HashMap<>();
+        for (FluidStackLong output : outputs) {
+            if (output.fluidStack() == null || output.amount() <= 0) continue;
+            long remaining = output.amount();
+            for (MTEHatchOutputME meHatch : meHatches) {
+                var provider = meHatch.getProvider();
+                long room = getLongCacheRoom(provider.getCachedAmount(), reserved.getOrDefault(meHatch, 0L));
+                if (room <= 0) continue;
+                long accepted = Math.min(remaining, room);
+                if (provider.shouldCheck()) {
+                    accepted = findLargestAcceptedAmount(
+                        accepted,
+                        value -> provider.canStore(output.fluidStack(), value));
+                } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
+                    .isAllowed(output.fluidStack())) {
+                        continue;
+                    }
+                if (accepted <= 0) continue;
+                reserved.merge(meHatch, accepted, Long::sum);
+                remaining -= accepted;
+                if (remaining <= 0) break;
+            }
+            if (remaining > 0) return false;
+        }
+        return true;
     }
 
     /**
@@ -420,6 +678,126 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // region Overrides
     @Override
+    protected void outputAfterRecipe() {
+        if (isMEOutputEnabled()) {
+            // Keep long outputs outside GT's int-sized output arrays.
+            outputMEItemQueue(meOutputQueue);
+            outputMEFluidQueue(meFluidOutputQueue);
+            clearMEOutputQueues();
+        }
+        super.outputAfterRecipe();
+    }
+
+    protected void outputMEItemQueue(List<ItemStackLong> outputs) {
+        for (ItemStackLong entry : outputs) {
+            outputItemToMENetwork(entry.itemStack(), entry.stackSize());
+        }
+    }
+
+    protected void outputMEFluidQueue(List<FluidStackLong> outputs) {
+        for (FluidStackLong entry : outputs) {
+            outputFluidToMENetwork(entry.fluidStack(), entry.amount());
+        }
+    }
+
+    protected long outputItemToMENetwork(ItemStack item, long amount) {
+        if (item == null || amount <= 0) return amount;
+        long remaining = amount;
+        for (MTEHatchOutputBusME meBus : getMEOutputBusses()) {
+            var provider = meBus.getProvider();
+            long transfer = Math.min(remaining, getLongCacheRoom(provider.getCachedAmount(), 0));
+            if (transfer <= 0) continue;
+            if (provider.shouldCheck()) {
+                transfer = findLargestAcceptedAmount(transfer, value -> provider.canStore(item, value));
+            } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
+                .isAllowed(item)) {
+                    continue;
+                }
+            if (transfer <= 0) continue;
+            provider.storeToCache(
+                provider.getFilter()
+                    .fromNative(GTUtility.copyAmountUnsafe(1, item))
+                    .setStackSize(transfer));
+            meBus.markDirty();
+            remaining -= transfer;
+            if (remaining <= 0) break;
+        }
+        return remaining;
+    }
+
+    protected long outputFluidToMENetwork(FluidStack fluid, long amount) {
+        if (fluid == null || amount <= 0) return amount;
+        long remaining = amount;
+        for (MTEHatchOutputME meHatch : getMEOutputHatches()) {
+            var provider = meHatch.getProvider();
+            long transfer = Math.min(remaining, getLongCacheRoom(provider.getCachedAmount(), 0));
+            if (transfer <= 0) continue;
+            if (provider.shouldCheck()) {
+                transfer = findLargestAcceptedAmount(transfer, value -> provider.canStore(fluid, value));
+            } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
+                .isAllowed(fluid)) {
+                    continue;
+                }
+            if (transfer <= 0) continue;
+            FluidStack template = fluid.copy();
+            template.amount = 1;
+            provider.storeToCache(
+                provider.getFilter()
+                    .fromNative(template)
+                    .setStackSize(transfer));
+            meHatch.markDirty();
+            remaining -= transfer;
+            if (remaining <= 0) break;
+        }
+        return remaining;
+    }
+
+    private List<MTEHatchOutputBusME> getMEOutputBusses() {
+        List<MTEHatchOutputBusME> result = new ArrayList<>();
+        for (MTEHatchOutputBus outputBus : validMTEList(mOutputBusses)) {
+            if (outputBus instanceof MTEHatchOutputBusME meBus) result.add(meBus);
+        }
+        result.sort(
+            Comparator.comparingInt(
+                bus -> bus.getBusType()
+                    .ordinal()));
+        return result;
+    }
+
+    private List<MTEHatchOutputME> getMEOutputHatches() {
+        List<MTEHatchOutputME> result = new ArrayList<>();
+        for (MTEHatchOutput outputHatch : validMTEList(mOutputHatches)) {
+            if (outputHatch instanceof MTEHatchOutputME meHatch) result.add(meHatch);
+        }
+        result.sort(Comparator.comparingInt(hatch -> hatch.isFluidLocked() ? 0 : 1));
+        return result;
+    }
+
+    private static long getLongCacheRoom(long cached, long reserved) {
+        if (cached < 0 || reserved < 0 || cached >= Long.MAX_VALUE - reserved) return 0;
+        return Long.MAX_VALUE - cached - reserved;
+    }
+
+    private static long findLargestAcceptedAmount(long maximum, LongPredicate canStore) {
+        if (maximum <= 0) return 0;
+        if (canStore.test(maximum)) return maximum;
+        long low = 0;
+        long high = maximum;
+        while (low < high) {
+            long middle = low + ((high - low) >>> 1) + 1;
+            if (canStore.test(middle)) low = middle;
+            else high = middle - 1;
+        }
+        return low;
+    }
+
+    @Override
+    public void stopMachine(@Nonnull ShutDownReason reason) {
+        clearMEOutputQueues();
+        super.stopMachine(reason);
+    }
+
+    @Override
     public String[] getInfoData() {
         String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
         String dEUMod = String.format("%.3f", this.getEuModifier() * 100) + "%";
@@ -451,10 +829,28 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return ret;
     }
 
+    private boolean isAllowedMEOutput(IGregTechTileEntity tileEntity) {
+        if (!isMEOutputEnabled() || tileEntity == null) return true;
+        IMetaTileEntity metaTileEntity = tileEntity.getMetaTileEntity();
+        if (metaTileEntity instanceof MTEHatchOutputBus) return metaTileEntity instanceof MTEHatchOutputBusME;
+        if (metaTileEntity instanceof MTEHatchOutput) return metaTileEntity instanceof MTEHatchOutputME;
+        return true;
+    }
+
+    @Override
+    public boolean addOutputBusToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
+        return isAllowedMEOutput(tileEntity) && super.addOutputBusToMachineList(tileEntity, baseCasingIndex);
+    }
+
+    @Override
+    public boolean addOutputHatchToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
+        return isAllowedMEOutput(tileEntity) && super.addOutputHatchToMachineList(tileEntity, baseCasingIndex);
+    }
+
     @Override
     public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+        return isAllowedMEOutput(aTileEntity) && (super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex));
     }
 
     public boolean addEnergyHatchOrExoticEnergyHatchToMachineList(IGregTechTileEntity aTileEntity,
@@ -741,6 +1137,34 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        if (isMEOutputEnabled()) {
+            tag.setInteger(WAILA_ME_ITEM_LENGTH, meOutputQueue.size());
+            tag.setInteger(WAILA_ME_FLUID_LENGTH, meFluidOutputQueue.size());
+
+            int itemCount = Math.min(3, meOutputQueue.size());
+            for (int i = 0; i < itemCount; i++) {
+                ItemStackLong output = meOutputQueue.get(i);
+                tag.setString(WAILA_ME_ITEM_ICON + i, TTRenderStack.create(output.itemStack(), true));
+                tag.setString(
+                    WAILA_ME_ITEM_NAME + i,
+                    output.itemStack()
+                        .getDisplayName());
+                tag.setLong(WAILA_ME_ITEM_COUNT + i, output.stackSize());
+            }
+
+            int fluidCount = Math.min(3 - itemCount, meFluidOutputQueue.size());
+            for (int i = 0; i < fluidCount; i++) {
+                FluidStackLong output = meFluidOutputQueue.get(i);
+                tag.setString(
+                    WAILA_ME_FLUID_ICON + i,
+                    TTRenderStack.create(GTUtility.getFluidDisplayStack(output.fluidStack(), false), true));
+                tag.setString(
+                    WAILA_ME_FLUID_NAME + i,
+                    output.fluidStack()
+                        .getLocalizedName());
+                tag.setLong(WAILA_ME_FLUID_COUNT + i, output.amount());
+            }
+        }
         if (showModeInWaila()) {
             tag.setInteger("modeTST", machineMode);
         }
@@ -751,6 +1175,53 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.hasKey(WAILA_ME_ITEM_LENGTH) && tag.getBoolean("isActive")) {
+            int itemCount = tag.getInteger(WAILA_ME_ITEM_LENGTH);
+            int fluidCount = tag.getInteger(WAILA_ME_FLUID_LENGTH);
+            int totalOutputs = itemCount + fluidCount;
+            if (totalOutputs > 0) {
+                List<String> outputInfo = new ArrayList<>();
+                outputInfo.add(StatCollector.translateToLocal("GT5U.waila.producing"));
+                if (tag.getBoolean("isLockedToRecipe")) {
+                    outputInfo.add(StatCollector.translateToLocal("GT5U.waila.multiblock.status.locked_recipe"));
+                }
+                int displayedItems = Math.min(3, itemCount);
+                for (int i = 0; i < displayedItems; i++) {
+                    outputInfo.add(
+                        "  " + tag.getString(WAILA_ME_ITEM_ICON + i)
+                            + EnumChatFormatting.AQUA
+                            + tag.getString(WAILA_ME_ITEM_NAME + i)
+                            + EnumChatFormatting.RESET
+                            + " x "
+                            + EnumChatFormatting.GOLD
+                            + formatNumber(tag.getLong(WAILA_ME_ITEM_COUNT + i)));
+                }
+                int displayedFluids = Math.min(3 - displayedItems, fluidCount);
+                for (int i = 0; i < displayedFluids; i++) {
+                    outputInfo.add(
+                        "  " + tag.getString(WAILA_ME_FLUID_ICON + i)
+                            + EnumChatFormatting.AQUA
+                            + tag.getString(WAILA_ME_FLUID_NAME + i)
+                            + EnumChatFormatting.RESET
+                            + " x "
+                            + EnumChatFormatting.GOLD
+                            + formatNumber(tag.getLong(WAILA_ME_FLUID_COUNT + i))
+                            + "L");
+                }
+                if (totalOutputs > 3) {
+                    outputInfo.add(
+                        StatCollector
+                            .translateToLocalFormatted("GT5U.waila.producing.andmore", formatNumber(totalOutputs - 3)));
+                }
+                String progress = GTWaila.getMachineProgressString(
+                    true,
+                    tag.getBoolean("isAllowedToWork"),
+                    tag.getInteger("maxProgress"),
+                    tag.getInteger("progress"));
+                int index = currentTip.lastIndexOf(progress);
+                currentTip.addAll(index < 0 ? currentTip.size() : index, outputInfo);
+            }
+        }
         if (tag.hasKey("modeTST")) {
             currentTip.add("" + EnumChatFormatting.YELLOW +
             // #tr TST.machines.running_mode

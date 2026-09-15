@@ -10,11 +10,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GTUtility;
 
 public final class EcoSphereModeSupport {
 
@@ -117,17 +120,35 @@ public final class EcoSphereModeSupport {
         return Math.min(parallelFromEUt, parallelFromFluid);
     }
 
-    public static void addSplitStack(List<ItemStack> outputs, ItemStack template, long amount) {
-        while (amount > Integer.MAX_VALUE) {
-            ItemStack split = template.copy();
-            split.stackSize = Integer.MAX_VALUE;
-            outputs.add(split);
-            amount -= Integer.MAX_VALUE;
+    public static void addItemOutput(List<ItemStackLong> outputs, ItemStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < outputs.size(); i++) {
+            ItemStackLong output = outputs.get(i);
+            if (GTUtility.areStacksEqual(output.itemStack(), stack)) {
+                outputs.set(i, new ItemStackLong(output.itemStack(), addSaturated(output.stackSize(), amount)));
+                return;
+            }
         }
-        if (amount <= 0) return;
-        ItemStack split = template.copy();
-        split.stackSize = (int) amount;
-        outputs.add(split);
+        outputs.add(new ItemStackLong(GTUtility.copyAmountUnsafe(1, stack), amount));
+    }
+
+    public static void addFluidOutput(List<FluidStackLong> outputs, FluidStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < outputs.size(); i++) {
+            FluidStackLong output = outputs.get(i);
+            if (output.fluidStack()
+                .isFluidEqual(stack)) {
+                outputs.set(i, new FluidStackLong(output.fluidStack(), addSaturated(output.amount(), amount)));
+                return;
+            }
+        }
+        FluidStack template = stack.copy();
+        template.amount = 1;
+        outputs.add(new FluidStackLong(template, amount));
+    }
+
+    public static long addSaturated(long first, long second) {
+        return first > Long.MAX_VALUE - second ? Long.MAX_VALUE : first + second;
     }
 
     public static long getAvailableFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid) {

@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
 import static com.gtnewhorizon.cropsnh.tileentity.multi.MTEIndustrialFarm.CYCLE_TICK_RATE_SCALAR;
 import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
@@ -23,6 +22,8 @@ import net.minecraftforge.common.IPlantable;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
@@ -66,36 +67,18 @@ public final class CropsNHFarm {
 
     private Pair<ItemStack, Double>[] output = new Pair[0];
 
-    private static ItemStack[] getOutputStacks(Pair<ItemStack, Double>[] cachedOutput, double multiplier) {
-        if (cachedOutput == null || cachedOutput.length == 0) {
-            return new ItemStack[0];
-        }
-
-        List<ItemStack> outputs = new ArrayList<>();
-
+    private static void addOutputStacks(List<ItemStackLong> outputs, Pair<ItemStack, Double>[] cachedOutput,
+        double multiplier) {
+        if (cachedOutput == null || cachedOutput.length == 0) return;
         for (Pair<ItemStack, Double> entry : cachedOutput) {
             if (entry == null) continue;
             ItemStack output = entry.getKey();
             if (output == null) continue;
-            // get actual amount of this stack to output
-            long amount = (long) Math.ceil(entry.getValue() * multiplier);
+            double outputAmount = Math.ceil(entry.getValue() * multiplier);
+            long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
             if (amount < 1) continue;
-
-            if (amount <= Integer.MAX_VALUE) {
-                outputs.add(setStackSize(output.copy(), (int) amount));
-            } else {
-                while (amount > Integer.MAX_VALUE) {
-                    outputs.add(setStackSize(output.copy(), Integer.MAX_VALUE));
-                    amount -= Integer.MAX_VALUE;
-                }
-                if (amount > 0) {
-                    outputs.add(setStackSize(output.copy(), (int) amount));
-                }
-            }
+            EcoSphereModeSupport.addItemOutput(outputs, output, amount);
         }
-
-        return outputs.toArray(new ItemStack[0]);
-
     }
 
     public CropCache getCropCache(ItemStack seed) {
@@ -364,8 +347,8 @@ public final class CropsNHFarm {
     @Desugar
     public record CropCache(boolean hybrid, Pair<ItemStack, Double>[] cachedOutput, int seedCount) {
 
-        public ItemStack[] getOutputStacks(double multiplier) {
-            return CropsNHFarm.getOutputStacks(cachedOutput, multiplier);
+        public void addOutputStacks(List<ItemStackLong> outputs, double multiplier) {
+            CropsNHFarm.addOutputStacks(outputs, cachedOutput, multiplier);
         }
 
         public CropCache withSeedCount(int count) {

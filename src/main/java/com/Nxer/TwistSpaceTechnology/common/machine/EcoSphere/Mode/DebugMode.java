@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addSplitStack;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addItemOutput;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -22,7 +23,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
@@ -31,6 +31,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.Direc
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.DirectedMobClonerWeaponHandler.WeaponTags;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
@@ -78,10 +79,10 @@ public final class DebugMode {
 
         DebugLine line = state.lines.get(state.lineIndex++);
         state.writeLine(line.text());
-        List<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         DebugOutput output = line.output();
         if (output != null) {
-            addSplitStack(
+            addItemOutput(
                 outputs,
                 output.item()
                     .getItemStackWithNBT(),
@@ -91,8 +92,8 @@ public final class DebugMode {
         machine.setCurrentParallel(DEBUG_PARALLEL);
         return new EcoSphereModeResult(
             SimpleResultWithText.ofSuccessText("debugRUN"),
-            outputs.toArray(new ItemStack[0]),
-            new FluidStack[0],
+            outputs,
+            Collections.emptyList(),
             0,
             1);
     }

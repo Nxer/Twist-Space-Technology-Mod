@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addSplitStack;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addItemOutput;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.MissingSaplingInput;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.MissingTreeOutputSelection;
@@ -23,6 +23,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSuppo
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -117,7 +118,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     private static EcoSphereModeResult processOutputs(List<EnumMap<Mode, ItemStack>> productSets,
         List<Integer> saplingCounts, EnumSet<Mode> selectedInputs, EcoSphereModeSupport.ParallelResult parallelResult) {
-        List<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         for (int index = 0; index < productSets.size(); index++) {
             EnumMap<Mode, ItemStack> products = productSets.get(index);
             int saplingCount = saplingCounts.get(index);
@@ -144,7 +145,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
                     * saplingParallel
                     * focusBonus;
                 long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
-                addSplitStack(outputs, output, amount);
+                addItemOutput(outputs, output, amount);
             }
         }
         if (outputs.isEmpty()) return EcoSphereModeResult.failure(MissingTreeOutputSelection);
@@ -153,7 +154,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             // # {\GREEN}Growing Trees
             // #zh_CN {\GREEN}树木生长中
             SimpleCheckRecipeResult.ofSuccess("tst_ess_growing_trees"),
-            outputs.toArray(new ItemStack[0]),
+            outputs,
             parallelResult.tier());
     }
 

@@ -101,7 +101,6 @@ import gregtech.api.util.GTUtility;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gregtech.api.util.VoidProtectionHelper;
 import gregtech.api.util.shutdown.ShutDownReason;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 import gtPlusPlus.core.block.ModBlocks;
@@ -166,6 +165,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT };
+
+    @Override
+    public boolean isMEOutputEnabled() {
+        return true;
+    }
 
     public boolean isTierTwo() {
         return getStructureTier() >= 2;
@@ -374,6 +378,26 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     @Override
+    protected void outputMEFluidQueue(List<FluidStackLong> outputs) {
+        // Recipe 0 routes Life Essence to the LP network. Items use the default ME path.
+        boolean routeLpOutput = activeRecipeZeroLpOutput;
+        try {
+            if (!routeLpOutput) {
+                super.outputMEFluidQueue(outputs);
+                return;
+            }
+            for (FluidStackLong output : outputs) {
+                long remaining = DirectedMobClonerMode
+                    .routeLifeEssenceLpOutputToNetwork(getCloningBloodOrb(), output.fluidStack(), output.amount());
+                outputFluidToMENetwork(output.fluidStack(), remaining);
+            }
+        } finally {
+            activeRecipeZeroLpOutput = false;
+            markDirty();
+        }
+    }
+
+    @Override
     public void stopMachine(ShutDownReason reason) {
         activeRecipeZeroLpOutput = false;
         pendingRecipeZeroLpOutput = false;
@@ -427,6 +451,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         mMaxProgresstime = 0;
         mOutputItems = null;
         mOutputFluids = null;
+        clearMEOutputQueues();
         markDirty();
     }
 
@@ -1131,20 +1156,13 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     private CheckRecipeResult checkModeOutputCapacity(EcoSphereModeResult modeResult, boolean recipeZeroLpOutput) {
-        FluidStack[] fluidOutputs = modeResult.fluidOutputs();
+        List<FluidStackLong> fluidOutputs = modeResult.fluidOutputs();
         if (recipeZeroLpOutput) {
             // Void protection only reserves hatch space for output the LP network cannot accept.
             fluidOutputs = DirectedMobClonerMode
                 .getRecipeZeroFluidOutputsForCapacityCheck(getCloningBloodOrb(), fluidOutputs);
         }
-        VoidProtectionHelper outputProtection = new VoidProtectionHelper().setMachine(this)
-            .setItemOutputs(modeResult.outputs())
-            .setFluidOutputs(fluidOutputs)
-            .setMaxParallel(1)
-            .build();
-        if (outputProtection.isItemFull()) return CheckRecipeResultRegistry.ITEM_OUTPUT_FULL;
-        if (outputProtection.isFluidFull()) return CheckRecipeResultRegistry.FLUID_OUTPUT_FULL;
-        return CheckRecipeResultRegistry.SUCCESSFUL;
+        return checkMEOutputCapacity(modeResult.outputs(), fluidOutputs);
     }
 
     private boolean commitPendingRecipeConsumption() {
@@ -1184,6 +1202,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             @Override
             @Nonnull
             public CheckRecipeResult process() {
+                clearLongOutputs();
                 currentParallel = 0;
                 pendingRecipeZeroLpOutput = false;
                 pendingRecipeConsumption = null;
@@ -1217,7 +1236,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     EcoSphereModeResult debugResult = DebugMode
                         .process(TST_EcoSphereSimulator.this, machineMode, getExecutionProtocolTier());
                     if (debugResult.result()
-                        .wasSuccessful()) return applyModeResult(debugResult);
+                        .wasSuccessful()) {
+                        CheckRecipeResult outputCapacityResult = checkModeOutputCapacity(debugResult, false);
+                        if (outputCapacityResult.wasSuccessful()) return applyModeResult(debugResult);
+                        currentParallel = 0;
+                        return outputCapacityResult;
+                    }
                     DebugMode.reset(TST_EcoSphereSimulator.this);
                     if (getBaseMetaTileEntity() != null) {
                         getBaseMetaTileEntity().disableWorking();
@@ -1268,8 +1292,9 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             private CheckRecipeResult applyModeResult(EcoSphereModeResult modeResult, boolean recipeZeroLpOutput) {
                 if (!modeResult.result()
                     .wasSuccessful()) return modeResult.result();
-                outputItems = modeResult.outputs();
-                outputFluids = modeResult.fluidOutputs();
+                setLongOutputs(modeResult.outputs(), modeResult.fluidOutputs());
+                outputItems = new ItemStack[0];
+                outputFluids = new FluidStack[0];
                 calculatedEut = modeResult.eut();
                 duration = modeResult.duration();
                 pendingRecipeZeroLpOutput = recipeZeroLpOutput;

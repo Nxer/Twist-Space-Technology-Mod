@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
-import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addSplitStack;
+import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.addItemOutput;
 import static com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport.getItemStackString;
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 
@@ -19,6 +19,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResul
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeSupport;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
@@ -63,17 +64,15 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         // Both distilled-water and unknown-water recipes support focusing on one output.
         TargetingSelection targeting = findTargetingSelection(machine, recipe.recipeType());
         Function<EcoSphereModeSupport.ParallelResult, EcoSphereModeResult> processor = parallelResult -> {
-            List<ItemStack> outputs;
+            List<ItemStackLong> outputs;
             if (recipe.recipeType() == UNKNOWN_WATER_RECIPE) {
                 outputs = processUnknownWaterOutputs(parallelResult, targeting);
             } else {
                 outputs = processStandardOutputs(parallelResult, targeting);
             }
             ItemStack focusStack = targeting == null ? null : targeting.stack();
-            return EcoSphereModeResult.standard(
-                getRunningResult(recipe.recipeType(), focusStack),
-                outputs.toArray(new ItemStack[0]),
-                parallelResult.tier());
+            return EcoSphereModeResult
+                .standard(getRunningResult(recipe.recipeType(), focusStack), outputs, parallelResult.tier());
         };
         FluidStack recipeFluid = recipe.fluidInput();
         return EcoSphereModeSupport
@@ -121,10 +120,10 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     @Desugar
     private record TargetingSelection(ItemStack stack, int multiplier) {}
 
-    private static List<ItemStack> processUnknownWaterOutputs(EcoSphereModeSupport.ParallelResult parallelResult,
+    private static List<ItemStackLong> processUnknownWaterOutputs(EcoSphereModeSupport.ParallelResult parallelResult,
         TargetingSelection targeting) {
         boolean focusMode = targeting != null;
-        List<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         double tierChance = Math.log(parallelResult.tier() + 2) / Math.log(2);
         for (ItemStack template : AquaticZoneSimulatorFakeRecipe.UnknownWaterOutputs) {
             int chance = AquaticZoneSimulatorFakeRecipe.UnknownWaterChances.get(getItemStackString(template));
@@ -146,10 +145,10 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         return outputs;
     }
 
-    private static List<ItemStack> processStandardOutputs(EcoSphereModeSupport.ParallelResult parallelResult,
+    private static List<ItemStackLong> processStandardOutputs(EcoSphereModeSupport.ParallelResult parallelResult,
         TargetingSelection targeting) {
         boolean focusMode = targeting != null;
-        List<ItemStack> outputs = new ArrayList<>();
+        List<ItemStackLong> outputs = new ArrayList<>();
         double tierChance = Math.log(parallelResult.tier() + 2) / Math.log(2);
         for (ItemStack recipeStack : AquaticZoneSimulatorFakeRecipe.WatersOutputs) {
             ItemStack output = recipeStack.copy();
@@ -165,7 +164,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             if (output.isItemEqual(AquaticZoneSimulatorFakeRecipe.OFFSPRING)) {
                 int offspringChance = calculateOffspringChance(parallelResult.tier(), chance, tierChance);
                 if (random >= offspringChance) continue;
-                addSplitStack(outputs, output, 1);
+                addItemOutput(outputs, output, 1);
                 continue;
             }
             addRandomOutput(outputs, output, chance, random, tierChance, parallelResult.parallel());
@@ -190,14 +189,14 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             Math.round(probability * voltageMultiplier * AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE));
     }
 
-    private static void addRandomOutput(List<ItemStack> outputs, ItemStack template, int chance, int random,
+    private static void addRandomOutput(List<ItemStackLong> outputs, ItemStack template, int chance, int random,
         double tierChance, double parallel) {
         if (random > chance * tierChance) return;
         double amountScale = (double) AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE
             * AquaticZoneSimulatorFakeRecipe.CHANCE_SCALE
             / 100;
         long amount = (long) (template.stackSize * parallel * chance * random / amountScale);
-        addSplitStack(outputs, template, amount);
+        addItemOutput(outputs, template, amount);
     }
 
     private static TargetingSelection findTargetingSelection(TST_EcoSphereSimulator machine, int recipeType) {

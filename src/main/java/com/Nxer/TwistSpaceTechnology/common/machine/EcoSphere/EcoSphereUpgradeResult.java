@@ -6,9 +6,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.DirectedMobClonerMode;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
 
 import gregtech.api.objects.XSTR;
@@ -69,62 +70,39 @@ public final class EcoSphereUpgradeResult {
         return specialUpgrades.contains(upgrade);
     }
 
-    private ItemStack[] applyOutputScaling(ItemStack[] outputs) {
-        if (outputs == null || outputs.length == 0) return outputs;
+    private List<ItemStackLong> applyOutputScaling(List<ItemStackLong> outputs) {
+        if (outputs.isEmpty()) return outputs;
         double outputMultiplier = getOutputMultiplier();
-        List<ItemStack> scaledOutputs = new ArrayList<>(outputs.length);
-        for (ItemStack output : outputs) {
-            if (output == null) {
-                scaledOutputs.add(null);
-                continue;
-            }
+        List<ItemStackLong> scaledOutputs = new ArrayList<>(outputs.size());
+        for (ItemStackLong entry : outputs) {
+            ItemStack output = entry.itemStack();
+            if (output == null) continue;
             ItemStack offspring = AquaticZoneSimulatorFakeRecipe.OFFSPRING;
             if (offspring != null && output.isItemEqual(offspring)) {
-                scaledOutputs.add(output);
+                EcoSphereModeSupport.addItemOutput(scaledOutputs, output, entry.stackSize());
                 continue;
             }
             double outputScale = outputMultiplier * (0.85 + XSTR.XSTR_INSTANCE.nextDouble() * 0.15);
             EcoSphereModeSupport
-                .addSplitStack(scaledOutputs, output, multiplySaturated((long) output.stackSize, outputScale));
+                .addItemOutput(scaledOutputs, output, multiplySaturated(entry.stackSize(), outputScale));
         }
-        return scaledOutputs.toArray(new ItemStack[0]);
+        return scaledOutputs;
     }
 
-    private FluidStack[] applyOutputScaling(FluidStack[] outputs, int conversionDivisor) {
-        if (outputs == null || outputs.length == 0) return outputs;
+    private List<FluidStackLong> applyOutputScaling(List<FluidStackLong> outputs, int conversionDivisor) {
+        if (outputs.isEmpty()) return outputs;
         double outputMultiplier = getOutputMultiplier();
-        List<FluidStack> scaledOutputs = new ArrayList<>(outputs.length);
-        // Merge equal fluids so split stacks share one random roll and are scaled once as a long total.
-        boolean[] consumed = new boolean[outputs.length];
-        for (int i = 0; i < outputs.length; i++) {
-            FluidStack template = outputs[i];
-            if (template == null || consumed[i]) continue;
-            long totalAmount = 0;
-            for (int j = i; j < outputs.length; j++) {
-                FluidStack candidate = outputs[j];
-                if (candidate == null || consumed[j] || !template.isFluidEqual(candidate)) continue;
-                totalAmount += candidate.amount;
-                consumed[j] = true;
-            }
+        List<FluidStackLong> scaledOutputs = new ArrayList<>(outputs.size());
+        for (FluidStackLong entry : outputs) {
+            if (entry.fluidStack() == null) continue;
             double outputScale = outputMultiplier * (0.85 + XSTR.XSTR_INSTANCE.nextDouble() * 0.15);
-            // Scale recipe 0 in whole LP units so its physical remainder stays exactly convertible.
-            int groupDivisor = conversionDivisor > 1 && DirectedMobClonerMode.isLifeEssenceOutput(template)
-                && totalAmount % conversionDivisor == 0 ? conversionDivisor : 1;
-            long scaledAmount = multiplySaturated(totalAmount / groupDivisor, outputScale);
+            int groupDivisor = conversionDivisor > 1 && DirectedMobClonerMode.isLifeEssenceOutput(entry.fluidStack())
+                && entry.amount() % conversionDivisor == 0 ? conversionDivisor : 1;
+            long scaledAmount = multiplySaturated(entry.amount() / groupDivisor, outputScale);
             scaledAmount = Math.min(scaledAmount, Long.MAX_VALUE / groupDivisor) * groupDivisor;
-            addSplitFluid(scaledOutputs, template, scaledAmount, groupDivisor);
+            EcoSphereModeSupport.addFluidOutput(scaledOutputs, entry.fluidStack(), scaledAmount);
         }
-        return scaledOutputs.toArray(new FluidStack[0]);
-    }
-
-    private static void addSplitFluid(List<FluidStack> outputs, FluidStack template, long amount, int amountDivisor) {
-        int maximumAmountPerStack = Integer.MAX_VALUE - Integer.MAX_VALUE % amountDivisor;
-        while (amount > 0) {
-            FluidStack split = template.copy();
-            split.amount = (int) Math.min(maximumAmountPerStack, amount);
-            outputs.add(split);
-            amount -= split.amount;
-        }
+        return scaledOutputs;
     }
 
     private int getCount(EcoSphereUpgradeType type) {
