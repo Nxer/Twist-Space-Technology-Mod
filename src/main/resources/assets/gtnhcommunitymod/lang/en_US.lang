@@ -2555,3 +2555,4 @@ NameAEStorageCellInputHatch=Super Stocking Input Hatch (ME)
 EcoSphereSimulator.gui.runningSeeds=Seeds
 EcoSphereSimulator.gui.cloningTarget=ID : %s | Mob
 EcoSphereSimulator.gui.runningSaplings=Saplings
+item.InfinityDistilledWaterStorageCell.name=ME Infinity Distilled Water Fluid Storage Cell

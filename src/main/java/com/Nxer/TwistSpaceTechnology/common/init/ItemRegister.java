@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.init;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -30,7 +31,7 @@ public class ItemRegister {
         // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
         Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
             MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
-            MetaItemFlask, };
+            MetaItemFlask, InfinityDistilledWaterStorageCell, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);

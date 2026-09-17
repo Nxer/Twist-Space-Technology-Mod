@@ -2555,3 +2555,4 @@ NameAEStorageCellInputHatch=超级存储输入仓(ME)
 EcoSphereSimulator.gui.runningSeeds=种子
 EcoSphereSimulator.gui.cloningTarget=编号 : %s | 生物
 EcoSphereSimulator.gui.runningSaplings=树苗
+item.InfinityDistilledWaterStorageCell.name=ME无限蒸馏水流体存储元件

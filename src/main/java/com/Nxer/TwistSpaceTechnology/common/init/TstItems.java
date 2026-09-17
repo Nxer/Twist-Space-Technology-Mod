@@ -13,6 +13,7 @@ import com.Nxer.TwistSpaceTechnology.common.item.ItemCardigan;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereExecutionProtocol;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemEcoSphereUpgrade;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemHatchUpdateTool;
+import com.Nxer.TwistSpaceTechnology.common.item.ItemInfinityDistilledWaterStorageCell;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemMultiStructuresLinkTool;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemNamedCircuit;
 import com.Nxer.TwistSpaceTechnology.common.item.ItemProofOfHeroes;
@@ -66,5 +67,10 @@ public class TstItems {
     public static final ItemCardigan Cardian = new ItemCardigan();
 
     public static final Item ActualPattern = new ItemActualPattern();
+
+    // #tr item.InfinityDistilledWaterStorageCell.name
+    // # ME Infinity Distilled Water Fluid Storage Cell
+    // #zh_CN ME无限蒸馏水流体存储元件
+    public static final Item InfinityDistilledWaterStorageCell = new ItemInfinityDistilledWaterStorageCell();
 
 }
