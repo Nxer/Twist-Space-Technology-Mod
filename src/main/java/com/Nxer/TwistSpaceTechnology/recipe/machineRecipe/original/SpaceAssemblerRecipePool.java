@@ -17,6 +17,7 @@ import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
+import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
@@ -74,7 +75,8 @@ public class SpaceAssemblerRecipePool {
                 new ItemStack(ItemAndBlockHolder.INTERFACE),
                 GTCMItemList.PerfectEngravedEnergyChip.get(1),
                 ItemList.Electric_Pump_UEV.get(1),
-                ModItem.getModItem("ae2fc", "fluid_storage.singularity", 1, 0))
+                ModItem.getModItem(Mods.AE2FluidCraft.ID, ItemAndBlockHolder.SINGULARITY_CELL == null ? null
+                    : new ItemStack(ItemAndBlockHolder.SINGULARITY_CELL), "Fluid Storage Singularity", 1))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
                 MaterialsTST.NeutroniumAlloy.getMolten(32 * 144),
