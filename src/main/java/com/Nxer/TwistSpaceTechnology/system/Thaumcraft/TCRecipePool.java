@@ -348,7 +348,7 @@ public class TCRecipePool {
                         .merge(Aspect.ORDER, 64),
                     ItemList.Circuit_Board_Bio.get(1),
                     new ItemStack[] {
-                        ExtremeEntityCrusher.get(1),
+                        getModItem(Mods.KubaTech.ID, ExtremeEntityCrusher.hasBeenSet() ? ExtremeEntityCrusher.get(1) : null, "Extreme Entity Crusher", 1),
                         getModItem(Mods.BloodArsenal.ID, "sigil_of_divinity", 1, 0),
                         new ItemStack(WayofTime.alchemicalWizardry.ModItems.weakBloodOrb, 1),
                         newItemStackWithNBT(getModItem(Mods.BloodArsenal.ID, "compacted_mrs", 1, 0), "ritualName", "AW013Suffering"),
