@@ -75,8 +75,12 @@ public class SpaceAssemblerRecipePool {
                 new ItemStack(ItemAndBlockHolder.INTERFACE),
                 GTCMItemList.PerfectEngravedEnergyChip.get(1),
                 ItemList.Electric_Pump_UEV.get(1),
-                ModItem.getModItem(Mods.AE2FluidCraft.ID, ItemAndBlockHolder.SINGULARITY_CELL == null ? null
-                    : new ItemStack(ItemAndBlockHolder.SINGULARITY_CELL), "Fluid Storage Singularity", 1))
+                ModItem.getModItem(
+                    Mods.AE2FluidCraft.ID,
+                    ItemAndBlockHolder.SINGULARITY_CELL == null ? null
+                        : new ItemStack(ItemAndBlockHolder.SINGULARITY_CELL),
+                    "Fluid Storage Singularity",
+                    1))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
                 MaterialsTST.NeutroniumAlloy.getMolten(32 * 144),
