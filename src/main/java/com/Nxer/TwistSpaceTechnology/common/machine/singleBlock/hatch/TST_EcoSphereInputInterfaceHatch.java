@@ -53,7 +53,8 @@ import lombok.Getter;
 public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements IAddUIWidgets {
 
     private static final int TREE_INPUT_SLOT = 0;
-    private static final int AQUATIC_INPUT_START = 1;
+    private static final int TREE_MAX_SLOTS = 4;
+    private static final int AQUATIC_INPUT_START = TREE_INPUT_SLOT + TREE_MAX_SLOTS;
     private static final int AQUATIC_MAX_SLOTS = 4;
     private static final int GREENHOUSE_INPUT_START = AQUATIC_INPUT_START + AQUATIC_MAX_SLOTS;
     private static final int GREENHOUSE_MAX_SLOTS = 4;
@@ -63,7 +64,8 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     // Capacity upgrades still add one slot per upgrade; they additionally multiply the per-slot stack limit by 4.
     // Cloning keeps 1 stack per slot regardless of upgrades.
     private static final InputSlotLayout EMPTY_INPUT_LAYOUT = new InputSlotLayout(0, 0, 0, 0);
-    private static final InputSlotLayout[] MODE_INPUT_LAYOUTS = { new InputSlotLayout(TREE_INPUT_SLOT, 1, 4, 1),
+    private static final InputSlotLayout[] MODE_INPUT_LAYOUTS = {
+        new InputSlotLayout(TREE_INPUT_SLOT, 1, TREE_MAX_SLOTS, 1),
         new InputSlotLayout(AQUATIC_INPUT_START, 1, AQUATIC_MAX_SLOTS, 1),
         new InputSlotLayout(GREENHOUSE_INPUT_START, 1, GREENHOUSE_MAX_SLOTS, 1),
         new InputSlotLayout(CLONING_AUXILIARY_INPUT_START, 0, CLONING_MAX_AUXILIARY_INPUT_SLOTS, 1) };
@@ -415,7 +417,7 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private void addTreeInputSlots(ModularWindow.Builder builder) {
         // 2x2 grid centered in the area left of the tree output buttons.
-        for (int index = 0; index < 4; index++) {
+        for (int index = 0; index < TREE_MAX_SLOTS; index++) {
             builder.widget(createInputSlot(TREE_INPUT_SLOT + index, 34 + index % 2 * 18, 26 + index / 2 * 18, 0));
         }
     }
@@ -430,12 +432,12 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
             @Override
             public boolean isEnabled() {
-                return machineMode == requiredMode && isInputSlotActive(index);
+                return machineMode == requiredMode;
             }
 
             @Override
             public boolean isItemValidPhantom(ItemStack stack) {
-                return isEnabled() && isInputValid(index, stack) && super.isItemValidPhantom(stack);
+                return isInputSlotActive(index) && isInputValid(index, stack) && super.isItemValidPhantom(stack);
             }
         };
         SlotWidget widget = new SlotWidget(slot);

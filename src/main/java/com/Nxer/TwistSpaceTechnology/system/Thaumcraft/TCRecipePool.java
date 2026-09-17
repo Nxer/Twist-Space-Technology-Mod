@@ -461,7 +461,7 @@ public class TCRecipePool {
                         getModItem(Mods.AppliedEnergistics2.ID, "item.ItemMultiMaterial", 1, 56),
                         ItemList.AcceleratorUV.get(1),
                         getEnchantedCapacitor(),
-                        ItemList.Field_Generator_UEV.get(1) });
+                        ItemList.Field_Generator_UIV.get(1) });
 
                 infusionRecipeEcoSphereUpgrade5 = addInfusionCraftingRecipeAspectNotNull(
                     "ECO_SPHERE_UPGRADE_5",
