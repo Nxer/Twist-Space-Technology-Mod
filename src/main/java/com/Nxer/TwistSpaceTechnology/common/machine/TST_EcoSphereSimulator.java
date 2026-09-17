@@ -1274,10 +1274,12 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     }
                     if (fluidAreaFillDuration > 0) {
                         // Wait for this layer before the next layer starts filling.
+                        int animationDuration = fluidAreaFillDuration;
+                        fluidAreaFillDuration = 0;
                         // #tr GT5U.gui.text.recipe_result.eco_sphere_simulator_filling_fluid_area
                         // # Filling Eco-Sphere fluid area
                         // #zh_CN 生态圈流体灌注中
-                        return waitForAnimation(fluidAreaFillDuration, "eco_sphere_simulator_filling_fluid_area");
+                        return waitForAnimation(animationDuration, "eco_sphere_simulator_filling_fluid_area");
                     }
                     if (missingFluidAreaInput != null) return SimpleResultWithText.outOfFluid(missingFluidAreaInput);
                     return modeResult.result();

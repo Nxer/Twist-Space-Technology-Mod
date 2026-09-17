@@ -150,6 +150,10 @@ public final class EcoSphereFluidAreaHandler {
             for (int layer = 0; layer < layerCount; layer++) {
                 int layerBlocks = countLayerBlocks(targetArea, layer);
                 if (layerBlocks == 0) continue;
+                if (withMain) {
+                    int mainBlocks = layerBlocks - countLayerBlocks(FluidArea.WITHOUT_MAIN, layer);
+                    layerBlocks -= mainBlocks / 4;
+                }
                 steps.add(new int[] { layer, Math.max(5, getLayerDuration(layerBlocks)) });
             }
             cleaningPlan = steps.toArray(new int[steps.size()][]);
@@ -220,9 +224,9 @@ public final class EcoSphereFluidAreaHandler {
         boolean horizontallyFlipped = machine.isFluidAreaHorizontallyFlipped();
         World world = base.getWorld();
         boolean changed = false;
-        // Neighbor updates during cleanup let fast fluids change later cells before this loop reaches them.
-        // Flag 2 sends the block changes to clients without resuming fluid simulation mid-layer.
+        // Finish replacing a layer before notifying neighbors so fluid cannot refill cells during the scan.
         int updateFlags = block == Blocks.air ? 2 : 3;
+        List<int[]> clearedPositions = block == Blocks.air ? new ArrayList<>() : null;
         // Use the same facing transform as the source-layer check.
         for (int z = 0; z < pattern.length; z++) {
             for (int x = 0; x < pattern[z].length(); x++) {
@@ -243,7 +247,15 @@ public final class EcoSphereFluidAreaHandler {
                 int worldZ = base.getZCoord() + blockOffsetZ;
                 Block actualBlock = world.getBlock(worldX, worldY, worldZ);
                 if (replacementFilter != null && !replacementFilter.test(actualBlock)) continue;
-                if (world.setBlock(worldX, worldY, worldZ, block, 0, updateFlags)) changed = true;
+                if (world.setBlock(worldX, worldY, worldZ, block, 0, updateFlags)) {
+                    changed = true;
+                    if (clearedPositions != null) clearedPositions.add(new int[] { worldX, worldY, worldZ });
+                }
+            }
+        }
+        if (clearedPositions != null) {
+            for (int[] position : clearedPositions) {
+                world.notifyBlocksOfNeighborChange(position[0], position[1], position[2], Blocks.air);
             }
         }
         return changed;

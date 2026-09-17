@@ -25,12 +25,25 @@ public final class EcoSphereFluidCache {
     private EcoSphereFluidCache() {}
 
     public static FluidStack findFirstValidFluid(TST_EcoSphereSimulator machine) {
+        return findFirstValidFluid(machine, null);
+    }
+
+    public static FluidStack findFirstValidFluid(TST_EcoSphereSimulator machine, Fluid fallbackFluid) {
         int mode = TST_EcoSphereSimulator.getModeFromExecutionProtocol(machine.getControllerSlot());
         if (mode < 0 || mode >= MODE_FLUIDS.length) return null;
         Set<Fluid> validFluids = MODE_FLUIDS[mode];
         if (validFluids == null || validFluids.isEmpty()) return null;
-        Fluid fluid = LongFluidInputs.of(machine)
-            .getFirstAvailableFluid(validFluids);
+        LongFluidInputs inputs = LongFluidInputs.of(machine);
+        Fluid fluid = null;
+        if (fallbackFluid == null) {
+            fluid = inputs.getFirstAvailableFluid(validFluids);
+        } else {
+            for (Fluid candidate : inputs.getFluidTypes()) {
+                if (!validFluids.contains(candidate)) continue;
+                fluid = candidate;
+                if (candidate != fallbackFluid) break;
+            }
+        }
         return fluid == null ? null : new FluidStack(fluid, 1);
     }
 
