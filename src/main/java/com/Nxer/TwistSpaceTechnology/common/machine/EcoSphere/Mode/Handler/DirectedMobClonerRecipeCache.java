@@ -73,7 +73,8 @@ public final class DirectedMobClonerRecipeCache {
                     event.recipe.entity.getClass()
                         .getName()),
                 isBoss(event),
-                getEecRecipeDuration(event.recipe.maxEntityHealth)));
+                getEecRecipeDuration(event.recipe.maxEntityHealth),
+                Math.max(1, (int) Math.ceil(event.recipe.maxEntityHealth * 4d))));
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -379,6 +380,7 @@ public final class DirectedMobClonerRecipeCache {
                     pending.localizedName(),
                     pending.boss(),
                     pending.eecDuration(),
+                    pending.lifeEssenceCost(),
                     pending.outputs()));
             id++;
         }
@@ -394,6 +396,7 @@ public final class DirectedMobClonerRecipeCache {
                 new DirectedMobClonerFakeRecipe.MobRecipeDisplay(
                     recipe.mobName(),
                     recipe.boss(),
+                    recipe.lifeEssenceCost(),
                     recipe.firstOutput()));
         }
         DirectedMobClonerFakeRecipe.rebuildFakeRecipes(displaysById);
@@ -418,14 +421,17 @@ public final class DirectedMobClonerRecipeCache {
         private final String modName;
         private final boolean boss;
         private final int eecDuration;
+        private final int lifeEssenceCost;
         private CachedOutputLists outputs = CachedOutputLists.EMPTY;
 
-        private PendingRecipe(String mobName, String localizedName, String modName, boolean boss, int eecDuration) {
+        private PendingRecipe(String mobName, String localizedName, String modName, boolean boss, int eecDuration,
+            int lifeEssenceCost) {
             this.mobName = mobName;
             this.localizedName = localizedName;
             this.modName = modName;
             this.boss = boss;
             this.eecDuration = eecDuration;
+            this.lifeEssenceCost = lifeEssenceCost;
         }
 
         private String mobName() {
@@ -448,6 +454,10 @@ public final class DirectedMobClonerRecipeCache {
             return eecDuration;
         }
 
+        private int lifeEssenceCost() {
+            return lifeEssenceCost;
+        }
+
         private CachedOutputLists outputs() {
             return outputs;
         }
@@ -459,7 +469,7 @@ public final class DirectedMobClonerRecipeCache {
 
     @Desugar
     public record CachedRecipe(int id, String mobName, String localizedName, boolean boss, int eecDuration,
-        CachedOutputLists cachedOutputs) {
+        int lifeEssenceCost, CachedOutputLists cachedOutputs) {
 
         public List<CachedOutput> ordinaryOutputs() {
             return cachedOutputs.ordinaryOutputs();

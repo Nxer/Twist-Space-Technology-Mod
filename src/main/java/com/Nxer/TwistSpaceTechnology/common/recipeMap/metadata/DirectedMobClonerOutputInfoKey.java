@@ -20,12 +20,12 @@ public final class DirectedMobClonerOutputInfoKey extends RecipeMetadataKey<Bool
         // #tr EcoSphereSimulator.nei.parallel
         // # Boosted by higher voltage
         // #zh_CN 并行随电压提高
-        recipeInfo.drawText(TextEnums.tr("EcoSphereSimulator.nei.parallel"));
-        if (cast(value, false)) {
-            // #tr EcoSphereSimulator.nei.losslessOverclock
-            // # Runs with perfect overclock
-            // #zh_CN 执行无损超频
-            recipeInfo.drawText(TextEnums.tr("EcoSphereSimulator.nei.losslessOverclock"));
-        }
+
+        // #tr EcoSphereSimulator.nei.losslessOverclock
+        // # Runs with perfect overclock
+        // #zh_CN 执行无损超频
+        recipeInfo.drawText(
+            TextEnums.tr(
+                cast(value, false) ? "EcoSphereSimulator.nei.losslessOverclock" : "EcoSphereSimulator.nei.parallel"));
     }
 }

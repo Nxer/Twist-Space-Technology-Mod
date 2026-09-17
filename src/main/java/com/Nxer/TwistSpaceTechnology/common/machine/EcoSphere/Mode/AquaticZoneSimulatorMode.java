@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -102,16 +103,19 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
         }
         return SimpleResultWithText.ofSuccessText(
             // #tr GT5U.gui.text.recipe_result.focus_on
-            // # {\BLUE}Targeting
-            // #zh_CN {\BLUE}定向中
+            // # {\AQUA}Targeting
+            // #zh_CN {\AQUA}定向中
 
             StatCollector.translateToLocal("GT5U.gui.text.recipe_result.focus_on") + "\n"
             // #tr EcoSphereSimulator.gui.focusOn
             // # Target:
             // #zh_CN 目标:
+                + EnumChatFormatting.WHITE
                 + StatCollector.translateToLocal("EcoSphereSimulator.gui.focusOn")
                 + " "
-                + focusStack.getDisplayName());
+                + EnumChatFormatting.GOLD
+                + EnumChatFormatting.getTextWithoutFormattingCodes(focusStack.getDisplayName())
+                + EnumChatFormatting.RESET);
     }
 
     @Desugar

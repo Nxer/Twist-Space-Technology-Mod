@@ -21,8 +21,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode.Handler.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.ArtificialGreenHouseFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.cropsnh.api.ICropCard;
@@ -33,7 +33,6 @@ import com.gtnewhorizon.cropsnh.utility.CropsNHUtils;
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
@@ -53,21 +52,17 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     @Override
     public EcoSphereModeResult process(TST_EcoSphereSimulator machine, int euTier) {
-        List<CropsNHFarm.CropCache> crops = findCrops(machine);
+        List<CropSelection> crops = findCrops(machine);
         if (crops.isEmpty()) return EcoSphereModeResult.failure(NoSeedInController);
         // Each retained seed expands its crop parallel and pays the discounted per-seed fertilizer cost.
         long fertilizerCostPerParallel = 0;
         int inputParallelMultiplier = 0;
-        for (CropsNHFarm.CropCache crop : crops) {
-            int fertilizerPerSeed;
-            if (crop.hybrid()) {
-                if (machine.getExecutionProtocolTier() < 2)
-                    return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
-                fertilizerPerSeed = ArtificialGreenHouseFakeRecipe.HYBRID_SEED_FERTILIZER_PER_PARALLEL;
-            } else {
-                fertilizerPerSeed = ArtificialGreenHouseFakeRecipe.NORMAL_SEED_FERTILIZER_PER_PARALLEL;
-            }
-            fertilizerCostPerParallel += machine.applyFluidDiscount(fertilizerPerSeed) * crop.seedCount();
+        for (CropSelection selection : crops) {
+            CropsNHFarm.CropCache crop = selection.crop();
+            if (crop.hybrid() && machine.getExecutionProtocolTier() < 2)
+                return EcoSphereModeResult.failure(ExecutionProtocolInputMismatch);
+            fertilizerCostPerParallel += machine.applyFluidDiscount(CropsNHFarm.getFertilizerCost(selection.seed()))
+                * crop.seedCount();
             inputParallelMultiplier += crop.seedCount();
         }
 
@@ -75,17 +70,28 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
         if (fertilizerInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
         Function<EcoSphereModeSupport.ParallelResult, EcoSphereModeResult> processor = parallelResult -> {
             List<ItemStackLong> outputs = new ArrayList<>();
-            for (CropsNHFarm.CropCache crop : crops) {
+            for (CropSelection selection : crops) {
+                CropsNHFarm.CropCache crop = selection.crop();
                 // Cached yields already include environmental growth progress and the non-hybrid efficiency penalty.
                 long seedParallel = EcoSphereModeSupport.multiplyParallel(parallelResult.parallel(), crop.seedCount());
                 crop.addOutputStacks(outputs, seedParallel * OUTPUT_SCALE);
             }
             if (outputs.isEmpty()) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
+            List<String> seedNames = new ArrayList<>(crops.size());
+            for (CropSelection selection : crops) seedNames.add(
+                selection.seed()
+                    .getDisplayName());
+            // #tr EcoSphereSimulator.gui.runningSeeds
+            // # Seeds
+            // #zh_CN 种子
             return EcoSphereModeResult.standard(
                 // #tr GT5U.gui.text.recipe_result.tst_ess_growing_crops
                 // # {\GREEN}Growing Crops
                 // #zh_CN {\GREEN}作物生长中
-                SimpleCheckRecipeResult.ofSuccess("tst_ess_growing_crops"),
+                SimpleResultWithText.ofSuccessText(
+                    translateToLocal("GT5U.gui.text.recipe_result.tst_ess_growing_crops") + "\n"
+                        + EcoSphereModeSupport
+                            .formatRunningInputs(translateToLocal("EcoSphereSimulator.gui.runningSeeds"), seedNames)),
                 outputs,
                 parallelResult.tier());
         };
@@ -98,7 +104,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
             processor);
     }
 
-    private static List<CropsNHFarm.CropCache> findCrops(TST_EcoSphereSimulator machine) {
+    private static List<CropSelection> findCrops(TST_EcoSphereSimulator machine) {
         Map<Object, CropSelection> selectedCrops = new LinkedHashMap<>();
         boolean maximizeGenetics = machine.hasSpecialUpgrade(EcoSphereSpecialUpgrade.PERFECT_GENETICS);
         for (ItemStack input : machine.getModeInputs()) {
@@ -126,14 +132,12 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
                 if (current.crop()
                     .seedCount() == seedCount && current.statTotal() >= statTotal) continue;
             }
-            selectedCrops.put(typeKey, new CropSelection(crop.withSeedCount(seedCount), statTotal));
+            selectedCrops.put(typeKey, new CropSelection(seed, crop.withSeedCount(seedCount), statTotal));
         }
-        List<CropsNHFarm.CropCache> crops = new ArrayList<>(selectedCrops.size());
-        for (CropSelection selection : selectedCrops.values()) crops.add(selection.crop());
-        return crops;
+        return new ArrayList<>(selectedCrops.values());
     }
 
     @Desugar
-    private record CropSelection(CropsNHFarm.CropCache crop, int statTotal) {}
+    private record CropSelection(ItemStack seed, CropsNHFarm.CropCache crop, int statTotal) {}
 
 }

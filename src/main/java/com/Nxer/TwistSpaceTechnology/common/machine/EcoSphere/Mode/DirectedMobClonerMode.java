@@ -2,6 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.Mode;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults.ExecutionProtocolInputMismatch;
 import static net.minecraft.util.StatCollector.translateToLocal;
+import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereModeResult;
@@ -28,9 +30,7 @@ import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 
 public final class DirectedMobClonerMode implements IEcoSphereMode {
 
@@ -94,53 +94,61 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         double allOutputsBonus = Math.min(LOOTING_CAP_LEVEL * 5_000d, Math.max(lootingBonus, tierThreeBonus));
         // 1x EEC at 20 HP, about 1/9 x at 300 HP each run in 5s.
         double durationMultiplier = 1 * 15125d / 1024d / ((double) recipe.eecDuration() * recipe.eecDuration());
-        return processCloningRecipeWithLifeEssence(machine, lifeEssenceInput, euTier, parallelResult -> {
-            List<ItemStackLong> outputs = new ArrayList<>();
-            for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
-                List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0 ? recipe.ordinaryOutputs()
-                    : recipe.equipmentOutputs(pulverize);
-                for (DirectedMobClonerRecipeCache.CachedOutput output : outputTable) {
+        return processCloningRecipeWithLifeEssence(
+            machine,
+            lifeEssenceInput,
+            recipe.lifeEssenceCost(),
+            euTier,
+            parallelResult -> {
+                List<ItemStackLong> outputs = new ArrayList<>();
+                for (int tableIndex = 0; tableIndex < 2; tableIndex++) {
+                    List<DirectedMobClonerRecipeCache.CachedOutput> outputTable = tableIndex == 0
+                        ? recipe.ordinaryOutputs()
+                        : recipe.equipmentOutputs(pulverize);
+                    for (DirectedMobClonerRecipeCache.CachedOutput output : outputTable) {
+                        double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
+                            * (output.chance() + allOutputsBonus)
+                            / 10_000d
+                            * durationMultiplier
+                            * output.durabilityExpectation()
+                            * output.probabilityMultiplier();
+                        long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
+                        EcoSphereModeSupport.addItemOutput(outputs, output.stack(), amount);
+                    }
+                }
+                for (DirectedMobClonerRecipeCache.CachedOutput output : recipe.activatedOutputs(weaponTags)) {
                     double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
-                        * (output.chance() + allOutputsBonus)
+                        * output.chance()
                         / 10_000d
                         * durationMultiplier
-                        * output.durabilityExpectation()
-                        * output.probabilityMultiplier();
-                    long amount = outputAmount >= Long.MAX_VALUE ? Long.MAX_VALUE : (long) outputAmount;
+                        * output.durabilityExpectation();
+                    long amount;
+                    if (outputAmount >= Long.MAX_VALUE) {
+                        amount = Long.MAX_VALUE;
+                    } else {
+                        amount = (long) outputAmount;
+                        // Preserve low-probability special drops without rolling once for every parallel operation.
+                        if (XSTR.XSTR_INSTANCE.nextDouble() < outputAmount - amount) amount++;
+                    }
                     EcoSphereModeSupport.addItemOutput(outputs, output.stack(), amount);
                 }
-            }
-            for (DirectedMobClonerRecipeCache.CachedOutput output : recipe.activatedOutputs(weaponTags)) {
-                double outputAmount = output.stack().stackSize * (double) parallelResult.parallel()
-                    * output.chance()
-                    / 10_000d
-                    * durationMultiplier
-                    * output.durabilityExpectation();
-                long amount;
-                if (outputAmount >= Long.MAX_VALUE) {
-                    amount = Long.MAX_VALUE;
-                } else {
-                    amount = (long) outputAmount;
-                    // Preserve low-probability special drops without rolling once for every parallel operation.
-                    if (XSTR.XSTR_INSTANCE.nextDouble() < outputAmount - amount) amount++;
-                }
-                EcoSphereModeSupport.addItemOutput(outputs, output.stack(), amount);
-            }
-            return EcoSphereModeResult.standard(
-                // #tr GT5U.gui.text.recipe_result.processing_mob_drops
-                // # Processing mob drops
-                // #zh_CN 生物掉落处理中
-                SimpleCheckRecipeResult.ofSuccess("processing_mob_drops"),
-                outputs,
-                parallelResult.tier());
-        });
+                return EcoSphereModeResult.standard(
+                    // #tr GT5U.gui.text.recipe_result.processing_mob_drops
+                    // # Processing mob drops
+                    // #zh_CN 生物掉落处理中
+                    SimpleResultWithText.ofSuccessText(
+                        translateToLocal("GT5U.gui.text.recipe_result.processing_mob_drops") + "\n"
+                            + getRunningTarget(recipeId, recipe.localizedName())),
+                    outputs,
+                    parallelResult.tier());
+            });
     }
 
     private static EcoSphereModeResult processCloningRecipeWithLifeEssence(TST_EcoSphereSimulator machine,
-        FluidStack lifeEssenceInput, int powerTier,
+        FluidStack lifeEssenceInput, int lifeEssenceCost, int powerTier,
         Function<EcoSphereModeSupport.ParallelResult, EcoSphereModeResult> processor) {
         long parallelFromEUt = EcoSphereModeSupport.getParallelFromEUt(powerTier, machine.isTierTwo());
-        long fluidPerParallel = machine.applyFluidDiscount(lifeEssenceInput.amount);
+        long fluidPerParallel = machine.applyFluidDiscount(lifeEssenceCost);
 
         ItemStack orb = machine.getCloningBloodOrb();
         boolean creativeOrb = BloodMagicHelper.isCreativeOrb(orb);
@@ -167,9 +175,11 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         // Parallel is capped by availableEquivalent, so this product remains representable.
         long totalEquivalentCost = fluidPerParallel * parallel;
         // Pay with network LP first, then use physical Life Essence for the remainder.
-        int lpToDrain = creativeOrb ? 0
-            : (int) Math.min(availableLp, totalEquivalentCost / LP_NETWORK_CONVERSION_DIVISOR);
-        long fluidToDrain = creativeOrb ? 0 : totalEquivalentCost - (long) lpToDrain * LP_NETWORK_CONVERSION_DIVISOR;
+        long lpNeeded = totalEquivalentCost / LP_NETWORK_CONVERSION_DIVISOR
+            + (totalEquivalentCost % LP_NETWORK_CONVERSION_DIVISOR > 0 ? 1 : 0);
+        int lpToDrain = creativeOrb ? 0 : (int) Math.min(Integer.MAX_VALUE, Math.min(availableLp, lpNeeded));
+        long fluidToDrain = creativeOrb ? 0
+            : Math.max(0, totalEquivalentCost - (long) lpToDrain * LP_NETWORK_CONVERSION_DIVISOR);
         if (fluidToDrain > 0
             && EcoSphereModeSupport.getAvailableFluid(machine, lifeEssenceInput.getFluid()) < fluidToDrain) {
             return EcoSphereModeResult
@@ -331,23 +341,35 @@ public final class DirectedMobClonerMode implements IEcoSphereMode {
         }
         List<FluidStackLong> lifeEssenceOutputs = new ArrayList<>();
         EcoSphereModeSupport.addFluidOutput(lifeEssenceOutputs, outputTemplate, outputAmount);
-        // #tr GT5U.gui.text.recipe_result.generating_life_essence
-        // # Generating Life Essence
-        // #zh_CN 生命本源生成中
-
         // #tr EcoSphereSimulator.gui.tierOneCloningAddress
         // # Tier I Structure: Initial Biological Address Only
         // #zh_CN 一级结构: 仅执行初始生物地址
-        CheckRecipeResult runningResult;
-        if (machine.isTierTwo()) {
-            runningResult = SimpleCheckRecipeResult.ofSuccess("generating_life_essence");
-        } else {
-            runningResult = SimpleResultWithText.ofSuccessText(
-                translateToLocal("GT5U.gui.text.recipe_result.generating_life_essence") + "\n"
-                    + translateToLocal("EcoSphereSimulator.gui.tierOneCloningAddress"));
+        String runningText = translateToLocal("GT5U.gui.text.recipe_result.processing_mob_drops") + "\n"
+            + getRunningTarget(0, null);
+        if (!machine.isTierTwo())
+            runningText += "\n" + translateToLocal("EcoSphereSimulator.gui.tierOneCloningAddress");
+        return EcoSphereModeResult.standard(
+            SimpleResultWithText.ofSuccessText(runningText),
+            Collections.emptyList(),
+            lifeEssenceOutputs,
+            parallelResult.tier());
+    }
+
+    private static String getRunningTarget(int recipeId, String mobName) {
+        // #tr EcoSphereSimulator.gui.cloningTarget
+        // # ID : %s | Mob
+        // #zh_CN 编号 : %s | 生物
+        String label = EnumChatFormatting.WHITE + translateToLocalFormatted(
+            "EcoSphereSimulator.gui.cloningTarget",
+            EnumChatFormatting.GOLD + Integer.toString(recipeId) + EnumChatFormatting.WHITE);
+        if (recipeId == 0) {
+            return label + " : "
+                + EnumChatFormatting.GOLD
+                + EnumChatFormatting.OBFUSCATED
+                + "????"
+                + EnumChatFormatting.RESET;
         }
-        return EcoSphereModeResult
-            .standard(runningResult, Collections.emptyList(), lifeEssenceOutputs, parallelResult.tier());
+        return EcoSphereModeSupport.formatRunningInputs(label, Collections.singletonList(mobName));
     }
 
 }

@@ -85,6 +85,15 @@ public final class CropsNHFarm {
         return getCropCache(seed, 0);
     }
 
+    public static int getFertilizerCost(ItemStack seed) {
+        ISeedData seedData = CropsNHUtils.getAnalyzedSeedData(seed);
+        ICropCard crop = seedData == null ? null : seedData.getCrop();
+        if (crop == null) return 20;
+        return Math.max(
+            1,
+            (int) Math.ceil(2d * Math.max(1, crop.getTier()) * Math.log(Math.max(1, crop.getGrowthDuration()))));
+    }
+
     public CropCache getCropCache(ItemStack seed, int simulatedSeedStat) {
         if (seed == null || seed.getItem() == null) return null;
         if (!isCached(seed, simulatedSeedStat) && !createCrop(seed, simulatedSeedStat)) {

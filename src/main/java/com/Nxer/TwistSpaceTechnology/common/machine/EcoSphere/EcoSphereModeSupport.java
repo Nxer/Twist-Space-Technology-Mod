@@ -2,9 +2,11 @@ package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -163,6 +165,20 @@ public final class EcoSphereModeSupport {
         if (requiredFluid == null) return false;
         return LongFluidInputs.of(machine)
             .extract(requiredFluid, amount) == amount;
+    }
+
+    public static String formatRunningInputs(String label, List<String> names) {
+        String text = names.stream()
+            .map(EnumChatFormatting::getTextWithoutFormattingCodes)
+            .collect(Collectors.joining(", "))
+            .replace('\n', ' ')
+            .replace('\r', ' ');
+        int limit = Math.max(
+            0,
+            24 - EnumChatFormatting.getTextWithoutFormattingCodes(label)
+                .length() - 3);
+        if (text.length() > limit) text = text.substring(0, Math.max(0, limit - 3)) + "...";
+        return EnumChatFormatting.WHITE + label + " : " + EnumChatFormatting.GOLD + text + EnumChatFormatting.RESET;
     }
 
     public static String getItemStackString(ItemStack stack) {

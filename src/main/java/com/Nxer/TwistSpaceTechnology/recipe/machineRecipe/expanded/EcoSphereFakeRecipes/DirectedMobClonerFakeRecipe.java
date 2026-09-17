@@ -22,12 +22,10 @@ import gregtech.api.util.GTUtility;
 
 public final class DirectedMobClonerFakeRecipe {
 
-    public static final int LIFE_ESSENCE_PER_PARALLEL = 80;
     public static final int FALLBACK_BLOOD_PER_PARALLEL = 100;
     public static final int FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL = 100;
     public static final FluidStack BLOOD_STACK = FluidRegistry.getFluidStack("blood", FALLBACK_BLOOD_PER_PARALLEL);
-    public static final FluidStack LIFE_ESSENCE_STACK = FluidRegistry
-        .getFluidStack("lifeessence", LIFE_ESSENCE_PER_PARALLEL);
+    public static final FluidStack LIFE_ESSENCE_STACK = FluidRegistry.getFluidStack("lifeessence", 1);
     public static final FluidStack FALLBACK_LIFE_ESSENCE_OUTPUT_STACK = FluidRegistry
         .getFluidStack("lifeessence", FALLBACK_LIFE_ESSENCE_OUTPUT_PER_PARALLEL);
 
@@ -41,6 +39,8 @@ public final class DirectedMobClonerFakeRecipe {
             ItemStack circuit = GTUtility.getIntegratedCircuit(0);
             FluidStack lifeEssence = LIFE_ESSENCE_STACK == null ? null : LIFE_ESSENCE_STACK.copy();
             if (lifeEssence == null) continue;
+            lifeEssence.amount = entry.getValue()
+                .lifeEssenceCost();
             GTValues.RA.stdBuilder()
                 .itemInputs(circuit)
                 .itemOutputs(createDisplayOutputs(entry.getValue()))
@@ -89,11 +89,13 @@ public final class DirectedMobClonerFakeRecipe {
 
         private final String mobName;
         private final boolean boss;
+        private final int lifeEssenceCost;
         private final ItemStack firstSelfDrop;
 
-        public MobRecipeDisplay(String mobName, boolean boss, ItemStack firstSelfDrop) {
+        public MobRecipeDisplay(String mobName, boolean boss, int lifeEssenceCost, ItemStack firstSelfDrop) {
             this.mobName = mobName;
             this.boss = boss;
+            this.lifeEssenceCost = lifeEssenceCost;
             this.firstSelfDrop = firstSelfDrop == null ? null : firstSelfDrop.copy();
         }
 
@@ -103,6 +105,10 @@ public final class DirectedMobClonerFakeRecipe {
 
         public boolean boss() {
             return boss;
+        }
+
+        public int lifeEssenceCost() {
+            return lifeEssenceCost;
         }
 
         public ItemStack firstSelfDrop() {

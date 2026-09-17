@@ -24,6 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereSpecialUp
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.IEcoSphereMode;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -31,7 +32,6 @@ import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
-import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
 
 public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
@@ -110,14 +110,15 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             fluidCostPerParallel,
             inputParallelMultiplier,
             euTier,
-            parallelResult -> processOutputs(productSets, saplingCounts, selectedInputs, parallelResult));
+            parallelResult -> processOutputs(productSets, saplingCounts, selectedInputs, saplings, parallelResult));
     }
 
     @Desugar
     private record SaplingProducts(ItemStack sapling, EnumMap<Mode, ItemStack> products) {}
 
     private static EcoSphereModeResult processOutputs(List<EnumMap<Mode, ItemStack>> productSets,
-        List<Integer> saplingCounts, EnumSet<Mode> selectedInputs, EcoSphereModeSupport.ParallelResult parallelResult) {
+        List<Integer> saplingCounts, EnumSet<Mode> selectedInputs, List<SaplingProducts> saplings,
+        EcoSphereModeSupport.ParallelResult parallelResult) {
         List<ItemStackLong> outputs = new ArrayList<>();
         for (int index = 0; index < productSets.size(); index++) {
             EnumMap<Mode, ItemStack> products = productSets.get(index);
@@ -149,11 +150,21 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             }
         }
         if (outputs.isEmpty()) return EcoSphereModeResult.failure(MissingTreeOutputSelection);
+        List<String> saplingNames = new ArrayList<>(saplings.size());
+        for (SaplingProducts sapling : saplings) saplingNames.add(
+            sapling.sapling()
+                .getDisplayName());
+        // #tr EcoSphereSimulator.gui.runningSaplings
+        // # Saplings
+        // #zh_CN 树苗
         return EcoSphereModeResult.standard(
             // #tr GT5U.gui.text.recipe_result.tst_ess_growing_trees
             // # {\GREEN}Growing Trees
             // #zh_CN {\GREEN}树木生长中
-            SimpleCheckRecipeResult.ofSuccess("tst_ess_growing_trees"),
+            SimpleResultWithText.ofSuccessText(
+                translateToLocal("GT5U.gui.text.recipe_result.tst_ess_growing_trees") + "\n"
+                    + EcoSphereModeSupport
+                        .formatRunningInputs(translateToLocal("EcoSphereSimulator.gui.runningSaplings"), saplingNames)),
             outputs,
             parallelResult.tier());
     }

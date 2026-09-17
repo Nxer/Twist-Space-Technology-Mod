@@ -37,9 +37,6 @@ import gregtech.api.enums.GTValues;
 
 public final class ArtificialGreenHouseFakeRecipe {
 
-    public static final int NORMAL_SEED_FERTILIZER_PER_PARALLEL = 20;
-    public static final int HYBRID_SEED_FERTILIZER_PER_PARALLEL = 50;
-
     private ArtificialGreenHouseFakeRecipe() {}
 
     public static void loadRecipes() {
@@ -175,7 +172,7 @@ public final class ArtificialGreenHouseFakeRecipe {
 
         FluidStack requiredFluid = new FluidStack(
             CropsNHFluids.enrichedFertilizer,
-            hybrid ? HYBRID_SEED_FERTILIZER_PER_PARALLEL : NORMAL_SEED_FERTILIZER_PER_PARALLEL);
+            CropsNHFarm.getFertilizerCost(seed));
         if (requiredFluid.getFluid() == null) return;
         GTValues.RA.stdBuilder()
             .itemInputs(input)
