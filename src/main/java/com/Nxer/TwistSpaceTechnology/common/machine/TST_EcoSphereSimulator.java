@@ -75,6 +75,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
+import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -1503,11 +1504,11 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // # Requires one Eco-Sphere Input Interface and one Eco-Sphere Upgrade Interface
             // #zh_CN 必须安装一个生态圈输入接口与一个生态圈升级接口
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.13"))
-            // #tr Tooltip_EcoSphereSimulator_MEOutput
-            // # This multiblock can only output to ME output busses/hatches
-            // #zh_CN 该多方块只能通过ME输出总线或输出仓输出
-            .addInfo(tr("Tooltip_EcoSphereSimulator_MEOutput"))
             .addSeparator()
+            // #tr Tooltip_EcoSphereSimulator_MEOutput
+            // # This multiblock can only output to ME output buses/hatches
+            // #zh_CN 这台多方块机器只支持ME输出总线/输出仓
+            .addInfo(tr("Tooltip_EcoSphereSimulator_MEOutput"))
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             // #tr Tooltip_EcoSphereSimulator_StructurePreview
@@ -1530,6 +1531,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             // #zh_CN 动态流体区域；无需放置方块
             .addOtherStructurePart(tr("Tooltip_EcoSphereSimulator_FluidArea"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addInfo(TextEnums.Author_Goderium.getText())
             .toolTipFinisher(ModName);
         return tt;
     }
