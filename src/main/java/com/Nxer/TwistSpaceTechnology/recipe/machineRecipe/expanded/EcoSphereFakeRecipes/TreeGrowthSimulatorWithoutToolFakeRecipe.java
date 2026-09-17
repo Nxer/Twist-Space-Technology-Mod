@@ -11,6 +11,7 @@ import static gregtech.common.tileentities.machines.multi.MTETreeFarm.treeProduc
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.init.Blocks;
@@ -18,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -57,6 +59,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
     static ItemStack[] allLeaves;
     static ItemStack[] allFruits;
     public static ItemStack[][] allProducts;
+    public static final Map<Fluid, EnumMap<Mode, ItemStack>> SPECIAL_PRODUCTS = new HashMap<>();
 
     public static void loadRecipes() {
         initStatic();
@@ -195,9 +198,10 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
     }
 
     static void addSpecialFakeRecipe(ItemStack specialSapling, FluidStack specialFluid) {
-        EnumMap<Mode, ItemStack> productMap = specialFluid.getFluid() == TEMPORAL_FLUID_STACK.getFluid()
-            ? queryTimeTreeProduct(specialSapling)
-            : queryTreeProduct(specialSapling, false);
+        EnumMap<Mode, ItemStack> productMap = TEMPORAL_FLUID_STACK != null
+            && specialFluid.getFluid() == TEMPORAL_FLUID_STACK.getFluid() ? queryTimeTreeProduct(specialSapling)
+                : queryTreeProduct(specialSapling, false);
+        if (productMap != null) SPECIAL_PRODUCTS.put(specialFluid.getFluid(), productMap);
         addFakeRecipe(productMap, allSaplingWithTag, specialFluid, 2);
     }
 

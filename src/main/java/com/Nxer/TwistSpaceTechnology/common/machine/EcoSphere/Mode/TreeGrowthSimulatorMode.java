@@ -66,7 +66,10 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         List<SaplingProducts> saplings = new ArrayList<>(selectedSaplings.values());
         if (saplings.isEmpty()) return EcoSphereModeResult.failure(MissingSaplingInput);
 
-        FluidStack fluidInput = EcoSphereFluidCache.findFirstValidFluid(machine);
+        FluidStack fluidInput = EcoSphereFluidCache.findFirstValidFluid(
+            machine,
+            machine.getExecutionProtocolTier() >= 2 ? TreeGrowthSimulatorWithoutToolFakeRecipe.WATER_STACK.getFluid()
+                : null);
         if (fluidInput == null) return EcoSphereModeResult.failure(CheckRecipeResultRegistry.NO_RECIPE);
 
         TreeFluidRecipe recipe = findRecipe(fluidInput);
@@ -84,12 +87,9 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             saplingCounts.add(1);
         } else {
             for (SaplingProducts sapling : saplings) {
-                EnumMap<Mode, ItemStack> products = sapling.products();
-                if (recipe.timeFluid()) {
-                    products = queryTimeTreeProduct(sapling.sapling());
-                } else if (maximizeForestry) {
-                    products = queryTreeProduct(sapling.sapling(), true);
-                }
+                EnumMap<Mode, ItemStack> products = recipe.specialProducts();
+                if (products == null)
+                    products = maximizeForestry ? queryTreeProduct(sapling.sapling(), true) : sapling.products();
                 productSets.add(products);
                 saplingCounts.add(Math.min(sapling.sapling().stackSize, 64));
             }
@@ -172,20 +172,23 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
     private static TreeFluidRecipe findRecipe(FluidStack fluid) {
         FluidStack water = TreeGrowthSimulatorWithoutToolFakeRecipe.WATER_STACK;
         if (water != null && fluid.getFluid() == water.getFluid())
-            return new TreeFluidRecipe(water, 1, true, false, false);
+            return new TreeFluidRecipe(water, 1, true, null, false);
         FluidStack temporalFluid = TreeGrowthSimulatorWithoutToolFakeRecipe.TEMPORAL_FLUID_STACK;
-        if (temporalFluid != null && fluid.getFluid() == temporalFluid.getFluid())
-            return new TreeFluidRecipe(temporalFluid, 2, false, true, false);
         FluidStack deathWater = TreeGrowthSimulatorWithoutToolFakeRecipe.DEATH_WATER_STACK;
-        if (deathWater != null && fluid.getFluid() == deathWater.getFluid())
-            return new TreeFluidRecipe(deathWater, 2, false, false, false);
         FluidStack unknownWater = TreeGrowthSimulatorWithoutToolFakeRecipe.UNKNOWN_WATER_STACK;
-        if (unknownWater != null && fluid.getFluid() == unknownWater.getFluid())
-            return new TreeFluidRecipe(unknownWater, 2, false, false, false);
+        FluidStack specialFluid = null;
+        if (temporalFluid != null && fluid.getFluid() == temporalFluid.getFluid()) specialFluid = temporalFluid;
+        else if (deathWater != null && fluid.getFluid() == deathWater.getFluid()) specialFluid = deathWater;
+        else if (unknownWater != null && fluid.getFluid() == unknownWater.getFluid()) specialFluid = unknownWater;
+        if (specialFluid != null) {
+            EnumMap<Mode, ItemStack> products = TreeGrowthSimulatorWithoutToolFakeRecipe.SPECIAL_PRODUCTS
+                .get(specialFluid.getFluid());
+            return products == null ? null : new TreeFluidRecipe(specialFluid, 2, false, products, false);
+        }
         FluidStack uuMatter = TreeGrowthSimulatorWithoutToolFakeRecipe.UU_MATTER_STACK;
         if (uuMatter != null && fluid.getFluid() == uuMatter.getFluid()
             && TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts != null)
-            return new TreeFluidRecipe(uuMatter, 2, false, false, true);
+            return new TreeFluidRecipe(uuMatter, 2, false, null, true);
         return null;
     }
 
@@ -203,7 +206,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     @Desugar
     private record TreeFluidRecipe(FluidStack fluid, int requiredExecutionProtocolTier, boolean normalWater,
-        boolean timeFluid, boolean uuMatter) {}
+        EnumMap<Mode, ItemStack> specialProducts, boolean uuMatter) {}
 
     public static int getModeMultiplier(Mode mode) {
         return switch (mode) {
