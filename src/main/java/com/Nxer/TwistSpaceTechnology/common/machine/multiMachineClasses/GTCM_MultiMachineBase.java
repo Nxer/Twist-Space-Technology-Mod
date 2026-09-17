@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.LongPredicate;
 
 import javax.annotation.Nonnull;
@@ -33,6 +35,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedFluidInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -625,6 +629,19 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
         }
+        // Add back TST item segments merged by ME, without adding the same stack twice.
+        Set<ItemStack> includedSegments = null;
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (bus instanceof ITSTSegmentedItemInput segmentedInput) {
+                if (includedSegments == null) {
+                    includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
+                    includedSegments.addAll(rList);
+                }
+                for (ItemStack segment : segmentedInput.getTSTStoredItemSegments()) {
+                    if (segment != null && !includedSegments.remove(segment)) rList.add(segment);
+                }
+            }
+        }
         return rList;
     }
 
@@ -660,6 +677,19 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
+        }
+        // Add back TST fluid segments merged by ME, without adding the same stack twice.
+        Set<FluidStack> includedSegments = null;
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (hatch instanceof ITSTSegmentedFluidInput segmentedInput) {
+                if (includedSegments == null) {
+                    includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
+                    includedSegments.addAll(rList);
+                }
+                for (FluidStack segment : segmentedInput.getTSTStoredFluidSegments()) {
+                    if (segment != null && !includedSegments.remove(segment)) rList.add(segment);
+                }
+            }
         }
 
         // get all fluids from Dual input

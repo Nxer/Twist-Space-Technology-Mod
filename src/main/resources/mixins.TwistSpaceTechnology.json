@@ -8,7 +8,8 @@
     "CircuitComponentMixin",
     "HookMaterials_Mixin",
     "IC2_InternalName_Adder_Mixin",
-    "MixinContainerPatternTermEncode"
+    "MixinContainerPatternTermEncode",
+    "MixinMTEMultiBlockBaseSegmentedInput"
   ],
   "client": [],
   "server": []

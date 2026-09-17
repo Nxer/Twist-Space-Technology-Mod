@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original;
 
+import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 
 import net.minecraft.item.ItemStack;
@@ -7,14 +8,21 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
+import com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem;
+import com.Nxer.TwistSpaceTechnology.common.material.MaterialsTST;
+import com.glodblock.github.loader.ItemAndBlockHolder;
+
 import goodgenerator.util.ItemRefer;
 import gregtech.api.enums.GTValues;
+import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 import gtPlusPlus.core.item.ModItems;
+import gtPlusPlus.core.material.MaterialMisc;
 import gtnhintergalactic.recipe.IGRecipeMaps;
 
 public class SpaceAssemblerRecipePool {
@@ -58,6 +66,42 @@ public class SpaceAssemblerRecipePool {
                 .duration(20 * 10)
                 .addTo(SA);
         }
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                ItemList.Hatch_Input_Multi_2x2_UIV.get(4),
+                ItemList.Hatch_Input_ME_Advanced.get(2),
+                new ItemStack(ItemAndBlockHolder.INTERFACE),
+                GTCMItemList.PacketInformationTranslationArray.get(1),
+                ItemList.Electric_Pump_UIV.get(1),
+                ModItem.getModItem("ae2fc", "fluid_storage.singularity", 1, 0))
+            .fluidInputs(
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
+                MaterialsTST.NeutroniumAlloy.getMolten(32 * 144),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(8000))
+            .itemOutputs(GTCMItemList.AEStorageCellInputHatch.get(1))
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
+            .eut(RECIPE_UEV)
+            .duration(20 * 30)
+            .addTo(SA);
+
+        GTValues.RA.stdBuilder()
+            .itemInputs(
+                ItemList.Hatch_Input_Bus_MAX.get(16),
+                ItemList.Hatch_Input_Bus_ME_Advanced.get(2),
+                ModItem.getModItem("appliedenergistics2", "tile.BlockInterface", 1, 0),
+                GTCMItemList.PacketInformationTranslationArray.get(1),
+                ItemList.Conveyor_Module_UIV.get(1),
+                ModItem.getModItem("appliedenergistics2", "item.ItemExtremeStorageCell.Singularity", 1, 0))
+            .fluidInputs(
+                MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
+                MaterialsTST.NeutroniumAlloy.getMolten(32 * 144),
+                Materials.DimensionallyShiftedSuperfluid.getFluid(8000))
+            .itemOutputs(GTCMItemList.AEStorageCellInputBus.get(1))
+            .metadata(IGRecipeMaps.MODULE_TIER, 2)
+            .eut(RECIPE_UEV)
+            .duration(20 * 30)
+            .addTo(SA);
 
     }
 }
