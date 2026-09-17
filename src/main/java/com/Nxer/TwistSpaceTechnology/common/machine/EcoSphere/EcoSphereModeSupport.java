@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -12,6 +11,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch.LongFluidInputs;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.github.bsideup.jabel.Desugar;
 
@@ -68,7 +68,9 @@ public final class EcoSphereModeSupport {
             processor);
     }
 
-    /** Processes a mode whose final fluid cost per EU-limited parallel has already been calculated. */
+    /**
+     * Processes a mode whose final fluid cost per EU-limited parallel has already been calculated.
+     */
     public static EcoSphereModeResult processModeRecipeWithTierAndFluidCost(TST_EcoSphereSimulator machine,
         Fluid requiredFluid, long fluidPerParallel, int inputParallelMultiplier, int powerTier,
         Function<ParallelResult, EcoSphereModeResult> processor) {
@@ -152,33 +154,15 @@ public final class EcoSphereModeSupport {
     }
 
     public static long getAvailableFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid) {
-        long available = 0;
-        for (FluidStack fluid : machine.getStoredFluids()) {
-            if (fluid != null && fluid.getFluid() == requiredFluid) available += fluid.amount;
-        }
-        return available;
+        return LongFluidInputs.of(machine)
+            .getAmount(requiredFluid);
     }
 
     public static boolean drainFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {
-        List<FluidStack> matching = new ArrayList<>();
-        long available = 0;
-        for (FluidStack fluid : machine.getStoredFluids()) {
-            if (fluid != null && fluid.getFluid() == requiredFluid) {
-                matching.add(fluid);
-                available += fluid.amount;
-            }
-        }
-        return available >= amount && drainFluidStacks(matching, amount);
-    }
-
-    public static boolean drainFluidStacks(List<FluidStack> fluids, long amount) {
-        for (FluidStack fluid : fluids) {
-            int drained = (int) Math.min(amount, fluid.amount);
-            fluid.amount -= drained;
-            amount -= drained;
-            if (amount == 0) return true;
-        }
-        return amount == 0;
+        if (amount <= 0) return true;
+        if (requiredFluid == null) return false;
+        return LongFluidInputs.of(machine)
+            .extract(requiredFluid, amount) == amount;
     }
 
     public static String getItemStackString(ItemStack stack) {

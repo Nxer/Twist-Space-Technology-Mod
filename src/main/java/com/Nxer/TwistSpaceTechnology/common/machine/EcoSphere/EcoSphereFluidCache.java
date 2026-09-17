@@ -7,6 +7,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch.LongFluidInputs;
 
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.util.GTRecipe;
@@ -28,10 +29,9 @@ public final class EcoSphereFluidCache {
         if (mode < 0 || mode >= MODE_FLUIDS.length) return null;
         Set<Fluid> validFluids = MODE_FLUIDS[mode];
         if (validFluids == null || validFluids.isEmpty()) return null;
-        for (FluidStack input : machine.getStoredFluids()) {
-            if (input != null && input.amount > 0 && validFluids.contains(input.getFluid())) return input;
-        }
-        return null;
+        Fluid fluid = LongFluidInputs.of(machine)
+            .getFirstAvailableFluid(validFluids);
+        return fluid == null ? null : new FluidStack(fluid, 1);
     }
 
     // Build this once when a mode finishes registering its fake recipes.
