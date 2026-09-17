@@ -378,6 +378,14 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
             return types;
         }
 
+        public ItemStack getFirstAvailableItem(Set<GTUtility.ItemId> allowedItems) {
+            for (Map.Entry<GTUtility.ItemId, ItemStack> entry : itemTypes.entrySet()) {
+                if (allowedItems.contains(entry.getKey()) && getAmount(entry.getValue()) > 0) return entry.getKey()
+                    .getItemStack();
+            }
+            return null;
+        }
+
         public long getAmount(ItemStack item) {
             if (item == null || item.stackSize <= 0) return 0;
             return availableAmounts.computeIfAbsent(GTUtility.ItemId.createNoCopy(item), ignored -> queryAmount(item));

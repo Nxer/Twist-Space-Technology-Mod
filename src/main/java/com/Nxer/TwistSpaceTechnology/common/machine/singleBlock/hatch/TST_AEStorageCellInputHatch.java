@@ -371,6 +371,13 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
             return types;
         }
 
+        public Fluid getFirstAvailableFluid(Set<Fluid> allowedFluids) {
+            for (Fluid fluid : fluidTypes) {
+                if (allowedFluids.contains(fluid) && getAmount(fluid) > 0) return fluid;
+            }
+            return null;
+        }
+
         public long getAmount(Fluid fluid) {
             if (fluid == null) return 0;
             return availableAmounts.computeIfAbsent(fluid, this::queryAmount);

@@ -72,8 +72,8 @@ public class SpaceAssemblerRecipePool {
                 ItemList.Hatch_Input_Multi_2x2_UIV.get(4),
                 ItemList.Hatch_Input_ME_Advanced.get(2),
                 new ItemStack(ItemAndBlockHolder.INTERFACE),
-                GTCMItemList.PacketInformationTranslationArray.get(1),
-                ItemList.Electric_Pump_UIV.get(1),
+                GTCMItemList.PerfectEngravedEnergyChip.get(1),
+                ItemList.Electric_Pump_UEV.get(1),
                 ModItem.getModItem("ae2fc", "fluid_storage.singularity", 1, 0))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
@@ -90,8 +90,8 @@ public class SpaceAssemblerRecipePool {
                 ItemList.Hatch_Input_Bus_MAX.get(16),
                 ItemList.Hatch_Input_Bus_ME_Advanced.get(2),
                 ModItem.getModItem("appliedenergistics2", "tile.BlockInterface", 1, 0),
-                GTCMItemList.PacketInformationTranslationArray.get(1),
-                ItemList.Conveyor_Module_UIV.get(1),
+                GTCMItemList.PerfectEngravedEnergyChip.get(1),
+                ItemList.Conveyor_Module_UEV.get(1),
                 ModItem.getModItem("appliedenergistics2", "item.ItemExtremeStorageCell.Singularity", 1, 0))
             .fluidInputs(
                 MaterialMisc.MUTATED_LIVING_SOLDER.getFluidStack(64 * 144),
