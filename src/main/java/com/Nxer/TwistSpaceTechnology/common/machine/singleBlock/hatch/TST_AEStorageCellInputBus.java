@@ -10,12 +10,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -309,147 +309,266 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
         return entry == null ? 0 : entry.availableAmount;
     }
 
-    /** Reads the full amount of a marked item without the GT int segment limit. */
-    public long getAvailableLongItems(ItemStack item) {
-        int index = findMarkedItem(item);
-        if (!canUseLongInput() || index < 0) return 0;
-        boolean useCell = hasStorageCell();
-        try {
-            IMEInventory<IAEItemStack> inventory = getAvailableInventory(useCell);
-            if (inventory == null) return 0;
-            IAEItemStack found = inventory.extractItems(
-                AEItemStack.create(item)
-                    .setStackSize(Long.MAX_VALUE),
-                Actionable.SIMULATE,
-                getAvailableSource(useCell));
-            if (found != null && found.getStackSize() > 0
-                && processingRecipe
-                && !exposedInputsPrepared
-                && !displayedThisRecipe[index]) {
-                selectedContents[index] = new CellItemEntry(found);
-                slots[index].extracted = found.copy()
-                    .setStackSize(Math.min(found.getStackSize(), Integer.MAX_VALUE))
-                    .getItemStack();
-                slots[index].extractedAmount = slots[index].extracted.stackSize;
-                displayedThisRecipe[index] = true;
+    /** Create one view during checkProcessing, after GT starts recipe processing for the busses. */
+    public static final class LongItemInputs {
+
+        private final List<ItemStack> ordinaryInputs;
+        private final Map<GTUtility.ItemId, List<ItemSource>> longInputs = new HashMap<>();
+        private final Map<GTUtility.ItemId, ItemStack> itemTypes = new LinkedHashMap<>();
+        private final Map<GTUtility.ItemId, Long> availableAmounts = new HashMap<>();
+
+        public static LongItemInputs of(MTEMultiBlockBase machine) {
+            return new LongItemInputs(machine, Optional.empty());
+        }
+
+        public static LongItemInputs forColor(MTEMultiBlockBase machine, byte color) {
+            return new LongItemInputs(machine, Optional.of(color));
+        }
+
+        private LongItemInputs(MTEMultiBlockBase machine, Optional<Byte> color) {
+            List<TST_AEStorageCellInputBus> longBusses = new ArrayList<>();
+            for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(machine.mInputBusses)) {
+                if (!(bus instanceof TST_AEStorageCellInputBus longBus)) continue;
+                byte busColor = bus.getColor();
+                if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+                if (!longBus.processingRecipe) throw new IllegalStateException("Recipe processing has not started");
+                longBusses.add(longBus);
             }
-            return found == null ? 0 : Math.max(0, found.getStackSize());
-        } catch (GridAccessException ignored) {
-            return 0;
-        }
-    }
-
-    public List<ItemStack> getConfiguredItemInputs() {
-        List<ItemStack> items = new ArrayList<>();
-        for (Slot slot : slots) {
-            if (slot != null && slot.config != null) items.add(slot.config.copy());
-        }
-        return items;
-    }
-
-    public IGrid getLongItemNetwork() {
-        if (hasStorageCell() || !getProxy().isActive()) return null;
-        try {
-            return getProxy().getGrid();
-        } catch (GridAccessException ignored) {
-            return null;
-        }
-    }
-
-    public static ArrayList<ItemStack> collectWithoutRecipeSegments(Supplier<ArrayList<ItemStack>> collect,
-        List<MTEHatchInputBus> inputBusses, List<TST_AEStorageCellInputBus> longBusses, Optional<Byte> color) {
-        if (longBusses.isEmpty() || !longBusses.get(0).processingRecipe) return collect.get();
-
-        for (TST_AEStorageCellInputBus bus : longBusses) bus.suppressRecipeSegments = true;
-        try {
-            return filterOverlappingMEInputs(collect.get(), inputBusses, longBusses, color);
-        } finally {
-            for (TST_AEStorageCellInputBus bus : longBusses) bus.suppressRecipeSegments = false;
-        }
-    }
-
-    private static ArrayList<ItemStack> filterOverlappingMEInputs(ArrayList<ItemStack> items,
-        List<MTEHatchInputBus> inputBusses, List<TST_AEStorageCellInputBus> longBusses, Optional<Byte> color) {
-        Map<GTUtility.ItemId, ItemStack> otherMEItems = new HashMap<>();
-        Set<ItemStack> overlappingStacks = Collections.newSetFromMap(new IdentityHashMap<>());
-        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(inputBusses)) {
-            if (!(bus instanceof MTEHatchInputBusME meBus) || bus instanceof TST_AEStorageCellInputBus) continue;
-            byte busColor = bus.getColor();
-            if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
-            for (int i = meBus.getSizeInventory() - 1; i >= 0; i--) {
-                ItemStack item = meBus.getStackInSlot(i);
-                if (item == null) continue;
-                if (isSuppliedByLongInput(meBus, item, longBusses)) overlappingStacks.add(item);
-                else otherMEItems.put(GTUtility.ItemId.createNoCopy(item), item);
-            }
-        }
-        // Keep GT's selected ME stack when another network still supplies the same item.
-        for (ListIterator<ItemStack> iterator = items.listIterator(); iterator.hasNext();) {
-            ItemStack item = iterator.next();
-            if (!overlappingStacks.contains(item)) continue;
-            ItemStack replacement = otherMEItems.get(GTUtility.ItemId.createNoCopy(item));
-            if (replacement == null) iterator.remove();
-            else iterator.set(replacement);
-        }
-        return items;
-    }
-
-    private static boolean isSuppliedByLongInput(MTEHatchInputBusME meBus, ItemStack item,
-        List<TST_AEStorageCellInputBus> longBusses) {
-        try {
-            IGrid network = meBus.getProxy()
-                .getGrid();
-            if (network == null) return false;
-            for (TST_AEStorageCellInputBus bus : longBusses) {
-                if (bus.getLongItemNetwork() == network && bus.findMarkedItem(item) >= 0
-                    && bus.getAvailableLongItems(item) > 0) return true;
-            }
-        } catch (GridAccessException ignored) {}
-        return false;
-    }
-
-    /** Returns the actual amount pulled, possibly partial; do not also consume this bus's GT stacks. */
-    public long extractLongItems(ItemStack item, long amount) {
-        int index = findMarkedItem(item);
-        if (amount <= 0 || !canUseLongInput() || index < 0) return 0;
-        if (processingRecipe && !displayedThisRecipe[index]) getAvailableLongItems(item);
-        boolean useCell = hasStorageCell();
-        try {
-            IMEInventory<IAEItemStack> inventory = getAvailableInventory(useCell);
-            if (inventory == null) return 0;
-            IAEItemStack request = AEItemStack.create(item)
-                .setStackSize(amount);
-            IAEItemStack extracted = useCell ? inventory.extractItems(request, Actionable.MODULATE, CELL_ACTION_SOURCE)
-                : Platform.poweredExtraction(getProxy().getEnergy(), inventory, request, getAvailableSource(false));
-            long pulled = extracted == null ? 0 : Math.max(0, Math.min(amount, extracted.getStackSize()));
-            if (pulled > 0) {
-                if (useCell) markDirty();
-                if (processingRecipe) {
-                    longExtractionUsed = true;
-                    reduceDisplayedAmount(index, pulled);
+            if (longBusses.isEmpty()) {
+                ordinaryInputs = machine.getStoredInputsForColor(color);
+            } else {
+                // Hide only GT's int segments; keep the circuit and special input slots.
+                for (TST_AEStorageCellInputBus bus : longBusses) bus.suppressRecipeSegments = true;
+                try {
+                    ordinaryInputs = machine.getStoredInputsForColor(color);
+                    filterOverlappingMEInputs(ordinaryInputs, machine.mInputBusses, longBusses, color);
+                } finally {
+                    for (TST_AEStorageCellInputBus bus : longBusses) bus.suppressRecipeSegments = false;
                 }
-                lastGuiAmountRefreshTick = Long.MIN_VALUE;
             }
-            return pulled;
-        } catch (GridAccessException ignored) {
-            return 0;
+            for (ItemStack item : ordinaryInputs) {
+                if (item != null && item.stackSize > 0)
+                    itemTypes.putIfAbsent(GTUtility.ItemId.createNoCopy(item), item);
+            }
+            for (TST_AEStorageCellInputBus bus : longBusses) {
+                Set<GTUtility.ItemId> marked = new HashSet<>();
+                for (Slot slot : bus.slots) {
+                    ItemStack item = slot == null ? null : slot.config;
+                    if (item == null || item.stackSize <= 0) continue;
+                    GTUtility.ItemId id = GTUtility.ItemId.createNoCopy(item);
+                    if (!marked.add(id)) continue;
+                    ItemStack config = item.copy();
+                    config.stackSize = 1;
+                    longInputs.computeIfAbsent(id, ignored -> new ArrayList<>())
+                        .add(new ItemSource(bus, config));
+                    itemTypes.putIfAbsent(id, config);
+                }
+            }
         }
-    }
 
-    private boolean canUseLongInput() {
-        IGregTechTileEntity base = getBaseMetaTileEntity();
-        return base != null && base.isServerSide()
-            && (!processingRecipe || !exposedInputsPrepared)
-            && isAllowedToWork();
-    }
-
-    private int findMarkedItem(ItemStack item) {
-        if (item == null || item.stackSize <= 0) return -1;
-        for (int i = 0; i < slots.length; i++) {
-            Slot slot = slots[i];
-            if (slot != null && slot.config != null && GTUtility.areStacksEqual(slot.config, item)) return i;
+        public List<ItemStack> getItemTypes() {
+            List<ItemStack> types = new ArrayList<>();
+            for (ItemStack item : itemTypes.values()) {
+                if (getAmount(item) > 0) {
+                    ItemStack type = item.copy();
+                    type.stackSize = 1;
+                    types.add(type);
+                }
+            }
+            return types;
         }
-        return -1;
+
+        public long getAmount(ItemStack item) {
+            if (item == null || item.stackSize <= 0) return 0;
+            return availableAmounts.computeIfAbsent(GTUtility.ItemId.createNoCopy(item), ignored -> queryAmount(item));
+        }
+
+        private long queryAmount(ItemStack item) {
+            long available = 0;
+            for (ItemStack stack : ordinaryInputs) {
+                if (stack != null && stack.stackSize > 0 && GTUtility.areStacksEqual(stack, item)) {
+                    available = addSaturated(available, stack.stackSize);
+                }
+            }
+            // Busses on the same ME network share items; storage cells count separately.
+            Set<IGrid> countedNetworks = Collections.newSetFromMap(new IdentityHashMap<>());
+            for (ItemSource source : longInputs
+                .getOrDefault(GTUtility.ItemId.createNoCopy(item), Collections.emptyList())) {
+                IGrid network = networkOf(source.bus);
+                if (network != null && countedNetworks.contains(network)) continue;
+                long amount = simulateLong(source.bus, source.config);
+                if (amount <= 0) continue;
+                if (network != null) countedNetworks.add(network);
+                available = addSaturated(available, amount);
+            }
+            return available;
+        }
+
+        /** Returns the amount actually taken; the network may change after getAmount. */
+        public long extract(ItemStack item, long amount) {
+            if (item == null || item.stackSize <= 0 || amount <= 0) return 0;
+            long remaining = amount;
+            for (ItemStack stack : ordinaryInputs) {
+                if (remaining == 0) break;
+                if (stack == null || stack.stackSize <= 0 || !GTUtility.areStacksEqual(stack, item)) continue;
+                int taken = (int) Math.min(remaining, stack.stackSize);
+                stack.stackSize -= taken;
+                remaining -= taken;
+            }
+            for (ItemSource source : longInputs
+                .getOrDefault(GTUtility.ItemId.createNoCopy(item), Collections.emptyList())) {
+                if (remaining == 0) break;
+                remaining -= extractLong(source.bus, source.config, remaining);
+            }
+            long taken = amount - remaining;
+            GTUtility.ItemId id = GTUtility.ItemId.createNoCopy(item);
+            if (availableAmounts.containsKey(id)) {
+                availableAmounts.put(id, Math.max(0, availableAmounts.get(id) - taken));
+            }
+            return taken;
+        }
+
+        private static void filterOverlappingMEInputs(List<ItemStack> items, List<MTEHatchInputBus> inputBusses,
+            List<TST_AEStorageCellInputBus> longBusses, Optional<Byte> color) {
+            Map<GTUtility.ItemId, ItemStack> otherMEItems = new HashMap<>();
+            Set<ItemStack> overlappingStacks = Collections.newSetFromMap(new IdentityHashMap<>());
+            for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(inputBusses)) {
+                if (!(bus instanceof MTEHatchInputBusME meBus) || bus instanceof TST_AEStorageCellInputBus) continue;
+                byte busColor = bus.getColor();
+                if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+                for (int i = meBus.getSizeInventory() - 1; i >= 0; i--) {
+                    ItemStack item = meBus.getStackInSlot(i);
+                    if (item == null) continue;
+                    if (isSuppliedByLongInput(meBus, item, longBusses)) overlappingStacks.add(item);
+                    else otherMEItems.put(GTUtility.ItemId.createNoCopy(item), item);
+                }
+            }
+            // Keep GT's selected ME stack when another network still supplies the same item.
+            for (ListIterator<ItemStack> iterator = items.listIterator(); iterator.hasNext();) {
+                ItemStack item = iterator.next();
+                if (!overlappingStacks.contains(item)) continue;
+                ItemStack replacement = otherMEItems.get(GTUtility.ItemId.createNoCopy(item));
+                if (replacement == null) iterator.remove();
+                else iterator.set(replacement);
+            }
+        }
+
+        private static boolean isSuppliedByLongInput(MTEHatchInputBusME meBus, ItemStack item,
+            List<TST_AEStorageCellInputBus> longBusses) {
+            try {
+                IGrid network = meBus.getProxy()
+                    .getGrid();
+                if (network == null) return false;
+                for (TST_AEStorageCellInputBus bus : longBusses) {
+                    if (networkOf(bus) == network && simulateLong(bus, item) > 0) return true;
+                }
+            } catch (GridAccessException ignored) {}
+            return false;
+        }
+
+        private static IGrid networkOf(TST_AEStorageCellInputBus bus) {
+            if (bus.hasStorageCell() || !bus.getProxy()
+                .isActive()) return null;
+            try {
+                return bus.getProxy()
+                    .getGrid();
+            } catch (GridAccessException ignored) {
+                return null;
+            }
+        }
+
+        private static long simulateLong(TST_AEStorageCellInputBus bus, ItemStack item) {
+            int index = findSlot(bus, item);
+            if (!canUse(bus) || index < 0) return 0;
+            boolean useCell = bus.hasStorageCell();
+            try {
+                IMEInventory<IAEItemStack> inventory = bus.getAvailableInventory(useCell);
+                if (inventory == null) return 0;
+                IAEItemStack found = inventory.extractItems(
+                    AEItemStack.create(item)
+                        .setStackSize(Long.MAX_VALUE),
+                    Actionable.SIMULATE,
+                    bus.getAvailableSource(useCell));
+                if (found != null && found.getStackSize() > 0
+                    && bus.processingRecipe
+                    && !bus.exposedInputsPrepared
+                    && !bus.displayedThisRecipe[index]) {
+                    bus.selectedContents[index] = new CellItemEntry(found);
+                    bus.slots[index].extracted = found.copy()
+                        .setStackSize(Math.min(found.getStackSize(), Integer.MAX_VALUE))
+                        .getItemStack();
+                    bus.slots[index].extractedAmount = bus.slots[index].extracted.stackSize;
+                    bus.displayedThisRecipe[index] = true;
+                }
+                return found == null ? 0 : Math.max(0, found.getStackSize());
+            } catch (GridAccessException ignored) {
+                return 0;
+            }
+        }
+
+        private static long extractLong(TST_AEStorageCellInputBus bus, ItemStack item, long amount) {
+            int index = findSlot(bus, item);
+            if (amount <= 0 || !canUse(bus) || index < 0) return 0;
+            if (bus.processingRecipe && !bus.displayedThisRecipe[index]) simulateLong(bus, item);
+            boolean useCell = bus.hasStorageCell();
+            try {
+                IMEInventory<IAEItemStack> inventory = bus.getAvailableInventory(useCell);
+                if (inventory == null) return 0;
+                IAEItemStack request = AEItemStack.create(item)
+                    .setStackSize(amount);
+                IAEItemStack extracted = useCell
+                    ? inventory.extractItems(request, Actionable.MODULATE, CELL_ACTION_SOURCE)
+                    : Platform.poweredExtraction(
+                        bus.getProxy()
+                            .getEnergy(),
+                        inventory,
+                        request,
+                        bus.getAvailableSource(false));
+                long pulled = extracted == null ? 0 : Math.max(0, Math.min(amount, extracted.getStackSize()));
+                if (pulled > 0) {
+                    if (useCell) bus.markDirty();
+                    if (bus.processingRecipe) {
+                        bus.longExtractionUsed = true;
+                        bus.reduceDisplayedAmount(index, pulled);
+                    }
+                    bus.lastGuiAmountRefreshTick = Long.MIN_VALUE;
+                }
+                return pulled;
+            } catch (GridAccessException ignored) {
+                return 0;
+            }
+        }
+
+        private static boolean canUse(TST_AEStorageCellInputBus bus) {
+            IGregTechTileEntity base = bus.getBaseMetaTileEntity();
+            return base != null && base.isServerSide()
+                && (!bus.processingRecipe || !bus.exposedInputsPrepared)
+                && bus.isAllowedToWork();
+        }
+
+        private static int findSlot(TST_AEStorageCellInputBus bus, ItemStack item) {
+            if (item == null || item.stackSize <= 0) return -1;
+            for (int i = 0; i < bus.slots.length; i++) {
+                Slot slot = bus.slots[i];
+                if (slot != null && slot.config != null && GTUtility.areStacksEqual(slot.config, item)) return i;
+            }
+            return -1;
+        }
+
+        private static long addSaturated(long first, long second) {
+            return first > Long.MAX_VALUE - second ? Long.MAX_VALUE : first + second;
+        }
+
+        private static final class ItemSource {
+
+            private final TST_AEStorageCellInputBus bus;
+            private final ItemStack config;
+
+            private ItemSource(TST_AEStorageCellInputBus bus, ItemStack config) {
+                this.bus = bus;
+                this.config = config;
+            }
+        }
     }
 
     private void reduceDisplayedAmount(int index, long amount) {

@@ -9,12 +9,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -309,144 +309,257 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
         return pullableAmounts[index];
     }
 
-    /** Reads the full amount of a marked fluid without the GT int segment limit. */
-    public long getAvailableLongFluid(FluidStack fluid) {
-        int index = findMarkedFluid(fluid);
-        if (!canUseLongInput() || index < 0) return 0;
-        boolean useCell = hasStorageCell();
-        try {
-            IMEInventory<IAEFluidStack> inventory = getAvailableInventory(useCell);
-            if (inventory == null) return 0;
-            IAEFluidStack found = inventory.extractItems(
-                AEFluidStack.create(fluid)
-                    .setStackSize(Long.MAX_VALUE),
-                Actionable.SIMULATE,
-                getAvailableSource(useCell));
-            if (found != null && found.getStackSize() > 0
-                && processingRecipe
-                && !exposedInputsPrepared
-                && !displayedThisRecipe[index]) {
-                selectedContents[index] = new CellFluidEntry(found);
-                pullableAmounts[index] = found.getStackSize();
-                slots[index].extracted = found.copy()
-                    .setStackSize(Math.min(found.getStackSize(), Integer.MAX_VALUE))
-                    .getFluidStack();
-                slots[index].extractedAmount = slots[index].extracted.amount;
-                displayedThisRecipe[index] = true;
+    /** Create one view during checkProcessing, after GT starts recipe processing for the hatches. */
+    public static final class LongFluidInputs {
+
+        private final List<FluidStack> ordinaryInputs;
+        private final Map<Fluid, List<FluidSource>> longInputs = new HashMap<>();
+        private final Set<Fluid> fluidTypes = new LinkedHashSet<>();
+        private final Map<Fluid, Long> availableAmounts = new HashMap<>();
+
+        public static LongFluidInputs of(MTEMultiBlockBase machine) {
+            return new LongFluidInputs(machine, Optional.empty());
+        }
+
+        public static LongFluidInputs forColor(MTEMultiBlockBase machine, byte color) {
+            return new LongFluidInputs(machine, Optional.of(color));
+        }
+
+        private LongFluidInputs(MTEMultiBlockBase machine, Optional<Byte> color) {
+            List<TST_AEStorageCellInputHatch> longHatches = new ArrayList<>();
+            for (MTEHatchInput hatch : GTUtility.filterValidMTEs(machine.mInputHatches)) {
+                if (!(hatch instanceof TST_AEStorageCellInputHatch longHatch)) continue;
+                byte hatchColor = hatch.getColor();
+                if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+                if (!longHatch.processingRecipe) throw new IllegalStateException("Recipe processing has not started");
+                longHatches.add(longHatch);
             }
-            return found == null ? 0 : Math.max(0, found.getStackSize());
-        } catch (GridAccessException ignored) {
-            return 0;
-        }
-    }
-
-    public List<FluidStack> getConfiguredFluidInputs() {
-        List<FluidStack> fluids = new ArrayList<>();
-        for (Slot slot : slots) {
-            if (slot != null && slot.config != null) fluids.add(slot.config.copy());
-        }
-        return fluids;
-    }
-
-    public IGrid getLongFluidNetwork() {
-        if (hasStorageCell() || !getProxy().isActive()) return null;
-        try {
-            return getProxy().getGrid();
-        } catch (GridAccessException ignored) {
-            return null;
-        }
-    }
-
-    public static ArrayList<FluidStack> collectWithoutRecipeSegments(Supplier<ArrayList<FluidStack>> collect,
-        List<MTEHatchInput> inputHatches, List<TST_AEStorageCellInputHatch> longHatches, Optional<Byte> color) {
-        if (longHatches.isEmpty() || !longHatches.get(0).processingRecipe) return collect.get();
-
-        for (TST_AEStorageCellInputHatch hatch : longHatches) hatch.suppressRecipeSegments = true;
-        try {
-            return filterOverlappingMEInputs(collect.get(), inputHatches, longHatches, color);
-        } finally {
-            for (TST_AEStorageCellInputHatch hatch : longHatches) hatch.suppressRecipeSegments = false;
-        }
-    }
-
-    private static ArrayList<FluidStack> filterOverlappingMEInputs(ArrayList<FluidStack> fluids,
-        List<MTEHatchInput> inputHatches, List<TST_AEStorageCellInputHatch> longHatches, Optional<Byte> color) {
-        Map<Fluid, FluidStack> otherMEFluids = new HashMap<>();
-        Set<FluidStack> overlappingStacks = Collections.newSetFromMap(new IdentityHashMap<>());
-        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(inputHatches)) {
-            if (!(hatch instanceof MTEHatchInputME meHatch) || hatch instanceof TST_AEStorageCellInputHatch) continue;
-            byte hatchColor = hatch.getColor();
-            if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
-            for (FluidStack fluid : meHatch.getStoredFluids()) {
-                if (fluid == null) continue;
-                if (isSuppliedByLongInput(meHatch, fluid, longHatches)) overlappingStacks.add(fluid);
-                else otherMEFluids.put(fluid.getFluid(), fluid);
-            }
-        }
-        // Keep GT's selected ME stacks unless one shares the long input's network.
-        for (ListIterator<FluidStack> iterator = fluids.listIterator(); iterator.hasNext();) {
-            FluidStack fluid = iterator.next();
-            if (!overlappingStacks.contains(fluid)) continue;
-            FluidStack replacement = otherMEFluids.get(fluid.getFluid());
-            if (replacement == null) iterator.remove();
-            else iterator.set(replacement);
-        }
-        return fluids;
-    }
-
-    private static boolean isSuppliedByLongInput(MTEHatchInputME meHatch, FluidStack fluid,
-        List<TST_AEStorageCellInputHatch> longHatches) {
-        try {
-            IGrid network = meHatch.getProxy()
-                .getGrid();
-            if (network == null) return false;
-            for (TST_AEStorageCellInputHatch hatch : longHatches) {
-                if (hatch.getLongFluidNetwork() == network && hatch.getAvailableLongFluid(fluid) > 0) return true;
-            }
-        } catch (GridAccessException ignored) {}
-        return false;
-    }
-
-    /** Returns the actual amount pulled, possibly partial; do not also consume this hatch's GT stacks. */
-    public long extractLongFluid(FluidStack fluid, long amount) {
-        int index = findMarkedFluid(fluid);
-        if (amount <= 0 || !canUseLongInput() || index < 0) return 0;
-        if (processingRecipe && !exposedInputsPrepared && !displayedThisRecipe[index]) getAvailableLongFluid(fluid);
-        boolean useCell = hasStorageCell();
-        try {
-            IMEInventory<IAEFluidStack> inventory = getAvailableInventory(useCell);
-            if (inventory == null) return 0;
-            IAEFluidStack request = AEFluidStack.create(fluid)
-                .setStackSize(amount);
-            IAEFluidStack extracted = useCell ? inventory.extractItems(request, Actionable.MODULATE, CELL_ACTION_SOURCE)
-                : Platform.poweredExtraction(getProxy().getEnergy(), inventory, request, getAvailableSource(false));
-            long pulled = extracted == null ? 0 : Math.max(0, Math.min(amount, extracted.getStackSize()));
-            if (pulled > 0) {
-                if (useCell) markDirty();
-                if (processingRecipe) {
-                    longExtractionUsed = true;
-                    reduceDisplayedAmount(index, pulled);
+            if (longHatches.isEmpty()) {
+                ordinaryInputs = machine.getStoredFluidsForColor(color);
+            } else {
+                // Hide this hatch's int segments while GT gathers the other fluid inputs.
+                for (TST_AEStorageCellInputHatch hatch : longHatches) hatch.suppressRecipeSegments = true;
+                try {
+                    ordinaryInputs = machine.getStoredFluidsForColor(color);
+                    filterOverlappingMEInputs(ordinaryInputs, machine.mInputHatches, longHatches, color);
+                } finally {
+                    for (TST_AEStorageCellInputHatch hatch : longHatches) hatch.suppressRecipeSegments = false;
                 }
-                lastGuiAmountRefreshTick = Long.MIN_VALUE;
             }
-            return pulled;
-        } catch (GridAccessException ignored) {
-            return 0;
+            for (FluidStack fluid : ordinaryInputs) {
+                if (fluid != null && fluid.amount > 0 && fluid.getFluid() != null) fluidTypes.add(fluid.getFluid());
+            }
+            for (TST_AEStorageCellInputHatch hatch : longHatches) {
+                Set<Fluid> marked = Collections.newSetFromMap(new IdentityHashMap<>());
+                for (Slot slot : hatch.slots) {
+                    FluidStack fluid = slot == null ? null : slot.config;
+                    if (fluid == null || fluid.getFluid() == null || !marked.add(fluid.getFluid())) continue;
+                    FluidStack config = fluid.copy();
+                    config.amount = 1;
+                    longInputs.computeIfAbsent(fluid.getFluid(), ignored -> new ArrayList<>())
+                        .add(new FluidSource(hatch, config));
+                    fluidTypes.add(fluid.getFluid());
+                }
+            }
         }
-    }
 
-    private boolean canUseLongInput() {
-        IGregTechTileEntity base = getBaseMetaTileEntity();
-        return base != null && base.isServerSide() && isAllowedToWork();
-    }
-
-    private int findMarkedFluid(FluidStack fluid) {
-        if (fluid == null || fluid.amount <= 0) return -1;
-        for (int i = 0; i < slots.length; i++) {
-            Slot slot = slots[i];
-            if (slot != null && slot.config != null && GTUtility.areFluidsEqual(slot.config, fluid)) return i;
+        public List<Fluid> getFluidTypes() {
+            List<Fluid> types = new ArrayList<>();
+            for (Fluid fluid : fluidTypes) {
+                if (getAmount(fluid) > 0) types.add(fluid);
+            }
+            return types;
         }
-        return -1;
+
+        public long getAmount(Fluid fluid) {
+            if (fluid == null) return 0;
+            return availableAmounts.computeIfAbsent(fluid, this::queryAmount);
+        }
+
+        private long queryAmount(Fluid fluid) {
+            long available = 0;
+            for (FluidStack stack : ordinaryInputs) {
+                if (stack != null && stack.getFluid() == fluid && stack.amount > 0) {
+                    available = addSaturated(available, stack.amount);
+                }
+            }
+            // Hatches on the same ME network see the same fluid; storage cells are separate sources.
+            Set<IGrid> countedNetworks = Collections.newSetFromMap(new IdentityHashMap<>());
+            for (FluidSource source : longInputs.getOrDefault(fluid, Collections.emptyList())) {
+                IGrid network = networkOf(source.hatch);
+                if (network != null && countedNetworks.contains(network)) continue;
+                long amount = simulateLong(source.hatch, source.config);
+                if (amount <= 0) continue;
+                if (network != null) countedNetworks.add(network);
+                available = addSaturated(available, amount);
+            }
+            return available;
+        }
+
+        /** Returns the actual amount taken; the network may change after getAmount. */
+        public long extract(Fluid fluid, long amount) {
+            if (fluid == null || amount <= 0) return 0;
+            long remaining = amount;
+            for (FluidStack stack : ordinaryInputs) {
+                if (remaining == 0) break;
+                if (stack == null || stack.getFluid() != fluid || stack.amount <= 0) continue;
+                int taken = (int) Math.min(remaining, stack.amount);
+                stack.amount -= taken;
+                remaining -= taken;
+            }
+            for (FluidSource source : longInputs.getOrDefault(fluid, Collections.emptyList())) {
+                if (remaining == 0) break;
+                remaining -= extractLong(source.hatch, source.config, remaining);
+            }
+            long taken = amount - remaining;
+            if (availableAmounts.containsKey(fluid)) {
+                availableAmounts.put(fluid, Math.max(0, availableAmounts.get(fluid) - taken));
+            }
+            return taken;
+        }
+
+        private static void filterOverlappingMEInputs(List<FluidStack> fluids, List<MTEHatchInput> inputHatches,
+            List<TST_AEStorageCellInputHatch> longHatches, Optional<Byte> color) {
+            Map<Fluid, FluidStack> otherMEFluids = new HashMap<>();
+            Set<FluidStack> overlappingStacks = Collections.newSetFromMap(new IdentityHashMap<>());
+            for (MTEHatchInput hatch : GTUtility.filterValidMTEs(inputHatches)) {
+                if (!(hatch instanceof MTEHatchInputME meHatch) || hatch instanceof TST_AEStorageCellInputHatch)
+                    continue;
+                byte hatchColor = hatch.getColor();
+                if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+                for (FluidStack fluid : meHatch.getStoredFluids()) {
+                    if (fluid == null) continue;
+                    if (isSuppliedByLongInput(meHatch, fluid, longHatches)) overlappingStacks.add(fluid);
+                    else otherMEFluids.put(fluid.getFluid(), fluid);
+                }
+            }
+            // Keep GT's selected ME stacks unless one shares the long input's network.
+            for (ListIterator<FluidStack> iterator = fluids.listIterator(); iterator.hasNext();) {
+                FluidStack fluid = iterator.next();
+                if (!overlappingStacks.contains(fluid)) continue;
+                FluidStack replacement = otherMEFluids.get(fluid.getFluid());
+                if (replacement == null) iterator.remove();
+                else iterator.set(replacement);
+            }
+        }
+
+        private static boolean isSuppliedByLongInput(MTEHatchInputME meHatch, FluidStack fluid,
+            List<TST_AEStorageCellInputHatch> longHatches) {
+            try {
+                IGrid network = meHatch.getProxy()
+                    .getGrid();
+                if (network == null) return false;
+                for (TST_AEStorageCellInputHatch hatch : longHatches) {
+                    if (networkOf(hatch) == network && simulateLong(hatch, fluid) > 0) return true;
+                }
+            } catch (GridAccessException ignored) {}
+            return false;
+        }
+
+        private static IGrid networkOf(TST_AEStorageCellInputHatch hatch) {
+            if (hatch.hasStorageCell() || !hatch.getProxy()
+                .isActive()) return null;
+            try {
+                return hatch.getProxy()
+                    .getGrid();
+            } catch (GridAccessException ignored) {
+                return null;
+            }
+        }
+
+        private static long simulateLong(TST_AEStorageCellInputHatch hatch, FluidStack fluid) {
+            int index = findSlot(hatch, fluid);
+            if (!canUse(hatch) || index < 0) return 0;
+            boolean useCell = hatch.hasStorageCell();
+            try {
+                IMEInventory<IAEFluidStack> inventory = hatch.getAvailableInventory(useCell);
+                if (inventory == null) return 0;
+                IAEFluidStack found = inventory.extractItems(
+                    AEFluidStack.create(fluid)
+                        .setStackSize(Long.MAX_VALUE),
+                    Actionable.SIMULATE,
+                    hatch.getAvailableSource(useCell));
+                if (found != null && found.getStackSize() > 0
+                    && hatch.processingRecipe
+                    && !hatch.exposedInputsPrepared
+                    && !hatch.displayedThisRecipe[index]) {
+                    hatch.selectedContents[index] = new CellFluidEntry(found);
+                    hatch.pullableAmounts[index] = found.getStackSize();
+                    hatch.slots[index].extracted = found.copy()
+                        .setStackSize(Math.min(found.getStackSize(), Integer.MAX_VALUE))
+                        .getFluidStack();
+                    hatch.slots[index].extractedAmount = hatch.slots[index].extracted.amount;
+                    hatch.displayedThisRecipe[index] = true;
+                }
+                return found == null ? 0 : Math.max(0, found.getStackSize());
+            } catch (GridAccessException ignored) {
+                return 0;
+            }
+        }
+
+        private static long extractLong(TST_AEStorageCellInputHatch hatch, FluidStack fluid, long amount) {
+            int index = findSlot(hatch, fluid);
+            if (amount <= 0 || !canUse(hatch) || index < 0) return 0;
+            if (hatch.processingRecipe && !hatch.exposedInputsPrepared && !hatch.displayedThisRecipe[index]) {
+                simulateLong(hatch, fluid);
+            }
+            boolean useCell = hatch.hasStorageCell();
+            try {
+                IMEInventory<IAEFluidStack> inventory = hatch.getAvailableInventory(useCell);
+                if (inventory == null) return 0;
+                IAEFluidStack request = AEFluidStack.create(fluid)
+                    .setStackSize(amount);
+                IAEFluidStack extracted = useCell
+                    ? inventory.extractItems(request, Actionable.MODULATE, CELL_ACTION_SOURCE)
+                    : Platform.poweredExtraction(
+                        hatch.getProxy()
+                            .getEnergy(),
+                        inventory,
+                        request,
+                        hatch.getAvailableSource(false));
+                long pulled = extracted == null ? 0 : Math.max(0, Math.min(amount, extracted.getStackSize()));
+                if (pulled > 0) {
+                    if (useCell) hatch.markDirty();
+                    if (hatch.processingRecipe) {
+                        hatch.longExtractionUsed = true;
+                        hatch.reduceDisplayedAmount(index, pulled);
+                    }
+                    hatch.lastGuiAmountRefreshTick = Long.MIN_VALUE;
+                }
+                return pulled;
+            } catch (GridAccessException ignored) {
+                return 0;
+            }
+        }
+
+        private static boolean canUse(TST_AEStorageCellInputHatch hatch) {
+            IGregTechTileEntity base = hatch.getBaseMetaTileEntity();
+            return base != null && base.isServerSide() && hatch.isAllowedToWork();
+        }
+
+        private static int findSlot(TST_AEStorageCellInputHatch hatch, FluidStack fluid) {
+            if (fluid == null || fluid.amount <= 0) return -1;
+            for (int i = 0; i < hatch.slots.length; i++) {
+                Slot slot = hatch.slots[i];
+                if (slot != null && slot.config != null && GTUtility.areFluidsEqual(slot.config, fluid)) return i;
+            }
+            return -1;
+        }
+
+        private static long addSaturated(long first, long second) {
+            return first > Long.MAX_VALUE - second ? Long.MAX_VALUE : first + second;
+        }
+
+        private static final class FluidSource {
+
+            private final TST_AEStorageCellInputHatch hatch;
+            private final FluidStack config;
+
+            private FluidSource(TST_AEStorageCellInputHatch hatch, FluidStack config) {
+                this.hatch = hatch;
+                this.config = config;
+            }
+        }
     }
 
     private void reduceDisplayedAmount(int index, long amount) {
