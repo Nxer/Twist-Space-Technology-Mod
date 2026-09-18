@@ -2362,3 +2362,5 @@ Material.axonisalloy=Axonis Alloy
 Material.axonium=Axonium
 Material.dubnium=Dubnium
 tc.research_text.ESSENTIA_DISCRETIZER.2=With the update to version 2.9.0, Thaumic Energistics has been refactored. Essentia now has its own native essentia channel and no longer relies on the fluid channel. Therefore, the relationship is now more direct: CrystalEssence on the item channel directly corresponds to native essentia on the essentia channel.
+tst.shared.machineTooltip.temporaryController=§cTemporary controller; will be removed in the next update!
+tst.shared.machineTooltip.replacementController=§cSee NEI for the replacement controller and conversion recipes.

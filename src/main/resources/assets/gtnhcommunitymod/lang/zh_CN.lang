@@ -2362,3 +2362,5 @@ Material.axonisalloy=灵韵合金
 Material.axonium=焕律璨金
 Material.dubnium=钅杜
 tc.research_text.ESSENTIA_DISCRETIZER.2=随着2.9.0版本的更新,神秘能源的源质也做出了重构,源质有原生信道,不再依托流体信道,因此现在更加直接,就是晶化源质对应源质.
+tst.shared.machineTooltip.temporaryController=§c临时控制器，将在下个版本移除！
+tst.shared.machineTooltip.replacementController=§c请在NEI查看替代控制器及转换配方。

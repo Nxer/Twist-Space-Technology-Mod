@@ -3288,7 +3288,7 @@ public class GTCMMachineRecipes {
                 4,
                 new Object[]{
                     ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
-                    ItemList.ZPM2.get(1),
+                    ItemList.ZPM3.get(1),
                     Materials.Silver.getNanite(2),
                     ItemRefer.Fluid_Storage_Core_T5.get(2),
 

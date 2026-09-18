@@ -23,6 +23,7 @@ import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
+import static gregtech.api.enums.HatchElement.InputHatch;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons.casingTexturePages;
 import static gregtech.api.util.GTStructureUtility.buildHatchAdder;
@@ -134,13 +135,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     protected static final String[][] shapeMainT1 = new String[][]{
         {"           ","           ","   NNNNN   ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","   NNNNN   ","           ","           "},
         {"           ","   NNNNN   ","  NHHHHHN  "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN "," NHDDDDDHN ","  NHHHHHN  ","   NNNNN   ","           "},
-        {"   FFFFF   ","  FMMMMMF  "," FMFKKKFMF ","FMFEEEEEFMF","FMKEEEEEKMF","FMKEECEEKMF","FMKEEEEEKMF","FMFEEEEEFMF"," FMFKKKFMF ","  FMMMMMF  ","   FFFFF   "},
-        {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
-        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
-        {"           ","   J   J   ","  BFAAAFB  "," JFEEEEEFJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JFEEEEEFJ ","  BFAAAFB  ","   J   J   ","           "},
-        {"           ","   HHHHH   ","  HFFFFFH  "," HFEEEEEFH "," HFEEEEEFH "," HFEECEEFH "," HFEEEEEFH "," HFEEEEEFH ","  HFFFFFH  ","   HHHHH   ","           "},
-        {"   FFFFF   ","  FMMMMMF  "," FMFJJJFMF ","FMFEEEEEFMF","FMJEEEEEJMF","FMJEECEEJMF","FMJEEEEEJMF","FMFEEEEEFMF"," FMFJJJFMF ","  FMMMMMF  ","   FFFFF   "},
-        {"           ","   JJ JJ   ","  JNNNNNJ  "," JNEDDDDNJ ","JJNDEEEDNJ ","  NDECEDN  ","JJNDEEEDNJ "," JNEDDDENJ ","  JNNNNNJ  ","   JJ JJ   ","           "},
+        {"   GGGGG   ","  GMMMMMG  "," GMGKKKGMG ","GMGEEEEEGMG","GMKEEEEEKMG","GMKEECEEKMG","GMKEEEEEKMG","GMGEEEEEGMG"," GMGKKKGMG ","  GMMMMMG  ","   GGGGG   "},
+        {"           ","   HHHHH   ","  HGGGGGH  "," HGEEEEEGH "," HGEEEEEGH "," HGEECEEGH "," HGEEEEEGH "," HGEEEEEGH ","  HGGGGGH  ","   HHHHH   ","           "},
+        {"           ","   J   J   ","  BGAAAGB  "," JGEEEEEGJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JGEEEEEGJ ","  BGAAAGB  ","   J   J   ","           "},
+        {"           ","   J   J   ","  BGAAAGB  "," JGEEEEEGJ ","  AEEEEEA  ","  AEECEEA  ","  AEEEEEA  "," JGEEEEEGJ ","  BGAAAGB  ","   J   J   ","           "},
+        {"           ","   HHHHH   ","  HGGGGGH  "," HGEEEEEGH "," HGEEEEEGH "," HGEECEEGH "," HGEEEEEGH "," HGEEEEEGH ","  HGGGGGH  ","   HHHHH   ","           "},
+        {"   GGGGG   ","  GMMMMMG  "," GMGJJJGMG ","GMGEEEEEGMG","GMJEEEEEJMG","GMJEECEEJMG","GMJEEEEEJMG","GMGEEEEEGMG"," GMGJJJGMG ","  GMMMMMG  ","   GGGGG   "},
+        {"           ","   JJ JJ   ","  JNNNNNJ  "," JNEDDDENJ ","JJNDEEEDNJ ","  NDECEDN  ","JJNDEEEDNJ "," JNEDDDENJ ","  JNNNNNJ  ","   JJ JJ   ","           "},
         {"           ","    J J    ","   NHNHN   ","  NEDDDEN  "," JHDEEEDHJ ","  NDECEDN  "," JHDEEEDHJ ","  NEDDDEN  ","   NHNHN   ","    J J    ","           "},
         {"           ","    J J    ","   NHNHN   ","  NEDDDEN  "," JHDEEEDHJ ","  NDECEDN  "," JHDEEEDHJ ","  NEDDDEN  ","   NHNHN   ","    J J    ","           "},
         {"           ","           ","   NHNHN   ","  NEDDDEN  ","  HDEEEDH  ","  NDECEDN  ","  HDEEEDH  ","  NEDDDEN  ","   NHNHN   ","           ","           "},
@@ -157,13 +158,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     protected static final String[][] shapeMainT2 = new String[][]{
         {"                      ","                      ","   NNNNN              ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","  NNNNNNN             ","   NNNNN              ","                      ","                      "},
         {"                      ","   NNNNN              ","  NHHHHHN             "," NHDDDDDHN       NNN  "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN      NNNNN "," NHDDDDDHN       NNN  ","  NHHHHHN             ","   NNNNN              ","                      "},
-        {"   FFFFF              ","  FMMMMMF             "," FMFKKKFMF      GGGGG ","FMFEEEEEFMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMKEECEEKMF    GGGGGGG","FMKEEEEEKMFJJJJGGGGGGG","FMFEEEEEFMF    GGGGGGG"," FMFKKKFMF      GGGGG ","  FMMMMMF             ","   FFFFF              "},
-        {"                      ","   HHHHH              ","  HFFFFFH        HHH  "," HFEEEEEFH      HNNNH "," HFEEEEEFHHHHHHHNLLLNH"," HFEECEEFNNNNNNNNLLLNh"," HFEEEEEFHHHHHHHNLLLNH"," HFEEEEEFH      HNNNH ","  HFFFFFH        HHH  ","   HHHHH              ","                      "},
-        {"                      ","   J   J              ","  BFAAAFB             "," JFEEEEEFJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN       - L a ","  AEEEEEHAAAAAAAA   A "," JFEEEEEFJ      GAAAG ","  BFAAAFB             ","   J   J              ","                      "},
-        {"                      ","   J   J              ","  BFAAAFB             "," JFEEEEEFJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN       - L a ","  AEEEEEHAAAAAAAA   A "," JFEEEEEFJ      GAAAG ","  BFAAAFB             ","   J   J              ","                      "},
-        {"                      ","   HHHHH              ","  HFFFFFH        HHH  "," HFEEEEEFH      HNNNH "," HFEEEEEFHHHHHHHN   NH"," HFEECEEFNNNNNNNN L Nh"," HFEEEEEFHHHHHHHN   NH"," HFEEEEEFH      HNNNH ","  HFFFFFH        HHH  ","   HHHHH              ","                      "},
-        {"   FFFFF              ","  FMMMMMF             "," FMFJJJFMF       GGG  ","FMFEEEEEFMF     GAAAG ","FMJEEEEEJMFJJJJGA   AG","FMJEECEEJMF    GN L NG","FMJEEEEEJMFJJJJGA   AG","FMFEEEEEFMF     GAAAG "," FMFJJJFMF       GGG  ","  FMMMMMF             ","   FFFFF              "},
-        {"                      ","   JJ JJ              ","  JNNNNNJ        JJJ  "," JNEDDDDNJ      JAAAJ ","JJNDEEEDNJJ    JA   AJ","  NDECEDN      JN L NJ","JJNDEEEDNJJ    JA   AJ"," JNEDDDENJ      JAAAJ ","  JNNNNNJ        JJJ  ","   JJ JJ              ","                      "},
+        {"   GGGGG              ","  GMMMMMG             "," GMGKKKGMG      GGGGG ","GMGEEEEEGMG    GGGGGGG","GMKEEEEEKMGJJJJGGGGGGG","GMKEECEEKMG    GGGGGGG","GMKEEEEEKMGJJJJGGGGGGG","GMGEEEEEGMG    GGGGGGG"," GMGKKKGMG      GGGGG ","  GMMMMMG             ","   GGGGG              "},
+        {"                      ","   HHHHH              ","  HGGGGGH        HHH  "," HGEEEEEGH      HNNNH "," HGEEEEEGHHHHHHHNFFFNH"," HGEECEEGNNNNNNNNFFFNH"," HGEEEEEGHHHHHHHNFFFNH"," HGEEEEEGH      HNNNH ","  HGGGGGH        HHH  ","   HHHHH              ","                      "},
+        {"                      ","   J   J              ","  BGAAAGB             "," JGEEEEEGJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN         L A ","  AEEEEEHAAAAAAAA   A "," JGEEEEEGJ      GAAAG ","  BGAAAGB             ","   J   J              ","                      "},
+        {"                      ","   J   J              ","  BGAAAGB             "," JGEEEEEGJ      GAAAG ","  AEEEEEHAAAAAAAA   A ","  AEECEEN         L A ","  AEEEEEHAAAAAAAA   A "," JGEEEEEGJ      GAAAG ","  BGAAAGB             ","   J   J              ","                      "},
+        {"                      ","   HHHHH              ","  HGGGGGH        HHH  "," HGEEEEEGH      HNNNH "," HGEEEEEGHHHHHHHN   NH"," HGEECEEGNNNNNNNN L NH"," HGEEEEEGHHHHHHHN   NH"," HGEEEEEGH      HNNNH ","  HGGGGGH        HHH  ","   HHHHH              ","                      "},
+        {"   GGGGG              ","  GMMMMMG             "," GMGJJJGMG       GGG  ","GMGEEEEEGMG     GAAAG ","GMJEEEEEJMGJJJJGA   AG","GMJEECEEJMG    GN L NG","GMJEEEEEJMGJJJJGA   AG","GMGEEEEEGMG     GAAAG "," GMGJJJGMG       GGG  ","  GMMMMMG             ","   GGGGG              "},
+        {"                      ","   JJ JJ              ","  JNNNNNJ        JJJ  "," JNEDDDENJ      JAAAJ ","JJNDEEEDNJJ    JA   AJ","  NDECEDN      JN L NJ","JJNDEEEDNJJ    JA   AJ"," JNEDDDENJ      JAAAJ ","  JNNNNNJ        JJJ  ","   JJ JJ              ","                      "},
         {"                      ","    J J               ","   NHNHN              ","  NEDDDEN       BAAAB "," JHDEEEDHJ      A   A ","  NDECEDN       N L N "," JHDEEEDHJ      A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","    J J               ","                      "},
         {"                      ","    J J               ","   NHNHN              ","  NEDDDEN       BAAAB "," JHDEEEDHJ      A   A ","  NDECEDN       N L N "," JHDEEEDHJ      A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","    J J               ","                      "},
         {"                      ","                      ","   NHNHN              ","  NEDDDEN       BAAAB ","  HDEEEDH       A   A ","  NDECEDN       N L N ","  HDEEEDH       A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","                      ","                      "},
@@ -171,9 +172,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         {"                      ","                      ","   NHNHN              ","  NEDDDEN       BAAAB ","  HDEEEDH       A   A ","  NDECEDN       N L N ","  HDEEEDH       A   A ","  NEDDDEN       BAAAB ","   NHNHN              ","                      ","                      "},
         {"                      ","                      ","   NNNNN              ","  NNDDDNN       BAAAB ","  NDEEEDN       A   A ","  NDECEDN       N L N ","  NDEEEDN       A   A ","  NNDDDNN       BAAAB ","   NNNNN              ","                      ","                      "},
         {"                      ","   NNNNN              ","  N     N       GGGGG "," N  DDD  N     GGNNNGG"," N DEEED N     GN   NG"," N DECED N     GN L NG"," N DEEED N     GN   NG"," N  DDD  N     GGNNNGG","  N     N       GGGGG ","   NNNNN              ","                      "},
-        {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHDIDHB"," M MEEEM M     GD   DG"," M MECEM M     II L II"," M MEEEM M     GD   DG"," M  MMM  M     BHDIDHB","  M     M       BGIGB ","   MMMMM              ","                      "},
-        {"                      ","   MO~OM              ","  A     A       BNSNB "," A  KKK  A     BHDDDHB"," A KEEEK A     ND   DN"," A KECEK A     ND L DN"," A KEEEK A     ND   DN"," A  KKK  A     BHDDDHB","  A     A       BNONB ","   AAAAA              ","                      "},
-        {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHDIDHB"," M MEEEM M     GD   DG"," M MECEM M     II L II"," M MEEEM M     GD   DG"," M  MMM  M     BHDIDHB","  M     M       BGIGB ","   MMMMM              ","                      "},
+        {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHFIFHB"," M MEEEM M     GF   FG"," M MECEM M     II L II"," M MEEEM M     GF   FG"," M  MMM  M     BHFIFHB","  M     M       BGIGB ","   MMMMM              ","                      "},
+        {"                      ","   MO~OM              ","  A     A       BNSNB "," A  KKK  A     BHFFFHB"," A KEEEK A     NF   FN"," A KECEK A     NF L FN"," A KEEEK A     NF   FN"," A  KKK  A     BHFFFHB","  A     A       BNONB ","   AAAAA              ","                      "},
+        {"                      ","   MOOOM              ","  M     M       BGIGB "," M  MMM  M     BHFIFHB"," M MEEEM M     GF   FG"," M MECEM M     II L II"," M MEEEM M     GF   FG"," M  MMM  M     BHFIFHB","  M     M       BGIGB ","   MMMMM              ","                      "},
         {"                      ","   PPPPP              ","  PDDDDDP       GGGGG "," PDDDDDDDP     GGNNNGG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GNNNNNG"," PDDDDDDDP     GGNNNGG","  PDDDDDP       GGGGG ","   PPPPP              ","                      "}
     };
 
@@ -229,7 +230,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     withChannel(
                         "coil",
                         ofCoil(TST_SwelegfyrBlastFurnace::setCoilLevel, TST_SwelegfyrBlastFurnace::getCoilLevel)))
-                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 5))
+                .addElement('F', ofBlock(TstBlocks.MetaBlockCasing02, 6))
                 .addElement('G', ofBlock(TstBlocks.MetaBlockCasing02, 2))
                 .addElement('H', ofBlock(GregTechAPI.sBlockCasings8, 10))
                 .addElement(
@@ -244,7 +245,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 .addElement(
                     'O',
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
-                        .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                        .atLeast(InputBus, OutputBus, InputHatch, Energy.or(ExoticEnergy))
                         .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
                         .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
@@ -498,11 +499,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 // Refresh passive status
                 inPassiveMode = isPassiveMode;
 
-                // No recipe change, no heat clear, whether normal or passive
-                if (!(previousRecipeCode == recipe.hashCode() || previousRecipeCode != 0)) {
-                    previousRecipeCode = recipe.hashCode();
+                // The first recipe after warm-up also clears extra heat
+                int recipeCode = recipe.hashCode();
+                if (previousRecipeCode != recipeCode) {
                     mHeatingCapacity = getCoilHeat();
                 }
+                previousRecipeCode = recipeCode;
 
                 euModifier = (float) Math.pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
 
@@ -532,10 +534,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 if (isPassiveMode && isRapidHeating) {
                     inPassiveMode = true;
                     inRapidHeating = true;
+                    previousRecipeCode = 0;
                     return RapidHeating();
                 } else {
                     inRapidHeating = false;
-                    return super.process();
+                    CheckRecipeResult result = super.process();
+                    if (result == CheckRecipeResultRegistry.NO_RECIPE) previousRecipeCode = 0;
+                    return result;
                 }
             }
 
@@ -569,7 +574,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 }
             }
 
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+        }.setMaxParallelSupplier(this::getTrueParallel);
 
     }
 
@@ -746,15 +751,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return base;
     }
 
-    // @Override
-    // public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-    // super.addUIWidgets(builder, buildContext);
-    // builder.widget(createBlazeStatusButton(builder));
-    // builder.widget(createRapidHeatingButton(builder));
-    // builder.widget(createHoldingHeatButton(builder));
-    //
-    // }
-
     @Override
     protected boolean useMui2() {
         return super.useMui2();
@@ -772,82 +768,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         }
     }
 
-    // public ButtonWidget createBlazeStatusButton(IWidgetBuilder<?> builder) {
-    //
-    // Widget button = new ButtonWidget()
-    // .setOnClick(
-    // (clickData, widget) -> {
-    // if (checkStructure(true, getBaseMetaTileEntity()) && !this.getBaseMetaTileEntity()
-    // .isActive()) setRemoveBlaze();
-    // })
-    // .setPlayClickSound(true)
-    // .setBackground(() -> {
-    // List<IDrawable> layers = new ArrayList<>();
-    // // Add icons per mode
-    // if (!isBlazeFinishClear) {
-    // layers.add(GTUITextures.BUTTON_STANDARD);
-    // layers.add(UITextures.SBF_BlazeClear);
-    // } else if (!isBlazeFinishSet) {
-    // layers.add(GTUITextures.BUTTON_STANDARD);
-    // layers.add(UITextures.SBF_BlazeSet);
-    // }
-    //
-    // return layers.toArray(new IDrawable[0]);
-    // })
-    // .attachSyncer(
-    // new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishSet, val -> isBlazeFinishSet = val),
-    // builder)
-    // .attachSyncer(
-    // new FakeSyncWidget.BooleanSyncer(() -> isBlazeFinishClear, val -> isBlazeFinishClear = val),
-    // builder)
-    //
-    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze"))
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(98, 91)
-    // .setSize(16, 16);
-    //
-    // return (ButtonWidget) button;
-    // }
-
-    // public ButtonWidget createRapidHeatingButton(IWidgetBuilder<?> builder) {
-    // // if controller tier = 1, not generate button
-    // if (controllerTier != 2) return null;
-    //
-    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-    // if (isPassiveMode) {
-    // setRapidHeating(!isRapidHeating);
-    // if (isRapidHeating) isHoldingHeat = false;
-    // }
-    // })
-    // .setPlayClickSound(isPassiveMode)
-    // .setBackground(() -> {
-    // List<IDrawable> layers = new ArrayList<>();
-    // // Add icons per mode
-    // if (isPassiveMode) {
-    // if (getRapidHeating()) {
-    // layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-    // layers.add(UITextures.SBF_RapidHeating_On);
-    // } else {
-    // layers.add(GTUITextures.BUTTON_STANDARD);
-    // layers.add(UITextures.SBF_RapidHeating_Off);
-    // }
-    // } else {
-    // layers.add(GTUITextures.BUTTON_STANDARD);
-    // layers.add(UITextures.SBF_RapidHeating_Forbidden);
-    // }
-    //
-    // return layers.toArray(new IDrawable[0]);
-    // })
-    // .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getRapidHeating, this::setRapidHeating), builder)
-    //
-    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating"))
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(116, 91)
-    // .setSize(16, 16);
-    //
-    // return (ButtonWidget) button;
-    // }
-
     public boolean getRapidHeating() {
         return isRapidHeating;
     }
@@ -856,45 +776,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         isRapidHeating = b;
         if (b) isHoldingHeat = false;
     }
-
-    // public ButtonWidget createHoldingHeatButton(IWidgetBuilder<?> builder) {
-    // // if controller tier = 1, not generate button
-    // if (controllerTier != 2) return null;
-    //
-    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-    // if (isPassiveMode) {
-    // setHoldingHeat(!isHoldingHeat);
-    // if (isHoldingHeat) isRapidHeating = false;
-    // }
-    // })
-    // .setPlayClickSound(isPassiveMode)
-    // .setBackground(() -> {
-    // List<IDrawable> layers = new ArrayList<>();
-    // // Add icons per mode
-    // if (isPassiveMode) {
-    // if (getHoldingHeat()) {
-    // layers.add(GTUITextures.BUTTON_STANDARD_PRESSED);
-    // layers.add(UITextures.SBF_HoldingHeat_On);
-    // } else {
-    // layers.add(GTUITextures.BUTTON_STANDARD);
-    // layers.add(UITextures.SBF_HoldingHeat_Off);
-    // }
-    // } else {
-    // layers.add(GTUITextures.BUTTON_STANDARD);
-    // layers.add(UITextures.SBF_HoldingHeat_Forbidden);
-    // }
-    //
-    // return layers.toArray(new IDrawable[0]);
-    // })
-    // .attachSyncer(new FakeSyncWidget.BooleanSyncer(this::getHoldingHeat, this::setHoldingHeat), builder)
-    //
-    // .addTooltip(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat"))
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(134, 91)
-    // .setSize(16, 16);
-    //
-    // return (ButtonWidget) button;
-    // }
 
     public boolean getHoldingHeat() {
         return isHoldingHeat;

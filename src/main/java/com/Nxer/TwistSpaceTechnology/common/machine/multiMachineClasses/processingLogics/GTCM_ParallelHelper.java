@@ -117,10 +117,6 @@ public class GTCM_ParallelHelper extends ParallelHelper {
      */
     private double durationMultiplier;
     /**
-     * Modifier which is applied on the recipe eut. Useful for GT++ machines
-     */
-    private float eutModifier = 1;
-    /**
      * Method for calculating max parallel from given inputs.
      */
     private MaxParallelCalculator maxParallelCalculator = GTCM_ParallelHelper::maxParallelCalculatedByInputs;
@@ -200,14 +196,6 @@ public class GTCM_ParallelHelper extends ParallelHelper {
      */
     public ParallelHelper setAvailableEUt(long aAvailableEUt) {
         this.availableEUt = aAvailableEUt;
-        return this;
-    }
-
-    /**
-     * Sets the modifier for recipe eut. 1 does nothing 0.9 is 10% less. 1.1 is 10% more
-     */
-    public ParallelHelper setEUtModifier(float aEUtModifier) {
-        this.eutModifier = aEUtModifier;
         return this;
     }
 
