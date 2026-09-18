@@ -54,7 +54,7 @@ public final class MiracleTopRecipeCommon {
         private RecipeOutputKey(GTRecipe recipe) {
             if (recipe.mOutputs != null) {
                 for (ItemStack stack : recipe.mOutputs) {
-                    if (stack != null) itemOutputs.add(TST_ItemID.create(stack));
+                    itemOutputs.add(TST_ItemID.create(stack));
                 }
             }
         }
@@ -62,8 +62,7 @@ public final class MiracleTopRecipeCommon {
         @Override
         public boolean equals(Object object) {
             if (this == object) return true;
-            if (!(object instanceof RecipeOutputKey)) return false;
-            RecipeOutputKey key = (RecipeOutputKey) object;
+            if (!(object instanceof RecipeOutputKey key)) return false;
             return itemOutputs.equals(key.itemOutputs);
         }
 
@@ -134,9 +133,7 @@ public final class MiracleTopRecipeCommon {
                     if (material.getMolten(1) != null && targetModifyOreDict.contains(prefix)) {
                         FluidStack convertedFluid = material
                             .getMolten(prefix.getMaterialAmount() * INGOTS * stack.stackSize / GTValues.M);
-                        if (convertedFluid.isFluidEqual(Materials.Copper.getMolten(1))) {
-                            convertedFluid = Materials.AnnealedCopper.getMolten(convertedFluid.amount);
-                        } else if (convertedFluid.isFluidEqual(Materials.TengamAttuned.getMolten(1))) {
+                        if (convertedFluid.isFluidEqual(Materials.TengamAttuned.getMolten(1))) {
                             convertedFluid = Materials.TengamPurified.getMolten(convertedFluid.amount);
                         }
                         inputFluids.add(convertedFluid);
