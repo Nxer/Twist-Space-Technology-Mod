@@ -492,6 +492,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     protected ProcessingLogic createProcessingLogic() {
         return new GTCM_ProcessingLogic() {
 
+            private boolean heatBeforeRecipe;
+
             @Override
             @Nonnull
             protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
@@ -499,18 +501,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 // Refresh passive status
                 inPassiveMode = isPassiveMode;
 
-                // The first recipe after warm-up also clears extra heat
+                if (heatBeforeRecipe) return CheckRecipeResultRegistry.NO_RECIPE;
+
+                if (recipe.mSpecialValue > recipeHeatLimitation)
+                    return CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+
                 int recipeCode = recipe.hashCode();
-                if (previousRecipeCode != recipeCode) {
+                if (previousRecipeCode != 0 && previousRecipeCode != recipeCode) {
                     mHeatingCapacity = getCoilHeat();
+                    heatBeforeRecipe = isPassiveMode && isRapidHeating && mHeatingCapacity < maxHeatingCapacity;
                 }
                 previousRecipeCode = recipeCode;
 
-                euModifier = (float) Math.pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
+                // Heat the new recipe before consuming its inputs.
+                if (heatBeforeRecipe) return CheckRecipeResultRegistry.NO_RECIPE;
 
-                // whether recipe can be processed depends on the coil heat
-                return recipe.mSpecialValue <= recipeHeatLimitation ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+                TST_SwelegfyrBlastFurnace.this.euModifier = (float) Math
+                    .pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
+                setEuModifier(TST_SwelegfyrBlastFurnace.this.getEuModifier());
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
             }
 
             @Nonnull
@@ -526,52 +536,45 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             @Override
             @Nonnull
             public CheckRecipeResult process() {
+                heatBeforeRecipe = false;
                 setSpeedBonus(getSpeedBonus());
                 setEuModifier(getEuModifier());
 
                 if (checkBlaze()) return shutDownOfMissingPyrotheum(controllerTier > 1 ? 168000 : 72000);
 
-                if (isPassiveMode && isRapidHeating) {
+                if (isPassiveMode && isRapidHeating && mHeatingCapacity < maxHeatingCapacity) {
                     inPassiveMode = true;
                     inRapidHeating = true;
-                    previousRecipeCode = 0;
                     return RapidHeating();
                 } else {
                     inRapidHeating = false;
                     CheckRecipeResult result = super.process();
-                    if (result == CheckRecipeResultRegistry.NO_RECIPE) previousRecipeCode = 0;
+                    if (heatBeforeRecipe) {
+                        inRapidHeating = true;
+                        return RapidHeating();
+                    }
                     return result;
                 }
             }
 
             private CheckRecipeResult RapidHeating() {
-                if (mHeatingCapacity < maxHeatingCapacity) {
-                    // Heating with 100 heat/s
-                    int euTier = (int) Math
-                        .max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
-                    if (euTier < 1) stopMachine(ShutDownReasonRegistry.POWER_LOSS);
-
-                    correctBlazeCost = mHeatingCapacity * maxHeatingCapacity / (int) Math.pow(euTier, 3);
-                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true))
-                        return shutDownOfMissingPyrotheum(correctBlazeCost);
-
-                    calculatedEut = availableVoltage * availableAmperage * 15 / 16;
-                    duration = 20;
-                    mHeatingCapacity = numericalApproximation(mHeatingCapacity, maxHeatingCapacity, 100);
-
-                    return CheckRecipeResults.RapidHeating;
-                } else {
-                    // Heating finish, as holding mode running
-                    // correctBlazeCost = mHeatingCapacity / 20;
-                    // if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true))
-                    // return shutDownOfMissingPyrotheum(correctBlazeCost * 10);
-                    //
-                    // duration = 200;
-                    // return CheckRecipeResults.RapidHeatFinish;
-                    isRapidHeating = false;
-                    isHoldingHeat = true;
-                    return CheckRecipeResultRegistry.NO_RECIPE;
+                // Heating with 100 heat/s
+                int euTier = (int) Math
+                    .max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                if (euTier < 1) {
+                    stopMachine(ShutDownReasonRegistry.POWER_LOSS);
+                    return CheckRecipeResultRegistry.insufficientPower(32);
                 }
+
+                correctBlazeCost = mHeatingCapacity * maxHeatingCapacity / (int) Math.pow(euTier, 3);
+                if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true))
+                    return shutDownOfMissingPyrotheum(correctBlazeCost);
+
+                calculatedEut = availableVoltage * availableAmperage * 15 / 16;
+                duration = 20;
+                mHeatingCapacity = numericalApproximation(mHeatingCapacity, maxHeatingCapacity, 100);
+
+                return CheckRecipeResults.RapidHeating;
             }
 
         }.setMaxParallelSupplier(this::getTrueParallel);
@@ -626,7 +629,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 boolean isActive = aBaseMetaTileEntity.isActive();
 
                 // Heat holding mode
-                if (!isActive && isPassiveMode && !isRapidHeating && isHoldingHeat) {
+                if (!isActive && isPassiveMode && isHoldingHeat) {
                     // If missing blaze, stop holding
                     if (checkBlaze()) {
                         mHeatingCapacity = getCoilHeat();
@@ -676,8 +679,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void stopMachine(@NotNull ShutDownReason reason) {
         runningTick = 0;
-        previousRecipeCode = 0;
-        mHeatingCapacity = getCoilHeat();
         super.stopMachine(reason);
     }
 
@@ -774,7 +775,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public void setRapidHeating(boolean b) {
         isRapidHeating = b;
-        if (b) isHoldingHeat = false;
     }
 
     public boolean getHoldingHeat() {
@@ -783,7 +783,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public void setHoldingHeat(boolean b) {
         isHoldingHeat = b;
-        if (b) isRapidHeating = false;
     }
 
     @Override
