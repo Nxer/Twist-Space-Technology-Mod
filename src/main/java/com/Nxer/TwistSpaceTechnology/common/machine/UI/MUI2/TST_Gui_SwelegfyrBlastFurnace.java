@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
+import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_BlazeClear;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_BlazeSet;
+import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_Blaze_Forbidden;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_HoldingHeat_Forbidden;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_HoldingHeat_Off;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_HoldingHeat_On;
@@ -13,10 +15,10 @@ import net.minecraft.util.StatCollector;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
+import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.screen.ModularPanel;
-import com.cleanroommc.modularui.screen.RichTooltip;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
@@ -31,20 +33,44 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
 
     @Override
     public Flow createLeftPanelGapRow(ModularPanel panel, PanelSyncManager syncManager) {
-        return super.createLeftPanelGapRow(panel, syncManager).child(createBlazeStatusButton())
+        return super.createLeftPanelGapRow(panel, syncManager).child(createBlazeStatusButton(syncManager))
             .child(createRapidHeatingButton(syncManager))
             .child(createHoldingHeatButton(syncManager));
     }
 
-    public IWidget createBlazeStatusButton() {
-        return new ToggleButton().size(18, 18)
-            .syncHandler("blazeStatusButtonSyncer")
-            .overlay(SBF_BlazeSet)
-            .tooltip(new RichTooltip().add(StatCollector.translateToLocal("SBF.Msg.setOrClearBlaze")));
+    public IWidget createBlazeStatusButton(PanelSyncManager syncManager) {
+        BooleanSyncValue blazeStatusButtonSyncer = syncManager
+            .findSyncHandler("blazeStatusButtonSyncer", BooleanSyncValue.class);
+        BooleanSyncValue machineActiveGetter = syncManager
+            .findSyncHandler("machineActiveGetter", BooleanSyncValue.class);
 
-        // #tr SBF.Msg.setOrClearBlaze
-        // # Place / Clear Pyrotheum
-        // #zh_CN 填充/清除炽焱
+        return new ToggleButton() {
+
+            @NotNull
+            @Override
+            public Result onMousePressed(int mouseButton) {
+                if (machineActiveGetter.getValue()) return Result.IGNORE;
+                return super.onMousePressed(mouseButton);
+            }
+        }.size(18, 18)
+            .value(blazeStatusButtonSyncer)
+            .overlay(new DynamicDrawable(() -> {
+                if (machineActiveGetter.getValue()) return SBF_Blaze_Forbidden;
+                return blazeStatusButtonSyncer.getValue() ? SBF_BlazeClear : SBF_BlazeSet;
+            }))
+            .tooltipBuilder(
+                tooltip -> tooltip.addLine(
+                    IKey.dynamic(
+                        () -> StatCollector.translateToLocal(
+                            blazeStatusButtonSyncer.getValue() ? "SBF.Msg.clearBlaze" : "SBF.Msg.fillBlaze"))));
+
+        // #tr SBF.Msg.fillBlaze
+        // # Fill Pyrotheum
+        // #zh_CN 填充炽焱
+
+        // #tr SBF.Msg.clearBlaze
+        // # Clear Pyrotheum
+        // #zh_CN 清除炽焱
     }
 
     public IWidget createRapidHeatingButton(PanelSyncManager syncManager) {
@@ -110,12 +136,15 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
     protected void registerSyncValues(PanelSyncManager syncManager) {
         super.registerSyncValues(syncManager);
 
-        ClickOnceSyncValue b = new ClickOnceSyncValue(multiblock::clickBlazeStatusButton);
-
         BooleanSyncValue blazeStatusButtonSyncer = new BooleanSyncValue(
-            () -> false,
+            multiblock::isBlazeFilled,
             val -> { multiblock.clickBlazeStatusButton(); }).allowC2S();
         syncManager.syncValue("blazeStatusButtonSyncer", blazeStatusButtonSyncer);
+
+        BooleanSyncValue machineActiveGetter = new BooleanSyncValue(
+            () -> multiblock.getBaseMetaTileEntity() != null && multiblock.getBaseMetaTileEntity()
+                .isActive());
+        syncManager.syncValue("machineActiveGetter", machineActiveGetter);
 
         BooleanSyncValue updatedMachineGetter = new BooleanSyncValue(() -> multiblock.controllerTier == 2).allowC2S();
         syncManager.syncValue("updatedMachineGetter", updatedMachineGetter);

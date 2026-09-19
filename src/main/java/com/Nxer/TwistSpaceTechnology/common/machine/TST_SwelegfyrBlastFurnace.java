@@ -769,6 +769,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         }
     }
 
+    public boolean isBlazeFilled() {
+        return isBlazeFinishSet && !isBlazeFinishClear;
+    }
+
     public boolean getRapidHeating() {
         return isRapidHeating;
     }

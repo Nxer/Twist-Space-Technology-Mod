@@ -11,6 +11,8 @@ public class UITextures {
     public static final UITexture SBF_BlazeClear = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_BlazeClear");
     public static final com.gtnewhorizons.modularui.api.drawable.UITexture SBF_BlazeClear_MUI1 = com.gtnewhorizons.modularui.api.drawable.UITexture
         .fullImage(TST_ID, "icons/UITextures/SBF_BlazeClear");
+    public static final UITexture SBF_Blaze_Forbidden = UITexture
+        .fullImage(TST_ID, "icons/UITextures/SBF_Blaze_Forbidden");
     public static final UITexture SBF_BlazeSet = UITexture.fullImage(TST_ID, "icons/UITextures/SBF_BlazeSet");
     public static final com.gtnewhorizons.modularui.api.drawable.UITexture SBF_BlazeSet_MUI1 = com.gtnewhorizons.modularui.api.drawable.UITexture
         .fullImage(TST_ID, "icons/UITextures/SBF_BlazeSet");
