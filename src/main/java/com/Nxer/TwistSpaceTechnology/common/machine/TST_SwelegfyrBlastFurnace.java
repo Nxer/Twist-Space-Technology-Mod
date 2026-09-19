@@ -587,13 +587,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public boolean onRunningTick(ItemStack aStack) {
         if (runningTick % 20 == 0) {
             // Updates every sec
-            if (!isPassiveMode) {
+            if (!inPassiveMode) {
                 correctBlazeCost = 1000;
                 if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true)) {
                     stopMachineOfMissingPyrotheum(correctBlazeCost);
                     return false;
                 }
-            } else if (inPassiveMode && !isRapidHeating) {
+            } else if (!inRapidHeating) {
                 correctBlazeCost = mHeatingCapacity / 5;
                 if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true)) {
                     stopMachineOfMissingPyrotheum(correctBlazeCost);
@@ -617,7 +617,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 ItemStack ControllerSlot = this.getControllerSlot();
                 if (GTUtility.areStacksEqual(UpgradeItem, ControllerSlot)) {
                     controllerTier = 2;
-                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot, ControllerSlot.stackSize);
+                    mInventory[1] = ItemUtils.depleteStack(ControllerSlot, 1);
                     markDirty();
                     // schedule a structure check
                     mUpdated = true;
@@ -627,12 +627,12 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // Updates every 10 sec
             if (aTick % 200 == 0) {
                 boolean isActive = aBaseMetaTileEntity.isActive();
+                boolean isCurrentlyPassive = isActive ? inPassiveMode : isPassiveMode;
 
                 // Heat holding mode
-                if (!isActive && isPassiveMode && isHoldingHeat) {
+                if (!isActive && isCurrentlyPassive && isHoldingHeat) {
                     // If missing blaze, stop holding
                     if (checkBlaze()) {
-                        mHeatingCapacity = getCoilHeat();
                         isHoldingHeat = false;
                         return;
                     }
@@ -641,10 +641,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true)) {
                         isHoldingHeat = false;
                     }
-                } else if (!isPassiveMode || (!isActive && !isHoldingHeat)) {
+                } else if (!isCurrentlyPassive || (!isActive && !isHoldingHeat)) {
                     // Not hold, loss heat
                     int targetHeat = getCoilHeat();
-                    double lossRat = isActive && !isPassiveMode ? 0.1 : 0.2;
+                    double lossRat = isActive && !isCurrentlyPassive ? 0.1 : 0.2;
                     if (!isActive && !isHoldingHeat) correctBlazeCost = 0;
                     // Normal mode inactive not cost Blaze
 
@@ -792,7 +792,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             ItemStack heldItem = aPlayer.getHeldItem();
             if (GTUtility.areStacksEqual(UpgradeItem, heldItem)) {
                 controllerTier = 2;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, heldItem.stackSize));
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, 1));
                 if (getBaseMetaTileEntity().isServerSide()) {
                     markDirty();
                     aPlayer.inventory.markDirty();
