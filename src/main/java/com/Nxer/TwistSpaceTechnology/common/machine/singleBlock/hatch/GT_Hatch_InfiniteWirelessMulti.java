@@ -12,11 +12,13 @@ import java.util.UUID;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessMulti;
 import tectech.util.TTUtility;
 
+@SkipGenerateDescription
 public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
 
     private UUID owner_uuid;

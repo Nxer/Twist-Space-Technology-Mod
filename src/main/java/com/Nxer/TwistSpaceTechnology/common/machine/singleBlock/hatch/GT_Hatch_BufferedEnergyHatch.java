@@ -24,6 +24,7 @@ import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.MetaBaseItem;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -34,6 +35,7 @@ import ic2.api.item.IElectricItem;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+@SkipGenerateDescription
 public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
 
     public boolean mCharge = false, mDecharge = false;

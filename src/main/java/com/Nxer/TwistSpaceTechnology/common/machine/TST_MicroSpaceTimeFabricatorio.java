@@ -49,6 +49,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.RecipeMap;
@@ -61,6 +62,7 @@ import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import tectech.thing.casing.TTCasingsContainer;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
+@SkipGenerateDescription
 public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_MicroSpaceTimeFabricatorio> {
 
     // region Class Constructor

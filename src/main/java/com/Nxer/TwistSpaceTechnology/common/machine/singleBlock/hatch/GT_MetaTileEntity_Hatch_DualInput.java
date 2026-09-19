@@ -33,6 +33,7 @@ import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
@@ -40,6 +41,7 @@ import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 
+@SkipGenerateDescription
 public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implements IAddUIWidgets, IDualInputHatch {
 
     public static final int ITEM_SLOT_AMOUNT = 19;

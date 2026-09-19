@@ -53,6 +53,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import bartworks.API.recipe.BartWorksRecipeMaps;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -69,6 +70,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import tectech.thing.block.BlockQuantumGlass;
 
+@SkipGenerateDescription
 public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEntity_SpaceScaler>
     implements IConstructable, ISurvivalConstructable {
 

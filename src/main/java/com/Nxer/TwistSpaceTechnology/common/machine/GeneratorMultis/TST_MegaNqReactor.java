@@ -61,6 +61,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.recipe.RecipeMap;
@@ -86,6 +87,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
  * 最大并行可在配置文件中调整。
  * 消耗减免按配方开始时刻的累计运行时间计算。
  */
+@SkipGenerateDescription
 public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     implements IConstructable, ISurvivalConstructable, IMTERenderer {
 

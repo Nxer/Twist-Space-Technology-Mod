@@ -16,7 +16,9 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 
+@SkipGenerateDescription
 public class DynamicSpeedController extends DynamicSpeedControllerBase {
 
     // region Class Constructor

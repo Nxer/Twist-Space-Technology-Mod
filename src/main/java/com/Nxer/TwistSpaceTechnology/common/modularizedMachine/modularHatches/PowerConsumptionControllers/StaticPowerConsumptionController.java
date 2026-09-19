@@ -5,7 +5,9 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 
+@SkipGenerateDescription
 public class StaticPowerConsumptionController extends StaticPowerConsumptionControllerBase {
 
     public StaticPowerConsumptionController(int aID, String aName, String aNameRegional, int aTier,

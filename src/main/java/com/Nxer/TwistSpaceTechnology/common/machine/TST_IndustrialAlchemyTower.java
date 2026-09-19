@@ -84,6 +84,7 @@ import com.gtnewhorizon.structurelib.structure.StructureUtility;
 import emt.tile.TileElectricCloud;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
@@ -109,6 +110,7 @@ import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.storage.EnumEssentiaStorageTypes;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 
+@SkipGenerateDescription
 public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_IndustrialAlchemyTower> {
 
     // region default value

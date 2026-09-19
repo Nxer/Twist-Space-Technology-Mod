@@ -43,6 +43,7 @@ import gregtech.api.enums.Mods;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -57,6 +58,7 @@ import micdoodle8.mods.galacticraft.planets.mars.blocks.MarsBlocks;
 import tectech.thing.casing.TTCasingsContainer;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 
+@SkipGenerateDescription
 public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEntity_MegaEggGenerator>
     implements IConstructable, ISurvivalConstructable {
 

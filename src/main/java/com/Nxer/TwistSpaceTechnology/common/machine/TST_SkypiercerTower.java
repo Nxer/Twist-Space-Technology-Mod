@@ -81,6 +81,7 @@ import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -102,6 +103,7 @@ import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 import vazkii.botania.common.block.ModBlocks;
 
+@SkipGenerateDescription
 public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTower>
     implements IConstructable, ISurvivalConstructable {
 

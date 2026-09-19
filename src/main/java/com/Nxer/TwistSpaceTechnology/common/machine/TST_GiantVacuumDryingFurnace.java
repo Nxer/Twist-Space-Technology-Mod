@@ -46,6 +46,7 @@ import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
@@ -58,6 +59,7 @@ import gregtech.common.blocks.BlockCasings8;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 
+@SkipGenerateDescription
 public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_GiantVacuumDryingFurnace> {
 
     private static final int MACHINEMODE_VACUUMFURNACE = 0;

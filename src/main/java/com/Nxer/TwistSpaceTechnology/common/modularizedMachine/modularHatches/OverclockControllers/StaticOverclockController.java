@@ -12,8 +12,10 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.render.TextureFactory;
 
+@SkipGenerateDescription
 public class StaticOverclockController extends StaticOverclockControllerBase {
 
     public StaticOverclockController(int aID, String aName, String aNameRegional, int aTier, int timeReduction,

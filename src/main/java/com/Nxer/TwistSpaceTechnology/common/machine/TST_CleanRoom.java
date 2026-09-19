@@ -41,6 +41,7 @@ import gregtech.api.interfaces.ICleanroomReceiver;
 import gregtech.api.interfaces.ISecondaryDescribable;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEBasicHull;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -50,6 +51,7 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
+@SkipGenerateDescription
 public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
     implements IConstructable, ISecondaryDescribable, ICleanroom {
 

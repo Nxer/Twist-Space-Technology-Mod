@@ -9,10 +9,12 @@ import net.minecraft.util.EnumChatFormatting;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessDynamoMulti;
 
+@SkipGenerateDescription
 public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamoMulti {
 
     // region Class Constructor

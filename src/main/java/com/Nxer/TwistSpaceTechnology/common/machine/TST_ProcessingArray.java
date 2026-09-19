@@ -44,6 +44,7 @@ import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEBasicMachineWithRecipe;
@@ -66,6 +67,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 /**
  * Recode the Processing Array.
  */
+@SkipGenerateDescription
 public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArray> {
 
     // region Class Constructors

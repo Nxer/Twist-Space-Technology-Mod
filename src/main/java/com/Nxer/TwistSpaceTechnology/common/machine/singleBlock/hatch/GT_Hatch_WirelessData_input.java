@@ -22,6 +22,7 @@ import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -29,6 +30,7 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.gui.TecTechUITextures;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataInput;
 
+@SkipGenerateDescription
 public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IAddGregtechLogo, IAddUIWidgets {
 
     public long requiredComputation = 1000000;

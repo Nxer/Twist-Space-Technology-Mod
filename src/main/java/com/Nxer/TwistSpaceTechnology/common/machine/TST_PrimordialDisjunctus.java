@@ -49,6 +49,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
 import gregtech.api.objects.XSTR;
@@ -69,6 +70,7 @@ import thaumcraft.common.lib.network.fx.PacketFXEssentiaSource;
 import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileEssentiaProvider;
 
+@SkipGenerateDescription
 public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_PrimordialDisjunctus>
     implements IConstructable, ISurvivalConstructable {
 

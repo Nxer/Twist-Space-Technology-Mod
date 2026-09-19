@@ -8,10 +8,12 @@ import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPack
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataOutput;
 
+@SkipGenerateDescription
 public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput {
 
     public GT_Hatch_WirelessData_output(int aID, String aName, String aNameRegional, int aTier) {

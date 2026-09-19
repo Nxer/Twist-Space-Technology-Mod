@@ -37,6 +37,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
@@ -54,6 +55,7 @@ import gtnhintergalactic.client.IGTextures;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import tectech.thing.casing.TTCasingsContainer;
 
+@SkipGenerateDescription
 public class GT_TileEntity_StellarMaterialSiphon
     extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_StellarMaterialSiphon> implements IChunkLoader {
 

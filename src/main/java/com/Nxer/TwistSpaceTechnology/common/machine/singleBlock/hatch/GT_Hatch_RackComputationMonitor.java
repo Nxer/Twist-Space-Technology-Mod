@@ -38,6 +38,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -48,6 +49,7 @@ import tectech.TecTech;
 import tectech.thing.gui.TecTechUITextures;
 import tectech.util.TTUtility;
 
+@SkipGenerateDescription
 public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGregtechLogo, IAddUIWidgets {
 
     private static IIconContainer EM_R;

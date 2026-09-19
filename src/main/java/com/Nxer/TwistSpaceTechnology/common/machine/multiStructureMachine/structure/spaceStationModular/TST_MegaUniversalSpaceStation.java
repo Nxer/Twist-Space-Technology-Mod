@@ -28,6 +28,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
@@ -40,6 +41,7 @@ import gtnhintergalactic.client.IGTextures;
 import tectech.thing.casing.TTCasingsContainer;
 
 // spotless:off
+@SkipGenerateDescription
 public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureMachine<TST_MegaUniversalSpaceStation> {
 
     public static IStructureDefinition<TST_MegaUniversalSpaceStation> structureDefinition;

@@ -49,6 +49,7 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.apiculture.genetics.Bee;
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -226,6 +227,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         return ret.toString();
     }
 
+    @SkipGenerateDescription
     public static class TST_SpaceApiaryT1 extends TST_SpaceApiary {
 
         protected static final int MODULE_VOLTAGE_TIER = 10;
@@ -286,6 +288,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
     }
 
+    @SkipGenerateDescription
     public static class TST_SpaceApiaryT2 extends TST_SpaceApiary {
 
         protected static final int MODULE_VOLTAGE_TIER = 14;
@@ -346,6 +349,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
     }
 
+    @SkipGenerateDescription
     public static class TST_SpaceApiaryT3 extends TST_SpaceApiary {
 
         protected static final int MODULE_VOLTAGE_TIER = 18;
@@ -406,6 +410,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
         }
     }
 
+    @SkipGenerateDescription
     public static class TST_SpaceApiaryT4 extends TST_SpaceApiary {
 
         protected static final int MODULE_VOLTAGE_TIER = 25;

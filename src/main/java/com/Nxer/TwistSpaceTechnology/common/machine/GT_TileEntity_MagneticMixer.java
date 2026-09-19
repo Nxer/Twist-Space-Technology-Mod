@@ -35,6 +35,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
@@ -48,6 +49,7 @@ import gregtech.common.blocks.BlockCasings8;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 
+@SkipGenerateDescription
 public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEntity_MagneticMixer> {
 
     // region Class Constructor

@@ -5,7 +5,9 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 
+@SkipGenerateDescription
 public class StaticParallelController extends StaticParallelControllerBase {
 
     public StaticParallelController(int aID, String aName, String aNameRegional, int aTier, int parallel) {

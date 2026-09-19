@@ -86,6 +86,7 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -105,6 +106,7 @@ import scala.tools.nsc.doc.model.Object;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
+@SkipGenerateDescription
 public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCraftingCenter>
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
 

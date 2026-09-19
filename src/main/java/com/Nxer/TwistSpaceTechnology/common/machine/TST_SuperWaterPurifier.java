@@ -51,6 +51,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
@@ -63,6 +64,7 @@ import gregtech.api.util.VoidProtectionHelper;
 import gregtech.common.blocks.BlockCasings10;
 import tectech.thing.block.BlockGodforgeGlass;
 
+@SkipGenerateDescription
 public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWaterPurifier> {
 
     // region Class Constructor

@@ -40,9 +40,11 @@ import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
+@SkipGenerateDescription
 public class TST_PatternAccessHatch extends MTEHatch
     implements IGridProxyable, ICellContainer, IMEInventoryHandler<AEItemStack>, IPowerChannelState {
 

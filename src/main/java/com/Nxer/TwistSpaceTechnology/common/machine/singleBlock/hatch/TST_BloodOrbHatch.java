@@ -18,10 +18,12 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 
+@SkipGenerateDescription
 public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
 
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch";
@@ -249,6 +251,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         return true;
     }
 
+    @SkipGenerateDescription
     public static class TST_Debug_BloodHatch extends TST_BloodOrbHatch {
 
         public TST_Debug_BloodHatch(int aID, String aName, String aNameRegional, int aTier) {

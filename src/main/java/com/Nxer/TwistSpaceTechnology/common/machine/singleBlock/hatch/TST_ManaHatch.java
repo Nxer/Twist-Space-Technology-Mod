@@ -20,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
@@ -28,6 +29,7 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
+@SkipGenerateDescription
 public class TST_ManaHatch extends MTEHatchInput {
 
     private boolean isLiquidizerMode;

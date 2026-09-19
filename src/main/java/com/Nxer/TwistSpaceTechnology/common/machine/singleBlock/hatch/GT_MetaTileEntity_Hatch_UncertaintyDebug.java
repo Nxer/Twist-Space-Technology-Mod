@@ -10,10 +10,12 @@ import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchUncertainty;
 import tectech.util.CommonValues;
 
+@SkipGenerateDescription
 public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty {
 
     public GT_MetaTileEntity_Hatch_UncertaintyDebug(int aID, String aName, String aNameRegional, int aTier) {
