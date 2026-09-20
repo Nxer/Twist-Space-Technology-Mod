@@ -454,6 +454,8 @@ public enum GTCMItemList {
     // region single block Machines
     InfiniteAirHatch,
     ManaHatch,
+    AEStorageCellInputBus,
+    AEStorageCellInputHatch,
     InfiniteWirelessDynamoHatch,
     DualInputBuffer_IV,
     DualInputBuffer_LuV,

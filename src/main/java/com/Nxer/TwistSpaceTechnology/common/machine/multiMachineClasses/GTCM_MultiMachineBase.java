@@ -3,10 +3,14 @@ package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 import static gregtech.api.util.GTUtility.validMTEList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -27,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedFluidInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TextEnums;
@@ -357,6 +363,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
         }
+        appendSegmentedItemInputs(rList, Optional.empty());
         return rList;
     }
 
@@ -393,6 +400,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
         }
+        appendSegmentedFluidInputs(rList, Optional.empty());
 
         // get all fluids from Dual input
         if (supportsCraftingMEBuffer()) {
@@ -418,7 +426,72 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
+    // GT keeps one stack per ME type; TST machines add the remaining int-sized segments back.
+    private void appendSegmentedItemInputs(List<ItemStack> inputs, Optional<Byte> color) {
+        Set<ItemStack> includedSegments = null;
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (!(bus instanceof ITSTSegmentedItemInput segmentedInput)) continue;
+            byte busColor = bus.getColor();
+            if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+            if (includedSegments == null) {
+                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
+                includedSegments.addAll(inputs);
+            }
+            for (ItemStack segment : segmentedInput.getTSTStoredItemSegments()) {
+                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            }
+        }
+    }
+
+    private void appendSegmentedFluidInputs(List<FluidStack> inputs, Optional<Byte> color) {
+        Set<FluidStack> includedSegments = null;
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (!(hatch instanceof ITSTSegmentedFluidInput segmentedInput)) continue;
+            byte hatchColor = hatch.getColor();
+            if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+            if (includedSegments == null) {
+                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
+                includedSegments.addAll(inputs);
+            }
+            for (FluidStack segment : segmentedInput.getTSTStoredFluidSegments()) {
+                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            }
+        }
+    }
+
     // region Overrides
+    @Override
+    public void startRecipeProcessing() {
+        super.startRecipeProcessing();
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (bus instanceof ITSTSegmentedItemInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+        }
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (hatch instanceof ITSTSegmentedFluidInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+        }
+    }
+
+    @Override
+    public ArrayList<ItemStack> getStoredInputsForColor(Optional<Byte> color) {
+        ArrayList<ItemStack> inputs = super.getStoredInputsForColor(color);
+        appendSegmentedItemInputs(inputs, color);
+        return inputs;
+    }
+
+    @Override
+    public ArrayList<ItemStack> getAllStoredInputs() {
+        ArrayList<ItemStack> inputs = super.getAllStoredInputs();
+        appendSegmentedItemInputs(inputs, Optional.empty());
+        return inputs;
+    }
+
+    @Override
+    public ArrayList<FluidStack> getStoredFluidsForColor(Optional<Byte> color) {
+        ArrayList<FluidStack> inputs = super.getStoredFluidsForColor(color);
+        appendSegmentedFluidInputs(inputs, color);
+        return inputs;
+    }
+
     @Override
     public String[] getInfoData() {
         String dSpeed = String.format("%.3f", this.getSpeedBonus() * 100) + "%";
