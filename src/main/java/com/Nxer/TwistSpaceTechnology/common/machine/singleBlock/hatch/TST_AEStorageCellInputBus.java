@@ -112,23 +112,26 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
 
     private static String[] createDescription() {
         return new String[] { TextLocalization.HatchTier + " " + TstSharedFormat.getTierName(VoltageIndex.UIV),
-            // #tr Tooltip_AEStorageCellInputBus.3
+            // #tr Tooltip_AEStorageCellInputBus.0
             // # Advanced stocking input bus upgrade for multiblock item input
             // #zh_CN 进阶存储输入总线的升级版，为多方块机器输入物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.3"),
-            // #tr Tooltip_AEStorageCellInputBus.0
+            TextEnums.tr("Tooltip_AEStorageCellInputBus.0"),
+            // #tr Tooltip_AEStorageCellInputBus.1
             // # Retrieves up to 16 marked item types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.0"),
+            TextEnums.tr("Tooltip_AEStorageCellInputBus.1"),
             // #tr Tooltip_AEStorageCellInputBus.2
             // # An inserted ME storage cell supplies items instead and disconnects the ME network
             // #zh_CN 放入ME存储元件后改从元件中拉取，且无法连接ME网络
             TextEnums.tr("Tooltip_AEStorageCellInputBus.2"),
-            // #tr Tooltip_AEStorageCellInputBus.1
-            // # Processes up to %s x 2147483647 items in total per recipe
-            // #zh_CN 单次配方合计最多处理%s × 2147483647件物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.1", Config.MaxTotalIntSegments_AEStorageCellInput),
-            TextEnums.Author_Goderium.getText(), ModNameDesc };
+            // #tr Tooltip_AEStorageCellInputBus.3
+            // # Per recipe, TST machines handle %s x 2147483647 items in total
+            // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647件物品
+            TextEnums.tr("Tooltip_AEStorageCellInputBus.3", Config.MaxTotalIntSegments_AEStorageCellInput),
+            // #tr Tooltip_AEStorageCellInputBus.4
+            // # Supported special processing can use the full stored amount
+            // #zh_CN 支持的特殊处理可使用完整库存数量
+            TextEnums.tr("Tooltip_AEStorageCellInputBus.4"), TextEnums.Author_Goderium.getText(), ModNameDesc };
     }
 
     @Override
