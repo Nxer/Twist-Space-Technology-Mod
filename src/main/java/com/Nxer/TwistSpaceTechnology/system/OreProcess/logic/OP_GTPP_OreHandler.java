@@ -60,7 +60,7 @@ public class OP_GTPP_OreHandler {
                 .fluidInputs(Materials.Lubricant.getFluid(1))
                 .eut(OreProcessRecipeEUt)
                 .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.OreProcessingRecipes);
+                .addTo(GTCMRecipe.OreProcessingVisualRecipes);
 
             ItemStack r = ore.getRawOre(1);
             if (r != null) {
@@ -70,7 +70,7 @@ public class OP_GTPP_OreHandler {
                     .fluidInputs(Materials.Lubricant.getFluid(1))
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.OreProcessingRecipes);
+                    .addTo(GTCMRecipe.OreProcessingVisualRecipes);
             }
 
         }
@@ -83,14 +83,14 @@ public class OP_GTPP_OreHandler {
             .fluidInputs(Materials.Lubricant.getFluid(1))
             .eut(OreProcessRecipeEUt)
             .duration(OreProcessRecipeDuration)
-            .addTo(GTCMRecipe.OreProcessingRecipes);
+            .addTo(GTCMRecipe.OreProcessingVisualRecipes);
         TST_RecipeBuilder.builder()
             .itemInputs(MaterialsFluorides.FLUORITE.getRawOre(1))
             .itemOutputs(MaterialsFluorides.FLUORITE.getDust(64))
             .fluidInputs(Materials.Lubricant.getFluid(1))
             .eut(OreProcessRecipeEUt)
             .duration(OreProcessRecipeDuration)
-            .addTo(GTCMRecipe.OreProcessingRecipes);
+            .addTo(GTCMRecipe.OreProcessingVisualRecipes);
     }
 
 }

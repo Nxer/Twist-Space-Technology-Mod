@@ -338,7 +338,7 @@ public class OP_NormalProcessing {
             .fluidInputs(Materials.Lubricant.getFluid(1))
             .eut(OreProcessRecipeEUt)
             .duration(OreProcessRecipeDuration)
-            .addTo(GTCMRecipe.OreProcessingRecipes);
+            .addTo(GTCMRecipe.OreProcessingVisualRecipes);
     }
 
     /**

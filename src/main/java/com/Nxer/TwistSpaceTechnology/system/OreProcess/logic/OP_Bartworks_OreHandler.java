@@ -60,7 +60,7 @@ public class OP_Bartworks_OreHandler {
                 .fluidInputs(Materials.Lubricant.getFluid(1))
                 .eut(OreProcessRecipeEUt)
                 .duration(OreProcessRecipeDuration)
-                .addTo(GTCMRecipe.OreProcessingRecipes);
+                .addTo(GTCMRecipe.OreProcessingVisualRecipes);
 
             ItemStack r = werkstoff.get(rawOre, 1);
             if (r != null) {
@@ -70,7 +70,7 @@ public class OP_Bartworks_OreHandler {
                     .fluidInputs(Materials.Lubricant.getFluid(1))
                     .eut(OreProcessRecipeEUt)
                     .duration(OreProcessRecipeDuration)
-                    .addTo(GTCMRecipe.OreProcessingRecipes);
+                    .addTo(GTCMRecipe.OreProcessingVisualRecipes);
             }
 
         }

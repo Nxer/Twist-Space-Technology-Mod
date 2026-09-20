@@ -368,7 +368,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.OreProcessingRecipes;
+        return GTCMRecipe.OreProcessingVisualRecipes;
     }
 
     @Override
