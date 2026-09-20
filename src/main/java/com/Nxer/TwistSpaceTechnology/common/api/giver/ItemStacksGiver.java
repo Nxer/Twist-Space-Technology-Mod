@@ -71,6 +71,26 @@ public class ItemStacksGiver {
 
     public ItemStacksGiver() {}
 
+    public boolean isEmpty() {
+        return cache == null || cache.isEmpty();
+    }
+
+    public void merge(TST_ItemID i, long amount) {
+        cache.merge(i, amount, Long::sum);
+    }
+
+    public void merge(ItemStack item) {
+        merge(TST_ItemID.create(item), item.stackSize);
+    }
+
+    public void merge(ItemStacksGiver g, int times) {
+        g.cache.forEach((i, l) -> { cache.merge(i, l * times, Long::sum); });
+    }
+
+    public void merge(ItemStacksGiver g) {
+        g.cache.forEach((i, l) -> { cache.merge(i, l, Long::sum); });
+    }
+
     public List<ItemStack> getAsList(int times) {
         if (times <= 0 || cache.isEmpty()) {
             return new ArrayList<>();
@@ -84,7 +104,8 @@ public class ItemStacksGiver {
             while (amount > Integer.MAX_VALUE) {
                 o.add(
                     e.getKey()
-                        .getItemStack((int) amount));
+                        .getItemStack(Integer.MAX_VALUE));
+                amount -= Integer.MAX_VALUE;
             }
 
             if (amount > 0) {
@@ -102,6 +123,14 @@ public class ItemStacksGiver {
         }
 
         return getAsList(times).toArray(new ItemStack[0]);
+    }
+
+    public ItemStack[] getAsArray() {
+        return getAsArray(1);
+    }
+
+    public ItemStack[] toArray() {
+        return getAsArray(1);
     }
 
     public Map<TST_ItemID, Long> getAsMap(int times) {
