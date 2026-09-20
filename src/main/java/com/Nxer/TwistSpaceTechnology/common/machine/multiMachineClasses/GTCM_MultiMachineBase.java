@@ -461,6 +461,17 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // region Overrides
     @Override
+    public void startRecipeProcessing() {
+        super.startRecipeProcessing();
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (bus instanceof ITSTSegmentedItemInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+        }
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (hatch instanceof ITSTSegmentedFluidInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+        }
+    }
+
+    @Override
     public ArrayList<ItemStack> getStoredInputsForColor(Optional<Byte> color) {
         ArrayList<ItemStack> inputs = super.getStoredInputsForColor(color);
         appendSegmentedItemInputs(inputs, color);

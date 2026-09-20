@@ -84,6 +84,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
     private final boolean[] displayedThisRecipe = new boolean[TST_AEStorageCellHelper.MAX_TYPES];
     private int[] segmentAllocations = new int[TST_AEStorageCellHelper.MAX_TYPES];
     private final int configuredTier;
+    private TST_AEStorageCellHelper.PullMode pullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
     private boolean storageCellPresent;
     private boolean usingCellDuringRecipe;
     private boolean exposedInputsPrepared;
@@ -346,6 +347,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
                     for (TST_AEStorageCellInputHatch hatch : longHatches) hatch.suppressRecipeSegments = false;
                 }
             }
+            for (TST_AEStorageCellInputHatch hatch : longHatches) hatch.setLongInputMode();
             for (FluidStack fluid : ordinaryInputs) {
                 if (fluid != null && fluid.amount > 0 && fluid.getFluid() != null) fluidTypes.add(fluid.getFluid());
             }
@@ -573,10 +575,10 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
         CellFluidEntry entry = selectedContents[index];
         if (entry == null) return;
         entry.availableAmount = Math.max(0, entry.availableAmount - amount);
-        pullableAmounts[index] = entry.availableAmount;
+        pullableAmounts[index] = Math.max(0, pullableAmounts[index] - amount);
         Slot slot = slots[index];
         if (slot != null && slot.extracted != null) {
-            slot.extractedAmount = (int) Math.min(entry.availableAmount, Integer.MAX_VALUE);
+            slot.extractedAmount = (int) Math.min(pullableAmounts[index], Integer.MAX_VALUE);
             slot.extracted.amount = slot.extractedAmount;
         }
         showRecipeRemainder = true;
@@ -699,6 +701,11 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
     }
 
     @Override
+    public void setTSTSegmentedInputMode() {
+        setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
+    }
+
+    @Override
     public FluidStack getFluid() {
         if (!processingRecipe) return null;
         prepareRecipeInputsIfNeeded();
@@ -800,6 +807,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
         processingRecipe = true;
         exposedInputsPrepared = false;
         longExtractionUsed = false;
+        setPullMode(TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK);
         showRecipeRemainder = false;
         Arrays.fill(displayedThisRecipe, false);
         lastGuiAmountRefreshTick = Long.MIN_VALUE;
@@ -871,23 +879,22 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
         if (!processingRecipe && !showRecipeRemainder) refreshSelectedContents(hasStorageCell());
         tag.setLong("cacheCapacity", (long) Integer.MAX_VALUE * Config.MaxTotalIntSegments_AEStorageCellInput);
 
-        List<CellFluidEntry> entries = new ArrayList<>();
-        for (CellFluidEntry entry : selectedContents) {
-            if (entry != null && entry.availableAmount > 0) entries.add(entry);
+        List<Integer> entries = new ArrayList<>();
+        for (int i = 0; i < selectedContents.length; i++) {
+            if (selectedContents[i] != null && pullableAmounts[i] > 0) entries.add(i);
         }
-        entries.sort((a, b) -> Long.compare(b.availableAmount, a.availableAmount));
+        entries.sort((a, b) -> Long.compare(pullableAmounts[b], pullableAmounts[a]));
 
         tag.setInteger("stackCount", entries.size());
         NBTTagList stacks = new NBTTagList();
         tag.setTag("stacks", stacks);
-        entries.stream()
-            .limit(10)
-            .forEach(entry -> {
-                NBTTagCompound stack = new NBTTagCompound();
-                stack.setString("Name", entry.displayStack.getLocalizedName());
-                stack.setLong("Amount", entry.availableAmount);
-                stacks.appendTag(stack);
-            });
+        for (int i = 0; i < Math.min(10, entries.size()); i++) {
+            int index = entries.get(i);
+            NBTTagCompound stack = new NBTTagCompound();
+            stack.setString("Name", selectedContents[index].displayStack.getLocalizedName());
+            stack.setLong("Amount", pullableAmounts[index]);
+            stacks.appendTag(stack);
+        }
     }
 
     @Override
@@ -1017,11 +1024,26 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
         for (int i = 0; i < selectedContents.length; i++) {
             if (selectedContents[i] != null) availableAmounts[i] = selectedContents[i].availableAmount;
         }
-        // GT recipes still share the int segment limit; the GUI shows the full long amount.
         segmentAllocations = TST_AEStorageCellHelper
             .distributeIntSegments(availableAmounts, Config.MaxTotalIntSegments_AEStorageCellInput);
+        applyPullMode();
+    }
+
+    private void setLongInputMode() {
+        setPullMode(TST_AEStorageCellHelper.PullMode.LONG);
+    }
+
+    private void setPullMode(TST_AEStorageCellHelper.PullMode mode) {
+        if (pullMode == mode) return;
+        pullMode = mode;
+        applyPullMode();
+    }
+
+    private void applyPullMode() {
         for (int i = 0; i < pullableAmounts.length; i++) {
-            pullableAmounts[i] = availableAmounts[i];
+            CellFluidEntry entry = selectedContents[i];
+            pullableAmounts[i] = entry == null ? 0
+                : TST_AEStorageCellHelper.limitPullableAmount(entry.availableAmount, segmentAllocations[i], pullMode);
         }
     }
 

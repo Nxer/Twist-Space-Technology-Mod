@@ -86,8 +86,11 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
     };
     private final CellItemEntry[] selectedContents = new CellItemEntry[TST_AEStorageCellHelper.MAX_TYPES];
     private final List<ItemStack> exposedStacks = new ArrayList<>();
+    private final long[] pullableAmounts = new long[TST_AEStorageCellHelper.MAX_TYPES];
     private final boolean[] displayedThisRecipe = new boolean[TST_AEStorageCellHelper.MAX_TYPES];
+    private int[] segmentAllocations = new int[TST_AEStorageCellHelper.MAX_TYPES];
     private final int configuredTier;
+    private TST_AEStorageCellHelper.PullMode pullMode = TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK;
     private boolean storageCellPresent;
     private boolean usingCellDuringRecipe;
     private boolean exposedInputsPrepared;
@@ -263,6 +266,8 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
     protected void clearSlotConfigs() {
         super.clearSlotConfigs();
         Arrays.fill(selectedContents, null);
+        Arrays.fill(pullableAmounts, 0);
+        Arrays.fill(segmentAllocations, 0);
         showRecipeRemainder = false;
         lastGuiAmountRefreshTick = Long.MIN_VALUE;
     }
@@ -305,8 +310,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
                 refreshSelectedContents(hasStorageCell());
             }
         }
-        CellItemEntry entry = selectedContents[index];
-        return entry == null ? 0 : entry.availableAmount;
+        return pullableAmounts[index];
     }
 
     /** Create one view during checkProcessing, after GT starts recipe processing for the busses. */
@@ -346,6 +350,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
                     for (TST_AEStorageCellInputBus bus : longBusses) bus.suppressRecipeSegments = false;
                 }
             }
+            for (TST_AEStorageCellInputBus bus : longBusses) bus.setLongInputMode();
             for (ItemStack item : ordinaryInputs) {
                 if (item != null && item.stackSize > 0)
                     itemTypes.putIfAbsent(GTUtility.ItemId.createNoCopy(item), item);
@@ -502,6 +507,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
                     && !bus.exposedInputsPrepared
                     && !bus.displayedThisRecipe[index]) {
                     bus.selectedContents[index] = new CellItemEntry(found);
+                    bus.pullableAmounts[index] = found.getStackSize();
                     bus.slots[index].extracted = found.copy()
                         .setStackSize(Math.min(found.getStackSize(), Integer.MAX_VALUE))
                         .getItemStack();
@@ -583,9 +589,10 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
         CellItemEntry entry = selectedContents[index];
         if (entry == null) return;
         entry.availableAmount = Math.max(0, entry.availableAmount - amount);
+        pullableAmounts[index] = Math.max(0, pullableAmounts[index] - amount);
         Slot slot = slots[index];
         if (slot != null && slot.extracted != null) {
-            slot.extractedAmount = (int) Math.min(entry.availableAmount, Integer.MAX_VALUE);
+            slot.extractedAmount = (int) Math.min(pullableAmounts[index], Integer.MAX_VALUE);
             slot.extracted.stackSize = slot.extractedAmount;
         }
         showRecipeRemainder = true;
@@ -613,6 +620,11 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
         if (processingRecipe && suppressRecipeSegments) return Collections.emptyList();
         prepareRecipeInputsIfNeeded();
         return exposedStacks;
+    }
+
+    @Override
+    public void setTSTSegmentedInputMode() {
+        setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
     }
 
     @Override
@@ -722,6 +734,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
         processingRecipe = true;
         exposedInputsPrepared = false;
         longExtractionUsed = false;
+        setPullMode(TST_AEStorageCellHelper.PullMode.GT_SINGLE_STACK);
         showRecipeRemainder = false;
         Arrays.fill(displayedThisRecipe, false);
         lastGuiAmountRefreshTick = Long.MIN_VALUE;
@@ -797,23 +810,22 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
         if (!processingRecipe && !showRecipeRemainder) refreshSelectedContents(hasStorageCell());
         tag.setLong("cacheCapacity", (long) Integer.MAX_VALUE * Config.MaxTotalIntSegments_AEStorageCellInput);
 
-        List<CellItemEntry> entries = new ArrayList<>();
-        for (CellItemEntry entry : selectedContents) {
-            if (entry != null && entry.availableAmount > 0) entries.add(entry);
+        List<Integer> entries = new ArrayList<>();
+        for (int i = 0; i < selectedContents.length; i++) {
+            if (selectedContents[i] != null && pullableAmounts[i] > 0) entries.add(i);
         }
-        entries.sort((a, b) -> Long.compare(b.availableAmount, a.availableAmount));
+        entries.sort((a, b) -> Long.compare(pullableAmounts[b], pullableAmounts[a]));
 
         tag.setInteger("stackCount", entries.size());
         NBTTagList stacks = new NBTTagList();
         tag.setTag("stacks", stacks);
-        entries.stream()
-            .limit(10)
-            .forEach(entry -> {
-                NBTTagCompound stack = new NBTTagCompound();
-                stack.setString("Name", entry.displayStack.getDisplayName());
-                stack.setLong("Amount", entry.availableAmount);
-                stacks.appendTag(stack);
-            });
+        for (int i = 0; i < Math.min(10, entries.size()); i++) {
+            int index = entries.get(i);
+            NBTTagCompound stack = new NBTTagCompound();
+            stack.setString("Name", selectedContents[index].displayStack.getDisplayName());
+            stack.setLong("Amount", pullableAmounts[index]);
+            stacks.appendTag(stack);
+        }
     }
 
     @Override
@@ -888,6 +900,8 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
                 if (entry != null) entry.availableAmount = 0;
             }
             clearExtractedStacks();
+            Arrays.fill(pullableAmounts, 0);
+            Arrays.fill(segmentAllocations, 0);
             return;
         }
 
@@ -933,19 +947,42 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
             slot.extractedAmount = slot.extracted.stackSize;
         }
         Arrays.fill(selectedContents, selectedSlotCount, selectedContents.length, null);
+        updatePullableAmounts();
     }
 
-    private void prepareExposedStacks() {
-        exposedStacks.clear();
+    private void setLongInputMode() {
+        setPullMode(TST_AEStorageCellHelper.PullMode.LONG);
+    }
+
+    private void setPullMode(TST_AEStorageCellHelper.PullMode mode) {
+        if (pullMode == mode) return;
+        pullMode = mode;
+        applyPullMode();
+    }
+
+    private void updatePullableAmounts() {
         long[] availableAmounts = new long[selectedContents.length];
         for (int i = 0; i < selectedContents.length; i++) {
             if (selectedContents[i] != null) availableAmounts[i] = selectedContents[i].availableAmount;
         }
-        // All marked types share one limit, not one limit per type.
-        int[] allocations = TST_AEStorageCellHelper
+        segmentAllocations = TST_AEStorageCellHelper
             .distributeIntSegments(availableAmounts, Config.MaxTotalIntSegments_AEStorageCellInput);
+        applyPullMode();
+    }
+
+    private void applyPullMode() {
+        for (int i = 0; i < pullableAmounts.length; i++) {
+            CellItemEntry entry = selectedContents[i];
+            pullableAmounts[i] = entry == null ? 0
+                : TST_AEStorageCellHelper.limitPullableAmount(entry.availableAmount, segmentAllocations[i], pullMode);
+        }
+    }
+
+    private void prepareExposedStacks() {
+        exposedStacks.clear();
         for (int i = 0; i < selectedContents.length; i++) {
-            if (selectedContents[i] != null) selectedContents[i].prepareExposedStacks(allocations[i], exposedStacks);
+            if (selectedContents[i] != null)
+                selectedContents[i].prepareExposedStacks(segmentAllocations[i], exposedStacks);
         }
     }
 
