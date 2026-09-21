@@ -64,7 +64,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesReci
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipes.CropsMutationRecipes;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler;
-import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_NormalProcessing;
+import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Logic;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipePool;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearches;
 
@@ -140,7 +140,7 @@ public class RecipeLoader {
         StaticMiscs.init();
         GT_TileEntity_MegaBrickedBlastFurnace.initStatics();
 
-        OP_NormalProcessing.enumOreProcessingRecipes();
+        OP_Logic.initialize();
 
         if (Config.Enable_MegaCraftingCenter) {
             new ExtremeCraftRecipeHandler().initECRecipe();
