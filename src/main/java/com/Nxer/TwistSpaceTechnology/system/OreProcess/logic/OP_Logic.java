@@ -16,6 +16,7 @@ import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_HIGH;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_LOW;
 import static gtPlusPlus.core.material.MaterialMisc.RARE_EARTH_MID;
 import static gtPlusPlus.core.material.MaterialsAlloy.KOBOLDITE;
+import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.RUNITE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -380,6 +381,7 @@ public class OP_Logic {
         mOres.add(RARE_EARTH_MID);
         mOres.add(RARE_EARTH_HIGH);
         mOres.add(KOBOLDITE);
+        mOres.add(RUNITE);
         for (Material m : Material.mMaterialMap) {
             if (m == null) continue;
             if (MaterialState.ORE.equals(m.getState())) {
