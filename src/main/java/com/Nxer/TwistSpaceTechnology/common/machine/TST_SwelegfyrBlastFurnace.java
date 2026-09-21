@@ -360,7 +360,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         }
 
         // set recipe heat limitation
-        recipeHeatLimitation = (int) getCoilLevel().getHeat() + 100 * (getTotalPowerTier() - 2);
+        recipeHeatLimitation = (int) getCoilLevel().getHeat() + 100 * Math.max(getDominantInputVoltageTier() - 2, 0);
 
     }
 
@@ -373,9 +373,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public boolean inPassiveMode = false;
     public boolean isRapidHeating = false;
     public boolean inRapidHeating = false;
+    private int pendingRapidHeatingStep = 0;
     public boolean isHoldingHeat = false;
+    private int holdingHeatTicks = 0;
     public static ItemStack UpgradeItem = null;
     public int previousRecipeCode = 0;
+    private GTRecipe previousRecipe;
+    private int previousRecipeVoltageTier = -1;
     public int correctBlazeCost = 0;
     public MTEHatchInput mBlazeHatch;
     public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
@@ -393,6 +397,30 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     public void setCoilLevel(HeatingCoilLevel coilLevel) {
         this.coilLevel = coilLevel;
+    }
+
+    private static int getRecipeCode(GTRecipe recipe) {
+        int result = 1;
+        result = 31 * result + recipe.mEUt;
+        result = 31 * result + recipe.mDuration;
+        result = 31 * result + recipe.mSpecialValue;
+        for (ItemStack input : recipe.mInputs) {
+            result = 31 * result + GTUtility.persistentHash(input, true, true);
+        }
+        for (FluidStack input : recipe.mFluidInputs) {
+            result = 31 * result + GTUtility.persistentHash(input, true, true);
+        }
+        for (ItemStack output : recipe.mOutputs) {
+            result = 31 * result + GTUtility.persistentHash(output, true, true);
+        }
+        for (FluidStack output : recipe.mFluidOutputs) {
+            result = 31 * result + GTUtility.persistentHash(output, true, true);
+        }
+        result = 31 * result + Arrays.hashCode(recipe.mInputChances);
+        result = 31 * result + Arrays.hashCode(recipe.mOutputChances);
+        result = 31 * result + Arrays.hashCode(recipe.mFluidInputChances);
+        result = 31 * result + Arrays.hashCode(recipe.mFluidOutputChances);
+        return result == 0 ? 1 : result;
     }
 
     @Override
@@ -493,6 +521,53 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return new GTCM_ProcessingLogic() {
 
             private boolean heatBeforeRecipe;
+            private int rapidHeatingVoltageTierDifference;
+            private int rapidHeatingInitialMissingHeat;
+            private GTRecipe previousRecipeAtCheckStart;
+            private int previousRecipeCodeAtCheckStart;
+            private int previousRecipeVoltageTierAtCheckStart;
+            private int heatingCapacityAtCheckStart;
+            private int rapidHeatingInitialMissingHeatAtCheckStart;
+            private GTRecipe previousRecipeCandidateDuringCheck;
+
+            private int selectRecipeCandidate(GTRecipe recipe) {
+                int recipeCode = recipe == previousRecipeAtCheckStart ? previousRecipeCodeAtCheckStart
+                    : getRecipeCode(recipe);
+                int recipeVoltageTier = GTUtility.getTier(recipe.mEUt);
+                if (previousRecipeAtCheckStart == recipe
+                    || (previousRecipeCodeAtCheckStart != 0 && previousRecipeCodeAtCheckStart == recipeCode)) {
+                    previousRecipeCandidateDuringCheck = recipe;
+                }
+                // Compare every candidate against the same pre-check state so fallback candidates cannot repeatedly
+                // apply heat retention during one recipe search.
+                boolean recipeChanged = previousRecipeAtCheckStart == null
+                    ? previousRecipeCodeAtCheckStart != 0 && previousRecipeCodeAtCheckStart != recipeCode
+                    : previousRecipeAtCheckStart != recipe && previousRecipeCodeAtCheckStart != recipeCode;
+                if (recipeChanged) {
+                    int coilHeat = getCoilHeat();
+                    double retainedHeatRatio = controllerTier > 1
+                        ? 0.5 + 0.25 * Math.tanh((previousRecipeVoltageTierAtCheckStart - recipeVoltageTier) / 3.0)
+                        : 0;
+                    mHeatingCapacity = coilHeat
+                        + (int) Math.round(Math.max(heatingCapacityAtCheckStart - coilHeat, 0) * retainedHeatRatio);
+                    rapidHeatingInitialMissingHeat = 0;
+                } else {
+                    mHeatingCapacity = heatingCapacityAtCheckStart;
+                    rapidHeatingInitialMissingHeat = rapidHeatingInitialMissingHeatAtCheckStart;
+                }
+                previousRecipe = recipe;
+                previousRecipeCode = recipeCode;
+                previousRecipeVoltageTier = recipeVoltageTier;
+                return recipeVoltageTier;
+            }
+
+            private void restorePreviousRecipeAfterFailedSearch() {
+                mHeatingCapacity = heatingCapacityAtCheckStart;
+                rapidHeatingInitialMissingHeat = rapidHeatingInitialMissingHeatAtCheckStart;
+                previousRecipe = previousRecipeCandidateDuringCheck;
+                previousRecipeCode = previousRecipeCodeAtCheckStart;
+                previousRecipeVoltageTier = previousRecipeVoltageTierAtCheckStart;
+            }
 
             @Override
             @Nonnull
@@ -503,21 +578,31 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
                 if (heatBeforeRecipe) return CheckRecipeResultRegistry.NO_RECIPE;
 
+                // Select before validation: insufficient heat or power still counts as changing the recipe.
+                int recipeVoltageTier = selectRecipeCandidate(recipe);
+
                 if (recipe.mSpecialValue > recipeHeatLimitation)
                     return CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
 
-                int recipeCode = recipe.hashCode();
-                if (previousRecipeCode != 0 && previousRecipeCode != recipeCode) {
-                    mHeatingCapacity = getCoilHeat();
-                    heatBeforeRecipe = isPassiveMode && isRapidHeating && mHeatingCapacity < maxHeatingCapacity;
+                rapidHeatingVoltageTierDifference = getDominantInputVoltageTier() - recipeVoltageTier;
+                int minimumRecipeEUtAtMaxHeat = (int) Math
+                    .ceil(recipe.mEUt * Math.pow(0.9, Math.max(maxHeatingCapacity - recipe.mSpecialValue, 0) / 900));
+                if (availableVoltage * availableAmperage < minimumRecipeEUtAtMaxHeat) {
+                    rapidHeatingInitialMissingHeat = 0;
+                    return CheckRecipeResultRegistry.insufficientPower(minimumRecipeEUtAtMaxHeat);
                 }
-                previousRecipeCode = recipeCode;
+                heatBeforeRecipe = isPassiveMode && isRapidHeating && mHeatingCapacity < maxHeatingCapacity;
+                if (!heatBeforeRecipe) rapidHeatingInitialMissingHeat = 0;
 
                 // Heat the new recipe before consuming its inputs.
-                if (heatBeforeRecipe) return CheckRecipeResultRegistry.NO_RECIPE;
+                if (heatBeforeRecipe) {
+                    // Rapid heating is a fake recipe, so remember its target before applyRecipe can update the cache.
+                    lastRecipe = recipe.mCanBeBuffered ? recipe : null;
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
 
                 TST_SwelegfyrBlastFurnace.this.euModifier = (float) Math
-                    .pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 1800);
+                    .pow(0.9, Math.max(mHeatingCapacity - recipe.mSpecialValue, 0) / 900);
                 setEuModifier(TST_SwelegfyrBlastFurnace.this.getEuModifier());
 
                 return CheckRecipeResultRegistry.SUCCESSFUL;
@@ -529,50 +614,70 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 // overclock depends on the correct heat (mHeatingCapacity)
                 return super.createOverclockCalculator(recipe).setRecipeHeat(recipe.mSpecialValue)
                     .setMachineHeat(TST_SwelegfyrBlastFurnace.this.mHeatingCapacity)
-                    .setHeatOC(true)
-                    .setHeatDiscount(true);
+                    .setHeatOC(true);
             }
 
             @Override
             @Nonnull
             public CheckRecipeResult process() {
                 heatBeforeRecipe = false;
+                rapidHeatingVoltageTierDifference = 0;
                 setSpeedBonus(getSpeedBonus());
                 setEuModifier(getEuModifier());
 
                 if (checkBlaze()) return shutDownOfMissingPyrotheum(controllerTier > 1 ? 168000 : 72000);
 
-                if (isPassiveMode && isRapidHeating && mHeatingCapacity < maxHeatingCapacity) {
-                    inPassiveMode = true;
+                previousRecipeAtCheckStart = previousRecipe;
+                previousRecipeCodeAtCheckStart = previousRecipeCode;
+                previousRecipeVoltageTierAtCheckStart = previousRecipeVoltageTier;
+                heatingCapacityAtCheckStart = mHeatingCapacity;
+                rapidHeatingInitialMissingHeatAtCheckStart = rapidHeatingInitialMissingHeat;
+                previousRecipeCandidateDuringCheck = null;
+                inRapidHeating = false;
+                CheckRecipeResult result = super.process();
+                if (heatBeforeRecipe) {
                     inRapidHeating = true;
                     return RapidHeating();
-                } else {
-                    inRapidHeating = false;
-                    CheckRecipeResult result = super.process();
-                    if (heatBeforeRecipe) {
-                        inRapidHeating = true;
-                        return RapidHeating();
-                    }
-                    return result;
                 }
+                if (!result.wasSuccessful() && previousRecipeCandidateDuringCheck != null) {
+                    // If the old target still matches the current inputs, other failed fallback candidates do not
+                    // represent a player recipe change and must not overwrite its heat-retention history.
+                    restorePreviousRecipeAfterFailedSearch();
+                }
+                return result;
             }
 
             private CheckRecipeResult RapidHeating() {
-                // Heating with 100 heat/s
-                int euTier = (int) Math
-                    .max(0, Math.log((double) (availableVoltage * availableAmperage) / 8) / Math.log(4));
+                int euTier = getDominantInputVoltageTier();
                 if (euTier < 1) {
                     stopMachine(ShutDownReasonRegistry.POWER_LOSS);
                     return CheckRecipeResultRegistry.insufficientPower(32);
                 }
 
-                correctBlazeCost = mHeatingCapacity * maxHeatingCapacity / (int) Math.pow(euTier, 3);
+                int rapidHeatingTierSteps = Math.max(rapidHeatingVoltageTierDifference, 0);
+                int missingHeat = maxHeatingCapacity - mHeatingCapacity;
+                if (rapidHeatingInitialMissingHeat < missingHeat) rapidHeatingInitialMissingHeat = missingHeat;
+                // Voltage above the recipe tier accelerates heating; lower voltage approaches half the base rate.
+                double heatingRatio = rapidHeatingVoltageTierDifference >= 0
+                    ? 0.2 + 0.25 * (1 - Math.exp(-rapidHeatingTierSteps / 2.0))
+                    : 0.2 * (0.5 + 0.5 * Math.exp(rapidHeatingVoltageTierDifference / 3.0));
+                int heatingStep = Math.min(missingHeat, Math.max(200, (int) Math.ceil(missingHeat * heatingRatio)));
+
+                // Keep a 10x passive baseline, then decay the front-loaded surcharge over the warm-up.
+                long baseBlazeCost = (long) mHeatingCapacity * maxHeatingCapacity / (long) Math.pow(euTier, 3);
+                double heatFactor = Math.log1p(heatingStep / 200.0) / Math.log(2);
+                double tierFactor = 1 + 0.5 * (1 - Math.exp(-rapidHeatingTierSteps / 3.0));
+                double remainingHeatRatio = (double) missingHeat / rapidHeatingInitialMissingHeat;
+                double passiveBlazeCost = mHeatingCapacity / 5.0;
+                double blazeCost = passiveBlazeCost * 10
+                    + baseBlazeCost * heatFactor * tierFactor * 0.25 * remainingHeatRatio * remainingHeatRatio;
+                correctBlazeCost = blazeCost >= Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) Math.ceil(blazeCost);
                 if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true))
                     return shutDownOfMissingPyrotheum(correctBlazeCost);
 
                 calculatedEut = availableVoltage * availableAmperage * 15 / 16;
                 duration = 20;
-                mHeatingCapacity = numericalApproximation(mHeatingCapacity, maxHeatingCapacity, 100);
+                pendingRapidHeatingStep = heatingStep;
 
                 return CheckRecipeResults.RapidHeating;
             }
@@ -582,6 +687,17 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     protected long runningTick = 0;
+
+    @Override
+    protected void outputAfterRecipe() {
+        if (inRapidHeating) {
+            // Grant heat only after the fake recipe finishes, so interrupted warm-up cycles give no free heat.
+            mHeatingCapacity = numericalApproximation(mHeatingCapacity, maxHeatingCapacity, pendingRapidHeatingStep);
+            pendingRapidHeatingStep = 0;
+            inRapidHeating = false;
+        }
+        super.outputAfterRecipe();
+    }
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
@@ -624,28 +740,40 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 }
             }
 
-            // Updates every 10 sec
-            if (aTick % 200 == 0) {
-                boolean isActive = aBaseMetaTileEntity.isActive();
-                boolean isCurrentlyPassive = isActive ? inPassiveMode : isPassiveMode;
+            boolean isActive = aBaseMetaTileEntity.isActive();
+            boolean isCurrentlyPassive = isActive ? inPassiveMode : isPassiveMode;
 
-                // Heat holding mode
-                if (!isActive && isCurrentlyPassive && isHoldingHeat) {
+            // Heat holding mode
+            if (!inRapidHeating && !isActive && isCurrentlyPassive && isHoldingHeat) {
+                if (holdingHeatTicks > 0) holdingHeatTicks--;
+                if (holdingHeatTicks == 0) {
+                    // Holding cost is paid once per second; the mode state itself is still evaluated every tick.
                     // If missing blaze, stop holding
                     if (checkBlaze()) {
                         isHoldingHeat = false;
+                        correctBlazeCost = 0;
                         return;
                     }
 
                     correctBlazeCost = mHeatingCapacity / 20;
-                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost * 10, true)) {
+                    if (!drainPyrotheumFromBlazeHatch(correctBlazeCost, true)) {
                         isHoldingHeat = false;
+                        correctBlazeCost = 0;
+                        return;
                     }
-                } else if (!isCurrentlyPassive || (!isActive && !isHoldingHeat)) {
+                    holdingHeatTicks = 20;
+                }
+            } else {
+                holdingHeatTicks = 0;
+                if (!isActive && !isHoldingHeat) correctBlazeCost = 0;
+            }
+
+            // Updates every 10 sec
+            if (aTick % 200 == 0) {
+                if (!inRapidHeating && (!isCurrentlyPassive || (!isActive && !isHoldingHeat))) {
                     // Not hold, loss heat
                     int targetHeat = getCoilHeat();
                     double lossRat = isActive && !isCurrentlyPassive ? 0.1 : 0.2;
-                    if (!isActive && !isHoldingHeat) correctBlazeCost = 0;
                     // Normal mode inactive not cost Blaze
 
                     if (mHeatingCapacity != targetHeat) {
@@ -679,6 +807,8 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void stopMachine(@NotNull ShutDownReason reason) {
         runningTick = 0;
+        inRapidHeating = false;
+        pendingRapidHeatingStep = 0;
         super.stopMachine(reason);
     }
 
@@ -695,12 +825,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(UITextures.SBF_ModeBase);
-    // machineModeIcons.add(UITextures.SBF_ModePassive);
-    // }
-
     @Override
     public void setMachineMode(int index) {
         super.setMachineMode(index);
@@ -710,10 +834,17 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public String getMachineModeName() {
         // Override the origin logic, check machine mode name with the machine status
-        return getMachineModeName(machineMode != 0, inPassiveMode, inRapidHeating);
+        return getMachineModeName(
+            this.getBaseMetaTileEntity()
+                .isActive(),
+            machineMode != 0,
+            inPassiveMode,
+            inRapidHeating,
+            isHoldingHeat);
     }
 
-    public String getMachineModeName(boolean isPassiveMode, boolean inPassiveMode, boolean inRapidHeating) {
+    private String getMachineModeName(boolean isActive, boolean isPassiveMode, boolean inPassiveMode,
+        boolean inRapidHeating, boolean isHoldingHeat) {
         // #tr Swelegfyr.modeMsg.0
         // # Normal Mode
         // #zh_CN 普通模式
@@ -722,30 +853,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         // # Passive Mode
         // #zh_CN 被动模式
 
-        int correctMode = 0;
-        boolean isActive = this.getBaseMetaTileEntity()
-            .isActive();
+        boolean passive = isActive ? inPassiveMode : isPassiveMode;
         String suffixKey = null;
-
-        if (isActive) {
-            // Machine active, check work status
-            if (inPassiveMode) {
-                correctMode = 1;
-                if (inRapidHeating) {
-                    suffixKey = "SBF.Msg.enableRapidHeating";
-                }
-            }
-        } else {
-            // Machine inactive, check real-time status
-            if (isPassiveMode) {
-                correctMode = 1;
-                if (isHoldingHeat) {
-                    suffixKey = "SBF.Msg.enableHoldingHeat";
-                }
-            }
+        if (passive) {
+            if (isActive && inRapidHeating) suffixKey = "SBF.Msg.enableRapidHeating";
+            else if (!isActive && isHoldingHeat) suffixKey = "SBF.Msg.enableHoldingHeat";
         }
 
-        String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + correctMode);
+        String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + (passive ? 1 : 0));
         if (suffixKey != null) {
             return base + "-" + StatCollector.translateToLocal(suffixKey);
         }
@@ -786,7 +901,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     public void setHoldingHeat(boolean b) {
+        if (isHoldingHeat == b) return;
         isHoldingHeat = b;
+        holdingHeatTicks = 0;
+        IGregTechTileEntity baseMetaTileEntity = getBaseMetaTileEntity();
+        if (baseMetaTileEntity != null && !baseMetaTileEntity.isActive()) {
+            correctBlazeCost = b && isPassiveMode ? mHeatingCapacity / 20 : 0;
+        }
     }
 
     @Override
@@ -849,8 +970,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         aNBT.setBoolean("inPassiveMode", inPassiveMode);
         aNBT.setBoolean("isRapidHeating", isRapidHeating);
         aNBT.setBoolean("inRapidHeating", inRapidHeating);
+        aNBT.setInteger("pendingRapidHeatingStep", pendingRapidHeatingStep);
         aNBT.setBoolean("isHoldingHeat", isHoldingHeat);
         aNBT.setInteger("previousRecipeCode", previousRecipeCode);
+        aNBT.setInteger("previousRecipeVoltageTier", previousRecipeVoltageTier);
         aNBT.setInteger("correctBlazeCost", correctBlazeCost);
         aNBT.setInteger("recipeHeatLimitation", recipeHeatLimitation);
         aNBT.setLong("runningTick", runningTick);
@@ -859,6 +982,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         super.loadNBTData(aNBT);
+        previousRecipe = null;
         controllerTier = aNBT.getByte("mTier");
         glassTier = aNBT.getInteger("mGlass");
         machineMode = aNBT.getByte("mMode");
@@ -869,8 +993,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         inPassiveMode = aNBT.getBoolean("inPassiveMode");
         isRapidHeating = aNBT.getBoolean("isRapidHeating");
         inRapidHeating = aNBT.getBoolean("inRapidHeating");
+        pendingRapidHeatingStep = aNBT.getInteger("pendingRapidHeatingStep");
         isHoldingHeat = aNBT.getBoolean("isHoldingHeat");
         previousRecipeCode = aNBT.getInteger("previousRecipeCode");
+        previousRecipeVoltageTier = aNBT.getInteger("previousRecipeVoltageTier");
         correctBlazeCost = aNBT.getInteger("correctBlazeCost");
         recipeHeatLimitation = aNBT.getInteger("recipeHeatLimitation");
         runningTick = aNBT.getLong("runningTick");
@@ -885,10 +1011,13 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             tag.setInteger("recipeHeatLimitation", recipeHeatLimitation);
             tag.setInteger("mHeatingCapacity", mHeatingCapacity);
             tag.setInteger("maxHeatingCapacity", maxHeatingCapacity);
+            tag.setInteger("coilHeat", getCoilHeat());
             tag.setInteger("correctBlazeCost", correctBlazeCost);
+            tag.setInteger("pendingRapidHeatingStep", pendingRapidHeatingStep);
             tag.setBoolean("isPassiveMode", isPassiveMode);
             tag.setBoolean("inPassiveMode", inPassiveMode);
             tag.setBoolean("inRapidHeating", inRapidHeating);
+            tag.setBoolean("isHoldingHeat", isHoldingHeat);
             tag.setBoolean("machineUpdated", controllerTier == 2);
         }
     }
@@ -902,19 +1031,29 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         boolean IsPassiveMode = tag.getBoolean("isPassiveMode");
         boolean InPassiveMode = tag.getBoolean("inPassiveMode");
         boolean InRapidHeating = tag.getBoolean("inRapidHeating");
-        boolean IsActive = this.getBaseMetaTileEntity()
-            .isActive();
+        boolean IsHoldingHeat = tag.getBoolean("isHoldingHeat");
+        boolean IsActive = tag.getBoolean("isActive");
         boolean updated = tag.getBoolean("machineUpdated");
+        int rapidHeatingStep = tag.getInteger("pendingRapidHeatingStep");
+        String heatChangeSuffix = getHeatChangeSuffix(
+            IsActive,
+            IsPassiveMode,
+            InPassiveMode,
+            InRapidHeating,
+            IsHoldingHeat,
+            tag.getInteger("mHeatingCapacity"),
+            tag.getInteger("maxHeatingCapacity"),
+            tag.getInteger("coilHeat"),
+            rapidHeatingStep);
 
-        if (tag.hasKey("mode")) {
-            // Old one won't refresh automatically, replace it with new one
-            currentTip.removeIf(s -> s.contains(StatCollector.translateToLocal("GT5U.machines.oreprocessor1")));
-            currentTip
-                .add(StatCollector.translateToLocal("GT5U.machines.oreprocessor1") + " " + EnumChatFormatting.WHITE
-                // Status switch need special handle
-                    + getMachineModeName(IsPassiveMode, InPassiveMode, InRapidHeating)
-                    + EnumChatFormatting.RESET);
-        }
+        // The inherited mode line uses unsynchronized client-side fields, replace it with server Waila data.
+        String runningModeLabel = StatCollector.translateToLocal("TST.machines.running_mode");
+        currentTip.removeIf(s -> s.contains(runningModeLabel));
+        currentTip.add(
+            runningModeLabel + " "
+                + EnumChatFormatting.WHITE
+                + getMachineModeName(IsActive, IsPassiveMode, InPassiveMode, InRapidHeating, IsHoldingHeat)
+                + EnumChatFormatting.RESET);
 
         currentTip.add(
             // #tr Waila.SBF.0
@@ -931,7 +1070,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.1")
                 + textColon
                 + EnumChatFormatting.WHITE
-                + tag.getInteger("mHeatingCapacity")) + Kelvin);
+                + tag.getInteger("mHeatingCapacity")
+                + Kelvin
+                + heatChangeSuffix));
         if ((IsActive && InPassiveMode) || (!IsActive && IsPassiveMode)) {
             currentTip.add(
                 // #tr Waila.SBF.2
@@ -958,6 +1099,42 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     }
 
+    private static String getHeatChangeSuffix(boolean isActive, boolean isPassiveMode, boolean inPassiveMode,
+        boolean inRapidHeating, boolean isHoldingHeat, int currentHeat, int maxHeat, int coilHeat,
+        int rapidHeatingStep) {
+        boolean isCurrentlyPassive = isActive ? inPassiveMode : isPassiveMode;
+
+        if (inRapidHeating && rapidHeatingStep > 0) {
+            return formatHeatChange(true, rapidHeatingStep);
+        }
+        if (isActive && isCurrentlyPassive) {
+            int passiveHeatingStep = Math.min(5, Math.max(maxHeat - currentHeat, 0));
+            return passiveHeatingStep > 0 ? formatHeatChange(true, passiveHeatingStep) : "";
+        }
+        if (!isActive && isCurrentlyPassive && isHoldingHeat) {
+            return formatHeatChange(false, 0);
+        }
+        if (!isCurrentlyPassive || (!isActive && !isHoldingHeat)) {
+            int heatDifference = currentHeat - coilHeat;
+            if (heatDifference == 0) return "";
+            double lossRatio = isActive && !isCurrentlyPassive ? 0.1 : 0.2;
+            return formatHeatChange(heatDifference < 0, Math.max((int) (Math.abs(heatDifference) * lossRatio), 1));
+        }
+        return "";
+    }
+
+    private static String formatHeatChange(boolean increasing, int heatChange) {
+        return EnumChatFormatting.WHITE + " "
+            + (increasing ? "+" : "-")
+            + " ["
+            + (increasing ? EnumChatFormatting.RED : EnumChatFormatting.BLUE)
+            + heatChange
+            + Kelvin
+            + EnumChatFormatting.WHITE
+            + "]"
+            + EnumChatFormatting.RESET;
+    }
+
     @Override
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
@@ -965,8 +1142,21 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums
             .tr("Waila.SBF.0") + textColon + EnumChatFormatting.GOLD + recipeHeatLimitation + Kelvin;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums
-            .tr("Waila.SBF.1") + textColon + EnumChatFormatting.GOLD + mHeatingCapacity + Kelvin;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.tr("Waila.SBF.1")
+            + textColon
+            + EnumChatFormatting.GOLD
+            + mHeatingCapacity
+            + Kelvin
+            + getHeatChangeSuffix(
+                getBaseMetaTileEntity().isActive(),
+                isPassiveMode,
+                inPassiveMode,
+                inRapidHeating,
+                isHoldingHeat,
+                mHeatingCapacity,
+                maxHeatingCapacity,
+                getCoilHeat(),
+                pendingRapidHeatingStep);
         return ret;
     }
 
