@@ -2376,3 +2376,5 @@ AEStorageCellInput.CellSlot=ME存储元件
 AEStorageCellInput.AvailableAmount=可用数量：%s
 NameAEStorageCellInputBus=超级存储输入总线(ME)
 NameAEStorageCellInputHatch=超级存储输入仓(ME)
+item.metaitem.tst.1.name=进阶装配线的改造记录
+item.metaitem.tst.1.desc=我需要更加智能、更加高效的组装技术……
