@@ -1498,7 +1498,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.11"))
             // #tr Tooltip_EcoSphereSimulator.0.12
             // # Operating media enter through input hatches; fluid-habitat protocols reproduce them in the chamber
-            // #zh_CN 运行介质由输入仓送入；流体栖息地协议会在舱室内将其复现
+            // #zh_CN 运行介质由输入仓送入; 流体栖息地协议会在舱室内将其复现
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.12"))
             // #tr Tooltip_EcoSphereSimulator.0.13
             // # Requires one Eco-Sphere Input Interface and one Eco-Sphere Upgrade Interface
@@ -1528,7 +1528,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             .addOtherStructurePart(tr("Tooltip_EcoSphereSimulator_Interfaces"), getBlueprintWithDot(3), 3)
             // #tr Tooltip_EcoSphereSimulator_FluidArea
             // # Animated fluid area; no blocks are required
-            // #zh_CN 动态流体区域；无需放置方块
+            // #zh_CN 动态流体区域; 无需放置方块
             .addOtherStructurePart(tr("Tooltip_EcoSphereSimulator_FluidArea"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInfo(TextEnums.Author_Goderium.getText())

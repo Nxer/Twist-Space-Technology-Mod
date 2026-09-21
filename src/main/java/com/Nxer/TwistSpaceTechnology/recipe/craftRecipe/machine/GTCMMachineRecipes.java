@@ -3374,22 +3374,22 @@ public class GTCMMachineRecipes {
             new Object[]{
                 GTOreDictUnificator.get(OrePrefixes.frameGt, MaterialsTST.NeutroniumAlloy, 1),
                 GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveCasing.get(2),
-                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.TengamPurified, 2),
-                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Knightmetal, 8),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.PrismaticNaquadah, 12),
+                GTOreDictUnificator.get(OrePrefixes.plateSuperdense, Materials.Knightmetal, 24),
 
                 ItemList.Field_Generator_UV.get(1),
                 ItemList.Electric_Pump_UV.get(2),
                 ItemList.Electric_Piston_UHV.get(4),
-                GTOreDictUnificator.get(OrePrefixes.ring, Materials.TranscendentMetal, 12),
+                GTOreDictUnificator.get(OrePrefixes.ring, Materials.TengamAttuned, 12),
 
                 GTOreDictUnificator.get(OrePrefixes.pipeQuadruple, Materials.NetherStar, 6),
                 ItemRefer.Advanced_Radiation_Protection_Plate.get(24),
                 getModItem("GraviSuite", "itemSimpleItem", 12, 1)
             },
             new FluidStack[]{
-                RadoxPolymer.getMolten(1152),
-                Materials.SuperconductorUHVBase.getMolten(2304),
-                FluidRegistry.getFluidStack("cryotheum", 1_000_000)
+                RadoxPolymer.getMolten(144 * 16),
+                Materials.SuperconductorUHVBase.getMolten(144 * 24),
+                FluidRegistry.getFluidStack("cryotheum", 8_000_000)
             },
             GTCMItemList.EnvironmentalIsolationCasing.get(1),
             20 * 30,

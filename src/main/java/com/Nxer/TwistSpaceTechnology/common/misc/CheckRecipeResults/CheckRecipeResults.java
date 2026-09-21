@@ -76,8 +76,8 @@ public final class CheckRecipeResults {
         .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
 
     // #tr CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch
-    // # Execution protocol authorization level insufficient
-    // #zh_CN 当前执行协议授权等级不足
+    // # Authorization level insufficient
+    // #zh_CN 授权等级不足
     public static final CheckRecipeResult ExecutionProtocolInputMismatch = SimpleResultWithText
         .ofFailure("CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch");
 
