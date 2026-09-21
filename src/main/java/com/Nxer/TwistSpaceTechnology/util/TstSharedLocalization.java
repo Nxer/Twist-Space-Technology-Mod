@@ -42,15 +42,8 @@ public class TstSharedLocalization {
         public static String temporaryController() {
             // #tr tst.shared.machineTooltip.temporaryController
             // # {\RED}Temporary controller; will be removed in the next update!
-            // #zh_CN {\RED}临时控制器，将在下个版本移除！
+            // #zh_CN {\RED}临时控制器, 将在下个版本移除!
             return TstUtils.tr("tst.shared.machineTooltip.temporaryController");
-        }
-
-        public static String replacementController() {
-            // #tr tst.shared.machineTooltip.replacementController
-            // # {\RED}See NEI for the replacement controller and conversion recipes.
-            // #zh_CN {\RED}请在NEI查看替代控制器及转换配方。
-            return TstUtils.tr("tst.shared.machineTooltip.replacementController");
         }
 
     }

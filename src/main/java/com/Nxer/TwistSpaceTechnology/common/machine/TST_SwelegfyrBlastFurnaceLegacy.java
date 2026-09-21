@@ -1,14 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textSpace;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -25,7 +17,6 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -172,48 +163,8 @@ public class TST_SwelegfyrBlastFurnaceLegacy extends TST_SwelegfyrBlastFurnace {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        // Keep this copy here so the legacy tooltip can be removed without changing the current controller.
-        return new MultiblockTooltipBuilder().addMachineType(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_MachineType"))
+        return new MultiblockTooltipBuilder()
             .addDeprecatedLine(TstSharedLocalization.MachineTooltip.temporaryController())
-            .addInfo(TstSharedLocalization.MachineTooltip.replacementController())
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.01"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.02"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
-            .addInfo(textSpace)
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
-            .addSeparator()
-            .addInfo(MoreInfoCheckingInScanner.getText())
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .addStructureInfo(Text_SeparatingLine)
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.11"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.16"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.17"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.18"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.21"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.22"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.23"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.24"))
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
-            .addStructureInfo(Text_SeparatingLine)
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .addController(textFrontBottom)
-            .addInputHatch(getBlueprintWithDot(1), 1)
-            .addOutputHatch(getBlueprintWithDot(1), 1)
-            .addInputBus(getBlueprintWithDot(1), 1)
-            .addOutputBus(getBlueprintWithDot(1), 1)
-            .addEnergyHatch(getBlueprintWithDot(2), 2)
-            .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
             .toolTipFinisher(ModName);
     }
 }

@@ -852,7 +852,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         // #tr Swelegfyr.modeMsg.1
         // # Passive Mode
         // #zh_CN 被动模式
-
         boolean passive = isActive ? inPassiveMode : isPassiveMode;
         String suffixKey = null;
         if (passive) {
@@ -1197,36 +1196,36 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
             // #tr Tooltip_SwelegfyrBlastFurnace.01
             // # {\ITALIC}{\GOLD}Blaze Pyrotheum feeds celestial forges. Soulsteel wrought, flame-bound cosmic rite.
-            // #zh_CN {\ITALIC}{\GOLD}炽焱为薪，焚天作工。铸形炼魄，器道同烽。
+            // #zh_CN {\ITALIC}{\GOLD}炽焱为薪, 焚天作工. 铸形炼魄, 器道同烽.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.01"))
             // #tr Tooltip_SwelegfyrBlastFurnace.02
-            // # A Volcanus blast furnace specialized in continuous processing, also capable of conventional processes.
-            // #zh_CN 专注于持续加工的炽焱高炉，同时也可以进行常规处理。
+            // # Excels at continuous processing, but also handles conventional recipes.
+            // #zh_CN 专精持续加工, 也可处理常规配方.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.02"))
             // #tr Tooltip_SwelegfyrBlastFurnace.03
             // # Blast furnace temp gradually increases in Passive Mode.
-            // #zh_CN 当处于被动模式时炉温会缓慢升高。
+            // #zh_CN 当处于被动模式时炉温会缓慢升高.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
             // #tr Tooltip_SwelegfyrBlastFurnace.04
-            // # Additional furnace heat will reset upon recipe change.
-            // #zh_CN 切换配方时，额外炉温会被清空。
+            // # Recipe changes recalculate extra heat based on structure tier.
+            // #zh_CN 切换配方会按结构等级重算额外炉温.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
             // #tr Tooltip_SwelegfyrBlastFurnace.05
-            // # Power consumption decreases by 10% per 1800K above recipe temperature threshold.
-            // #zh_CN 炉温每高出配方1800K， 耗电减少10% 。
+            // # Power consumption decreases by 10% per 900K above recipe temperature threshold.
+            // #zh_CN 炉温每高出配方900K, 耗电减少10%.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
-            // # Glass tier restricts Energy Hatch tier.
-            // #zh_CN 玻璃等级限制能源仓等级。
+            // # Processes recipes at 390% speed; Glass tier restricts Energy Hatch tier.
+            // #zh_CN 配方处理速度为390%, 玻璃等级限制能源仓等级.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
             // #tr Tooltip_SwelegfyrBlastFurnace.07
             // # Upgrade machine and build additional structure to unlock additional functions.
-            // #zh_CN 升级机器并搭建附加结构以解锁更多功能。
+            // #zh_CN 升级机器并搭建附加结构以解锁更多功能.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
             .addInfo(textSpace)
             // #tr Tooltip_SwelegfyrBlastFurnace.08
             // # {\YELLOW}Do not open the cabin door while the machine is running!
-            // #zh_CN {\YELLOW}禁止在机器运行时打开舱门！
+            // #zh_CN {\YELLOW}禁止在机器运行时打开舱门!
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
             .addSeparator()
             .addInfo(MoreInfoCheckingInScanner.getText())
@@ -1234,36 +1233,36 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInfo(BLUE_PRINT_INFO)
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.11
-            // # {\GOLD}Heat{\WHITE}Upper Limit:
-            // #zh_CN {\GOLD}炉温{\WHITE}上限：
+            // # {\GOLD}Heat {\WHITE}Upper Limit:
+            // #zh_CN {\GOLD}炉温{\WHITE}上限:
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.11"))
             // #tr Tooltip_SwelegfyrBlastFurnace.12
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Coil Heat
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\AQUA}线圈炉温
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\AQUA}线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
             // #tr Tooltip_SwelegfyrBlastFurnace.13
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ {\GOLD}1.08
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.08
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.08
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
             // #tr Tooltip_SwelegfyrBlastFurnace.14
             // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
-            // #zh_CN {\GOLD}炽焱{\WHITE}消耗：
+            // #zh_CN {\GOLD}炽焱{\WHITE}消耗:
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
             // #tr Tooltip_SwelegfyrBlastFurnace.15
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\GOLD}1000 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\GOLD}1000 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\GOLD}1000 {\WHITE}L/s
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
             // #tr Tooltip_SwelegfyrBlastFurnace.16
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}5 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.16"))
             // #tr Tooltip_SwelegfyrBlastFurnace.17
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}L/s
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: {\AQUA}Current Heat {\WHITE}x {\AQUA}Max Heat {\WHITE}/ {\AQUA}Input Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}(affected by remaining heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}输入电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}(受剩余温差影响)
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.17"))
             // #tr Tooltip_SwelegfyrBlastFurnace.18
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}20 {\WHITE}L/s
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}20 {\WHITE}L/s
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.18"))
             // #tr Tooltip_SwelegfyrBlastFurnace.21
             // # {\GOLD}Heat Capacity {\WHITE}Change:
@@ -1271,24 +1270,28 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.21"))
             // #tr Tooltip_SwelegfyrBlastFurnace.22
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\GOLD}5 {\WHITE}K/s [{\RED}Increasing{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\GOLD}5 {\WHITE}K/s [{\RED}升温{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\GOLD}5 {\WHITE}K/s [{\RED}升温{\WHITE}]
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.22"))
             // #tr Tooltip_SwelegfyrBlastFurnace.23
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: {\GOLD}100 {\WHITE}K/s [{\RED}Increasing{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\GOLD}100 {\WHITE}K/s [{\RED}升温{\WHITE}]
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: (Max Heat - Current Heat) x 20% K/s (affected by input voltage) [{\RED}Increasing{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: (最高炉温 - 当前炉温) x 20% K/s (受输入电压影响) [{\RED}升温{\WHITE}]
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.23"))
             // #tr Tooltip_SwelegfyrBlastFurnace.24
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Current Heat {\WHITE}× {\GOLD}10% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\AQUA}当前炉温 {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}降温{\WHITE}]， 不低于线圈炉温
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Current Heat {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\AQUA}当前炉温 {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}降温{\WHITE}], 不低于线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.24"))
             // #tr Tooltip_SwelegfyrBlastFurnace.25
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown in Non-Retention Mode: {\AQUA}Current Heat {\WHITE}× {\GOLD}20% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}非保温模式关机： {\AQUA}当前炉温 {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}降温{\WHITE}]， 不低于线圈炉温
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown: {\AQUA}Current Heat {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}关机状态: {\AQUA}当前炉温 {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}降温{\WHITE}], 不低于线圈炉温
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.26
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Recipe Change: Tier I {\GOLD}0%{\WHITE}, Tier II {\GOLD}25%-75% {\WHITE}(scaled by recipe voltage) [{\BLUE}Decreasing{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}切换配方: 一级结构 {\GOLD}0%{\WHITE}, 二级结构 {\GOLD}25%-75% {\WHITE}(按配方电压折算) [{\BLUE}降温{\WHITE}]
+            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.26"))
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
             // # Attention: Pyrotheum's dedicated input hatch location will be changed when upgrade machine.
-            // #zh_CN 注意：升级结构后炽焱专用的输入仓位置会发生变化.
+            // #zh_CN 注意: 升级结构后炽焱专用的输入仓位置会发生变化.
             .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
