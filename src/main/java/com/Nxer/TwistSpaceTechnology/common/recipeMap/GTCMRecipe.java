@@ -129,8 +129,8 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
         .build();
 
-    public static final RecipeMap<RecipeMapBackend> OreProcessingRecipes = RecipeMapBuilder
-        .of("tst.recipe.OreProcessingRecipes")
+    public static final RecipeMap<RecipeMapBackend> OreProcessingVisualRecipes = RecipeMapBuilder
+        .of("tst.recipe.OreProcessingVisualRecipes")
         .maxIO(1, 9, 1, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.OreProcessingFactory.get(1)))

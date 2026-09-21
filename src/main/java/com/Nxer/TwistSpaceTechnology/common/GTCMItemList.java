@@ -566,6 +566,7 @@ public enum GTCMItemList {
     // region Misc
 
     ResearchOnAncientPA,
+    ResearchOnAAL,
 
     // endregion
 

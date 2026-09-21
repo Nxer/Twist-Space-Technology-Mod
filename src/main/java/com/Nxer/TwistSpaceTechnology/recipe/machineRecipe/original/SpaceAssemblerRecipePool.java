@@ -73,6 +73,7 @@ public class SpaceAssemblerRecipePool {
                 ItemList.Hatch_Input_Multi_2x2_UIV.get(4),
                 ItemList.Hatch_Input_ME_Advanced.get(2),
                 new ItemStack(ItemAndBlockHolder.INTERFACE),
+                ModItem.getModItem("appliedenergistics2", "tile.BlockChest", 1, 0),
                 GTCMItemList.PerfectEngravedEnergyChip.get(1),
                 ItemList.Electric_Pump_UEV.get(1),
                 ModItem.getModItem(
@@ -96,6 +97,7 @@ public class SpaceAssemblerRecipePool {
                 ItemList.Hatch_Input_Bus_MAX.get(16),
                 ItemList.Hatch_Input_Bus_ME_Advanced.get(2),
                 ModItem.getModItem("appliedenergistics2", "tile.BlockInterface", 1, 0),
+                ModItem.getModItem("appliedenergistics2", "tile.BlockChest", 1, 0),
                 GTCMItemList.PerfectEngravedEnergyChip.get(1),
                 ItemList.Conveyor_Module_UEV.get(1),
                 ModItem.getModItem("appliedenergistics2", "item.ItemExtremeStorageCell.Singularity", 1, 0))

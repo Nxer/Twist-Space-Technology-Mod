@@ -12,6 +12,7 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.LongPredicate;
 
@@ -629,19 +630,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
         }
-        // Add back TST item segments merged by ME, without adding the same stack twice.
-        Set<ItemStack> includedSegments = null;
-        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
-            if (bus instanceof ITSTSegmentedItemInput segmentedInput) {
-                if (includedSegments == null) {
-                    includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
-                    includedSegments.addAll(rList);
-                }
-                for (ItemStack segment : segmentedInput.getTSTStoredItemSegments()) {
-                    if (segment != null && !includedSegments.remove(segment)) rList.add(segment);
-                }
-            }
-        }
+        appendSegmentedItemInputs(rList, Optional.empty());
         return rList;
     }
 
@@ -678,19 +667,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (!inputsFromME.isEmpty()) {
             rList.addAll(inputsFromME.values());
         }
-        // Add back TST fluid segments merged by ME, without adding the same stack twice.
-        Set<FluidStack> includedSegments = null;
-        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
-            if (hatch instanceof ITSTSegmentedFluidInput segmentedInput) {
-                if (includedSegments == null) {
-                    includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
-                    includedSegments.addAll(rList);
-                }
-                for (FluidStack segment : segmentedInput.getTSTStoredFluidSegments()) {
-                    if (segment != null && !includedSegments.remove(segment)) rList.add(segment);
-                }
-            }
-        }
+        appendSegmentedFluidInputs(rList, Optional.empty());
 
         // get all fluids from Dual input
         if (supportsCraftingMEBuffer()) {
@@ -714,6 +691,39 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
 
         return rList;
+    }
+
+    // GT keeps one stack per ME type; TST machines add the remaining int-sized segments back.
+    private void appendSegmentedItemInputs(List<ItemStack> inputs, Optional<Byte> color) {
+        Set<ItemStack> includedSegments = null;
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (!(bus instanceof ITSTSegmentedItemInput segmentedInput)) continue;
+            byte busColor = bus.getColor();
+            if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+            if (includedSegments == null) {
+                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
+                includedSegments.addAll(inputs);
+            }
+            for (ItemStack segment : segmentedInput.getTSTStoredItemSegments()) {
+                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            }
+        }
+    }
+
+    private void appendSegmentedFluidInputs(List<FluidStack> inputs, Optional<Byte> color) {
+        Set<FluidStack> includedSegments = null;
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (!(hatch instanceof ITSTSegmentedFluidInput segmentedInput)) continue;
+            byte hatchColor = hatch.getColor();
+            if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+            if (includedSegments == null) {
+                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
+                includedSegments.addAll(inputs);
+            }
+            for (FluidStack segment : segmentedInput.getTSTStoredFluidSegments()) {
+                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            }
+        }
     }
 
     // region Overrides
@@ -835,6 +845,38 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     public void stopMachine(@Nonnull ShutDownReason reason) {
         clearMEOutputQueues();
         super.stopMachine(reason);
+    }
+
+    @Override
+    public void startRecipeProcessing() {
+        super.startRecipeProcessing();
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (bus instanceof ITSTSegmentedItemInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+        }
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (hatch instanceof ITSTSegmentedFluidInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+        }
+    }
+
+    @Override
+    public ArrayList<ItemStack> getStoredInputsForColor(Optional<Byte> color) {
+        ArrayList<ItemStack> inputs = super.getStoredInputsForColor(color);
+        appendSegmentedItemInputs(inputs, color);
+        return inputs;
+    }
+
+    @Override
+    public ArrayList<ItemStack> getAllStoredInputs() {
+        ArrayList<ItemStack> inputs = super.getAllStoredInputs();
+        appendSegmentedItemInputs(inputs, Optional.empty());
+        return inputs;
+    }
+
+    @Override
+    public ArrayList<FluidStack> getStoredFluidsForColor(Optional<Byte> color) {
+        ArrayList<FluidStack> inputs = super.getStoredFluidsForColor(color);
+        appendSegmentedFluidInputs(inputs, color);
+        return inputs;
     }
 
     @Override

@@ -3672,7 +3672,7 @@ public class GTCMMachineRecipes {
 
         // region Integrated Assembly Matrix
         TTRecipeAdder.addResearchableAssemblylineRecipe(
-            GGItemList.AdvAssLine.get(1),
+            GTCMItemList.ResearchOnAAL.get(1),
             64_000,
             32,
             800_000,

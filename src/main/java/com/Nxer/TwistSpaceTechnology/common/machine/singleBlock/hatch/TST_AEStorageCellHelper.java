@@ -14,6 +14,13 @@ final class TST_AEStorageCellHelper {
 
     static final int MAX_TYPES = 16;
 
+    /** Selects the amount that the GUI and Waila report as pullable. */
+    enum PullMode {
+        GT_SINGLE_STACK,
+        TST_SEGMENTED,
+        LONG
+    }
+
     private TST_AEStorageCellHelper() {}
 
     @Nullable
@@ -32,6 +39,14 @@ final class TST_AEStorageCellHelper {
         ItemStack singleCell = cell.copy();
         singleCell.stackSize = 1;
         return getCellInventory(singleCell, null, channel) != null;
+    }
+
+    static long limitPullableAmount(long availableAmount, int allocatedSegments, PullMode pullMode) {
+        if (availableAmount <= 0) return 0;
+        if (pullMode == PullMode.LONG) return availableAmount;
+        long limit = pullMode == PullMode.TST_SEGMENTED ? (long) Integer.MAX_VALUE * allocatedSegments
+            : Integer.MAX_VALUE;
+        return Math.min(availableAmount, limit);
     }
 
     static int[] distributeIntSegments(long[] amounts, int totalSegmentLimit) {
