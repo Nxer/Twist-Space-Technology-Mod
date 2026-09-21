@@ -245,7 +245,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
         mOutputItems = outputs.toArray();
 
-        lEUt = (originParallel - remaining) * OreProcessRecipeEUt;
+        lEUt = -(originParallel - remaining) * OreProcessRecipeEUt;
 
     }
 
