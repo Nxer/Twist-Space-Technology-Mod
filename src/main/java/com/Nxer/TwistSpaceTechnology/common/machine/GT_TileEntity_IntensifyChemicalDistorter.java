@@ -103,21 +103,15 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH);
-    }
-
-    @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
     }
-    //
-    // @Override
-    // public RecipeMap<?> getRecipeMap() {
-    // if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
-    // return RecipeMaps.multiblockChemicalReactorRecipes;
-    // }
+
+     @Override
+     public RecipeMap<?> getRecipeMap() {
+     if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+     return RecipeMaps.multiblockChemicalReactorRecipes;
+     }
 
     @NotNull
     @Override
