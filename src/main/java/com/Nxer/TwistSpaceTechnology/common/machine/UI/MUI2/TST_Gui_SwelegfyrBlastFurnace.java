@@ -10,6 +10,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UIText
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_RapidHeating_Off;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures.SBF_RapidHeating_On;
 
+import java.util.function.BooleanSupplier;
+
 import net.minecraft.util.StatCollector;
 
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +20,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
@@ -74,62 +77,57 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
     }
 
     public IWidget createRapidHeatingButton(PanelSyncManager syncManager) {
-        IntSyncValue machineModeSyncer = syncManager.findSyncHandler("machineMode", IntSyncValue.class);
-        BooleanSyncValue rapidHeatingButtonSyncer = syncManager
-            .findSyncHandler("rapidHeatingButtonSyncer", BooleanSyncValue.class);
-        BooleanSyncValue updatedMachineGetter = syncManager
-            .findSyncHandler("updatedMachineGetter", BooleanSyncValue.class);
+        return createPassiveModeButton(
+            syncManager,
+            "rapidHeatingButtonSyncer",
+            SBF_RapidHeating_Off,
+            SBF_RapidHeating_On,
+            SBF_RapidHeating_Forbidden,
+            "SBF.Msg.enableRapidHeating");
 
-        return new ToggleButton() {
-
-            @NotNull
-            @Override
-            public Result onMousePressed(int mouseButton) {
-                if (!updatedMachineGetter.getValue() || machineModeSyncer.getValue() != 1) return Result.IGNORE;
-                return super.onMousePressed(mouseButton);
-            }
-        }.size(18, 18)
-            .value(rapidHeatingButtonSyncer)
-            .overlay(new DynamicDrawable(() -> {
-                if (!updatedMachineGetter.getValue() || machineModeSyncer.getValue() != 1) {
-                    return SBF_RapidHeating_Forbidden;
-                }
-                return rapidHeatingButtonSyncer.getValue() ? SBF_RapidHeating_On : SBF_RapidHeating_Off;
-            }))
-            .tooltipBuilder(a -> a.add(StatCollector.translateToLocal("SBF.Msg.enableRapidHeating")));
         // #tr SBF.Msg.enableRapidHeating
         // # Rapid Thermal Boost
         // #zh_CN 快速热增强模式
     }
 
     public IWidget createHoldingHeatButton(PanelSyncManager syncManager) {
+        return createPassiveModeButton(
+            syncManager,
+            "holdingHeatButtonSyncer",
+            SBF_HoldingHeat_Off,
+            SBF_HoldingHeat_On,
+            SBF_HoldingHeat_Forbidden,
+            "SBF.Msg.enableHoldingHeat");
+
+        // #tr SBF.Msg.enableHoldingHeat
+        // # Thermal Retention Standby
+        // #zh_CN 热保持待机模式
+    }
+
+    private IWidget createPassiveModeButton(PanelSyncManager syncManager, String syncKey, UITexture offTexture,
+        UITexture onTexture, UITexture forbiddenTexture, String tooltipKey) {
         IntSyncValue machineModeSyncer = syncManager.findSyncHandler("machineMode", IntSyncValue.class);
+        BooleanSyncValue buttonSyncer = syncManager.findSyncHandler(syncKey, BooleanSyncValue.class);
         BooleanSyncValue updatedMachineGetter = syncManager
             .findSyncHandler("updatedMachineGetter", BooleanSyncValue.class);
-        BooleanSyncValue holdingHeatButtonSyncer = syncManager
-            .findSyncHandler("holdingHeatButtonSyncer", BooleanSyncValue.class);
+        // Both secondary modes are available only after the tier II upgrade and while passive mode is selected.
+        BooleanSupplier isEnabled = () -> updatedMachineGetter.getValue() && machineModeSyncer.getValue() == 1;
 
         return new ToggleButton() {
 
             @NotNull
             @Override
             public Result onMousePressed(int mouseButton) {
-                if (!updatedMachineGetter.getValue() || machineModeSyncer.getValue() != 1) return Result.IGNORE;
+                if (!isEnabled.getAsBoolean()) return Result.IGNORE;
                 return super.onMousePressed(mouseButton);
             }
         }.size(18, 18)
-            .value(holdingHeatButtonSyncer)
+            .value(buttonSyncer)
             .overlay(new DynamicDrawable(() -> {
-                if (!updatedMachineGetter.getValue() || machineModeSyncer.getValue() != 1) {
-                    return SBF_HoldingHeat_Forbidden;
-                }
-
-                return holdingHeatButtonSyncer.getValue() ? SBF_HoldingHeat_On : SBF_HoldingHeat_Off;
+                if (!isEnabled.getAsBoolean()) return forbiddenTexture;
+                return buttonSyncer.getValue() ? onTexture : offTexture;
             }))
-            .tooltipBuilder(a -> a.add(StatCollector.translateToLocal("SBF.Msg.enableHoldingHeat")));
-        // #tr SBF.Msg.enableHoldingHeat
-        // # Thermal Retention Standby
-        // #zh_CN 热保持待机模式
+            .tooltipBuilder(tooltip -> tooltip.add(StatCollector.translateToLocal(tooltipKey)));
     }
 
     @Override
@@ -149,7 +147,6 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
         BooleanSyncValue updatedMachineGetter = new BooleanSyncValue(() -> multiblock.controllerTier == 2).allowC2S();
         syncManager.syncValue("updatedMachineGetter", updatedMachineGetter);
 
-        //
         BooleanSyncValue rapidHeatingButtonSyncer = new BooleanSyncValue(
             multiblock::getRapidHeating,
             multiblock::setRapidHeating).allowC2S();
