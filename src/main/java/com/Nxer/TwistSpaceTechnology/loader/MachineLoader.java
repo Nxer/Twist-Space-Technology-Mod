@@ -90,6 +90,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTil
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Hatch_UncertaintyDebug;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_MetaTileEntity_Pipe_EnergySmart_Focusing;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputBus;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
@@ -683,6 +685,26 @@ public final class MachineLoader {
                 14));
 
         GTCMItemList.ManaHatch.set(new TST_ManaHatch(18979, "NameManaHatch", TextLocalization.NameManaHatch, 9));
+
+        // #tr NameAEStorageCellInputBus
+        // # Super Stocking Input Bus (ME)
+        // #zh_CN 超级存储输入总线(ME)
+        GTCMItemList.AEStorageCellInputBus.set(
+            new TST_AEStorageCellInputBus(
+                18851,
+                "NameAEStorageCellInputBus",
+                TextEnums.tr("NameAEStorageCellInputBus"),
+                9));
+
+        // #tr NameAEStorageCellInputHatch
+        // # Super Stocking Input Hatch (ME)
+        // #zh_CN 超级存储输入仓(ME)
+        GTCMItemList.AEStorageCellInputHatch.set(
+            new TST_AEStorageCellInputHatch(
+                18852,
+                "NameAEStorageCellInputHatch",
+                TextEnums.tr("NameAEStorageCellInputHatch"),
+                9));
 
         // region Dual Input Buffer
         GTCMItemList.DualInputBuffer_IV.set(

@@ -23,6 +23,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedFluidInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.AdvExecutionCore;
@@ -121,6 +123,9 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         if (MEInputHatches.isEmpty()) return;
         for (IRecipeProcessingAwareHatch hatch : filterValidMTE(MEInputHatches)) {
             hatch.startRecipeProcessing();
+            // This fast path skips GTCM's start method, so mark TST segmented inputs here.
+            if (hatch instanceof ITSTSegmentedItemInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
+            if (hatch instanceof ITSTSegmentedFluidInput segmentedInput) segmentedInput.setTSTSegmentedInputMode();
         }
     }
 
