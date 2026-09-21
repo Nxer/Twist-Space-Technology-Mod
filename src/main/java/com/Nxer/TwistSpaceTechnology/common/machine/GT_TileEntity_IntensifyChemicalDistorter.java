@@ -46,7 +46,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -103,21 +102,15 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     @Override
-    public void setMachineModeIcons() {
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-        machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH);
-    }
-
-    @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
     }
-    //
-    // @Override
-    // public RecipeMap<?> getRecipeMap() {
-    // if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
-    // return RecipeMaps.multiblockChemicalReactorRecipes;
-    // }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+        return RecipeMaps.multiblockChemicalReactorRecipes;
+    }
 
     @NotNull
     @Override
