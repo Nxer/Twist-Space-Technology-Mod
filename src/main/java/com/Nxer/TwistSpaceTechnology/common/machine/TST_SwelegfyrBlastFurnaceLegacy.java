@@ -165,6 +165,7 @@ public class TST_SwelegfyrBlastFurnaceLegacy extends TST_SwelegfyrBlastFurnace {
     protected MultiblockTooltipBuilder createTooltip() {
         return new MultiblockTooltipBuilder()
             .addDeprecatedLine(TstSharedLocalization.MachineTooltip.temporaryController())
+            .addInfo(TstSharedLocalization.MachineTooltip.replacementController())
             .toolTipFinisher(ModName);
     }
 }

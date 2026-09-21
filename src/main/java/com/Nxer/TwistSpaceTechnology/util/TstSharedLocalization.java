@@ -46,6 +46,13 @@ public class TstSharedLocalization {
             return TstUtils.tr("tst.shared.machineTooltip.temporaryController");
         }
 
+        public static String replacementController() {
+            // #tr tst.shared.machineTooltip.replacementController
+            // # {\RED}See NEI for the replacement controller and conversion recipes.
+            // #zh_CN {\RED}请在NEI查看替代控制器及转换配方.
+            return TstUtils.tr("tst.shared.machineTooltip.replacementController");
+        }
+
     }
 
     public static class Command {
