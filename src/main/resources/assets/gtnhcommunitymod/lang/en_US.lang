@@ -2376,3 +2376,5 @@ AEStorageCellInput.CellSlot=ME storage cell
 AEStorageCellInput.AvailableAmount=Available: %s
 NameAEStorageCellInputBus=Super Stocking Input Bus (ME)
 NameAEStorageCellInputHatch=Super Stocking Input Hatch (ME)
+item.metaitem.tst.1.name=AAL modification log
+item.metaitem.tst.1.desc=I need a smarter, more efficient way to assemble things…
