@@ -385,6 +385,10 @@ public class Config {
     public static double secondsOfInfiniteAirHatchFillFull = 1;
     // endregion
 
+    // region ME Storage Cell Inputs
+    public static int MaxTotalIntSegments_AEStorageCellInput = 128;
+    // endregion
+
     // region Recipe
     public static boolean Registry_DragonBlood_ExtraRecipe = true;
     public static boolean Registry_DTPF_ExtraRecipe = false;
@@ -845,6 +849,7 @@ public class Config {
 
         // region Single Blocks
         secondsOfInfiniteAirHatchFillFull = Double.parseDouble(configuration.getString("secondsOfInfiniteAirHatchFillFull", SingleBlocks, String.valueOf(secondsOfInfiniteAirHatchFillFull), "How many seconds Infinite Air Hatch fill itself to max capacity. Type:double"));
+        MaxTotalIntSegments_AEStorageCellInput = configuration.getInt("MaxTotalIntSegments_AEStorageCellInput", SingleBlocks, MaxTotalIntSegments_AEStorageCellInput, 1, 1024, "Maximum total number of Integer.MAX_VALUE-sized input segments exposed by one ME Storage Cell Input Bus or Hatch. Type: int");
         // endregion
 
         // region DSP

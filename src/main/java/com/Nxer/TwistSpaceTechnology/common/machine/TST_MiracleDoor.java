@@ -294,10 +294,26 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
         return new GTCM_ProcessingLogic() {
 
+            private boolean hasIngotMold;
+
             @Nonnull
             @Override
             protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
                 return OverclockCalculator.ofNoOverclock(recipe);
+            }
+
+            @Override
+            protected ItemStack[] prepareCatalyst(ItemStack[] inputs) {
+                hasIngotMold = false;
+                List<ItemStack> recipeInputs = new ArrayList<>(inputs.length);
+                for (ItemStack input : inputs) {
+                    if (input != null && input.isItemEqual(IngotMold)) {
+                        hasIngotMold = true;
+                    } else {
+                        recipeInputs.add(input);
+                    }
+                }
+                return hasIngotMold ? recipeInputs.toArray(new ItemStack[0]) : inputs;
             }
 
             @Nonnull
@@ -309,22 +325,8 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
                 // Get the right recipe
                 Stream<GTRecipe> base = super.findRecipeMatches(map);
 
-                // Only this recipe will be transformed
-                boolean hasMold = false;
-                if (this.inputItems != null) {
-                    for (ItemStack s : this.inputItems) {
-                        if (s != null && s.isItemEqual(IngotMold)) {
-                            hasMold = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (hasMold) {
-                    return base.map(TST_MiracleDoor::turnToIngotRecipe);
-                } else {
-                    return base;
-                }
+                // Only recipes processed by the bus containing the mold will be transformed
+                return hasIngotMold ? base.map(TST_MiracleDoor::turnToIngotRecipe) : base;
             }
 
             @NotNull

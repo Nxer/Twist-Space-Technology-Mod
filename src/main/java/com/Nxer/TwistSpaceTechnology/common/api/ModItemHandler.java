@@ -168,6 +168,10 @@ public class ModItemHandler {
             return r;
         }
 
+        public static ItemStack getModItem(String modID, ItemStack item, String itemName, int amount) {
+            return item != null ? copyAmount(amount, item) : createFallbackItem(modID, itemName, amount);
+        }
+
         public static ItemStack getModItem(String modID, String itemName, int amount, int meta) {
             ItemStack r = GTModHandler.getModItem(modID, itemName, amount, meta);
             if (r == null) {
