@@ -17,7 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -50,6 +52,7 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     public TST_LargeSteamAlloySmelter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     @Override
@@ -157,18 +160,15 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_LargeSteamAlloySmelter_MachineType)
             .addInfo(TextLocalization.Tooltip_LargeSteamAlloySmelter_Controller)
             .addInfo(TextLocalization.Tooltip_LargeSteamAlloySmelter_01)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .beginStructureBlock(5, 3, 3, false)
             .addController(TextLocalization.textFrontCenter)
             .addInputBus(TextLocalization.textAnyCasing, 2)
             .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

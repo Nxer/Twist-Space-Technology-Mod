@@ -3,7 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.O
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,8 +12,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 
 @SkipGenerateDescription
@@ -21,6 +22,7 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
     public StaticOverclockController(int aID, String aName, String aNameRegional, int aTier, int timeReduction,
         int powerIncrease) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.overclockType = OverclockType.checkOverclockType(timeReduction, powerIncrease);
     }
 
@@ -66,8 +68,6 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
                     // # Each machine can only install one overclock controller.
                     // #zh_CN 每台机器只可安装一个超频控制器.
                     TextEnums.tr("Tooltips.StaticOverclockController.03"),
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

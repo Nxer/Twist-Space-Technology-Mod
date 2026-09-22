@@ -5,7 +5,9 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfi
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
@@ -17,10 +19,11 @@ import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluid
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
 @SkipGenerateDescription
-public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
+public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator implements TSTTooltipCredit {
 
     public GT_MetaTileEntity_Hatch_Air(final int aID, final String aName, final String aNameRegional, final int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.SHORDINGER);
     }
 
     public GT_MetaTileEntity_Hatch_Air(final String aName, final int aTier, final String[] aDescription,

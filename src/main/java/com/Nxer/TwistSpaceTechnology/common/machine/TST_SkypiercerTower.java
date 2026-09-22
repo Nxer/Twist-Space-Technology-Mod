@@ -12,10 +12,9 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateT
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileExt;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -58,8 +57,11 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SkypiercerTower;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
@@ -109,6 +111,12 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
     public TST_SkypiercerTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.AEFHMV, MAINTAINER, ID.ABLAZING);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
@@ -927,7 +935,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_SkypiercerTwoer_MachineType
         // #en_US Essentia Synthesizer
@@ -969,9 +977,6 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #en_US Note: Non‑passive modes require blocking to ensure only one type of aspect is synthesized at a time; otherwise it may interfere or even jam (also does not support color input).
             // #zh_CN 注意,非被动模式下均需要阻挡,保证一次只合成一种要素,否则会相互干扰,甚至会卡住(另外不支持染色仓).
             .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_09"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
 
@@ -1001,7 +1006,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // # Essentia Output Hatch
             // #zh_CN 源质输出仓
             .addOtherStructurePart(TextEnums.tr("Tooltip.EssentiaOutputHatch"), TextEnums.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         // spotless:on
         return tt;
     }

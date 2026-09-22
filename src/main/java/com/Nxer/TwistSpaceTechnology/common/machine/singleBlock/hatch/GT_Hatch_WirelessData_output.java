@@ -1,11 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -14,10 +16,11 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataOutput;
 
 @SkipGenerateDescription
-public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput {
+public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput implements TSTTooltipCredit {
 
     public GT_Hatch_WirelessData_output(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.SHORDINGER);
 
     }
 

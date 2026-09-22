@@ -21,8 +21,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -48,6 +50,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     // region Constructor
     public TST_LargeCanner(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(new ID[] { ID.SNOW_DREAM, ID.NXER });
     }
 
     public TST_LargeCanner(String aName) {
@@ -201,7 +204,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_LargeCanner_MachineType
         // # Fluid/Solid Canner
         // #zh_CN 流体/固体装罐机
@@ -222,15 +225,13 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             // # Please use a screwdriver to switch modes.
             // #zh_CN 请使用螺丝刀来切换模式。
             .addInfo(TextEnums.tr("Tooltip_LargeCanner_03"))
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addSeparator()
             .beginStructureBlock(13, 17, 13, false)
-            .addInputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addInputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addEnergyHatch(TextLocalization.BLUE_PRINT_INFO)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addInputBus(TextLocalization.textUseBlueprint)
+            .addOutputBus(TextLocalization.textUseBlueprint)
+            .addInputHatch(TextLocalization.textUseBlueprint)
+            .addOutputHatch(TextLocalization.textUseBlueprint)
+            .addEnergyHatch(TextLocalization.textUseBlueprint)
+            .toolTipFinisher();
         return tt;
     }
     //

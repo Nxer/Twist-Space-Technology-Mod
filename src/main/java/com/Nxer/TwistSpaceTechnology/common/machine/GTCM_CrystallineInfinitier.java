@@ -42,7 +42,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -78,6 +80,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     // region Class Constructor
     public GTCM_CrystallineInfinitier(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GTCM_CrystallineInfinitier(String aName) {
@@ -365,7 +368,7 @@ G -> ofFrame;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_CrystallineInfinitier_MachineType)
             .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_00)
             .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_01)
@@ -376,16 +379,13 @@ G -> ofFrame;
             .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_06)
             .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(31, 36, 32, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 2)
             .addOutputHatch(TextLocalization.textUseBlueprint, 2)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

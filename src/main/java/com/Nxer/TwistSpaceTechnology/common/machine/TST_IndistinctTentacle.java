@@ -4,8 +4,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ComponentCa
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_LaserHatch_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_WirelessMode_IndistinctTentacle;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -50,7 +50,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -90,6 +92,7 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     // region Class Constructor
     public TST_IndistinctTentacle(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_IndistinctTentacle(String aName) {
@@ -487,7 +490,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_IndistinctTentacle_MachineType)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_Controller)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_01)
@@ -499,9 +502,6 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_07)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_08)
             .addInfo(TextLocalization.Tooltip_IndistinctTentacle_09)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .addStructureInfo(TextLocalization.Tooltip_Details)
             .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_01)
             .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_02)
@@ -520,7 +520,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
             .addInputHatch(textUseBlueprint, 2)
             .addOutputBus(textUseBlueprint, 2)
             .addEnergyHatch(textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

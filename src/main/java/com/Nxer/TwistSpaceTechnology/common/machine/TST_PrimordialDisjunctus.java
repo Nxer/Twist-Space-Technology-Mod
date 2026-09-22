@@ -1,10 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofSpecificTileAdder;
@@ -34,7 +33,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -76,6 +78,12 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
 
     public TST_PrimordialDisjunctus(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.AEFHMV, MAINTAINER, ID.ABLAZING);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     private static final int CASING_INDEX = 1536;
@@ -625,7 +633,7 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_PrimordialDisjunctus_MachineType
         // # Essentia Extractor
@@ -672,8 +680,6 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
             // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
             .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_07"))
             .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
             // #tr Tooltip_PrimordialDisjunctus_EssentiaProvider
@@ -686,7 +692,7 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
             .addOutputHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
             .addEnergyHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
             .addOtherStructurePart(TextEnums.tr("Tooltip.EssentiaOutputHatch"), TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
         // spotless:on
     }

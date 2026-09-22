@@ -1,17 +1,19 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 @SkipGenerateDescription
 public class StaticSpeedController extends StaticSpeedControllerBase {
 
     public StaticSpeedController(int aID, String aName, String aNameRegional, int aTier, int speedMultiplier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.speedMultiplier = speedMultiplier;
     }
 
@@ -56,8 +58,6 @@ public class StaticSpeedController extends StaticSpeedControllerBase {
                     // # Provides speed x
                     // #zh_CN 提供速度增幅
                     TextEnums.tr("Tooltips.StaticSpeedController.02") + " " + getSpeedMultiplier() + "00%",
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

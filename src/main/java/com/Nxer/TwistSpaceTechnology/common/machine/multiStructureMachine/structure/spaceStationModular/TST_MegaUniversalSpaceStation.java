@@ -17,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -264,7 +265,7 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaUniversalSpaceStation_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_00)
             .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_01)
@@ -275,9 +276,6 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
             .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_06)
             .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(448, 256, 431, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 2)
             .addOutputHatch(TextLocalization.textUseBlueprint, 2)

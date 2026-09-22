@@ -1,6 +1,8 @@
-package com.Nxer.TwistSpaceTechnology.util;
+package com.Nxer.TwistSpaceTechnology.util.text;
 
 import org.jetbrains.annotations.ApiStatus;
+
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 /**
  *
@@ -10,41 +12,10 @@ public enum TextEnums {
 
     // region General
 
-    // #tr Mod_TwistSpaceTechnology
-    // # {\RED}Twist Space Technology
-    // #zh_CN {\RED}Twist Space Technology
-    Mod_TwistSpaceTechnology("Mod_TwistSpaceTechnology"),
-
     // #tr Machine_of_TwistSpaceTechnology
     // # {\BOLD}{\BLUE}Twist {\AQUA}Space {\YELLOW}Technology{\RESET} is honored to serve you
     // #zh_CN {\BOLD}{\BLUE}Twist {\AQUA}Space {\YELLOW}Technology{\RESET} 很荣幸为您服务!
     Machine_of_TwistSpaceTechnology("Machine_of_TwistSpaceTechnology"),
-
-    // #tr Author_Goderium
-    // # Author: {\WHITE}{\BOLD}Goderium_
-    // #zh_CN 作者: {\WHITE}{\BOLD}Goderium_
-    Author_Goderium("Author_Goderium"),
-
-    // #tr Author_Taskeren
-    // # Author: {\GOLD}Taskeren
-    // #zh_CN 作者：{\GOLD}Taskeren（楓）
-    Author_Taskeren("Author_Taskeren"),
-
-    // #tr Author_Totto
-    // # Author: {\AQUA}Totto
-    // #zh_CN 作者: {\AQUA}Totto
-    Author_Totto("Author_Totto"),
-    Author_EvgenWarGold("Author_EvgenWarGold"),
-
-    // #tr Author_Faotik
-    // # Author: {\YELLOW}Faotik
-    // #zh_CN 作者: {\YELLOW}Faotik
-    Author_Faotik("Author_Faotik"),
-
-    // #tr AddByTwistSpaceTechnology
-    // # Added by {\GREEN}Twist Space Technology{\GRAY}
-    // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加
-    AddByTwistSpaceTechnology("AddByTwistSpaceTechnology"),
 
     // #tr MoreInfoCheckingInScanner
     // # {\WHITE}Use scanner check controller block to get more information.
@@ -211,13 +182,12 @@ public enum TextEnums {
 
     BigBroArrayDesc10("BigBroArray.desc.10"),
     BigBroArrayDesc11("BigBroArray.desc.11"),
-    BigBroArrayDesc12("BigBroArray.desc.12"),
-
+    BigBroArrayDesc12("BigBroArray.desc.12");
 
     // end
-    StructureTooComplex("StructureTooComplex");
 
     // spotless:on
+
     @ApiStatus.Obsolete
     public static String tr(String key) {
         return TstUtils.tr(key);

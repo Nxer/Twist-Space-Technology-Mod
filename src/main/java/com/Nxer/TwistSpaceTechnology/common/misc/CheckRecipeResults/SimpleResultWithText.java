@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
 
 import gregtech.api.recipe.check.CheckRecipeResult;

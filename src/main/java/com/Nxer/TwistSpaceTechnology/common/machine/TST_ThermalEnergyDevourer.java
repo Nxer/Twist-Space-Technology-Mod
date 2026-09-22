@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.MAR_Casing;
@@ -25,7 +27,9 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -59,6 +63,7 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     // region Class Constructor
     public TST_ThermalEnergyDevourer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.NXER, MAINTAINER, ID.YUE_LENG_M);
     }
 
     public TST_ThermalEnergyDevourer(String aName) {
@@ -311,7 +316,7 @@ F -> ofFrame...(Materials.NaquadahAlloy);
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ThermalEnergyDevourer_MachineType)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_Controller)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_01)
@@ -329,9 +334,6 @@ F -> ofFrame...(Materials.NaquadahAlloy);
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_12)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_13)
             .addInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_14)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(TextLocalization.Tooltip_ThermalEnergyDevourer_2_01)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(15, 37, 15, false)
@@ -341,7 +343,7 @@ F -> ofFrame...(Materials.NaquadahAlloy);
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

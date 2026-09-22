@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static gregtech.api.enums.Dyes.MACHINE_METAL;
 
 import java.util.ArrayList;
@@ -15,7 +17,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,8 +28,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTETieredMachineBlock;
 import gregtech.api.render.TextureFactory;
@@ -39,7 +43,8 @@ import tectech.thing.metaTileEntity.pipe.MTEPipeLaserMirror;
 import tectech.util.CommonValues;
 
 @SkipGenerateDescription
-public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock implements IConnectsToEnergyTunnel {
+public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock
+    implements IConnectsToEnergyTunnel, TSTTooltipCredit {
 
     public long Voltage;
     public long Amperes;
@@ -51,6 +56,11 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
 
     public GT_MetaTileEntity_Pipe_EnergySmart(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
+        registerTooltipCredits(
+            AUTHOR,
+            ID.HOLEFISH,
+            MAINTAINER,
+            new ID[] { ID.YUE_LENG_M, ID.AEFHMV });
     }
 
     public GT_MetaTileEntity_Pipe_EnergySmart(String aName, int aTier, String[] aDescription,
@@ -107,8 +117,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock im
             // #tr LaserFocusedSmartNode.description.05
             // # {\AQUA}Try not to mix the two types of intelligent nodes. In general, it is allowed, but if a loop occurs in the laser network (that is, the output passes through several nodes and then becomes the input), there may be unpredictable consequences.
             // #zh_CN {\AQUA}尽量不要将两种智能节点混用,在一般情况下是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.
-            TextEnums.tr("LaserFocusedSmartNode.description.05"),
-            TextEnums.AddByTwistSpaceTechnology.getText() };
+            TextEnums.tr("LaserFocusedSmartNode.description.05") };
         // spotless:on
     }
 

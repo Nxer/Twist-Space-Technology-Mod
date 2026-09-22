@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.google.common.collect.ImmutableList;
 
 import gregtech.api.logic.ProcessingLogic;
@@ -21,7 +22,7 @@ import gregtech.api.util.OverclockCalculator;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.base.MTESteamMultiBlockBase;
 
 public abstract class TST_SteamMultiMachineBase<T extends TST_SteamMultiMachineBase<T>>
-    extends MTESteamMultiBlockBase<T> {
+    extends MTESteamMultiBlockBase<T> implements TSTTooltipCredit {
 
     public TST_SteamMultiMachineBase(String aName) {
         super(aName);

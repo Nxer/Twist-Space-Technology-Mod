@@ -1,13 +1,13 @@
 package com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.too_more_hatches;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_2_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_CircuitConverter_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_2_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_Controller;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
@@ -27,7 +27,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -55,6 +56,7 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     // region Class Constructor
     public TST_CircuitConverter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_CircuitConverter(String aName) {
@@ -208,18 +210,16 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_CircuitConverter_MachineType)
             .addInfo(Tooltip_CircuitConverter_Controller)
             .addInfo(Tooltip_CircuitConverter_01)
-            .addSeparator()
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(Tooltip_CircuitConverter_2_01)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
             .addInputBus(textAnyCasing, 1)
             .addOutputBus(textAnyCasing, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

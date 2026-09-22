@@ -33,8 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
@@ -68,6 +70,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     // region Class Constructor
     public TST_MicroSpaceTimeFabricatorio(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_MicroSpaceTimeFabricatorio(String aName) {
@@ -450,7 +453,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
-        MultiblockTooltipBuilder tooltip = new MultiblockTooltipBuilder();
+        MultiblockTooltipBuilder tooltip = new TSTMultiblockTooltipBuilder();
 
         tooltip
             // #tr Tooltip_MicroSpaceTimeFabricatorio_MachineType
@@ -477,9 +480,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             // # Can provide space-time seeds in dedicated input bus, consuming 1 space-time seed per run and doubling the output.
             // #zh_CN 可以在专用输入总线内提供时空之种, 每次运行消耗1个时空之种, 并将产物翻倍.
             .addInfo(TextEnums.tr("Tooltip_MicroSpaceTimeFabricatorio_05"))
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(19, 22, 22, false)
             // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name
             // # Input Bus of The Seed of Space and Time
@@ -493,7 +493,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         // spotless:on
         return tooltip;
     }

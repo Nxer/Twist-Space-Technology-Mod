@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -38,7 +38,9 @@ import com.Nxer.TwistSpaceTechnology.client.effect.MegaNqReactorParticleBatch;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -380,6 +382,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     public TST_MegaNqReactor(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
+        registerTooltipCredits(ID.LONEI);
     }
 
     public TST_MegaNqReactor(String name) {
@@ -1714,17 +1717,14 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(tr("Tooltip_MegaNqReactor_MachineType"))
             .addInfo(tr("Tooltip_MegaNqReactor_01"))
             .addInfo(tr("Tooltip_MegaNqReactor_02"))
             .addInfo(tr("Tooltip_MegaNqReactor_03"))
             .addInfo(tr("Tooltip_MegaNqReactor_04"))
             .addInfo(tr("Tooltip_MegaNqReactor_05"))
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

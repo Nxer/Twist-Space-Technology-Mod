@@ -26,8 +26,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -58,6 +60,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
     // region Class Constructor
     public GT_TileEntity_Silksong(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_Silksong(String aName) {
@@ -316,7 +319,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_Silksong_MachineType)
             .addInfo(TextLocalization.Tooltip_Silksong_00)
             .addInfo(TextLocalization.Tooltip_Silksong_01)
@@ -324,9 +327,6 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
             .addInfo(TextLocalization.Tooltip_Silksong_03)
             .addInfo(TextLocalization.Tooltip_Silksong_04)
             .addInfo(TextLocalization.Tooltip_Silksong_05)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addInputHatch(TextLocalization.textUseBlueprint, 3)
             .addOutputHatch(TextLocalization.textUseBlueprint, 3)
             .addInputBus(TextLocalization.textUseBlueprint, 3)
@@ -336,7 +336,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
             // # {\BLACK}Something special when piece reaches 94.
             // #zh_CN {\BLACK}层数达到94层后有一些特别的东西.
             .addStructureInfo(TextEnums.tr("Tooltip_Silksong_SilksongReleaseDate"))
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

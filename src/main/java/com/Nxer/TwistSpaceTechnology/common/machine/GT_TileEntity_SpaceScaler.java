@@ -40,8 +40,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -77,6 +79,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     // region Class Constructor
     public GT_TileEntity_SpaceScaler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_SpaceScaler(String aName) {
@@ -464,7 +467,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_SpaceScaler_MachineType)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_00)
             .addInfo(TextLocalization.Tooltip_SpaceScaler_01)
@@ -483,16 +486,13 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
             .addInfo(TextEnums.tr("Tooltip_SpaceScaler_09"))
             .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(31, 31, 32, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
         // spotless:on
     }

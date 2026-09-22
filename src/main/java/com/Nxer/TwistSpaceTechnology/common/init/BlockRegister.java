@@ -24,7 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Materials;

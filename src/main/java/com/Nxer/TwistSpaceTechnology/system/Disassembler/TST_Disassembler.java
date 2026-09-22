@@ -33,8 +33,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -66,6 +68,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     // region Class Constructor
     public TST_Disassembler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_Disassembler(String aName) {
@@ -459,7 +462,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
             // spotless:off
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             // #tr Tooltip_TSTDisassembler_MachineType
             // # Disassembler
             // #zh_CN 拆解机
@@ -484,9 +487,6 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 // # No energy consumption.
                 // #zh_CN 不消耗能源.
                 .addInfo(TextEnums.tr("Tooltip_TSTDisassembler_04"))
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 .addStructureInfo(TextLocalization.Tooltip_Details)
                 // #tr Tooltip_TSTDisassembler_2_01
                 // # Supported:
@@ -520,7 +520,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                 .addInputBus(TextLocalization.textUseBlueprint, 1)
                 .addOutputBus(TextLocalization.textUseBlueprint, 1)
                 .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             // spotless:on
         }
         return tooltip;

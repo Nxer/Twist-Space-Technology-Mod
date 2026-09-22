@@ -21,7 +21,7 @@ import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.client.audio.Sound;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

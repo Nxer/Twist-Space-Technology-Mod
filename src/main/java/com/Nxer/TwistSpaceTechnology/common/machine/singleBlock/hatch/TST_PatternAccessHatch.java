@@ -13,7 +13,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.google.common.collect.ImmutableList;
 
 import appeng.api.config.AccessRestriction;
@@ -39,14 +41,14 @@ import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
 @SkipGenerateDescription
 public class TST_PatternAccessHatch extends MTEHatch
-    implements IGridProxyable, ICellContainer, IMEInventoryHandler<AEItemStack>, IPowerChannelState {
+    implements IGridProxyable, ICellContainer, IMEInventoryHandler<AEItemStack>, IPowerChannelState, TSTTooltipCredit {
 
     private TST_MegaCraftingCenter controller;
     private AENetworkProxy gridProxy;
@@ -66,12 +68,11 @@ public class TST_PatternAccessHatch extends MTEHatch
         // #tr Tooltip_PatternAccessHatch_4
         // # Invalid items or duplicated patterns will be rejected.
         // #zh_CN 错误或重复的样板不会由此输入
-        TextEnums.tr("Tooltip_PatternAccessHatch_4"),
-
-        TextEnums.Mod_TwistSpaceTechnology.getText() };
+        TextEnums.tr("Tooltip_PatternAccessHatch_4") };
 
     public TST_PatternAccessHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 0, "");
+        registerTooltipCredits(ID.REOBF);
     }
 
     public TST_PatternAccessHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {

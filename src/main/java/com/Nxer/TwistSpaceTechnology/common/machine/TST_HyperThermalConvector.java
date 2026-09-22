@@ -1,11 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
@@ -39,7 +36,9 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -77,6 +76,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     // region Class Constructor
     public TST_HyperThermalConvector(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_HyperThermalConvector(String aName) {
@@ -563,7 +563,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_HyperThermalConvector_MachineType
         // # Heat Exchanger | Heat Cooler
         // #zh_CN 热交换机 | 热冷却机
@@ -588,9 +588,6 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             // # This device complies with {\YELLOW}GB/T 28712{\RESET} standards and will not explode!
             // #zh_CN 本设备符合GB/T 28712标准，不会爆炸！
             .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.4"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             // #tr Tooltip_HyperThermalConvector.11
             // # Hot fluid input hatch
             // #zh_CN 热流体输入仓
@@ -608,7 +605,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             // #zh_CN 蒸馏水输入仓
             .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.14"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Text_SeparatingLine)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 }

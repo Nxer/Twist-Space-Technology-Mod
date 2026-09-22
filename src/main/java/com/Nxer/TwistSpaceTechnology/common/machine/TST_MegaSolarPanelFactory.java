@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -37,8 +37,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -69,6 +71,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
 
     public TST_MegaSolarPanelFactory(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.LONEI);
     }
 
     public TST_MegaSolarPanelFactory(String aName) {
@@ -327,7 +330,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tttt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_MegaSolarPanelFactory
         // # Solar Factory
@@ -345,16 +348,13 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             // # Recipe Time Multiplier = 100% / Component Casing Tier.
             // #zh_CN 耗时倍率 = 100% / 部件装配线外壳等级.
             .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_02"))
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(13, 16, 13, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         // spotless:on
         return tttt;
     }

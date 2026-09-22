@@ -15,7 +15,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
@@ -36,7 +37,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @SkipGenerateDescription
-public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
+public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTTooltipCredit {
 
     public boolean mCharge = false, mDecharge = false;
     public int mBatteryCount = 0, mChargeableCount = 0;
@@ -53,7 +54,8 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
             aTier,
             aInvSlotCount,
             new String[] { TstUtils.tr("BufferedEnergyHatch.Tooltips.01"),
-                TstUtils.tr("BufferedEnergyHatch.Tooltips.02"), TextLocalization.ModNameDesc });
+                TstUtils.tr("BufferedEnergyHatch.Tooltips.02") });
+        registerTooltipCredits(ID.SHORDINGER);
     }
 
     public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, int aslot, String[] aDescription,

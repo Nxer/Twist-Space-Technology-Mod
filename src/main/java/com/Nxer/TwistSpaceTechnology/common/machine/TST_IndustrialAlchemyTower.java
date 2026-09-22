@@ -15,8 +15,8 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateT
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStrict;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofBlockStrictExt;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -71,9 +71,11 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileArcaneHole;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
@@ -132,10 +134,16 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
 
     public TST_IndustrialAlchemyTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.TC_TRAVELER, MAINTAINER, ID.KERIILS);
     }
 
     public TST_IndustrialAlchemyTower(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     // endregion
@@ -505,7 +513,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     // spotless:off
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_IndustrialAlchemyTower_MachineType
         // # Alchemy Tower
         // #zh_CN 炼金塔
@@ -575,8 +583,6 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
             .addInfo(TextEnums.tr("Tooltip_IndustrialAlchemyTower_14"))
             .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             // #tr Tooltip_Channel_Helper
             // # You can use the {\BLUE} channel:{\YELLOW}chisel{\GRAY} to automatically convert chisel blocks when building, and you can see nei to preview the available blocks
             // #zh_CN 可以使用{\BLUE}信道:{\YELLOW}chisel{\GRAY}进行搭建时自动转换凿子方块，可以查看nei进行预览可用方块
@@ -623,7 +629,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             .addOtherStructurePart(
                 TextEnums.tr("Tooltip_IndustrialAlchemyTower_20"),
                 TextEnums.tr("Tooltip_IndustrialAlchemyTower_21"))
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
     // spotless:on

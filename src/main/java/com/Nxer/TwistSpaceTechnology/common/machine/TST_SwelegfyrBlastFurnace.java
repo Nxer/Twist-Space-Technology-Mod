@@ -3,17 +3,14 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Kelvin;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textColon;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textSpace;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.MoreInfoCheckingInScanner;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Kelvin;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textColon;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textSpace;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -60,7 +57,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -109,6 +108,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     // region Class Constructor
     public TST_SwelegfyrBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_SwelegfyrBlastFurnace(String aName) {
@@ -247,7 +247,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     'O',
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                        .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
                         .hint(1)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
@@ -255,7 +254,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                     'P',
                     HatchElementBuilder.<TST_SwelegfyrBlastFurnace>builder()
                         .atLeast(Energy.or(ExoticEnergy))
-                        .adder(TST_SwelegfyrBlastFurnace::addToMachineList)
                         .hint(2)
                         .casingIndex(TstBlocks.MetaBlockCasing01.getTextureIndex(15))
                         .buildAndChain(TstBlocks.MetaBlockCasing01, 15))
@@ -1114,7 +1112,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_SwelegfyrBlastFurnace_MachineType
         // # Blast Furnace
         // #zh_CN 工业高炉
@@ -1158,8 +1156,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
             .addSeparator()
             .addInfo(MoreInfoCheckingInScanner.getText())
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.11
             // # {\GOLD}Heat{\WHITE}Upper Limit:
@@ -1229,7 +1225,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // # Pyrotheum's dedicated input hatch
             // #zh_CN 炽焱专用的输入仓
             .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
         // spotless:on
     }

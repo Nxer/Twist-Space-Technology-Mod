@@ -5,15 +5,15 @@ import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.Or
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.moveUnprocessedItemsToOutputs;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.ticksOfPerFluidConsuming;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_Controller;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -53,8 +53,10 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -86,6 +88,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     // region Class Constructor
     public TST_OreProcessingFactory(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_OreProcessingFactory(String aName) {
@@ -578,7 +581,7 @@ M -> ofFrame...(Materials.TungstenSteel, 0, ...);
     // region Info
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_OreProcessingFactory_MachineType)
             .addInfo(Tooltip_OreProcessingFactory_Controller)
             .addInfo(Tooltip_OreProcessingFactory_01)
@@ -588,14 +591,11 @@ M -> ofFrame...(Materials.TungstenSteel, 0, ...);
             .addInfo(Tooltip_OreProcessingFactory_05)
             .addInfo(Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addInfo(Tooltip_OreProcessingFactory_06)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 3)
             .addOutputBus(TextLocalization.textUseBlueprint, 3)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

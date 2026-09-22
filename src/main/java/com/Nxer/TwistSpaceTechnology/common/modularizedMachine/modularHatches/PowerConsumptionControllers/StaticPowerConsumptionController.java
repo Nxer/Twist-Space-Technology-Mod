@@ -1,11 +1,12 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.PowerConsumptionControllers;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 @SkipGenerateDescription
 public class StaticPowerConsumptionController extends StaticPowerConsumptionControllerBase {
@@ -13,6 +14,7 @@ public class StaticPowerConsumptionController extends StaticPowerConsumptionCont
     public StaticPowerConsumptionController(int aID, String aName, String aNameRegional, int aTier,
         float powerConsumptionMultiplier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.powerConsumptionMultiplier = powerConsumptionMultiplier;
     }
 
@@ -58,8 +60,6 @@ public class StaticPowerConsumptionController extends StaticPowerConsumptionCont
                     // # The actual power consumption is multiplied by
                     // #zh_CN 机器实际耗电量乘以
                     TextEnums.tr("Tooltips.StaticPowerConsumptionController.02") + value,
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

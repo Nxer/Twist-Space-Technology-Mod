@@ -26,7 +26,7 @@ public class CropPurpleMagnolia extends TST_CropBase {
 
     @Override
     public String getCreator() {
-        return "The_Flames";
+        return "The__Flames";
     }
 
     @Override

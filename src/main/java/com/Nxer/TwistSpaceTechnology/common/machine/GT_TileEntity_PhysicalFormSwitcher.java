@@ -34,7 +34,9 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -69,6 +71,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     // region Class Constructor
     public GT_TileEntity_PhysicalFormSwitcher(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_PhysicalFormSwitcher(String aName) {
@@ -322,7 +325,7 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_PhysicalFormSwitcher_MachineType)
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_00)
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_01)
@@ -330,16 +333,13 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_03)
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_04)
             .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_05)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(15, 20, 15, false)
             .addInputHatch(TextLocalization.textAnyCasing, 1)
             .addOutputHatch(TextLocalization.textAnyCasing, 1)
             .addInputBus(TextLocalization.textAnyCasing, 1)
             .addOutputBus(TextLocalization.textAnyCasing, 1)
             .addEnergyHatch(TextLocalization.textAnyCasing, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

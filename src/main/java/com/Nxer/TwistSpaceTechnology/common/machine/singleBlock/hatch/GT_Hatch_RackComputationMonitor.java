@@ -21,7 +21,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -50,7 +52,8 @@ import tectech.thing.gui.TecTechUITextures;
 import tectech.util.TTUtility;
 
 @SkipGenerateDescription
-public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGregtechLogo, IAddUIWidgets {
+public class GT_Hatch_RackComputationMonitor extends MTEHatch
+    implements IAddGregtechLogo, IAddUIWidgets, TSTTooltipCredit {
 
     private static IIconContainer EM_R;
     private static IIconContainer EM_R_ACTIVE;
@@ -73,6 +76,7 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
             new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
                 translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
+        registerTooltipCredits(ID.SHORDINGER);
         TTUtility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;
 

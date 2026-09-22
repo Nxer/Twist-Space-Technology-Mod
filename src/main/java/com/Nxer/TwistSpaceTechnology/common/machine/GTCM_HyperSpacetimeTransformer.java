@@ -39,7 +39,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -66,6 +68,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     // region Class Constructor
     public GTCM_HyperSpacetimeTransformer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.THE__FLAMES);
     }
 
     public GTCM_HyperSpacetimeTransformer(String aName) {
@@ -878,7 +881,7 @@ J -> ofBlock...(tile.quantumGlass, 0, ...);
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_HyperSpacetimeTransformer_MachineType)
             .addInfo(TextLocalization.Tooltip_HyperSpacetimeTransformer_00)
             .addInfo(TextLocalization.Tooltip_HyperSpacetimeTransformer_01)
@@ -888,16 +891,13 @@ J -> ofBlock...(tile.quantumGlass, 0, ...);
             .addInfo(TextLocalization.Tooltip_HyperSpacetimeTransformer_05)
             .addInfo(TextLocalization.Tooltip_HyperSpacetimeTransformer_06)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(45, 11, 45, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 2)
             .addOutputHatch(TextLocalization.textUseBlueprint, 2)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

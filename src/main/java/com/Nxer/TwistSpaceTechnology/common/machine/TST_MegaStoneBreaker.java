@@ -1,13 +1,10 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipes;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.calculateVoltageTier;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -32,7 +29,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -68,6 +67,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     // region Class Constructor
     public TST_MegaStoneBreaker(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_MegaStoneBreaker(String aName) {
@@ -300,7 +300,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_MegaStoneBreaker_MachineType
         // # Stone Breaker
         // #zh_CN 碎石机
@@ -321,9 +321,6 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
             // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
             .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker.3"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
@@ -338,7 +335,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             .addStructureInfo(TextEnums.tr("Tooltip_MegaStoneBreaker_Hatch_1"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Text_SeparatingLine)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 

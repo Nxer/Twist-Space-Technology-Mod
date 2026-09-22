@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.dreammaster.block.BlockList.BloodyThaumium;
 import static com.dreammaster.block.BlockList.BloodyVoid;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -56,9 +56,11 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
@@ -123,10 +125,20 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     public GT_TileEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(
+            AUTHOR,
+            ID.XIAO_XING_521,
+            MAINTAINER,
+            new ID[] { ID.GODERIUM, ID.YUE_LENG_M });
     }
 
     public GT_TileEntity_IndustrialMagicMatrix(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     // end region
@@ -3030,7 +3042,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(
                 // #tr Tooltip_IndustrialMagicMatrix_MachineType
                 // # Magic Matrix
@@ -3132,9 +3144,6 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
                 // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
                 .addInfo(TextEnums.tr("Tooltip_IndustrialMagicMatrix_22"))
-                .addSeparator()
-                .addInfo(StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 // #tr Tooltip_IndustrialMagicMatrix_23
                 // # Infusion Provider
                 // #zh_CN 注魔供应器
@@ -3157,7 +3166,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 // #zh_CN §b每级提供4^tier的并行
                 .addOtherStructurePart(TextEnums.tr("Tooltip_IndustrialMagicMatrix_25"),
                         TextEnums.tr("Tooltip_IndustrialMagicMatrix_25.1"))
-                .toolTipFinisher(ModName);
+                .toolTipFinisher();
         return tt;
     }
     // spotless:on

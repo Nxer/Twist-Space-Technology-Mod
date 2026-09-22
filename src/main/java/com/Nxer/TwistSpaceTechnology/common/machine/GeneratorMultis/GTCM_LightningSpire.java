@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Dynamo;
@@ -40,7 +42,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -79,6 +84,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     // region Construct
     public GTCM_LightningSpire(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
+        registerTooltipCredits(AUTHOR, ID.SNOW_DREAM, MAINTAINER, ID.NXER);
     }
 
     public GTCM_LightningSpire(String name) {
@@ -435,7 +441,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     // spotless:off
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr GTCM_LightningSpire_MachineType
         // # Multi Lightning Rod
         // #zh_CN 多方块避雷针
@@ -490,13 +496,12 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             // # Use a wire cutter to enable/disable lightning animation.
             // #zh_CN 使用剪线钳开启/关闭闪电特效
             .addInfo(tr("GTCM_LightningSpire_12"))
-            .addSeparator()
             .beginStructureBlock(11, 23, 11, false)
-            .addInputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addInputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addDynamoHatch(TextLocalization.BLUE_PRINT_INFO)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addInputHatch(TextLocalization.textUseBlueprint)
+            .addInputBus(TextLocalization.textUseBlueprint)
+            .addOutputBus(TextLocalization.textUseBlueprint)
+            .addDynamoHatch(TextLocalization.textUseBlueprint)
+            .toolTipFinisher();
         return tt;
     }
     // spotless:on

@@ -4,36 +4,35 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstruct
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_02_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_07;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_08;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_ArtificialStar_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_02_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_07;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_08;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_Controller;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_ArtificialStar_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -77,8 +76,11 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -112,10 +114,21 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     // region Class Constructor
     public TST_ArtificialStar(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_ArtificialStar(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.DYSON_SPHERE;
+    }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.DYSON_SPHERE };
     }
 
     @Override
@@ -609,7 +622,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
     }
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_ArtificialStar_MachineType)
             .addInfo(Tooltip_ArtificialStar_Controller)
             .addInfo(Tooltip_ArtificialStar_00)
@@ -621,9 +634,6 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
             .addInfo(Tooltip_ArtificialStar_06)
             .addInfo(Tooltip_ArtificialStar_07)
             .addInfo(Tooltip_ArtificialStar_08)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .addStructureInfo(Tooltip_Details)
             .addStructureInfo(Tooltip_ArtificialStar_02_01)
             .addStructureInfo(Tooltip_ArtificialStar_02_02)
@@ -632,7 +642,6 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
             .addStructureInfo(Tooltip_ArtificialStar_02_05)
             .addStructureInfo(Tooltip_ArtificialStar_02_06)
           .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
-          .addStructureInfo(DSPName + ":")
           .addStructureInfo(Tooltip_DSPInfo_launch_01)
           .addStructureInfo(Tooltip_DSPInfo_launch_02)
           .addStructureInfo(Tooltip_DSPInfo_00)
@@ -646,7 +655,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
     private final String[][] shapeMain = new String[][]{

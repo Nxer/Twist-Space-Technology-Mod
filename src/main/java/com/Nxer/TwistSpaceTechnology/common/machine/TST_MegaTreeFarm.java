@@ -7,12 +7,9 @@ import static com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.Check
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersChances;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe.WatersOutputs;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.TreeGrowthSimulatorWithoutToolFakeRecipe.allProducts;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -61,6 +58,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.treefarm.CropsNHFarm;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.cropsnh.init.CropsNHFluids;
@@ -108,10 +109,16 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // region Class Constructor
     public TST_MegaTreeFarm(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_MegaTreeFarm(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     @Override
@@ -1310,7 +1317,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // }
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_EcoSphereSimulator_MachineType
         // # Tree Farm | Aquatic Farm | Green House | Mob Cloner
         // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
@@ -1388,9 +1395,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             // # - Has a huge consumption of water
             // #zh_CN {\SPACE}- 运行时消耗大量水
             .addInfo(tr("Tooltip_EcoSphereSimulator.0.17"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(33, 45, 33, false)
             // .addStructureInfo(Text_SeparatingLine)
             .addInputHatch(textUseBlueprint, 1)
@@ -1399,7 +1403,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addOutputBus(textUseBlueprint, 1)
             .addEnergyHatch(textUseBlueprint, 2)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 

@@ -16,7 +16,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -25,8 +26,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
@@ -36,6 +37,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
 
     public PerfectExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
     }
 
     public PerfectExecutionCore(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -188,8 +190,6 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                     // # Any task is completed within 1 second.
                     // #zh_CN 任何任务都在 1 秒内完成.
                     TextEnums.tr("Tooltips.PerfectExecutionCore.04"),
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

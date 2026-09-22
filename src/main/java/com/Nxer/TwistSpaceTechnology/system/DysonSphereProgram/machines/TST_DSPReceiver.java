@@ -4,40 +4,39 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_07;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_02_08;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_07;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_08;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPReceiver_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentPlanetCoefficient;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.infoText_CurrentStellarCoefficient;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_07;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_02_08;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_07;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_08;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPReceiver_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.infoText_CurrentPlanetCoefficient;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.infoText_CurrentStellarCoefficient;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -78,8 +77,11 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -116,10 +118,21 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     // region Class Constructor
     public TST_DSPReceiver(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_DSPReceiver(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.DYSON_SPHERE;
+    }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.DYSON_SPHERE };
     }
 
     @Override
@@ -735,7 +748,7 @@ Q -> ofFrame...(NaquadahAlloy, ...);
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_DSPReceiver_MachineType)
             .addInfo(Tooltip_DSPReceiver_00)
             .addInfo(Tooltip_DSPReceiver_01)
@@ -746,9 +759,6 @@ Q -> ofFrame...(NaquadahAlloy, ...);
             .addInfo(Tooltip_DSPReceiver_06)
             .addInfo(Tooltip_DSPReceiver_07)
             .addInfo(Tooltip_DSPReceiver_08)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .addStructureInfo(Tooltip_Details)
             .addStructureInfo(Tooltip_DSPReceiver_02_06)
             .addStructureInfo(Tooltip_DSPReceiver_02_01)
@@ -759,7 +769,6 @@ Q -> ofFrame...(NaquadahAlloy, ...);
             .addStructureInfo(Tooltip_DSPReceiver_02_07)
             .addStructureInfo(Tooltip_DSPReceiver_02_08)
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
-            .addStructureInfo(DSPName + ":")
             .addStructureInfo(Tooltip_DSPInfo_launch_01)
             .addStructureInfo(Tooltip_DSPInfo_launch_02)
             .addStructureInfo(Tooltip_DSPInfo_00)
@@ -774,7 +783,7 @@ Q -> ofFrame...(NaquadahAlloy, ...);
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
             .addDynamoHatch(textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

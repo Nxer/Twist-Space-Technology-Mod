@@ -23,8 +23,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -53,6 +55,7 @@ public class MM_LargeNeutronOscillator
     // region Class Constructor
     public MM_LargeNeutronOscillator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_LargeNeutronOscillator(String aName) {
@@ -224,7 +227,7 @@ public class MM_LargeNeutronOscillator
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             // #tr Tooltip_LargeNeutronOscillator_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}中子活化器
@@ -245,11 +248,6 @@ public class MM_LargeNeutronOscillator
                 // # Installing module hatches near the controller block can significantly improve machine performance.
                 // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
                 .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_03"))
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
                 .addStructureInfo(TextEnums.OverclockControllerDescription.getText())
@@ -267,7 +265,7 @@ public class MM_LargeNeutronOscillator
                 .addInputBus(TextLocalization.textUseBlueprint, 3)
                 .addOutputBus(TextLocalization.textUseBlueprint, 3)
                 .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             // spotless:on
         }
         return tooltip;

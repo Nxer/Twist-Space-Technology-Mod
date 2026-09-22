@@ -28,7 +28,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -58,6 +60,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     // region Class Constructor
     public TST_DeployedNanoCore(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_DeployedNanoCore(String aName) {
@@ -4523,16 +4526,13 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_DeployedNanoCore_MachineType)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_Controller)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_01)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_02)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_03)
             .addInfo(TextLocalization.Tooltip_DeployedNanoCore_04)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(81, 167, 81, false)
@@ -4542,7 +4542,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

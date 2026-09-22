@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -25,7 +25,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -52,6 +54,7 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     // region Class Constructor
     public TST_LargeIndustrialCokingFactory(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_LargeIndustrialCokingFactory(String aName) {
@@ -199,22 +202,19 @@ I -> ofFrame...(Materials.Steel, ...);
     // region Info
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_LargeIndustrialCokingFactory_MachineType)
             .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_Controller)
             .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_01)
             .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_02)
             .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_03)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 1)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
             .addEnergyHatch(textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

@@ -10,9 +10,9 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MultiStructures
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ProofOfGods;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ProofOfHeroes;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.Yamato;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.RiseOfDarkFog;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.RiseOfDarkFog;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.DSPName;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

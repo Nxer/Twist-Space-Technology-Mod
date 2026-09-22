@@ -38,7 +38,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -68,6 +70,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     // region Class Constructor
     public GT_TileEntity_MagneticDrivePressureFormer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_MagneticDrivePressureFormer(String aName) {
@@ -328,7 +331,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     // tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MagneticDrivePressureFormer_MachineType)
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_00)
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_01)
@@ -341,9 +344,6 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_09)
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_07)
             .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_08)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(15, 25, 15, false)
             .addController(TextLocalization.textTopCenter)
             .addInputHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
@@ -351,7 +351,7 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             .addInputBus(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
             .addOutputBus(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
             .addEnergyHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_EnergyHatch, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

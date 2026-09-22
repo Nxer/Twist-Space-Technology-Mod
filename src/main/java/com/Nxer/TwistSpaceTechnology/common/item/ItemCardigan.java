@@ -32,13 +32,16 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizon.gtnhlib.eventbus.EventBusSubscriber;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.api.GregTechAPI;
 import gregtech.api.damagesources.GTDamageSources;
+import gregtech.api.enums.GTAuthors;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -237,8 +240,10 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
         // spotless:on
 
-        tooltips.add(TextEnums.Author_Taskeren.toString());
-        tooltips.add(TextEnums.AddByTwistSpaceTechnology.toString());
+        tooltips.add(GTAuthors.buildAuthorsWithFormat(ID.TASKEREN.get()));
+        tooltips.add(
+            TSTTooltipCredit.buildModNameTooltip(Style.STANDARD)
+                .get());
     }
 
     @Override // to override IC2 special logic

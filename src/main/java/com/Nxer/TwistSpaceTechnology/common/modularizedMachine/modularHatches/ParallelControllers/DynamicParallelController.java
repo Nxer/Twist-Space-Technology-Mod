@@ -3,7 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.P
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -15,8 +16,8 @@ import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 @SkipGenerateDescription
 public class DynamicParallelController extends DynamicParallelControllerBase {
@@ -24,6 +25,7 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
     // region Class Constructor
     public DynamicParallelController(int aID, String aName, String aNameRegional, int aTier, int maxParallel) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.maxParallel = maxParallel;
         this.description = new String[] {
 
@@ -119,8 +121,6 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
                       // # Provides up to
                       // #zh_CN 最多提供
                       TextEnums.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TextEnums.Word_Parallel + ".",
-                      TextEnums.AddByTwistSpaceTechnology.getText(),
-                      TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

@@ -1,8 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.FluidCapacity;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.HatchTier;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,8 +17,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -30,7 +33,7 @@ import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
 @SkipGenerateDescription
-public class TST_ManaHatch extends MTEHatchInput {
+public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
 
     private boolean isLiquidizerMode;
     private static FluidStack fluidMana;
@@ -39,6 +42,7 @@ public class TST_ManaHatch extends MTEHatchInput {
 
     public TST_ManaHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(AUTHOR, ID.THE__FLAMES, MAINTAINER, ID.KERIILS);
     }
 
     public TST_ManaHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -123,12 +127,10 @@ public class TST_ManaHatch extends MTEHatchInput {
         final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
-        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
+        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 1];
         System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
         System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
         System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
-        desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
-
         return desc;
     }
 

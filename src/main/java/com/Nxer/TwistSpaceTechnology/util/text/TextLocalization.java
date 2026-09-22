@@ -1,8 +1,10 @@
-package com.Nxer.TwistSpaceTechnology.util;
+package com.Nxer.TwistSpaceTechnology.util.text;
 
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.Tags;
+import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import gregtech.api.util.GTLanguageManager;
 
@@ -20,8 +22,8 @@ public class TextLocalization {
     // region general
     public static final String ModName = Tags.MODNAME;
     // #tr ModNameDesc
-    // # Added by {\GREEN}Twist Space Technology{\GRAY}
-    // #zh_CN 由 {\GREEN}Twist Space Technology{\GRAY} 添加{\RESET}
+    // # Added by %s
+    // #zh_CN 由 %s 添加
     public static final String ModNameDesc = TextEnums.tr("ModNameDesc");
 
     // #tr HeatCapacity
@@ -53,11 +55,6 @@ public class TextLocalization {
     // # {\GOLD}-----------------------------------------
     // #zh_CN {\GOLD}-----------------------------------------
     public static final String Text_SeparatingLine = TextEnums.tr("Text_SeparatingLine");
-
-    // #tr BLUE_PRINT_INFO
-    // # Follow the {\BLUE} Structure{\DARK_BLUE}Lib{\GRAY} hologram projector to build the main structure.
-    // #zh_CN 请参考{\BLUE}Structure{\DARK_BLUE}Lib{\GRAY}全息投影，构建主体结构
-    public static final String BLUE_PRINT_INFO = TextEnums.tr("BLUE_PRINT_INFO");
 
     // #tr DSPName
     // # {\BLUE}Dyson Sphere Program
@@ -222,11 +219,6 @@ public class TextLocalization {
     // # Machine end
     // #zh_CN 机器末端
     public static final String textEndSides = TextEnums.tr("textEndSides");
-
-    // #tr StructureTooComplex
-    // # The structure is too complex!
-    // #zh_CN 结构太复杂了！
-    public static final String StructureTooComplex = TextEnums.tr("StructureTooComplex");
 
     // #tr textCasingAdvIrPlated
     // # Advanced Iridium Plated Machine Casing

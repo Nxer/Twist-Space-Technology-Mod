@@ -33,8 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -68,6 +70,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     // region Class Constructor
     public MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(String aName) {
@@ -430,7 +433,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Plasma Forge
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉
@@ -462,11 +465,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
                 .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06"))
                 .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
                 .addStructureInfo(TextEnums.OverclockControllerDescription.getText())
@@ -484,7 +482,7 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                 .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
                 .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
                 .addStructureHint(TextEnums.ModularHatch.getKey(), 2)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             // spotless:on
         }
         return tooltip;

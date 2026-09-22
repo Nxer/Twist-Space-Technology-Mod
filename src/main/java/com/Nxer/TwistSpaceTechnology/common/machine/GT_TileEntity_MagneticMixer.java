@@ -25,7 +25,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -55,6 +57,7 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
     // region Class Constructor
     public GT_TileEntity_MagneticMixer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_MagneticMixer(String aName) {
@@ -228,23 +231,20 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MagneticMixer_MachineType)
             .addInfo(TextLocalization.Tooltip_MagneticMixer_00)
             .addInfo(TextLocalization.Tooltip_MagneticMixer_01)
             .addInfo(TextLocalization.Tooltip_MagneticMixer_02)
             .addInfo(TextLocalization.Tooltip_MagneticMixer_03)
             .addInfo(TextLocalization.Tooltip_MagneticMixer_04)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(19, 19, 21, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

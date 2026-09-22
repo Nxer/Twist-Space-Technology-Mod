@@ -17,7 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.enums.VoidingMode;
 import gregtech.api.interfaces.IOutputBus;

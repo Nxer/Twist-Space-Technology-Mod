@@ -40,8 +40,9 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -76,7 +77,7 @@ import tectech.thing.metaTileEntity.multi.base.Parameters;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
 @SkipGenerateDescription
-public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
+public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable, TSTTooltipCredit {
 
     private GT_Hatch_RackComputationMonitor realMonitor;
     private double multiplier = 1;
@@ -995,6 +996,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
 
     public TST_Computer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.SHORDINGER);
         eCertainMode = 0;
         useLongPower = true;
     }
@@ -1225,14 +1227,13 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
 
     @Override
     public MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("gt.blockmachines.multimachine.em.computer.name")) // Machine Type: Quantum
             // Computer
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.0")) // Controller block of
             // the Quantum Computer
             .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.1")) // Used to generate
             // computation (and heat)
-            .addInfo(TstSharedLocalization.MachineTooltip.tooComplex()) // The structure is too complex!
             .addSeparator()
             // .addInfo("what the fuck")
             .addInfo(translateToLocal("tst.computer.desc.0"))
@@ -1253,7 +1254,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
                 translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),
                 "no need uncertain hatch!",
                 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

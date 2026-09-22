@@ -10,21 +10,24 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 
 @SkipGenerateDescription
-public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
+public class TST_BloodOrbHatch extends MTEHatchFluidGenerator implements TSTTooltipCredit {
 
     private static final String TEXTURE_NAME_OVERLAY_ACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch";
     private static final String TEXTURE_NAME_OVERLAY_INACTIVE = "gtnhcommunitymod:iconSets/overlay_blood_hatch_inactive";
@@ -52,18 +55,25 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
         // #tr Tooltip_BloodOrbHatch_5
         // # Deactivating the Hatch will refund the Life Essence back to the Blood Orb.
         // #zh_CN 关闭血液仓将会把生命本质输回气血宝珠
-        TextEnums.tr("Tooltip_BloodOrbHatch_5"), TextEnums.Author_Taskeren.getText(),
-        TextEnums.Mod_TwistSpaceTechnology.getText() };
+        TextEnums.tr("Tooltip_BloodOrbHatch_5") };
 
     private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),
         TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.tr("Tooltip_BloodOrbHatch_5"), };
 
     public TST_BloodOrbHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        if (getClass() == TST_BloodOrbHatch.class) {
+            registerTooltipCredits(ID.TASKEREN);
+        }
     }
 
     public TST_BloodOrbHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     @Override
@@ -256,6 +266,7 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
 
         public TST_Debug_BloodHatch(int aID, String aName, String aNameRegional, int aTier) {
             super(aID, aName, aNameRegional, aTier);
+            registerTooltipCredits(ID.NXER);
         }
 
         public TST_Debug_BloodHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -291,8 +302,8 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator {
             TextEnums.tr("Tooltip_BloodOrbHatch_1"),
             // #tr Tooltip_DebugBloodHatch
             // # {\GOLD}Infinity Life Essence.
-            // #zh_CN {\GOLD}提供无线的生命本质
-            TextEnums.tr("Tooltip_BloodOrbHatch_5"), TextEnums.Mod_TwistSpaceTechnology.getText() };
+            // #zh_CN {\GOLD}提供无限的生命本质
+            TextEnums.tr("Tooltip_DebugBloodHatch") };
 
         @Override
         public synchronized String[] getDescription() {

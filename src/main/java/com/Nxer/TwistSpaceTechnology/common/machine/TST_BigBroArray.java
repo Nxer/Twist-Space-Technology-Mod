@@ -54,8 +54,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -1361,6 +1362,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
 
     public TST_BigBroArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.KO_TORI_MINAMI);
     }
 
     public TST_BigBroArray(String aName) {
@@ -1603,7 +1605,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new MultiblockTooltipBuilder()
+        MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new TSTMultiblockTooltipBuilder()
             .addMachineType(TextEnums.BigBroArrayType.toString())
             .addInfo(TextEnums.OutOfMaintenance.toString())
             .addInfo(TextEnums.BigBroArrayDesc1.toString())
@@ -1617,10 +1619,8 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
             .addInfo(TextEnums.BigBroArrayDesc9.toString())
             .addInfo(TextEnums.BigBroArrayDesc10.toString())
             .addInfo(TextEnums.BigBroArrayDesc11.toString())
-            .addInfo(TextEnums.BigBroArrayDesc12.toString())
-            .addInfo(TextEnums.StructureTooComplex.toString())
-            .addInfo(TextLocalization.BLUE_PRINT_INFO);
-        gt_multiblock_tooltip_builder.toolTipFinisher(TextLocalization.ModName);
+            .addInfo(TextEnums.BigBroArrayDesc12.toString());
+        gt_multiblock_tooltip_builder.toolTipFinisher();
         return gt_multiblock_tooltip_builder;
     }
 

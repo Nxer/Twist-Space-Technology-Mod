@@ -3,7 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.S
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -15,8 +16,8 @@ import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 @SkipGenerateDescription
 public class DynamicSpeedController extends DynamicSpeedControllerBase {
@@ -24,6 +25,7 @@ public class DynamicSpeedController extends DynamicSpeedControllerBase {
     // region Class Constructor
     public DynamicSpeedController(int aID, String aName, String aNameRegional, int aTier, int maxSpeedMultiplier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.maxSpeedMultiplier = maxSpeedMultiplier;
     }
 
@@ -118,8 +120,6 @@ public class DynamicSpeedController extends DynamicSpeedControllerBase {
                     // # Provides up to speed x
                     // #zh_CN 最高提供速度增幅
                     TextEnums.tr("Tooltips.DynamicSpeedController.02") + " " + getMaxSpeedMultiplier() + "00%",
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

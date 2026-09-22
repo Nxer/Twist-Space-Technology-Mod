@@ -3,9 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Totto;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Mod_TwistSpaceTechnology;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.*;
@@ -34,6 +32,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -80,7 +82,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @SkipGenerateDescription
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
-    implements ISurvivalConstructable {
+    implements ISurvivalConstructable, TSTTooltipCredit {
 
     public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons
         .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
@@ -235,6 +237,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
 
     public TST_LaserMeteorMiner(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.TOTTO);
     }
 
     public TST_LaserMeteorMiner(String aName) {
@@ -350,7 +353,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
-        MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr TST_LaserMeteorMiner_tooltips_machineType
         // # Meteor Miner
         // #zh_CN 陨星采矿机
@@ -431,8 +434,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             // # {\BLUE}{\BOLD}Finally some good Meteors!
             // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)
             .addInfo(tr("TST_LaserMeteorMiner_tooltips_18"))
-            .addInfo(Author_Totto.getText())
-            .addSeparator()
             // #tr TST_LaserMeteorMiner_tooltips_T1
             // # {\GOLD}{\BOLD}TIER I
             // #zh_CN {\GOLD}{\BOLD}等级 I
@@ -465,7 +466,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
             .addOutputBus(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
             .addEnergyHatch(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
             .addMaintenanceHatch(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
-            .toolTipFinisher(Mod_TwistSpaceTechnology.getText());
+            .toolTipFinisher();
         return tt;
         // spotless:on
     }

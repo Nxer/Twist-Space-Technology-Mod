@@ -6,12 +6,9 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInf
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.ChiselBeacon_1;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAroundController;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAroundController;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -57,9 +54,12 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellAlchemi
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.block.BlockList;
@@ -121,10 +121,16 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     public TST_BloodyHell(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(new ID[] { ID.TASKEREN, ID.GODERIUM });
     }
 
     public TST_BloodyHell(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     @Override
@@ -193,7 +199,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        var tt = new MultiblockTooltipBuilder();
+        var tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
 
         // #tr Tooltip_BloodyHell_MachineType
@@ -217,16 +223,11 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             // # Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
             // #zh_CN 还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
             .addInfo(TextEnums.tr("Tooltip_BloodyHell_3"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textUseBlueprint)
             .addInputBus(textAroundController+" "+getBlueprintWithDot(1))
             .addOutputBus(textAroundController+" "+getBlueprintWithDot(1))
             .addInputHatch(textAroundController+" "+getBlueprintWithDot(1))
-            .addInfo(TextEnums.Author_Taskeren.getText())
-            .addInfo(TextEnums.Author_Goderium.getText())
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
         // spotless:on
     }

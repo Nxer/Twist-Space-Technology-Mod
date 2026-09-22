@@ -35,8 +35,10 @@ import com.Nxer.TwistSpaceTechnology.common.api.random.RandomPackageFactory;
 import com.Nxer.TwistSpaceTechnology.common.api.random.XSTR;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -64,6 +66,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     // region Class Constructor
     public TST_NetherInterface(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_NetherInterface(String aName) {
@@ -310,7 +313,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_NetherInterface_MachineType
         // # Otherworld Teleporter
@@ -328,16 +331,13 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
           // # Machine takes 2A IV to maintain the teleporter, and 1A IV per parallel.
           // #zh_CN 需要消耗 2A IV 维持传送器, 并且每个并行消耗1A IV.
           .addInfo(TextEnums.tr("Tooltip_NetherInterface_03"))
-          .addSeparator()
-          .addInfo(TextLocalization.StructureTooComplex)
-          .addInfo(TextLocalization.BLUE_PRINT_INFO)
           .beginStructureBlock(15, 16, 3, false)
           .addInputHatch(TextLocalization.textUseBlueprint, 1)
           .addOutputHatch(TextLocalization.textUseBlueprint, 1)
           .addInputBus(TextLocalization.textUseBlueprint, 1)
           .addOutputBus(TextLocalization.textUseBlueprint, 1)
           .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-          .toolTipFinisher(TextLocalization.ModName);
+          .toolTipFinisher();
         // spotless:on
         return tt;
     }

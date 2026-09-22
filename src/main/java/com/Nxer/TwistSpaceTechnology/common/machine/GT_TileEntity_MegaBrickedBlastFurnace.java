@@ -28,8 +28,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
@@ -546,6 +548,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     public GT_TileEntity_MegaBrickedBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.HOLEFISH);
     }
 
     public GT_TileEntity_MegaBrickedBlastFurnace(String aName) {
@@ -574,7 +577,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaBrickedBlastFurnace_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_Controller)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_00)
@@ -588,14 +591,11 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_08)
             .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_09)
             .addPollutionAmount(getPollutionPerSecond(null))
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addInfo(TextEnums.tr("Tooltip_Channel_Helper"))
-            .addSeparator()
             .addStructureInfo(TextLocalization.textMegaBrickedBlastFurnaceTips)
             .addInputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
             .addOutputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

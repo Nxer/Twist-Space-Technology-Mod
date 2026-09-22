@@ -4,26 +4,26 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMira
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.MoltenToIngot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_07;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_08;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_07;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_08;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_2_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_2_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_2_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_2_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_2_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_Controller;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MiracleDoor_MachineType;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -60,7 +60,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.Wireless
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -96,6 +97,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     // region Class Constructor
     public TST_MiracleDoor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_MiracleDoor(String aName) {
@@ -584,7 +586,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     // region info
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_MiracleDoor_MachineType)
             .addInfo(Tooltip_MiracleDoor_Controller)
             .addInfo(Tooltip_MiracleDoor_00)
@@ -596,9 +598,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
             .addInfo(Tooltip_MiracleDoor_06)
             .addInfo(Tooltip_MiracleDoor_07)
             .addInfo(Tooltip_MiracleDoor_08)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(Tooltip_Details)
             .addStructureInfo(Tooltip_MiracleDoor_2_01)
             .addStructureInfo(Tooltip_MiracleDoor_2_02)
@@ -608,7 +607,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -39,7 +39,9 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -81,6 +83,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     // region Class Constructor
     public TST_BiosphereIII(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.HOLEFISH);
     }
 
     public TST_BiosphereIII(String aName) {
@@ -408,7 +411,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
     // region Info
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_BiosphereIII_MachineType)
             .addInfo(TextLocalization.Tooltip_BiosphereIII_Controller)
             .addInfo(TextLocalization.Tooltip_BiosphereIII_00)
@@ -430,9 +433,6 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             .addInfo(TextLocalization.Tooltip_BiosphereIII_Mode2n3_00)
             .addInfo(TextLocalization.Tooltip_BiosphereIII_Mode2n3_01)
             .addInfo(TextLocalization.Tooltip_BiosphereIII_Mode2n3_02)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(13, 19, 17, false)
             .addController(textFrontBottom)
             .addInputHatch(TextLocalization.textBiosphereIIIHatchLocation, 1)
@@ -442,7 +442,7 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             .addEnergyHatch(TextLocalization.textBiosphereIIIHatchLocation, 1)
             .addStructureInfo(
                 TextLocalization.textBiosphereIIIRadioHatch + ", " + TextLocalization.textBiosphereIIIHatchLocation)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

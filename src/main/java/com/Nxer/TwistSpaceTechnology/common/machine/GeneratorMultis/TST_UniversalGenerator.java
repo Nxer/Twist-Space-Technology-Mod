@@ -32,8 +32,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -67,6 +69,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     // region Class Constructor
     public TST_UniversalGenerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.EVGEN_WAR_GOLD);
     }
 
     public TST_UniversalGenerator(String aName) {
@@ -295,16 +298,15 @@ F -> ofBlock...(gt.blockframes, 305, ...);
     // region Overrides
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_UniversalGenerator_MachineType)
             .addInfo(TextLocalization.Tooltip_UniversalGenerator_00)
             .addInfo(TextLocalization.Tooltip_UniversalGenerator_01)
             .addInfo(TextLocalization.Tooltip_UniversalGenerator_02)
             .addInfo(TextLocalization.Tooltip_UniversalGenerator_03)
-            .addInfo(TextEnums.Author_EvgenWarGold.getText())
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

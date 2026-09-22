@@ -3,8 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
@@ -16,10 +17,11 @@ import tectech.thing.metaTileEntity.hatch.MTEHatchUncertainty;
 import tectech.util.CommonValues;
 
 @SkipGenerateDescription
-public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty {
+public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty implements TSTTooltipCredit {
 
     public GT_MetaTileEntity_Hatch_UncertaintyDebug(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_MetaTileEntity_Hatch_UncertaintyDebug(String aName, int aTier, String[] aDescription,
@@ -43,8 +45,7 @@ public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertaint
             // #tr DebugUncertaintyHatch.getDescription.01
             // # The quantum world collapses.
             // #zh_CN 量子世界坍塌.
-                + TextEnums.tr("DebugUncertaintyHatch.getDescription.01"),
-            TextLocalization.ModNameDesc };
+                + TextEnums.tr("DebugUncertaintyHatch.getDescription.01") };
     }
 
     @Override

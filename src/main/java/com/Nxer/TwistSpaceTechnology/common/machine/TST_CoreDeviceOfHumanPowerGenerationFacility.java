@@ -24,8 +24,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.enums.TierName;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -56,6 +58,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     // region Class Constructor
     public TST_CoreDeviceOfHumanPowerGenerationFacility(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_CoreDeviceOfHumanPowerGenerationFacility(String aName) {
@@ -255,7 +258,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     // region General
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType
         // # Fluid Heater
         // #zh_CN 流体加热器
@@ -273,16 +276,13 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
             // #zh_CN 升级线圈以获得更快的速度.
             .addInfo(TextEnums.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02"))
             .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(15, 20, 15, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 2)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

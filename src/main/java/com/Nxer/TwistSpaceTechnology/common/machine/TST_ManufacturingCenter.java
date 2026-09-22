@@ -27,8 +27,11 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TstSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -65,7 +68,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @SkipGenerateDescription
 public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_ManufacturingCenter>
-    implements ISurvivalConstructable {
+    implements ISurvivalConstructable, TSTTooltipCredit {
 
     @MagicConstant(valuesFromClass = VoltageIndex.class)
     private static final int LOWEST_CORE_TIER = VoltageIndex.IV;
@@ -82,6 +85,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     public TST_ManufacturingCenter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.TASKEREN);
     }
 
     public TST_ManufacturingCenter(String aName) {
@@ -255,7 +259,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        var tt = new MultiblockTooltipBuilder();
+        var tt = new TSTMultiblockTooltipBuilder();
 
         // spotless:off
         TstSharedFormat.setDefaultColor(EnumChatFormatting.GRAY);
@@ -312,9 +316,7 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
             .addEnergyHatch("Any Casing", 1)
             .addMaintenanceHatch("Any Casing", 1)
             .addMufflerHatch("Any Casing", 1)
-            .addSeparator()
-            .addInfo(TextEnums.Author_Taskeren.toString())
-            .toolTipFinisher(TextEnums.Mod_TwistSpaceTechnology.toString());
+            .toolTipFinisher();
 
         // spotless:on
         return tt;

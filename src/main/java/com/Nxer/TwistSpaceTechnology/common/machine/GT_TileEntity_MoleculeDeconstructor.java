@@ -4,19 +4,16 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_Pe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MoleculeDeconstructor_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textScrewdriverChangeMode;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_MoleculeDeconstructor_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textScrewdriverChangeMode;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
@@ -47,6 +44,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -78,6 +77,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     // region Class Constructor
     public GT_TileEntity_MoleculeDeconstructor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_MoleculeDeconstructor(String aName) {
@@ -457,7 +457,7 @@ I -> ofFrame...();
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(Tooltip_MoleculeDeconstructor_MachineType)
             .addInfo(Tooltip_MoleculeDeconstructor_00)
             .addInfo(Tooltip_MoleculeDeconstructor_01)
@@ -466,16 +466,13 @@ I -> ofFrame...();
             .addInfo(Tooltip_MoleculeDeconstructor_04)
             .addInfo(Tooltip_MoleculeDeconstructor_05)
             .addInfo(textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 4)
             .addOutputHatch(textUseBlueprint, 2)
             .addInputBus(textUseBlueprint, 4)
             .addOutputBus(textUseBlueprint, 2)
             .addEnergyHatch(textUseBlueprint, 1)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 

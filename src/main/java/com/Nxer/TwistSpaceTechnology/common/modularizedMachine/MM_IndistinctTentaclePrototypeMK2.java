@@ -46,8 +46,10 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
@@ -84,6 +86,7 @@ public class MM_IndistinctTentaclePrototypeMK2
     // region Class Constructor
     public MM_IndistinctTentaclePrototypeMK2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_IndistinctTentaclePrototypeMK2(String aName) {
@@ -461,7 +464,7 @@ public class MM_IndistinctTentaclePrototypeMK2
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             // #tr Tooltip_IndistinctTentaclePrototypeMK2_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Assembly Line | Component Assembly Line | Assembler | Precise Assembler
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}巨型装配线 | 部件装配线 | 组装机 | 精密组装机
@@ -483,11 +486,6 @@ public class MM_IndistinctTentaclePrototypeMK2
                 // #zh_CN 直接使用无线EU网络中的能量, 无需能源仓.
                 .addInfo(TextEnums.tr("Tooltip_IndistinctTentaclePrototypeMK2_03"))
                 .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
                 .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
@@ -507,7 +505,7 @@ public class MM_IndistinctTentaclePrototypeMK2
                 .addInputBus(TextLocalization.textUseBlueprint, 1)
                 .addOutputBus(TextLocalization.textUseBlueprint, 1)
                 .addStructureHint(TextEnums.ModularHatch.getKey(), 2)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             // spotless:on
         }
         return tooltip;

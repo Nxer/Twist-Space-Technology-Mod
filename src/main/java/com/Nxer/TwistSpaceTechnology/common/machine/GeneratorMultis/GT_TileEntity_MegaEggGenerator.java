@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -27,7 +29,9 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_GeneratorBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -65,6 +69,7 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
     // region Class Constructor
     public GT_TileEntity_MegaEggGenerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.RH_NU, MAINTAINER, ID.TASKEREN);
     }
 
     public GT_TileEntity_MegaEggGenerator(String aName) {
@@ -445,7 +450,7 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
     @SuppressWarnings("deprecation")
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaEggGenerator_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_Controller)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_00)
@@ -458,16 +463,13 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_07)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_08)
             .addInfo(TextLocalization.Tooltip_MegaEggGenerator_09)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addOtherStructurePart(
                 TextLocalization.Tooltip_MegaEggGenerator_D,
                 TextLocalization.Tooltip_MegaEggGenerator_C,
                 1)
             .addStructureInfo(TextLocalization.Tooltip_MegaEggGenerator_L)
             .addStructureInfo(TextLocalization.Tooltip_MegaEggGenerator_M)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

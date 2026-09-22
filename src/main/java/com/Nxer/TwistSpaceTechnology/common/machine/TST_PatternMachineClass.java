@@ -11,7 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -104,12 +105,9 @@ public class TST_PatternMachineClass extends GTCM_MultiMachineBase<TST_PatternMa
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             tooltip.addMachineType("test")
                 .addInfo("testing")
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 .beginStructureBlock(3, 3, 3, false)
                 .addInputHatch(TextLocalization.textUseBlueprint, 1)
                 .addOutputHatch(TextLocalization.textUseBlueprint, 1)

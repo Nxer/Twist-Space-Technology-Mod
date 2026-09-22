@@ -1,12 +1,10 @@
 // spotless:off
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textCasing;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
@@ -22,7 +20,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -175,11 +174,8 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     // Tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
             .addController(textFrontBottom)
             .addCasingInfoRange(textCasing, 8, 26, false)

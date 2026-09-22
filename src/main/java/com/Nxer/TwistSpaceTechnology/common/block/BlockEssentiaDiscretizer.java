@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
+import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.addItemTooltip;
+
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -18,7 +20,9 @@ import net.minecraft.world.World;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileEssentiaDiscretizer;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import appeng.block.AEBaseTileBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -44,6 +48,7 @@ public class BlockEssentiaDiscretizer extends AEBaseTileBlock {
 
     public BlockEssentiaDiscretizer register() {
         GameRegistry.registerBlock(this, ItemBlockEssentiaDiscretizer.class, RNAME);
+        addItemTooltip(new ItemStack(this), TSTTooltipCredit.buildModNameTooltip(Style.INFUSION));
         GameRegistry.registerTileEntity(TileEssentiaDiscretizer.class, RNAME);
         return this;
     }

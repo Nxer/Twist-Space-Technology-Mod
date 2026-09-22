@@ -39,8 +39,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -70,6 +71,7 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
     // region Class Constructor
     public TST_SuperWaterPurifier(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.EVGEN_WAR_GOLD);
     }
 
     public TST_SuperWaterPurifier(String aName) {
@@ -306,17 +308,16 @@ F -> ofBlock...(tile.spatiallyTranscendentGravitationalLens, 0, ...);
     // region Overrides
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_SuperwaterPurifier_MachineType)
             .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_00)
             .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_01)
             .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_02)
             .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_03)
             .addInfo(TextLocalization.Tooltip_SuperWaterPurifier_04)
-            .addInfo(TextEnums.Author_EvgenWarGold.getText())
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

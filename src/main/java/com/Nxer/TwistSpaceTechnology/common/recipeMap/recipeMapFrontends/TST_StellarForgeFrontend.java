@@ -7,7 +7,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;

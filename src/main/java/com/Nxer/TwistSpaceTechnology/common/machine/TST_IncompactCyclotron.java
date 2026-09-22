@@ -5,13 +5,10 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MaxParallel_IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBouns_IncompactCyclotron;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -32,7 +29,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -56,6 +55,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     // region Class Constructor
     public TST_IncompactCyclotron(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_IncompactCyclotron(String aName) {
@@ -205,7 +205,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_IncompactCyclotron_MachineType
         // # Particle Accelerator
         // #zh_CN 粒子加速器
@@ -242,9 +242,6 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             // # But it requires additional 60%% of power to work
             // #zh_CN 但是需要额外60%%的供电来运行
             .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_07"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textFrontCenter)
             .addInputHatch(getBlueprintWithDot(1))
             .addOutputHatch(getBlueprintWithDot(1))
@@ -253,7 +250,7 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             .addEnergyHatch(getBlueprintWithDot(2))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
     // spotless:on

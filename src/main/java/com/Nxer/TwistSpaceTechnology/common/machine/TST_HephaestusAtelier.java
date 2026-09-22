@@ -45,7 +45,9 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
@@ -79,6 +81,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     // region Class Constructor
     public TST_HephaestusAtelier(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_HephaestusAtelier(String aName) {
@@ -582,7 +585,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_HephaestusAtelier_MachineType)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_Controller)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_01)
@@ -601,9 +604,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_13)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_14)
             .addInfo(TextLocalization.Tooltip_HephaestusAtelier_15)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(TextLocalization.Tooltip_HephaestusAtelier_2_01)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(33, 11, 33, false)
@@ -611,7 +611,7 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
             .addInputBus(TextLocalization.textAnyCasing, 1)
             .addOutputBus(TextLocalization.textAnyCasing, 1)
             .addEnergyHatch(TextLocalization.textAnyCasing, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

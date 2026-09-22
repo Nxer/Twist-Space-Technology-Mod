@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;

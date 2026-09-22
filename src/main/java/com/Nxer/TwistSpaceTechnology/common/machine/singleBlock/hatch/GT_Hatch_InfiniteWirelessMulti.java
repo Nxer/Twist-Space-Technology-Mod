@@ -1,25 +1,25 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.AddByTwistSpaceTechnology;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.Author_Goderium;
-import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.GRAY;
-import static com.gtnewhorizon.gtnhlib.util.AnimatedTooltipHandler.GREEN;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
 
 import java.util.UUID;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.util.GTUtility;
+import gregtech.api.util.tooltip.TooltipHelper;
 import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessMulti;
 import tectech.util.TTUtility;
 
 @SkipGenerateDescription
-public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
+public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti implements TSTTooltipCredit {
 
     private UUID owner_uuid;
     public static final long[] Vst = new long[] { 8L, 32L, 128L, 512L, 2048L, 8192L, 32_768L, 131_072L, 524_288L,
@@ -30,6 +30,7 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
 
     public GT_Hatch_InfiniteWirelessMulti(int aID, String aName, String aNameRegional, int aTier, int aAmp) {
         super(aID, aName, aNameRegional, aTier, aAmp);
+        registerTooltipCredits(ID.GODERIUM);
         TTUtility.setTier(aTier, this);
     }
 
@@ -57,8 +58,8 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti {
             // #tr ToolTip_InfiniteWirelessMulti.3
             // # {\GRAY}Be careful of energy overflow.
             // #zh_CN {\GRAY}小心能量溢出.
-            TextEnums.tr("ToolTip_InfiniteWirelessMulti.3"), Author_Goderium.getText(),
-            AddByTwistSpaceTechnology.getText(), GRAY + "Ampere IN: " + GREEN + String.format("%,d", Amperes) };
+            TextEnums.tr("ToolTip_InfiniteWirelessMulti.3"),
+            GTUtility.translate("gt.tileentity.amperage", TooltipHelper.ampText(Amperes)) };
     }
 
     @Override

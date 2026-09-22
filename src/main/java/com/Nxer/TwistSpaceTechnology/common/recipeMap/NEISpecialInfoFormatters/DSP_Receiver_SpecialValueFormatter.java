@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;

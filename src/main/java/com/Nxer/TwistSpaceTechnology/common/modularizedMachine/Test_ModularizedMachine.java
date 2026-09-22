@@ -28,7 +28,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -266,12 +267,9 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             tooltip.addMachineType("test")
                 .addInfo("testing")
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
                 .beginStructureBlock(3, 3, 3, false)
                 .addInputHatch(TextLocalization.textUseBlueprint, 1)
                 .addOutputHatch(TextLocalization.textUseBlueprint, 1)

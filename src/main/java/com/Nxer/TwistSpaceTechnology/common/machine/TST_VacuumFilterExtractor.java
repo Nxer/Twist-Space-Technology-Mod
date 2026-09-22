@@ -29,7 +29,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -59,6 +61,7 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     // region Class Constructor
     public TST_VacuumFilterExtractor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_VacuumFilterExtractor(String aName) {
@@ -256,7 +259,7 @@ G -> ofFrame...(Materials.Neutronium);
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_VacuumFilterExtractor_MachineType)
             .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_Controller)
             .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_01)
@@ -266,9 +269,6 @@ G -> ofFrame...(Materials.Neutronium);
             .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_05)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
             .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_06)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(13, 22, 14, false)
             .addController(TextLocalization.textUseBlueprint)
@@ -277,7 +277,7 @@ G -> ofFrame...(Materials.Neutronium);
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

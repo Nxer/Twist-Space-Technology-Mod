@@ -1,17 +1,19 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
 @SkipGenerateDescription
 public class StaticParallelController extends StaticParallelControllerBase {
 
     public StaticParallelController(int aID, String aName, String aNameRegional, int aTier, int parallel) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.parallel = parallel;
     }
 
@@ -50,8 +52,6 @@ public class StaticParallelController extends StaticParallelControllerBase {
                     // # Provides
                     // #zh_CN 提供
                     TextEnums.tr("Tooltips.StaticParallelController.02") + " " + getParallel() + " " + TextEnums.Word_Parallel + ".",
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

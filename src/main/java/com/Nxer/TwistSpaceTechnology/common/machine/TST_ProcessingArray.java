@@ -31,8 +31,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -73,6 +75,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     // region Class Constructors
     public TST_ProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_ProcessingArray(String aName) {
@@ -344,7 +347,7 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder tooltips = new MultiblockTooltipBuilder();
+        MultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr TST_ProcessingArray.tooltips.MachineType
         // # Processing Array

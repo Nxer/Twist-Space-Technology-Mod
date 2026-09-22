@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,7 +10,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -31,7 +33,8 @@ import tectech.thing.gui.TecTechUITextures;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataInput;
 
 @SkipGenerateDescription
-public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IAddGregtechLogo, IAddUIWidgets {
+public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
+    implements IAddGregtechLogo, IAddUIWidgets, TSTTooltipCredit {
 
     public long requiredComputation = 1000000;
 
@@ -41,6 +44,7 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IA
 
     public GT_Hatch_WirelessData_input(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.SHORDINGER);
     }
 
     public GT_Hatch_WirelessData_input(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {

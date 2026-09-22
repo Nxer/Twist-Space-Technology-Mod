@@ -3,13 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_Scavenger;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -31,7 +28,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -59,6 +58,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     // region Class Constructor
     public TST_Scavenger(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_Scavenger(String aName) {
@@ -221,16 +221,13 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_Scavenger_MachineType)
             .addInfo(TextLocalization.Tooltip_Scavenger_Controller)
             .addInfo(TextLocalization.Tooltip_Scavenger_01)
             .addInfo(TextLocalization.Tooltip_Scavenger_02)
             .addInfo(TextLocalization.Tooltip_Scavenger_03)
             .addInfo(TextLocalization.Tooltip_Scavenger_04)
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 2)
@@ -239,7 +236,7 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
             .addEnergyHatch(textUseBlueprint, 2)
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 

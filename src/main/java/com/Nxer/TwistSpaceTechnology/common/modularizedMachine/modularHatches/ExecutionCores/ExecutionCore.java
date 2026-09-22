@@ -2,7 +2,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.E
 
 import net.minecraft.client.renderer.texture.IIconRegister;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -10,8 +11,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 
 @SkipGenerateDescription
@@ -19,6 +20,7 @@ public class ExecutionCore extends ExecutionCoreBase {
 
     public ExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
     }
 
     public ExecutionCore(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -76,8 +78,6 @@ public class ExecutionCore extends ExecutionCoreBase {
                     // # Finally, the execution cores dynamically share the energy input of the machine.
                     // #zh_CN 最终实现执行核心动态均分机器的能源输入.
                     TextEnums.tr("Tooltips.ExecutionCore.06"),
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

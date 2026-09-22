@@ -38,7 +38,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -76,6 +78,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     public GT_TileEntity_IntensifyChemicalDistorter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_IntensifyChemicalDistorter(String aName) {
@@ -400,7 +403,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     // Tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
             .addInfo(TextLocalization.Tooltip_ICD_00)
             .addInfo(TextLocalization.Tooltip_ICD_01)
@@ -410,9 +413,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             .addInfo(TextLocalization.Tooltip_ICD_05)
             .addInfo(TextLocalization.Tooltip_ICD_06)
             .addInfo(TextLocalization.Tooltip_ICD_07)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .beginStructureBlock(11, 13, 11, false)
             .addController(TextLocalization.textFrontBottom)
             .addCasingInfoRange(TextLocalization.textCasing, 8, 26, false)
@@ -421,7 +421,7 @@ public class GT_TileEntity_IntensifyChemicalDistorter
             .addInputBus(TextLocalization.textAnyCasing, 2)
             .addOutputBus(TextLocalization.textAnyCasing, 2)
             .addEnergyHatch(TextLocalization.textAnyCasing, 3)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

@@ -5,11 +5,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiply_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBouns_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.multi_Amp_hatch_incompatible;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textAnyCasing;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -31,7 +28,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -55,6 +54,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     // region Class Constructor
     public TST_IndustrialMagnetarSeparator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_IndustrialMagnetarSeparator(String aName) {
@@ -177,7 +177,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     // spotless:off
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_IndustrialMagnetarSeparator_MachineType
         // # Electromagnetic Separator
         // #zh_CN 电磁离析机
@@ -199,9 +199,6 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             // #zh_CN 每提升一个电压等级，每次运行可以多处理4个物品
             .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.03"))
             .addPollutionAmount(300)
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textFrontCenter)
             // #tr Tooltip_IndustrialMagnetarSeparator.casingAmount
             // # §69x §7Anti-Magnetic Casing (minimum)
@@ -212,7 +209,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             .addEnergyHatch(textAnyCasing, 1)
             .addMaintenanceHatch(textAnyCasing, 1)
             .addMufflerHatch(textAnyCasing,1)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
     // spotless:on

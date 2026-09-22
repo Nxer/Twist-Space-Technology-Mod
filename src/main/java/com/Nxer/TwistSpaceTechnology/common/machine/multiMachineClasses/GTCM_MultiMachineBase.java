@@ -29,7 +29,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -57,7 +58,7 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
-    extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
+    extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable, TSTTooltipCredit {
 
     // region Class Constructor
     public GTCM_MultiMachineBase(int aID, String aName, String aNameRegional) {

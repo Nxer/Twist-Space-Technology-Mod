@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.misc;
 
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 public enum OverclockType {
 

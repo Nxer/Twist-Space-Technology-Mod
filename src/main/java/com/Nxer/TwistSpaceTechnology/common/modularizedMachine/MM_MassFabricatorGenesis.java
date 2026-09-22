@@ -23,8 +23,10 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -49,6 +51,7 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     // region Class Constructor
     public MM_MassFabricatorGenesis(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_MassFabricatorGenesis(String aName) {
@@ -234,7 +237,7 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             // #tr Tooltip_MassFabricatorGenesis_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}质量发生器
@@ -250,11 +253,6 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
                 // # Energy - Mass : Interface.
                 // #zh_CN 能量 - 质量 : 接口.
                 .addInfo(TextEnums.tr("Tooltip_MassFabricatorGenesis_02"))
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
                 .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
@@ -264,7 +262,7 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
                 .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
                 .addOutputHatch(TextLocalization.textUseBlueprint, 1)
                 .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             // spotless:on
         }
         return tooltip;

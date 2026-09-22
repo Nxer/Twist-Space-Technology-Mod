@@ -47,8 +47,12 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
@@ -105,10 +109,21 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // region Class Constructor
     public TST_StrangeMatterAggregator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_StrangeMatterAggregator(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.DYSON_SPHERE;
+    }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.DYSON_SPHERE, Tag.MODULARIZED };
     }
 
     @Override
@@ -1679,7 +1694,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
+            tooltip = new TSTMultiblockTooltipBuilder();
             // #tr Tooltip_StrangeMatterAggregator_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Strange Matter Aggregator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}奇异物质聚合器
@@ -1804,11 +1819,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 // #zh_CN 同时副产物产量翻倍.
                 .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_29"))
                 .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
                 .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
                 .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
@@ -1839,7 +1849,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .addOutputBus(TextLocalization.textUseBlueprint, 1)
                 .addOutputHatch(TextLocalization.textUseBlueprint, 1)
                 .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             // spotless:on
         }
         return tooltip;

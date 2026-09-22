@@ -11,6 +11,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiary
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T3;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpaceApiaryMaxParallels_T4;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.enableDNAConsuming;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static net.minecraft.util.StatCollector.translateToLocal;
@@ -31,7 +33,10 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
@@ -61,12 +66,13 @@ import tectech.thing.metaTileEntity.multi.base.IStatusFunction;
 import tectech.thing.metaTileEntity.multi.base.LedStatus;
 import tectech.thing.metaTileEntity.multi.base.Parameters;
 
-public abstract class TST_SpaceApiary extends TileEntityModuleBase {
+public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TSTTooltipCredit {
 
     // region Class Constructor
     public TST_SpaceApiary(int aID, String aName, String aNameRegional, int tTier, int tModuleTier, int tMinMotorTier,
         int bufferSizeMultiplier) {
         super(aID, aName, aNameRegional, tTier, tModuleTier, tMinMotorTier, bufferSizeMultiplier);
+        registerTooltipCredits(AUTHOR, ID.KISARACHAN, MAINTAINER, ID.NXER);
     }
 
     public TST_SpaceApiary(String aName, int tTier, int tModuleTier, int tMinMotorTier, int bufferSizeMultiplier) {
@@ -268,7 +274,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
-            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+            final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -278,12 +284,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t1_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t1_desc4)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT1"))
-                .addSeparator()
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             return tt;
         }
     }
@@ -329,7 +334,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
-            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+            final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -339,12 +344,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t2_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t2_desc4)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT2"))
-                .addSeparator()
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             return tt;
         }
     }
@@ -390,7 +394,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
-            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+            final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -400,12 +404,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t3_desc3)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t3_desc4)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT3"))
-                .addSeparator()
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             return tt;
         }
     }
@@ -451,7 +454,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
-            final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+            final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
                 .addInfo(
                     EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
@@ -462,12 +465,11 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase {
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc4)
                 .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc5)
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT4"))
-                .addSeparator()
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
             return tt;
         }
     }

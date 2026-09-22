@@ -27,8 +27,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -58,6 +60,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     // region Class Constructor
     public TST_AdvancedMegaOilCracker(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_AdvancedMegaOilCracker(String aName) {
@@ -235,7 +238,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     // region General
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltips_AdvancedMegaOilCracker_MachineType)
             .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_Controller)
             .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_01)
@@ -244,16 +247,13 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
             .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_04)
             .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_05)
             .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_06)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addInputBus(TextLocalization.textUseBlueprint, 1)
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addInputHatch(TextLocalization.textUseBlueprint, 2)
             .addOutputHatch(TextLocalization.textUseBlueprint, 2)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

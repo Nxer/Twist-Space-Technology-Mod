@@ -1,9 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.magicCasing;
@@ -38,7 +35,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.recipes.ResultInsufficientPedestals;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -73,10 +73,16 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     public TST_InfusionMaterialDispenser(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.AEFHMV);
     }
 
     public TST_InfusionMaterialDispenser(String aName) {
         super(aName);
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
     private TileInfusionMatrix targetMatrix;
@@ -510,7 +516,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_InfusionMaterialDispenser_MachineType
         // # Infusion Material Dispenser
@@ -548,9 +554,6 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // # Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
             // #zh_CN 当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
             .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_07"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
             // #tr Tooltip_InfusionMaterialDispenser_HatchBusInfo
@@ -558,7 +561,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             // #zh_CN 任何舱室替换魔法机械方块
             .addInputBus(TextEnums.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
             .addOutputBus(TextEnums.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
         // spotless:on
     }

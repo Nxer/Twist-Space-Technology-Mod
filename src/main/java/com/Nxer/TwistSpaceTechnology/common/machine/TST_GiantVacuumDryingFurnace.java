@@ -3,10 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerPiece_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -34,7 +31,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -70,6 +69,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     // region constructor
     public TST_GiantVacuumDryingFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.AEFHMV);
     }
 
     public TST_GiantVacuumDryingFurnace(String aName) {
@@ -412,7 +412,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_GVDF_MachineType
         // # Vacuum Furnace | Dehydrator
         // #zh_CN 真空干燥炉 | 化学脱水机
@@ -450,9 +450,6 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             // # Would anyone really need this machine to handle space ice cream?
             // #zh_CN 真的会有人需要这台机器来处理太空冰淇淋吗？
             .addInfo(TextEnums.tr("Tooltip_GVDF_07"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
 
@@ -468,7 +465,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             // #zh_CN 能量舱口必须放置在主框架内
             .addEnergyHatch(TextEnums.tr("Tooltip_GVDF_EnergyHatch"))
 
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 

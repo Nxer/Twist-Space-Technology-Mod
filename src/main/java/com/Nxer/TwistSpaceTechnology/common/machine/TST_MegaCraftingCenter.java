@@ -3,8 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.extremeCraftRecipesMap;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.visualExtremeCraftRecipes;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -50,7 +51,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.google.common.collect.ImmutableList;
@@ -114,6 +117,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
     public TST_MegaCraftingCenter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.SHORDINGER, MAINTAINER, ID.NXER);
     }
 
     protected TST_MegaCraftingCenter(String aName) {
@@ -1146,7 +1150,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
             // #tr tst.megacraftingcenter.desc.firstWords
@@ -1191,7 +1195,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
             .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.onScrewDriverRightClick"))
             .addInfo(Text_SeparatingLine)
             .addInfo(TextEnums.MoreInfoCheckingInScanner.getText())
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         // spotless:on
         return tt;
     }

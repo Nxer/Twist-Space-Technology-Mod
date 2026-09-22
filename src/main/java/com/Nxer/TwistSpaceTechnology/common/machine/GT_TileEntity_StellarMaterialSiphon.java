@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
@@ -260,7 +261,7 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.type"))
             .addInfo(loreTooltip != null ? ITALIC + loreTooltip : "")
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc1"))
@@ -268,7 +269,6 @@ public class GT_TileEntity_StellarMaterialSiphon
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc3"))
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc4"))
             .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc5"))
-            .addSeparator()
             .beginStructureBlock(3, 7, 3, false)
             .addController(GCCoreUtil.translate("ig.siphon.structure.ControllerPos"))
             .addOtherStructurePart(

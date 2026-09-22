@@ -1,4 +1,4 @@
-package com.Nxer.TwistSpaceTechnology.util;
+package com.Nxer.TwistSpaceTechnology.util.text;
 
 import net.minecraft.util.EnumChatFormatting;
 

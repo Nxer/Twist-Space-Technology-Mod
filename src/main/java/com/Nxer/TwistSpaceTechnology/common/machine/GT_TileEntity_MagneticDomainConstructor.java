@@ -30,7 +30,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -63,6 +65,7 @@ public class GT_TileEntity_MagneticDomainConstructor
     // region Class Constructor
     public GT_TileEntity_MagneticDomainConstructor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_MagneticDomainConstructor(String aName) {
@@ -453,7 +456,7 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MagneticDomainConstructor_MachineType)
             .addInfo(TextLocalization.Tooltip_MagneticDomainConstructor_00)
             .addInfo(TextLocalization.Tooltip_MagneticDomainConstructor_01)
@@ -461,15 +464,12 @@ public class GT_TileEntity_MagneticDomainConstructor
             .addInfo(TextLocalization.Tooltip_MagneticDomainConstructor_03)
             .addInfo(TextLocalization.Tooltip_MagneticDomainConstructor_04)
             .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .addInputHatch(TextLocalization.textUseBlueprint, 2)
             .addOutputHatch(TextLocalization.textUseBlueprint, 3)
             .addInputBus(TextLocalization.textUseBlueprint, 2)
             .addOutputBus(TextLocalization.textUseBlueprint, 3)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

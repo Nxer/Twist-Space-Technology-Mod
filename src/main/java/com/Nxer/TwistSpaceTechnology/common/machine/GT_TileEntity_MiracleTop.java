@@ -30,7 +30,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -55,6 +57,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     // region Constructors
     public GT_TileEntity_MiracleTop(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_MiracleTop(String aName) {
@@ -368,7 +371,7 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MiracleTop_MachineType)
             .addInfo(TextLocalization.Tooltip_MiracleTop_00)
             .addInfo(TextLocalization.Tooltip_MiracleTop_01)
@@ -378,16 +381,13 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
             .addInfo(TextLocalization.Tooltip_MiracleTop_05)
             .addInfo(TextLocalization.Tooltip_MiracleTop_06)
             .addInfo(TextLocalization.Tooltip_MiracleTop_07)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .addController(TextLocalization.textFrontCenter)
             .addInputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
             .addOutputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
             .addInputBus(TextLocalization.textMiracleTopHatchLocation, 2)
             .addOutputBus(TextLocalization.textMiracleTopHatchLocation, 2)
             .addEnergyHatch(TextLocalization.textMiracleTopHatchLocation, 2)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
     // endregion

@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.recipe.RecipeMetadataKey;
 import gregtech.nei.RecipeDisplayInfo;

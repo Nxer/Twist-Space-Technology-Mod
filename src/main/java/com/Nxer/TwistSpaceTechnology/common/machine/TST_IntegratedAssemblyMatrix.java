@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.SpecialHatchElement.DataAccess;
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_IntegratedAssemblyMatrix.SpecialHatchElement.NaniteBus;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -35,7 +35,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -77,6 +80,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     public TST_IntegratedAssemblyMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_IntegratedAssemblyMatrix(String aName) {
@@ -379,7 +383,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tttt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         // #tr Tooltip_IntegratedAssemblyMatrix_MachineType
         // # Assembly Line
@@ -425,9 +429,6 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
             // # And {\YELLOW}double{\GRAY} the parallelism.
             // #zh_CN 并{\YELLOW}翻倍{\GRAY}并行数量.
             .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_09"))
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
             .beginStructureBlock(9, 9, 52, false)
             .addInputHatch(TextLocalization.textUseBlueprint, 1)
             .addOutputHatch(TextLocalization.textUseBlueprint, 1)
@@ -442,7 +443,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
             // # Only allow and must place {\GOLD}1{\GRAY} Data Access Hatch and {\GOLD}1{\GRAY} Nanites Bus
             // #zh_CN 只允许且必须安装{\GOLD}1{\GRAY}个数据访问仓和{\GOLD}1{\GRAY}个纳米蜂群仓
             .addStructureInfo(tr("Tooltips_IntegratedAssemblyMatrix_DataHatchLimit"))
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         // spotless:on
         return tttt;
     }

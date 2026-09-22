@@ -1,6 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.simple_structure_issue;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static gregtech.api.enums.GTValues.debugCleanroom;
 import static gregtech.api.enums.Textures.BlockIcons.BLOCK_PLASCRETE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM;
@@ -28,7 +30,8 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.gtnhlib.capability.Capabilities;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
@@ -103,6 +106,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
 
     public TST_CleanRoom(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.SHORDINGER, MAINTAINER, ID.LUO_YANG_YU_LI);
     }
 
     public TST_CleanRoom(String aName) {
@@ -142,7 +146,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(translateToLocal("Tooltip_TST_CleanRoom_MachineType"));
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_00"));
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_01"));
@@ -154,9 +158,6 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_07"));
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_08"));
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_09"));
-        tt.addSeparator();
-        tt.addInfo(translateToLocal("StructureTooComplex"));
-        tt.addInfo(translateToLocal("BLUE_PRINT_INFO"));
         tt.beginVariableStructureBlock(3, MAX_WIDTH, 4, MAX_HEIGHT, 3, MAX_WIDTH, true);
         tt.addController(translateToLocal("Tooltip_TST_CleanRoom_Controller"));
         tt.addCasingInfoRange(translateToLocal("Tooltip_TST_CleanRoom_Plascrete"), 20, 19592, false);
@@ -170,7 +171,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         tt.addEnergyHatch(translateToLocal("Tooltip_TST_CleanRoom_EnergyHatch"));
         tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_Door"));
         tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_Hull"));
-        tt.toolTipFinisher(TextLocalization.ModName);
+        tt.toolTipFinisher();
         return tt;
     }
 

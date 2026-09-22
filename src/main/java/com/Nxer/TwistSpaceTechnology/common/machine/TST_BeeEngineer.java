@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -20,7 +22,9 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -50,6 +54,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
     public TST_BeeEngineer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.RH_NU, MAINTAINER, ID.NXER);
     }
 
     public TST_BeeEngineer(String aName) {
@@ -260,7 +265,7 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     // endregion
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_BeeEngineer_Type)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_Controller)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_01)
@@ -270,13 +275,10 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
             .addInfo(TextLocalization.Tooltip_BeeEngineer_05)
             .addInfo(TextLocalization.Tooltip_BeeEngineer_06)
             // .addInfo(TextLocalization.Tooltip_BeeEngineer_07)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addInputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addInputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputBus(TextLocalization.BLUE_PRINT_INFO)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addInputBus(TextLocalization.textUseBlueprint)
+            .addInputHatch(TextLocalization.textUseBlueprint)
+            .addOutputBus(TextLocalization.textUseBlueprint)
+            .toolTipFinisher();
         return tt;
     }
 

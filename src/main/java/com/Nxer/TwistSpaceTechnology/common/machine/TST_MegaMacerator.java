@@ -4,12 +4,9 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier1P
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier2Parallel_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MegaMacerator;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -38,7 +35,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -72,6 +71,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     // region Class Constructor
     public TST_MegaMacerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_MegaMacerator(String aName) {
@@ -345,7 +345,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_MegaMacerator_MachineType)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_Controller)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_01)
@@ -354,16 +354,13 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
             .addInfo(TextLocalization.Tooltip_MegaMacerator_04)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_05)
             .addInfo(TextLocalization.Tooltip_MegaMacerator_06)
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 2)
             .addOutputBus(textUseBlueprint, 2)
             .addMaintenanceHatch(textUseBlueprint, 2)
             .addEnergyHatch(textUseBlueprint, 1)
             .addStructureInfo(Text_SeparatingLine)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
 

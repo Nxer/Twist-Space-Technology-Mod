@@ -8,7 +8,8 @@ import java.util.UUID;
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 import cpw.mods.fml.relauncher.Side;
@@ -17,8 +18,8 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.render.TextureFactory;
 
 // TODO Wireless EU costings
@@ -27,6 +28,7 @@ public class AdvExecutionCore extends ExecutionCoreBase {
 
     public AdvExecutionCore(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
     }
 
     public AdvExecutionCore(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -103,8 +105,6 @@ public class AdvExecutionCore extends ExecutionCoreBase {
                     // # It also accepts boost from machine to speed up the process.
                     // #zh_CN 同时也接受机器的速度增幅用以加快进程.
                     TextEnums.tr("Tooltips.AdvancedExecutionCore.05"),
-                    TextEnums.AddByTwistSpaceTechnology.getText(),
-                    TextEnums.ModularizedMachineSystem.getText(),
                 };
         }
         return description;

@@ -3,10 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeExtraEuCost_BallLightning;
 import static com.Nxer.TwistSpaceTechnology.config.Config.WirelessModeTickEveryProcess_BallLightning;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_MAX;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -60,8 +57,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -99,6 +98,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     // region Class Constructor
     public TST_BallLightning(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_BallLightning(String aName) {
@@ -874,7 +874,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     };
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // #tr Tooltip_BallLightning_MachineType
         // # (Plasma / Electric) Arc Furnace / Fusion Reactor / Star Kernel Generator
         // #zh_CN 电弧炉 | 等离子电弧炉 | 聚变反应堆 | 星核发生器
@@ -987,10 +987,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             // # Eu Modifier = 1 - 9.9%% * (Field Generator Tier - 1)
             // #zh_CN 每升级一次力场发生器, 降低9.9%%功耗
             .addInfo(TextEnums.tr("Tooltip_BallLightning.0.26"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .addInfo(TextEnums.Author_Goderium.getText())
             // #tr Tooltip_BallLightning.0.27
             // # {\LIGHT_PURPLE}Wireless Mode :
             // #zh_CN {\LIGHT_PURPLE}无线模式 :
@@ -1078,7 +1074,7 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
             .addStructureInfo(TextEnums.tr("Tooltip_BallLightning.1.15"))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
         return tt;
     }
     // spotless:on

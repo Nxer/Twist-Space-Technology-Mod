@@ -43,8 +43,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper;
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_LargeSolarBoiler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -77,6 +78,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     // region Class Constructor
     public TST_LargeSolarBoiler(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.FAOTIK);
     }
 
     public TST_LargeSolarBoiler(String aName) {
@@ -533,7 +535,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
     // region Overrides
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(
             // #tr TST_LargeSolarBoiler.machineType
             // # Solar Boiler
@@ -646,9 +648,7 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     + steamProductionSteel
                     + " L/s"
                     + EnumChatFormatting.GRAY)
-            .addSeparator()
-            .addInfo(TextEnums.Author_Faotik.getText())
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

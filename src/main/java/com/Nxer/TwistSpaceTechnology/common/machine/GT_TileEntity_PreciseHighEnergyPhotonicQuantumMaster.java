@@ -37,7 +37,9 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -64,6 +66,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // region ClassConstructors
     public GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(String aName) {
@@ -327,7 +330,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     // tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(TextLocalization.Tooltip_PhC_MachineType)
             .addInfo(TextLocalization.Tooltip_PhC_00)
             .addInfo(TextLocalization.Tooltip_PhC_01)
@@ -339,9 +342,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             .addInfo(TextLocalization.Tooltip_PhC_07)
             .addInfo(TextLocalization.Tooltip_PhC_08)
             .addInfo(TextLocalization.Tooltip_PhC_09)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
             .beginStructureBlock(15, 7, 9, false)
             .addController(TextLocalization.textFrontCenter)
             .addCasingInfoRange(TextLocalization.textCasingAdvIrPlated, 296, 347, false)
@@ -352,7 +352,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             .addInputBus(TextLocalization.textCenterOfLRSides, 2)
             .addOutputBus(TextLocalization.textCenterOfLRSides, 2)
             .addEnergyHatch(TextLocalization.textHighPowerCasingUDSides, 3)
-            .toolTipFinisher(TextLocalization.ModName);
+            .toolTipFinisher();
         return tt;
     }
 

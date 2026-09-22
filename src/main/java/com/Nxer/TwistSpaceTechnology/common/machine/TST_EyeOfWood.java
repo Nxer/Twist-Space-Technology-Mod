@@ -34,8 +34,10 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -68,6 +70,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     // region Class Constructor
     public TST_EyeOfWood(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_EyeOfWood(String aName) {
@@ -607,7 +610,7 @@ F -> ofBlock...(tile.wood, 0, ...);
     protected MultiblockTooltipBuilder createTooltip() {
         // spotless:off
         if (tt == null) {
-            tt = new MultiblockTooltipBuilder();
+            tt = new TSTMultiblockTooltipBuilder();
             tt.addMachineType(TextLocalization.Tooltip_EyeOfWood_MachineType)
                 .addInfo(TextLocalization.Tooltip_EyeOfWood_Controller)
                 .addInfo(TextLocalization.Tooltip_EyeOfWood_01)
@@ -615,9 +618,6 @@ F -> ofBlock...(tile.wood, 0, ...);
                 // # Can only be deployed in the Overworld, otherwise it will have a festive effect.
                 // #zh_CN 仅可部署在主世界, 否则将产生节庆效果.
                 .addInfo(TextEnums.tr("Tooltip_EyeOfWood_02"))
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addSeparator()
                 // #tr Tooltip_EyeOfWood_2_01
                 // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY}in Input Hatches and store it inside the machine, like the Eye of Harmony.
                 // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
@@ -678,7 +678,7 @@ F -> ofBlock...(tile.wood, 0, ...);
                 .addController(TextLocalization.textFrontCenter)
                 .addInputBus(TextLocalization.textAnyCasing, 2)
                 .addOutputBus(TextLocalization.textAnyCasing, 2)
-                .toolTipFinisher(TextLocalization.ModName);
+                .toolTipFinisher();
         }
         // spotless:on
 

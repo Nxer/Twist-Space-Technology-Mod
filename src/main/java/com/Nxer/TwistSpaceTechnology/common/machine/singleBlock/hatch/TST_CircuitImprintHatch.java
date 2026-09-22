@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DATA_ACCESS;
 
 import java.util.HashSet;
@@ -10,7 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
@@ -18,15 +19,15 @@ import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import bartworks.API.enums.CircuitImprint;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
+import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
 @SkipGenerateDescription
-public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
+public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
 
     private int timeout = 4;
     public HashSet<TST_ItemID> circuitType = new HashSet<>();
@@ -53,8 +54,8 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
                 TextEnums.tr("Tooltips.CircuitImprintHatch.02") + " "
                     + (aTier > 5 ? 16 : 4)
                     + " "
-                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03"),
-                ModNameDesc });
+                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03") });
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_CircuitImprintHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {

@@ -17,6 +17,8 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ID
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
 
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -26,6 +28,16 @@ import gregtech.api.structure.error.StructureError;
 
 public abstract class ModularizedMachineBase<T extends ModularizedMachineBase<T>> extends GTCM_MultiMachineBase<T>
     implements IModularizedMachine {
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.MODULARIZED;
+    }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.MODULARIZED };
+    }
 
     // region Class Constructor
     public ModularizedMachineBase(int aID, String aName, String aNameRegional) {
