@@ -3,7 +3,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.MoreInfoCheckingInScanner;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Kelvin;
 import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
@@ -103,6 +102,7 @@ import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+@IMetaTileEntity.SkipGenerateDescription
 public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_SwelegfyrBlastFurnace> {
 
     // region Class Constructor
@@ -1215,20 +1215,23 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #zh_CN 炉温每高出配方900K, 耗电减少10%.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
-            // # Processes recipes at 390% speed; Glass tier restricts Energy Hatch tier.
-            // #zh_CN 配方处理速度为390%, 玻璃等级限制能源仓等级.
+            // # Max parallels: 4096x in Normal Mode; 256x in Passive Mode.
+            // #zh_CN 最大并行: 普通模式4096x, 被动模式256x.
             .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
             // #tr Tooltip_SwelegfyrBlastFurnace.07
+            // # Processes recipes at 390% speed; Glass tier restricts Energy Hatch tier.
+            // #zh_CN 配方处理速度为390%, 玻璃等级限制能源仓等级.
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
+            // #tr Tooltip_SwelegfyrBlastFurnace.08
             // # Upgrade machine and build additional structure to unlock additional functions.
             // #zh_CN 升级机器并搭建附加结构以解锁更多功能.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
             .addInfo(textSpace)
-            // #tr Tooltip_SwelegfyrBlastFurnace.08
+            // #tr Tooltip_SwelegfyrBlastFurnace.09
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门!
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
+            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.09"))
             .addSeparator()
-            .addInfo(MoreInfoCheckingInScanner.getText())
             .addInfo(StructureTooComplex)
             .addInfo(BLUE_PRINT_INFO)
             .addStructureInfo(Text_SeparatingLine)
