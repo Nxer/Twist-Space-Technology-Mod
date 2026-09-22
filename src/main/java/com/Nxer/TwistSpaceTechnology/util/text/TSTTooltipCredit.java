@@ -21,11 +21,12 @@ import gregtech.api.enums.GTAuthors;
 
 public interface TSTTooltipCredit {
 
-    /** Display order is fixed by this declaration: author, maintainer, then structure designer. */
+    /** Display order is fixed by this declaration: author, maintainer, structure designer, then artist. */
     enum Role {
         AUTHOR,
         MAINTAINER,
-        STRUCTURE
+        STRUCTURE,
+        ART
     }
 
     /** Footer tags are independent from text effects and render in the order returned by the machine. */
@@ -117,7 +118,9 @@ public interface TSTTooltipCredit {
         if (role == Role.AUTHOR) {
             creditLine = GTAuthors.buildAuthorsWithFormatSupplier(ids);
         } else {
-            String translationKey = (role == Role.MAINTAINER ? "Tooltip_Maintainer" : "Tooltip_Structure")
+            String translationKey = (role == Role.MAINTAINER
+                ? "Tooltip_Maintainer"
+                : role == Role.STRUCTURE ? "Tooltip_Structure" : "Tooltip_Art")
                 + (ids.length == 1 ? "" : "s");
             creditLine = () -> StatCollector.translateToLocalFormatted(
                 translationKey,
@@ -147,4 +150,12 @@ public interface TSTTooltipCredit {
     // #tr Tooltip_Structures
     // # Structures: %s
     // #zh_CN 结构：%s
+
+    // #tr Tooltip_Art
+    // # Artist: %s
+    // #zh_CN 美术: %s
+
+    // #tr Tooltip_Arts
+    // # Artists: %s
+    // #zh_CN 美术: %s
 }

@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import net.minecraft.util.EnumChatFormatting;
 
-/** Minecraft IDs used for author, maintainer, and structure-designer tooltip credits. */
+/** Minecraft IDs used for author, maintainer, structure-designer, and artist tooltip credits. */
 public final class ID implements Supplier<String> {
 
     private static final Style DEFAULT_STYLE = Style.of(EnumChatFormatting.WHITE);
@@ -31,6 +31,7 @@ public final class ID implements Supplier<String> {
     public static final ID ABLAZING = new ID("ablazing");
     public static final ID LONEI = new ID("Lonei");
     public static final ID KISARACHAN = new ID("kisarachan");
+    public static final ID HUAN_F = new ID("Huan_F");
 
     // These IDs retain the formatting used by their original tooltip credits.
     public static final ID NXER = new ID("Nxer", Style.of(ID::formatNxer));

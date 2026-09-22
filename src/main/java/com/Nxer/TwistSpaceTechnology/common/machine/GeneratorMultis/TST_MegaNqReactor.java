@@ -1,5 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.ART;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -95,7 +96,7 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     // region Class Constructor
     public TST_MegaNqReactor(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
-        registerTooltipCredits(ID.LONEI);
+        registerTooltipCredits(ID.LONEI, ART, ID.HUAN_F);
     }
 
     public TST_MegaNqReactor(String name) {

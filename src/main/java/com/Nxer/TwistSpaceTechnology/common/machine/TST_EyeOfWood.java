@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.TstUtils.sendMessageKeyToPlayer;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.ART;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -70,7 +71,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     // region Class Constructor
     public TST_EyeOfWood(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        registerTooltipCredits(ID.NXER);
+        registerTooltipCredits(ID.NXER, ART, ID.HUAN_F);
     }
 
     public TST_EyeOfWood(String aName) {
