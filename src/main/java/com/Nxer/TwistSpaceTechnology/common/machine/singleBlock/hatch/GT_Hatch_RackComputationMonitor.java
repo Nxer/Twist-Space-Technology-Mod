@@ -22,8 +22,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;

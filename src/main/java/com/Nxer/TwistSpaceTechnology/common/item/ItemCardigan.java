@@ -41,7 +41,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import gregtech.api.GregTechAPI;
 import gregtech.api.damagesources.GTDamageSources;
-import gregtech.api.enums.GTAuthors;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -240,7 +239,9 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
         // spotless:on
 
-        tooltips.add(GTAuthors.buildAuthorsWithFormat(ID.TASKEREN.get()));
+        tooltips.add(
+            TSTTooltipCredit.buildCreditLine(TSTTooltipCredit.Role.AUTHOR, ID.TASKEREN)
+                .get());
         tooltips.add(
             TSTTooltipCredit.buildModNameTooltip(Style.STANDARD)
                 .get());

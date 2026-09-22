@@ -117,9 +117,9 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPL
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_DSPReceiver;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_StrangeMatterAggregator;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
+import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 
 @SuppressWarnings("deprecation") // ignore deprecation for TextLocalization
 public final class MachineLoader {

@@ -104,20 +104,32 @@ public interface TSTTooltipCredit {
 
     static Supplier<String> buildModNameTooltip(Style style) {
         Supplier<String> styledModName = style.apply(Tags.MODNAME);
-        return () -> EnumChatFormatting.GRAY
-            + StatCollector.translateToLocalFormatted("ModNameDesc", styledModName.get() + EnumChatFormatting.GRAY);
+        return () -> "" + EnumChatFormatting.RESET
+            + EnumChatFormatting.GRAY
+            + StatCollector.translateToLocalFormatted(
+                "ModNameDesc",
+                styledModName.get() + EnumChatFormatting.RESET + EnumChatFormatting.GRAY)
+            + EnumChatFormatting.RESET;
     }
 
     static Supplier<String> buildCreditLine(Role role, ID... ids) {
-        if (role == Role.AUTHOR) return GTAuthors.buildAuthorsWithFormatSupplier(ids);
-        String translationKey = (role == Role.MAINTAINER ? "Tooltip_Maintainer" : "Tooltip_Structure")
-            + (ids.length == 1 ? "" : "s");
-        return () -> EnumChatFormatting.WHITE + StatCollector.translateToLocalFormatted(
-            translationKey,
-            GTAuthors.formatAuthors(
-                Arrays.stream(ids)
-                    .map(Supplier::get)
-                    .toArray(String[]::new)));
+        Supplier<String> creditLine;
+        if (role == Role.AUTHOR) {
+            creditLine = GTAuthors.buildAuthorsWithFormatSupplier(ids);
+        } else {
+            String translationKey = (role == Role.MAINTAINER ? "Tooltip_Maintainer" : "Tooltip_Structure")
+                + (ids.length == 1 ? "" : "s");
+            creditLine = () -> StatCollector.translateToLocalFormatted(
+                translationKey,
+                GTAuthors.formatAuthors(
+                    Arrays.stream(ids)
+                        .map(Supplier::get)
+                        .toArray(String[]::new)));
+        }
+        return () -> "" + EnumChatFormatting.RESET
+            + EnumChatFormatting.GRAY
+            + creditLine.get()
+            + EnumChatFormatting.RESET;
     }
 
     // #tr Tooltip_Maintainer

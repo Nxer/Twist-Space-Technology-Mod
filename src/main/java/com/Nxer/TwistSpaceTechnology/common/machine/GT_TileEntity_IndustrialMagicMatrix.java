@@ -56,12 +56,12 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
-import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
-import com.Nxer.TwistSpaceTechnology.util.text.Style;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -125,11 +125,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     public GT_TileEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
-        registerTooltipCredits(
-            AUTHOR,
-            ID.XIAO_XING_521,
-            MAINTAINER,
-            new ID[] { ID.GODERIUM, ID.YUE_LENG_M });
+        registerTooltipCredits(AUTHOR, new ID[] { ID.XIAO_XING_521, ID.GODERIUM }, MAINTAINER, ID.YUE_LENG_M);
     }
 
     public GT_TileEntity_IndustrialMagicMatrix(String aName) {

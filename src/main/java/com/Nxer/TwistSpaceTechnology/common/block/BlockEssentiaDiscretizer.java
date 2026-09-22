@@ -21,8 +21,8 @@ import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileEssentiaDiscretizer;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import appeng.block.AEBaseTileBlock;
 import cpw.mods.fml.common.registry.GameRegistry;

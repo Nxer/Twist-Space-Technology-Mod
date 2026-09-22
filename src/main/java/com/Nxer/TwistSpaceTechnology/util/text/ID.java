@@ -65,11 +65,8 @@ public final class ID implements Supplier<String> {
     }
 
     private static String formatEvgenWarGold(String id) {
-        return EnumChatFormatting.RED + id.substring(0, 5)
-            + EnumChatFormatting.BLUE
-            + id.substring(5, 8)
-            + EnumChatFormatting.GOLD
-            + id.substring(8);
+        return EnumChatFormatting.RED + id
+            .substring(0, 5) + EnumChatFormatting.BLUE + id.substring(5, 8) + EnumChatFormatting.GOLD + id.substring(8);
     }
 
     @Override

@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -56,11 +56,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock
 
     public GT_MetaTileEntity_Pipe_EnergySmart(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
-        registerTooltipCredits(
-            AUTHOR,
-            ID.HOLEFISH,
-            MAINTAINER,
-            new ID[] { ID.YUE_LENG_M, ID.AEFHMV });
+        registerTooltipCredits(AUTHOR, ID.HOLEFISH, MAINTAINER, new ID[] { ID.YUE_LENG_M, ID.AEFHMV });
     }
 
     public GT_MetaTileEntity_Pipe_EnergySmart(String aName, int aTier, String[] aDescription,

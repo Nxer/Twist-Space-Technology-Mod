@@ -6,8 +6,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;

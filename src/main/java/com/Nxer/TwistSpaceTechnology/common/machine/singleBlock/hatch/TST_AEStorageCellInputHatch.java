@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
@@ -30,9 +29,11 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TstSharedFormat;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -72,7 +73,8 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @IMetaTileEntity.SkipGenerateDescription
-public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITSTSegmentedFluidInput, ISaveProvider {
+public class TST_AEStorageCellInputHatch extends MTEHatchInputME
+    implements ITSTSegmentedFluidInput, ISaveProvider, TSTTooltipCredit {
 
     private static final int CELL_SLOT = 0;
     private static final BaseActionSource CELL_ACTION_SOURCE = new BaseActionSource();
@@ -96,6 +98,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
     public TST_AEStorageCellInputHatch(int id, String name, String nameRegional, int tier) {
         super(id, true, name, nameRegional);
         configuredTier = tier;
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_AEStorageCellInputHatch(String name, int tier, String[] description, ITexture[][][] textures) {
@@ -124,7 +127,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
             // #tr Tooltip_AEStorageCellInputHatch.4
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TextEnums.tr("Tooltip_AEStorageCellInputHatch.4"), TextEnums.Author_Goderium.getText(), ModNameDesc };
+            TextEnums.tr("Tooltip_AEStorageCellInputHatch.4") };
     }
 
     @Override

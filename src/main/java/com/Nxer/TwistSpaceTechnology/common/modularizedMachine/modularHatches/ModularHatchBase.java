@@ -7,8 +7,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
-import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.metatileentity.implementations.MTEHatch;
