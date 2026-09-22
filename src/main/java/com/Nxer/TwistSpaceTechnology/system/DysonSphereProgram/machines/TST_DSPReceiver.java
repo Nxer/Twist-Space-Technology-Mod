@@ -5,6 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLen
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_00;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_01;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_02;
@@ -846,6 +847,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // #zh_CN 最终请求能量点数上限 = 星阵数量^2 * 2048A Max
             .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_08"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(DSPName + ":")
             .addStructureInfo(Tooltip_DSPInfo_launch_01)
             .addStructureInfo(Tooltip_DSPInfo_launch_02)
             .addStructureInfo(Tooltip_DSPInfo_00)

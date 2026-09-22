@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.StellarConstruct
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EnableRenderDefaultArtificialStar;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.secondsOfArtificialStarProgressCycleTime;
+import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.DSPName;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_00;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_01;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_02;
@@ -830,6 +831,7 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
             // #zh_CN 连续运行奖励系数最大值 150%% , 中断后降到 100%% .
             .addStructureInfo(TextEnums.tr("Tooltip_ArtificialStar_02_06"))
           .addStructureInfo(EnumChatFormatting.GOLD+"-----------------------------------------")
+          .addStructureInfo(DSPName + ":")
           .addStructureInfo(Tooltip_DSPInfo_launch_01)
           .addStructureInfo(Tooltip_DSPInfo_launch_02)
           .addStructureInfo(Tooltip_DSPInfo_00)
