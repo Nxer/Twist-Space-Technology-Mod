@@ -332,11 +332,6 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // }
     @Override
     public String getMachineModeName() {
         if (wirelessMode) {

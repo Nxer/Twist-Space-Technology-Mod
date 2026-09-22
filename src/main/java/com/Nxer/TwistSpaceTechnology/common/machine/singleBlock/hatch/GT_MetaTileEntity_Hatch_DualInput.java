@@ -439,11 +439,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
         };
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return true;
-    // }
-
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         final int SLOT_NUMBER = fluidTanks.length;

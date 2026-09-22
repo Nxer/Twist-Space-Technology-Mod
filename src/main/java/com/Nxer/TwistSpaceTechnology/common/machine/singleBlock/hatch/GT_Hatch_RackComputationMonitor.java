@@ -320,11 +320,6 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch
         // Heat==1-10? --> 1
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return isMeanHatch;
-    // }
-
     @Override
     public void addGregTechLogo(ModularWindow.Builder builder) {
         builder.widget(
@@ -341,17 +336,8 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         if (!isMeanHatch) return;
-        // builder.addWidgetInternal();
         builder.setSize(206, 270);
-        // builder.addPlayerInventoryLabel(2,200);
         builder.bindPlayerInventory(buildContext.getPlayer(), new Pos2d(8, 181), getGUITextureSet().getItemSlot());
-        // builder.widget(
-        // new DrawableWidget().setDrawable(TecTechUITextures.PICTURE_HEAT_SINK).setPos(46, 17).setSize(84, 60));
-
-        // Pos2d[] positions = new Pos2d[]{
-        // new Pos2d(68, 27), new Pos2d(90, 27),
-        // new Pos2d(68, 49), new Pos2d(90, 49),
-        // };
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Pos2d position = new Pos2d(8 + 22 * x, 5 + 22 * y);

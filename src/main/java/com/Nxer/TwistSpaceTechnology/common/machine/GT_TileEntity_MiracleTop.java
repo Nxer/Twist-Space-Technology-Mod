@@ -400,11 +400,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("MiracleTop.modeMsg." + machineMode);

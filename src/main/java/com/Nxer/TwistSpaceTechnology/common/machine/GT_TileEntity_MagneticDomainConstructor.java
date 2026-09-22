@@ -354,11 +354,6 @@ public class GT_TileEntity_MagneticDomainConstructor
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_POLARIZER);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + machineMode);

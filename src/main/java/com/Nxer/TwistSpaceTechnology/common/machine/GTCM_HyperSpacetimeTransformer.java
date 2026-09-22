@@ -307,11 +307,6 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + machineMode);

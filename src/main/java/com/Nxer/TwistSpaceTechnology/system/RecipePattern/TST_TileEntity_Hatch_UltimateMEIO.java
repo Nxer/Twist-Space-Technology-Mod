@@ -116,11 +116,6 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
         super.onUnload();
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return super.useModularUI();
-    // }
-
     @Override
     public boolean isMachineBlockUpdateRecursive() {
         return super.isMachineBlockUpdateRecursive();

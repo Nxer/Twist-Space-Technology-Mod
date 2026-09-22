@@ -266,11 +266,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);

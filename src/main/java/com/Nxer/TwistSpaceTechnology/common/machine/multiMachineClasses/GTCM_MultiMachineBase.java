@@ -755,44 +755,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // endregion
 
-    // region Old MUI1 Machine Mode
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // for (int i = 0; i < totalMachineMode(); i++) {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
-    // }
-    // }
-
-    // public boolean canButtonSwitchMode() {
-    // return supportsMachineModeSwitch();
-    // }
-
-    // @Override
-    // public ButtonWidget createModeSwitchButton(IWidgetBuilder<?> builder) {
-    // if (!supportsMachineModeSwitch()) return null;
-    // Widget button = new ButtonWidget().setOnClick((clickData, widget) -> {
-    // if (canButtonSwitchMode()) {
-    // onMachineModeSwitchClick();
-    // setMachineMode(nextMachineMode());
-    // }
-    // })
-    // .setPlayClickSound(supportsMachineModeSwitch())
-    // .setBackground(() -> {
-    // List<UITexture> ret = new ArrayList<>();
-    // if (supportsMachineModeSwitch()) {
-    // ret.add(GTUITextures.BUTTON_STANDARD);
-    // ret.add(getMachineModeIcon(getMachineMode()));
-    // } else return null;
-    // return ret.toArray(new IDrawable[0]);
-    // })
-    // .attachSyncer(new FakeSyncWidget.IntegerSyncer(this::getMachineMode, this::setMachineMode), builder)
-    // .addTooltip(StatCollector.translateToLocal("GT5U.gui.button.mode_switch"))
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(getMachineModeSwitchButtonPos())
-    // .setSize(16, 16);
-    // return (ButtonWidget) button;
-    // }
+    // region Machine Mode
 
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,

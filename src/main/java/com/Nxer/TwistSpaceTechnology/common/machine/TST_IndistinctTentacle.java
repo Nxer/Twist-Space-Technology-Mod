@@ -321,13 +321,6 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);

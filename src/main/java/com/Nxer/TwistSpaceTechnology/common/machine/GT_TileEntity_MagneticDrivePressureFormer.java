@@ -257,13 +257,6 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);

@@ -283,15 +283,6 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
-    // machineModeIcons.add(UITextures.HESTTD_RapidCooling);
-    // }
-    // @Override
-    // public void setMachineMode(int index) {
-    // super.setMachineMode(index);
-    // }
     @Override
     public String getMachineModeName() {
         // #tr HyperThermalConvector.modeMsg.0

@@ -453,13 +453,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
-    // }
     @Override
     public String getMachineModeName() {
         // spotless:off
@@ -497,10 +490,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return false;
     }
 
-    // @Override
-    // public boolean canButtonSwitchMode() {
-    // return checkStructure(true, getBaseMetaTileEntity());
-    // }
     @Override
     protected IAlignmentLimits getInitialAlignmentLimits() {
         // You're right, but there will be water leakage

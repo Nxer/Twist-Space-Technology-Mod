@@ -438,12 +438,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("BallLightning.modeMsg." + machineMode);

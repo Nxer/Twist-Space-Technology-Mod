@@ -217,11 +217,6 @@ G -> ofFrame...(Materials.Neutronium);
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    // }
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + machineMode);

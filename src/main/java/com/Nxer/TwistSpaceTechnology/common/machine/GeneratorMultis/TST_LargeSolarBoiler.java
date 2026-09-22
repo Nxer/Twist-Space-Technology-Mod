@@ -548,30 +548,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return null;
     }
 
-    // @Override
-    // protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-    // super.drawTexts(screenElements, inventorySlot);
-    // screenElements.widget(
-    // new TextWidget().setStringSupplier(
-    // () -> EnumChatFormatting.WHITE
-    // + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
-    // + " "
-    // + EnumChatFormatting.GOLD
-    // + numberFormat.format((int) (heat * 100))
-    // + "% "
-    // + EnumChatFormatting.RESET))
-    // .widget(
-    // new TextWidget().setStringSupplier(
-    // () -> EnumChatFormatting.WHITE
-    // + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
-    // + " "
-    // + EnumChatFormatting.GOLD
-    // + numberFormat.format((int) (calcification * 100))
-    // + "% "
-    // + EnumChatFormatting.RESET))
-    // .widget(new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val))
-    // .widget(new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val));;
-    // }
     public void onClickClearingButton() {
         calcification = 0;
         runningTicks = 0;
@@ -598,27 +574,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
 
     // region NBT
 
-    // @Override
-    // public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-    // super.addUIWidgets(builder, buildContext);
-    // builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
-    // if (clickData.mouseButton == 0) {
-    // calcification = 0;
-    // runningTicks = 0;
-    // }
-    // })
-    // .setPlayClickSound(true)
-    // .setBackground(
-    // () -> new IDrawable[] { GTUITextures.BUTTON_STANDARD,
-    // GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
-    // .addTooltip(
-    // EnumChatFormatting.WHITE
-    // + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
-    // + EnumChatFormatting.RESET)
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(new Pos2d(174, 91))
-    // .setSize(16, 16));
-    // }
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);

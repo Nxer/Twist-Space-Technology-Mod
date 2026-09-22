@@ -94,7 +94,6 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets, 
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
-        // GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
         openGui(aPlayer);
         return true;
     }

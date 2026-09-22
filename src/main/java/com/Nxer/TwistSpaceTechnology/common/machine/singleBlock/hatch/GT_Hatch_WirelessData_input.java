@@ -94,11 +94,6 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
         super.onFirstTick(aBaseMetaTileEntity);
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return true;
-    // }
-
     @Override
     public void addGregTechLogo(ModularWindow.Builder builder) {
         builder.widget(
