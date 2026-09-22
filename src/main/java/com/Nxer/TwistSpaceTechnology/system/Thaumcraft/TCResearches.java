@@ -59,6 +59,7 @@ public class TCResearches {
             // #tr tc.research_name.TST_WELCOME
             // # Twist Space Technology
             // #zh_CN 扭曲空间科技
+
             // #tr tc.research_text.TST_WELCOME
             // # It's so cooooooooooooooooool
             // #zh_CN It's so cooooooooooooooooool
@@ -124,6 +125,7 @@ public class TCResearches {
                 // #tr tc.research_name.ECO_SPHERE_SIMULATOR
                 // # Eco-Sphere Simulator
                 // #zh_CN 拟似生态圈
+
                 // #tr tc.research_text.ECO_SPHERE_SIMULATOR
                 // # Cool, when can we cage the Wither?
                 // #zh_CN 酷, 我们什么时候能圈养凋零？
@@ -163,6 +165,7 @@ public class TCResearches {
                 // #tr tc.research_name.OFFSPRING
                 // # {\DARK_AQUA}"Offspring"
                 // #zh_CN {\DARK_AQUA}"子代"
+
                 // #tr tc.research_text.OFFSPRING
                 // # Little jellyfish. So can we cage the Wither now?
                 // #zh_CN 小水母, 所以我们能圈养凋零了吗?
@@ -189,6 +192,7 @@ public class TCResearches {
                 // #tr tc.research_name.EVOLUTIO
                 // # Evolutio
                 // #zh_CN Evolutio
+
                 // #tr tc.research_text.EVOLUTIO
                 // # New Aspect. What does it have to do with caging the Wither?
                 // #zh_CN 新源质, 这和圈养凋零有什么关系?
@@ -218,6 +222,7 @@ public class TCResearches {
                 // #tr tc.research_name.FONT_OF_ECOLOGY
                 // # {\BLUE}{\BOLD}Font of Ecology
                 // #zh_CN {\BLUE}{\BOLD}生态泉源
+
                 // #tr tc.research_text.FONT_OF_ECOLOGY
                 // # We can cage the Wither now!
                 // #zh_CN 我们能圈养凋零了!
@@ -255,6 +260,7 @@ public class TCResearches {
             // #tr tc.research_name.BLOODY_HELL
             // # Bloody Hell
             // #zh_CN 血狱
+
             // #tr tc.research_text.BLOODY_HELL
             // # BLOOD, BLOOD, BLOOD!
             // #zh_CN 血！血！血！
@@ -280,6 +286,7 @@ public class TCResearches {
                 // #tr tc.research_name.BLOOD_HATCH
                 // # Blood Hatch
                 // #zh_CN 血液仓
+
                 // #tr tc.research_text.BLOOD_HATCH
                 // # BLOOD, BLOOD, BLOOD!
                 // #zh_CN 血！血！血！
@@ -306,6 +313,7 @@ public class TCResearches {
             // #tr tc.research_name.TIME_BENDING_SPEED_RUNE
             // # Time-bending Speed Rune
             // #zh_CN 时间扭曲速度符文
+
             // #tr tc.research_text.TIME_BENDING_SPEED_RUNE
             // # Electrotine Torch,Start!
             // #zh_CN 蓝石火把,启动!
@@ -334,6 +342,7 @@ public class TCResearches {
                 // #tr tc.research_name.INDUSTRIAL_ALCHEMY_TOWER
                 // # Industrial Alchemy Tower
                 // #zh_CN 工业炼金塔
+
                 // #tr tc.research_text.INDUSTRIAL_ALCHEMY_TOWER
                 // # Batch alchemy!
                 // #zh_CN 批量化炼金!
@@ -363,6 +372,7 @@ public class TCResearches {
             // #tr tc.research_name.TST_ARCANE_HOLE
             // # Arcane Hole
             // #zh_CN 奥术裂隙
+
             // #tr tc.research_text.TST_ARCANE_HOLE
             // # Block in the void
             // #zh_CN 虚空中之物
@@ -391,6 +401,7 @@ public class TCResearches {
             // #tr tc.research_name.PRIMORDIAL_DISJUNCTUS
             // # Primordial Disjunctus
             // #zh_CN 初源解离机
+
             // #tr tc.research_text.PRIMORDIAL_DISJUNCTUS
             // # Elementary essentia free!
             // #zh_CN 初等源质自由!
@@ -419,6 +430,7 @@ public class TCResearches {
             // #tr tc.research_name.SKYPIERCER_TOWER
             // # Skypiercer Tower
             // #zh_CN 穿云尖塔
+
             // #tr tc.research_text.SKYPIERCER_TOWER
             // # Crafting Essentia On Demand!
             // #zh_CN 源质自由!
@@ -462,6 +474,7 @@ public class TCResearches {
             // #tr tc.research_name.INFUSION_MATERIAL_DISPENSER
             // # Infusion Material Dispenser
             // #zh_CN 注魔原料分配器
+
             // #tr tc.research_text.INFUSION_MATERIAL_DISPENSER
             // # automatically dispense!
             // #zh_CN 自动分配!
@@ -495,6 +508,7 @@ public class TCResearches {
             // #tr tc.research_name.ESSENTIA_DISCRETIZER
             // # Essentia Discretizer
             // #zh_CN 源质离散器
+
             // #tr tc.research_text.ESSENTIA_DISCRETIZER
             // # Free movement!
             // #zh_CN 自由流动!

@@ -352,9 +352,11 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         // #tr SkypiercerTower.mode.0
         // #en_US Passive Mode
         // #zh_CN 被动模式
+
         // #tr SkypiercerTower.mode.1
         // #en_US Crystal Essence Mode
         // #zh_CN 晶化源质模式
+
         // #tr SkypiercerTower.mode.2
         // #en_US Essentia Mode
         // #zh_CN 源质模式
@@ -982,6 +984,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #tr Tooltip_SkypiercerTower_InfusionProvider
             // #en_US Replace any chemically inert machine casing.Only one is allowed.
             // #zh_CN 任何舱室替换化学惰性方块,只允许有一个.
+
             // #tr Tooltip.InfusionProvider
             // # Infusion Provider
             // #zh_CN 注魔供应器
@@ -989,6 +992,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #tr Tooltip_SkypiercerTower_EssentiaOutputHatch
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
+
             // #tr Tooltip.EssentiaOutputHatch
             // # Essentia Output Hatch
             // #zh_CN 源质输出仓

@@ -949,8 +949,8 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
-            // spotless:off
             // #tr tst.megacraftingcenter.desc.firstWords
             // # {\AQUA}{\ITALIC}{\BOLD}Goodbye, all crafting lags.{\RESET}{\GRAY}
             // #zh_CN {\AQUA}{\ITALIC}{\BOLD}再见了, 所有的合成卡顿.{\RESET}{\GRAY}
@@ -994,7 +994,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
             .addInfo(Text_SeparatingLine)
             .addInfo(TextEnums.MoreInfoCheckingInScanner.getText())
             .toolTipFinisher();
-            // spotless:on
+        // spotless:on
         return tt;
     }
 

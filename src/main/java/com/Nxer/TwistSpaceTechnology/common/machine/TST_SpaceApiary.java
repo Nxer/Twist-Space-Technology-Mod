@@ -371,9 +371,9 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+            // spotless:off
             tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                // spotless:off
                 // #tr Tooltip_SpaceApiary_t2_desc1
                 // # Surrender to the hive mind..
                 // #zh_CN 臣服于蜂巢思维..
@@ -394,7 +394,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
-                // spotless:on
+            // spotless:on
             return tt;
         }
 
@@ -448,9 +448,9 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+            // spotless:off
             tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                // spotless:off
                 // #tr Tooltip_SpaceApiary_t3_desc1
                 // # The Great Creator of the Void!
                 // #zh_CN 伟大的虚空造物主!
@@ -471,7 +471,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
-                // spotless:on
+            // spotless:on
             return tt;
         }
 
@@ -525,9 +525,9 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+            // spotless:off
             tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                // spotless:off
                 // #tr Tooltip_SpaceApiary_t4_desc1
                 // # Bees give birth to all things to nourish humanity.
                 // #zh_CN Bee生万物以养人
@@ -552,7 +552,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
-                // spotless:on
+            // spotless:on
             return tt;
         }
 
