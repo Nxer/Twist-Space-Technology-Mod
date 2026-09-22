@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -77,86 +78,104 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         super(aName);
     }
 
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_MagneticDrivePressureFormer(this.mName);
+    }
     // endregion
 
-    // region Member Variables
+    // region Structure
+    private final int horizontalOffSet = 7;
+    private final int verticalOffSet = 7;
+    private final int depthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
 
-    /**
-     * Use to check recipe in mode.
-     * <li>0 = Extruder
-     * <li>1 = Bending Machine
-     * <li>2 = Forming Press
-     * <li>3 = Forge Hammer
+    // spotless:off
+    private final String[][] shape = new String[][]{
+        {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "},
+        {"   DDFFDFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFFFFDD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDFFFFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFDFFDD   "},
+        {"  DFFFFDFFFFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFF     FFD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DFF     FFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFFFFDFFFFD  "},
+        {" DFFFFFDFFFFFD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DFFFFFDFFFFFD "},
+        {" DFFFFFDFFFFFD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A   EEE   A  ","  A         A  ","  A         A  ","  A         A  ","  A   EEE   A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DFFFFFDFFFFFD "},
+        {"DFFFFFDDDFFFFFD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DF           FD"," A           A "," A           A "," A           A ","DA   E   E   AD"," A           A "," A   E   E   A "," A           A "," A           A "," A           A "," A   E   E   A "," A           A ","DA   E   E   AD"," A           A "," A           A "," A           A ","DF           FD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DFFFFFDDDFFFFFD"},
+        {"DFFFFDDDDDFFFFD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DF     C     FD"," A     C     A "," A     C     A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A  E FFF E  A "," A           A "," A           A "," A           A "," A  E FFF E  A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A     C     A "," A     C     A ","DF     C     FD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DFFFFDDDDDFFFFD"},
+        {"DDDDDDD~DDDDDDD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DF    CCC    FD","DA    CCC    AD","DA    CCC    AD","DA    CCC    AD","DA  E CCC E  AD","DA    CCC    AD","DA  E FFF E  AD","DA           AD","DA           AD","DA           AD","DA  E FFF E  AD","DA    CCC    AD","DA  E CCC E  AD","DA    CCC    AD","DA    CCC    AD","DA    CCC    AD","DF    CCC    FD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DDDDDDDFDDDDDDD"},
+        {"DFFFFDDDDDFFFFD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DF     C     FD"," A     C     A "," A     C     A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A  E FFF E  A "," A           A "," A           A "," A           A "," A  E FFF E  A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A     C     A "," A     C     A ","DF     C     FD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DFFFFDDDDDFFFFD"},
+        {"DFFFFFDDDFFFFFD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DF           FD"," A           A "," A           A "," A           A ","DA   E   E   AD"," A           A "," A   E   E   A "," A           A "," A           A "," A           A "," A   E   E   A "," A           A ","DA   E   E   AD"," A           A "," A           A "," A           A ","DF           FD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DFFFFFDDDFFFFFD"},
+        {" DFFFFFDFFFFFD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A   EEE   A  ","  A         A  ","  A         A  ","  A         A  ","  A   EEE   A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DFFFFFDFFFFFD "},
+        {" DFFFFFDFFFFFD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DFFFFFDFFFFFD "},
+        {"  DFFFFDFFFFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFF     FFD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DFF     FFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFFFFDFFFFD  "},
+        {"   DDFFDFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFFFFDD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDFFFFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFDFFDD   "},
+        {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "}
+    };
+    // spotless:on
+
+    private static IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> STRUCTURE_DEFINITION = null;
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(BW_GlasBlocks, 14, ...); // glass
+     * B -> ofBlock...(compactFusionCoil, 0, ...);
+     * C -> ofBlock...(gt.blockcasings2, 5, ...);
+     * D -> ofBlock...(gt.blockcasings4, 14, ...); // Hatches
+     * E -> ofBlock...(gt.blockcasings5, 13, ...); // Coil
+     * F -> ofBlock...(gt.blockcasings8, 7, ...); // Energy Hatch
      */
 
-    public int glassTier;
-    public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    public void setCoilLevel(HeatingCoilLevel coilLevel) {
-        this.coilLevel = coilLevel;
-    }
-
-    // endregion
-
-    // region Processing Logic
     @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Extruder
-         * 1 - Bending Machine
-         * 2 - Forming Press
-         * 3 - Forge Hammer
-         */
-        return 4;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // }
-    //
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);
+    public IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
+                .addElement('B', ofBlock(compactFusionCoil, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                .addElement(
+                    'D',
+                    HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
+                        .hint(1)
+                        .casingIndex(62)
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 14))
+                .addElement(
+                    'E',
+                    withChannel(
+                        "coil",
+                        ofCoil(
+                            GT_TileEntity_MagneticDrivePressureFormer::setCoilLevel,
+                            GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel)))
+                .addElement(
+                    'F',
+                    HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
+                        .hint(2)
+                        .casingIndex(183)
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 7))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
     @Override
-    protected float getEuModifier() {
-        return EU_Multiplier_MagneticDrivePressureFormer;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return machineMode != 0
-            || coilLevel.getTier() >= CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return ((machineMode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer)
-            : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer))
-            / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer));
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Parallel_MagneticDrivePressureFormer;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
 
     @Override
@@ -180,6 +199,23 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             }
         }
     }
+    // endregion
+
+    // region Processing Logic
+    /**
+     * Use to check recipe in mode.
+     * <li>0 = Extruder
+     * <li>1 = Bending Machine
+     * <li>2 = Forming Press
+     * <li>3 = Forge Hammer
+     */
+    public int glassTier;
+
+    public HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING };
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -204,113 +240,65 @@ public class GT_TileEntity_MagneticDrivePressureFormer
             RecipeMaps.hammerRecipes,
             RecipeMaps.extruderRecipes);
     }
-    // endregion
 
-    // region Structure
-    // spotless:off
-    private final int horizontalOffSet = 7;
-    private final int verticalOffSet = 7;
-    private final int depthOffSet = 0;
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private final String[][] shape = new String[][]{
-        {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "},
-        {"   DDFFDFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFFFFDD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDFFFFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFDFFDD   "},
-        {"  DFFFFDFFFFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFF     FFD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DFF     FFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFFFFDFFFFD  "},
-        {" DFFFFFDFFFFFD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DFFFFFDFFFFFD "},
-        {" DFFFFFDFFFFFD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A   EEE   A  ","  A         A  ","  A         A  ","  A         A  ","  A   EEE   A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DFFFFFDFFFFFD "},
-        {"DFFFFFDDDFFFFFD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DF           FD"," A           A "," A           A "," A           A ","DA   E   E   AD"," A           A "," A   E   E   A "," A           A "," A           A "," A           A "," A   E   E   A "," A           A ","DA   E   E   AD"," A           A "," A           A "," A           A ","DF           FD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DFFFFFDDDFFFFFD"},
-        {"DFFFFDDDDDFFFFD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DF     C     FD"," A     C     A "," A     C     A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A  E FFF E  A "," A           A "," A           A "," A           A "," A  E FFF E  A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A     C     A "," A     C     A ","DF     C     FD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DFFFFDDDDDFFFFD"},
-        {"DDDDDDD~DDDDDDD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DF    CCC    FD","DA    CCC    AD","DA    CCC    AD","DA    CCC    AD","DA  E CCC E  AD","DA    CCC    AD","DA  E FFF E  AD","DA           AD","DA           AD","DA           AD","DA  E FFF E  AD","DA    CCC    AD","DA  E CCC E  AD","DA    CCC    AD","DA    CCC    AD","DA    CCC    AD","DF    CCC    FD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DFBB  CCC  BBFD","DDDDDDDFDDDDDDD"},
-        {"DFFFFDDDDDFFFFD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DF     C     FD"," A     C     A "," A     C     A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A  E FFF E  A "," A           A "," A           A "," A           A "," A  E FFF E  A "," A     C     A ","DA  E  C  E  AD"," A     C     A "," A     C     A "," A     C     A ","DF     C     FD"," FBB   C   BBF "," FBB   C   BBF "," FBB   C   BBF ","DFFFFDDDDDFFFFD"},
-        {"DFFFFFDDDFFFFFD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DF           FD"," A           A "," A           A "," A           A ","DA   E   E   AD"," A           A "," A   E   E   A "," A           A "," A           A "," A           A "," A   E   E   A "," A           A ","DA   E   E   AD"," A           A "," A           A "," A           A ","DF           FD"," FBBB     BBBF "," FBBB     BBBF "," FBBB     BBBF ","DFFFFFDDDFFFFFD"},
-        {" DFFFFFDFFFFFD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A   EEE   A  ","  A         A  ","  A         A  ","  A         A  ","  A   EEE   A  ","  A         A  "," DA   EEE   AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBB   BBBF  ","  FBBB   BBBF  ","  FBBB   BBBF  "," DFFFFFDFFFFFD "},
-        {" DFFFFFDFFFFFD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DF         FD ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  ","  A         A  "," DA         AD ","  A         A  ","  A         A  ","  A         A  "," DF         FD ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  ","  FBBBBBBBBBF  "," DFFFFFDFFFFFD "},
-        {"  DFFFFDFFFFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFF     FFD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DAA     AAD  ","   AA     AA   ","   AA     AA   ","   AA     AA   ","  DFF     FFD  ","   FFBBBBBFF   ","   FFBBBBBFF   ","   FFBBBBBFF   ","  DFFFFDFFFFD  "},
-        {"   DDFFDFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFFFFDD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDAAAAADD   ","     AAAAA     ","     AAAAA     ","     AAAAA     ","   DDFFFFFDD   ","     FFFFF     ","     FFFFF     ","     FFFFF     ","   DDFFDFFDD   "},
-        {"     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     ","       D       ","       D       ","       D       ","     DDDDD     "}
-    };
-
-    private static IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> STRUCTURE_DEFINITION = null;
-
-    /*
-    Blocks:
-        A -> ofBlock...(BW_GlasBlocks, 14, ...);    // glass
-        B -> ofBlock...(compactFusionCoil, 0, ...);
-        C -> ofBlock...(gt.blockcasings2, 5, ...);
-        D -> ofBlock...(gt.blockcasings4, 14, ...); // Hatches
-        E -> ofBlock...(gt.blockcasings5, 13, ...); // Coil
-        F -> ofBlock...(gt.blockcasings8, 7, ...);  // Energy Hatch
-     */
     @Override
-    public IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition
-                                       .<GT_TileEntity_MagneticDrivePressureFormer>builder()
-                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                                       .addElement(
-                                           'A',
-                                           chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier)
-                                       )
-                                       .addElement('B', ofBlock(compactFusionCoil,0))
-                                       .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
-                                       .addElement(
-                                           'D',
-                                           HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
-                                                                 .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                                                                 .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                                                                 .hint(1)
-                                                                 .casingIndex(62)
-                                                                 .buildAndChain(GregTechAPI.sBlockCasings4, 14))
-                                       .addElement(
-                                           'E',
-                                           withChannel("coil",
-                                                       ofCoil(
-                                                           GT_TileEntity_MagneticDrivePressureFormer::setCoilLevel,
-                                                           GT_TileEntity_MagneticDrivePressureFormer::getCoilLevel)))
-                                       .addElement(
-                                           'F',
-                                           HatchElementBuilder.<GT_TileEntity_MagneticDrivePressureFormer>builder()
-                                                                 .atLeast(Energy.or(ExoticEnergy))
-                                                                 .adder(GT_TileEntity_MagneticDrivePressureFormer::addToMachineList)
-                                                                 .hint(2)
-                                                                 .casingIndex(183)
-                                                                 .buildAndChain(GregTechAPI.sBlockCasings8, 7))
-                                       .build();
-        }
-        return STRUCTURE_DEFINITION;
+    public int totalMachineMode() {
+        /*
+         * 0 - Extruder
+         * 1 - Bending Machine
+         * 2 - Forming Press
+         * 3 - Forge Hammer
+         */
+        return 4;
     }
 
     @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // }
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);
     }
 
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    public int getMaxParallelRecipes() {
+        return Parallel_MagneticDrivePressureFormer;
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
+    protected float getEuModifier() {
+        return EU_Multiplier_MagneticDrivePressureFormer;
     }
 
-    // spotless:on
+    @Override
+    protected float getSpeedBonus() {
+        return ((machineMode == 0 ? (1.0F / SpeedUpMultiplier_ExtruderMode_MagneticDrivePressureFormer)
+            : (1.0F / SpeedUpMultiplier_OtherMode_MagneticDrivePressureFormer))
+            / (1 + coilLevel.getTier() * SpeedUpMultiplier_Coil_MagneticDrivePressureFormer));
+    }
 
-    // endregion
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return machineMode != 0
+            || coilLevel.getTier() >= CoilTier_EnablePerfectOverclockExtruderMode_MagneticDrivePressureFormer;
+    }
 
-    // region Overrides
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
+    }
 
     // Scanner Info
     @Override
@@ -328,37 +316,27 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         return ret;
     }
 
-    // tooltips
+    // endregion
+
+    // region NBT
+
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_MagneticDrivePressureFormer_MachineType)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_00)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_01)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_02)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_03)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_04)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_05)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_06)
-            .addSeparator()
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_09)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_07)
-            .addInfo(TextLocalization.Tooltip_MagneticDrivePressureFormer_08)
-            .beginStructureBlock(15, 25, 15, false)
-            .addController(TextLocalization.textTopCenter)
-            .addInputHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
-            .addOutputHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
-            .addInputBus(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
-            .addOutputBus(TextLocalization.Tooltip_MagneticDrivePressureFormer_Hatches, 1)
-            .addEnergyHatch(TextLocalization.Tooltip_MagneticDrivePressureFormer_EnergyHatch, 2)
-            .toolTipFinisher();
-        return tt;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setByte("mode", (byte) machineMode);
     }
 
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_MagneticDrivePressureFormer(this.mName);
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        machineMode = aNBT.getByte("mode");
     }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -386,19 +364,88 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(62) };
     }
 
+    // endregion
+
+    // region Tooltip
+
+    // tooltips
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setByte("mode", (byte) machineMode);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        machineMode = aNBT.getByte("mode");
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_MagneticDrivePressureFormer_MachineType
+        // # Extruder | Bending Machine | Forming Press | Forge Hammer
+        // #zh_CN 压模机 | 卷板机 | 冲压机床 | 锻造锤
+        tt.addMachineType(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_MachineType"))
+            // #tr Tooltip_MagneticDrivePressureFormer_00
+            // # Controller block for the Magnetic Drive Pressure Former.
+            // #zh_CN 磁驱压力成型机的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_00"))
+            // #tr Tooltip_MagneticDrivePressureFormer_01
+            // # {\AQUA}Simple applications of Maxwell's equations.
+            // #zh_CN {\AQUA}麦克斯韦方程的简单应用.
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_01"))
+            // #tr Tooltip_MagneticDrivePressureFormer_02
+            // # No difficulty ! No hurry !
+            // #zh_CN 轻而易举, 从容不迫！
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_02"))
+            // #tr Tooltip_MagneticDrivePressureFormer_03
+            // # {\GOLD}Extruder Mode:
+            // #zh_CN {\GOLD}压模机模式:
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_03"))
+            // #tr Tooltip_MagneticDrivePressureFormer_04
+            // # {\RED}700%{\GRAY} faster than normal | Infinity Coil+ enable Perfect Overclock
+            // #zh_CN 8倍速 | 无尽线圈解锁无损超频
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_04"))
+            // #tr Tooltip_MagneticDrivePressureFormer_05
+            // # {\GOLD}Bending and Forming Press and Forge Hammer Mode:
+            // #zh_CN {\GOLD}卷板机|冲压机床|锻造锤模式:
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_05"))
+            // #tr Tooltip_MagneticDrivePressureFormer_06
+            // # {\RED}1500%{\GRAY} faster than normal | Enable Perfect Overclock
+            // #zh_CN 16倍速 | 无损超频
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_06"))
+            .addSeparator()
+            // #tr Tooltip_MagneticDrivePressureFormer_09
+            // # {\AQUA}1024x{\GRAY} Parallel.
+            // #zh_CN {\AQUA}1024x{\GRAY} 并行.
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_09"))
+            // #tr Tooltip_MagneticDrivePressureFormer_07
+            // # Extra {\RED}+100%{\GRAY} speed multiplier per Coil Level.
+            // #zh_CN 线圈等级每提高1级, 额外加速{\RED}100%{\GRAY}, 线圈加速部分独立计算.
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_07"))
+            // #tr Tooltip_MagneticDrivePressureFormer_08
+            // # Need Infinity Glass to use Laser energy hatch.
+            // #zh_CN 无尽强化硼玻璃解锁激光仓.
+            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_08"))
+            .beginStructureBlock(15, 25, 15, false)
+            .addController(TextLocalization.textTopCenter)
+            // #tr Tooltip_MagneticDrivePressureFormer_Hatches
+            // # Frame location, Osmiridium Casing.
+            // #zh_CN 框架位置, 铱锇机械方块.
+            .addInputHatch(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addOutputHatch(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addInputBus(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addOutputBus(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            // #tr Tooltip_MagneticDrivePressureFormer_EnergyHatch
+            // # The white, Iridium Casing, and the bottom center.
+            // #zh_CN 铱强化机械方块, 和机器底层中心.
+            .addEnergyHatch(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_EnergyHatch"), 2)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
     }
 
     // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
+
 }

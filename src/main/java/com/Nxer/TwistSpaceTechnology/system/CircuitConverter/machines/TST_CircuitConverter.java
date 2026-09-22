@@ -1,10 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.too_more_hatches;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_01;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_2_01;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_CircuitConverter_MachineType;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
@@ -29,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -67,10 +64,108 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_CircuitConverter(this.mName);
     }
+    // endregion
 
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainCircuitConverter";
+    private final int horizontalOffSet = 1;
+    private final int verticalOffSet = 1;
+    private final int depthOffSet = 0;
+
+    // spotless:off
+    private final String[][] shapeMain = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "A A", "AAA" },
+        { "AAA", "AAA", "AAA" } };
+    // spotless:on
+
+    private final IStructureDefinition<TST_CircuitConverter> STRUCTURE = IStructureDefinition
+        .<TST_CircuitConverter>builder()
+        .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+        .addElement(
+            'A',
+            HatchElementBuilder.<TST_CircuitConverter>builder()
+                .atLeast(InputBus, OutputBus)
+                .adder(TST_CircuitConverter::addInputBusOrOutputBusToMachineList)
+                .hint(1)
+                .casingIndex(16)
+                .buildAndChain(GregTechAPI.sBlockCasings2, 6))
+        .build();
+
+    @Override
+    public IStructureDefinition<TST_CircuitConverter> getStructureDefinition() {
+        return STRUCTURE;
+    }
+
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (mInputBusses.size() + mOutputBusses.size() > 8) {
+            errors.add(too_more_hatches);
+        }
+    }
     // endregion
 
     // region Processing Logic
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return 1;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
 
     @NotNull
     @Override
@@ -108,120 +203,9 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (mInputBusses.size() + mOutputBusses.size() > 8) {
-            errors.add(too_more_hatches);
-        }
-    }
     // endregion
 
-    // region Structure
-    private static final String STRUCTURE_PIECE_MAIN = "mainCircuitConverter";
-    private final int horizontalOffSet = 1;
-    private final int verticalOffSet = 1;
-    private final int depthOffSet = 0;
-
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_CircuitConverter> getStructureDefinition() {
-        return STRUCTURE;
-    }
-
-    private final String[][] shapeMain = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "A A", "AAA" },
-        { "AAA", "AAA", "AAA" } };
-
-    private final IStructureDefinition<TST_CircuitConverter> STRUCTURE = IStructureDefinition
-        .<TST_CircuitConverter>builder()
-        .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-        .addElement(
-            'A',
-            HatchElementBuilder.<TST_CircuitConverter>builder()
-                .atLeast(InputBus, OutputBus)
-                .adder(TST_CircuitConverter::addInputBusOrOutputBusToMachineList)
-                .hint(1)
-                .casingIndex(16)
-                .buildAndChain(GregTechAPI.sBlockCasings2, 6))
-        .build();
-
-    // endregion
-
-    // region General
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 1;
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(Tooltip_CircuitConverter_MachineType)
-            .addInfo(Tooltip_CircuitConverter_Controller)
-            .addInfo(Tooltip_CircuitConverter_01)
-            .addStructureInfo(Tooltip_CircuitConverter_2_01)
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
-            .addInputBus(textAnyCasing, 1)
-            .addOutputBus(textAnyCasing, 1)
-            .toolTipFinisher();
-        return tt;
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -248,4 +232,40 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[0][16] };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_CircuitConverter_MachineType
+        // # Circuit Converter
+        // #zh_CN 电路板转换器
+        tt.addMachineType(TextEnums.tr("Tooltip_CircuitConverter_MachineType"))
+            // #tr Tooltip_CircuitConverter_Controller
+            // # Controller block for the General Circuit Converter
+            // #zh_CN 通用电路板转换器的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_CircuitConverter_Controller"))
+            // #tr Tooltip_CircuitConverter_01
+            // # Transform input circuits to Any Circuit.
+            // #zh_CN 将输入的电路板转换成通用电路板.
+            .addInfo(TextEnums.tr("Tooltip_CircuitConverter_01"))
+            // #tr Tooltip_CircuitConverter_2_01
+            // # Maximum 8 In/Output Buses.
+            // #zh_CN 最多 8 个输入总线或输出总线.
+            .addStructureInfo(TextEnums.tr("Tooltip_CircuitConverter_2_01"))
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
+            .addInputBus(textAnyCasing, 1)
+            .addOutputBus(textAnyCasing, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

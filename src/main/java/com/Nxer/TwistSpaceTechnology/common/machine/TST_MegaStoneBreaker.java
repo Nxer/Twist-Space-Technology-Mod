@@ -78,154 +78,27 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaStoneBreaker(this.mName);
     }
-
     // endregion
 
-    // region Processing Logic
-    private MTEHatchInput mLavaHatch;
-    private MTEHatchInput mWaterHatch;
-    boolean isOutputMultiply = false;
-
-    @Override
-    protected float getEuModifier() {
-        return 1;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        int EuTier = (int) calculateVoltageTier(getMaxInputEu());
-        return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return MegaStoneBreakerRecipes;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @Nonnull
-            @Override
-            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
-                isOutputMultiply = drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), false)
-                    && drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), false);
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            @NotNull
-            @Override
-            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
-                    ArrayList<ItemStack> outputItemList = new ArrayList<>();
-                    int OutputBonus = isOutputMultiply ? 1024 : 4;
-
-                    for (ItemStack recipeItemStack : recipe.mOutputs) {
-                        if (recipeItemStack != null) addItemsLong(
-                            outputItemList,
-                            recipeItemStack,
-                            (long) parallel * recipeItemStack.stackSize * OutputBonus);
-                    }
-                    return outputItemList.toArray(new ItemStack[0]);
-                });
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-
-    }
-
-    private byte runningTick = 0;
-
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        if (runningTick % 20 == 0) {
-            if (isOutputMultiply) {
-                if (!drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), true)
-                    || !drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), true)) {
-                    isOutputMultiply = false;
-                    return false;
-                }
-            }
-            runningTick = 1;
-        } else {
-            runningTick++;
-        }
-        return super.onRunningTick(aStack);
-    }
-
-    public boolean addWaterHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
-            mWaterHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addLavaHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
-            mLavaHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
     // region Structure
-
     private final int horizontalOffSet = 10;
     private final int verticalOffSet = 7;
     private final int depthOffSet = 2;
     private static final String STRUCTURE_PIECE_MAIN = "mainMegaStoneBreaker";
     private static IStructureDefinition<TST_MegaStoneBreaker> STRUCTURE_DEFINITION = null;
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"                     ","  GGGGG       GGGGG  "," GGDCDGG     GGDCDGG "," GDDCDDGGGGGGGDDCDDG "," GCCCCCCCCCCCCCCCCCG "," GDDCDDGGGGGGGDDCDDG "," GGDCDGG     GGDCDGG ","  GGGGG       GGGGG  ","                     "},
+        {"  FFFFF       FFFFF  "," FGEEEGF     FGEEEGF ","FGBBBBBGFFFFFGBBBBBGF","FEBIIIBEGEEEGEBIIIBEF","FEBIBIBEGEEEGEBIBIBEF","FEBIIIBEGEEEGEBIIIBEF","FGBBBBBGFFFFFGBBBBBGF"," FGEEEGF     FGEEEGF ","  FFFFF       FFFFF  "},
+        {"  GGGGG       GGGGG  "," GEEEEEG     GEEEEEG ","GEBBBBBEGGGGGEBBBBBEG","GEBIIIBEGIIIGEBIIIBEG","GEBIBIBEGGGGGEBIBIBEG","GEBIIIBEGIIIGEBIIIBEG","GEBBBBBEGGGGGEBBBBBEG"," GEEEEEG     GEEEEEG ","  GGGGG       GGGGG  "},
+        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
+        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFFFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
+        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
+        {"  GGGGG       GGGGG  "," GEEGEEG     GEEGEEG ","GEEEGEEEGGGGGEEEGEEEG","GEEIIIEEGIIIGEEIIIEEG","GGGIBIGGGGGGGGGIBIGGG","GEEIIIEEGIIIGEEIIIEEG","GEEEGEEEGGGGGEEEGEEEG"," GEEGEEG     GEEGEEG ","  GGGGG       GGGGG  "},
+        {"  FFLFF       FFWFF  "," FGGGGGF     FGGGGGF ","FGGGGGGGJJ~JJGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGFFFFFGGGGGGGF"," FGGGGGF     FGGGGGF ","  FFFFF       FFFFF  "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_MegaStoneBreaker> getStructureDefinition() {
@@ -268,8 +141,6 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
         return STRUCTURE_DEFINITION;
     }
 
-    // spotless:off
-
     /*
      * Blocks:
      * A -> ofBlock...(gt.blockcasings11, 7, ...);
@@ -283,24 +154,158 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
      * I -> ofBlock...(pressureResistantWalls, 0, ...);
      */
 
-    private final String[][] shapeMain = new String[][]{
-        {"                     ","  GGGGG       GGGGG  "," GGDCDGG     GGDCDGG "," GDDCDDGGGGGGGDDCDDG "," GCCCCCCCCCCCCCCCCCG "," GDDCDDGGGGGGGDDCDDG "," GGDCDGG     GGDCDGG ","  GGGGG       GGGGG  ","                     "},
-        {"  FFFFF       FFFFF  "," FGEEEGF     FGEEEGF ","FGBBBBBGFFFFFGBBBBBGF","FEBIIIBEGEEEGEBIIIBEF","FEBIBIBEGEEEGEBIBIBEF","FEBIIIBEGEEEGEBIIIBEF","FGBBBBBGFFFFFGBBBBBGF"," FGEEEGF     FGEEEGF ","  FFFFF       FFFFF  "},
-        {"  GGGGG       GGGGG  "," GEEEEEG     GEEEEEG ","GEBBBBBEGGGGGEBBBBBEG","GEBIIIBEGIIIGEBIIIBEG","GEBIBIBEGGGGGEBIBIBEG","GEBIIIBEGIIIGEBIIIBEG","GEBBBBBEGGGGGEBBBBBEG"," GEEEEEG     GEEEEEG ","  GGGGG       GGGGG  "},
-        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
-        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFFFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
-        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
-        {"  GGGGG       GGGGG  "," GEEGEEG     GEEGEEG ","GEEEGEEEGGGGGEEEGEEEG","GEEIIIEEGIIIGEEIIIEEG","GGGIBIGGGGGGGGGIBIGGG","GEEIIIEEGIIIGEEIIIEEG","GEEEGEEEGGGGGEEEGEEEG"," GEEGEEG     GEEGEEG ","  GGGGG       GGGGG  "},
-        {"  FFLFF       FFWFF  "," FGGGGGF     FGGGGGF ","FGGGGGGGJJ~JJGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGFFFFFGGGGGGGF"," FGGGGGF     FGGGGGF ","  FFFFF       FFFFF  "}
-    };
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+    private MTEHatchInput mLavaHatch;
+    private MTEHatchInput mWaterHatch;
+    boolean isOutputMultiply = false;
+    private byte runningTick = 0;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return MegaStoneBreakerRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        int EuTier = (int) calculateVoltageTier(getMaxInputEu());
+        return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected float getEuModifier() {
+        return 1;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Nonnull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
+                isOutputMultiply = drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), false)
+                    && drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), false);
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
+                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
+                    ArrayList<ItemStack> outputItemList = new ArrayList<>();
+                    int OutputBonus = isOutputMultiply ? 1024 : 4;
+
+                    for (ItemStack recipeItemStack : recipe.mOutputs) {
+                        if (recipeItemStack != null) addItemsLong(
+                            outputItemList,
+                            recipeItemStack,
+                            (long) parallel * recipeItemStack.stackSize * OutputBonus);
+                    }
+                    return outputItemList.toArray(new ItemStack[0]);
+                });
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+
+    }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        if (runningTick % 20 == 0) {
+            if (isOutputMultiply) {
+                if (!drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), true)
+                    || !drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), true)) {
+                    isOutputMultiply = false;
+                    return false;
+                }
+            }
+            runningTick = 1;
+        } else {
+            runningTick++;
+        }
+        return super.onRunningTick(aStack);
+    }
 
     // endregion
 
-    // region General
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        if (side == aFacing) {
+            if (aActive) {
+                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
+                    TextureFactory.builder()
+                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
+                        .extFacing()
+                        .build(),
+                    TextureFactory.builder()
+                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
+                TextureFactory.builder()
+                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
+                    .extFacing()
+                    .build() };
+        }
+
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)) };
+    }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_MegaStoneBreaker_MachineType
         // # Stone Breaker
         // #zh_CN 碎石机
@@ -336,35 +341,40 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
 
-    // spotless:on
+    // endregion
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
+    // region Hatch Registration
 
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)),
-                TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                    .extFacing()
-                    .build() };
+    public boolean addWaterHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
+            mWaterHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
         }
-
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)) };
+        return false;
     }
+
+    public boolean addLavaHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
+            mLavaHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    // endregion
+
 }

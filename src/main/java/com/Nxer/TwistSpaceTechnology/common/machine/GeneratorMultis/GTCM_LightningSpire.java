@@ -80,7 +80,7 @@ import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTe
 public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     implements IConstructable, ISurvivalConstructable {
 
-    // region Construct
+    // region Class Constructor
     public GTCM_LightningSpire(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
         registerTooltipCredits(AUTHOR, ID.SNOW_DREAM, MAINTAINER, ID.NXER);
@@ -100,6 +100,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_LR";
     private final int hOffset = 5, vOffset = 20, dOffset = 3;
     private static IStructureDefinition<GTCM_LightningSpire> STRUCTURE_DEFINITION = null;
+
     // spotless:off
     protected final String[][] shapeMain = new String[][]{
             {"           ","           ","           ","           ","    CCC    ","    CCC    ","    CCC    ","           ","           ","           ","           "},
@@ -126,7 +127,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             {"           ","           ","    BBB    ","   BBBBB   ","  BBAAABB  ","  BBADABB  ","  BBAAABB  ","   BBBBB   ","    BBB    ","           ","           "},
             {"   BBBBB   ","  BBBBBBB  "," BBBBBBBBB ","BBBBBBBBBBB","BBBBAAABBBB","BBBBABABBBB","BBBBAAABBBB","BBBBBBBBBBB"," BBBBBBBBB ","  BBBBBBB  ","   BBBBB   "}
     };
-    //spotless:on
+    // spotless:on
 
     @Override
     public IStructureDefinition<GTCM_LightningSpire> getStructureDefinition() {
@@ -149,13 +150,6 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors)) return;
-        setLightningPosition(getBaseMetaTileEntity().getFrontFacing());
-    }
-
-    @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
     }
@@ -174,10 +168,19 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             false,
             true);
     }
-    // endregion end
 
-    // region Process
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors)) return;
+        setLightningPosition(getBaseMetaTileEntity().getFrontFacing());
+    }
+    // endregion
+
+    // region Processing Logic
+    // endregion end
     public static final int CRYOTHEUM_CONSUMPTION = 128;
+
     protected static Fluid MOLTEN_IRON;
     protected static Fluid CRYOTHEUM;
     private static final int MAXRODS = 512;
@@ -193,53 +196,8 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     private int aZ;
 
     @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        if (aBaseMetaTileEntity.isServerSide()) {
-            if (null == MOLTEN_IRON) {
-                MOLTEN_IRON = Materials.Iron.getMolten(1)
-                    .getFluid();
-            }
-            if (null == CRYOTHEUM) {
-                CRYOTHEUM = FluidRegistry.getFluid("cryotheum");
-            }
-        }
-    }
-
-    private void setLightningPosition(ForgeDirection face) {
-        aY = this.getBaseMetaTileEntity()
-            .getYCoord() + 21;
-        if (face == NORTH) {
-            aX = this.getBaseMetaTileEntity()
-                .getXCoord();
-            aZ = this.getBaseMetaTileEntity()
-                .getZCoord() + 2;
-        } else if (face == SOUTH) {
-            aX = this.getBaseMetaTileEntity()
-                .getXCoord();
-            aZ = this.getBaseMetaTileEntity()
-                .getZCoord() - 2;
-        } else if (face == WEST) {
-            aX = this.getBaseMetaTileEntity()
-                .getXCoord() + 2;
-            aZ = this.getBaseMetaTileEntity()
-                .getZCoord();
-        } else if (face == EAST) {
-            aX = this.getBaseMetaTileEntity()
-                .getXCoord() - 2;
-            aZ = this.getBaseMetaTileEntity()
-                .getZCoord();
-        } else {
-            aX = this.getBaseMetaTileEntity()
-                .getXCoord();
-            aZ = this.getBaseMetaTileEntity()
-                .getZCoord();
-        }
-    }
-
-    protected void lightOnWorld() {
-        if (!enable_lightning) return;
-        World world = getBaseMetaTileEntity().getWorld();
-        world.addWeatherEffect(new EntityLightningBolt(world, aX, aY, aZ));
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -358,6 +316,56 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     }
 
     @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        if (aBaseMetaTileEntity.isServerSide()) {
+            if (null == MOLTEN_IRON) {
+                MOLTEN_IRON = Materials.Iron.getMolten(1)
+                    .getFluid();
+            }
+            if (null == CRYOTHEUM) {
+                CRYOTHEUM = FluidRegistry.getFluid("cryotheum");
+            }
+        }
+    }
+
+    private void setLightningPosition(ForgeDirection face) {
+        aY = this.getBaseMetaTileEntity()
+            .getYCoord() + 21;
+        if (face == NORTH) {
+            aX = this.getBaseMetaTileEntity()
+                .getXCoord();
+            aZ = this.getBaseMetaTileEntity()
+                .getZCoord() + 2;
+        } else if (face == SOUTH) {
+            aX = this.getBaseMetaTileEntity()
+                .getXCoord();
+            aZ = this.getBaseMetaTileEntity()
+                .getZCoord() - 2;
+        } else if (face == WEST) {
+            aX = this.getBaseMetaTileEntity()
+                .getXCoord() + 2;
+            aZ = this.getBaseMetaTileEntity()
+                .getZCoord();
+        } else if (face == EAST) {
+            aX = this.getBaseMetaTileEntity()
+                .getXCoord() - 2;
+            aZ = this.getBaseMetaTileEntity()
+                .getZCoord();
+        } else {
+            aX = this.getBaseMetaTileEntity()
+                .getXCoord();
+            aZ = this.getBaseMetaTileEntity()
+                .getZCoord();
+        }
+    }
+
+    protected void lightOnWorld() {
+        if (!enable_lightning) return;
+        World world = getBaseMetaTileEntity().getWorld();
+        world.addWeatherEffect(new EntityLightningBolt(world, aX, aY, aZ));
+    }
+
+    @Override
     public boolean onRunningTick(ItemStack stack) {
         if (tStored > 0) {
             // push eu to dynamo
@@ -394,6 +402,76 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     }
 
     @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.OperatingMode = (this.OperatingMode + 1) % 3;
+            GTUtility.sendChatTrans(
+                aPlayer,
+                // spotless:off
+                // #tr LightningSpire.ModeMsg.0
+                // # Lightning Spire is in Operate Mode
+                // #zh_CN 闪电尖塔设置为发电模式
+                // #tr LightningSpire.ModeMsg.1
+                // # Lightning Spire is in Input Mode
+                // #zh_CN 闪电尖塔设置为输入模式
+                // #tr LightningSpire.ModeMsg.2
+                // # Lightning Spire is in Output Mode
+                // #zh_CN 闪电尖塔设置为输出模式
+                StatCollector.translateToLocal(tr("LightningSpire.ModeMsg." + OperatingMode)));
+                // spotless:on
+        }
+    }
+
+    @Override
+    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
+        float aX, float aY, float aZ, ItemStack aTool) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            enable_lightning = !enable_lightning;
+            // #tr LightningSpire.enable_lightning.true
+            // # Enable lightning animation
+            // #zh_CN 启用闪电特效
+            // #tr LightningSpire.enable_lightning.false
+            // # Disable lightning animation
+            // #zh_CN 禁用闪电特效
+            GTUtility.sendChatTrans(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        super.addUIWidgets(builder, buildContext);
+        builder.widget(
+            new ProgressBar().setProgress(() -> (float) tStored / tMaxStored)
+                .setDirection(ProgressBar.Direction.RIGHT)
+                .setTexture(GTUITextures.PROGRESSBAR_STORED_EU, 147)
+                .setPos(7, 85)
+                .setSize(130, 5));
+    }
+
+    @Override
+    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+        super.drawTexts(screenElements, inventorySlot);
+        screenElements
+            .widget(
+                new TextWidget().setStringSupplier(() -> "Currently stored LR:" + numberFormat.format(tRods))
+                    .setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .setEnabled(widget -> getErrorDisplayID() == 0))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> tRods, val -> tRods = val))
+            .widget(
+                new TextWidget().setStringSupplier(() -> "EU Gen per strike:" + numberFormat.format(tProduct))
+                    .setDefaultColor(COLOR_TEXT_WHITE.get())
+                    .setEnabled(widget -> getErrorDisplayID() == 0))
+            .widget(new FakeSyncWidget.LongSyncer(() -> tProduct, val -> tProduct = val));
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setBoolean("enable_lightning", enable_lightning);
@@ -424,9 +502,11 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             mStored.add(ItemStack.loadItemStackFromNBT(nbttagcompound1));
         }
     }
-    // region end
 
-    // region tooltip
+    // endregion
+
+    // region Textures
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
@@ -437,10 +517,14 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][16 + 6] };
     }
 
-    // spotless:off
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr GTCM_LightningSpire_MachineType
         // # Multi Lightning Rod
         // #zh_CN 多方块避雷针
@@ -501,81 +585,10 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             .addOutputBus(TextLocalization.textUseBlueprint)
             .addDynamoHatch(TextLocalization.textUseBlueprint)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
-    // spotless:on
-    // region end
 
-    // region UI
+    // endregion
 
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.OperatingMode = (this.OperatingMode + 1) % 3;
-            GTUtility.sendChatTrans(
-                aPlayer,
-                // #tr LightningSpire.ModeMsg.0
-                // # Lightning Spire is in Operate Mode
-                // #zh_CN 闪电尖塔设置为发电模式
-                // #tr LightningSpire.ModeMsg.1
-                // # Lightning Spire is in Input Mode
-                // #zh_CN 闪电尖塔设置为输入模式
-                // #tr LightningSpire.ModeMsg.2
-                // # Lightning Spire is in Output Mode
-                // #zh_CN 闪电尖塔设置为输出模式
-                StatCollector.translateToLocal(tr("LightningSpire.ModeMsg." + OperatingMode)));
-        }
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
-        float aX, float aY, float aZ, ItemStack aTool) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            enable_lightning = !enable_lightning;
-            // #tr LightningSpire.enable_lightning.true
-            // # Enable lightning animation
-            // #zh_CN 启用闪电特效
-            // #tr LightningSpire.enable_lightning.false
-            // # Disable lightning animation
-            // #zh_CN 禁用闪电特效
-            GTUtility.sendChatTrans(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-        builder.widget(
-            new ProgressBar().setProgress(() -> (float) tStored / tMaxStored)
-                .setDirection(ProgressBar.Direction.RIGHT)
-                .setTexture(GTUITextures.PROGRESSBAR_STORED_EU, 147)
-                .setPos(7, 85)
-                .setSize(130, 5));
-    }
-
-    @Override
-    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-        super.drawTexts(screenElements, inventorySlot);
-        screenElements
-            .widget(
-                new TextWidget().setStringSupplier(() -> "Currently stored LR:" + numberFormat.format(tRods))
-                    .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(widget -> getErrorDisplayID() == 0))
-            .widget(new FakeSyncWidget.IntegerSyncer(() -> tRods, val -> tRods = val))
-            .widget(
-                new TextWidget().setStringSupplier(() -> "EU Gen per strike:" + numberFormat.format(tProduct))
-                    .setDefaultColor(COLOR_TEXT_WHITE.get())
-                    .setEnabled(widget -> getErrorDisplayID() == 0))
-            .widget(new FakeSyncWidget.LongSyncer(() -> tProduct, val -> tProduct = val));
-    }
-
-    //
 }

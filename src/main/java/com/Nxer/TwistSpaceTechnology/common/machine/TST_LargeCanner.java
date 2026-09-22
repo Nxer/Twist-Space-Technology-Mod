@@ -47,7 +47,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 @SkipGenerateDescription
 public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
-    // region Constructor
+    // region Class Constructor
     public TST_LargeCanner(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(new ID[] { ID.SNOW_DREAM, ID.NXER });
@@ -61,7 +61,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_LargeCanner(this.mName);
     }
-    // region end
+    // endregion
 
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "LargeCanner_main";
@@ -115,12 +115,6 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -140,18 +134,20 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             false,
             true);
     }
-    // region end
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
 
     // process
-
     @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.cannerRecipes;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -160,9 +156,18 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     }
 
     @Override
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     protected boolean isEnablePerfectOverclock() {
         return true;
     }
+
+    // endregion
+
+    // region NBT
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -175,6 +180,10 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
         super.loadNBTData(aNBT);
         machineMode = aNBT.getBoolean("fluidMode") ? 1 : 0;
     }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -202,9 +211,14 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(48) };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_LargeCanner_MachineType
         // # Fluid/Solid Canner
         // #zh_CN 流体/固体装罐机
@@ -232,8 +246,10 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             .addOutputHatch(TextLocalization.textUseBlueprint)
             .addEnergyHatch(TextLocalization.textUseBlueprint)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
-    //
+
+    // endregion
 
 }

@@ -65,74 +65,12 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_IndustrialMagnetarSeparator(this.mName);
     }
-
     // endregion
 
-    // region Processing Logic
-    int mCasing = 0;
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return SpeedBouns_IndustrialMagnetarSeparator;
-    }
-
-    @Override
-    protected float getEuModifier() {
-        return EuModifier_IndustrialMagnetarSeparator;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return ParallelMultiply_IndustrialMagnetarSeparator * GTUtility.getTier(this.getMaxInputVoltage());
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.electroMagneticSeparatorRecipes;
-    }
-
-    @Override
-    public int getPollutionPerSecond(final ItemStack aStack) {
-        return 300;
-    }
-
-    // endregion
-    public boolean checkHatch() {
-        return mMaintenanceHatches.size() <= 1 && (this.getPollutionPerSecond(null) <= 0 || !mMufflerHatches.isEmpty())
-            && mExoticEnergyHatches.isEmpty();
-    }
     // region Structure
-
     private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN";
     private final int horizontalOffSet = 1, verticalOffSet = 1, depthOffSet = 0;
     private static IStructureDefinition<TST_IndustrialMagnetarSeparator> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        mCasing = 0;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        checkCasingMin(errors, mCasing, 9);
-        checkHasMaintenanceHatch(errors);
-        checkHasMufflerHatch(errors);
-        if (!mExoticEnergyHatches.isEmpty()) {
-            errors.add(multi_Amp_hatch_incompatible);
-        }
-    }
 
     // spotless:off
     protected final String[][] STRUCTURE = new String[][] {
@@ -140,6 +78,7 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
         { "C~C", "C-C", "CCC" },
         { "CCC", "CCC", "CCC" } };
     // spotless:on
+
     @Override
     public IStructureDefinition<TST_IndustrialMagnetarSeparator> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -159,6 +98,11 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     }
 
     @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
         int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
@@ -174,10 +118,101 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             true);
     }
 
-    // spotless:off
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        mCasing = 0;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        checkCasingMin(errors, mCasing, 9);
+        checkHasMaintenanceHatch(errors);
+        checkHasMufflerHatch(errors);
+        if (!mExoticEnergyHatches.isEmpty()) {
+            errors.add(multi_Amp_hatch_incompatible);
+        }
+    }
+    // endregion
+
+    // region Processing Logic
+    int mCasing = 0;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.electroMagneticSeparatorRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return ParallelMultiply_IndustrialMagnetarSeparator * GTUtility.getTier(this.getMaxInputVoltage());
+    }
+
+    @Override
+    protected float getEuModifier() {
+        return EuModifier_IndustrialMagnetarSeparator;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return SpeedBouns_IndustrialMagnetarSeparator;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    public int getPollutionPerSecond(final ItemStack aStack) {
+        return 300;
+    }
+
+    public boolean checkHatch() {
+        return mMaintenanceHatches.size() <= 1 && (this.getPollutionPerSecond(null) <= 0 || !mMufflerHatches.isEmpty())
+            && mExoticEnergyHatches.isEmpty();
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(8)];
+        if (side == facing) {
+            if (aActive) return new ITexture[] { base, TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { base, TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { base };
+    }
+
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_IndustrialMagnetarSeparator_MachineType
         // # Electromagnetic Separator
         // #zh_CN 电磁离析机
@@ -210,34 +245,10 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
             .addMaintenanceHatch(textAnyCasing, 1)
             .addMufflerHatch(textAnyCasing,1)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
-    // spotless:on
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        ITexture base = casingTexturePages[115][MetaBlockCasing01.getTextureIndexInPage(8)];
-        if (side == facing) {
-            if (aActive) return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { base, TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { base };
-    }
+    // endregion
+
 }

@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -74,144 +75,14 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
     }
     // endregion
 
-    // region Processing Logic
-    /**
-     * coefficient = input voltage tier
-     */
-    private int coefficientMultiplier = 1;
-
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Distillation Tower
-         * 1 - Distillery
-         */
-        return 2;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    // }
-
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + machineMode);
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mode", (byte) machineMode);
-        aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        machineMode = aNBT.getByte("mode");
-        coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 1) {
-            return RecipeMaps.distilleryRecipes;
-        }
-        return RecipeMaps.distillationTowerRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.distillationTowerRecipes, RecipeMaps.distilleryRecipes);
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        // distillery has perfect overclock
-        return machineMode == 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    protected float getEuModifier() {
-        return EuModifier_VacuumFilterExtractor;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        coefficientMultiplier = 1 + getTotalPowerTier();
-        speedBonus = 1F / coefficientMultiplier;
-    }
-    // endregion
-
     // region Structure
-    // spotless:off
     private final int horizontalOffSet = 6;
     private final int verticalOffSet = 20;
     private final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainVacuumFilterExtractor";
     private static IStructureDefinition<TST_VacuumFilterExtractor> STRUCTURE_DEFINITION = null;
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
 
-    @Override
-    public IStructureDefinition<TST_VacuumFilterExtractor> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition
-                                       .<TST_VacuumFilterExtractor>builder()
-                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE))
-                                       .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 8))
-                                       .addElement(
-                                           'B',
-                                           HatchElementBuilder
-                                               .<TST_VacuumFilterExtractor>builder()
-                                               .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                                               .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .hint(1)
-                                               .casingIndex(((BlockCasings4)GregTechAPI.sBlockCasings4).getTextureIndex(10))
-                                               .buildAndChain(GregTechAPI.sBlockCasings4, 10))
-                                       .addElement(
-                                           'C',
-                                           HatchElementBuilder
-                                               .<TST_VacuumFilterExtractor>builder()
-                                               .atLeast(Energy.or(ExoticEnergy))
-                                               .adder(TST_VacuumFilterExtractor::addToMachineList)
-                                               .hint(2)
-                                               .casingIndex(((BlockCasings8)GregTechAPI.sBlockCasings8).getTextureIndex(3))
-                                               .buildAndChain(GregTechAPI.sBlockCasings8, 3))
-                                       .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 0))
-                                       .addElement('E', ofBlock(sBlockCasingsTT, 8))
-                                       .addElement('F', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                                       .addElement('G', ofFrame(Materials.Neutronium))
-                                       .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
+    // spotless:off
     private final String[][] SHAPE = new String[][]{
         {"             ","   CCCCCCC   ","  CCCCCCCCC  "," CCCCCCCCCCC ","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC"," CCCCCCCCCCC ","  CCCCCCCCC  ","   CCCCCCC   "},
         {"             ","             ","    G   G    ","             ","             "," G    B    G ","     BDB     ","    BDEDB    ","     BDB     "," G    B    G ","             ","             ","    G   G    ","             "},
@@ -237,7 +108,6 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
         {"     CCC     ","   CCCCCCC   ","  CCCCCCCCC  "," CCCCCCCCCCC ","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC"," CCCCCCCCCCC ","  CCCCCCCCC  ","   CCCCCCC   "}
     };
 
-
     /*
     Blocks:
 A -> ofBlock...(gt.blockcasings2, 8, ...);
@@ -249,37 +119,156 @@ F -> ofBlock...(tile.quantumGlass, 0, ...);
 G -> ofFrame...(Materials.Neutronium);
      */
     // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_VacuumFilterExtractor> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_VacuumFilterExtractor>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(SHAPE))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 8))
+                .addElement(
+                    'B',
+                    HatchElementBuilder.<TST_VacuumFilterExtractor>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .adder(TST_VacuumFilterExtractor::addToMachineList)
+                        .hint(1)
+                        .casingIndex(((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(10))
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 10))
+                .addElement(
+                    'C',
+                    HatchElementBuilder.<TST_VacuumFilterExtractor>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(TST_VacuumFilterExtractor::addToMachineList)
+                        .hint(2)
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 3))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings9, 0))
+                .addElement('E', ofBlock(sBlockCasingsTT, 8))
+                .addElement('F', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .addElement('G', ofFrame(Materials.Neutronium))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        coefficientMultiplier = 1 + getTotalPowerTier();
+        speedBonus = 1F / coefficientMultiplier;
+    }
     // endregion
 
-    // region General
+    // region Processing Logic
+    /**
+     * coefficient = input voltage tier
+     */
+    private int coefficientMultiplier = 1;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        if (machineMode == 1) {
+            return RecipeMaps.distilleryRecipes;
+        }
+        return RecipeMaps.distillationTowerRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.distillationTowerRecipes, RecipeMaps.distilleryRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Distillation Tower
+         * 1 - Distillery
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    // }
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + machineMode);
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected float getEuModifier() {
+        return EuModifier_VacuumFilterExtractor;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        // distillery has perfect overclock
+        return machineMode == 1;
+    }
+
     @Override
     public boolean getDefaultInputSeparationMode() {
         return false;
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_VacuumFilterExtractor_MachineType)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_Controller)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_01)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_02)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_03)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_04)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_05)
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addInfo(TextLocalization.Tooltip_VacuumFilterExtractor_06)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
-            .beginStructureBlock(13, 22, 14, false)
-            .addController(TextLocalization.textUseBlueprint)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher();
-        return tt;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", (byte) machineMode);
+        aNBT.setInteger("coefficientMultiplier", coefficientMultiplier);
     }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        machineMode = aNBT.getByte("mode");
+        coefficientMultiplier = aNBT.getInteger("coefficientMultiplier");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -312,4 +301,61 @@ G -> ofFrame...(Materials.Neutronium);
         }
         return rTexture;
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_VacuumFilterExtractor_MachineType
+        // # Distillation Tower | Distillery
+        // #zh_CN 蒸馏塔 | 蒸馏室
+        tt.addMachineType(TextEnums.tr("Tooltip_VacuumFilterExtractor_MachineType"))
+            // #tr Tooltip_VacuumFilterExtractor_Controller
+            // # Controller block for the Vacuum Filter Extractor
+            // #zh_CN 真空抽滤器的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_Controller"))
+            // #tr Tooltip_VacuumFilterExtractor_01
+            // # {\ITALIC}Engineers think something isn't broken because it has too few features.
+            // #zh_CN {\ITALIC}工程师认为东西没坏是它功能太少.
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_01"))
+            // #tr Tooltip_VacuumFilterExtractor_02
+            // # By manipulating space in order to achieve separation of matter
+            // #zh_CN 通过操控空间以实现分离物质,
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_02"))
+            // #tr Tooltip_VacuumFilterExtractor_03
+            // # rather than direct manipulation of matter.
+            // #zh_CN 而非直接操控物质.
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_03"))
+            // #tr Tooltip_VacuumFilterExtractor_04
+            // # Recipe voltage is only {\RED}50%{\GRAY} of normal.
+            // #zh_CN 只需要正常配方电压的{\RED}50%{\GRAY}.
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_04"))
+            // #tr Tooltip_VacuumFilterExtractor_05
+            // # Increasing the energy input will result in more speed boosts.
+            // #zh_CN 提高能量输入将提供更多的速度提升.
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_05"))
+            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            // #tr Tooltip_VacuumFilterExtractor_06
+            // # In distillery mode, machine will enable {\AQUA}Perfect Overclock{\GRAY}.
+            // #zh_CN 蒸馏室模式将启用{\AQUA}无损超频{\GRAY}.
+            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_06"))
+            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .beginStructureBlock(13, 22, 14, false)
+            .addController(TextLocalization.textUseBlueprint)
+            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputBus(TextLocalization.textUseBlueprint, 1)
+            .addOutputBus(TextLocalization.textUseBlueprint, 1)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

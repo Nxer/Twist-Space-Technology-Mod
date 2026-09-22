@@ -164,27 +164,7 @@ public enum TextEnums {
     // #tr OutOfMaintenance
     // # {\RED}{\BOLD} OUT OF MAINTENANCE !
     // #zh_CN {\RED}{\BOLD}不再维护！
-    OutOfMaintenance("OutOfMaintenance"),
-
-    // start
-    BigBroArrayName("BigBroArray.name"),
-    BigBroArrayType("BigBroArray.type"),
-    BigBroArrayDesc1("BigBroArray.desc.1"),
-    BigBroArrayDesc2("BigBroArray.desc.2"),
-    BigBroArrayDesc3("BigBroArray.desc.3"),
-    BigBroArrayDesc4("BigBroArray.desc.4"),
-    BigBroArrayDesc5("BigBroArray.desc.5"),
-    BigBroArrayDesc6("BigBroArray.desc.6"),
-    BigBroArrayDesc7("BigBroArray.desc.7"),
-    BigBroArrayDesc8("BigBroArray.desc.8"),
-
-    BigBroArrayDesc9("BigBroArray.desc.9"),
-
-    BigBroArrayDesc10("BigBroArray.desc.10"),
-    BigBroArrayDesc11("BigBroArray.desc.11"),
-    BigBroArrayDesc12("BigBroArray.desc.12");
-
-    // end
+    OutOfMaintenance("OutOfMaintenance");
 
     // spotless:on
 

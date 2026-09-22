@@ -85,11 +85,183 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     public GT_TileEntity_SpaceScaler(String aName) {
         super(aName);
     }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_SpaceScaler(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private final String STRUCTURE_PIECE_MAIN = "mainSpaceScaler";
+    private final int horizontalOffSet = 15;
+    private final int verticalOffSet = 15;
+    private final int depthOffSet = 0;
+    private static IStructureDefinition<GT_TileEntity_SpaceScaler> STRUCTURE_DEFINITION = null;
+
+    // spotless:off
+    private final String[][] shapeMain = new String[][] {
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "              AAA              ", "            AAEEEAA            ", "           AEEEEEEEA           ", "           AEECCCEEA           ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "           AEECCCEEA           ", "           AEEEEEEEA           ", "            AAEEEAA            ", "              AAA              ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               A               ", "               A               ", "              AAA              ", "            AAAAAAA            ", "              AAA              ", "               A               ", "               A               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "       B               B       ", "      B                 B      ", "      B                 B      ", "      B        B        B      ", "      B       BGB       B      ", "      B        B        B      ", "      B                 B      ", "      B                 B      ", "       B               B       ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "      B                 B      ", "      B                 B      ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "     B         G         B     ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "      B                 B      ", "      B                 B      ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               G               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "   B           G           B   ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "          BB       BB          ", "         B           B         ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "         B           B         ", "          BB       BB          ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "         B           B         ", "        B             B        ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "        B             B        ", "         B           B         ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "        B             B        ", "       B               B       ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "       B               B       ", "        B             B        ", "                               ", "                               " },
+        { "                               ", "              AAA              ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "              AAA              " },
+        { "                               ", "            AAEEEAA            ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "E                             E", "E                             E", "E                             E", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "            AAEEEAA            " },
+        { "                               ", "           AEEEEEEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "E                             E", "EA                           AE", "E                             E", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEEEEEEEA           " },
+        { "              AAA              ", "           AEECCCEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "CA            DDD            AC", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEECCCEEA           " },
+        { "             AEEEA             ", "          AEECEEECEEA          ", "              AAA              ", "      B        B        B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "EA            D D            AE", "EAB          D   D          BAE", "EA            D D            AE", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B        B        B      ", "              AAA              ", "          AEECEEECEEA          " },
+        { "             AE~EA             ", "          AEECEEECEEA          ", "            AAAAAAA            ", "      B       BGB       B      ", "     B         G         B     ", "               G               ", "   B           G           B   ", "  B                         B  ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "EA                           AE", "CA            DDD            AC", "EAB          D   D          BAE", "EAGGGG       D   D       GGGGAE", "EAB          D   D          BAE", "CA            DDD            AC", "EA                           AE", "E                             E", "A                             A", "                               ", "                               ", "                               ", "  B                         B  ", "   B           G           B   ", "               G               ", "     B         G         B     ", "      B       BGB       B      ", "            AAAAAAA            ", "          AEECEEECEEA          " },
+        { "             AEEEA             ", "          AEECEEECEEA          ", "              AAA              ", "      B        B        B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "EA            D D            AE", "EAB          D   D          BAE", "EA            D D            AE", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B        B        B      ", "              AAA              ", "          AEECEEECEEA          " },
+        { "              AAA              ", "           AEECCCEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "CA            DDD            AC", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEECCCEEA           " },
+        { "                               ", "           AEEEEEEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "E                             E", "EA                           AE", "E                             E", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEEEEEEEA           " },
+        { "                               ", "            AAEEEAA            ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "E                             E", "E                             E", "E                             E", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "            AAEEEAA            " },
+        { "                               ", "              AAA              ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "              AAA              " },
+        { "                               ", "                               ", "                               ", "        B             B        ", "       B               B       ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "       B               B       ", "        B             B        ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "         B           B         ", "        B             B        ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "        B             B        ", "         B           B         ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "          BB       BB          ", "         B           B         ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "         B           B         ", "          BB       BB          ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "   B           G           B   ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               G               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "      B                 B      ", "      B                 B      ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "     B         G         B     ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "      B                 B      ", "      B                 B      ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "       B               B       ", "      B                 B      ", "      B                 B      ", "      B        B        B      ", "      B       BGB       B      ", "      B        B        B      ", "      B                 B      ", "      B                 B      ", "       B               B       ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               A               ", "               A               ", "              AAA              ", "            AAAAAAA            ", "              AAA              ", "               A               ", "               A               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
+        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "              AAA              ", "            AAEEEAA            ", "           AEEEEEEEA           ", "           AEECCCEEA           ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "           AEECCCEEA           ", "           AEEEEEEEA           ", "            AAEEEAA            ", "              AAA              ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " } };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement(
+                    'A',
+                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+                        .hint(1)
+                        .casingIndex(1024)
+                        .buildAndChain(sBlockCasingsTT, 0))
+                .addElement('B', ofBlock(sBlockCasingsTT, 4))
+                .addElement('C', ofBlock(sBlockCasingsTT, 6))
+                .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .addElement(
+                    'E',
+                    HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
+                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
+                        .adder(GT_TileEntity_SpaceScaler::addToMachineList)
+                        .hint(2)
+                        .casingIndex(1028)
+                        .buildAndChain(sBlockCasingsTT, 4))
+                .addElement(
+                    'G',
+                    withChannel(
+                        "fieldgeneratortier",
+                        ofBlocksTiered(
+                            GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
+                            ImmutableList.of(
+                                Pair.of(sBlockCasingsTT, 6),
+                                Pair.of(sBlockCasingsTT, 14),
+                                Pair.of(StabilisationFieldGenerators, 0),
+                                Pair.of(StabilisationFieldGenerators, 1),
+                                Pair.of(StabilisationFieldGenerators, 2),
+                                Pair.of(StabilisationFieldGenerators, 3),
+                                Pair.of(StabilisationFieldGenerators, 4),
+                                Pair.of(StabilisationFieldGenerators, 5),
+                                Pair.of(StabilisationFieldGenerators, 6),
+                                Pair.of(StabilisationFieldGenerators, 7),
+                                Pair.of(StabilisationFieldGenerators, 8)),
+                            -1,
+                            (m, t) -> m.fieldGeneratorTier = t,
+                            m -> m.fieldGeneratorTier)))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasingsTT, 0, ...); // Energy
+     * B -> ofBlock...(gt.blockcasingsTT, 4, ...);
+     * C -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator NORMAL
+     * D -> ofBlock...(tile.quantumGlass, 0, ...);
+     * E -> ofBlock...(gt.blockcasingsTT, 4, ...); // Hatches
+     * G -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator can upgrade
+     */
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.fieldGeneratorTier = -1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (this.fieldGeneratorTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
+        }
+        multiplier = 1 + Multiplier_ExtraOutputsPerFieldTier_SpaceScaler * Math.max(0, fieldGeneratorTier - 3);
+    }
     // endregion
 
     // region Processing Logic
     private int fieldGeneratorTier = -1;
     private int multiplier = 1;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        switch (machineMode) {
+            case 1:
+                return RecipeMaps.extractorRecipes;
+            case 2:
+                return GTPPRecipeMaps.cyclotronRecipes;
+            case 3:
+                return BartWorksRecipeMaps.electricImplosionCompressorRecipes;
+            case 4:
+                return RecipeMaps.neutroniumCompressorRecipes;
+            default:
+                return RecipeMaps.compressorRecipes;
+        }
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            RecipeMaps.extractorRecipes,
+            GTPPRecipeMaps.cyclotronRecipes,
+            RecipeMaps.compressorRecipes,
+            BartWorksRecipeMaps.electricImplosionCompressorRecipes,
+            RecipeMaps.neutroniumCompressorRecipes);
+    }
 
     @Override
     public int totalMachineMode() {
@@ -104,22 +276,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     }
 
     @Override
-    public int nextMachineMode() {
-        if (fieldGeneratorTier >= 11) {
-            return super.nextMachineMode();
-        } else if (fieldGeneratorTier >= 3) {
-            return super.nextMachineMode() % 3;
-        } else {
-            return super.nextMachineMode() % 2;
-        }
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
-
-    @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
@@ -132,28 +288,48 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
     // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
     // }
-    //
     @Override
     public String getMachineModeName() {
         return StatCollector.translateToLocal("SpaceScaler.modeMsg." + machineMode);
     }
 
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
 
-        aNBT.setByte("mode", (byte) machineMode);
-        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
-        aNBT.setInteger("multiplier", multiplier);
+    public float getSpeedBonus() {
+        return 1F / (this.fieldGeneratorTier < 2 ? SpeedMultiplier_Tier1Block_SpaceScaler
+            : SpeedMultiplier_BeyondTier2Block_SpaceScaler);
     }
 
     @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
+    protected ProcessingLogic createProcessingLogic() {
 
-        machineMode = aNBT.getByte("mode");
-        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
-        multiplier = aNBT.getInteger("multiplier");
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                setOverclockType(
+                    fieldGeneratorTier >= 2 ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
+                return super.process();
+            }
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+
+                if (fieldGeneratorTier >= 11 || machineMode > 0) return super.validateRecipe(recipe);
+
+                int recipeReq = 1 + recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0);
+                if (recipeReq > fieldGeneratorTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipeReq);
+                }
+                return super.validateRecipe(recipe);
+            }
+
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
     @NotNull
@@ -239,262 +415,28 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     }
 
     @Override
-    protected ProcessingLogic createProcessingLogic() {
-
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                setOverclockType(
-                    fieldGeneratorTier >= 2 ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
-                return super.process();
-            }
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-
-                if (fieldGeneratorTier >= 11 || machineMode > 0) return super.validateRecipe(recipe);
-
-                int recipeReq = 1 + recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0);
-                if (recipeReq > fieldGeneratorTier) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(recipeReq);
-                }
-                return super.validateRecipe(recipe);
-            }
-
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    public float getSpeedBonus() {
-        return 1F / (this.fieldGeneratorTier < 2 ? SpeedMultiplier_Tier1Block_SpaceScaler
-            : SpeedMultiplier_BeyondTier2Block_SpaceScaler);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        switch (machineMode) {
-            case 1:
-                return RecipeMaps.extractorRecipes;
-            case 2:
-                return GTPPRecipeMaps.cyclotronRecipes;
-            case 3:
-                return BartWorksRecipeMaps.electricImplosionCompressorRecipes;
-            case 4:
-                return RecipeMaps.neutroniumCompressorRecipes;
-            default:
-                return RecipeMaps.compressorRecipes;
+    public int nextMachineMode() {
+        if (fieldGeneratorTier >= 11) {
+            return super.nextMachineMode();
+        } else if (fieldGeneratorTier >= 3) {
+            return super.nextMachineMode() % 3;
+        } else {
+            return super.nextMachineMode() % 2;
         }
     }
 
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(
-            RecipeMaps.extractorRecipes,
-            GTPPRecipeMaps.cyclotronRecipes,
-            RecipeMaps.compressorRecipes,
-            BartWorksRecipeMaps.electricImplosionCompressorRecipes,
-            RecipeMaps.neutroniumCompressorRecipes);
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.fieldGeneratorTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (this.fieldGeneratorTier < 1) {
-            errors.add(internal_structure_issue);
-            return;
+    public static Integer getBlockFieldGeneratorTier(Block block, int meta) {
+        if (block == sBlockCasingsTT) {
+            return switch (meta) {
+                case 6 -> 1;
+                case 14 -> 2;
+                default -> null;
+            };
         }
-        multiplier = 1 + Multiplier_ExtraOutputsPerFieldTier_SpaceScaler * Math.max(0, fieldGeneratorTier - 3);
-    }
-
-    // endregion
-
-    // region Structure
-    // spotless:off
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    private final String STRUCTURE_PIECE_MAIN = "mainSpaceScaler";
-    private final int horizontalOffSet = 15;
-    private final int verticalOffSet = 15;
-    private final int depthOffSet = 0;
-    private static IStructureDefinition<GT_TileEntity_SpaceScaler> STRUCTURE_DEFINITION = null;
-    public static Integer getBlockFieldGeneratorTier(Block block, int meta){
-        if (block == sBlockCasingsTT){
-	        return switch (meta) {
-		        case 6 -> 1;
-		        case 14 -> 2;
-		        default -> null;
-	        };
-        }
-        if (block == StabilisationFieldGenerators){
+        if (block == StabilisationFieldGenerators) {
             return meta + 3;
         }
         return null;
-    }
-
-    @Override
-    public IStructureDefinition<GT_TileEntity_SpaceScaler> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_SpaceScaler>builder()
-                               .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                               .addElement(
-                                   'A',
-                                   HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                                                         .atLeast(Energy.or(ExoticEnergy))
-                                                         .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .hint(1)
-                                                         .casingIndex(1024)
-                                                         .buildAndChain(sBlockCasingsTT, 0))
-                               .addElement('B', ofBlock(sBlockCasingsTT, 4))
-                               .addElement('C', ofBlock(sBlockCasingsTT, 6))
-                               .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                               .addElement(
-                                   'E',
-                                   HatchElementBuilder.<GT_TileEntity_SpaceScaler>builder()
-                                                         .atLeast(InputBus, InputHatch, OutputBus, OutputHatch)
-                                                         .adder(GT_TileEntity_SpaceScaler::addToMachineList)
-                                                         .hint(2)
-                                                         .casingIndex(1028)
-                                                         .buildAndChain(sBlockCasingsTT, 4))
-                               .addElement(
-                                   'G',
-                                   withChannel("fieldgeneratortier",
-                                               ofBlocksTiered(
-                                                   GT_TileEntity_SpaceScaler::getBlockFieldGeneratorTier,
-                                                   ImmutableList.of(
-                                                       Pair.of(sBlockCasingsTT, 6),
-                                                       Pair.of(sBlockCasingsTT, 14),
-                                                       Pair.of(StabilisationFieldGenerators, 0),
-                                                       Pair.of(StabilisationFieldGenerators, 1),
-                                                       Pair.of(StabilisationFieldGenerators, 2),
-                                                       Pair.of(StabilisationFieldGenerators, 3),
-                                                       Pair.of(StabilisationFieldGenerators, 4),
-                                                       Pair.of(StabilisationFieldGenerators, 5),
-                                                       Pair.of(StabilisationFieldGenerators, 6),
-                                                       Pair.of(StabilisationFieldGenerators, 7),
-                                                       Pair.of(StabilisationFieldGenerators, 8)
-                                                   ),
-                                                   -1,
-                                                   (m, t) -> m.fieldGeneratorTier = t,
-                                                   m -> m.fieldGeneratorTier))
-                               )
-                               .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 0, ...); // Energy
-     * B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator NORMAL
-     * D -> ofBlock...(tile.quantumGlass, 0, ...);
-     * E -> ofBlock...(gt.blockcasingsTT, 4, ...); // Hatches
-     * G -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator can upgrade
-     */
-
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    private final String[][] shapeMain = new String[][] {
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "              AAA              ", "            AAEEEAA            ", "           AEEEEEEEA           ", "           AEECCCEEA           ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "           AEECCCEEA           ", "           AEEEEEEEA           ", "            AAEEEAA            ", "              AAA              ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               A               ", "               A               ", "              AAA              ", "            AAAAAAA            ", "              AAA              ", "               A               ", "               A               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "       B               B       ", "      B                 B      ", "      B                 B      ", "      B        B        B      ", "      B       BGB       B      ", "      B        B        B      ", "      B                 B      ", "      B                 B      ", "       B               B       ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "      B                 B      ", "      B                 B      ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "     B         G         B     ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "      B                 B      ", "      B                 B      ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               G               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "   B           G           B   ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "          BB       BB          ", "         B           B         ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "         B           B         ", "          BB       BB          ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "         B           B         ", "        B             B        ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "        B             B        ", "         B           B         ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "        B             B        ", "       B               B       ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "       B               B       ", "        B             B        ", "                               ", "                               " },
-        { "                               ", "              AAA              ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "              AAA              " },
-        { "                               ", "            AAEEEAA            ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "E                             E", "E                             E", "E                             E", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "            AAEEEAA            " },
-        { "                               ", "           AEEEEEEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "E                             E", "EA                           AE", "E                             E", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEEEEEEEA           " },
-        { "              AAA              ", "           AEECCCEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "CA            DDD            AC", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEECCCEEA           " },
-        { "             AEEEA             ", "          AEECEEECEEA          ", "              AAA              ", "      B        B        B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "EA            D D            AE", "EAB          D   D          BAE", "EA            D D            AE", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B        B        B      ", "              AAA              ", "          AEECEEECEEA          " },
-        { "             AE~EA             ", "          AEECEEECEEA          ", "            AAAAAAA            ", "      B       BGB       B      ", "     B         G         B     ", "               G               ", "   B           G           B   ", "  B                         B  ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "EA                           AE", "CA            DDD            AC", "EAB          D   D          BAE", "EAGGGG       D   D       GGGGAE", "EAB          D   D          BAE", "CA            DDD            AC", "EA                           AE", "E                             E", "A                             A", "                               ", "                               ", "                               ", "  B                         B  ", "   B           G           B   ", "               G               ", "     B         G         B     ", "      B       BGB       B      ", "            AAAAAAA            ", "          AEECEEECEEA          " },
-        { "             AEEEA             ", "          AEECEEECEEA          ", "              AAA              ", "      B        B        B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "EA            D D            AE", "EAB          D   D          BAE", "EA            D D            AE", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B        B        B      ", "              AAA              ", "          AEECEEECEEA          " },
-        { "              AAA              ", "           AEECCCEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "C              D              C", "CA            DDD            AC", "C              D              C", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEECCCEEA           " },
-        { "                               ", "           AEEEEEEEA           ", "               A               ", "      B                 B      ", "     B                   B     ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "E                             E", "E                             E", "E                             E", "EA                           AE", "E                             E", "E                             E", "E                             E", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "     B                   B     ", "      B                 B      ", "               A               ", "           AEEEEEEEA           " },
-        { "                               ", "            AAEEEAA            ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "E                             E", "E                             E", "E                             E", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "            AAEEEAA            " },
-        { "                               ", "              AAA              ", "                               ", "       B               B       ", "      B                 B      ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "A                             A", "A                             A", "A                             A", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "      B                 B      ", "       B               B       ", "                               ", "              AAA              " },
-        { "                               ", "                               ", "                               ", "        B             B        ", "       B               B       ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "       B               B       ", "        B             B        ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "         B           B         ", "        B             B        ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "        B             B        ", "         B           B         ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "          BB       BB          ", "         B           B         ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "         B           B         ", "          BB       BB          ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "  B                         B  ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "   B           G           B   ", "   B                       B   ", "   B                       B   ", "   B                       B   ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               G               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "      B                 B      ", "      B                 B      ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "     B         G         B     ", "     B                   B     ", "     B                   B     ", "     B                   B     ", "      B                 B      ", "      B                 B      ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "            BBBBBBB            ", "          BB       BB          ", "         B           B         ", "        B             B        ", "       B               B       ", "       B               B       ", "      B                 B      ", "      B                 B      ", "      B        B        B      ", "      B       BGB       B      ", "      B        B        B      ", "      B                 B      ", "      B                 B      ", "       B               B       ", "       B               B       ", "        B             B        ", "         B           B         ", "          BB       BB          ", "            BBBBBBB            ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "               A               ", "               A               ", "              AAA              ", "            AAAAAAA            ", "              AAA              ", "               A               ", "               A               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " },
-        { "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "              AAA              ", "            AAEEEAA            ", "           AEEEEEEEA           ", "           AEECCCEEA           ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "          AEECEEECEEA          ", "           AEECCCEEA           ", "           AEEEEEEEA           ", "            AAEEEAA            ", "              AAA              ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               ", "                               " } };
-
-
-    // spotless:on
-    // endregion
-
-    // region Overrides
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_SpaceScaler_MachineType)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_00)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_01)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_02)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_03)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_04)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_05)
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_06)
-            // #tr Tooltip_SpaceScaler_07
-            // # Gallifreyan Stabilisation Field Generator block enables Electric Implosion Compressor & Neutronium Compressor mode.
-            // #zh_CN 鸿蒙稳定力场发生器等级允许使用电动聚爆压缩机模式和中子态素压缩机模式.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
-            .addInfo(TextLocalization.Tooltip_SpaceScaler_08)
-            // #tr Tooltip_SpaceScaler_09
-            // # T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
-            // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_09"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .beginStructureBlock(31, 31, 32, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher();
-        return tt;
-        // spotless:on
     }
 
     @Override
@@ -509,10 +451,31 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         return ret;
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_SpaceScaler(this.mName);
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setByte("mode", (byte) machineMode);
+        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
+        aNBT.setInteger("multiplier", multiplier);
     }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        machineMode = aNBT.getByte("mode");
+        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
+        multiplier = aNBT.getInteger("multiplier");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -539,5 +502,81 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
         return new ITexture[] { casingTexturePages[0][12] };
     }
+
     // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_SpaceScaler_MachineType
+        // # Compressor | Extractor | Particle Collider | Electric Implosion Compressor | Neutronium Compressor
+        // #zh_CN 压缩机 | 提取机 | 粒子对撞机 | 电动聚爆压缩机 | 中子态素压缩机
+        tt.addMachineType(TextEnums.tr("Tooltip_SpaceScaler_MachineType"))
+            // #tr Tooltip_SpaceScaler_00
+            // # Controller block for the Space Scaler
+            // #zh_CN 空间缩放仪的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_00"))
+            // #tr Tooltip_SpaceScaler_01
+            // # {\AQUA} First Look Space Technology.
+            // #zh_CN {\AQUA}初见空间科技.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_01"))
+            // #tr Tooltip_SpaceScaler_02
+            // # Another method to operate matter.
+            // #zh_CN 操作物质的另一种方式.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_02"))
+            // #tr Tooltip_SpaceScaler_03
+            // # Only if the space is manageable...
+            // #zh_CN 前提是空间是可控的 ...
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_03"))
+            // #tr Tooltip_SpaceScaler_04
+            // # Has parallel equivalent to Perfect Overclock.
+            // #zh_CN 拥有与无损超频等效的并行(但有损超频).
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_04"))
+            // #tr Tooltip_SpaceScaler_05
+            // # If use Ultimate Containment Field Generator, enable {\RED}10x{\GRAY} speed multiplier.
+            // #zh_CN 如果换装终极遏制场发生器, 获得{\RED}10x{\GRAY}倍速.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_05"))
+            // #tr Tooltip_SpaceScaler_06
+            // # Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.
+            // #zh_CN 粗制稳定力场发生器等级+允许使用粒子对撞机模式.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_06"))
+            // #tr Tooltip_SpaceScaler_07
+            // # Gallifreyan Stabilisation Field Generator block enables Electric Implosion Compressor & Neutronium Compressor mode.
+            // #zh_CN 鸿蒙稳定力场发生器等级允许使用电动聚爆压缩机模式和中子态素压缩机模式.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
+            // #tr Tooltip_SpaceScaler_08
+            // # In Particle Collider mode, higher tier has more output.
+            // #zh_CN 粒子对撞机模式下, 高级方块带来额外产出.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_08"))
+            // #tr Tooltip_SpaceScaler_09
+            // # T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
+            // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
+            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_09"))
+            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .beginStructureBlock(31, 31, 32, false)
+            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputBus(TextLocalization.textUseBlueprint, 1)
+            .addOutputBus(TextLocalization.textUseBlueprint, 1)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
+
 }

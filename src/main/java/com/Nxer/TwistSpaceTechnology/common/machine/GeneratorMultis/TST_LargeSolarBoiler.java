@@ -85,46 +85,240 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         super(aName);
     }
 
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_LargeSolarBoiler(this.mName);
+    }
     // endregion
 
-    private static final double heatIncreaseSpeed = 0.001; // 0.1% per second
-    private static final double heatDecreaseSpeed = 0.0001; // 0.01% per second
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainLargeSolarBoiler";
+    private final int horizontalOffSet = 6;
+    private final int verticalOffSet = 0;
+    private final int depthOffSet = 0;
+    private static IStructureDefinition<TST_LargeSolarBoiler> STRUCTURE_DEFINITION = null;
 
-    private static final long calcificationDelayTicks = 20 * 60 * 60 * 24; // 24 hours
-    private static final long calcificationTimeSeconds = 60 * 60 * 36; // 36 hours
-    private static final int calcificationFactor = 3; // max calcification level will reduce steam production by 3 times
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"     C~C     "," C  CAAAC  C ","CCC CAAAC CCC"," C  CAAAC  C ","     CCC     "},
+        {"     DDD     ","CAC D   D CAC","A-A D   D A-A","CAC D   D CAC","     DDD     "},
+        {"     FFF     ","GJG FHHHF GKG","JCCEFHHHFECCK","GJG FHHHF GKG","     FFF     "}
+    };
+    // spotless:on
 
+    @Override
+    public IStructureDefinition<TST_LargeSolarBoiler> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSolarBoiler>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement('A', chainAllGlasses())
+                .addElement(
+                    'J',
+                    ofChain(
+                        buildHatchAdder(TST_LargeSolarBoiler.class).atLeast(InputHatch)
+                            .casingIndex(getCasingTextureID())
+                            .hint(1)
+                            .build(),
+                        ofBlocksTiered(
+                            TST_LargeSolarBoiler::getMachineCasingTier,
+                            ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
+                            -1,
+                            (t, m) -> t.tierMachineCasing = m,
+                            t -> t.tierMachineCasing)))
+                .addElement(
+                    'K',
+                    ofChain(
+                        buildHatchAdder(TST_LargeSolarBoiler.class).atLeast(OutputHatch)
+                            .casingIndex(getCasingTextureID())
+                            .hint(2)
+                            .build(),
+                        ofBlocksTiered(
+                            TST_LargeSolarBoiler::getMachineCasingTier,
+                            ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
+                            -1,
+                            (t, m) -> t.tierMachineCasing = m,
+                            t -> t.tierMachineCasing)))
+                .addElement(
+                    'C',
+                    ofBlocksTiered(
+                        TST_LargeSolarBoiler::getMachineCasingTier,
+                        ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
+                        -1,
+                        (t, m) -> t.tierMachineCasing = m,
+                        t -> t.tierMachineCasing))
+                .addElement(
+                    'D',
+                    ofBlocksTiered(
+                        TST_LargeSolarBoiler::getGearBoxCasingTier,
+                        ImmutableList.of(Pair.of(sBlockCasings2, 2), Pair.of(sBlockCasings2, 3)),
+                        -1,
+                        (t, m) -> t.tierGearBoxCasing = m,
+                        t -> t.tierGearBoxCasing))
+                .addElement(
+                    'E',
+                    ofBlocksTiered(
+                        TST_LargeSolarBoiler::getPipeCasingTier,
+                        ImmutableList.of(Pair.of(sBlockCasings2, 12), Pair.of(sBlockCasings2, 13)),
+                        -1,
+                        (t, m) -> t.tierPipeCasing = m,
+                        t -> t.tierPipeCasing))
+                .addElement(
+                    'F',
+                    ofBlocksTiered(
+                        TST_LargeSolarBoiler::getFireBoxCasingTier,
+                        ImmutableList.of(Pair.of(sBlockCasings3, 13), Pair.of(sBlockCasings3, 14)),
+                        -1,
+                        (t, m) -> t.tierFireBoxCasing = m,
+                        t -> t.tierFireBoxCasing))
+                .addElement(
+                    'G',
+                    ofBlocksTiered(
+                        TST_LargeSolarBoiler::getFrameCasingTier,
+                        ImmutableList.of(Pair.of(sBlockFrames, 300), Pair.of(sBlockFrames, 305)),
+                        -1,
+                        (t, m) -> t.tierFrameCasing = m,
+                        t -> t.tierFrameCasing))
+                .addElement('H', ofBlock(sBlockMetal6, 10))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(blockAlloyGlass, 0, ...);
+     * C -> ofBlock...(gt.blockcasings, 10, ...);
+     * D -> ofBlock...(gt.blockcasings2, 2, ...);
+     * E -> ofBlock...(gt.blockcasings2, 12, ...);
+     * F -> ofBlock...(gt.blockcasings3, 13, ...);
+     * G -> ofBlock...(gt.blockframes, 300, ...);
+     * H -> ofBlock...(gt.blockmetal6, 10, ...);
+     */
+
+    @Override
+    public void construct(ItemStack itemStack, boolean b) {
+        buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        tierFrameCasing = -1;
+        tierGearBoxCasing = -1;
+        tierPipeCasing = -1;
+        tierFireBoxCasing = -1;
+        tierMachineCasing = -1;
+
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            if (isRendering) {
+                destroyRenderBlock();
+            }
+            return;
+        }
+
+        if (tierGearBoxCasing == 1 && tierPipeCasing == 1
+            && tierFireBoxCasing == 1
+            && tierMachineCasing == 1
+            && tierFrameCasing == 1) {
+            updateHatchTexture();
+            machineTier = 1;
+            return;
+        }
+
+        if (tierGearBoxCasing == 2 && tierPipeCasing == 2
+            && tierFireBoxCasing == 2
+            && tierMachineCasing == 2
+            && tierFrameCasing == 2) {
+            updateHatchTexture();
+            machineTier = 2;
+            return;
+        }
+
+    }
+    // endregion
+
+    // region Processing Logic
+    private static final double heatIncreaseSpeed = 0.001;
+
+    // 0.1% per second
+    private static final double heatDecreaseSpeed = 0.0001;
+
+    // 0.01% per second
+    private static final long calcificationDelayTicks = 20 * 60 * 60 * 24;
+
+    // 24 hours
+    private static final long calcificationTimeSeconds = 60 * 60 * 36;
+
+    // 36 hours
+    private static final int calcificationFactor = 3;
+
+    // max calcification level will reduce steam production by 3 times
     private static final int steamProductionBronze = 4800;
+
     private static final int steamProductionSteel = 14400;
-
     private static final double heatThresholdToExplode = 0.5;
-
     private static final long explosionPower = V[1];
-
     private static final Fluid plainWater = FluidRegistry.WATER;
+    private double heat = 0;
 
-    private double heat = 0; // min - 0, max - 1
-    private double calcification = 0; // min - 0, max - 1
+    // min - 0, max - 1
+    private double calcification = 0;
+
+    // min - 0, max - 1
     private long runningTicks = 0;
+
     private boolean shouldExplode = false;
     private int machineTier = 1;
     private boolean isRendering = false;
-
     private int tierFrameCasing = -1;
     private int tierGearBoxCasing = -1;
     private int tierPipeCasing = -1;
     private int tierFireBoxCasing = -1;
     private int tierMachineCasing = -1;
 
-    public double getHeat() {
-        return heat;
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
-    public double getCalcification() {
-        return calcification;
+    @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
-    // region Processing Logic
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
     @Nonnull
     @Override
     public CheckRecipeResult checkProcessing() {
@@ -193,6 +387,14 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
+    public double getHeat() {
+        return heat;
+    }
+
+    public double getCalcification() {
+        return calcification;
+    }
+
     @Override
     public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         super.onPostTick(aBaseMetaTileEntity, aTick);
@@ -219,49 +421,9 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         }
     }
 
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        tierFrameCasing = -1;
-        tierGearBoxCasing = -1;
-        tierPipeCasing = -1;
-        tierFireBoxCasing = -1;
-        tierMachineCasing = -1;
-
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
-            if (isRendering) {
-                destroyRenderBlock();
-            }
-            return;
-        }
-
-        if (tierGearBoxCasing == 1 && tierPipeCasing == 1
-            && tierFireBoxCasing == 1
-            && tierMachineCasing == 1
-            && tierFrameCasing == 1) {
-            updateHatchTexture();
-            machineTier = 1;
-            return;
-        }
-
-        if (tierGearBoxCasing == 2 && tierPipeCasing == 2
-            && tierFireBoxCasing == 2
-            && tierMachineCasing == 2
-            && tierFrameCasing == 2) {
-            updateHatchTexture();
-            machineTier = 2;
-            return;
-        }
-
-    }
-
     private void updateHatchTexture() {
         for (MTEHatchInput hatch : mInputHatches) hatch.updateTexture(getCasingTextureID());
         for (MTEHatchOutput hatch : mOutputHatches) hatch.updateTexture(getCasingTextureID());
-    }
-
-    private int getCasingTextureID() {
-        if (machineTier == 2) return ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
-        return ((BlockCasings1) sBlockCasings1).getTextureIndex(10);
     }
 
     @Override
@@ -336,146 +498,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         isRendering = false;
     }
 
-    // endregion
-
-    // region Structure
-    @Override
-    public void construct(ItemStack itemStack, boolean b) {
-        buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    private static final String STRUCTURE_PIECE_MAIN = "mainLargeSolarBoiler";
-    private final int horizontalOffSet = 6;
-    private final int verticalOffSet = 0;
-    private final int depthOffSet = 0;
-
-    private static IStructureDefinition<TST_LargeSolarBoiler> STRUCTURE_DEFINITION = null;
-
-    // spotless:off
-    @Override
-    public IStructureDefinition<TST_LargeSolarBoiler> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeSolarBoiler>builder()
-                .addShape(STRUCTURE_PIECE_MAIN,
-                    transpose(shapeMain))
-                .addElement('A', chainAllGlasses())
-                .addElement('J',
-                    ofChain(
-                        buildHatchAdder(TST_LargeSolarBoiler.class)
-                            .atLeast(InputHatch)
-                            .casingIndex(getCasingTextureID())
-                            .hint(1)
-                            .build(),
-                        ofBlocksTiered(
-                            TST_LargeSolarBoiler::getMachineCasingTier,
-                            ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
-                            -1,
-                            (t, m) -> t.tierMachineCasing = m,
-                            t -> t.tierMachineCasing
-                        )
-                    )
-                )
-                .addElement('K',
-                    ofChain(
-                        buildHatchAdder(TST_LargeSolarBoiler.class)
-                            .atLeast(OutputHatch)
-                            .casingIndex(getCasingTextureID())
-                            .hint(2)
-                            .build(),
-                        ofBlocksTiered(
-                            TST_LargeSolarBoiler::getMachineCasingTier,
-                            ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
-                            -1,
-                            (t, m) -> t.tierMachineCasing = m,
-                            t -> t.tierMachineCasing
-                        )
-                    )
-                )
-                .addElement('C',
-                    ofBlocksTiered(
-                        TST_LargeSolarBoiler::getMachineCasingTier,
-                        ImmutableList.of(Pair.of(sBlockCasings1, 10), Pair.of(sBlockCasings2, 0)),
-                        -1,
-                        (t, m) -> t.tierMachineCasing = m,
-                        t -> t.tierMachineCasing
-                    )
-                )
-                .addElement('D',
-                    ofBlocksTiered(
-                        TST_LargeSolarBoiler::getGearBoxCasingTier,
-                        ImmutableList.of(Pair.of(sBlockCasings2, 2), Pair.of(sBlockCasings2, 3)),
-                        -1,
-                        (t, m) -> t.tierGearBoxCasing = m,
-                        t -> t.tierGearBoxCasing
-                    )
-                )
-                .addElement('E',
-                    ofBlocksTiered(
-                        TST_LargeSolarBoiler::getPipeCasingTier,
-                        ImmutableList.of(Pair.of(sBlockCasings2, 12), Pair.of(sBlockCasings2, 13)),
-                        -1,
-                        (t, m) -> t.tierPipeCasing = m,
-                        t -> t.tierPipeCasing
-                    )
-                )
-                .addElement('F',
-                    ofBlocksTiered(
-                        TST_LargeSolarBoiler::getFireBoxCasingTier,
-                        ImmutableList.of(Pair.of(sBlockCasings3, 13), Pair.of(sBlockCasings3, 14)),
-                        -1,
-                        (t, m) -> t.tierFireBoxCasing = m,
-                        t -> t.tierFireBoxCasing
-                    )
-                )
-                .addElement('G',
-                    ofBlocksTiered(
-                        TST_LargeSolarBoiler::getFrameCasingTier,
-                        ImmutableList.of(Pair.of(sBlockFrames, 300), Pair.of(sBlockFrames, 305)),
-                        -1,
-                        (t, m) -> t.tierFrameCasing = m,
-                        t -> t.tierFrameCasing
-                    )
-                )
-                .addElement('H',
-                    ofBlock(sBlockMetal6, 10)
-                )
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    /*
-    Blocks:
-    A -> ofBlock...(blockAlloyGlass, 0, ...);
-    C -> ofBlock...(gt.blockcasings, 10, ...);
-    D -> ofBlock...(gt.blockcasings2, 2, ...);
-    E -> ofBlock...(gt.blockcasings2, 12, ...);
-    F -> ofBlock...(gt.blockcasings3, 13, ...);
-    G -> ofBlock...(gt.blockframes, 300, ...);
-    H -> ofBlock...(gt.blockmetal6, 10, ...);
-    */
-
-    private final String[][] shapeMain = new String[][]{
-        {"     C~C     "," C  CAAAC  C ","CCC CAAAC CCC"," C  CAAAC  C ","     CCC     "},
-        {"     DDD     ","CAC D   D CAC","A-A D   D A-A","CAC D   D CAC","     DDD     "},
-        {"     FFF     ","GJG FHHHF GKG","JCCEFHHHFECCK","GJG FHHHF GKG","     FFF     "}
-    };
-
-    // spotless:on
     public static Integer getFrameCasingTier(Block block, int meta) {
         if (block == sBlockFrames && meta == 300) {
             return 1;
@@ -526,17 +548,145 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return null;
     }
 
-    @Override
-    protected IAlignmentLimits getInitialAlignmentLimits() {
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
+    // @Override
+    // protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+    // super.drawTexts(screenElements, inventorySlot);
+    // screenElements.widget(
+    // new TextWidget().setStringSupplier(
+    // () -> EnumChatFormatting.WHITE
+    // + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
+    // + " "
+    // + EnumChatFormatting.GOLD
+    // + numberFormat.format((int) (heat * 100))
+    // + "% "
+    // + EnumChatFormatting.RESET))
+    // .widget(
+    // new TextWidget().setStringSupplier(
+    // () -> EnumChatFormatting.WHITE
+    // + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
+    // + " "
+    // + EnumChatFormatting.GOLD
+    // + numberFormat.format((int) (calcification * 100))
+    // + "% "
+    // + EnumChatFormatting.RESET))
+    // .widget(new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val))
+    // .widget(new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val));;
+    // }
+    public void onClickClearingButton() {
+        calcification = 0;
+        runningTicks = 0;
     }
+
+    @Override
+    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
+        return new TST_Gui_LargeSolarBoiler(this);
+    }
+
+    @Override
+    public void stopMachine(@Nonnull ShutDownReason reason) {
+        destroyRenderBlock();
+        super.stopMachine(reason);
+    }
+
+    @Override
+    public void onBlockDestroyed() {
+        destroyRenderBlock();
+        super.onBlockDestroyed();
+    }
+
     // endregion
 
-    // region Overrides
+    // region NBT
+
+    // @Override
+    // public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+    // super.addUIWidgets(builder, buildContext);
+    // builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
+    // if (clickData.mouseButton == 0) {
+    // calcification = 0;
+    // runningTicks = 0;
+    // }
+    // })
+    // .setPlayClickSound(true)
+    // .setBackground(
+    // () -> new IDrawable[] { GTUITextures.BUTTON_STANDARD,
+    // GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
+    // .addTooltip(
+    // EnumChatFormatting.WHITE
+    // + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
+    // + EnumChatFormatting.RESET)
+    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
+    // .setPos(new Pos2d(174, 91))
+    // .setSize(16, 16));
+    // }
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setDouble("heat", heat);
+        aNBT.setDouble("calcification", calcification);
+        aNBT.setBoolean("shouldExplode", shouldExplode);
+        aNBT.setLong("runningTicks", runningTicks);
+        aNBT.setInteger("machineTier", machineTier);
+        aNBT.setBoolean("isRendering", isRendering);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        heat = aNBT.getDouble("heat");
+        calcification = aNBT.getDouble("calcification");
+        shouldExplode = aNBT.getBoolean("shouldExplode");
+        runningTicks = aNBT.getLong("runningTicks");
+        machineTier = aNBT.getInteger("machineTier");
+        isRendering = aNBT.getBoolean("isRendering");
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
+                    .extFacing()
+                    .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
+                    .extFacing()
+                    .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()) };
+    }
+
+    private int getCasingTextureID() {
+        if (machineTier == 2) return ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
+        return ((BlockCasings1) sBlockCasings1).getTextureIndex(10);
+    }
+
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(
+            // spotless:off
             // #tr TST_LargeSolarBoiler.machineType
             // # Solar Boiler
             // #zh_CN 太阳能锅炉
@@ -649,158 +799,10 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
                     + " L/s"
                     + EnumChatFormatting.GRAY)
             .toolTipFinisher();
+            // spotless:on
         return tt;
     }
 
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_LargeSolarBoiler(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(getCasingTextureID()) };
-    }
-
-    // @Override
-    // protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-    // super.drawTexts(screenElements, inventorySlot);
-    // screenElements.widget(
-    // new TextWidget().setStringSupplier(
-    // () -> EnumChatFormatting.WHITE
-    // + TextEnums.tr("TST_LargeSolarBoiler.gui.02")
-    // + " "
-    // + EnumChatFormatting.GOLD
-    // + numberFormat.format((int) (heat * 100))
-    // + "% "
-    // + EnumChatFormatting.RESET))
-    // .widget(
-    // new TextWidget().setStringSupplier(
-    // () -> EnumChatFormatting.WHITE
-    // + TextEnums.tr("TST_LargeSolarBoiler.gui.03")
-    // + " "
-    // + EnumChatFormatting.GOLD
-    // + numberFormat.format((int) (calcification * 100))
-    // + "% "
-    // + EnumChatFormatting.RESET))
-    // .widget(new FakeSyncWidget.DoubleSyncer(() -> heat, val -> heat = val))
-    // .widget(new FakeSyncWidget.DoubleSyncer(() -> calcification, val -> calcification = val));;
-    // }
-
-    public void onClickClearingButton() {
-        calcification = 0;
-        runningTicks = 0;
-    }
-
-    @Override
-    protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
-        return new TST_Gui_LargeSolarBoiler(this);
-    }
-
-    // @Override
-    // public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-    // super.addUIWidgets(builder, buildContext);
-    //
-    // builder.widget(new ButtonWidget().setOnClick((clickData, widget) -> {
-    // if (clickData.mouseButton == 0) {
-    // calcification = 0;
-    // runningTicks = 0;
-    // }
-    // })
-    // .setPlayClickSound(true)
-    // .setBackground(
-    // () -> new IDrawable[] { GTUITextures.BUTTON_STANDARD,
-    // GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT })
-    // .addTooltip(
-    // EnumChatFormatting.WHITE
-    // + TextEnums.tr("TST_LargeSolarBoiler.gui.01")
-    // + EnumChatFormatting.RESET)
-    // .setTooltipShowUpDelay(TOOLTIP_DELAY)
-    // .setPos(new Pos2d(174, 91))
-    // .setSize(16, 16));
-    // }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setDouble("heat", heat);
-        aNBT.setDouble("calcification", calcification);
-        aNBT.setBoolean("shouldExplode", shouldExplode);
-        aNBT.setLong("runningTicks", runningTicks);
-        aNBT.setInteger("machineTier", machineTier);
-        aNBT.setBoolean("isRendering", isRendering);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        heat = aNBT.getDouble("heat");
-        calcification = aNBT.getDouble("calcification");
-        shouldExplode = aNBT.getBoolean("shouldExplode");
-        runningTicks = aNBT.getLong("runningTicks");
-        machineTier = aNBT.getInteger("machineTier");
-        isRendering = aNBT.getBoolean("isRendering");
-    }
-
-    @Override
-    public void stopMachine(@Nonnull ShutDownReason reason) {
-        destroyRenderBlock();
-        super.stopMachine(reason);
-    }
-
-    @Override
-    public void onBlockDestroyed() {
-        destroyRenderBlock();
-        super.onBlockDestroyed();
-    }
-
     // endregion
+
 }

@@ -1,4 +1,3 @@
-// spotless:off
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
 import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.ModName;
@@ -21,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -35,6 +34,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 
 public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine<Test_MultiStructMachine> {
 
+    // region Class Constructor
     public Test_MultiStructMachine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -44,41 +44,17 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     }
 
     @Override
-    public IStructureDefinition<Test_MultiStructMachine> getStructureDefinition() {
-        return null;
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new Test_MultiStructMachine(this.mName);
     }
-
-    // region Processing Logic
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1.0F / 16;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
     // endregion
 
-    protected int mode = 0;
+    // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     @Override
-    public void setShape() {
-        super.setShape();
-    }
-
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    public IStructureDefinition<Test_MultiStructMachine> getStructureDefinition() {
+        return null;
     }
 
     @Override
@@ -114,14 +90,47 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     }
 
     @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+
     }
+    // endregion
+
+    // region Processing Logic
+    protected int mode = 0;
 
     @Override
     public UITexture[] getMachineModeIcons() {
         return new UITexture[0];
     }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1.0F / 16;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
+
+    @Override
+    public void setShape() {
+        super.setShape();
+    }
+
+    // endregion
+
+    // region NBT
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -135,15 +144,9 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
         mode = aNBT.getInteger("mode");
     }
 
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+    // endregion
 
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new Test_MultiStructMachine(this.mName);
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -171,11 +174,15 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
         return new ITexture[] { casingTexturePages[1][48] };
     }
 
+    // endregion
+
+    // region Tooltip
+
     // Tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
+        tt.addMachineType(TextEnums.tr("Tooltip_ICD_MachineType"))
             .beginStructureBlock(11, 13, 11, false)
             .addController(textFrontBottom)
             .addCasingInfoRange(textCasing, 8, 26, false)
@@ -188,5 +195,17 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
             .toolTipFinisher(ModName);
         return tt;
     }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
 
 }

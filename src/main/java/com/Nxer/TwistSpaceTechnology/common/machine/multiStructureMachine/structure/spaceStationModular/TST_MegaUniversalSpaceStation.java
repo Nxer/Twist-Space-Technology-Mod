@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -41,16 +42,10 @@ import gtPlusPlus.core.block.ModBlocks;
 import gtnhintergalactic.client.IGTextures;
 import tectech.thing.casing.TTCasingsContainer;
 
-// spotless:off
 @SkipGenerateDescription
 public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureMachine<TST_MegaUniversalSpaceStation> {
 
-    public static IStructureDefinition<TST_MegaUniversalSpaceStation> structureDefinition;
-
-    static {
-        StructureLoader.setOffSet("namemegauniversalspacestation", 215, 45, 223);
-    }
-
+    // region Class Constructor
     public TST_MegaUniversalSpaceStation(int aID, String mName, String aNameRegional) {
         super(aID, mName, aNameRegional);
         turnOffMaintenance();
@@ -62,77 +57,13 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     }
 
     @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-
-        super.onPreTick(aBaseMetaTileEntity, aTick);
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_MegaUniversalSpaceStation(this.mName);
     }
+    // endregion
 
-    @Override
-    public @NotNull CheckRecipeResult checkProcessing() {
-        if (InConstruct.isEmpty()) {
-            return SimpleCheckRecipeResult.ofSuccess("space station running fine");
-        }
-        // return early if no input busses are present, the first bus is invalid or the TE is not on a space station
-        if (runningTick % 100 == 0) {
-            // GT_Hatch_SpaceStationRepairHatch bus;
-            // try {
-            // bus = (GT_Hatch_SpaceStationRepairHatch) mInputBusses.get(0);
-            // } catch (Exception e) {
-            // return SimpleCheckRecipeResult.ofFailure(
-            // "space station is not complete or destroyed by someone, not you right?\n"
-            // + "no repair hatch find, please set one");
-            // }
-            // ItemStack repairItem = bus.getBaseMetaTileEntity()
-            // .getStackInSlot(0);
-            // if (repairItem == null) {
-            // return SimpleCheckRecipeResult.ofFailure(
-            // "space station is not complete or destroyed by someone, not you right?\n" + "no repair item find!");
-            // }
-            // if (Objects.equals(repairItem.getItem(), spaceStationConstructingMaterialMax.getItem())
-            // && repairItem.stackSize >= 1) {
-            // repairItem.stackSiz
-            int num = InConstruct.iterator()
-                .next();
-            repair(num);
-            construct(null, false);
-            return SimpleCheckRecipeResult.ofFailure(
-                "space station is not complete or destroyed by someone, not you right?\n"
-                    + "repairing or constructing space station, please wait");
-            // } else {
-            // return SimpleCheckRecipeResult.ofFailure(
-            // "space station is not complete or destroyed by someone, not you right?\n" + "repair item not fit!");
-            // }
-            // count mining pipes, get depth
-        }
-        return SimpleCheckRecipeResult
-            .ofFailure("space station is not complete or destroyed by someone, not you right?");
-
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        super.construct(stackSize, hintsOnly);
-    }
-
-    @Override
-    public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addInputBusOrOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        GTUtility.sendChatTrans(
-            env.getActor(),
-            "warning! you should not use general method to construct such a "
-                + "big structure! this will still process for you anyway.");
-        elementBudget = Math.max(100, elementBudget);
-        return super.survivalConstruct(stackSize, elementBudget, env);
-    }
+    // region Structure
+    public static IStructureDefinition<TST_MegaUniversalSpaceStation> structureDefinition;
 
     @Override
     public IStructureDefinition<TST_MegaUniversalSpaceStation> getStructureDefinition() {
@@ -244,13 +175,29 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        super.construct(stackSize, hintsOnly);
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return 0;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        GTUtility.sendChatTrans(
+            env.getActor(),
+            "warning! you should not use general method to construct such a "
+                + "big structure! this will still process for you anyway.");
+        elementBudget = Math.max(100, elementBudget);
+        return super.survivalConstruct(stackSize, elementBudget, env);
+    }
+    // endregion
+
+    // region Processing Logic
+    static {
+        StructureLoader.setOffSet("namemegauniversalspacestation", 215, 45, 223);
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -259,33 +206,66 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
     }
 
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_MegaUniversalSpaceStation(this.mName);
+    protected float getSpeedBonus() {
+        return 0;
     }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_MegaUniversalSpaceStation_MachineType)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_00)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_01)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_02)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_03)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_04)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_05)
-            .addInfo(TextLocalization.Tooltip_MegaUniversalSpaceStation_06)
-            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .beginStructureBlock(448, 256, 431, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+        if (InConstruct.isEmpty()) {
+            return SimpleCheckRecipeResult.ofSuccess("space station running fine");
+        }
+        // return early if no input busses are present, the first bus is invalid or the TE is not on a space station
+        if (runningTick % 100 == 0) {
+            // GT_Hatch_SpaceStationRepairHatch bus;
+            // try {
+            // bus = (GT_Hatch_SpaceStationRepairHatch) mInputBusses.get(0);
+            // } catch (Exception e) {
+            // return SimpleCheckRecipeResult.ofFailure(
+            // "space station is not complete or destroyed by someone, not you right?\n"
+            // + "no repair hatch find, please set one");
+            // }
+            // ItemStack repairItem = bus.getBaseMetaTileEntity()
+            // .getStackInSlot(0);
+            // if (repairItem == null) {
+            // return SimpleCheckRecipeResult.ofFailure(
+            // "space station is not complete or destroyed by someone, not you right?\n" + "no repair item find!");
+            // }
+            // if (Objects.equals(repairItem.getItem(), spaceStationConstructingMaterialMax.getItem())
+            // && repairItem.stackSize >= 1) {
+            // repairItem.stackSiz
+            int num = InConstruct.iterator()
+                .next();
+            repair(num);
+            construct(null, false);
+            return SimpleCheckRecipeResult.ofFailure(
+                "space station is not complete or destroyed by someone, not you right?\n"
+                    + "repairing or constructing space station, please wait");
+            // } else {
+            // return SimpleCheckRecipeResult.ofFailure(
+            // "space station is not complete or destroyed by someone, not you right?\n" + "repair item not fit!");
+            // }
+            // count mining pipes, get depth
+        }
+        return SimpleCheckRecipeResult
+            .ofFailure("space station is not complete or destroyed by someone, not you right?");
+
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -313,5 +293,70 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_MegaUniversalSpaceStation_MachineType
+        // # space station
+        // #zh_CN temp
+        tt.addMachineType(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_MachineType"))
+            // #tr Tooltip_MegaUniversalSpaceStation_00
+            // # Use auto build item to build instead of build your self
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_00"))
+            // #tr Tooltip_MegaUniversalSpaceStation_01
+            // # Auto-SpaceStation build core
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_01"))
+            // #tr Tooltip_MegaUniversalSpaceStation_02
+            // # If your station broke, you can put fix block inside the input hatch to fix it
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_02"))
+            // #tr Tooltip_MegaUniversalSpaceStation_03
+            // # temp
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_03"))
+            // #tr Tooltip_MegaUniversalSpaceStation_04
+            // # temp
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_04"))
+            // #tr Tooltip_MegaUniversalSpaceStation_05
+            // # temp
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_05"))
+            // #tr Tooltip_MegaUniversalSpaceStation_06
+            // # temp
+            // #zh_CN temp
+            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_06"))
+            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
+            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .beginStructureBlock(448, 256, 431, false)
+            .addInputHatch(TextLocalization.textUseBlueprint, 2)
+            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
+            .addInputBus(TextLocalization.textUseBlueprint, 2)
+            .addOutputBus(TextLocalization.textUseBlueprint, 2)
+            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
+            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .toolTipFinisher(TextLocalization.ModName);
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addInputBusOrOutputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addInputBusOrOutputBusToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
 
 }

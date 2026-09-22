@@ -54,6 +54,7 @@ import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -103,255 +104,6 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_IndistinctTentacle(this.mName);
     }
-
-    // endregion
-
-    // region Statics
-
-    // endregion
-
-    // region Processing Logic
-    public int tierComponentCasing = -2;
-    public int glassTier = -1;
-    private int extraEuCostMultiplier = 1;
-    protected boolean hasAstralArray = false;
-
-    public void checkAstralArray() {
-        hasAstralArray = GTUtility.areStacksEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
-    }
-
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Assembly Line
-         * 1 - Component
-         * 2 - Assembler
-         * 3 - Precise
-         */
-        return 4;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // }
-
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return switch (machineMode) {
-            case 1 -> GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
-            case 2 -> RecipeMaps.assemblerRecipes;
-            case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
-            default -> GTCMRecipe.AssemblyLineWithoutResearchRecipe;
-        };
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(
-            GoodGeneratorRecipeMaps.componentAssemblyLineRecipes,
-            RecipeMaps.assemblerRecipes,
-            GoodGeneratorRecipeMaps.preciseAssemblerRecipes,
-            GTCMRecipe.AssemblyLineWithoutResearchRecipe);
-    }
-
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(glassTier);
-        ret[origin.length + 1] = TstSharedLocalization.MachineInfo.componentTier(this.tierComponentCasing + 1);
-
-        return ret;
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("wirelessMode")) {
-
-            if (1 != tag.getInteger("extraEuCostMultiplier")) {
-                // #tr tst.indistinctTentacle.waila.extraEuMultiplier
-                // # {\BLUE}{\BOLD} Extra EU cost multiplier{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
-                // #zh_CN {\BLUE}{\BOLD} 额外EU消耗倍率{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
-                currentTip.add(
-                    TstUtils
-                        .tr("tst.indistinctTentacle.waila.extraEuMultiplier", tag.getInteger("extraEuCostMultiplier")));
-            }
-        }
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
-        if (tileEntity != null) {
-            tag.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
-        }
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mode", (byte) machineMode);
-        aNBT.setBoolean("hasAstralArray", hasAstralArray);
-        aNBT.setInteger("tierComponentCasing", tierComponentCasing);
-        aNBT.setInteger("glassTier", glassTier);
-        aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        machineMode = aNBT.getByte("mode");
-        hasAstralArray = aNBT.getBoolean("hasAstralArray");
-        tierComponentCasing = aNBT.getInteger("tierComponentCasing");
-        glassTier = aNBT.getInteger("glassTier");
-        extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                // component assembly line
-                if (machineMode == 1 && recipe.mSpecialValue > tierComponentCasing + 1) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
-                }
-                // check component block tier
-                byte recipeTier = GTUtility.getTier(recipe.mEUt);
-                if (recipeTier > tierComponentCasing + 2) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(recipeTier);
-                }
-                // if component block tier higher than recipe voltage tier,
-                // use perfect overclock
-                setOverclockType(
-                    recipeTier <= tierComponentCasing ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                if (wirelessMode) {
-                    return OverclockCalculator.ofNoOverclock(recipe);
-                } else {
-                    return super.createOverclockCalculator(recipe);
-                }
-            }
-
-        }.setMaxParallelSupplier(this::getTrueParallel);
-    }
-
-    @Override
-    protected void prepareProcessing() {
-        super.prepareProcessing();
-        checkAstralArray();
-        extraEuCostMultiplier = hasAstralArray
-            ? ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle
-            : 1;
-    }
-
-    public int getExtraEUCostMultiplier() {
-        return extraEuCostMultiplier;
-    }
-
-    @Override
-    public int getWirelessModeProcessingTime() {
-        return hasAstralArray ? Config.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle
-            : Config.TickEveryProcess_WirelessMode_IndistinctTentacle;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return switch (machineMode) {
-            case 1 -> 1F / ValueEnum.SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle;
-            case 2 -> 1F / ValueEnum.SpeedMultiplier_Assembler_IndistinctTentacle;
-            case 3 -> 1F / ValueEnum.SpeedMultiplier_PreciseAssembler_IndistinctTentacle;
-            default -> 1F / ValueEnum.SpeedMultiplier_AssemblyLine_IndistinctTentacle;
-        };
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return wirelessMode ? Integer.MAX_VALUE : ValueEnum.Parallel_Default_IndistinctTentacle;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        tierComponentCasing = -1;
-        glassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-
-        // trans metal allow use wireless mode
-        if (glassTier < GlassTierLimit_WirelessMode_IndistinctTentacle
-            || tierComponentCasing + 1 < ComponentCasingTierLimit_WirelessMode_IndistinctTentacle) {
-            // normal mode
-            // glass tier limit hatch tier
-            wirelessMode = false;
-            for (MTEHatch hatch : this.mExoticEnergyHatches) {
-                // osmium glass allow use laser hatch
-                if (this.glassTier < GlassTierLimit_LaserHatch_IndistinctTentacle
-                    && hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
-                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
-                    return;
-                }
-                if (this.glassTier < hatch.mTier) {
-                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
-                    return;
-                }
-            }
-            for (MTEHatch hatch : this.mEnergyHatches) {
-                if (this.glassTier < hatch.mTier) {
-                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
-                    return;
-                }
-            }
-        } else {
-            wirelessMode = mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
-        }
-
-    }
-
     // endregion
 
     // region Structure
@@ -360,26 +112,6 @@ public class TST_IndistinctTentacle extends WirelessEnergyMultiMachineBase<TST_I
     private static final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainIndistinctTentacle";
     private static IStructureDefinition<TST_IndistinctTentacle> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     // spotless:off
     private static final String[][] shapeMain = new String[][]{
@@ -436,6 +168,7 @@ K -> ofBlock...(tile.quantumGlass, 0, ...);
 L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
  */
     // spotless:on
+
     @Override
     public IStructureDefinition<TST_IndistinctTentacle> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
@@ -484,45 +217,275 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
         return STRUCTURE_DEFINITION;
     }
 
-    // endregion
-
-    // region General
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_IndistinctTentacle_MachineType)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_Controller)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_01)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_02)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_03)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_04)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_05)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_06)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_07)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_08)
-            .addInfo(TextLocalization.Tooltip_IndistinctTentacle_09)
-            .addStructureInfo(TextLocalization.Tooltip_Details)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_01)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_02)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_03)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_04)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_05)
-            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_06)
-            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_07)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_08)
-            .addStructureInfo(TextLocalization.Tooltip_IndistinctTentacle_2_09)
-            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .addInputBus(textUseBlueprint, 2)
-            .addInputHatch(textUseBlueprint, 2)
-            .addOutputBus(textUseBlueprint, 2)
-            .addEnergyHatch(textUseBlueprint, 1)
-            .toolTipFinisher();
-        return tt;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        tierComponentCasing = -1;
+        glassTier = -1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+
+        // trans metal allow use wireless mode
+        if (glassTier < GlassTierLimit_WirelessMode_IndistinctTentacle
+            || tierComponentCasing + 1 < ComponentCasingTierLimit_WirelessMode_IndistinctTentacle) {
+            // normal mode
+            // glass tier limit hatch tier
+            wirelessMode = false;
+            for (MTEHatch hatch : this.mExoticEnergyHatches) {
+                // osmium glass allow use laser hatch
+                if (this.glassTier < GlassTierLimit_LaserHatch_IndistinctTentacle
+                    && hatch.getConnectionType() == MTEHatch.ConnectionType.LASER) {
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
+                }
+                if (this.glassTier < hatch.mTier) {
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
+                }
+            }
+            for (MTEHatch hatch : this.mEnergyHatches) {
+                if (this.glassTier < hatch.mTier) {
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
+                }
+            }
+        } else {
+            wirelessMode = mEnergyHatches.isEmpty() && mExoticEnergyHatches.isEmpty();
+        }
+
+    }
+    // endregion
+
+    // region Processing Logic
+    public int tierComponentCasing = -2;
+    public int glassTier = -1;
+    private int extraEuCostMultiplier = 1;
+    protected boolean hasAstralArray = false;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return switch (machineMode) {
+            case 1 -> GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
+            case 2 -> RecipeMaps.assemblerRecipes;
+            case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
+            default -> GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+        };
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            GoodGeneratorRecipeMaps.componentAssemblyLineRecipes,
+            RecipeMaps.assemblerRecipes,
+            GoodGeneratorRecipeMaps.preciseAssemblerRecipes,
+            GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Assembly Line
+         * 1 - Component
+         * 2 - Assembler
+         * 3 - Precise
+         */
+        return 4;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // }
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return wirelessMode ? Integer.MAX_VALUE : ValueEnum.Parallel_Default_IndistinctTentacle;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return switch (machineMode) {
+            case 1 -> 1F / ValueEnum.SpeedMultiplier_ComponentAssemblyLine_IndistinctTentacle;
+            case 2 -> 1F / ValueEnum.SpeedMultiplier_Assembler_IndistinctTentacle;
+            case 3 -> 1F / ValueEnum.SpeedMultiplier_PreciseAssembler_IndistinctTentacle;
+            default -> 1F / ValueEnum.SpeedMultiplier_AssemblyLine_IndistinctTentacle;
+        };
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                // component assembly line
+                if (machineMode == 1 && recipe.mSpecialValue > tierComponentCasing + 1) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
+                }
+                // check component block tier
+                byte recipeTier = GTUtility.getTier(recipe.mEUt);
+                if (recipeTier > tierComponentCasing + 2) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipeTier);
+                }
+                // if component block tier higher than recipe voltage tier,
+                // use perfect overclock
+                setOverclockType(
+                    recipeTier <= tierComponentCasing ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                if (wirelessMode) {
+                    return OverclockCalculator.ofNoOverclock(recipe);
+                } else {
+                    return super.createOverclockCalculator(recipe);
+                }
+            }
+
+        }.setMaxParallelSupplier(this::getTrueParallel);
+    }
+
+    public void checkAstralArray() {
+        hasAstralArray = GTUtility.areStacksEqual(getControllerSlot(), MiscHelper.ASTRAL_ARRAY_FABRICATOR);
+    }
+
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 2];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(glassTier);
+        ret[origin.length + 1] = TstSharedLocalization.MachineInfo.componentTier(this.tierComponentCasing + 1);
+
+        return ret;
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("wirelessMode")) {
+
+            if (1 != tag.getInteger("extraEuCostMultiplier")) {
+                // #tr tst.indistinctTentacle.waila.extraEuMultiplier
+                // # {\BLUE}{\BOLD} Extra EU cost multiplier{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
+                // #zh_CN {\BLUE}{\BOLD} 额外EU消耗倍率{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
+                currentTip.add(
+                    TstUtils
+                        .tr("tst.indistinctTentacle.waila.extraEuMultiplier", tag.getInteger("extraEuCostMultiplier")));
+            }
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
+        }
+    }
+
+    @Override
+    protected void prepareProcessing() {
+        super.prepareProcessing();
+        checkAstralArray();
+        extraEuCostMultiplier = hasAstralArray
+            ? ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle
+            : 1;
+    }
+
+    public int getExtraEUCostMultiplier() {
+        return extraEuCostMultiplier;
+    }
+
+    @Override
+    public int getWirelessModeProcessingTime() {
+        return hasAstralArray ? Config.AstralArrayOverclockedTickEveryProcess_WirelessMode_IndistinctTentacle
+            : Config.TickEveryProcess_WirelessMode_IndistinctTentacle;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", (byte) machineMode);
+        aNBT.setBoolean("hasAstralArray", hasAstralArray);
+        aNBT.setInteger("tierComponentCasing", tierComponentCasing);
+        aNBT.setInteger("glassTier", glassTier);
+        aNBT.setInteger("extraEuCostMultiplier", extraEuCostMultiplier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        machineMode = aNBT.getByte("mode");
+        hasAstralArray = aNBT.getBoolean("hasAstralArray");
+        tierComponentCasing = aNBT.getInteger("tierComponentCasing");
+        glassTier = aNBT.getInteger("glassTier");
+        extraEuCostMultiplier = aNBT.getInteger("extraEuCostMultiplier");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -548,4 +511,109 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
 
         return new ITexture[] { casingTexturePages[0][12] };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_IndistinctTentacle_MachineType
+        // # Assembly Line | Component Assembly Line | Assembler | Precise Assembler
+        // #zh_CN 装配线 | 部件装配线 | 组装机 | 精密组装机
+        tt.addMachineType(TextEnums.tr("Tooltip_IndistinctTentacle_MachineType"))
+            // #tr Tooltip_IndistinctTentacle_Controller
+            // # Controller block for the Indistinct Tentacle
+            // #zh_CN 不可视之触的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_Controller"))
+            // #tr Tooltip_IndistinctTentacle_01
+            // # {\BOLD}{\ITALIC}In the midst of this sea and endless solitude there appears a dim road, a road without human footprints.
+            // #zh_CN {\BOLD}{\ITALIC}在这片海和无尽的孤独中出现了一条昏暗的道路，一条没有人类足迹的道路。
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_01"))
+            // #tr Tooltip_IndistinctTentacle_02
+            // # {\BOLD}{\ITALIC}No man has ever passed this place; no ship has ever sailed here.
+            // #zh_CN {\BOLD}{\ITALIC}没有人曾经过此地；亦没有船只曾在此航行。
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_02"))
+            // #tr Tooltip_IndistinctTentacle_03
+            // # Made everything in its where should be.
+            // #zh_CN 让所有事情都各得其所.
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_03"))
+            // #tr Tooltip_IndistinctTentacle_04
+            // # Glass tier limit energy hatch, laser hatch need UV glass.
+            // #zh_CN 玻璃限制能源仓等级, 激光仓需要UV玻璃.
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_04"))
+            // #tr Tooltip_IndistinctTentacle_05
+            // # Component Casing tier limit recipe can process. Casing tier require at least the recipe voltage level -1.
+            // #zh_CN 部件装配外壳等级限制可执行配方等级. 外壳等级最少需要配方电压等级-1.
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_05"))
+            // #tr Tooltip_IndistinctTentacle_06
+            // # If Component Casing tier is higher than recipe voltage, enable §cPerfect Overclock§7.
+            // #zh_CN 如果部件装配外壳等级高于配方等级则启用{\RED}无损超频{\GRAY}.
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_06"))
+            // #tr Tooltip_IndistinctTentacle_07
+            // # UMV+ glass and Component Casing allow Wireless mode by placing no energy hatch.
+            // #zh_CN {\LIGHT_PURPLE}{\BOLD}UMV{\GRAY}+ 玻璃与部件装配外壳允许使用无线电网模式(无能源仓自动进入).
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_07"))
+            // #tr Tooltip_IndistinctTentacle_08
+            // # Progressing time is fixed in Wireless mode.
+            // #zh_CN 无线电网模式下处理时间是固定的.
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_08"))
+            // #tr Tooltip_IndistinctTentacle_09
+            // # Watch out your Global energy storage if use wireless mode, you should not want to see the power drain's landscape.
+            // #zh_CN 注意你的无线电网电量, 你应该不会想看到跳电的风景对吧.
+            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_09"))
+            .addStructureInfo(TextLocalization.Tooltip_Details)
+            // #tr Tooltip_IndistinctTentacle_2_01
+            // # Speed (default) of mode:
+            // #zh_CN 模式下速度乘数(默认) :
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_01"))
+            // #tr Tooltip_IndistinctTentacle_2_02
+            // # Assembly Line = 100%%
+            // #zh_CN 装配线 = 100%%
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_02"))
+            // #tr Tooltip_IndistinctTentacle_2_03
+            // # Component Assembly Line = 200%%;
+            // #zh_CN 部件装配线 = 200%%
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_03"))
+            // #tr Tooltip_IndistinctTentacle_2_04
+            // # Assembler = 400%%
+            // #zh_CN 组装机 = 400%%
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_04"))
+            // #tr Tooltip_IndistinctTentacle_2_05
+            // # Precise Assembler = 400%%
+            // #zh_CN 精密组装机 = 400%%
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_05"))
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            // #tr Tooltip_IndistinctTentacle_2_06
+            // # Default power mode parallel 256.
+            // #zh_CN 默认能源仓模式下256并行.
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_06"))
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            // #tr Tooltip_IndistinctTentacle_2_07
+            // # Progressing time is fixed at 25.6s in Wireless mode.
+            // #zh_CN 无线电网模式下处理时间固定为25.6s.
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_07"))
+            // #tr Tooltip_IndistinctTentacle_2_08
+            // # Put an Astral Array Fabricator into controller slot,
+            // #zh_CN 在控制器方块放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} ,
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_08"))
+            // #tr Tooltip_IndistinctTentacle_2_09
+            // # the Progressing time will be fixed at 1.0s, and EU cost increase to 64 times.
+            // #zh_CN 则处理时间固定为1.0s, 同时耗能提高到{\RED}64{\GRAY}倍.
+            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_09"))
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addInputBus(textUseBlueprint, 2)
+            .addInputHatch(textUseBlueprint, 2)
+            .addOutputBus(textUseBlueprint, 2)
+            .addEnergyHatch(textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

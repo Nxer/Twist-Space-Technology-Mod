@@ -76,7 +76,6 @@ import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTe
 public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_IntegratedAssemblyMatrix> {
 
     // region Class Constructor
-
     public TST_IntegratedAssemblyMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.NXER);
@@ -90,10 +89,105 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_IntegratedAssemblyMatrix(mName);
     }
-
     // endregion
 
-    // region Logic
+    // region Structure
+    protected static final int horizontalOffSet = 4;
+    protected static final int verticalOffSet = 4;
+    protected static final int depthOffSet = 0;
+    protected static final String STRUCTURE_PIECE_MAIN = "main";
+    protected static IStructureDefinition<TST_IntegratedAssemblyMatrix> STRUCTURE_DEFINITION;
+
+    // spotless:off
+    protected static final String[][] shape = new String[][]{
+        {"         ","         ","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FFFFFFFFF"},
+        {"F       F","F       F","F       F"," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," DDDDDDD ","         "},
+        {"F       F","         ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HCEEECH ","         ","         "},
+        {"FE FFF EF","    F    ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," HEEEEEH ","         ","         "},
+        {"FEEE~EEEF","   FGF   ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," HEEEEEH ","         ","         "},
+        {"FE FFF EF","    F    ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," HEEEEEH ","         ","         "},
+        {"F       F","         ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HCEEECH ","         ","         "},
+        {"F       F","F       F","F       F"," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," DDDDDDD ","         "},
+        {"         ","         ","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FFFFFFFFF"}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_IntegratedAssemblyMatrix> getStructureDefinition() {
+        if (null == STRUCTURE_DEFINITION) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_IntegratedAssemblyMatrix>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                // A -> ofBlock...(BW_GlasBlocks, 14, ...);
+                // B -> ofBlock...(gt.blockcasings2, 5, ...);
+                // C -> ofBlock...(gt.blockcasings2, 9, ...);
+                // D -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                // E -> ofBlock...(gt.blockcasingsTT, 0, ...);
+                // F -> ofBlock...(gt.blockcasingsTT, 4, ...);
+                // G -> ofBlock...(gt.blockcasingsTT, 6, ...);
+                // H -> ofBlock...(tile.quantumGlass, 0, ...);
+                .addElement('A', chainAllGlasses())
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+                .addElement(
+                    'E',
+                    HatchElementBuilder.<TST_IntegratedAssemblyMatrix>builder()
+                        .atLeast(
+                            DataAccess,
+                            NaniteBus,
+                            InputBus,
+                            OutputBus,
+                            InputHatch,
+                            OutputHatch,
+                            Energy.or(ExoticEnergy))
+                        .adder(TST_IntegratedAssemblyMatrix::addToMachineList)
+                        .hint(1)
+                        .casingIndex(1024)
+                        .buildAndChain(sBlockCasingsTT, 0))
+                .addElement('F', ofBlock(sBlockCasingsTT, 4))
+                .addElement('G', ofBlock(sBlockCasingsTT, 6))
+                .addElement('H', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+
+        // get voltage limitation
+        checkEnergyLimitation();
+
+        if (dataAccessHatches.size() != 1 || naniteBuses.size() != 1) {
+            errors.add(special_hatch_amount_wrong);
+        }
+    }
+    // endregion
+
+    // region Processing Logic
     protected final Collection<TST_ItemID> allowedRecipes = new HashSet<>();
     protected int cachedData;
     protected long maxVoltage;
@@ -101,14 +195,17 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     protected long goldNanite;
     static TST_ItemID GOLD_NANITE;
     static TST_ItemID SILVER_NANITE;
+    public final List<MTEHatchDataAccess> dataAccessHatches = new ArrayList<>();
+    public final List<MTEHatchNanite> naniteBuses = new ArrayList<>();
 
     @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (GOLD_NANITE == null) {
-            GOLD_NANITE = TST_ItemID.createNoNBT(Materials.Gold.getNanite(1));
-            SILVER_NANITE = TST_ItemID.createNoNBT(Materials.Silver.getNanite(1));
-        }
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -168,6 +265,15 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         mOutputFluids = processingLogic.getOutputFluids();
 
         return result;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (GOLD_NANITE == null) {
+            GOLD_NANITE = TST_ItemID.createNoNBT(Materials.Gold.getNanite(1));
+            SILVER_NANITE = TST_ItemID.createNoNBT(Materials.Silver.getNanite(1));
+        }
     }
 
     public boolean flushData() {
@@ -241,34 +347,6 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     }
 
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.AssemblyLineWithoutResearchRecipe;
-    }
-
-    // endregion
-
-    // region Structure
-
-    protected static final int horizontalOffSet = 4;
-    protected static final int verticalOffSet = 4;
-    protected static final int depthOffSet = 0;
-    protected static final String STRUCTURE_PIECE_MAIN = "main";
-    protected static IStructureDefinition<TST_IntegratedAssemblyMatrix> STRUCTURE_DEFINITION;
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-
-        // get voltage limitation
-        checkEnergyLimitation();
-
-        if (dataAccessHatches.size() != 1 || naniteBuses.size() != 1) {
-            errors.add(special_hatch_amount_wrong);
-        }
-    }
-
     public void checkEnergyLimitation() {
         int tier = 0;
         for (MTEHatchEnergy tHatch : validMTEList(mEnergyHatches)) {
@@ -281,84 +359,15 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     }
 
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    public void clearHatches() {
+        super.clearHatches();
+        dataAccessHatches.clear();
+        naniteBuses.clear();
     }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_IntegratedAssemblyMatrix> getStructureDefinition() {
-        if (null == STRUCTURE_DEFINITION) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_IntegratedAssemblyMatrix>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                // A -> ofBlock...(BW_GlasBlocks, 14, ...);
-                // B -> ofBlock...(gt.blockcasings2, 5, ...);
-                // C -> ofBlock...(gt.blockcasings2, 9, ...);
-                // D -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                // E -> ofBlock...(gt.blockcasingsTT, 0, ...);
-                // F -> ofBlock...(gt.blockcasingsTT, 4, ...);
-                // G -> ofBlock...(gt.blockcasingsTT, 6, ...);
-                // H -> ofBlock...(tile.quantumGlass, 0, ...);
-                .addElement('A', chainAllGlasses())
-                .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
-                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))
-                .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
-                .addElement(
-                    'E',
-                    HatchElementBuilder.<TST_IntegratedAssemblyMatrix>builder()
-                        .atLeast(
-                            DataAccess,
-                            NaniteBus,
-                            InputBus,
-                            OutputBus,
-                            InputHatch,
-                            OutputHatch,
-                            Energy.or(ExoticEnergy))
-                        .adder(TST_IntegratedAssemblyMatrix::addToMachineList)
-                        .hint(1)
-                        .casingIndex(1024)
-                        .buildAndChain(sBlockCasingsTT, 0))
-                .addElement('F', ofBlock(sBlockCasingsTT, 4))
-                .addElement('G', ofBlock(sBlockCasingsTT, 6))
-                .addElement('H', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    // spotless:off
-    protected static final String[][] shape = new String[][]{
-        {"         ","         ","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FFFFFFFFF"},
-        {"F       F","F       F","F       F"," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," DDDDDDD ","         "},
-        {"F       F","         ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HCEEECH ","         ","         "},
-        {"FE FFF EF","    F    ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," HEEEEEH ","         ","         "},
-        {"FEEE~EEEF","   FGF   ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," H BGB H ","   AGA   "," H BGB H "," HEEEEEH ","         ","         "},
-        {"FE FFF EF","    F    ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," H  B  H ","    A    "," H  B  H "," HEEEEEH ","         ","         "},
-        {"F       F","         ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HC   CH ","         "," HC   CH "," HCEEECH ","         ","         "},
-        {"F       F","F       F","F       F"," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," D     D "," DHHHHHD "," DHHHHHD "," DDDDDDD ","         "},
-        {"         ","         ","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FE     EF","FFFFFFFFF"}
-    };
-    // spotless:on
 
     // endregion
 
-    // region General
-
+    // region Textures
     protected static IIconContainer ActiveFace;
     protected static IIconContainer InactiveFace;
 
@@ -379,6 +388,10 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
     }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -449,10 +462,40 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     // endregion
 
-    // region Data Hatch
+    // region Hatch Registration
 
-    public final List<MTEHatchDataAccess> dataAccessHatches = new ArrayList<>();
-    public final List<MTEHatchNanite> naniteBuses = new ArrayList<>();
+    public boolean addDataAccessToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchDataAccess) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return dataAccessHatches.add((MTEHatchDataAccess) aMetaTileEntity);
+        }
+        return false;
+    }
+
+    public boolean addNaniteBusToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
+        if (tileEntity == null) return false;
+        IMetaTileEntity metaTileEntity = tileEntity.getMetaTileEntity();
+        if (metaTileEntity instanceof MTEHatchNanite naniteBus) {
+            naniteBus.updateTexture(baseCasingIndex);
+            this.naniteBuses.add(naniteBus);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return addDataAccessToMachineList(aTileEntity, aBaseCasingIndex)
+            || addNaniteBusToMachineList(aTileEntity, aBaseCasingIndex)
+            || super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
+
+    // region Nested Classes
 
     protected enum SpecialHatchElement implements IHatchElement<TST_IntegratedAssemblyMatrix> {
 
@@ -492,46 +535,6 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         }
     }
 
-    public boolean addDataAccessToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchDataAccess) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            return dataAccessHatches.add((MTEHatchDataAccess) aMetaTileEntity);
-        }
-        return false;
-    }
-
-    public boolean addNaniteBusToMachineList(IGregTechTileEntity tileEntity, int baseCasingIndex) {
-        if (tileEntity == null) return false;
-        IMetaTileEntity metaTileEntity = tileEntity.getMetaTileEntity();
-        if (metaTileEntity instanceof MTEHatchNanite naniteBus) {
-            naniteBus.updateTexture(baseCasingIndex);
-            this.naniteBuses.add(naniteBus);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return addDataAccessToMachineList(aTileEntity, aBaseCasingIndex)
-            || addNaniteBusToMachineList(aTileEntity, aBaseCasingIndex)
-            || super.addToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public void clearHatches() {
-        super.clearHatches();
-        dataAccessHatches.clear();
-        naniteBuses.clear();
-    }
     // endregion
 
 }

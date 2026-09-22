@@ -90,7 +90,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_AdvCircuitAssemblyLine(this.mName);
     }
-
     // endregion
 
     // region Structure
@@ -98,6 +97,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     private static final int baseVerticalOffSet = 1;
     private static final int baseDepthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainAdvCAL";
+
     // spotless:off
     private static final String[][] shapeMain = new String[][]{
         {"       ","DDDDDDD","       "},
@@ -105,8 +105,8 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         {"AAAAAAA","CCCCCCC","AAAAAAA"},
         {"BBBBBBB","BBBBBBB","BBBBBBB"}
     };
-
     // spotless:on
+
     private static IStructureDefinition<TST_AdvCircuitAssemblyLine> STRUCTURE_DEFINITION;
 
     @Override
@@ -143,6 +143,17 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hintsOnly,
+            baseHorizontalOffSet,
+            baseVerticalOffSet,
+            baseDepthOffSet);
+    }
+
+    @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
         return survivalBuildPiece(
@@ -155,17 +166,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             env,
             false,
             true);
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            hintsOnly,
-            baseHorizontalOffSet,
-            baseVerticalOffSet,
-            baseDepthOffSet);
     }
 
     @Override
@@ -221,23 +221,12 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, HatchElement.Energy, 0, 1));
         }
     }
-
     // endregion
 
     // region Processing Logic
     protected long maxVoltageAllow = 0;
     ArrayList<TST_CircuitImprintHatch> mCircuitImprintHatches = new ArrayList<>();
     HashSet<TST_ItemID> circuitType = new HashSet<>();
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 16;
-    }
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -253,46 +242,22 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setLong("maxVoltageAllow", maxVoltageAllow);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        maxVoltageAllow = aNBT.getLong("maxVoltageAllow");
-    }
-
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    public boolean addCircuitImprintHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof TST_CircuitImprintHatch) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            return mCircuitImprintHatches.add((TST_CircuitImprintHatch) aMetaTileEntity);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
     public UITexture[] getMachineModeIcons() {
         return new UITexture[0];
     }
 
     @Override
-    public boolean isInputSeparationEnabled() {
+    public int getMaxParallelRecipes() {
+        return 16;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
         return false;
     }
 
@@ -333,12 +298,37 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
+    public boolean isInputSeparationEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean onRunningTick(ItemStack aStack) {
         for (TST_CircuitImprintHatch hatch_circuitImprint : mCircuitImprintHatches) {
             hatch_circuitImprint.setActive(true);
         }
         return super.onRunningTick(aStack);
     }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setLong("maxVoltageAllow", maxVoltageAllow);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        maxVoltageAllow = aNBT.getLong("maxVoltageAllow");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -366,9 +356,14 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16) };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_AdvCircuitAssemblyLine_MachineType
         // # Circuit Assembly Line
         // #zh_CN 电路装配线
@@ -413,8 +408,34 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
                 3)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addCircuitImprintHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof TST_CircuitImprintHatch) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return mCircuitImprintHatches.add((TST_CircuitImprintHatch) aMetaTileEntity);
+        }
+        return false;
+    }
+
+    // endregion
+
+    // region Nested Classes
 
     private enum CircuitImprintHatchElement implements IHatchElement<TST_AdvCircuitAssemblyLine> {
 
@@ -435,4 +456,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             return t.mCircuitImprintHatches.size();
         }
     }
+
+    // endregion
+
 }

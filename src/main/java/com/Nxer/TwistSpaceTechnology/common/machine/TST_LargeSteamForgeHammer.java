@@ -14,6 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -52,85 +53,10 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_LargeSteamForgeHammer(this.mName);
     }
-
     // endregion
-    protected int steamCasingTier = 1;
-    protected int parallel = 1;
 
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("steamCasingTier", steamCasingTier);
-        aNBT.setInteger("parallel", parallel);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        steamCasingTier = aNBT.getInteger("steamCasingTier");
-        parallel = aNBT.getInteger("parallel");
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return parallel;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    protected SoundResource getActivitySoundLoop() {
-        return SoundResource.GTCEU_LOOP_FORGE_HAMMER;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.hammerRecipes;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        steamCasingTier = -1;
-        if (!checkPiece(mName, 1, 1, 0, errors)) return;
-        if (steamCasingTier < 1) {
-            errors.add(internal_structure_issue);
-            return;
-        }
-        updateHatchTexture();
-        parallel = 16 * steamCasingTier;
-    }
-
+    // region Structure
     protected static IStructureDefinition<TST_LargeSteamForgeHammer> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public String getMachineType() {
-        return "Forge Hammer";
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(mName, stackSize, hintsOnly, 1, 1, 0);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(mName, stackSize, 1, 1, 0, elementBudget, env, false, true);
-    }
-
-    protected void updateHatchTexture() {
-        int casingIndex = getCasingTextureID(steamCasingTier);
-        for (MTEHatch h : mSteamInputs) h.updateTexture(casingIndex);
-        for (MTEHatch h : mSteamOutputs) h.updateTexture(casingIndex);
-        for (MTEHatch h : mSteamInputFluids) h.updateTexture(casingIndex);
-    }
-
-    public void setSteamCasingTier(int steamCasingTier) {
-        this.steamCasingTier = steamCasingTier;
-    }
-
-    public int getSteamCasingTier() {
-        return steamCasingTier;
-    }
 
     @Override
     public IStructureDefinition<TST_LargeSteamForgeHammer> getStructureDefinition() {
@@ -165,27 +91,89 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_LargeSteamForgeHammer_MachineType)
-            .addInfo(TextLocalization.Tooltip_LargeSteamForgeHammer_Controller)
-            .addInfo(TextLocalization.Tooltip_LargeSteamForgeHammer_01)
-            .beginStructureBlock(3, 3, 3, true)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .toolTipFinisher();
-        return tt;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(mName, stackSize, hintsOnly, 1, 1, 0);
     }
 
     @Override
-    protected IIconContainer getInactiveOverlay() {
-        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(mName, stackSize, 1, 1, 0, elementBudget, env, false, true);
     }
 
     @Override
-    protected IIconContainer getActiveOverlay() {
-        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER_ACTIVE;
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        steamCasingTier = -1;
+        if (!checkPiece(mName, 1, 1, 0, errors)) return;
+        if (steamCasingTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
+        }
+        updateHatchTexture();
+        parallel = 16 * steamCasingTier;
+    }
+    // endregion
+
+    // region Processing Logic
+    protected int steamCasingTier = 1;
+    protected int parallel = 1;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.hammerRecipes;
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return parallel;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean getDefaultHasMaintenanceChecks() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public final boolean shouldCheckMaintenance() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public void checkMaintenance() {}
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected SoundResource getActivitySoundLoop() {
+        return SoundResource.GTCEU_LOOP_FORGE_HAMMER;
+    }
+
+    @Override
+    public String getMachineType() {
+        return "Forge Hammer";
+    }
+
+    protected void updateHatchTexture() {
+        int casingIndex = getCasingTextureID(steamCasingTier);
+        for (MTEHatch h : mSteamInputs) h.updateTexture(casingIndex);
+        for (MTEHatch h : mSteamOutputs) h.updateTexture(casingIndex);
+        for (MTEHatch h : mSteamInputFluids) h.updateTexture(casingIndex);
+    }
+
+    public void setSteamCasingTier(int steamCasingTier) {
+        this.steamCasingTier = steamCasingTier;
+    }
+
+    public int getSteamCasingTier() {
+        return steamCasingTier;
     }
 
     @Override
@@ -217,26 +205,67 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         return true;
     }
 
-    /**
-     * No more machine error
-     */
-    @Override
-    public void checkMaintenance() {}
+    // endregion
 
-    /**
-     * No more machine error
-     */
+    // region NBT
+
     @Override
-    public boolean getDefaultHasMaintenanceChecks() {
-        return false;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("steamCasingTier", steamCasingTier);
+        aNBT.setInteger("parallel", parallel);
     }
 
-    /**
-     * No more machine error
-     */
     @Override
-    public final boolean shouldCheckMaintenance() {
-        return false;
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        steamCasingTier = aNBT.getInteger("steamCasingTier");
+        parallel = aNBT.getInteger("parallel");
     }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    protected IIconContainer getActiveOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER_ACTIVE;
+    }
+
+    @Override
+    protected IIconContainer getInactiveOverlay() {
+        return Textures.BlockIcons.OVERLAY_FRONT_STEAM_FORGE_HAMMER;
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_LargeSteamForgeHammer_MachineType
+        // # Forge Hammer
+        // #zh_CN 锻造锤
+        tt.addMachineType(TextEnums.tr("Tooltip_LargeSteamForgeHammer_MachineType"))
+            // #tr Tooltip_LargeSteamForgeHammer_Controller
+            // # Controller block for the Large Steam Forge Hammer
+            // #zh_CN 大型蒸汽锻造锤的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_LargeSteamForgeHammer_Controller"))
+            // #tr Tooltip_LargeSteamForgeHammer_01
+            // # He has a hammer. Who has the Sickle?
+            // #zh_CN 他有一柄锤子. 谁有镰刀?
+            .addInfo(TextEnums.tr("Tooltip_LargeSteamForgeHammer_01"))
+            .beginStructureBlock(3, 3, 3, true)
+            .addController(TextLocalization.textFrontCenter)
+            .addInputBus(TextLocalization.textAnyCasing, 2)
+            .addOutputBus(TextLocalization.textAnyCasing, 2)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
 
 }

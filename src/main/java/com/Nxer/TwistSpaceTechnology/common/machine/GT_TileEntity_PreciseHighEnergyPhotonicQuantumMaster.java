@@ -39,6 +39,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -63,7 +64,7 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     extends GTCM_MultiMachineBase<GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster> {
 
-    // region ClassConstructors
+    // region Class Constructor
     public GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.NXER);
@@ -73,16 +74,17 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         super(aName);
     }
 
-    // endregion
-
-    // region Member Variables
-
-    protected int totalSpeedIncrement = 0;
-
+    /**
+     * @param aTileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
+     * @return a newly created and ready MetaTileEntity
+     */
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(this.mName);
+    }
     // endregion
 
     // region Structure
-
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     // spotless:off
@@ -94,8 +96,8 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         { "     DMMMD     ", "DDDDDCCCCCDDDDD", "DBBBBBBBBBBBBBD", " I           I ", " I           I ", " I           I ", "DBBBBBBBBBBBBBD", "DDDDDCCCCCDDDDD", "DDDDDDAAADDDDDD" },
         { "     DDDDD     ", "D   DCCCCCD   D", "DEEEEEEEEEEEEED", "DXXXXXXXXXXXXXD", "DXXXXXXXXXXXXXD", "DXXXXXXXXXXXXXD", "DEEEEEEEEEEEEED", "DDDDDCCCCCDDDDD", "     DAAAD     " },
         { "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "               ", "               ", "               ", "DDDDDDDDDDDDDDD", "DDDDDDDDDDDDDDD", "     DDDDD     " } };
-
     // spotless:on
+
     private static final int horizontalOffSet = 7;
     private static final int verticalOffSet = 3;
     private static final int depthOffSet = 0;
@@ -210,64 +212,6 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
             true);
     }
 
-    // endregion
-
-    // region Processing Logic
-
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Laser Engraver
-         * 1 - Photon Manipulator
-         */
-        return 2;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    // }
-    //
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 1) {
-            return GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
-        }
-        return RecipeMaps.laserEngraverRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes, RecipeMaps.laserEngraverRecipes);
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return speedBonus / (machineMode == 1 ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
-            : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return machineMode == 1 ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
-            : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
-    }
-
     /**
      * Checks the Machine. You have to assign the MetaTileEntities for the Hatches here.
      *
@@ -286,10 +230,81 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         speedBonus = 10000F / (10000F + totalSpeedIncrement);
 
     }
+    // endregion
+
+    // region Processing Logic
+    protected int totalSpeedIncrement = 0;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        if (machineMode == 1) {
+            return GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+        }
+        return RecipeMaps.laserEngraverRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes, RecipeMaps.laserEngraverRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Laser Engraver
+         * 1 - Photon Manipulator
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
+    // }
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return machineMode == 1 ? Parallel_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+            : Parallel_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return speedBonus / (machineMode == 1 ? SpeedUpMultiplier_PhCMode_PreciseHighEnergyPhotonicQuantumMaster
+            : SpeedUpMultiplier_LaserEngraverMode_PreciseHighEnergyPhotonicQuantumMaster);
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 2];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = "Total Speed Increment: " + this.totalSpeedIncrement;
+        ret[origin.length + 1] = "Enable" + EnumChatFormatting.GOLD
+            + " Perfect Overclock"
+            + EnumChatFormatting.RESET
+            + ": "
+            + this.enablePerfectOverclock;
+        return ret;
+    }
 
     // endregion
 
-    // region General Overrides
+    // region NBT
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -307,63 +322,9 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         totalSpeedIncrement = aNBT.getInteger("totalSpeedIncrement");
     }
 
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = "Total Speed Increment: " + this.totalSpeedIncrement;
-        ret[origin.length + 1] = "Enable" + EnumChatFormatting.GOLD
-            + " Perfect Overclock"
-            + EnumChatFormatting.RESET
-            + ": "
-            + this.enablePerfectOverclock;
-        return ret;
-    }
+    // endregion
 
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    // tooltips
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_PhC_MachineType)
-            .addInfo(TextLocalization.Tooltip_PhC_00)
-            .addInfo(TextLocalization.Tooltip_PhC_01)
-            .addInfo(TextLocalization.Tooltip_PhC_02)
-            .addInfo(TextLocalization.Tooltip_PhC_03)
-            .addInfo(TextLocalization.Tooltip_PhC_04)
-            .addInfo(TextLocalization.Tooltip_PhC_05)
-            .addInfo(TextLocalization.Tooltip_PhC_06)
-            .addInfo(TextLocalization.Tooltip_PhC_07)
-            .addInfo(TextLocalization.Tooltip_PhC_08)
-            .addInfo(TextLocalization.Tooltip_PhC_09)
-            .beginStructureBlock(15, 7, 9, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addCasingInfoRange(TextLocalization.textCasingAdvIrPlated, 296, 347, false)
-            .addCasingInfoRange(TextLocalization.textCasingTT_0, 0, 78, false)
-            .addCasingInfoRange(TextLocalization.textUpgradeCasingAndLocation, 0, 25, false)
-            .addInputHatch(TextLocalization.textCenterOfLRSides, 2)
-            .addOutputHatch(TextLocalization.textCenterOfLRSides, 2)
-            .addInputBus(TextLocalization.textCenterOfLRSides, 2)
-            .addOutputBus(TextLocalization.textCenterOfLRSides, 2)
-            .addEnergyHatch(TextLocalization.textHighPowerCasingUDSides, 3)
-            .toolTipFinisher();
-        return tt;
-    }
-
-    /**
-     * @param aTileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
-     * @return a newly created and ready MetaTileEntity
-     */
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(this.mName);
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -393,4 +354,89 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     }
 
     // endregion
+
+    // region Tooltip
+
+    // tooltips
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_PhC_MachineType
+        // # Photon Controller/Laser Engraver
+        // #zh_CN 光子掌控者/激光蚀刻机
+        tt.addMachineType(TextEnums.tr("Tooltip_PhC_MachineType"))
+            // #tr Tooltip_PhC_00
+            // # Controller block for the Precise High-Energy Photonic Quantum Master
+            // #zh_CN 精密高能光量子掌控者的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_PhC_00"))
+            // #tr Tooltip_PhC_01
+            // # {\BLUE}Prism tank in order, sir.
+            // #zh_CN {\BLUE}Prism tank in order, sir.
+            .addInfo(TextEnums.tr("Tooltip_PhC_01"))
+            // #tr Tooltip_PhC_02
+            // # Control Photons on the scale of 10⁻² meters.
+            // #zh_CN 在10¯¹² m 尺度上掌控光子.
+            .addInfo(TextEnums.tr("Tooltip_PhC_02"))
+            // #tr Tooltip_PhC_03
+            // # Install Photonic Intensifier on the back side of the structure to dramatically increase production speeds.
+            // #zh_CN 可以在机器背面对应位置安装光量子增幅器,大幅提高处理速度.
+            .addInfo(TextEnums.tr("Tooltip_PhC_03"))
+            // #tr Tooltip_PhC_04
+            // # Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing.
+            // #zh_CN 多个光量子增幅器效果可以叠加,当然也可以不安装,使用强化镀铱机械方块占位.
+            .addInfo(TextEnums.tr("Tooltip_PhC_04"))
+            // #tr Tooltip_PhC_05
+            // # Use screwdriver to change mode.
+            // #zh_CN 使用螺丝刀切换模式.
+            .addInfo(TextEnums.tr("Tooltip_PhC_05"))
+            // #tr Tooltip_PhC_06
+            // # {\GOLD}Photon Controller mode:
+            // #zh_CN {\GOLD}光子掌控者模式:
+            .addInfo(TextEnums.tr("Tooltip_PhC_06"))
+            // #tr Tooltip_PhC_07
+            // # {\AQUA}16x{\GRAY} Parallel
+            // #zh_CN {\AQUA}16x{\GRAY} 并行
+            .addInfo(TextEnums.tr("Tooltip_PhC_07"))
+            // #tr Tooltip_PhC_08
+            // # {\GOLD}Laser Engraver mode:
+            // #zh_CN {\GOLD}激光蚀刻机模式:
+            .addInfo(TextEnums.tr("Tooltip_PhC_08"))
+            // #tr Tooltip_PhC_09
+            // # {\AQUA}256x{\GRAY} Parallel | Extra reduce {\RED}50%{\GRAY} recipe time spent
+            // #zh_CN {\AQUA}256x{\GRAY} 并行 | 额外降低{\RED}50%{\GRAY}耗时
+            .addInfo(TextEnums.tr("Tooltip_PhC_09"))
+            .beginStructureBlock(15, 7, 9, false)
+            .addController(TextLocalization.textFrontCenter)
+            .addCasingInfoRange(TextLocalization.textCasingAdvIrPlated, 296, 347, false)
+            .addCasingInfoRange(TextLocalization.textCasingTT_0, 0, 78, false)
+            // #tr textUpgradeCasingAndLocation
+            // # Upgrade module casing at backside area wrapped by AdvIrPlated Casing
+            // #zh_CN Upgrade module casing at backside area wrapped by AdvIrPlated Casing
+            .addCasingInfoRange(TextEnums.tr("textUpgradeCasingAndLocation"), 0, 25, false)
+            .addInputHatch(TextLocalization.textCenterOfLRSides, 2)
+            .addOutputHatch(TextLocalization.textCenterOfLRSides, 2)
+            .addInputBus(TextLocalization.textCenterOfLRSides, 2)
+            .addOutputBus(TextLocalization.textCenterOfLRSides, 2)
+            // #tr textHighPowerCasingUDSides
+            // # High Power Casing area of up and down side
+            // #zh_CN 上下两侧的超能机械方块区域
+            .addEnergyHatch(TextEnums.tr("textHighPowerCasingUDSides"), 3)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
+
 }

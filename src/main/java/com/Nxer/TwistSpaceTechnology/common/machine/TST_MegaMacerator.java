@@ -37,7 +37,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -82,86 +82,9 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaMacerator(this.mName);
     }
-
-    // end region
-
-    // region Processing Logic
-    protected int mBlockTier = 0;
-    public int mRecipeTier = 1;
-    public int glassTier;
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return EnablePerfectOverclock_MegaMacerator;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return (((glassTier >= 12) || (glassTier > mRecipeTier)) ? SpeedBonus_MegaMacerator : 1);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.maceratorRecipes;
-    }
-
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-                mRecipeTier = GTUtility.getTier(recipe.mEUt);
-                setSpeedBonus(getSpeedBonus());
-                if (glassTier < 12 && glassTier < mRecipeTier) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
-                }
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        switch (mBlockTier) {
-            case (1):
-                return BlockTier1Parallel_MegaMacerator;
-            case (2):
-                return BlockTier2Parallel_MegaMacerator;
-            case (3):
-                return Integer.MAX_VALUE;
-            default:
-                return -1;
-        }
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        mBlockTier = -1;
-        glassTier = -1;
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    public static Integer getTierOfBlock(Block block, int meta) {
-        if (block == null) {
-            return null;
-        }
-        if (block == GregTechAPI.sBlockMetal2 && meta == 9) {
-            return 1; // Damascus Steel
-        }
-        if (block == GregTechAPI.sBlockMetal5 && meta == 2) {
-            return 2; // Neutronium
-        }
-        if (block == GregTechAPI.sBlockMetal9 && meta == 8) {
-            return 3; // Universium
-        }
-        return null;
-    }
+    // endregion
 
     // region Structure
-
     protected final int horizontalOffSet = 8;
     protected final int verticalOffSet = 25;
     protected final int depthOffSet = 1;
@@ -169,90 +92,7 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     protected static final String STRUCTURE_PIECE_OLD = "oldMegaMacerator";
     protected static IStructureDefinition<TST_MegaMacerator> STRUCTURE_DEFINITION = null;
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_MegaMacerator> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaMacerator>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addShape(STRUCTURE_PIECE_OLD, transpose(shapeOld))
-                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
-                .addElement(
-                    'B',
-                    HatchElementBuilder.<TST_MegaMacerator>builder()
-                        .atLeast(InputBus, OutputBus, Maintenance)
-                        .adder(TST_MegaMacerator::addToMachineList)
-                        .hint(2)
-                        .casingIndex(((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0))
-                        .buildAndChain(GregTechAPI.sBlockCasings2, 0))
-                .addElement('b', ofBlock(GregTechAPI.sBlockCasings2, 0))
-                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 8))
-                .addElement(
-                    'D',
-                    HatchElementBuilder.<TST_MegaMacerator>builder()
-                        .atLeast(Energy.or(ExoticEnergy))
-                        .adder(TST_MegaMacerator::addToMachineList)
-                        .hint(1)
-                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
-                        .buildAndChain(GregTechAPI.sBlockCasings8, 3))
-                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
-                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
-                // .addElement('G', ofBlock(WerkstoffLoader.BWBlocks, 10097))
-                .addElement(
-                    'G',
-                    withChannel(
-                        "structureblock",
-                        ofBlocksTiered(
-                            TST_MegaMacerator::getTierOfBlock,
-                            ImmutableList.of(
-                                Pair.of(GregTechAPI.sBlockMetal2, 9),
-                                Pair.of(GregTechAPI.sBlockMetal5, 2),
-                                Pair.of(GregTechAPI.sBlockMetal9, 8)),
-                            -1,
-                            (m, t) -> m.mBlockTier = t,
-                            m -> m.mBlockTier)))
-
-                .addElement('H', ofFrame(Materials.NaquadahAlloy))
-                .addElement('I', ofFrame(Materials.CosmicNeutronium))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
     // spotless:off
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks2, 0, ...);
-     * B -> ofBlock...(gt.blockcasings2, 0, ...);
-     * C -> ofBlock...(gt.blockcasings2, 8, ...);
-     * D -> ofBlock...(gt.blockcasings8, 3, ...);
-     * E -> ofBlock...(gt.blockcasings8, 7, ...);
-     * F -> ofBlock...(gt.blockcasings8, 10, ...);
-     * G -> ofBlock...(gt.blockmetal5, 2, ...);
-     * H -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
-     * I -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
-     */
     protected static final String[][] shape = new String[][]{
         {"                 ","                 ","                 ","                 ","                 ","      FFFFF      ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","     FFFFFFF     ","      FFFFF      ","                 ","                 ","                 ","                 ","                 "},
         {"                 ","                 ","      FFFFF      ","    FFFFFFFFF    ","   FFFFFFFFFFF   ","   FFF     FFF   ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","  FFF       FFF  ","   FFF     FFF   ","   FFFFFFFFFFF   ","    FFFFFFFFF    ","      FFFFF      ","                 ","                 "},
@@ -314,21 +154,175 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         {"                 ","      DBBBD      ","    HBBBBBBBH    ","   BBB     BBB   ","  HBFFF   FFFBH  ","  BBFCFFFFFCFBB  "," DB FFFCCCFFF BD "," BB  FCCCCCF  BB ","  B  FCCCCCF  B  "," BB  FCCCCCF  BB "," DB FFFCCCFFF BD ","  BBFCFFFFFCFBB  ","  HBFFF   FFFBH  ","   BBB     BBB   ","    HBBBBBBBH    ","      DB BD      ","                 "},
         {"      DDDDD      ","    DDDDDDDDD    ","  DDDDDDDDDDDDD  ","  DDDDDDDDDDDDD  "," DDDDDDDDDDDDDDD "," DDDDDDDDDDDDDDD ","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD","DDDDDDDDDDDDDDDDD"," DDDDDDDDDDDDDDD "," DDDDDDDDDDDDDDD ","  DDDDDDDDDDDDD  ","  DDDDDDDDDDDDD  ","    DDDDDDDDD    ","      DDDDD      "}
     };
-
     // spotless:on
 
+    @Override
+    public IStructureDefinition<TST_MegaMacerator> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaMacerator>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addShape(STRUCTURE_PIECE_OLD, transpose(shapeOld))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
+                .addElement(
+                    'B',
+                    HatchElementBuilder.<TST_MegaMacerator>builder()
+                        .atLeast(InputBus, OutputBus, Maintenance)
+                        .adder(TST_MegaMacerator::addToMachineList)
+                        .hint(2)
+                        .casingIndex(((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0))
+                        .buildAndChain(GregTechAPI.sBlockCasings2, 0))
+                .addElement('b', ofBlock(GregTechAPI.sBlockCasings2, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 8))
+                .addElement(
+                    'D',
+                    HatchElementBuilder.<TST_MegaMacerator>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(TST_MegaMacerator::addToMachineList)
+                        .hint(1)
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(3))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 3))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
+                // .addElement('G', ofBlock(WerkstoffLoader.BWBlocks, 10097))
+                .addElement(
+                    'G',
+                    withChannel(
+                        "structureblock",
+                        ofBlocksTiered(
+                            TST_MegaMacerator::getTierOfBlock,
+                            ImmutableList.of(
+                                Pair.of(GregTechAPI.sBlockMetal2, 9),
+                                Pair.of(GregTechAPI.sBlockMetal5, 2),
+                                Pair.of(GregTechAPI.sBlockMetal9, 8)),
+                            -1,
+                            (m, t) -> m.mBlockTier = t,
+                            m -> m.mBlockTier)))
+
+                .addElement('H', ofFrame(Materials.NaquadahAlloy))
+                .addElement('I', ofFrame(Materials.CosmicNeutronium))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(BW_GlasBlocks2, 0, ...);
+     * B -> ofBlock...(gt.blockcasings2, 0, ...);
+     * C -> ofBlock...(gt.blockcasings2, 8, ...);
+     * D -> ofBlock...(gt.blockcasings8, 3, ...);
+     * E -> ofBlock...(gt.blockcasings8, 7, ...);
+     * F -> ofBlock...(gt.blockcasings8, 10, ...);
+     * G -> ofBlock...(gt.blockmetal5, 2, ...);
+     * H -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
+     * I -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
+     */
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        mBlockTier = -1;
+        glassTier = -1;
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
     // endregion
 
-    // region General
+    // region Processing Logic
+    protected int mBlockTier = 0;
+    public int mRecipeTier = 1;
+    public int glassTier;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.maceratorRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        switch (mBlockTier) {
+            case (1):
+                return BlockTier1Parallel_MegaMacerator;
+            case (2):
+                return BlockTier2Parallel_MegaMacerator;
+            case (3):
+                return Integer.MAX_VALUE;
+            default:
+                return -1;
+        }
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return (((glassTier >= 12) || (glassTier > mRecipeTier)) ? SpeedBonus_MegaMacerator : 1);
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return EnablePerfectOverclock_MegaMacerator;
+    }
 
     @Override
     public boolean supportsInputSeparation() {
         return false;
     }
 
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+                mRecipeTier = GTUtility.getTier(recipe.mEUt);
+                setSpeedBonus(getSpeedBonus());
+                if (glassTier < 12 && glassTier < mRecipeTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(mRecipeTier);
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    public static Integer getTierOfBlock(Block block, int meta) {
+        if (block == null) {
+            return null;
+        }
+        if (block == GregTechAPI.sBlockMetal2 && meta == 9) {
+            return 1; // Damascus Steel
+        }
+        if (block == GregTechAPI.sBlockMetal5 && meta == 2) {
+            return 2; // Neutronium
+        }
+        if (block == GregTechAPI.sBlockMetal9 && meta == 8) {
+            return 3; // Universium
+        }
+        return null;
     }
 
     // Scanner Info
@@ -343,26 +337,9 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         return ret;
     }
 
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_MegaMacerator_MachineType)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_Controller)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_01)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_02)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_03)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_04)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_05)
-            .addInfo(TextLocalization.Tooltip_MegaMacerator_06)
-            .addController(textFrontBottom)
-            .addInputBus(textUseBlueprint, 2)
-            .addOutputBus(textUseBlueprint, 2)
-            .addMaintenanceHatch(textUseBlueprint, 2)
-            .addEnergyHatch(textUseBlueprint, 1)
-            .addStructureInfo(Text_SeparatingLine)
-            .toolTipFinisher();
-        return tt;
-    }
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -396,5 +373,58 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         return new ITexture[] {
             Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings2, 0)) };
     }
-    // end region
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_MegaMacerator_MachineType
+        // # Macerator
+        // #zh_CN Macerator
+        tt.addMachineType(TextEnums.tr("Tooltip_MegaMacerator_MachineType"))
+            // #tr Tooltip_MegaMacerator_Controller
+            // # Controller block for the "Mini" Household Cell Fragmentizer
+            // #zh_CN "小型"家用破壁机的控制方块
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_Controller"))
+            // #tr Tooltip_MegaMacerator_01
+            // # Squeezed Collision of Material.
+            // #zh_CN {\GOLD}物质的挤压碰撞
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_01"))
+            // #tr Tooltip_MegaMacerator_02
+            // # This is way better than a forge hammer.
+            // #zh_CN 这玩意可比锻造锤好用多了
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_02"))
+            // #tr Tooltip_MegaMacerator_03
+            // # Can parallel up to {\AQUA}2 ^ (2 ^ (Tier + 2) - 1){\GRAY}.
+            // #zh_CN 最大并行：{\AQUA}2 ^ (2 ^ (等级 + 2) - 1){\GRAY}
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_03"))
+            // #tr Tooltip_MegaMacerator_04
+            // # Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.
+            // #zh_CN 取决于可选方块:大马士革钢、中子、宇宙素
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_04"))
+            // #tr Tooltip_MegaMacerator_05
+            // # The max voltage tier is limited by the glass tier.
+            // #zh_CN 玻璃等级限制可执行配方等级
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_05"))
+            // #tr Tooltip_MegaMacerator_06
+            // # Enable {\RED}8x{\GRAY} speed multiplier when glass tier > recipe tier.
+            // #zh_CN 当玻璃等级高于配方等级时获得{\RED}8x{\GRAY}倍速
+            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_06"))
+            .addController(textFrontBottom)
+            .addInputBus(textUseBlueprint, 2)
+            .addOutputBus(textUseBlueprint, 2)
+            .addMaintenanceHatch(textUseBlueprint, 2)
+            .addEnergyHatch(textUseBlueprint, 1)
+            .addStructureInfo(Text_SeparatingLine)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

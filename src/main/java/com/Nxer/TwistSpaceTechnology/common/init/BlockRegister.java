@@ -115,7 +115,13 @@ public class BlockRegister {
         GTCMItemList.HighPowerRadiationProofCasing.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 1,
+                // #tr Tooltips_HighPowerRadiationProofCasing.01
+                // # Constrained the overflowing energy
+                // #zh_CN {\GREEN}约束住了外溢的能量{\GRAY}.
                 new String[] { TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
+                    // #tr Tooltips_HighPowerRadiationProofCasing.02
+                    // # The power levels are still rising!!!
+                    // #zh_CN {\BOLD}{\AQUA}能量仍在上升!!!
                     TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
 
         // #tr tile.MetaBlockCasing01.2.name
@@ -124,7 +130,13 @@ public class BlockRegister {
         GTCMItemList.AdvancedHighPowerCoilBlock.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 2,
+                // #tr Tooltips_AdvancedHighPowerCoil.01
+                // # Constrained the overflowing energy
+                // #zh_CN {\BLUE}电流涌动于其中.
                 new String[] { TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
+                    // #tr Tooltips_AdvancedHighPowerCoil.02
+                    // # The power levels are still rising!!!
+                    // #zh_CN {\AQUA}目中闪烁雷霆.
                     TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02") }));
 
         // #tr tile.MetaBlockCasing01.3.name
@@ -473,6 +485,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeLV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 0,
+                // #tr PhotonControllerUpgradeLV.tooltips.01
+                // # Extra {\RED}1%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}1%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeLV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.1.name
@@ -481,6 +496,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeMV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 1,
+                // #tr PhotonControllerUpgradeMV.tooltips.01
+                // # Extra {\RED}2%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}2%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeMV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.2.name
@@ -489,6 +507,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeHV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 2,
+                // #tr PhotonControllerUpgradeHV.tooltips.01
+                // # Extra {\RED}3%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}3%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeHV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.3.name
@@ -497,6 +518,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeEV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 3,
+                // #tr PhotonControllerUpgradeEV.tooltips.01
+                // # Extra {\RED}4%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}4%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeEV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.4.name
@@ -505,6 +529,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeIV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 4,
+                // #tr PhotonControllerUpgradeIV.tooltips.01
+                // # Extra {\RED}5%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}5%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeIV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.5.name
@@ -513,6 +540,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeLuV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 5,
+                // #tr PhotonControllerUpgradeLuV.tooltips.01
+                // # Extra {\RED}10%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}10%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeLuV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.6.name
@@ -521,6 +551,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeZPM.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 6,
+                // #tr PhotonControllerUpgradeZPM.tooltips.01
+                // # Extra {\RED}20%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}20%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeZPM.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.7.name
@@ -529,6 +562,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeUV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 7,
+                // #tr PhotonControllerUpgradeUV.tooltips.01
+                // # Extra {\RED}40%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}40%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeUV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.8.name
@@ -537,6 +573,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeUHV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 8,
+                // #tr PhotonControllerUpgradeUHV.tooltips.01
+                // # Extra {\RED}70%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}70%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeUHV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.9.name
@@ -545,6 +584,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeUEV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 9,
+                // #tr PhotonControllerUpgradeUEV.tooltips.01
+                // # Extra {\RED}100%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}100%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeUEV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.10.name
@@ -553,6 +595,9 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeUIV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 10,
+                // #tr PhotonControllerUpgradeUIV.tooltips.01
+                // # Extra 140%% Speed Up !
+                // #zh_CN 额外140%%的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeUIV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.11.name
@@ -561,7 +606,13 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeUMV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 11,
+                // #tr PhotonControllerUpgradeUMV.tooltips.01
+                // # Extra {\RED}190%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}190%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.01"),
+                    // #tr PhotonControllerUpgradeUMV.tooltips.02
+                    // # Enable perfect overclocks!
+                    // #zh_CN 启用无损超频！
                     TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.02") }));
 
         // #tr tile.PhotonControllerUpgrades.12.name
@@ -570,7 +621,13 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeUXV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 12,
+                // #tr PhotonControllerUpgradeUXV.tooltips.01
+                // # Extra {\RED}250%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}250%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.01"),
+                    // #tr PhotonControllerUpgradeUXV.tooltips.02
+                    // # Enable perfect overclocks!
+                    // #zh_CN 启用无损超频！
                     TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.02") }));
 
         // #tr tile.PhotonControllerUpgrades.13.name
@@ -579,7 +636,13 @@ public class BlockRegister {
         GTCMItemList.PhotonControllerUpgradeMAX.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 13,
+                // #tr PhotonControllerUpgradeMAX.tooltips.01
+                // # Extra {\RED}320%{\GRAY} Speed Up !
+                // #zh_CN 额外{\RED}320%{\GRAY}的速度提升！
                 new String[] { TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.01"),
+                    // #tr PhotonControllerUpgradeMAX.tooltips.02
+                    // # Enable perfect overclocks!
+                    // #zh_CN 启用无损超频！
                     TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.02") }));
 
         // endregion

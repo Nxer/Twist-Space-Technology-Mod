@@ -25,13 +25,7 @@ import gregtech.common.tileentities.machines.multi.MTELargeChemicalReactor;
 
 public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TST_GeneralProcessor> {
 
-    public MTEEnhancedMultiBlockBase<?> monitor = null;
-
-    public static IStructureDefinition<TST_GeneralProcessor> structureDefinition;
-
-    public Integer structureCount = 0;
-    public static HashMap<Item, MTEEnhancedMultiBlockBase<?>> machineSupport = new HashMap<>();
-
+    // region Class Constructor
     protected TST_GeneralProcessor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
     }
@@ -41,18 +35,33 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_GeneralProcessor(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    public static IStructureDefinition<TST_GeneralProcessor> structureDefinition;
+
+    @Override
+    public IStructureDefinition<TST_GeneralProcessor> getStructureDefinition() {
+        return null;
+    }
+    // endregion
+
+    // region Processing Logic
+    public MTEEnhancedMultiBlockBase<?> monitor = null;
+    public Integer structureCount = 0;
+    public static HashMap<Item, MTEEnhancedMultiBlockBase<?>> machineSupport = new HashMap<>();
+
+    @Override
     public RecipeMap<?> getRecipeMap() {
         return monitor.getRecipeMap();
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1000;
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -61,8 +70,13 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     @Override
-    public IStructureDefinition<TST_GeneralProcessor> getStructureDefinition() {
-        return null;
+    protected float getSpeedBonus() {
+        return 1000;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
     }
 
     @Override
@@ -85,16 +99,6 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
     }
 
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        return null;
-    }
-
-    @Override
     public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
         if (aTick % 100 == 0) {
             var machine = getStackInSlot(0).getItem();
@@ -104,10 +108,14 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
         super.onPreTick(aBaseMetaTileEntity, aTick);
     }
 
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_GeneralProcessor(this.mName);
+    public static void loadMachineSupport() {
+        machineSupport
+            .put(ItemList.Machine_Multi_LargeChemicalReactor.getItem(), new MTELargeChemicalReactor("monitor"));
     }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -115,8 +123,15 @@ public class TST_GeneralProcessor extends GT_TileEntity_MultiStructureMachine<TS
         return new ITexture[0];
     }
 
-    public static void loadMachineSupport() {
-        machineSupport
-            .put(ItemList.Machine_Multi_LargeChemicalReactor.getItem(), new MTELargeChemicalReactor("monitor"));
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        return null;
     }
+
+    // endregion
+
 }

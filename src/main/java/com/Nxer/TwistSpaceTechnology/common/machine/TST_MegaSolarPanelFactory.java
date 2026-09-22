@@ -68,7 +68,6 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSolarPanelFactory> {
 
     // region Class Constructor
-
     public TST_MegaSolarPanelFactory(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.LONEI);
@@ -82,158 +81,35 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaSolarPanelFactory(mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-    private int casingTier = -1;
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return super.createProcessingLogic();
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.MegaSolarPanelFactoryRecpies;
-    }
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-    }
-
-    @Override
-    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
-        float aX, float aY, float aZ, ItemStack aTool) {
-        if (aPlayer.isSneaking()) {
-            batchMode = !batchMode;
-            if (batchMode) {
-                GTUtility.sendChatTrans(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOn"));
-            } else {
-                GTUtility.sendChatTrans(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOff"));
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return true;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return MAX_VALUE;
-    }
-
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = TstSharedLocalization.MachineInfo.componentTier(this.casingTier + 1);
-
-        return ret;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("casingTier", casingTier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        casingTier = aNBT.getInteger("casingTier");
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("batchMode")) {
-            currentTip.add(EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.1"));
-            // #tr Waila.TST_MegaSolarPanelFactory.1
-            // # {\GREEN}Batch mode is ON
-            // #zh_CN {\GREEN}批处理已开启
-        }
-        float speedBonus = tag.getFloat("speedBonus");
-        if (speedBonus > -1) {
-            currentTip.add(
-                EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.2")
-                    + "="
-                    + EnumChatFormatting.GOLD
-                    + formatNumber(tag.getFloat("speedBonus"))
-                    + "%");
-            // #tr Waila.TST_MegaSolarPanelFactory.2
-            // # {\GREEN}Current Speed Bonus
-            // #zh_CN {\GREEN}当前速度加成
-        }
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
-        if (tileEntity != null) {
-            tag.setBoolean("batchMode", batchMode);
-            tag.setFloat("speedBonus", casingTier * 100);
-        }
-    }
-
     // endregion
 
     // region Structure
-
     protected static final int horizontalOffSet = 6;
     protected static final int verticalOffSet = 14;
     protected static final int depthOffSet = 0;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<TST_MegaSolarPanelFactory> STRUCTURE_DEFINITION;
 
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.casingTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        this.speedBonus = 1F / (casingTier + 1);
-
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
+    // spotless:off
+    protected static final String[][] shape = new String[][]{
+        {"     CFC     ","  CCCCCCCCC  "," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","CCCCCEEECCCCC","FCCCCEEECCCCF","CCCCCEEECCCCC"," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","  CCCCCCCCC  ","     CFC     "},
+        {"   CCCFCCC   ","  CBBC CBBC  "," CB       BC ","CB F     F BC","CB   ACA   BC","CC  A   A  CC","F   C D C   F","CC  A   A  CC","CB   ACA   BC","CB F     F BC"," CB       BC ","  CBBC CBBC  ","   CCCFCCC   "},
+        {"     CFC     ","  C       C  "," C         C ","   F     F   ","     ACA     ","C   A   A   C","F   C D C   F","C   A   A   C","     ACA     ","   F     F   "," C         C ","  C       C  ","     CFC     "},
+        {"     C C     ","             ","             ","   F     F   ","     ACA     ","C   A   A   C","    C D C    ","C   A   A   C","     ACA     ","   F     F   ","             ","             ","     C C     "},
+        {"             ","             ","             ","   F     F   ","     ACA     ","    A   A    ","    C D C    ","    A   A    ","     ACA     ","   F     F   ","             ","             ","             "},
+        {"             ","             ","             ","             ","     CCC     ","    C   C    ","    C D C    ","    C   C    ","     CCC     ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","             ","             ","      D      ","             ","             ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","     FFF     ","    F   F    ","    F   F    ","    F   F    ","     FFF     ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","     FFF     ","    F   F    ","    F   F    ","    F   F    ","     FFF     ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","             ","             ","      D      ","             ","             ","             ","             ","             ","             "},
+        {"             ","             ","             ","             ","     CCC     ","    C   C    ","    C D C    ","    C   C    ","     CCC     ","             ","             ","             ","             "},
+        {"             ","             ","             ","   F     F   ","     ACA     ","    A   A    ","    C D C    ","    A   A    ","     ACA     ","   F     F   ","             ","             ","             "},
+        {"     C C     ","             ","             ","   F     F   ","     ACA     ","C   A   A   C","    C D C    ","C   A   A   C","     ACA     ","   F     F   ","             ","             ","     C C     "},
+        {"     CFC     ","  C       C  "," C         C ","   F     F   ","     ACA     ","C   A   A   C","F   C D C   F","C   A   A   C","     ACA     ","   F     F   "," C         C ","  C       C  ","     CFC     "},
+        {"   CCC~CCC   ","  CBBC CBBC  "," CB       BC ","CB F     F BC","CB   ACA   BC","CC  A   A  CC","F   C D C   F","CC  A   A  CC","CB   ACA   BC","CB F     F BC"," CB       BC ","  CBBC CBBC  ","   CCCFCCC   "},
+        {"     CFC     ","  CCCCCCCCC  "," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","CCCCCEEECCCCC","FCCCCEEECCCCF","CCCCCEEECCCCC"," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","  CCCCCCCCC  ","     CFC     "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_MegaSolarPanelFactory> getStructureDefinition() {
@@ -276,30 +152,154 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         return STRUCTURE_DEFINITION;
     }
 
-    // spotless:off
-    protected static final String[][] shape = new String[][]{
-        {"     CFC     ","  CCCCCCCCC  "," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","CCCCCEEECCCCC","FCCCCEEECCCCF","CCCCCEEECCCCC"," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","  CCCCCCCCC  ","     CFC     "},
-        {"   CCCFCCC   ","  CBBC CBBC  "," CB       BC ","CB F     F BC","CB   ACA   BC","CC  A   A  CC","F   C D C   F","CC  A   A  CC","CB   ACA   BC","CB F     F BC"," CB       BC ","  CBBC CBBC  ","   CCCFCCC   "},
-        {"     CFC     ","  C       C  "," C         C ","   F     F   ","     ACA     ","C   A   A   C","F   C D C   F","C   A   A   C","     ACA     ","   F     F   "," C         C ","  C       C  ","     CFC     "},
-        {"     C C     ","             ","             ","   F     F   ","     ACA     ","C   A   A   C","    C D C    ","C   A   A   C","     ACA     ","   F     F   ","             ","             ","     C C     "},
-        {"             ","             ","             ","   F     F   ","     ACA     ","    A   A    ","    C D C    ","    A   A    ","     ACA     ","   F     F   ","             ","             ","             "},
-        {"             ","             ","             ","             ","     CCC     ","    C   C    ","    C D C    ","    C   C    ","     CCC     ","             ","             ","             ","             "},
-        {"             ","             ","             ","             ","             ","             ","      D      ","             ","             ","             ","             ","             ","             "},
-        {"             ","             ","             ","             ","     FFF     ","    F   F    ","    F   F    ","    F   F    ","     FFF     ","             ","             ","             ","             "},
-        {"             ","             ","             ","             ","     FFF     ","    F   F    ","    F   F    ","    F   F    ","     FFF     ","             ","             ","             ","             "},
-        {"             ","             ","             ","             ","             ","             ","      D      ","             ","             ","             ","             ","             ","             "},
-        {"             ","             ","             ","             ","     CCC     ","    C   C    ","    C D C    ","    C   C    ","     CCC     ","             ","             ","             ","             "},
-        {"             ","             ","             ","   F     F   ","     ACA     ","    A   A    ","    C D C    ","    A   A    ","     ACA     ","   F     F   ","             ","             ","             "},
-        {"     C C     ","             ","             ","   F     F   ","     ACA     ","C   A   A   C","    C D C    ","C   A   A   C","     ACA     ","   F     F   ","             ","             ","     C C     "},
-        {"     CFC     ","  C       C  "," C         C ","   F     F   ","     ACA     ","C   A   A   C","F   C D C   F","C   A   A   C","     ACA     ","   F     F   "," C         C ","  C       C  ","     CFC     "},
-        {"   CCC~CCC   ","  CBBC CBBC  "," CB       BC ","CB F     F BC","CB   ACA   BC","CC  A   A  CC","F   C D C   F","CC  A   A  CC","CB   ACA   BC","CB F     F BC"," CB       BC ","  CBBC CBBC  ","   CCCFCCC   "},
-        {"     CFC     ","  CCCCCCCCC  "," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","CCCCCEEECCCCC","FCCCCEEECCCCF","CCCCCEEECCCCC"," CCCCCCCCCCC "," CCCCCCCCCCC "," CCCCCCCCCCC ","  CCCCCCCCC  ","     CFC     "}
-    };
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
 
-    // spotless:on
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.casingTier = -1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        this.speedBonus = 1F / (casingTier + 1);
 
-    // region General
+    }
+    // endregion
+
+    // region Processing Logic
+    private int casingTier = -1;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.MegaSolarPanelFactoryRecpies;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return MAX_VALUE;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return super.createProcessingLogic();
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+    }
+
+    @Override
+    public boolean onWireCutterRightClick(ForgeDirection side, ForgeDirection wrenchingSide, EntityPlayer aPlayer,
+        float aX, float aY, float aZ, ItemStack aTool) {
+        if (aPlayer.isSneaking()) {
+            batchMode = !batchMode;
+            if (batchMode) {
+                GTUtility.sendChatTrans(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOn"));
+            } else {
+                GTUtility.sendChatTrans(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOff"));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = TstSharedLocalization.MachineInfo.componentTier(this.casingTier + 1);
+
+        return ret;
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("batchMode")) {
+            currentTip.add(EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.1"));
+            // #tr Waila.TST_MegaSolarPanelFactory.1
+            // # {\GREEN}Batch mode is ON
+            // #zh_CN {\GREEN}批处理已开启
+        }
+        float speedBonus = tag.getFloat("speedBonus");
+        if (speedBonus > -1) {
+            currentTip.add(
+                EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.2")
+                    + "="
+                    + EnumChatFormatting.GOLD
+                    + formatNumber(tag.getFloat("speedBonus"))
+                    + "%");
+            // #tr Waila.TST_MegaSolarPanelFactory.2
+            // # {\GREEN}Current Speed Bonus
+            // #zh_CN {\GREEN}当前速度加成
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setBoolean("batchMode", batchMode);
+            tag.setFloat("speedBonus", casingTier * 100);
+        }
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("casingTier", casingTier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        casingTier = aNBT.getInteger("casingTier");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side,
@@ -327,6 +327,10 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(181) };
     }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {

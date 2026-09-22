@@ -81,195 +81,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(this.mName);
     }
-
-    // endregion
-
-    // region Statics
-    // 3600 seconds in an hour, 24 hours, 20 ticks in a second.
-    protected static final double max_efficiency_time_in_ticks = 3600d * 24d * 20d;
-    protected static final double maximum_discount = MaxFuelDiscount_DTMPFP;
-    protected static final double maximum_decrease = 1d - MaxFuelDiscount_DTMPFP;
-    protected static final long tick_decrease_per_tick = 24;
-
-    // Valid fuels which the discount will get applied to.
-    protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
-        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L), Materials.ExcitedDTCC.getFluid(1L),
-        Materials.ExcitedDTSC.getFluid(1L) };
-
-    // endregion
-
-    // region Logic
-
-    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
-    protected int coilHeat;
-    private long runningTime = 0;
-    protected double fuelCostMultiplier = 1;
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("coilHeat", coilHeat);
-        aNBT.setLong("runningTime", runningTime);
-        aNBT.setDouble("fuelCostMultiplier", fuelCostMultiplier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        coilHeat = aNBT.getInteger("coilHeat");
-        runningTime = aNBT.getLong("runningTime");
-        fuelCostMultiplier = aNBT.getDouble("fuelCostMultiplier");
-    }
-
-    public void resetDiscount(int tickDecrease) {
-        if (runningTime == 0) return;
-        if (runningTime < 0) {
-            runningTime = 0;
-            return;
-        }
-
-        if (runningTime > max_efficiency_time_in_ticks) {
-            runningTime = (long) max_efficiency_time_in_ticks;
-            return;
-        }
-
-        long tickToDecrease = tickDecrease * tick_decrease_per_tick;
-
-        if (runningTime > tickToDecrease) {
-            runningTime -= tickToDecrease;
-        } else {
-            runningTime = 0;
-        }
-
-    }
-
-    @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide() && aTick % 512 == 0 && !aBaseMetaTileEntity.isAllowedToWork()) {
-            resetDiscount(512);
-        }
-    }
-
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        boolean r = super.onRunningTick(aStack);
-        if (!r) {
-            resetDiscount(1);
-            return false;
-        }
-        if (isWorkingThisTick()) {
-            runningTime++;
-        } else {
-            resetDiscount(1);
-        }
-        return true;
-    }
-
-    @Override
-    public void stopMachine(@NotNull ShutDownReason reason) {
-        runningTime = 0;
-        fuelCostMultiplier = 1;
-        super.stopMachine(reason);
-    }
-
-    public void setCoilLevel(HeatingCoilLevel coilLevel) {
-        this.coilLevel = coilLevel;
-    }
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return false;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.plasmaForgeRecipes;
-    }
-
-    protected boolean isWorkingThisTick() {
-        if (this.isWorking()) return true;
-        for (IExecutionCore c : executionCores) {
-            if (c.isWorking()) return true;
-        }
-        for (IExecutionCore c : advExecutionCores) {
-            if (c.isWorking()) return true;
-        }
-        for (IExecutionCore c : perfectExecutionCores) {
-            if (c.isWorking()) return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new MultiExecutionProcessingLogic() {
-
-            // save fuel
-            @NotNull
-            @Override
-            protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
-                return super.createParallelHelper(recipeAfterDiscount(recipe));
-            }
-
-            // validate
-            @Override
-            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                return recipe.mSpecialValue <= coilHeat ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
-            }
-
-            // do not change these because of modularized machine
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                setOverclock(getOverclockType().timeReduction, getOverclockType().powerIncrease);
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                if (isNoOverclockCalculator) {
-                    return OverclockCalculator.ofNoOverclock(recipe);
-                } else {
-                    return super.createOverclockCalculator(recipe);
-                }
-            }
-
-        };
-    }
-
-    @Nonnull
-    protected GTRecipe recipeAfterDiscount(@Nonnull GTRecipe recipe) {
-        GTRecipe tRecipe = recipe.copy();
-        for (int i = 0; i < recipe.mFluidInputs.length; i++) {
-            for (FluidStack fuel : valid_fuels) {
-                if (tRecipe.mFluidInputs[i].isFluidEqual(fuel)) {
-                    if (runningTime > max_efficiency_time_in_ticks) {
-                        fuelCostMultiplier = maximum_discount;
-                    } else {
-                        // If running for max_efficiency_time_in_ticks then discount is at maximum.
-                        double time_percentage = Math.min(runningTime / max_efficiency_time_in_ticks, 1.0d);
-                        // Multiplied by 0.5 because that is the maximum achievable discount
-                        fuelCostMultiplier = Math.max(maximum_discount, 1 - time_percentage * maximum_decrease);
-                    }
-                    tRecipe.mFluidInputs[i].amount = (int) Math
-                        .round(tRecipe.mFluidInputs[i].amount * fuelCostMultiplier);
-                    return tRecipe;
-                }
-            }
-        }
-        return tRecipe;
-    }
-
     // endregion
 
     // region Structure
@@ -278,35 +89,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     private static final int depthOffSet = 30;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static IStructureDefinition<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        coilLevel = HeatingCoilLevel.None;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return false;
-        coilHeat = (int) coilLevel.getHeat();
-        return true;
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> getStructureDefinition() {
@@ -400,7 +182,207 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        coilLevel = HeatingCoilLevel.None;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return false;
+        coilHeat = (int) coilLevel.getHeat();
+        return true;
+    }
     // endregion
+
+    // region Processing Logic
+    // 3600 seconds in an hour, 24 hours, 20 ticks in a second.
+    protected static final double max_efficiency_time_in_ticks = 3600d * 24d * 20d;
+
+    protected static final double maximum_discount = MaxFuelDiscount_DTMPFP;
+    protected static final double maximum_decrease = 1d - MaxFuelDiscount_DTMPFP;
+    protected static final long tick_decrease_per_tick = 24;
+
+    // Valid fuels which the discount will get applied to.
+    protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
+        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L), Materials.ExcitedDTCC.getFluid(1L),
+        Materials.ExcitedDTSC.getFluid(1L) };
+
+    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+    protected int coilHeat;
+    private long runningTime = 0;
+    protected double fuelCostMultiplier = 1;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.plasmaForgeRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new MultiExecutionProcessingLogic() {
+
+            // save fuel
+            @NotNull
+            @Override
+            protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
+                return super.createParallelHelper(recipeAfterDiscount(recipe));
+            }
+
+            // validate
+            @Override
+            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                return recipe.mSpecialValue <= coilHeat ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
+            // do not change these because of modularized machine
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(getOverclockType().timeReduction, getOverclockType().powerIncrease);
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                if (isNoOverclockCalculator) {
+                    return OverclockCalculator.ofNoOverclock(recipe);
+                } else {
+                    return super.createOverclockCalculator(recipe);
+                }
+            }
+
+        };
+    }
+
+    public void resetDiscount(int tickDecrease) {
+        if (runningTime == 0) return;
+        if (runningTime < 0) {
+            runningTime = 0;
+            return;
+        }
+
+        if (runningTime > max_efficiency_time_in_ticks) {
+            runningTime = (long) max_efficiency_time_in_ticks;
+            return;
+        }
+
+        long tickToDecrease = tickDecrease * tick_decrease_per_tick;
+
+        if (runningTime > tickToDecrease) {
+            runningTime -= tickToDecrease;
+        } else {
+            runningTime = 0;
+        }
+
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide() && aTick % 512 == 0 && !aBaseMetaTileEntity.isAllowedToWork()) {
+            resetDiscount(512);
+        }
+    }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        boolean r = super.onRunningTick(aStack);
+        if (!r) {
+            resetDiscount(1);
+            return false;
+        }
+        if (isWorkingThisTick()) {
+            runningTime++;
+        } else {
+            resetDiscount(1);
+        }
+        return true;
+    }
+
+    @Override
+    public void stopMachine(@NotNull ShutDownReason reason) {
+        runningTime = 0;
+        fuelCostMultiplier = 1;
+        super.stopMachine(reason);
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return false;
+    }
+
+    protected boolean isWorkingThisTick() {
+        if (this.isWorking()) return true;
+        for (IExecutionCore c : executionCores) {
+            if (c.isWorking()) return true;
+        }
+        for (IExecutionCore c : advExecutionCores) {
+            if (c.isWorking()) return true;
+        }
+        for (IExecutionCore c : perfectExecutionCores) {
+            if (c.isWorking()) return true;
+        }
+        return false;
+    }
+
+    @Nonnull
+    protected GTRecipe recipeAfterDiscount(@Nonnull GTRecipe recipe) {
+        GTRecipe tRecipe = recipe.copy();
+        for (int i = 0; i < recipe.mFluidInputs.length; i++) {
+            for (FluidStack fuel : valid_fuels) {
+                if (tRecipe.mFluidInputs[i].isFluidEqual(fuel)) {
+                    if (runningTime > max_efficiency_time_in_ticks) {
+                        fuelCostMultiplier = maximum_discount;
+                    } else {
+                        // If running for max_efficiency_time_in_ticks then discount is at maximum.
+                        double time_percentage = Math.min(runningTime / max_efficiency_time_in_ticks, 1.0d);
+                        // Multiplied by 0.5 because that is the maximum achievable discount
+                        fuelCostMultiplier = Math.max(maximum_discount, 1 - time_percentage * maximum_decrease);
+                    }
+                    tRecipe.mFluidInputs[i].amount = (int) Math
+                        .round(tRecipe.mFluidInputs[i].amount * fuelCostMultiplier);
+                    return tRecipe;
+                }
+            }
+        }
+        return tRecipe;
+    }
 
     @Override
     public String[] getInfoData() {
@@ -422,18 +404,61 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         return ret;
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("coilHeat", coilHeat);
+        aNBT.setLong("runningTime", runningTime);
+        aNBT.setDouble("fuelCostMultiplier", fuelCostMultiplier);
     }
 
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        coilHeat = aNBT.getInteger("coilHeat");
+        runningTime = aNBT.getLong("runningTime");
+        fuelCostMultiplier = aNBT.getDouble("fuelCostMultiplier");
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        if (side == aFacing) {
+            if (aActive) return new ITexture[] { casingTexturePages[0][14], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_ON)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FUSION1_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { casingTexturePages[0][14], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_OFF)
+                .extFacing()
+                .build() };
+        }
+        return new ITexture[] { casingTexturePages[0][14] };
+    }
+
+    // endregion
+
+    // region Tooltip
     private static MultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
             // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Plasma Forge
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉
@@ -488,25 +513,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         return tooltip;
     }
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) return new ITexture[] { casingTexturePages[0][14], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_ON)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FUSION1_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { casingTexturePages[0][14], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-        return new ITexture[] { casingTexturePages[0][14] };
-    }
+    // endregion
 
 }

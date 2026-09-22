@@ -69,6 +69,7 @@ import thaumcraft.common.tiles.TilePedestal;
 @SkipGenerateDescription
 public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_InfusionMaterialDispenser> {
 
+    // region Class Constructor
     public TST_InfusionMaterialDispenser(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.AEFHMV);
@@ -79,51 +80,93 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     }
 
     @Override
-    public Style getTooltipCreditStyle() {
-        return Style.INFUSION;
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_InfusionMaterialDispenser(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static IStructureDefinition<TST_InfusionMaterialDispenser> multiDefinition = null;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private final int horizontalOffSet = 4;
+    private final int verticalOffSet = 0;
+    private final int depthOffSet = 4;
+
+    // spotless:off
+    private static final String[][] shape = new String[][]{
+        {"         ","         ","         ","         ","    ~    ","         ","         ","         ","         "},
+        {"         ","         ","         ","         ","         ","         ","         ","         ","         "},
+        {"         ","         ","         ","         ","         ","         ","         ","         ","         "},
+        {"    A    ","         ","         ","         ","A       A","         ","         ","         ","    A    "}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_InfusionMaterialDispenser> getStructureDefinition() {
+        if (multiDefinition == null) {
+            this.multiDefinition = StructureDefinition.<TST_InfusionMaterialDispenser>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement(
+                    'A',
+                    ofChain(
+                        buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
+                            .adder(TST_InfusionMaterialDispenser::addToMachineList)
+                            .casingIndex(1536)
+                            .hint(1)
+                            .buildAndChain(magicCasing, 0)))
+                .build();
+        }
+        return multiDefinition;
     }
 
-    private TileInfusionMatrix targetMatrix;
-    private TilePedestal mainPedestal; //
-    private ArrayList<TilePedestal> subPedestals = new ArrayList<>();
+    // logic region end
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.subPedestals.clear();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        this.subPedestals.clear();
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        this.subPedestals.clear();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+    private TileInfusionMatrix targetMatrix;
+    private TilePedestal mainPedestal;
+    private ArrayList<TilePedestal> subPedestals = new ArrayList<>();
     public FakePlayer fakePlayer = null;
     public FakePlayer fakePlayer1 = null;
     public String playerName = null;
+
     // The names of the items inside the controller should be named after the real players' names.
-
     private final Set<String> cachedResearches = new HashSet<>();
-    private String cachedPlayerName = null;
 
+    private String cachedPlayerName = null;
     public static final int STATE_IDLE = 0;
     public static final int STATE_INFUSING = 1;
-    private static IStructureDefinition<TST_InfusionMaterialDispenser> multiDefinition = null;
     public int infusionState = STATE_IDLE;
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("infusionState", this.infusionState);
-        aNBT.setString("cachedPlayerName", this.cachedPlayerName != null ? this.cachedPlayerName : "");
-        NBTTagCompound researchNBT = new NBTTagCompound();
-        int i = 0;
-        for (String key : cachedResearches) {
-            researchNBT.setString("research_" + i++, key);
-        }
-        aNBT.setTag("cachedResearches", researchNBT);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        this.infusionState = aNBT.getInteger("infusionState");
-        this.subPedestals.clear();
-        this.cachedPlayerName = aNBT.getString("cachedPlayerName");
-        this.cachedResearches.clear();
-        NBTTagCompound researchNBT = aNBT.getCompoundTag("cachedResearches");
-        for (String key : researchNBT.func_150296_c()) {
-            cachedResearches.add(researchNBT.getString(key));
-        }
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     // logic region
@@ -147,6 +190,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         TileEntity tempTile = null;
         tempTile = world.getTileEntity(x, y - 1, z);
         if (!(tempTile instanceof TileInfusionMatrix)) {
+            // spotless:off
             // #tr GT5U.gui.text.recipe_result.no_infusion_matrix
             // # {\RED}Can't find infusion matrix
             // #zh_CN {\RED}未找到注魔矩阵
@@ -252,6 +296,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         // # {\RED}Unknown problem
         // #zh_CN {\RED}未知问题
         return SimpleCheckRecipeResult.ofFailure("unknown_problem");
+            // spotless:on
     }
 
     public void updateCachedResearches(EntityPlayer player) {
@@ -280,11 +325,6 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         ItemStack tool) {
         this.fakePlayer = null;
         this.subPedestals.clear();
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
     }
 
     @Override
@@ -428,61 +468,62 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
         }
     }
-    // logic region end
+
+    // endregion
+
+    // region NBT
 
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.subPedestals.clear();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        this.subPedestals.clear();
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private final int horizontalOffSet = 4;
-    private final int verticalOffSet = 0;
-    private final int depthOffSet = 4;
-
-    private static final String[][] shape = new String[][] {
-        { "         ", "         ", "         ", "         ", "    ~    ", "         ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         ",
-            "         " },
-        { "    A    ", "         ", "         ", "         ", "A       A", "         ", "         ", "         ",
-            "    A    " }, };
-
-    @Override
-    public IStructureDefinition<TST_InfusionMaterialDispenser> getStructureDefinition() {
-        if (multiDefinition == null) {
-            this.multiDefinition = StructureDefinition.<TST_InfusionMaterialDispenser>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement(
-                    'A',
-                    ofChain(
-                        buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
-                            .adder(TST_InfusionMaterialDispenser::addToMachineList)
-                            .casingIndex(1536)
-                            .hint(1)
-                            .buildAndChain(magicCasing, 0)))
-                .build();
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("infusionState", this.infusionState);
+        aNBT.setString("cachedPlayerName", this.cachedPlayerName != null ? this.cachedPlayerName : "");
+        NBTTagCompound researchNBT = new NBTTagCompound();
+        int i = 0;
+        for (String key : cachedResearches) {
+            researchNBT.setString("research_" + i++, key);
         }
-        return multiDefinition;
+        aNBT.setTag("cachedResearches", researchNBT);
     }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        this.infusionState = aNBT.getInteger("infusionState");
+        this.subPedestals.clear();
+        this.cachedPlayerName = aNBT.getString("cachedPlayerName");
+        this.cachedResearches.clear();
+        NBTTagCompound researchNBT = aNBT.getCompoundTag("cachedResearches");
+        for (String key : researchNBT.func_150296_c()) {
+            cachedResearches.add(researchNBT.getString(key));
+        }
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstoneLevel) {
+        if (side == facing) {
+            if (active) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536),
+                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE), TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
+                    .glow()
+                    .build() };
+            else return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536),
+                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR), TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536) };
+    }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -532,37 +573,15 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             .addInputBus(TextEnums.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
             .addOutputBus(TextEnums.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
             .toolTipFinisher();
-        return tt;
         // spotless:on
+        return tt;
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        this.subPedestals.clear();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_InfusionMaterialDispenser(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            if (active) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536),
-                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
-                    .glow()
-                    .build() };
-            else return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536),
-                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536) };
-    }
+    // endregion
 
 }

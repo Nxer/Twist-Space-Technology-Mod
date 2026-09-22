@@ -37,7 +37,7 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
@@ -78,23 +78,27 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
     public TST_SpaceApiary(String aName, int tTier, int tModuleTier, int tMinMotorTier, int bufferSizeMultiplier) {
         super(aName, tTier, tModuleTier, tMinMotorTier, bufferSizeMultiplier);
     }
-
     // endregion
 
-    // region Statics
+    // region Processing Logic
     private static final INameFunction<TST_SpaceApiary> PARALLEL_SETTING_NAME = (base,
-        p) -> translateToLocal("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " " + (p.hatchId() / 2 + 1); // Parallels
+        p) -> translateToLocal("gt.blockmachines.multimachine.project.ig.pump.cfgi.2") + " " + (p.hatchId() / 2 + 1);
 
+    // Parallels
     private static final IStatusFunction<TST_SpaceApiary> PARALLEL_STATUS = (base, p) -> LedStatus
         .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 100, base.getMaxParallels());
 
-    // endregion
     Parameters.Group.ParameterIn[] parallelSettings;
+
     private final Fluid liquddna = FluidRegistry.getFluid("liquiddna") != null ? FluidRegistry.getFluid("liquiddna")
         : FluidRegistry.getFluid("water");
 
     protected World world;
     protected float voltageTierExact;
+
+    protected abstract int getLiquidDnaConsumingAmount();
+
+    final HashMap<TST_ItemID, Double> dropProgress = new HashMap<>();
 
     public double getVoltageTierExact() {
         return Math.log((double) GTValues.V[6] / 8d) / Math.log(4d) + 1e-8d;
@@ -160,8 +164,6 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         return CheckRecipeResultRegistry.SUCCESSFUL;
 
     }
-
-    protected abstract int getLiquidDnaConsumingAmount();
 
     private boolean consumeLiquidDNA() {
         if (getStoredFluids().isEmpty()) return false;
@@ -233,15 +235,32 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         return ret.toString();
     }
 
+    // endregion
+
+    // region Nested Classes
+
     @SkipGenerateDescription
     public static class TST_SpaceApiaryT1 extends TST_SpaceApiary {
 
+        // region Class Constructor
+        public TST_SpaceApiaryT1(int aID, String aName, String aNameRegional) {
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        public TST_SpaceApiaryT1(String aName) {
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        @Override
+        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
+            return new TST_SpaceApiaryT1(mName);
+        }
+        // endregion
+
+        // region Processing Logic
         protected static final int MODULE_VOLTAGE_TIER = 10;
-
         protected static final int MODULE_TIER = 1;
-
         protected static final int MINIMUM_MOTOR_TIER = 1;
-
         protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T1;
 
         @Override
@@ -259,49 +278,75 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
             return SpaceApiaryDNACost_T1;
         }
 
-        public TST_SpaceApiaryT1(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
+        // endregion
 
-        public TST_SpaceApiaryT1(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
-
-        @Override
-        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
-            return new TST_SpaceApiaryT1(mName);
-        }
+        // region Tooltip
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-            tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
-                .addInfo(
-                    EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                        + TextLocalization.Tooltip_SpaceApiary_t1_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t1_desc3)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t1_desc4)
+            // spotless:off
+            // #tr Tooltip_SpaceApiary_desc0
+            // # Module that adds Space Apiary Operations to the Space Elevator
+            // #zh_CN 将太空蜂箱功能添加到太空电梯
+            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+                .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
+                // #tr Tooltip_SpaceApiary_t1_desc1
+                // # Time to let the lazy bees absorb some cosmic rays.
+                // #zh_CN 该让懒惰的蜜蜂们晒晒太阳了
+                    + TextEnums.tr("Tooltip_SpaceApiary_t1_desc1"))
+                // #tr Tooltip_SpaceApiary_desc1
+                // # Accurately distort bee working progress in low-gravity environments.
+                // #zh_CN 在低重力环境中精准扭曲蜜蜂工作时间.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
+                // #tr Tooltip_SpaceApiary_desc2
+                // # Need queen bee in controller slot.
+                // #zh_CN 需要在控制器中放入蜂后.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                // #tr Tooltip_SpaceApiary_t1_desc3
+                // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}100L{\GRAY} liquid DNA/parallel per run.
+                // #zh_CN Consumes {\GOLD}1A{\GRAY}-Luv per parallel, while consuming {\GOLD}100L{\GRAY} liquid DNA/parallel per run.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t1_desc3"))
+                // #tr Tooltip_SpaceApiary_t1_desc4
+                // # Max parallels: {\AQUA}256{\GRAY}
+                // #zh_CN 最大并行：{\AQUA}256{\GRAY}
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t1_desc4"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT1"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
+            // spotless:on
             return tt;
         }
+
+        // endregion
+
     }
 
     @SkipGenerateDescription
     public static class TST_SpaceApiaryT2 extends TST_SpaceApiary {
 
+        // region Class Constructor
+        public TST_SpaceApiaryT2(int aID, String aName, String aNameRegional) {
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        public TST_SpaceApiaryT2(String aName) {
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        @Override
+        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
+            return new TST_SpaceApiaryT2(mName);
+        }
+        // endregion
+
+        // region Processing Logic
         protected static final int MODULE_VOLTAGE_TIER = 14;
-
         protected static final int MODULE_TIER = 2;
-
         protected static final int MINIMUM_MOTOR_TIER = 2;
-
         protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T2;
 
         @Override
@@ -319,49 +364,66 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
             return Math.log((double) GTValues.V[9] / 8d) / Math.log(4d) + 1e-8d; // UHV Tier
         }
 
-        public TST_SpaceApiaryT2(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
+        // endregion
 
-        public TST_SpaceApiaryT2(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
-
-        @Override
-        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
-            return new TST_SpaceApiaryT2(mName);
-        }
+        // region Tooltip
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-            tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
-                .addInfo(
-                    EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                        + TextLocalization.Tooltip_SpaceApiary_t2_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t2_desc3)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t2_desc4)
+            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+                .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
+                // spotless:off
+                // #tr Tooltip_SpaceApiary_t2_desc1
+                // # Surrender to the hive mind..
+                // #zh_CN 臣服于蜂巢思维..
+                    + TextEnums.tr("Tooltip_SpaceApiary_t2_desc1"))
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                // #tr Tooltip_SpaceApiary_t2_desc3
+                // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}25L{\GRAY} liquid DNA/parallel per run.
+                // #zh_CN 每并行消耗 {\GOLD}1A-Luv{\GRAY} ，同时每次运行消耗 {\GOLD}25L{\GRAY} 液态DNA/并行.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t2_desc3"))
+                // #tr Tooltip_SpaceApiary_t2_desc4
+                // # Max parallels: {\AQUA}4096{\GRAY}
+                // #zh_CN 最大并行：{\AQUA}4096{\GRAY}
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t2_desc4"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT2"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
+                // spotless:on
             return tt;
         }
+
+        // endregion
+
     }
 
     @SkipGenerateDescription
     public static class TST_SpaceApiaryT3 extends TST_SpaceApiary {
 
+        // region Class Constructor
+        public TST_SpaceApiaryT3(int aID, String aName, String aNameRegional) {
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        public TST_SpaceApiaryT3(String aName) {
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        @Override
+        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
+            return new TST_SpaceApiaryT3(mName);
+        }
+        // endregion
+
+        // region Processing Logic
         protected static final int MODULE_VOLTAGE_TIER = 18;
-
         protected static final int MODULE_TIER = 3;
-
         protected static final int MINIMUM_MOTOR_TIER = 3;
-
         protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T3;
 
         @Override
@@ -379,49 +441,66 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
             return Math.log((double) GTValues.V[10] / 8d) / Math.log(4d) + 1e-8d; // UEV Tier
         }
 
-        public TST_SpaceApiaryT3(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
+        // endregion
 
-        public TST_SpaceApiaryT3(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
-
-        @Override
-        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
-            return new TST_SpaceApiaryT3(mName);
-        }
+        // region Tooltip
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-            tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
-                .addInfo(
-                    EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                        + TextLocalization.Tooltip_SpaceApiary_t3_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t3_desc3)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t3_desc4)
+            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+                .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
+                // spotless:off
+                // #tr Tooltip_SpaceApiary_t3_desc1
+                // # The Great Creator of the Void!
+                // #zh_CN 伟大的虚空造物主!
+                    + TextEnums.tr("Tooltip_SpaceApiary_t3_desc1"))
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                // #tr Tooltip_SpaceApiary_t3_desc3
+                // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}5L{\GRAY} liquid DNA/parallel per run.
+                // #zh_CN 每并行消耗 {\GOLD}1A-Luv{\GRAY} ，同时每次运行消耗 {\GOLD}5L{\GRAY} 液态DNA/并行.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t3_desc3"))
+                // #tr Tooltip_SpaceApiary_t3_desc4
+                // # Max parallels: {\AQUA}32768{\GRAY}
+                // #zh_CN 最大并行：{\AQUA}32768{\GRAY}
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t3_desc4"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT3"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
+                // spotless:on
             return tt;
         }
+
+        // endregion
+
     }
 
     @SkipGenerateDescription
     public static class TST_SpaceApiaryT4 extends TST_SpaceApiary {
 
+        // region Class Constructor
+        public TST_SpaceApiaryT4(int aID, String aName, String aNameRegional) {
+            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        public TST_SpaceApiaryT4(String aName) {
+            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
+        }
+
+        @Override
+        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
+            return new TST_SpaceApiaryT4(mName);
+        }
+        // endregion
+
+        // region Processing Logic
         protected static final int MODULE_VOLTAGE_TIER = 25;
-
         protected static final int MODULE_TIER = 4;
-
         protected static final int MINIMUM_MOTOR_TIER = 4;
-
         protected static final int MAX_PARALLELS = SpaceApiaryMaxParallels_T4;
 
         @Override
@@ -439,42 +518,47 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
             return Math.log((double) Integer.MAX_VALUE / 8d) / Math.log(4d) + 1e-8d; // MAX Tier
         }
 
-        public TST_SpaceApiaryT4(int aID, String aName, String aNameRegional) {
-            super(aID, aName, aNameRegional, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
+        // endregion
 
-        public TST_SpaceApiaryT4(String aName) {
-            super(aName, MODULE_VOLTAGE_TIER, MODULE_TIER, MINIMUM_MOTOR_TIER, MAX_PARALLELS);
-        }
-
-        @Override
-        public IMetaTileEntity newMetaEntity(IGregTechTileEntity iGregTechTileEntity) {
-            return new TST_SpaceApiaryT4(mName);
-        }
+        // region Tooltip
 
         @Override
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-            tt.addInfo(TextLocalization.Tooltip_SpaceApiary_desc0)
-                .addInfo(
-                    EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
-                        + TextLocalization.Tooltip_SpaceApiary_t4_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc1)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_desc2)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc3)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc4)
-                .addInfo(TextLocalization.Tooltip_SpaceApiary_t4_desc5)
+            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+                .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
+                // spotless:off
+                // #tr Tooltip_SpaceApiary_t4_desc1
+                // # Bees give birth to all things to nourish humanity.
+                // #zh_CN Bee生万物以养人
+                    + TextEnums.tr("Tooltip_SpaceApiary_t4_desc1"))
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                // #tr Tooltip_SpaceApiary_t4_desc3
+                // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}1L{\GRAY} liquid DNA/parallel per run.
+                // #zh_CN 每并行消耗 {\GOLD}1A-Luv{\GRAY} ，同时每次运行消耗 {\GOLD}1L{\GRAY} 液态DNA/并行.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t4_desc3"))
+                // #tr Tooltip_SpaceApiary_t4_desc4
+                // # Max parallels: {\AQUA}2147483647{\GRAY}
+                // #zh_CN 最大并行：{\AQUA}2147483647{\GRAY}
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t4_desc4"))
+                // #tr Tooltip_SpaceApiary_t4_desc5
+                // # But humans have nothing to repay the bees.
+                // #zh_CN 人无一物以报Bee.
+                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t4_desc5"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT4"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
                 .addOutputBus(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .addInputHatch(translateToLocal("ig.elevator.structure.AnyBaseCasingWith1Dot"), 1)
                 .toolTipFinisher();
+                // spotless:on
             return tt;
         }
-    }
 
-    final HashMap<TST_ItemID, Double> dropProgress = new HashMap<>();
+        // endregion
+
+    }
 
     // from kubatech, modified
     private static class BeeSimulator {
@@ -602,5 +686,7 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
             }
         }
     }
+
+    // endregion
 
 }

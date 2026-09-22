@@ -109,142 +109,67 @@ import vazkii.botania.common.block.ModBlocks;
 public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTower>
     implements IConstructable, ISurvivalConstructable {
 
+    // region Class Constructor
     public TST_SkypiercerTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(AUTHOR, ID.AEFHMV, MAINTAINER, ID.ABLAZING);
     }
 
-    @Override
-    public Style getTooltipCreditStyle() {
-        return Style.INFUSION;
+    public TST_SkypiercerTower(String mName) {
+        super(mName);
     }
 
-    private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
-    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
-    protected ArrayList<TileNitor> mTileNitors = new ArrayList<>();
-    protected ArrayList<TileElectricCloud> mTileElectricCloud = new ArrayList<>();
-    protected AspectList mOutputAspects = new AspectList();
-    protected String[] mOutputAspectNames = null;
-    protected Integer[] mOutputAspectAmounts = null;
-    protected double mParallel = 0;
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_SkypiercerTower(this.mName);
+    }
+    // endregion
 
-    private int ringCount = 0;
-
-    /**
-     * Bitmask of selected aspects for Passive Mode GUI (bit n = aspect at index n in
-     * {@link #getAllCompoundAspectsSorted()}).
-     */
-    private long mAspectSelectionBits = 0L;
-
-    private int RECIPE_DURATION = 32;
-    private static final int RECIPE_EUT = 1920;
-    private static final int SECOND_IN_TICKS = 20;
-
+    // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_RINGS = "rings";
     private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
-
-    private boolean mStopAfterCycle = false;
-
-    // ========================================================
-    // Aspect Selection (for Passive Mode GUI)
-    // ========================================================
-
-    public long getAspectSelectionBits() {
-        return mAspectSelectionBits;
-    }
-
-    public void setAspectSelectionBits(long bits) {
-        mAspectSelectionBits = bits;
-    }
-
-    @Override
-    public void clearHatches() {
-        super.clearHatches();
-        mEssentiaOutputHatches.clear();
-    }
-
     private final int Main_horizontalOffSet = 7;
     private final int Main_verticalOffSet = 17;
     private final int Main_depthOffSet = 1;
 
-    private static final String[][] shapeMain = new String[][] {
-        { "    JJJGJJJ    ", "  JJ       JJ  ", " JJ         JJ ", " J           J ", "J             J",
-            "J             J", "J      C      J", "G     C C     G", "J      C      J", "J             J",
-            "J             J", " J           J ", " JJ         JJ ", "  JJ       JJ  ", "    JJJGJJJ    " },
-        { "               ", "    JJJGJJJ    ", "   J       J   ", "  J         J  ", " J           J ",
-            " J           J ", " J     C     J ", " G    C C    G ", " J     C     J ", " J           J ",
-            " J           J ", "  J         J  ", "   J       J   ", "    JJJGJJJ    ", "               " },
-        { "               ", "               ", "    JJJGJJJ    ", "   JJGGGGGJJ   ", "  JJGG G GGJJ  ",
-            "  JGG     GGJ  ", "  JG   C   GJ  ", "  GGG C C GGG  ", "  JG   C   GJ  ", "  JGG     GGJ  ",
-            "  JJGG G GGJJ  ", "   JJGGGGGJJ   ", "    JJJGJJJ    ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "      G G      ",
-            "     G G G     ", "    G  C  G    ", "     GC CG     ", "    G  C  G    ", "     G G G     ",
-            "      G G      ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "      AAA      ",
-            "     AFFFA     ", "    AFHBHFA    ", "    AFB BFA    ", "    AFHBHFA    ", "     AFFFA     ",
-            "      AAA      ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "               ",
-            "               ", "       C       ", "   A  C C  A   ", "       C       ", "               ",
-            "               ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "       B       ",
-            "       H       ", "       B       ", "   ABHB BHBA   ", "       B       ", "       H       ",
-            "       B       ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "       A       ",
-            "       B       ", "               ", "   AAB   BAA   ", "               ", "       B       ",
-            "       A       ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "               ",
-            "               ", "       B       ", "   A  B B  A   ", "       B       ", "               ",
-            "               ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "       A       ", "               ", "               ",
-            "               ", "               ", "  A         A  ", "               ", "               ",
-            "               ", "               ", "       A       ", "               ", "               " },
-        { "               ", "               ", "       A       ", "               ", "               ",
-            "               ", "               ", "  A         A  ", "               ", "               ",
-            "               ", "               ", "       A       ", "               ", "               " },
-        { "               ", "               ", "       A       ", "               ", "       L       ",
-            "               ", "               ", "  A L     L A  ", "               ", "               ",
-            "       L       ", "               ", "       A       ", "               ", "               " },
-        { "               ", "      NAN      ", "               ", "               ", "               ",
-            "               ", " N           N ", " A     M     A ", " N           N ", "               ",
-            "               ", "               ", "               ", "      NAN      ", "               " },
-        { "               ", "      B~B      ", "               ", "               ", "       I       ",
-            "               ", " B    DDD    B ", " A  I DDD I  A ", " B    DDD    B ", "               ",
-            "       I       ", "               ", "               ", "      BAB      ", "               " },
-        { "   AAAAAAAAA   ", "  AACCGGGCCAA  ", " AACGGGGGGGCAA ", "AACGGGGGGGGGCAA", "ACGGGGEGEGGGGCA",
-            "ACGGGEGGGEGGGCA", "AGGGEGGGGGEGGGA", "AGGGGGGGGGGGGGA", "AGGGEGGGGGEGGGA", "ACGGGEGGGEGGGCA",
-            "ACGGGGEGEGGGGCA", "AACGGGGGGGGGCAA", " AACGGGGGGGCAA ", "  AACCGGGCCAA  ", "   AAAAAAAAA   " } };
+    // spotless:off
+    private static final String[][] shapeMain = new String[][]{
+        {"    JJJGJJJ    ","  JJ       JJ  "," JJ         JJ "," J           J ","J             J","J             J","J      C      J","G     C C     G","J      C      J","J             J","J             J"," J           J "," JJ         JJ ","  JJ       JJ  ","    JJJGJJJ    "},
+        {"               ","    JJJGJJJ    ","   J       J   ","  J         J  "," J           J "," J           J "," J     C     J "," G    C C    G "," J     C     J "," J           J "," J           J ","  J         J  ","   J       J   ","    JJJGJJJ    ","               "},
+        {"               ","               ","    JJJGJJJ    ","   JJGGGGGJJ   ","  JJGG G GGJJ  ","  JGG     GGJ  ","  JG   C   GJ  ","  GGG C C GGG  ","  JG   C   GJ  ","  JGG     GGJ  ","  JJGG G GGJJ  ","   JJGGGGGJJ   ","    JJJGJJJ    ","               ","               "},
+        {"               ","               ","               ","               ","      G G      ","     G G G     ","    G  C  G    ","     GC CG     ","    G  C  G    ","     G G G     ","      G G      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      AAA      ","     AFFFA     ","    AFHBHFA    ","    AFB BFA    ","    AFHBHFA    ","     AFFFA     ","      AAA      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","               ","               ","       C       ","   A  C C  A   ","       C       ","               ","               ","       A       ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","       B       ","       H       ","       B       ","   ABHB BHBA   ","       B       ","       H       ","       B       ","       A       ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","       A       ","       B       ","               ","   AAB   BAA   ","               ","       B       ","       A       ","       A       ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","               ","               ","       B       ","   A  B B  A   ","       B       ","               ","               ","       A       ","               ","               ","               "},
+        {"               ","               ","       A       ","               ","               ","               ","               ","  A         A  ","               ","               ","               ","               ","       A       ","               ","               "},
+        {"               ","               ","       A       ","               ","               ","               ","               ","  A         A  ","               ","               ","               ","               ","       A       ","               ","               "},
+        {"               ","               ","       A       ","               ","       L       ","               ","               ","  A L     L A  ","               ","               ","       L       ","               ","       A       ","               ","               "},
+        {"               ","      NAN      ","               ","               ","               ","               "," N           N "," A     M     A "," N           N ","               ","               ","               ","               ","      NAN      ","               "},
+        {"               ","      B~B      ","               ","               ","       I       ","               "," B    DDD    B "," A  I DDD I  A "," B    DDD    B ","               ","       I       ","               ","               ","      BAB      ","               "},
+        {"   AAAAAAAAA   ","  AACCGGGCCAA  "," AACGGGGGGGCAA ","AACGGGGGGGGGCAA","ACGGGGEGEGGGGCA","ACGGGEGGGEGGGCA","AGGGEGGGGGEGGGA","AGGGGGGGGGGGGGA","AGGGEGGGGGEGGGA","ACGGGEGGGEGGGCA","ACGGGGEGEGGGGCA","AACGGGGGGGGGCAA"," AACGGGGGGGCAA ","  AACCGGGCCAA  ","   AAAAAAAAA   "}
+    };
+    // spotless:on
+
     private final int Rings_horizontalOffSet = 4;
     private final int Rings_verticalOffSet = 5;
     private final int Rings_depthOffSet = -2;
 
-    private static final String[][] shapeRings = new String[][] {
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " },
-        { "  PEOEP  ", " P     P ", "P       P", "E   C   E", "O  C C  O", "E   C   E", "P       P", " P     P ",
-            "  PEOEP  " },
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " } };
-
-    public TST_SkypiercerTower(String mName) {
-        super(mName);
-    }
+    // spotless:off
+    private static final String[][] shapeRings = new String[][]{
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
+        {"  PEOEP  "," P     P ","P       P","E   C   E","O  C C  O","E   C   E","P       P"," P     P ","  PEOEP  "},
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_SkypiercerTower> getStructureDefinition() {
@@ -304,78 +229,6 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
                 .build();
         }
         return multiDefinition;
-    }
-
-    public boolean addInfusionProvider(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileInfusionProvider) {
-            TileInfusionProvider provider = (TileInfusionProvider) aTileEntity;
-            if (!this.mTileInfusionProvider.contains(provider)) {
-                return this.mTileInfusionProvider.add(provider);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean addNitor(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileNitor) {
-            TileNitor nitor = (TileNitor) aTileEntity;
-            if (!this.mTileNitors.contains(nitor)) {
-                return this.mTileNitors.add(nitor);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean addTileElectricCloud(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileElectricCloud) {
-            TileElectricCloud cloud = (TileElectricCloud) aTileEntity;
-            if (!this.mTileElectricCloud.contains(cloud)) {
-                return this.mTileElectricCloud.add(cloud);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setDouble("mParallel", this.mParallel);
-        aNBT.setInteger("ringCount", this.ringCount);
-        aNBT.setLong("aspectSelection", this.mAspectSelectionBits);
-        aNBT.setBoolean("stopAfterCycle", this.mStopAfterCycle);
-        Aspect[] aspectA = this.mOutputAspects.getAspects();
-        NBTTagList nbtTagList = new NBTTagList();
-        for (Aspect aspect : aspectA) {
-            if (aspect != null) {
-                NBTTagCompound f = new NBTTagCompound();
-                f.setString("key", aspect.getTag());
-                f.setInteger("amount", this.mOutputAspects.getAmount(aspect));
-                nbtTagList.appendTag(f);
-            }
-        }
-        aNBT.setTag("Aspects", nbtTagList);
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        this.mParallel = aNBT.getDouble("mParallel");
-        this.ringCount = aNBT.getInteger("ringCount");
-        this.mAspectSelectionBits = aNBT.getLong("aspectSelection");
-        this.mStopAfterCycle = aNBT.getBoolean("stopAfterCycle");
-        this.mOutputAspects.aspects.clear();
-        NBTTagList tlist = aNBT.getTagList("Aspects", 10);
-        for (int j = 0; j < tlist.tagCount(); ++j) {
-            NBTTagCompound rs = tlist.getCompoundTagAt(j);
-            if (rs.hasKey("key"))
-                this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
-        }
-        super.loadNBTData(aNBT);
     }
 
     @Override
@@ -450,17 +303,62 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         errors.clear();
         this.mParallel = (int) Math.min((long) this.ringCount * Parallel_PerRing_SkypiercerTower, Integer.MAX_VALUE);
     }
+    // endregion
 
-    private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
-        if (aTileEntity != null) {
-            return this.mEssentiaOutputHatches.add(aTileEntity);
-        }
-        return false;
-    }
+    // region Processing Logic
+    private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
+    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
+    protected ArrayList<TileNitor> mTileNitors = new ArrayList<>();
+    protected ArrayList<TileElectricCloud> mTileElectricCloud = new ArrayList<>();
+    protected AspectList mOutputAspects = new AspectList();
+    protected String[] mOutputAspectNames = null;
+    protected Integer[] mOutputAspectAmounts = null;
+    protected double mParallel = 0;
+    private int ringCount = 0;
+
+    /**
+     * Bitmask of selected aspects for Passive Mode GUI (bit n = aspect at index n in
+     * {@link #getAllCompoundAspectsSorted()}).
+     */
+    private long mAspectSelectionBits = 0L;
+
+    private int RECIPE_DURATION = 32;
+    private static final int RECIPE_EUT = 1920;
+    private static final int SECOND_IN_TICKS = 20;
+    private boolean mStopAfterCycle = false;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SKYPIERCER_MODE_PASSIVE,
+        UITextures.SKYPIERCER_MODE_CRYSTAL, UITextures.SKYPIERCER_MODE_ESSENTIA };
 
     @Override
     public RecipeMap<?> getRecipeMap() {
         return GTCMRecipe.SkypiercerTower;
+    }
+
+    @Override
+    public int totalMachineMode() {
+        return 3;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        return TextEnums.tr("SkypiercerTower.mode." + machineMode);
+        // spotless:off
+        // #tr SkypiercerTower.mode.0
+        // #en_US Passive Mode
+        // #zh_CN 被动模式
+        // #tr SkypiercerTower.mode.1
+        // #en_US Crystal Essence Mode
+        // #zh_CN 晶化源质模式
+        // #tr SkypiercerTower.mode.2
+        // #en_US Essentia Mode
+        // #zh_CN 源质模式
+        // spotless:on
     }
 
     @Override
@@ -489,33 +387,33 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         }
     }
 
-    @Override
-    public int totalMachineMode() {
-        return 3;
+    // ========================================================
+    // Aspect Selection (for Passive Mode GUI)
+    // ========================================================
+    public long getAspectSelectionBits() {
+        return mAspectSelectionBits;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SKYPIERCER_MODE_PASSIVE,
-        UITextures.SKYPIERCER_MODE_CRYSTAL, UITextures.SKYPIERCER_MODE_ESSENTIA };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
+    public void setAspectSelectionBits(long bits) {
+        mAspectSelectionBits = bits;
     }
 
     @Override
-    public String getMachineModeName() {
-        return TextEnums.tr("SkypiercerTower.mode." + machineMode);
-        // spotless:off
-        // #tr SkypiercerTower.mode.0
-        // #en_US Passive Mode
-        // #zh_CN 被动模式
-        // #tr SkypiercerTower.mode.1
-        // #en_US Crystal Essence Mode
-        // #zh_CN 晶化源质模式
-        // #tr SkypiercerTower.mode.2
-        // #en_US Essentia Mode
-        // #zh_CN 源质模式
-        // spotless:on
+    public void clearHatches() {
+        super.clearHatches();
+        mEssentiaOutputHatches.clear();
+    }
+
+    public boolean addInfusionProvider(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileInfusionProvider) {
+            TileInfusionProvider provider = (TileInfusionProvider) aTileEntity;
+            if (!this.mTileInfusionProvider.contains(provider)) {
+                return this.mTileInfusionProvider.add(provider);
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -933,6 +831,95 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, val -> mMaxProgresstime = val));
     }
 
+    public static List<Aspect> getAllCompoundAspectsSorted() {
+        List<Aspect> aspects = new ArrayList<>(Aspect.aspects.values());
+        aspects.removeIf(Aspect::isPrimal);
+        aspects.sort(Comparator.comparingInt(TST_SkypiercerTower::computeAspectLevelSafe));
+        return aspects;
+    }
+
+    private static int computeAspectLevelSafe(Aspect a) {
+        try {
+            return computeAspectLevel(a);
+        } catch (Exception e) {
+            return 999;
+        }
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        aNBT.setDouble("mParallel", this.mParallel);
+        aNBT.setInteger("ringCount", this.ringCount);
+        aNBT.setLong("aspectSelection", this.mAspectSelectionBits);
+        aNBT.setBoolean("stopAfterCycle", this.mStopAfterCycle);
+        Aspect[] aspectA = this.mOutputAspects.getAspects();
+        NBTTagList nbtTagList = new NBTTagList();
+        for (Aspect aspect : aspectA) {
+            if (aspect != null) {
+                NBTTagCompound f = new NBTTagCompound();
+                f.setString("key", aspect.getTag());
+                f.setInteger("amount", this.mOutputAspects.getAmount(aspect));
+                nbtTagList.appendTag(f);
+            }
+        }
+        aNBT.setTag("Aspects", nbtTagList);
+        super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        this.mParallel = aNBT.getDouble("mParallel");
+        this.ringCount = aNBT.getInteger("ringCount");
+        this.mAspectSelectionBits = aNBT.getLong("aspectSelection");
+        this.mStopAfterCycle = aNBT.getBoolean("stopAfterCycle");
+        this.mOutputAspects.aspects.clear();
+        NBTTagList tlist = aNBT.getTagList("Aspects", 10);
+        for (int j = 0; j < tlist.tagCount(); ++j) {
+            NBTTagCompound rs = tlist.getCompoundTagAt(j);
+            if (rs.hasKey("key"))
+                this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
+        }
+        super.loadNBTData(aNBT);
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int aColorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { casingTexturePages[1][48] };
+    }
+
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
@@ -1012,48 +999,45 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
     }
 
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int aColorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { casingTexturePages[1][48], TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    public boolean addNitor(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileNitor) {
+            TileNitor nitor = (TileNitor) aTileEntity;
+            if (!this.mTileNitors.contains(nitor)) {
+                return this.mTileNitors.add(nitor);
+            } else {
+                return true;
+            }
         }
-        return new ITexture[] { casingTexturePages[1][48] };
+        return false;
     }
 
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_SkypiercerTower(this.mName);
-    }
-
-    public static List<Aspect> getAllCompoundAspectsSorted() {
-        List<Aspect> aspects = new ArrayList<>(Aspect.aspects.values());
-        aspects.removeIf(Aspect::isPrimal);
-        aspects.sort(Comparator.comparingInt(TST_SkypiercerTower::computeAspectLevelSafe));
-        return aspects;
-    }
-
-    private static int computeAspectLevelSafe(Aspect a) {
-        try {
-            return computeAspectLevel(a);
-        } catch (Exception e) {
-            return 999;
+    public boolean addTileElectricCloud(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileElectricCloud) {
+            TileElectricCloud cloud = (TileElectricCloud) aTileEntity;
+            if (!this.mTileElectricCloud.contains(cloud)) {
+                return this.mTileElectricCloud.add(cloud);
+            } else {
+                return true;
+            }
         }
+        return false;
     }
+
+    private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
+        if (aTileEntity != null) {
+            return this.mEssentiaOutputHatches.add(aTileEntity);
+        }
+        return false;
+    }
+
+    // endregion
+
 }

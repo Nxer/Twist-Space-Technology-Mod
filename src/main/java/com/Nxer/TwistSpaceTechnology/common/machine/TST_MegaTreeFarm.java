@@ -116,412 +116,18 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public Style getTooltipCreditStyle() {
-        return Style.INFUSION;
-    }
-
-    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaTreeFarm(this.mName);
     }
+    // endregion
 
     // region Structure
-
-    private int controllerTier = 0;
-    boolean checkWaterFinish = false;
-    boolean checkAirFinish = false;
-    boolean isFocusMode = false;
-    private static ItemStack FountOfEcology;
-    private static ItemStack Offspring;
-    // public ESSFakePlayer ESSPlayer = null;
-    // public final Random rand = new FastRandom();
-
-    public long fertilizerToConsume = 0;
-    public long waterToConsume = 0;
-
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Tree Growth Simulator
-         * 1 - Aqua Zone Simulator
-         * 2 - Green House Simulator
-         */
-        return 3;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT/* , GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT */ };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
-    // }
-
-    @Override
-    public String getMachineModeName() {
-        // #tr EcoSphereSimulator.modeMsg.0
-        // # Tree Growth Simulator
-        // #zh_CN 原木拟生模式
-
-        // #tr EcoSphereSimulator.modeMsg.1
-        // # Aqua Zone Simulator
-        // #zh_CN 水域模拟模式
-
-        // #tr EcoSphereSimulator.modeMsg.2
-        // # Artificial Green House
-        // #zh_CN 人工温室模式
-
-        // #tr EcoSphereSimulator.modeMsg.3
-        // # Directed Mob Cloner
-        // #zh_CN 定向克隆模式
-        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + machineMode);
-    }
-
-    @Override
-    public void setMachineMode(int index) {
-        super.setMachineMode(index);
-        SetRemoveWater();
-    }
-
-    // @Override
-    // public boolean canButtonSwitchMode() {
-    // return checkStructure(true, getBaseMetaTileEntity());
-    // }
-
-    @Override
-    protected IAlignmentLimits getInitialAlignmentLimits() {
-        // You're right, but there will be water leakage
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
-    }
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
-        if (Offspring == null) Offspring = GTCMItemList.OffSpring.get(1);
-    }
-
-    @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0 && controllerTier == 0) {
-            ItemStack ControllerSlot = this.getControllerSlot();
-            if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
-                controllerTier = 1;
-                mInventory[1] = ItemUtils.depleteStack(ControllerSlot, ControllerSlot.stackSize);
-                markDirty();
-                // schedule a structure check
-                mUpdated = true;
-            }
-        }
-    }
-
-    @Override
-    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
-        float aX, float aY, float aZ) {
-        if (controllerTier == 0 && !aPlayer.isSneaking()) {
-            ItemStack heldItem = aPlayer.getHeldItem();
-            if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
-                controllerTier = 1;
-                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, heldItem.stackSize));
-                if (getBaseMetaTileEntity().isServerSide()) {
-                    markDirty();
-                    aPlayer.inventory.markDirty();
-                    // schedule a structure check
-                    mUpdated = true;
-                }
-                return true;
-            }
-        }
-        return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
-    }
-
-    @Override
-    public void onValueUpdate(byte aValue) {
-        controllerTier = aValue;
-    }
-
-    @Override
-    public byte getUpdateData() {
-        return (byte) controllerTier;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mTier", (byte) controllerTier);
-        aNBT.setByte("mMode", (byte) machineMode);
-        aNBT.setBoolean("checkWater", checkWaterFinish);
-        aNBT.setBoolean("checkAir", checkAirFinish);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        controllerTier = aNBT.getByte("mTier");
-        machineMode = aNBT.getByte("mMode");
-        checkWaterFinish = aNBT.getBoolean("checkWater");
-        checkAirFinish = aNBT.getBoolean("checkAir");
-    }
-
-    @Override
-    public void setItemNBT(NBTTagCompound aNBT) {
-        super.setItemNBT(aNBT);
-        aNBT.setByte("mTier", (byte) controllerTier);
-    }
-
-    @Override
-    public void initDefaultModes(NBTTagCompound aNBT) {
-        super.initDefaultModes(aNBT);
-        if (aNBT == null || !aNBT.hasKey("mTier")) {
-            controllerTier = 0;
-        } else {
-            controllerTier = aNBT.getByte("mTier");
-        }
-    }
-
-    @Override
-    public void addAdditionalTooltipInformation(ItemStack stack, List<String> tooltip) {
-        super.addAdditionalTooltipInformation(stack, tooltip);
-        NBTTagCompound aNBT = stack.getTagCompound();
-        int tier;
-        if (aNBT == null) {
-            tier = 1;
-        } else {
-            tier = aNBT.getInteger("mTier") + 1;
-        }
-        tooltip.add(StatCollector.translateToLocalFormatted("tooltip.large_macerator.tier", tier));
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        tag.setInteger("tier", controllerTier + 1);
-        if (machineMode == 2) {
-            tag.setLong("fertilizerToConsume", fertilizerToConsume);
-            tag.setLong("waterToConsume", waterToConsume);
-        }
-
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.hasKey("tier")) {
-            currentTip.add(
-                "Tier: " + EnumChatFormatting.YELLOW + formatNumber(tag.getInteger("tier")) + EnumChatFormatting.RESET);
-        }
-        if (tag.hasKey("fertilizerToConsume")) {
-            // #tr MegaTreeFarm.Waila.fertiConsume
-            // # Now consumption of Enriched Fertilizer is :
-            // #zh_CN 当前富集肥料消耗量：
-            currentTip.add(
-                tr("MegaTreeFarm.Waila.fertiConsume") + " " + formatNumber(tag.getLong("fertilizerToConsume")) + "L");
-            // #tr MegaTreeFarm.Waila.waterConsume
-            // # Now consumption of Water is :
-            // #zh_CN 当前水消耗量：
-            currentTip
-                .add(tr("MegaTreeFarm.Waila.waterConsume") + " " + formatNumber(tag.getLong("waterToConsume")) + "L");
-        }
-
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            if (!checkStructure(true, getBaseMetaTileEntity())) {
-                GTUtility.sendChatTrans(
-                    aPlayer,
-                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
-                return;
-            }
-            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, tool);
-        }
-    }
-
     private static final String STRUCTURE_PIECE_MAIN = "mainEcoSphereSimulator0";
     private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
     private static final String STRUCTURE_PIECE_WATER = "waterEcoSphereSimulator";
     private static IStructureDefinition<TST_MegaTreeFarm> STRUCTURE_DEFINITION = null;
 
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        int structureTier = stackSize.stackSize + controllerTier - 1;
-        if (structureTier > 1) structureTier = 1;
-        this.buildPiece("mainEcoSphereSimulator" + structureTier, stackSize, hintsOnly, 16, 38, 7);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        int built;
-        int builtW;
-        int structureTier = stackSize.stackSize + controllerTier - 1;
-        if (structureTier > 1) structureTier = 1;
-        built = survivalBuildPiece(
-            "mainEcoSphereSimulator" + structureTier,
-            stackSize,
-            16,
-            38,
-            7,
-            elementBudget,
-            env,
-            false,
-            true);
-        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
-        if (built >= 0) return built;
-        return built + builtW;
-
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        // setDebugEnabled(true);
-        if (!checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7, errors)) {
-            return;
-        }
-        if (!checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9, errors)) {
-            // #tr TST_MegaTreeFarm.StructureErrors.no_water_block
-            // # Place a water block at the specific location on the top of the machine structure.
-            // #zh_CN 在机器结构顶部的特定位置放置水方块
-            errors.add(StructureErrors.of("TST_MegaTreeFarm.StructureErrors.no_water_block"));
-        }
-    }
-
-    @Override
-    public IStructureDefinition<TST_MegaTreeFarm> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
-                .addShape(STRUCTURE_PIECE_WATER, transpose(water))
-                .addElement('A', chainAllGlasses())
-                .addElement('B', ofBlock(MetaBlockCasing01, 9))
-                .addElement('C', ofBlock(MetaBlockCasing01, 10))
-                .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 10))
-                .addElement('d', ofBlock(GregTechAPI.sBlockCasings4, 1))
-                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 5))
-                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
-                .addElement('G', ofBlock(GregTechAPI.sBlockCasings9, 1))
-                .addElement('H', ofBlock(ModBlocks.blockCasings2Misc, 15))
-                .addElement('h', ofBlock(MetaBlockCasing01, 13))
-                .addElement('I', ofBlock(ModBlocks.blockCasingsTieredGTPP, 8))
-                .addElement(
-                    'J',
-                    ofBlock(ModBlocksHandler.BlockTranslucent.getLeft(), ModBlocksHandler.BlockTranslucent.getRight()))
-                .addElement(
-                    'K',
-                    ofBlock(ModBlocksHandler.AirCrystalBlock.getLeft(), ModBlocksHandler.AirCrystalBlock.getRight()))
-                .addElement(
-                    'L',
-                    ofBlock(
-                        ModBlocksHandler.WaterCrystalBlock.getLeft(),
-                        ModBlocksHandler.WaterCrystalBlock.getRight()))
-                .addElement(
-                    'M',
-                    ofBlock(
-                        ModBlocksHandler.EarthCrystalBlock.getLeft(),
-                        ModBlocksHandler.EarthCrystalBlock.getRight()))
-                .addElement('N', ofBlock(ModBlocksHandler.soil.getLeft(), ModBlocksHandler.soil.getRight()))
-                .addElement(
-                    'O',
-                    ofBlock(ModBlocksHandler.PurpleLight.getLeft(), ModBlocksHandler.PurpleLight.getRight()))
-                .addElement('P', ofBlock(BlocksItems.getFluidBlock(InternalName.fluidDistilledWater), 0))
-                .addElement(
-                    'Q',
-                    ofChain(
-                        ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
-                            .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
-                            .hint(1)
-                            .casingIndex(TAE.getIndexFromPage(1, 15))
-                            .build()))
-                .addElement(
-                    'q',
-                    ofChain(
-                        ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
-                            .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
-                            .hint(1)
-                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
-                            .build()))
-                .addElement(
-                    'R',
-                    ofChain(
-                        ofBlock(ModBlocks.blockCasings2Misc, 15),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
-                            .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
-                            .hint(2)
-                            .casingIndex(TAE.getIndexFromPage(1, 15))
-                            .build()))
-                .addElement(
-                    'r',
-                    ofChain(
-                        ofBlock(MetaBlockCasing01, 13),
-                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
-                            .atLeast(Energy.or(ExoticEnergy))
-                            .adder(TST_MegaTreeFarm::addToMachineList)
-                            .hint(2)
-                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
-                            .build()))
-                .addElement('S', ofFrame(Materials.Mytryl))
-                .addElement('s', ofFrame(Materials.AstralSilver))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            if (aActive) {
-                return new ITexture[] {
-                    Textures.BlockIcons.getCasingTextureForId(
-                        controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] {
-                Textures.BlockIcons.getCasingTextureForId(
-                    controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
-                TextureFactory.builder()
-                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
-                    .extFacing()
-                    .build() };
-        }
-
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(
-            controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)) };
-    }
-
     // spotless:off
-
     /*
     A -> ofBlock...(BW_GlasBlocks, 0, ...);
     B -> ofBlock...(MetaBlockCasing01, 9, ...);
@@ -543,7 +149,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     R -> ofBlock...(tile.wood, 1, ...);
     S -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
     */
-
     private final String[][] shape = new String[][]{
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             DDDDDDD             ","             DDDDDDD             ","             DDDDDDD             ","             DDDDDDD             ","             DDDDDDD             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
         {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","             GGD DGG             ","            GGGD DGGG            ","           GGGHH HHGGG           ","           GGHSH HSHGG           ","          DDDHHH HHHDDD          ","                                 ","          DDDHHH HHHDDD          ","           GGHSH HSHGG           ","           GGGHH HHGGG           ","            GGGD DGGG            ","             GGD DGG             ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
@@ -639,6 +244,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         {"            ddddddddd            ","            dsssssssd            ","           ddd     ddd           ","           ddddddddddd           ","           ddddddddddd           ","         ddddddddddddddd         ","        ddd  ddddddd  ddd        ","       dd     ddddd     dd       ","      dd      ddddd      dd      ","     dd     dd     dd     dd     ","     dd   dd         dd   dd     ","  dddd    d           d    dddd  ","dddddd   d    EJJJE    d   dddddd","dsddddd  d   FMMMMMF   d  dddddsd","ds dddddd   EMMMMMMME   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   JMMMMMMMJ   dddddd sd","ds dddddd   EMMMMMMME   dddddd sd","dsddddd  d   FMMMMMF   d  dddddsd","dddddd   d    EJJJE    d   dddddd","  dddd    d           d    dddd  ","     dd   dd         dd   dd     ","     dd     dd     dd     dd     ","      dd      ddddd      dd      ","       dd     ddddd     dd       ","        ddd  ddddddd  ddd        ","         ddddddddddddddd         ","           ddddddddddd           ","           ddddddddddd           ","           ddd     ddd           ","            dsssssssd            ","            ddddddddd            "},
         {"            BBBBBBBBB            ","          BBB       BBB          ","        BBBBBB     BBBBBB        ","      BB  BBBBBBBBBBBBB  BB      ","     B   BBBBBBBBBBBBBBB   B     ","    B   BBBBBBBBBBBBBBBBB   B    ","   B   BBBB  BBBBBBB  BBBB   B   ","   B  BBB     BBBBB     BBB  B   ","  B  BBB      BBBBB      BBB  B  ","  B BBB     BB     BB     BBB B  "," BBBBBB   BB         BB   BBBBBB "," BBBBB    B           B    BBBBB ","BBBBBB   B    EEEEE    B   BBBBBB","B BBBBB  B   EFFFFFE   B  BBBBB B","B  BBBBBB   EFFMMMFFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFMMMMMFE   BBBBBB  B","B  BBBBBB   EFFMMMFFE   BBBBBB  B","B BBBBB  B   EFFFFFE   B  BBBBB B","BBBBBB   B    EEEEE    B   BBBBBB"," BBBBB    B           B    BBBBB "," BBBBBB   BB         BB   BBBBBB ","  B BBB     BB     BB     BBB B  ","  B  BBB      BBBBB      BBB  B  ","   B  BBB     BBBBB     BBB  B   ","   B   BBBB  BBBBBBB  BBBB   B   ","    B   BBBBBBBBBBBBBBBBB   B    ","     B   BBBBBBBBBBBBBBB   B     ","      BB  BBBBBBBBBBBBB  BB      ","        BBBBBB     BBBBBB        ","          BBB       BBB          ","            BBBBBBBBB            "}
     };
+
     private final String[][] water = new String[][]{
         {"P"}
     };
@@ -654,45 +260,231 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZPPPZZZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZPPPPPPPPPPPPPPPPPPPPPPPZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZZPPPPPPPPPPPPPZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZZZPPPZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
         {"ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZPPPPPPPPPPPPPPPPPPPPPZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZPPPPPPPPPPPPPPPPPPPZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZPPPPPPPPPPPPPPPPPZZZZ","ZZZZZPPPPPPPPPPPPPPPZZZZZ","ZZZZZZZPPPPPPPPPPPZZZZZZZ","ZZZZZZZZZPPPPPPPZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ","ZZZZZZZZZZZZZZZZZZZZZZZZZ"},
     };
-
     // spotless:on
 
-    private void SetRemoveWater() {
-
-        // checkType = true, check Water
-        boolean checkType = machineMode != 0;
-        if (checkType && checkWaterFinish) return;
-        if (!checkType && checkAirFinish) return;
-        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] StructureDef = StructureWater;
-        Block Air = Blocks.air;
-        Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
-        boolean isFlipped = this.getFlip()
-            .isHorizontallyFlipped();
-        int OffSetX = 12;
-        int OffSetY = 25;
-        int OffSetZ = 3;
-        if (checkType && !checkWaterFinish) {
-            checkAirFinish = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
-            checkWaterFinish = true;
-        } else if (!checkType && !checkAirFinish) {
-            checkWaterFinish = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
-            checkAirFinish = true;
+    @Override
+    public IStructureDefinition<TST_MegaTreeFarm> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaTreeFarm>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
+                .addShape(STRUCTURE_PIECE_WATER, transpose(water))
+                .addElement('A', chainAllGlasses())
+                .addElement('B', ofBlock(MetaBlockCasing01, 9))
+                .addElement('C', ofBlock(MetaBlockCasing01, 10))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 10))
+                .addElement('d', ofBlock(GregTechAPI.sBlockCasings4, 1))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 5))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
+                .addElement('G', ofBlock(GregTechAPI.sBlockCasings9, 1))
+                .addElement('H', ofBlock(ModBlocks.blockCasings2Misc, 15))
+                .addElement('h', ofBlock(MetaBlockCasing01, 13))
+                .addElement('I', ofBlock(ModBlocks.blockCasingsTieredGTPP, 8))
+                .addElement(
+                    'J',
+                    ofBlock(ModBlocksHandler.BlockTranslucent.getLeft(), ModBlocksHandler.BlockTranslucent.getRight()))
+                .addElement(
+                    'K',
+                    ofBlock(ModBlocksHandler.AirCrystalBlock.getLeft(), ModBlocksHandler.AirCrystalBlock.getRight()))
+                .addElement(
+                    'L',
+                    ofBlock(
+                        ModBlocksHandler.WaterCrystalBlock.getLeft(),
+                        ModBlocksHandler.WaterCrystalBlock.getRight()))
+                .addElement(
+                    'M',
+                    ofBlock(
+                        ModBlocksHandler.EarthCrystalBlock.getLeft(),
+                        ModBlocksHandler.EarthCrystalBlock.getRight()))
+                .addElement('N', ofBlock(ModBlocksHandler.soil.getLeft(), ModBlocksHandler.soil.getRight()))
+                .addElement(
+                    'O',
+                    ofBlock(ModBlocksHandler.PurpleLight.getLeft(), ModBlocksHandler.PurpleLight.getRight()))
+                .addElement('P', ofBlock(BlocksItems.getFluidBlock(InternalName.fluidDistilledWater), 0))
+                .addElement(
+                    'Q',
+                    ofChain(
+                        ofBlock(ModBlocks.blockCasings2Misc, 15),
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                            .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .hint(1)
+                            .casingIndex(TAE.getIndexFromPage(1, 15))
+                            .build()))
+                .addElement(
+                    'q',
+                    ofChain(
+                        ofBlock(MetaBlockCasing01, 13),
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                            .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .hint(1)
+                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
+                            .build()))
+                .addElement(
+                    'R',
+                    ofChain(
+                        ofBlock(ModBlocks.blockCasings2Misc, 15),
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                            .atLeast(Energy.or(ExoticEnergy))
+                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .hint(2)
+                            .casingIndex(TAE.getIndexFromPage(1, 15))
+                            .build()))
+                .addElement(
+                    'r',
+                    ofChain(
+                        ofBlock(MetaBlockCasing01, 13),
+                        HatchElementBuilder.<TST_MegaTreeFarm>builder()
+                            .atLeast(Energy.or(ExoticEnergy))
+                            .adder(TST_MegaTreeFarm::addToMachineList)
+                            .hint(2)
+                            .casingIndex(MetaBlockCasing01.getTextureIndex(13))
+                            .build()))
+                .addElement('S', ofFrame(Materials.Mytryl))
+                .addElement('s', ofFrame(Materials.AstralSilver))
+                .build();
         }
+        return STRUCTURE_DEFINITION;
+    }
+
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        int structureTier = stackSize.stackSize + controllerTier - 1;
+        if (structureTier > 1) structureTier = 1;
+        this.buildPiece("mainEcoSphereSimulator" + structureTier, stackSize, hintsOnly, 16, 38, 7);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        int built;
+        int builtW;
+        int structureTier = stackSize.stackSize + controllerTier - 1;
+        if (structureTier > 1) structureTier = 1;
+        built = survivalBuildPiece(
+            "mainEcoSphereSimulator" + structureTier,
+            stackSize,
+            16,
+            38,
+            7,
+            elementBudget,
+            env,
+            false,
+            true);
+        builtW = survivalBuildPiece(STRUCTURE_PIECE_WATER, stackSize, 0, 37, -9, elementBudget, env, false, true);
+        if (built >= 0) return built;
+        return built + builtW;
 
     }
 
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        // setDebugEnabled(true);
+        if (!checkPiece("mainEcoSphereSimulator" + controllerTier, 16, 38, 7, errors)) {
+            return;
+        }
+        if (!checkPiece(STRUCTURE_PIECE_WATER, 0, 37, -9, errors)) {
+            // #tr TST_MegaTreeFarm.StructureErrors.no_water_block
+            // # Place a water block at the specific location on the top of the machine structure.
+            // #zh_CN 在机器结构顶部的特定位置放置水方块
+            errors.add(StructureErrors.of("TST_MegaTreeFarm.StructureErrors.no_water_block"));
+        }
+    }
+    // endregion
+
     // region Processing Logic
+    private int controllerTier = 0;
+    boolean checkWaterFinish = false;
+    boolean checkAirFinish = false;
+    boolean isFocusMode = false;
+    private static ItemStack FountOfEcology;
+    private static ItemStack Offspring;
+
+    // public ESSFakePlayer ESSPlayer = null;
+    // public final Random rand = new FastRandom();
+    public long fertilizerToConsume = 0;
+
+    public long waterToConsume = 0;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT/* , GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT */ };
+
     double tierMultiplier = 1;
     int EuTier = 1;
+    public Map<Integer, Mode> damageModeMap = new HashMap<>();
+
+    {
+        damageModeMap.put(1, Mode.LOG);
+        damageModeMap.put(2, Mode.SAPLING);
+        damageModeMap.put(3, Mode.LEAVES);
+        damageModeMap.put(4, Mode.FRUIT);
+    }
+
+    public final CropsNHFarm cropsNHFarm = new CropsNHFarm();
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays
+            .asList(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes, GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
+    }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
+    public int totalMachineMode() {
+        /*
+         * 0 - Tree Growth Simulator
+         * 1 - Aqua Zone Simulator
+         * 2 - Green House Simulator
+         */
+        return 3;
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        SetRemoveWater();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_UNPACKAGER);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_WASHPLANT);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_DEFAULT);
+    // }
+    @Override
+    public String getMachineModeName() {
+        // spotless:off
+        // #tr EcoSphereSimulator.modeMsg.0
+        // # Tree Growth Simulator
+        // #zh_CN 原木拟生模式
+
+        // #tr EcoSphereSimulator.modeMsg.1
+        // # Aqua Zone Simulator
+        // #zh_CN 水域模拟模式
+
+        // #tr EcoSphereSimulator.modeMsg.2
+        // # Artificial Green House
+        // #zh_CN 人工温室模式
+
+        // #tr EcoSphereSimulator.modeMsg.3
+        // # Directed Mob Cloner
+        // #zh_CN 定向克隆模式
+        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg." + machineMode);
+        // spotless:on
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return 1;
     }
 
     @Override
@@ -701,15 +493,18 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     }
 
     @Override
-    public int getMaxParallelRecipes() {
-        return 1;
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
 
-    @NotNull
+    // @Override
+    // public boolean canButtonSwitchMode() {
+    // return checkStructure(true, getBaseMetaTileEntity());
+    // }
     @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays
-            .asList(GTCMRecipe.TreeGrowthSimulatorWithoutToolFakeRecipes, GTCMRecipe.AquaticZoneSimulatorFakeRecipes);
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        // You're right, but there will be water leakage
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
     @Override
@@ -725,155 +520,6 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     public boolean supportsSingleRecipeLocking() {
         return false;
-    }
-
-    private static int getTierMultiplier(int tier) {
-        return (int) Math
-            .floor(3 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
-    }
-
-    /**
-     * Use the highest bonus from the original Recipe.
-     */
-
-    public static int getModeMultiplier(Mode mode) {
-        return switch (mode) {
-            case LOG -> 20;
-            case SAPLING -> 3;
-            case LEAVES -> 8;
-            case FRUIT -> 1;
-        };
-
-    }
-
-    public Map<Integer, Mode> damageModeMap = new HashMap<>();
-    {
-        damageModeMap.put(1, Mode.LOG);
-        damageModeMap.put(2, Mode.SAPLING);
-        damageModeMap.put(3, Mode.LEAVES);
-        damageModeMap.put(4, Mode.FRUIT);
-    }
-
-    public int getModeOutput(Mode mode) {
-        for (ItemStack stack : getStoredInputs()) {
-            if (stack.getItem() instanceof ItemIntegratedCircuit && stack.getItemDamage() > 0) {
-                Mode mappedMode = damageModeMap.get(stack.getItemDamage());
-                if (mode == mappedMode) {
-                    return 1;
-                }
-            }
-        }
-        return -1;
-    }
-
-    public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
-        String key = getItemStackString(sapling);
-        EnumMap<Mode, ItemStack> ProductMap = treeProductsMap.get(key);
-        if (ProductMap != null) {
-            return ProductMap;
-        }
-        return getOutputsForForestrySapling(sapling);
-    }
-
-    public static String getItemStackString(ItemStack aStack) {
-        return Item.itemRegistry.getNameForObject(aStack.getItem()) + ":" + aStack.getItemDamage();
-
-    }
-
-    public static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling) {
-        // copy form GTPP_TGS
-        ITree tree = TreeManager.treeRoot.getMember(sapling);
-        if (tree == null) return null;
-
-        String speciesUUID = tree.getIdent();
-
-        EnumMap<Mode, ItemStack> defaultMap = treeProductsMap.get("Forestry:sapling:" + speciesUUID);
-        if (defaultMap == null) return null;
-
-        // We need to make a new map so that we don't modify the stored amounts of outputs.
-        EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(Mode.class);
-
-        ItemStack log = defaultMap.get(Mode.LOG);
-        if (log != null) {
-            double height = Math.max(
-                3 * (tree.getGenome()
-                    .getHeight() - 1),
-                0) + 1;
-            double girth = tree.getGenome()
-                .getGirth();
-
-            log = log.copy();
-            log.stackSize = (int) (log.stackSize * height * girth);
-            adjustedMap.put(Mode.LOG, log);
-        }
-
-        ItemStack saplingOut = defaultMap.get(Mode.SAPLING);
-        if (saplingOut != null) {
-            // Lowest = 0.01 ... Average = 0.05 ... Highest = 0.3
-            double fertility = tree.getGenome()
-                .getFertility() * 10;
-
-            // Return a copy of the *input* sapling, retaining its genetics.
-            int stackSize = Math.max(1, (int) (saplingOut.stackSize * fertility));
-            saplingOut = sapling.copy();
-            saplingOut.stackSize = stackSize;
-            adjustedMap.put(Mode.SAPLING, saplingOut);
-        }
-
-        ItemStack leaves = defaultMap.get(Mode.LEAVES);
-        if (leaves != null) {
-            adjustedMap.put(Mode.LEAVES, leaves.copy());
-        }
-
-        ItemStack fruit = defaultMap.get(Mode.FRUIT);
-        if (fruit != null) {
-            // Lowest = 0.025 ... Average = 0.2 ... Highest = 0.4
-            double yield = tree.getGenome()
-                .getYield() * 10;
-
-            fruit = fruit.copy();
-            fruit.stackSize = (int) (fruit.stackSize * yield);
-            adjustedMap.put(Mode.FRUIT, fruit);
-        }
-
-        return adjustedMap;
-    }
-
-    /**
-     * Attempts to drain the multi of a given fluid, will only return true if all fluid is consumed.
-     *
-     * @param toConsume    A fluid stack of the fluid to consume.
-     * @param drainPartial True to allow partial consumption.
-     * @return True when all the fluid has been consumed.
-     */
-    private boolean tryDrain(FluidStack toConsume, boolean drainPartial) {
-
-        if (toConsume == null || toConsume.amount <= 0) return true;
-
-        List<FluidStack> fluids = this.getStoredFluids();
-        List<FluidStack> fluidsToUse = new ArrayList<>(fluids.size());
-        int remaining = toConsume.amount;
-
-        for (FluidStack fluid : fluids) {
-            if (fluid.isFluidEqual(toConsume)) {
-                remaining -= fluid.amount;
-                fluidsToUse.add(fluid);
-                if (remaining <= 0) break;
-            }
-        }
-
-        if (!drainPartial && remaining > 0) return false;
-
-        boolean success = remaining <= 0;
-        remaining = toConsume.amount - Math.max(0, remaining);
-
-        for (FluidStack fluid : fluidsToUse) {
-            int used = Math.min(remaining, fluid.amount);
-            fluid.amount -= used;
-            remaining -= used;
-        }
-
-        return success;
     }
 
     @Override
@@ -1228,8 +874,301 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
 
     }
 
-    public final CropsNHFarm cropsNHFarm = new CropsNHFarm();
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (FountOfEcology == null) FountOfEcology = GTCMItemList.FountOfEcology.get(1);
+        if (Offspring == null) Offspring = GTCMItemList.OffSpring.get(1);
+    }
 
+    @Override
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide() && aTick % 20 == 0 && controllerTier == 0) {
+            ItemStack ControllerSlot = this.getControllerSlot();
+            if (GTUtility.areStacksEqual(FountOfEcology, ControllerSlot)) {
+                controllerTier = 1;
+                mInventory[1] = ItemUtils.depleteStack(ControllerSlot, ControllerSlot.stackSize);
+                markDirty();
+                // schedule a structure check
+                mUpdated = true;
+            }
+        }
+    }
+
+    @Override
+    public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer, ForgeDirection side,
+        float aX, float aY, float aZ) {
+        if (controllerTier == 0 && !aPlayer.isSneaking()) {
+            ItemStack heldItem = aPlayer.getHeldItem();
+            if (GTUtility.areStacksEqual(FountOfEcology, heldItem)) {
+                controllerTier = 1;
+                aPlayer.setCurrentItemOrArmor(0, ItemUtils.depleteStack(heldItem, heldItem.stackSize));
+                if (getBaseMetaTileEntity().isServerSide()) {
+                    markDirty();
+                    aPlayer.inventory.markDirty();
+                    // schedule a structure check
+                    mUpdated = true;
+                }
+                return true;
+            }
+        }
+        return super.onRightclick(aBaseMetaTileEntity, aPlayer, side, aX, aY, aZ);
+    }
+
+    @Override
+    public void onValueUpdate(byte aValue) {
+        controllerTier = aValue;
+    }
+
+    @Override
+    public byte getUpdateData() {
+        return (byte) controllerTier;
+    }
+
+    @Override
+    public void initDefaultModes(NBTTagCompound aNBT) {
+        super.initDefaultModes(aNBT);
+        if (aNBT == null || !aNBT.hasKey("mTier")) {
+            controllerTier = 0;
+        } else {
+            controllerTier = aNBT.getByte("mTier");
+        }
+    }
+
+    @Override
+    public void addAdditionalTooltipInformation(ItemStack stack, List<String> tooltip) {
+        super.addAdditionalTooltipInformation(stack, tooltip);
+        NBTTagCompound aNBT = stack.getTagCompound();
+        int tier;
+        if (aNBT == null) {
+            tier = 1;
+        } else {
+            tier = aNBT.getInteger("mTier") + 1;
+        }
+        tooltip.add(StatCollector.translateToLocalFormatted("tooltip.large_macerator.tier", tier));
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        tag.setInteger("tier", controllerTier + 1);
+        if (machineMode == 2) {
+            tag.setLong("fertilizerToConsume", fertilizerToConsume);
+            tag.setLong("waterToConsume", waterToConsume);
+        }
+
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.hasKey("tier")) {
+            currentTip.add(
+                "Tier: " + EnumChatFormatting.YELLOW + formatNumber(tag.getInteger("tier")) + EnumChatFormatting.RESET);
+        }
+        if (tag.hasKey("fertilizerToConsume")) {
+            // #tr MegaTreeFarm.Waila.fertiConsume
+            // # Now consumption of Enriched Fertilizer is :
+            // #zh_CN 当前富集肥料消耗量：
+            currentTip.add(
+                tr("MegaTreeFarm.Waila.fertiConsume") + " " + formatNumber(tag.getLong("fertilizerToConsume")) + "L");
+            // #tr MegaTreeFarm.Waila.waterConsume
+            // # Now consumption of Water is :
+            // #zh_CN 当前水消耗量：
+            currentTip
+                .add(tr("MegaTreeFarm.Waila.waterConsume") + " " + formatNumber(tag.getLong("waterToConsume")) + "L");
+        }
+
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            if (!checkStructure(true, getBaseMetaTileEntity())) {
+                GTUtility.sendChatTrans(
+                    aPlayer,
+                    StatCollector.translateToLocal("BallLightning.modeMsg.IncompleteStructure"));
+                return;
+            }
+            super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, tool);
+        }
+    }
+
+    private void SetRemoveWater() {
+
+        // checkType = true, check Water
+        boolean checkType = machineMode != 0;
+        if (checkType && checkWaterFinish) return;
+        if (!checkType && checkAirFinish) return;
+        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
+        String[][] StructureDef = StructureWater;
+        Block Air = Blocks.air;
+        Block Water = BlocksItems.getFluidBlock(InternalName.fluidDistilledWater);
+        boolean isFlipped = this.getFlip()
+            .isHorizontallyFlipped();
+        int OffSetX = 12;
+        int OffSetY = 25;
+        int OffSetZ = 3;
+        if (checkType && !checkWaterFinish) {
+            checkAirFinish = false;
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Water);
+            checkWaterFinish = true;
+        } else if (!checkType && !checkAirFinish) {
+            checkWaterFinish = false;
+            TstUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "P", Air);
+            checkAirFinish = true;
+        }
+
+    }
+
+    private static int getTierMultiplier(int tier) {
+        return (int) Math
+            .floor(3 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
+    }
+
+    /**
+     * Use the highest bonus from the original Recipe.
+     */
+    public static int getModeMultiplier(Mode mode) {
+        return switch (mode) {
+            case LOG -> 20;
+            case SAPLING -> 3;
+            case LEAVES -> 8;
+            case FRUIT -> 1;
+        };
+
+    }
+
+    public int getModeOutput(Mode mode) {
+        for (ItemStack stack : getStoredInputs()) {
+            if (stack.getItem() instanceof ItemIntegratedCircuit && stack.getItemDamage() > 0) {
+                Mode mappedMode = damageModeMap.get(stack.getItemDamage());
+                if (mode == mappedMode) {
+                    return 1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static EnumMap<Mode, ItemStack> queryTreeProduct(ItemStack sapling) {
+        String key = getItemStackString(sapling);
+        EnumMap<Mode, ItemStack> ProductMap = treeProductsMap.get(key);
+        if (ProductMap != null) {
+            return ProductMap;
+        }
+        return getOutputsForForestrySapling(sapling);
+    }
+
+    public static String getItemStackString(ItemStack aStack) {
+        return Item.itemRegistry.getNameForObject(aStack.getItem()) + ":" + aStack.getItemDamage();
+
+    }
+
+    public static EnumMap<Mode, ItemStack> getOutputsForForestrySapling(ItemStack sapling) {
+        // copy form GTPP_TGS
+        ITree tree = TreeManager.treeRoot.getMember(sapling);
+        if (tree == null) return null;
+
+        String speciesUUID = tree.getIdent();
+
+        EnumMap<Mode, ItemStack> defaultMap = treeProductsMap.get("Forestry:sapling:" + speciesUUID);
+        if (defaultMap == null) return null;
+
+        // We need to make a new map so that we don't modify the stored amounts of outputs.
+        EnumMap<Mode, ItemStack> adjustedMap = new EnumMap<>(Mode.class);
+
+        ItemStack log = defaultMap.get(Mode.LOG);
+        if (log != null) {
+            double height = Math.max(
+                3 * (tree.getGenome()
+                    .getHeight() - 1),
+                0) + 1;
+            double girth = tree.getGenome()
+                .getGirth();
+
+            log = log.copy();
+            log.stackSize = (int) (log.stackSize * height * girth);
+            adjustedMap.put(Mode.LOG, log);
+        }
+
+        ItemStack saplingOut = defaultMap.get(Mode.SAPLING);
+        if (saplingOut != null) {
+            // Lowest = 0.01 ... Average = 0.05 ... Highest = 0.3
+            double fertility = tree.getGenome()
+                .getFertility() * 10;
+
+            // Return a copy of the *input* sapling, retaining its genetics.
+            int stackSize = Math.max(1, (int) (saplingOut.stackSize * fertility));
+            saplingOut = sapling.copy();
+            saplingOut.stackSize = stackSize;
+            adjustedMap.put(Mode.SAPLING, saplingOut);
+        }
+
+        ItemStack leaves = defaultMap.get(Mode.LEAVES);
+        if (leaves != null) {
+            adjustedMap.put(Mode.LEAVES, leaves.copy());
+        }
+
+        ItemStack fruit = defaultMap.get(Mode.FRUIT);
+        if (fruit != null) {
+            // Lowest = 0.025 ... Average = 0.2 ... Highest = 0.4
+            double yield = tree.getGenome()
+                .getYield() * 10;
+
+            fruit = fruit.copy();
+            fruit.stackSize = (int) (fruit.stackSize * yield);
+            adjustedMap.put(Mode.FRUIT, fruit);
+        }
+
+        return adjustedMap;
+    }
+
+    /**
+     * Attempts to drain the multi of a given fluid, will only return true if all fluid is consumed.
+     *
+     * @param toConsume    A fluid stack of the fluid to consume.
+     * @param drainPartial True to allow partial consumption.
+     * @return True when all the fluid has been consumed.
+     */
+    private boolean tryDrain(FluidStack toConsume, boolean drainPartial) {
+
+        if (toConsume == null || toConsume.amount <= 0) return true;
+
+        List<FluidStack> fluids = this.getStoredFluids();
+        List<FluidStack> fluidsToUse = new ArrayList<>(fluids.size());
+        int remaining = toConsume.amount;
+
+        for (FluidStack fluid : fluids) {
+            if (fluid.isFluidEqual(toConsume)) {
+                remaining -= fluid.amount;
+                fluidsToUse.add(fluid);
+                if (remaining <= 0) break;
+            }
+        }
+
+        if (!drainPartial && remaining > 0) return false;
+
+        boolean success = remaining <= 0;
+        remaining = toConsume.amount - Math.max(0, remaining);
+
+        for (FluidStack fluid : fluidsToUse) {
+            int used = Math.min(remaining, fluid.amount);
+            fluid.amount -= used;
+            remaining -= used;
+        }
+
+        return success;
+    }
+
+    // spotless:off
     // #tr GT5U.gui.text.recipe_result.no_energy
     // # No power
     // #zh_CN 能源不足
@@ -1265,7 +1204,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // #tr GT5U.gui.text.recipe_result.Invalid_Seed
     // # Invalid Seed
     // #zh_CN 无效种子
-
+    // spotless:on
     public String[] getInfoData() {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
@@ -1278,11 +1217,77 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
         return ret;
     }
 
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mTier", (byte) controllerTier);
+        aNBT.setByte("mMode", (byte) machineMode);
+        aNBT.setBoolean("checkWater", checkWaterFinish);
+        aNBT.setBoolean("checkAir", checkAirFinish);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        controllerTier = aNBT.getByte("mTier");
+        machineMode = aNBT.getByte("mMode");
+        checkWaterFinish = aNBT.getBoolean("checkWater");
+        checkAirFinish = aNBT.getBoolean("checkAir");
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        aNBT.setByte("mTier", (byte) controllerTier);
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        if (side == aFacing) {
+            if (aActive) {
+                return new ITexture[] {
+                    Textures.BlockIcons.getCasingTextureForId(
+                        controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
+                    TextureFactory.builder()
+                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
+                        .extFacing()
+                        .build(),
+                    TextureFactory.builder()
+                        .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced_Active)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+
+            return new ITexture[] {
+                Textures.BlockIcons.getCasingTextureForId(
+                    controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)),
+                TextureFactory.builder()
+                    .addIcon(TexturesGtBlock.Overlay_Machine_Controller_Advanced)
+                    .extFacing()
+                    .build() };
+        }
+
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(
+            controllerTier == 0 ? TAE.getIndexFromPage(1, 15) : MetaBlockCasing01.getTextureIndex(13)) };
+    }
+
+    // endregion
+
+    // region Tooltip
+
     // private static class ESSFakePlayer extends FakePlayer {
-    //
     // TST_EcoSphereSimulator mte;
     // ItemStack currentWeapon;
-    //
     // public ESSFakePlayer(TST_EcoSphereSimulator mte) {
     // super(
     // (WorldServer) mte.getBaseMetaTileEntity()
@@ -1292,23 +1297,18 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     // "[EEC Fake Player]"));
     // this.mte = mte;
     // }
-    //
     // @Override
     // public void renderBrokenItemStack(ItemStack p_70669_1_) {}
-    //
     // @Override
     // public Random getRNG() {
     // return mte.rand;
     // }
-    //
     // @Override
     // public void destroyCurrentEquippedItem() {}
-    //
     // @Override
     // public ItemStack getCurrentEquippedItem() {
     // return currentWeapon;
     // }
-    //
     // @Override
     // public ItemStack getHeldItem() {
     // return currentWeapon;
@@ -1317,6 +1317,7 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_EcoSphereSimulator_MachineType
         // # Tree Farm | Aquatic Farm | Green House | Mob Cloner
         // #zh_CN 树厂 | 渔场 | 温室 | 生物克隆
@@ -1403,7 +1404,15 @@ public class TST_MegaTreeFarm extends GTCM_MultiMachineBase<TST_MegaTreeFarm> {
             .addEnergyHatch(textUseBlueprint, 2)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
+    }
+
+    // endregion
 
 }

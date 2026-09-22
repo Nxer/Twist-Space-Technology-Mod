@@ -366,6 +366,9 @@ public final class MachineLoader {
                     TextEnums.tr("NameLargeCanner")));
         }
 
+        // #tr BigBroArray.name
+        // # MegaArray
+        // #zh_CN 大哥阵列
         GTCMItemList.BigBroArray.set(new TST_BigBroArray(19049, "BigBroArray.name", TextEnums.tr("BigBroArray.name")));
 
         if (Config.Enable_IndustrialMagnetarSeparator) {

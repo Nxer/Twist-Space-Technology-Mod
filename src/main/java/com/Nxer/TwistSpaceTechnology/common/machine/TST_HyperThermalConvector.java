@@ -87,7 +87,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_HyperThermalConvector(this.mName);
     }
-    // end region
+    // endregion
 
     // region Structure
     private static final int baseHorizontalOffSet = 10;
@@ -95,6 +95,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private static final int baseDepthOffSet = 2;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static final String STRUCTURE_PIECE_OLD = "old";
+
     // spotless:off
     private static final String[][] shapeMain = new String[][]{
         {"                     ","                     ","                     ","       HHGGGHH       ","      HHHHHHHHH      ","     JGHHHHHHHGJ     ","    JGGGGGGGGGGGJ    ","    JGIIIIIIIIIGJ    ","    JGGGGGGGGGGGJ    ","     JGHHHHHHHGJ     ","      HHHHHHHHH      ","       HHHHHHH       ","                     ","                     ","                     "},
@@ -112,6 +113,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMHHGGGHHMMMMMM ","MMMMMMHHHHHHHHHMMMMMM","MMMMMGGHHHHHHHGGMMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMGGGGGGGGGGGGGMMMM","MMMMMGGHHHHHHHGGMMMMM","MMMMMMHHHHHHHHHMMMMMM"," MMMMMMHHHHHHHMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "},
         {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMMMMMMMMMMMMMM ","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM"," MMMMMMMMMMMMMMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "}
     };
+
     // old structure (to be deprecated on future version)
     private static final String[][] shapeOld = new String[][]{
         {"                     ","                     ","                     ","       HHGGGHH       ","      HHHHHHHHH      ","     JGHHHHHHHGJ     ","    JGGGGGGGGGGGJ    ","    JGIIIIIIIIIGJ    ","    JGGGGGGGGGGGJ    ","     JGHHHHHHHGJ     ","      HHHHHHHHH      ","       HHHHHHH       ","                     ","                     ","                     "},
@@ -130,6 +132,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         {"       MMMMMMM       ","      MMMMMMMMM      ","    MMMMMMMMMMMMM    "," MMMMMMMMMMMMMMMMMMM ","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM","MMMMMMMMMMMMMMMMMMMMM"," MMMMMMMMMMMMMMMMMMM ","    MMMMMMMMMMMMM    ","      MMMMMMMMM      ","       MMMMMMM       "}
     };
     // spotless:on
+
     private static IStructureDefinition<TST_HyperThermalConvector> STRUCTURE_DEFINITION = null;
 
     @Override
@@ -243,9 +246,9 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             errors.add(special_hatch_amount_wrong);
         }
     }
+    // endregion
 
     // region Processing Logic
-
     private MTEHatchInput mDistilledWaterHatch;
     private MTEHatchOutput mSteamHatch;
     private MTEHatchInput mHotFluidHatch;
@@ -253,6 +256,11 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     private final MTEHatchInput[] dedicatedHatches = new MTEHatchInput[2];
     private static Fluid water;
     private static Fluid distilledWater;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.HESTTD_HeatExchanger,
+        UITextures.HESTTD_RapidCooling };
+
+    protected boolean isRecipeProcessing = false;
 
     @Override
     public RecipeMap<?> getRecipeMap() {
@@ -270,9 +278,6 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return 2;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.HESTTD_HeatExchanger,
-        UITextures.HESTTD_RapidCooling };
-
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
@@ -283,12 +288,10 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     // machineModeIcons.add(UITextures.HESTTD_HeatExchanger);
     // machineModeIcons.add(UITextures.HESTTD_RapidCooling);
     // }
-    //
     // @Override
     // public void setMachineMode(int index) {
     // super.setMachineMode(index);
     // }
-
     @Override
     public String getMachineModeName() {
         // #tr HyperThermalConvector.modeMsg.0
@@ -303,67 +306,8 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (water == null) water = FluidRegistry.getFluid("water");
-        if (distilledWater == null) distilledWater = FluidRegistry.getFluid("ic2distilledwater");
-    }
-
-    public boolean addHotFluidInputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            mHotFluidHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addColdFluidOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchOutput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            mColdFluidHatch = (MTEHatchOutput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addDistilledWaterInputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            mDistilledWaterHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addSteamOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity instanceof MTEHatchOutput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            mSteamHatch = (MTEHatchOutput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
-        // overriding this for calculating parallels correctly.
-        return GTUtility.filterValidMTEs(Lists.newArrayList(mColdFluidHatch, mSteamHatch));
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -372,11 +316,9 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
-
-    protected boolean isRecipeProcessing = false;
 
     @Nonnull
     @Override
@@ -401,6 +343,19 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         mMaxProgresstime = 20;
         mEfficiency = 10000;
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (water == null) water = FluidRegistry.getFluid("water");
+        if (distilledWater == null) distilledWater = FluidRegistry.getFluid("ic2distilledwater");
+    }
+
+    @Override
+    public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
+        // overriding this for calculating parallels correctly.
+        return GTUtility.filterValidMTEs(Lists.newArrayList(mColdFluidHatch, mSteamHatch));
     }
 
     private CheckRecipeResult processSingleBatch() {
@@ -537,6 +492,10 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return fluid != null && fluid != distilledWater && fluid != water;
     }
 
+    // endregion
+
+    // region Textures
+
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean aActive, boolean aRedstone) {
@@ -561,9 +520,14 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         return new ITexture[] { Base };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_HyperThermalConvector_MachineType
         // # Heat Exchanger | Heat Cooler
         // #zh_CN 热交换机 | 热冷却机
@@ -606,6 +570,60 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
             .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.14"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
+
+    // endregion
+
+    // region Hatch Registration
+
+    public boolean addHotFluidInputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            mHotFluidHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addColdFluidOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchOutput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            mColdFluidHatch = (MTEHatchOutput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addDistilledWaterInputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            mDistilledWaterHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addSteamOutputHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity instanceof MTEHatchOutput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            mSteamHatch = (MTEHatchOutput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    // endregion
+
 }

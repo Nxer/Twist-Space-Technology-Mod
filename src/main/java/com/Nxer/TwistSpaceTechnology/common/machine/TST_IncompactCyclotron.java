@@ -66,76 +66,34 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_IncompactCyclotron(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    @Override
-    protected float getEuModifier() {
-        return EuModifier_IncompactCyclotron;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return EnablePerfectOverclock_IncompactCyclotron;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return SpeedBouns_IncompactCyclotron;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return MaxParallel_IncompactCyclotron;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTPPRecipeMaps.cyclotronRecipes;
-    }
-
     // endregion
 
     // region Structure
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
     private final int horizontalOffSet = 23;
     private final int verticalOffSet = 3;
     private final int depthOffSet = 40;
     private static final String STRUCTURE_PIECE_MAIN = "mainIncompactCyclotron";
     private static IStructureDefinition<TST_IncompactCyclotron> STRUCTURE_DEFINITION = null;
+
+    // spotless:off
+    /*
+     * A -> ofBlock...(BW_GlasBlocks, 14, ...);
+     * B -> ofBlock...(block.Quantum.frame, 0, ...);
+     * C -> ofBlock...(gtplusplus.blockcasings.2, 9, ...);
+     * D -> ofBlock...(gtplusplus.blockcasings.2, 10, ...);
+     * E -> ofBlock...(tile.wood, 0, ...);
+     * F -> ofBlock...(tile.wood, 1, ...);
+     */
+    private final String[][] shapeMain = new String[][]{
+        {"                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","  BBB                                     BBB  ","  DDD                                     DDD  ","  DED                                     DED  ","  DAD                                     DAD  ","  DED                                     DED  ","  DDD                                     DDD  ","  BBB                                     BBB  ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               "},
+        {"                                               ","                    BDEAEDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDDD     DDDDDDD              ","            DDDDDDD BDEAEDB DDDDDDD            ","           DDDDD               DDDDD           ","          DDDD                   DDDD          ","         DDD                       DDD         ","        DDD                         DDD        ","       DDD                           DDD       ","      DDD                             DDD      ","     DDD                               DDD     ","     DDD                               DDD     ","    DDD                                 DDD    ","    DDD                                 DDD    ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","  DDD                                     DDD  "," BDDDB                                   BDDDB "," D   D                                   D   D "," E   E                                   E   E "," A   A                                   A   A "," E   E                                   E   E "," D   D                                   D   D "," BDDDB                                   BDDDB ","  DDD                                     DDD  ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","    DDD                                 DDD    ","    DDD                                 DDD    ","     DDD                               DDD     ","     DDD                               DDD     ","      DDD                             DDD      ","       DDD                           DDD       ","        DDD                         DDD        ","         DDD                       DDD         ","          DDDD                   DDDD          ","           DDDDD               DDDDD           ","            DDDDDDD BDEAEDB DDDDDDD            ","              DDDDDDD     DDDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDEAEDB                    ","                                               "},
+        {"                    BDDDDDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDCCCCCCCCCDDDDD              ","            DDDDCCCDD     DDCCCDDDD            ","           DDDCCDDDDD     DDDDDCCDDD           ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","         DDCDDDD               DDDDCDD         ","        DDCDDD                   DDDCDD        ","       DDCDF                       FDCDD       ","      FDCDD                         DDCDF      ","     DDCDF                           FDCDD     ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  "," DDCDD                                   DDCDD ","BDDCDDB                                 BDDCDDB","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","BDDCDDB                                 BDDCDDB"," DDCDD                                   DDCDD ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","     DDCDF                           FDCDD     ","      FDCDD                         DDCDF      ","       DDCDF                       FDCDD       ","        DDCDDD                   DDDCDD        ","         DDCDDDD               DDDDCDD         ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","           DDDCCDDDDD     DDDDDCCDDD           ","            DDDDCCCDD     DDCCCDDDD            ","              DDDDDCCCCCCCCCDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDDDDDB                    "},
+        {"                    BDEAEDB                    ","                   DD     DD                   ","                DDDCCCCCCCCCDDD                ","              DDCCCCCCCCCCCCCCCDD              ","            DDCCCCCCCCCCCCCCCCCCCDD            ","           DCCCCCCCDD     DDCCCCCCCD           ","          DCCCCCDDD BDEAEDB DDDCCCCCD          ","         DCCCCDD               DDCCCCD         ","        DCCCDD                   DDCCCD        ","       DCCCD                       DCCCD       ","      DCCCD                         DCCCD      ","     DCCCD                           DCCCD     ","    DCCCD                             DCCCD    ","    DCCCD                             DCCCD    ","   DCCCD                               DCCCD   ","   DCCCD                               DCCCD   ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  "," DCCCD                                   DCCCD ","BDCCCDB                                 BDCCCDB","D CCC D                                 D CCC D","E CCC E                                 E CCC E","A CCC A                                 A CCC A","E CCC E                                 E CCC E","D CCC D                                 D CCC D","BDCCCDB                                 BDCCCDB"," DCCCD                                   DCCCD ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  ","   DCCCD                               DCCCD   ","   DCCCD                               DCCCD   ","    DCCCD                             DCCCD    ","    DCCCD                             DCCCD    ","     DCCCD                           DCCCD     ","      DCCCD                         DCCCD      ","       DCCCD                       DCCCD       ","        DCCCDD                   DDCCCD        ","         DCCCCDD               DDCCCCD         ","          DCCCCCDDD BDE~EDB DDDCCCCCD          ","           DCCCCCCCDD     DDCCCCCCCD           ","            DDCCCCCCCCCCCCCCCCCCCDD            ","              DDCCCCCCCCCCCCCCCDD              ","                DDDCCCCCCCCCDDD                ","                   DD     DD                   ","                    BDEAEDB                    "},
+        {"                    BDDDDDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDCCCCCCCCCDDDDD              ","            DDDDCCCDD     DDCCCDDDD            ","           DDDCCDDDDD     DDDDDCCDDD           ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","         DDCDDDD               DDDDCDD         ","        DDCDDD                   DDDCDD        ","       DDCDF                       FDCDD       ","      FDCDD                         DDCDF      ","     DDCDF                           FDCDD     ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  "," DDCDD                                   DDCDD ","BDDCDDB                                 BDDCDDB","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","BDDCDDB                                 BDDCDDB"," DDCDD                                   DDCDD ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","     DDCDF                           FDCDD     ","      FDCDD                         DDCDF      ","       DDCDF                       FDCDD       ","        DDCDDD                   DDDCDD        ","         DDCDDDD               DDDDCDD         ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","           DDDCCDDDDD     DDDDDCCDDD           ","            DDDDCCCDD     DDCCCDDDD            ","              DDDDDCCCCCCCCCDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDDDDDB                    "},
+        {"                                               ","                    BDEAEDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDDD     DDDDDDD              ","            DDDDDDD BDEAEDB DDDDDDD            ","           DDDDD               DDDDD           ","          DDDD                   DDDD          ","         DDD                       DDD         ","        DDD                         DDD        ","       DDD                           DDD       ","      DDD                             DDD      ","     DDD                               DDD     ","     DDD                               DDD     ","    DDD                                 DDD    ","    DDD                                 DDD    ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","  DDD                                     DDD  "," BDDDB                                   BDDDB "," D   D                                   D   D "," E   E                                   E   E "," A   A                                   A   A "," E   E                                   E   E "," D   D                                   D   D "," BDDDB                                   BDDDB ","  DDD                                     DDD  ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","    DDD                                 DDD    ","    DDD                                 DDD    ","     DDD                               DDD     ","     DDD                               DDD     ","      DDD                             DDD      ","       DDD                           DDD       ","        DDD                         DDD        ","         DDD                       DDD         ","          DDDD                   DDDD          ","           DDDDD               DDDDD           ","            DDDDDDD BDEAEDB DDDDDDD            ","              DDDDDDD     DDDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDEAEDB                    ","                                               "},
+        {"                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","  BBB                                     BBB  ","  DDD                                     DDD  ","  DED                                     DED  ","  DAD                                     DAD  ","  DED                                     DED  ","  DDD                                     DDD  ","  BBB                                     BBB  ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_IncompactCyclotron> getStructureDefinition() {
@@ -165,26 +123,69 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
         }
         return STRUCTURE_DEFINITION;
     }
-    // spotless:off
 
-    /*
-     * A -> ofBlock...(BW_GlasBlocks, 14, ...);
-     * B -> ofBlock...(block.Quantum.frame, 0, ...);
-     * C -> ofBlock...(gtplusplus.blockcasings.2, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.2, 10, ...);
-     * E -> ofBlock...(tile.wood, 0, ...);
-     * F -> ofBlock...(tile.wood, 1, ...);
-     */
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
-    private final String[][] shapeMain = new String[][]{
-        {"                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","  BBB                                     BBB  ","  DDD                                     DDD  ","  DED                                     DED  ","  DAD                                     DAD  ","  DED                                     DED  ","  DDD                                     DDD  ","  BBB                                     BBB  ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               "},
-        {"                                               ","                    BDEAEDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDDD     DDDDDDD              ","            DDDDDDD BDEAEDB DDDDDDD            ","           DDDDD               DDDDD           ","          DDDD                   DDDD          ","         DDD                       DDD         ","        DDD                         DDD        ","       DDD                           DDD       ","      DDD                             DDD      ","     DDD                               DDD     ","     DDD                               DDD     ","    DDD                                 DDD    ","    DDD                                 DDD    ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","  DDD                                     DDD  "," BDDDB                                   BDDDB "," D   D                                   D   D "," E   E                                   E   E "," A   A                                   A   A "," E   E                                   E   E "," D   D                                   D   D "," BDDDB                                   BDDDB ","  DDD                                     DDD  ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","    DDD                                 DDD    ","    DDD                                 DDD    ","     DDD                               DDD     ","     DDD                               DDD     ","      DDD                             DDD      ","       DDD                           DDD       ","        DDD                         DDD        ","         DDD                       DDD         ","          DDDD                   DDDD          ","           DDDDD               DDDDD           ","            DDDDDDD BDEAEDB DDDDDDD            ","              DDDDDDD     DDDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDEAEDB                    ","                                               "},
-        {"                    BDDDDDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDCCCCCCCCCDDDDD              ","            DDDDCCCDD     DDCCCDDDD            ","           DDDCCDDDDD     DDDDDCCDDD           ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","         DDCDDDD               DDDDCDD         ","        DDCDDD                   DDDCDD        ","       DDCDF                       FDCDD       ","      FDCDD                         DDCDF      ","     DDCDF                           FDCDD     ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  "," DDCDD                                   DDCDD ","BDDCDDB                                 BDDCDDB","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","BDDCDDB                                 BDDCDDB"," DDCDD                                   DDCDD ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","     DDCDF                           FDCDD     ","      FDCDD                         DDCDF      ","       DDCDF                       FDCDD       ","        DDCDDD                   DDDCDD        ","         DDCDDDD               DDDDCDD         ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","           DDDCCDDDDD     DDDDDCCDDD           ","            DDDDCCCDD     DDCCCDDDD            ","              DDDDDCCCCCCCCCDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDDDDDB                    "},
-        {"                    BDEAEDB                    ","                   DD     DD                   ","                DDDCCCCCCCCCDDD                ","              DDCCCCCCCCCCCCCCCDD              ","            DDCCCCCCCCCCCCCCCCCCCDD            ","           DCCCCCCCDD     DDCCCCCCCD           ","          DCCCCCDDD BDEAEDB DDDCCCCCD          ","         DCCCCDD               DDCCCCD         ","        DCCCDD                   DDCCCD        ","       DCCCD                       DCCCD       ","      DCCCD                         DCCCD      ","     DCCCD                           DCCCD     ","    DCCCD                             DCCCD    ","    DCCCD                             DCCCD    ","   DCCCD                               DCCCD   ","   DCCCD                               DCCCD   ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  "," DCCCD                                   DCCCD ","BDCCCDB                                 BDCCCDB","D CCC D                                 D CCC D","E CCC E                                 E CCC E","A CCC A                                 A CCC A","E CCC E                                 E CCC E","D CCC D                                 D CCC D","BDCCCDB                                 BDCCCDB"," DCCCD                                   DCCCD ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  ","  DCCCD                                 DCCCD  ","   DCCCD                               DCCCD   ","   DCCCD                               DCCCD   ","    DCCCD                             DCCCD    ","    DCCCD                             DCCCD    ","     DCCCD                           DCCCD     ","      DCCCD                         DCCCD      ","       DCCCD                       DCCCD       ","        DCCCDD                   DDCCCD        ","         DCCCCDD               DDCCCCD         ","          DCCCCCDDD BDE~EDB DDDCCCCCD          ","           DCCCCCCCDD     DDCCCCCCCD           ","            DDCCCCCCCCCCCCCCCCCCCDD            ","              DDCCCCCCCCCCCCCCCDD              ","                DDDCCCCCCCCCDDD                ","                   DD     DD                   ","                    BDEAEDB                    "},
-        {"                    BDDDDDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDCCCCCCCCCDDDDD              ","            DDDDCCCDD     DDCCCDDDD            ","           DDDCCDDDDD     DDDDDCCDDD           ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","         DDCDDDD               DDDDCDD         ","        DDCDDD                   DDDCDD        ","       DDCDF                       FDCDD       ","      FDCDD                         DDCDF      ","     DDCDF                           FDCDD     ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  "," DDCDD                                   DDCDD ","BDDCDDB                                 BDDCDDB","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","D  C  D                                 D  C  D","BDDCDDB                                 BDDCDDB"," DDCDD                                   DDCDD ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","  DDCDD                                 DDCDD  ","   DDCDD                               DDCDD   ","   DDCDD                               DDCDD   ","    DDCDD                             DDCDD    ","    DDCDD                             DDCDD    ","     DDCDF                           FDCDD     ","      FDCDD                         DDCDF      ","       DDCDF                       FDCDD       ","        DDCDDD                   DDDCDD        ","         DDCDDDD               DDDDCDD         ","          FDCCDDDDD BDDDDDB DDDDDCCDF          ","           DDDCCDDDDD     DDDDDCCDDD           ","            DDDDCCCDD     DDCCCDDDD            ","              DDDDDCCCCCCCCCDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDDDDDB                    "},
-        {"                                               ","                    BDEAEDB                    ","                   DD     DD                   ","                DDDDD     DDDDD                ","              DDDDDDD     DDDDDDD              ","            DDDDDDD BDEAEDB DDDDDDD            ","           DDDDD               DDDDD           ","          DDDD                   DDDD          ","         DDD                       DDD         ","        DDD                         DDD        ","       DDD                           DDD       ","      DDD                             DDD      ","     DDD                               DDD     ","     DDD                               DDD     ","    DDD                                 DDD    ","    DDD                                 DDD    ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","  DDD                                     DDD  "," BDDDB                                   BDDDB "," D   D                                   D   D "," E   E                                   E   E "," A   A                                   A   A "," E   E                                   E   E "," D   D                                   D   D "," BDDDB                                   BDDDB ","  DDD                                     DDD  ","   DDD                                   DDD   ","   DDD                                   DDD   ","   DDD                                   DDD   ","    DDD                                 DDD    ","    DDD                                 DDD    ","     DDD                               DDD     ","     DDD                               DDD     ","      DDD                             DDD      ","       DDD                           DDD       ","        DDD                         DDD        ","         DDD                       DDD         ","          DDDD                   DDDD          ","           DDDDD               DDDDD           ","            DDDDDDD BDEAEDB DDDDDDD            ","              DDDDDDD     DDDDDDD              ","                DDDDD     DDDDD                ","                   DD     DD                   ","                    BDEAEDB                    ","                                               "},
-        {"                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","  BBB                                     BBB  ","  DDD                                     DDD  ","  DED                                     DED  ","  DAD                                     DAD  ","  DED                                     DED  ","  DDD                                     DDD  ","  BBB                                     BBB  ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    BDDDDDB                    ","                    BDEAEDB                    ","                    BDDDDDB                    ","                                               ","                                               "}
-    };
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTPPRecipeMaps.cyclotronRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return MaxParallel_IncompactCyclotron;
+    }
+
+    @Override
+    protected float getEuModifier() {
+        return EuModifier_IncompactCyclotron;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return SpeedBouns_IncompactCyclotron;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return EnablePerfectOverclock_IncompactCyclotron;
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -203,9 +204,14 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
         return new ITexture[] { base };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_IncompactCyclotron_MachineType
         // # Particle Accelerator
         // #zh_CN 粒子加速器
@@ -251,7 +257,10 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
-    // spotless:on
+
+    // endregion
+
 }

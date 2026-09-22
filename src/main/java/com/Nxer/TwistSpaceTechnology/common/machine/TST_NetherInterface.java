@@ -77,33 +77,124 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_NetherInterface(mName);
     }
-
     // endregion
 
-    // region Logic
+    // region Structure
+    private static final int horizontalOffSet = 7;
+    private static final int verticalOffSet = 13;
+    private static final int depthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static IStructureDefinition<TST_NetherInterface> STRUCTURE_DEFINITION = null;
+
+    @Override
+    public IStructureDefinition<TST_NetherInterface> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_NetherInterface>builder()
+                .addShape(
+                    STRUCTURE_PIECE_MAIN,
+                    transpose(
+                        new String[][] { { "               ", " AAAAAAAAAAAAA ", " AAAAAAAAAAAAA ", " AAAAAAAAAAAAA " },
+                            { "               ", " A           A ", " CCCCCCCCCCCCC ", " A           A " },
+                            { "               ", " BCCCCCCCCCCCB ", " CDDDDDDDDDDDC ", " BCCCCCCCCCCCB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "               ", " BC         CB ", " CD         DC ", " BC         CB " },
+                            { "      A~A      ", " BCCCCCCCCCCCB ", " CDDDDDDDDDDDC ", " BCCCCCCCCCCCB " },
+                            { "      AAA      ", "AAAAAAAAAAAAAAA", "ACCCCCCCCCCCCCA", "AAAAAAAAAAAAAAA" },
+                            { "      AAA      ", "AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAA" } }))
+                .addElement(
+                    'A',
+                    HatchElementBuilder.<TST_NetherInterface>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_NetherInterface::addToMachineList)
+                        .hint(1)
+                        .casingIndex(16)
+                        .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 0)))
+                .addElement('B', ofFrame(Materials.Obsidian))
+                .addElement('C', ofBlock(MetaBlockCasing02, 5))
+                .addElement('D', ofBlock(Blocks.obsidian, 0))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        repairMachine();
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        maxParallel = Config.MaxParallel_NetherInterface;
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
     public static RandomPackageFactory<ItemStack> ItemRandomGetter;
 
-    public static void initStatics() {
-        ItemRandomGetter = RandomPackageFactory.<ItemStack>builder()
-            .add(
-                getModItem(
-                    EtFuturumRequiem.ID,
-                    "ancient_debris",
-                    1,
-                    new ItemStack(Blocks.fire).setStackDisplayName("EtFuturumRequiem:ancient_debris")),
-                1d)
-            .add(ItemList.Heavy_Hellish_Mud.get(48), 49d)
-            .add(ItemList.Brittle_Netherite_Scrap.get(64), 30d)
-            .add(ItemList.Intensely_Bonded_Netherite_Nanoparticles.get(64), 10d)
-            .add(
-                getModItem(
-                    ThaumicTinkerer.ID,
-                    "kamiResource",
-                    8,
-                    6,
-                    new ItemStack(Blocks.fire).setStackDisplayName("ThaumicTinkerer:kamiResource:6")),
-                10d)
-            .build(new ItemStack[0]);
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return NetherInterfaceVisualRecipeMap;
+    }
+
+    @Override
+    public boolean supportsMachineModeSwitch() {
+        return false;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
     }
 
     @NotNull
@@ -169,121 +260,32 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
         return CheckRecipeResultRegistry.SUCCESSFUL;
     }
 
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return NetherInterfaceVisualRecipeMap;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        maxParallel = Config.MaxParallel_NetherInterface;
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    public static void initStatics() {
+        ItemRandomGetter = RandomPackageFactory.<ItemStack>builder()
+            .add(
+                getModItem(
+                    EtFuturumRequiem.ID,
+                    "ancient_debris",
+                    1,
+                    new ItemStack(Blocks.fire).setStackDisplayName("EtFuturumRequiem:ancient_debris")),
+                1d)
+            .add(ItemList.Heavy_Hellish_Mud.get(48), 49d)
+            .add(ItemList.Brittle_Netherite_Scrap.get(64), 30d)
+            .add(ItemList.Intensely_Bonded_Netherite_Nanoparticles.get(64), 10d)
+            .add(
+                getModItem(
+                    ThaumicTinkerer.ID,
+                    "kamiResource",
+                    8,
+                    6,
+                    new ItemStack(Blocks.fire).setStackDisplayName("ThaumicTinkerer:kamiResource:6")),
+                10d)
+            .build(new ItemStack[0]);
     }
 
     // endregion
 
-    // region Structure
-    // spotless:off
-    private static final int horizontalOffSet = 7;
-    private static final int verticalOffSet = 13;
-    private static final int depthOffSet = 0;
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static IStructureDefinition<TST_NetherInterface> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        repairMachine();
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_NetherInterface> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION =
-                StructureDefinition
-                    .<TST_NetherInterface>builder()
-                    .addShape(STRUCTURE_PIECE_MAIN, transpose(new String[][]{
-                        {"               "," AAAAAAAAAAAAA "," AAAAAAAAAAAAA "," AAAAAAAAAAAAA "},
-                        {"               "," A           A "," CCCCCCCCCCCCC "," A           A "},
-                        {"               "," BCCCCCCCCCCCB "," CDDDDDDDDDDDC "," BCCCCCCCCCCCB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"               "," BC         CB "," CD         DC "," BC         CB "},
-                        {"      A~A      "," BCCCCCCCCCCCB "," CDDDDDDDDDDDC "," BCCCCCCCCCCCB "},
-                        {"      AAA      ","AAAAAAAAAAAAAAA","ACCCCCCCCCCCCCA","AAAAAAAAAAAAAAA"},
-                        {"      AAA      ","AAAAAAAAAAAAAAA","AAAAAAAAAAAAAAA","AAAAAAAAAAAAAAA"}
-                    }))
-                    .addElement(
-                        'A',
-                        HatchElementBuilder
-                            .<TST_NetherInterface>builder()
-                            .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
-                            .adder(TST_NetherInterface::addToMachineList)
-                            .hint(1)
-                            .casingIndex(16)
-                            .buildAndChain(ofBlock(GregTechAPI.sBlockCasings2, 0))
-                    )
-                    .addElement('B', ofFrame(Materials.Obsidian))
-                    .addElement('C', ofBlock(MetaBlockCasing02, 5))
-                    .addElement('D', ofBlock(Blocks.obsidian, 0))
-                    .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    // spotless:on
-    // endregion
-
-    // region General
-
-    @Override
-    protected boolean supportsCraftingMEBuffer() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsMachineModeSwitch() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -310,6 +312,10 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[0][16] };
     }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -341,6 +347,7 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
         // spotless:on
         return tt;
     }
+
     // endregion
 
 }

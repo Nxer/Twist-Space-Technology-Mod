@@ -81,267 +81,14 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MicroSpaceTimeFabricatorio(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    public static TST_ItemID SeedSpaceTime;
-
-    public static void initStatics() {
-        SeedSpaceTime = TST_ItemID.createNoNBT(GTCMItemList.SeedsSpaceTime.get(1));
-    }
-
-    protected int transcendentCasingTier = -1;
-    protected int injectionCasingTier = -1;
-    protected int bridgeCasingTier = -1;
-    protected int fieldTier = -1;
-    protected MTEHatchInputBus specialInputBus;
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("transcendentCasingTier", transcendentCasingTier);
-        aNBT.setInteger("injectionCasingTier", injectionCasingTier);
-        aNBT.setInteger("bridgeCasingTier", bridgeCasingTier);
-        aNBT.setInteger("fieldTier", fieldTier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        transcendentCasingTier = aNBT.getInteger("transcendentCasingTier");
-        injectionCasingTier = aNBT.getInteger("injectionCasingTier");
-        bridgeCasingTier = aNBT.getInteger("bridgeCasingTier");
-        fieldTier = aNBT.getInteger("fieldTier");
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.MicroSpaceTimeFabricatorioRecipes;
-    }
-
-    @NotNull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        // check structure whether cause calamity
-        if (!Safe_Calamity_MicroSpaceTimeFabricatorio && fieldTier > 1) {
-            if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) {
-                explodeMultiblock();
-                return CheckRecipeResultRegistry.NO_RECIPE;
-            }
-        }
-
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-        mMaxProgresstime = processingLogic.getDuration();
-        setEnergyUsage(processingLogic);
-
-        mOutputItems = processingLogic.getOutputItems();
-        mOutputFluids = processingLogic.getOutputFluids();
-
-        if (tryConsumeSpaceTimeSeed()) {
-            if (mOutputItems != null && mOutputItems.length > 0) {
-                List<ItemStack> o = new ArrayList<>();
-                for (ItemStack i : mOutputItems) {
-                    o.add(i.copy());
-                    o.add(i);
-                }
-                mOutputItems = o.toArray(new ItemStack[0]);
-            }
-
-            if (mOutputFluids != null && mOutputFluids.length > 0) {
-                List<FluidStack> o = new ArrayList<>();
-                for (FluidStack f : mOutputFluids) {
-                    o.add(f.copy());
-                    o.add(f);
-                }
-                mOutputFluids = o.toArray(new FluidStack[0]);
-            }
-        }
-
-        return result;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    protected boolean tryConsumeSpaceTimeSeed() {
-        if (null == specialInputBus || !specialInputBus.isValid()) return false;
-        IGregTechTileEntity te = specialInputBus.getBaseMetaTileEntity();
-        for (int i = te.getSizeInventory() - 1; i >= 0; i--) {
-            ItemStack itemStack = te.getStackInSlot(i);
-            if (itemStack != null && itemStack.stackSize >= 1) {
-                if (SeedSpaceTime.equalItemStack(itemStack)) {
-                    itemStack.stackSize--;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void updateSlots() {
-        super.updateSlots();
-        if (null != specialInputBus && specialInputBus.isValid()) specialInputBus.updateSlots();
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Parallel_MicroSpaceTimeFabricatorio;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        specialInputBus = null;
-        transcendentCasingTier = -1;
-        injectionCasingTier = -1;
-        bridgeCasingTier = -1;
-        fieldTier = -1;
-        enablePerfectOverclock = false;
-        speedBonus = 1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (fieldTier < 1) {
-            errors.add(internal_structure_issue);
-            return;
-        }
-        if (fieldTier > 1) {
-            // using homo field block need use homo structure block at same time
-            if (Safe_Calamity_MicroSpaceTimeFabricatorio) {
-                if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) {
-                    errors.add(tiered_structure_issue);
-                    return;
-                }
-            }
-            // using homo field block enable perfect overclock
-            enablePerfectOverclock = true;
-            if (fieldTier > 2) {
-                // higher tier gives a stacked speed up parameter
-                int t = fieldTier - 2;
-                int speedUp = (t + 1) * t / 2;
-                speedBonus = 1F / speedUp;
-            }
-        }
-
-    }
-
     // endregion
 
     // region Structure
-
     protected static final int horizontalOffSet = 9;
     protected static final int verticalOffSet = 20;
     protected static final int depthOffSet = 1;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<TST_MicroSpaceTimeFabricatorio> STRUCTURE_DEFINITION = null;
-
-    public static Integer getBlockFieldTier(Block block, int meta) {
-        if (block == sBlockCasingsTT && meta == 14) {
-            return 1;
-        }
-        if (block == StabilisationFieldGenerators && meta <= 8) {
-            return meta + 2;
-        }
-        return null;
-    }
-
-    public static Integer getBlockTranscendentCasingTier(Block block, int meta) {
-        if (block == sBlockCasings1 && meta == 12) {
-            return 1;
-        }
-        if (block == sBlockCasingsBA0 && meta == 11) {
-            return 2;
-        }
-        return null;
-    }
-
-    public static Integer getBlockInjectionCasingTier(Block block, int meta) {
-        if (block == sBlockCasings1 && meta == 13) {
-            return 1;
-        }
-        if (block == sBlockCasingsBA0 && meta == 12) {
-            return 2;
-        }
-        return null;
-    }
-
-    public static Integer getBlockBridgeCasingTier(Block block, int meta) {
-        if (block == sBlockCasings1 && meta == 14) {
-            return 1;
-        }
-        if (block == sBlockCasingsTT && meta == 10) {
-            return 2;
-        }
-        return null;
-    }
-
-    public boolean addSpecialInputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-
-        if (aMetaTileEntity instanceof MTEHatchInputBus hatch) {
-            hatch.updateTexture(aBaseCasingIndex);
-            hatch.updateCraftingIcon(this.getMachineCraftingIcon());
-            hatch.mRecipeMap = getRecipeMap();
-            specialInputBus = hatch;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void startRecipeProcessing() {
-        super.startRecipeProcessing();
-        if (null != specialInputBus && specialInputBus.isValid()) {
-            if (specialInputBus instanceof IRecipeProcessingAwareHatch aware) {
-                aware.startRecipeProcessing();
-            }
-        }
-    }
-
-    @Override
-    public void endRecipeProcessing() {
-        super.endRecipeProcessing();
-        if (null != specialInputBus && specialInputBus.isValid()) {
-            if (specialInputBus instanceof IRecipeProcessingAwareHatch aware) {
-                setResultIfFailure(aware.endRecipeProcessing(this));
-            }
-        }
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<TST_MicroSpaceTimeFabricatorio> getStructureDefinition() {
@@ -447,15 +194,277 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
         return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        specialInputBus = null;
+        transcendentCasingTier = -1;
+        injectionCasingTier = -1;
+        bridgeCasingTier = -1;
+        fieldTier = -1;
+        enablePerfectOverclock = false;
+        speedBonus = 1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (fieldTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
+        }
+        if (fieldTier > 1) {
+            // using homo field block need use homo structure block at same time
+            if (Safe_Calamity_MicroSpaceTimeFabricatorio) {
+                if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) {
+                    errors.add(tiered_structure_issue);
+                    return;
+                }
+            }
+            // using homo field block enable perfect overclock
+            enablePerfectOverclock = true;
+            if (fieldTier > 2) {
+                // higher tier gives a stacked speed up parameter
+                int t = fieldTier - 2;
+                int speedUp = (t + 1) * t / 2;
+                speedBonus = 1F / speedUp;
+            }
+        }
+
+    }
     // endregion
 
-    // region General
+    // region Processing Logic
+    public static TST_ItemID SeedSpaceTime;
+    protected int transcendentCasingTier = -1;
+    protected int injectionCasingTier = -1;
+    protected int bridgeCasingTier = -1;
+    protected int fieldTier = -1;
+    protected MTEHatchInputBus specialInputBus;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.MicroSpaceTimeFabricatorioRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return Parallel_MicroSpaceTimeFabricatorio;
+    }
+
+    @NotNull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        // check structure whether cause calamity
+        if (!Safe_Calamity_MicroSpaceTimeFabricatorio && fieldTier > 1) {
+            if (transcendentCasingTier < 2 || injectionCasingTier < 2 || bridgeCasingTier < 2) {
+                explodeMultiblock();
+                return CheckRecipeResultRegistry.NO_RECIPE;
+            }
+        }
+
+        setupProcessingLogic(processingLogic);
+
+        CheckRecipeResult result = doCheckRecipe();
+        result = postCheckRecipe(result, processingLogic);
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+        mMaxProgresstime = processingLogic.getDuration();
+        setEnergyUsage(processingLogic);
+
+        mOutputItems = processingLogic.getOutputItems();
+        mOutputFluids = processingLogic.getOutputFluids();
+
+        if (tryConsumeSpaceTimeSeed()) {
+            if (mOutputItems != null && mOutputItems.length > 0) {
+                List<ItemStack> o = new ArrayList<>();
+                for (ItemStack i : mOutputItems) {
+                    o.add(i.copy());
+                    o.add(i);
+                }
+                mOutputItems = o.toArray(new ItemStack[0]);
+            }
+
+            if (mOutputFluids != null && mOutputFluids.length > 0) {
+                List<FluidStack> o = new ArrayList<>();
+                for (FluidStack f : mOutputFluids) {
+                    o.add(f.copy());
+                    o.add(f);
+                }
+                mOutputFluids = o.toArray(new FluidStack[0]);
+            }
+        }
+
+        return result;
+    }
+
+    public static void initStatics() {
+        SeedSpaceTime = TST_ItemID.createNoNBT(GTCMItemList.SeedsSpaceTime.get(1));
+    }
+
+    protected boolean tryConsumeSpaceTimeSeed() {
+        if (null == specialInputBus || !specialInputBus.isValid()) return false;
+        IGregTechTileEntity te = specialInputBus.getBaseMetaTileEntity();
+        for (int i = te.getSizeInventory() - 1; i >= 0; i--) {
+            ItemStack itemStack = te.getStackInSlot(i);
+            if (itemStack != null && itemStack.stackSize >= 1) {
+                if (SeedSpaceTime.equalItemStack(itemStack)) {
+                    itemStack.stackSize--;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void updateSlots() {
+        super.updateSlots();
+        if (null != specialInputBus && specialInputBus.isValid()) specialInputBus.updateSlots();
+    }
+
+    public static Integer getBlockFieldTier(Block block, int meta) {
+        if (block == sBlockCasingsTT && meta == 14) {
+            return 1;
+        }
+        if (block == StabilisationFieldGenerators && meta <= 8) {
+            return meta + 2;
+        }
+        return null;
+    }
+
+    public static Integer getBlockTranscendentCasingTier(Block block, int meta) {
+        if (block == sBlockCasings1 && meta == 12) {
+            return 1;
+        }
+        if (block == sBlockCasingsBA0 && meta == 11) {
+            return 2;
+        }
+        return null;
+    }
+
+    public static Integer getBlockInjectionCasingTier(Block block, int meta) {
+        if (block == sBlockCasings1 && meta == 13) {
+            return 1;
+        }
+        if (block == sBlockCasingsBA0 && meta == 12) {
+            return 2;
+        }
+        return null;
+    }
+
+    public static Integer getBlockBridgeCasingTier(Block block, int meta) {
+        if (block == sBlockCasings1 && meta == 14) {
+            return 1;
+        }
+        if (block == sBlockCasingsTT && meta == 10) {
+            return 2;
+        }
+        return null;
+    }
+
+    @Override
+    public void startRecipeProcessing() {
+        super.startRecipeProcessing();
+        if (null != specialInputBus && specialInputBus.isValid()) {
+            if (specialInputBus instanceof IRecipeProcessingAwareHatch aware) {
+                aware.startRecipeProcessing();
+            }
+        }
+    }
+
+    @Override
+    public void endRecipeProcessing() {
+        super.endRecipeProcessing();
+        if (null != specialInputBus && specialInputBus.isValid()) {
+            if (specialInputBus instanceof IRecipeProcessingAwareHatch aware) {
+                setResultIfFailure(aware.endRecipeProcessing(this));
+            }
+        }
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("transcendentCasingTier", transcendentCasingTier);
+        aNBT.setInteger("injectionCasingTier", injectionCasingTier);
+        aNBT.setInteger("bridgeCasingTier", bridgeCasingTier);
+        aNBT.setInteger("fieldTier", fieldTier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        transcendentCasingTier = aNBT.getInteger("transcendentCasingTier");
+        injectionCasingTier = aNBT.getInteger("injectionCasingTier");
+        bridgeCasingTier = aNBT.getInteger("bridgeCasingTier");
+        fieldTier = aNBT.getInteger("fieldTier");
+    }
+
+    // endregion
+
+    // region Textures
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstoneLevel) {
+        if (side == facing) {
+            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
+                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
+        }
+        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
+    }
+
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
         MultiblockTooltipBuilder tooltip = new TSTMultiblockTooltipBuilder();
 
         tooltip
+            // spotless:off
             // #tr Tooltip_MicroSpaceTimeFabricatorio_MachineType
             // # Artificial SpaceTime Fabricator
             // #zh_CN 人造时空发生器
@@ -494,28 +503,29 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
             .addOutputBus(TextLocalization.textUseBlueprint, 1)
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .toolTipFinisher();
-        // spotless:on
+            // spotless:on
         return tooltip;
     }
 
-    protected static IIconContainer ActiveFace;
-    protected static IIconContainer InactiveFace;
+    // endregion
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_on");
-        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Adv_off");
-        super.registerIcons(aBlockIconRegister);
-    }
+    // region Hatch Registration
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
-                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
+    public boolean addSpecialInputBusToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+
+        if (aMetaTileEntity instanceof MTEHatchInputBus hatch) {
+            hatch.updateTexture(aBaseCasingIndex);
+            hatch.updateCraftingIcon(this.getMachineCraftingIcon());
+            hatch.mRecipeMap = getRecipeMap();
+            specialInputBus = hatch;
+            return true;
         }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
+        return false;
     }
+
+    // endregion
+
 }

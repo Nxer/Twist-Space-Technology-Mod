@@ -60,6 +60,11 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator implements TSTTool
     private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),
         TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.tr("Tooltip_BloodOrbHatch_5"), };
 
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
+    }
+
     public TST_BloodOrbHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
         if (getClass() == TST_BloodOrbHatch.class) {
@@ -69,11 +74,6 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator implements TSTTool
 
     public TST_BloodOrbHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
         super(aName, aTier, aDescription, aTextures);
-    }
-
-    @Override
-    public Style getTooltipCreditStyle() {
-        return Style.INFUSION;
     }
 
     @Override

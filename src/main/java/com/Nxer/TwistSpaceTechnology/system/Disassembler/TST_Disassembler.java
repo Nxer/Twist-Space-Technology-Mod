@@ -79,16 +79,385 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_Disassembler(this.mName);
     }
-
     // endregion
 
     // region Structure
-    // spotless:off
     private static final int horizontalOffSet = 13;
     private static final int verticalOffSet = 21;
     private static final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainTSTDisassembler";
     private static IStructureDefinition<TST_Disassembler> STRUCTURE_DEFINITION = null;
+
+    @Override
+    public IStructureDefinition<TST_Disassembler> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_Disassembler>builder()
+                .addShape(
+                    STRUCTURE_PIECE_MAIN,
+                    transpose(
+                        new String[][] { { "                           ", "                           ",
+                            "                           ", "                           ", "                           ",
+                            "                           ", "                           ", "                           ",
+                            "                           ", "                           ", "                           ",
+                            "                           ", "                           ", "           D   D           ",
+                            "           D   D           ", "           D   D           ", "                           ",
+                            "                           ", "                           ", "                           ",
+                            "                           ", "                           ", "                           ",
+                            "                           ", "                           ", "                           ",
+                            "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           D   D           ", "           D   D           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           D   D           ", "           D G D           ",
+                                "            GGG            ", "             G             ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "            EEE            ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "            GGG            ",
+                                "           DGGGD           ", "            GGG            ",
+                                "             G             ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "            FFF            ", "          EEBBBEE          ",
+                                "            FFF            ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "            GGG            ", "           DGGGD           ",
+                                "            GGG            ", "             G             ",
+                                "                           ", "                           ",
+                                "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "          FF   FF          ", "         EBBABABBE         ",
+                                "          FF   FF          ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "           D G D           ",
+                                "            GGG            ", "            GGG            ",
+                                "             G             ", "                           ",
+                                "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "         F                 ", "        EBAA B AA          ",
+                                "         F                 ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           D G D           ", "            GGG            ",
+                                "            GGG            ", "             G             ",
+                                "                           ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "        F                  ", "       EBA   B             ",
+                                "        F                  ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           D   D           ", "             G             ",
+                                "            GGG            ", "            GGG            ",
+                                "             G             ", "                           " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "        F                  ", "       EBA                 ",
+                                "        F                  ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "             G             ", "            GGG            ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "            FFF            ",
+                                "          FF   FF          ", "                 F         ",
+                                "                  F        ", "                  F        ",
+                                "       F           F       ", "     GEBA          FEG     ",
+                                "       F           F       ", "                  F        ",
+                                "                  F        ", "                 F         ",
+                                "          FF   FF          ", "            FFF            ",
+                                "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "                           ",
+                                "            EEE            ", "          EEBBBEE          ",
+                                "         EBBABABBE         ", "          AA B AABE        ",
+                                "             B   ABE       ", "                 ABE       ",
+                                "     GEF          ABEG     ", "     GBBBBB  H  BBBBBG     ",
+                                "     GEF          ABEG     ", "                 ABE       ",
+                                "             B   ABE       ", "          AA B AABE        ",
+                                "         EBBABABBE         ", "          EEBBBEE          ",
+                                "            EEE            ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "                           ",
+                                "                           ", "            FFF            ",
+                                "          FF   FF          ", "                 F         ",
+                                "                  F        ", "                  F        ",
+                                "       F           F       ", "     GEBA          FEG     ",
+                                "       F           F       ", "                  F        ",
+                                "                  F        ", "                 F         ",
+                                "          FF   FF          ", "            FFF            ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "     J  F            J     ", "     G EBA           G     ",
+                                "     J  F            J     ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           D   D           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "     J               J     ",
+                                "     G  F            G     ", "     G EBA   B       G     ",
+                                "     G  F            G     ", "     J               J     ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           D   D           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "     J               J     ", "     G               G     ",
+                                "         F                 ", "     G  EBAA B AA    G     ",
+                                "         F                 ", "     G               G     ",
+                                "     J               J     ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "                           ",
+                                "                           ", "     J               J     ",
+                                "     G               G     ", "                           ",
+                                "          FF   FF          ", "     G   EBBABABBE   G     ",
+                                "          FF   FF          ", "                           ",
+                                "     G               G     ", "     J               J     ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "                           ", "             H             ",
+                                "     J               J     ", "     G               G     ",
+                                "                           ", "                           ",
+                                "            FFF            ", "     G    EEBBBEE    G     ",
+                                "            FFF            ", "                           ",
+                                "                           ", "     G               G     ",
+                                "     J               J     ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "           DGHGD           ", "     J      GGG      J     ",
+                                "     G               G     ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "     G      EEE      G     ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "     G               G     ", "     J               J     ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "            JGJ            ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "            GHG            ",
+                                "     J      JGJ      J     ", "     G     D   D     G     ",
+                                "           D   D           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "    JG               GJ    ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "     G               G     ",
+                                "     J               J     ", "                           ",
+                                "                           ", "                           ",
+                                "            J J            ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "                           ", "                           ",
+                                "                           ", "                           ",
+                                "            GCG            ", "     J       G       J     ",
+                                "     G      J J      G     ", "                           ",
+                                "                           ", "           D   D           ",
+                                "           D   D           ", "                           ",
+                                "                           ", "   JGGJ             JGGJ   ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "     G               G     ", "     J               J     ",
+                                "                           ", "            J J            ",
+                                "                           ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "            III            ", "            GCG            ",
+                                "            GCG            ", "            GCG            ",
+                                "     J      JGJ      J     ", "     G               G     ",
+                                "            J J            ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "           D   D           ",
+                                "           D   D           ", "  JG GGJ   D   D   JGG GJ  ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "     G               G     ",
+                                "     J      J J      J     ", "                           ",
+                                "             G             ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "            I~I            ", "             G             ",
+                                "            JGJ            ", "     J       G       J     ",
+                                "     G      J J      G     ", "                           ",
+                                "            J J            ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", " JG  G GJ         JG G  GJ ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "                           ",
+                                "                           ", "            J J            ",
+                                "     G               G     ", "     J       G       J     ",
+                                "             G             ", "             G             ",
+                                "            GGG            ", "             G             " },
+                            { "            III            ", "             G             ",
+                                "     G      J J      G     ", "     G               G     ",
+                                "     G      J J      G     ", "     G               G     ",
+                                "     G      J J      G     ", "     G               G     ",
+                                "     G               G     ", "     G               G     ",
+                                "     G               G     ", "     G               G     ",
+                                "     G               G     ", "GGGGGGGGGGGGGGGGGGGGGGGGGGG",
+                                "     G               G     ", "     G               G     ",
+                                "     G               G     ", "     G               G     ",
+                                "     G               G     ", "     G               G     ",
+                                "     G      GGG      G     ", "     G      GGG      G     ",
+                                "     G      GGG      G     ", "     G      GGG      G     ",
+                                "     G      GGG      G     ", "            GGG            ",
+                                "            GGG            ", "            GGG            " } }))
+                .addElement('A', BorosilicateGlass.ofBoroGlassAnyTier())
+                .addElement(
+                    'B',
+                    withChannel(
+                        "component",
+                        ofBlocksTiered(
+                            (block, meta) -> block == Loaders.componentAssemblylineCasing ? meta : -1,
+                            IntStream.range(0, 14)
+                                .mapToObj(i -> Pair.of(Loaders.componentAssemblylineCasing, i))
+                                .collect(Collectors.toList()),
+                            -2,
+                            (t, meta) -> t.tierComponentCasing = meta,
+                            t -> t.tierComponentCasing)))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 8))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings9, 1))
+                .addElement('G', ofBlock(sBlockCasingsTT, 4))
+                .addElement('H', ofBlock(sBlockCasingsTT, 8))
+                .addElement(
+                    'I',
+                    HatchElementBuilder.<TST_Disassembler>builder()
+                        .atLeast(InputBus, OutputBus, OutputHatch)
+                        .adder(TST_Disassembler::addToMachineList)
+                        .hint(1)
+                        .casingIndex(1028)
+                        .buildAndChain(sBlockCasingsTT, 4))
+                .addElement('J', ofFrame(Materials.CosmicNeutronium))
+                /*
+                 * A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
+                 * B -> ofBlock...(componentAssemblyLineCasing, 13, ...); // tiered component casing
+                 * C -> ofBlock...(gt.blockcasings2, 5, ...);
+                 * D -> ofBlock...(gt.blockcasings2, 8, ...);
+                 * E -> ofBlock...(gt.blockcasings2, 9, ...);
+                 * F -> ofBlock...(gt.blockcasings9, 1, ...);
+                 * G -> ofBlock...(gt.blockcasingsTT, 4, ...);
+                 * H -> ofBlock...(gt.blockcasingsTT, 8, ...);
+                 * I -> ofBlock...(gt.blockcasingsTT, 4, ...); // hatches
+                 * J -> ofFrame...(Materials.CosmicNeutron);
+                 */
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -97,88 +466,16 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_Disassembler> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION =
-                StructureDefinition
-                    .<TST_Disassembler>builder()
-                    .addShape(
-                        STRUCTURE_PIECE_MAIN,
-                        transpose(new String[][]{
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","           D   D           ","           D   D           ","           D   D           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","           D   D           ","           D   D           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","           D   D           ","           D G D           ","            GGG            ","             G             ","                           ","                           ","                           ","                           ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","            EEE            ","                           ","                           ","                           ","                           ","                           ","            GGG            ","           DGGGD           ","            GGG            ","             G             ","                           ","                           ","                           ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","            FFF            ","          EEBBBEE          ","            FFF            ","                           ","                           ","                           ","                           ","                           ","            GGG            ","           DGGGD           ","            GGG            ","             G             ","                           ","                           ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","          FF   FF          ","         EBBABABBE         ","          FF   FF          ","                           ","                           ","                           ","                           ","                           ","                           ","           D G D           ","            GGG            ","            GGG            ","             G             ","                           ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","         F                 ","        EBAA B AA          ","         F                 ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","           D G D           ","            GGG            ","            GGG            ","             G             ","                           ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","        F                  ","       EBA   B             ","        F                  ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","           D   D           ","             G             ","            GGG            ","            GGG            ","             G             ","                           "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","        F                  ","       EBA                 ","        F                  ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","           D   D           ","             G             ","            GGG            ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","                           ","            FFF            ","          FF   FF          ","                 F         ","                  F        ","                  F        ","       F           F       ","     GEBA          FEG     ","       F           F       ","                  F        ","                  F        ","                 F         ","          FF   FF          ","            FFF            ","                           ","                           ","                           ","           D   D           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","           D   D           ","                           ","                           ","            EEE            ","          EEBBBEE          ","         EBBABABBE         ","          AA B AABE        ","             B   ABE       ","                 ABE       ","     GEF          ABEG     ","     GBBBBB  H  BBBBBG     ","     GEF          ABEG     ","                 ABE       ","             B   ABE       ","          AA B AABE        ","         EBBABABBE         ","          EEBBBEE          ","            EEE            ","                           ","                           ","           D   D           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","           D   D           ","                           ","                           ","                           ","            FFF            ","          FF   FF          ","                 F         ","                  F        ","                  F        ","       F           F       ","     GEBA          FEG     ","       F           F       ","                  F        ","                  F        ","                 F         ","          FF   FF          ","            FFF            ","                           ","                           ","                           ","                           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","           D   D           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","     J  F            J     ","     G EBA           G     ","     J  F            J     ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","           D   D           ","                           ","                           ","                           ","                           ","                           ","                           ","     J               J     ","     G  F            G     ","     G EBA   B       G     ","     G  F            G     ","     J               J     ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","           D   D           ","                           ","                           ","                           ","                           ","                           ","     J               J     ","     G               G     ","         F                 ","     G  EBAA B AA    G     ","         F                 ","     G               G     ","     J               J     ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","                           ","           D   D           ","                           ","                           ","                           ","     J               J     ","     G               G     ","                           ","          FF   FF          ","     G   EBBABABBE   G     ","          FF   FF          ","                           ","     G               G     ","     J               J     ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","                           ","           D   D           ","                           ","             H             ","     J               J     ","     G               G     ","                           ","                           ","            FFF            ","     G    EEBBBEE    G     ","            FFF            ","                           ","                           ","     G               G     ","     J               J     ","                           ","                           ","                           ","                           ","                           ","                           ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","                           ","                           ","           DGHGD           ","     J      GGG      J     ","     G               G     ","                           ","                           ","                           ","                           ","     G      EEE      G     ","                           ","                           ","                           ","                           ","     G               G     ","     J               J     ","                           ","                           ","                           ","                           ","                           ","            JGJ            ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","                           ","            GHG            ","     J      JGJ      J     ","     G     D   D     G     ","           D   D           ","                           ","                           ","                           ","                           ","    JG               GJ    ","                           ","                           ","                           ","                           ","                           ","     G               G     ","     J               J     ","                           ","                           ","                           ","            J J            ","             G             ","            GGG            ","             G             "},
-                            {"                           ","                           ","                           ","                           ","            GCG            ","     J       G       J     ","     G      J J      G     ","                           ","                           ","           D   D           ","           D   D           ","                           ","                           ","   JGGJ             JGGJ   ","                           ","                           ","                           ","                           ","                           ","                           ","     G               G     ","     J               J     ","                           ","            J J            ","                           ","             G             ","            GGG            ","             G             "},
-                            {"            III            ","            GCG            ","            GCG            ","            GCG            ","     J      JGJ      J     ","     G               G     ","            J J            ","                           ","                           ","                           ","                           ","           D   D           ","           D   D           ","  JG GGJ   D   D   JGG GJ  ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","     G               G     ","     J      J J      J     ","                           ","             G             ","             G             ","            GGG            ","             G             "},
-                            {"            I~I            ","             G             ","            JGJ            ","     J       G       J     ","     G      J J      G     ","                           ","            J J            ","                           ","                           ","                           ","                           ","                           ","                           "," JG  G GJ         JG G  GJ ","                           ","                           ","                           ","                           ","                           ","                           ","                           ","            J J            ","     G               G     ","     J       G       J     ","             G             ","             G             ","            GGG            ","             G             "},
-                            {"            III            ","             G             ","     G      J J      G     ","     G               G     ","     G      J J      G     ","     G               G     ","     G      J J      G     ","     G               G     ","     G               G     ","     G               G     ","     G               G     ","     G               G     ","     G               G     ","GGGGGGGGGGGGGGGGGGGGGGGGGGG","     G               G     ","     G               G     ","     G               G     ","     G               G     ","     G               G     ","     G               G     ","     G      GGG      G     ","     G      GGG      G     ","     G      GGG      G     ","     G      GGG      G     ","     G      GGG      G     ","            GGG            ","            GGG            ","            GGG            "}
-                        }))
-                    .addElement('A', BorosilicateGlass.ofBoroGlassAnyTier())
-                    .addElement(
-                        'B',
-                        withChannel(
-                            "component",
-                            ofBlocksTiered(
-                                (block, meta) -> block == Loaders.componentAssemblylineCasing ? meta : -1,
-                                IntStream.range(0, 14)
-                                         .mapToObj(i -> Pair.of(Loaders.componentAssemblylineCasing, i))
-                                         .collect(Collectors.toList()),
-                                -2,
-                                (t, meta) -> t.tierComponentCasing = meta,
-                                t -> t.tierComponentCasing))
-                    )
-                    .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 5))
-                    .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 8))
-                    .addElement('E', ofBlock(GregTechAPI.sBlockCasings2, 9))
-                    .addElement('F', ofBlock(GregTechAPI.sBlockCasings9, 1))
-                    .addElement('G', ofBlock(sBlockCasingsTT, 4))
-                    .addElement('H', ofBlock(sBlockCasingsTT, 8))
-                    .addElement(
-                        'I',
-                        HatchElementBuilder
-                            .<TST_Disassembler>builder()
-                            .atLeast(InputBus, OutputBus, OutputHatch)
-                            .adder(TST_Disassembler::addToMachineList)
-                            .hint(1)
-                            .casingIndex(1028)
-                            .buildAndChain(sBlockCasingsTT, 4)
-                    )
-                    .addElement('J', ofFrame(Materials.CosmicNeutronium))
-                    /*
-                    A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
-                    B -> ofBlock...(componentAssemblyLineCasing, 13, ...); // tiered component casing
-                    C -> ofBlock...(gt.blockcasings2, 5, ...);
-                    D -> ofBlock...(gt.blockcasings2, 8, ...);
-                    E -> ofBlock...(gt.blockcasings2, 9, ...);
-                    F -> ofBlock...(gt.blockcasings9, 1, ...);
-                    G -> ofBlock...(gt.blockcasingsTT, 4, ...);
-                    H -> ofBlock...(gt.blockcasingsTT, 8, ...);
-                    I -> ofBlock...(gt.blockcasingsTT, 4, ...); // hatches
-                    J -> ofFrame...(Materials.CosmicNeutron);
-                     */
-                    .build();
-        }
-        return STRUCTURE_DEFINITION;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
 
     @Override
@@ -187,52 +484,50 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         tierComponentCasing = -2;
         checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
-
-    // spotless:on
     // endregion
 
     // region Processing Logic
     public int tierComponentCasing = -2;
     private static Set<GTRecipe> allRecipes = null;
 
-    public Set<GTRecipe> getAllRecipes() {
-        if (allRecipes == null) {
-            allRecipes = new HashSet<>();
-            allRecipes.addAll(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
-            allRecipes.addAll(GTCMRecipe.MiracleTopRecipes.getAllRecipes());
-            allRecipes.addAll(RecipeMaps.assemblylineVisualRecipes.getAllRecipes());
-            allRecipes.addAll(RecipeMaps.assemblerRecipes.getAllRecipes());
-            allRecipes.addAll(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes.getAllRecipes());
-        }
-        return allRecipes;
-    }
-
-    private byte getRealTierComponentCasing() {
-        return (byte) (tierComponentCasing + 1);
-    }
-
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.ComponentBlockTier")
-            + ": "
-            + EnumChatFormatting.GOLD
-            + getRealTierComponentCasing();
-
-        return ret;
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("tierComponentCasing", tierComponentCasing);
+    public int getMaxParallelRecipes() {
+        return 1;
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        tierComponentCasing = aNBT.getInteger("tierComponentCasing");
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
     }
 
     @NotNull
@@ -298,6 +593,34 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
 
         updateSlots();
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public Set<GTRecipe> getAllRecipes() {
+        if (allRecipes == null) {
+            allRecipes = new HashSet<>();
+            allRecipes.addAll(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
+            allRecipes.addAll(GTCMRecipe.MiracleTopRecipes.getAllRecipes());
+            allRecipes.addAll(RecipeMaps.assemblylineVisualRecipes.getAllRecipes());
+            allRecipes.addAll(RecipeMaps.assemblerRecipes.getAllRecipes());
+            allRecipes.addAll(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes.getAllRecipes());
+        }
+        return allRecipes;
+    }
+
+    private byte getRealTierComponentCasing() {
+        return (byte) (tierComponentCasing + 1);
+    }
+
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.ComponentBlockTier")
+            + ": "
+            + EnumChatFormatting.GOLD
+            + getRealTierComponentCasing();
+
+        return ret;
     }
 
     @Override
@@ -413,56 +736,62 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
 
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("tierComponentCasing", tierComponentCasing);
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 1;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        tierComponentCasing = aNBT.getInteger("tierComponentCasing");
     }
 
     // endregion
 
-    // region General
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        if (side == aFacing) {
+
+            if (aActive) {
+                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+                    .addIcon(OVERLAY_DTPF_ON)
+                    .extFacing()
+                    .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FUSION1_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+
+            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_OFF)
+                .extFacing()
+                .build() };
+        }
+
+        return new ITexture[] { casingTexturePages[0][12] };
+    }
+
+    // endregion
+
+    // region Tooltip
     private static MultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         if (tooltip == null) {
-            // spotless:off
             tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
             // #tr Tooltip_TSTDisassembler_MachineType
             // # Disassembler
             // #zh_CN 拆解机
@@ -526,29 +855,6 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         return tooltip;
     }
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
+    // endregion
 
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
-    }
 }

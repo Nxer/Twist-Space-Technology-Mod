@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_Pe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.RingsAmount_EnablePerfectOverclock_MiracleTop;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedUpMultiplier_PerRing_MiracleTop;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
 import static gregtech.api.enums.HatchElement.ExoticEnergy;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -32,6 +33,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -54,7 +56,7 @@ import tectech.thing.block.BlockQuantumGlass;
 @SkipGenerateDescription
 public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntity_MiracleTop> {
 
-    // region Constructors
+    // region Class Constructor
     public GT_TileEntity_MiracleTop(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.NXER);
@@ -62,6 +64,15 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     public GT_TileEntity_MiracleTop(String aName) {
         super(aName);
+    }
+
+    /**
+     * @param aTileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
+     * @return a newly created and ready MetaTileEntity
+     */
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_MiracleTop(this.mName);
     }
     // endregion
 
@@ -73,6 +84,106 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     private static final String STRUCTURE_PIECE_MIDDLE = "middleMiracleTop";
     private static final String STRUCTURE_PIECE_END = "endMiracleTop";
     private static IStructureDefinition<GT_TileEntity_MiracleTop> STRUCTURE_DEFINITION = null;
+
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"         AAA         ","       AADDDAA       ","         HHH         ","                     ","                     ","                     ","                     ","                     "},
+        {"       AA   AA       ","      ADDEEEDDA      ","       AA   AA       ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","       EE   EE       ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","  A               A  ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"  A               A  "," ADE             EDA ","  A               A  ","                     ","                     ","                     ","                     ","                     "},
+        {"  A      AAA      A  "," ADE     EEE     EDA ","  A      AAA      A  ","                     ","                     ","                     ","                     ","                     "},
+        {" A      AMMMA      A ","HDE     EBBBE     EDH"," H      AAAAA      H ","         EEE         ","         EEE         ","         EEE         ","         EEE         ","         EEE         "},
+        {" A      AM~MA      A ","HDE     EBCBE     EDH"," H      AACAA      H ","         ECE         ","         ECE         ","         ECE         ","         ECE         ","         ECE         "},
+        {" A      AMMMA      A ","HDE     EBBBE     EDH"," H      AAAAA      H ","         EEE         ","         EEE         ","         EEE         ","         EEE         ","         EEE         "},
+        {"  A      AAA      A  "," ADE     EEE     EDA ","  A      AAA      A  ","                     ","                     ","                     ","                     ","                     "},
+        {"  A               A  "," ADE             EDA ","  A               A  ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","  A               A  ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","       EE   EE       ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"       AA   AA       ","      ADDEEEDDA      ","       AA   AA       ","                     ","                     ","                     ","                     ","                     "},
+        {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "}
+    };
+
+    /*
+     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
+     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
+     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
+     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
+     * E -> ofBlock...(tile.quantumGlass, 0, ...);
+     */
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
+     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
+     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
+     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
+     * E -> ofBlock...(tile.quantumGlass, 0, ...);
+     */
+
+    private final String[][] shapeMiddle = new String[][]{
+        {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
+        {"       AA   AA       ","      ADDEEEDDA      ","       AA   AA       ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","       EE   EE       ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","  A               A  ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"  A               A  "," ADE             EDA ","  A               A  ","                     ","                     ","                     ","                     ","                     "},
+        {"  A               A  "," ADE             EDA ","  A               A  ","                     ","                     ","                     ","                     ","                     "},
+        {" A       EEE       A ","HDE      EEE      EDH"," A       EEE       A ","         EEE         ","         EEE         ","         EEE         ","         EEE         ","         EEE         "},
+        {" A       ECE       A ","HDE      ECE      EDH"," A       ECE       A ","         ECE         ","         ECE         ","         ECE         ","         ECE         ","         ECE         "},
+        {" A       EEE       A ","HDE      EEE      EDH"," A       EEE       A ","         EEE         ","         EEE         ","         EEE         ","         EEE         ","         EEE         "},
+        {"  A               A  "," ADE             EDA ","  A               A  ","                     ","                     ","                     ","                     ","                     "},
+        {"  A               A  "," ADE             EDA ","  A               A  ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","  A               A  ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","       EE   EE       ","                     ","                     ","                     ","                     ","                     ","                     "},
+        {"       AA   AA       ","      ADDEEEDDA      ","       AA   AA       ","                     ","                     ","                     ","                     ","                     "},
+        {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
+        {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "}
+    };
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
+     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
+     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
+     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
+     * E -> ofBlock...(tile.quantumGlass, 0, ...);
+     */
+
+    private final String[][] shapeEnd = new String[][]{
+        {"                     ","         HHH         ","                     "},
+        {"         AAA         ","       AADDDAA       ","         AAA         "},
+        {"       AA   AA       ","      ADDEEEDDA      ","       AA   AA       "},
+        {"                     ","       EE   EE       ","                     "},
+        {"                     ","                     ","                     "},
+        {"                     ","                     ","                     "},
+        {"                     ","  A               A  ","                     "},
+        {"  A               A  "," ADE             EDA ","  A               A  "},
+        {"  A      AAA      A  "," ADE     EEE     EDA ","  A      AAA      A  "},
+        {" A      AAAAA      A ","HDE     EBBBE     EDH"," A      AHHHA      A "},
+        {" A      AACAA      A ","HDE     EBCBE     EDH"," A      AHHHA      A "},
+        {" A      AAAAA      A ","HDE     EBBBE     EDH"," A      AHHHA      A "},
+        {"  A      AAA      A  "," ADE     EEE     EDA ","  A      AAA      A  "},
+        {"  A               A  "," ADE             EDA ","  A               A  "},
+        {"                     ","  A               A  ","                     "},
+        {"                     ","                     ","                     "},
+        {"                     ","                     ","                     "},
+        {"                     ","       EE   EE       ","                     "},
+        {"       AA   AA       ","      ADDEEEDDA      ","       AA   AA       "},
+        {"         AAA         ","       AADDDAA       ","         AAA         "},
+        {"                     ","         HHH         ","                     "}
+    };
+    // spotless:on
 
     /*
      * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
@@ -87,9 +198,9 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     public IStructureDefinition<GT_TileEntity_MiracleTop> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MiracleTop>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, shapeMain)
-                .addShape(STRUCTURE_PIECE_MIDDLE, shapeMiddle)
-                .addShape(STRUCTURE_PIECE_END, shapeEnd)
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addShape(STRUCTURE_PIECE_MIDDLE, transpose(shapeMiddle))
+                .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
                 .addElement('A', ofBlock(sBlockCasingsTT, 4))
                 .addElement('B', ofBlock(sBlockCasingsTT, 7))
                 .addElement('C', ofBlock(sBlockCasingsTT, 9))
@@ -256,37 +367,11 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         maxParallel = amountRings * Parallel_PerRing_MiracleTop;
 
     }
-
     // endregion
 
     // region Processing Logic
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Miracle Top Circuit Assembler
-         * 1 - Gravitation Inversion
-         */
-        return 2;
-    }
-
     public static final UITexture[] tMachineModeIcons = new UITexture[] {
         GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // }
-    //
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("MiracleTop.modeMsg." + machineMode);
-    }
 
     public int amountRings = 1;
 
@@ -302,6 +387,43 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     }
 
     @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Miracle Top Circuit Assembler
+         * 1 - Gravitation Inversion
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
+    // }
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("MiracleTop.modeMsg." + machineMode);
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = "Speed up multiplier: " + this.amountRings * SpeedUpMultiplier_PerRing_MiracleTop;
+        return ret;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
         aNBT.setByte("mode", (byte) machineMode);
@@ -315,33 +437,9 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         amountRings = aNBT.getInteger("amountRings");
     }
 
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
     // endregion
 
-    // region Overrides
-
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = "Speed up multiplier: " + this.amountRings * SpeedUpMultiplier_PerRing_MiracleTop;
-        return ret;
-    }
-
-    /**
-     * @param aTileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
-     * @return a newly created and ready MetaTileEntity
-     */
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_MiracleTop(this.mName);
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -369,398 +467,74 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         return new ITexture[] { casingTexturePages[0][12] };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_MiracleTop_MachineType)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_00)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_01)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_02)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_03)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_04)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_05)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_06)
-            .addInfo(TextLocalization.Tooltip_MiracleTop_07)
+        // spotless:off
+        // #tr Tooltip_MiracleTop_MachineType
+        // # Circuit Assembler/Gravitation Breaker
+        // #zh_CN 电路组装机/引力驱使核心
+        tt.addMachineType(TextEnums.tr("Tooltip_MiracleTop_MachineType"))
+            // #tr Tooltip_MiracleTop_00
+            // # Controller block for the Miracle Top.
+            // #zh_CN 奇迹顶点的控制器方块.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_00"))
+            // #tr Tooltip_MiracleTop_01
+            // # {\LIGHT_PURPLE}I never think about the future because it will come sooner or later.
+            // #zh_CN {\LIGHT_PURPLE}我从不思考未来，因为未来迟早会来.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_01"))
+            // #tr Tooltip_MiracleTop_02
+            // # For absolute precision and efficiency, please abandon traditional manufacturing methods.
+            // #zh_CN 为了绝对的精准和高效，请放弃传统的制造思路.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_02"))
+            // #tr Tooltip_MiracleTop_03
+            // # The machine consists of a ring section and a conveying section.
+            // #zh_CN 整个机器由环部分和传输部分组成.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_03"))
+            // #tr Tooltip_MiracleTop_04
+            // # The number of rings is variable:{\SPACE}{\SPACE}Maximum {\GOLD}16{\GRAY} rings, Minimum {\GOLD}2{\GRAY} rings(the first and the last).
+            // #zh_CN 环的数量是可变的:{\SPACE}{\SPACE}最多{\GOLD}16{\GRAY}环, 最少{\GOLD}2{\GRAY}环(第一个环和最后一个环).
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_04"))
+            // #tr Tooltip_MiracleTop_05
+            // # Total speed multiplier is equal to {\RED}400%{\GRAY} x num of rings.
+            // #zh_CN 速度倍率 = 环数 x {\RED}400%{\GRAY}.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_05"))
+            // #tr Tooltip_MiracleTop_06
+            // # Enable Perfect overclock when num of rings >= {\GOLD}8{\GRAY}.
+            // #zh_CN 环数大于等于{\RED}8{\GRAY}时开启无损超频.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_06"))
+            // #tr Tooltip_MiracleTop_07
+            // # {\AQUA}128x{\GRAY} Parallel per Ring.
+            // #zh_CN 每环 {\AQUA}128x{\GRAY} 并行.
+            .addInfo(TextEnums.tr("Tooltip_MiracleTop_07"))
             .addController(TextLocalization.textFrontCenter)
-            .addInputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addOutputHatch(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addInputBus(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addOutputBus(TextLocalization.textMiracleTopHatchLocation, 2)
-            .addEnergyHatch(TextLocalization.textMiracleTopHatchLocation, 2)
+            // #tr textMiracleTopHatchLocation
+            // # Outermost 12 blocks on the ring (outermost 3 on each side).
+            // #zh_CN 环上最外侧的12个方块(每侧最外边3个).
+            .addInputHatch(TextEnums.tr("textMiracleTopHatchLocation"), 2)
+            .addOutputHatch(TextEnums.tr("textMiracleTopHatchLocation"), 2)
+            .addInputBus(TextEnums.tr("textMiracleTopHatchLocation"), 2)
+            .addOutputBus(TextEnums.tr("textMiracleTopHatchLocation"), 2)
+            .addEnergyHatch(TextEnums.tr("textMiracleTopHatchLocation"), 2)
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
+
     // endregion
 
-    // region Structures
-    // spotless:off
-    private final String[][] shapeMain = new String[][] {
-        {
-            "                     ",
-            "         AAA         ",
-            "       AA   AA       ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "  A               A  ",
-            "  A      AAA      A  ",
-            " A      AMMMA      A ",
-            " A      AM~MA      A ",
-            " A      AMMMA      A ",
-            "  A      AAA      A  ",
-            "  A               A  ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "       AA   AA       ",
-            "         AAA         ",
-            "                     " },
-        {
-            "         HHH         ",
-            "       AADDDAA       ",
-            "      ADDEEEDDA      ",
-            "       EE   EE       ",
-            "                     ",
-            "                     ",
-            "  A               A  ",
-            " ADE             EDA ",
-            " ADE     EEE     EDA ",
-            "HDE     EBBBE     EDH",
-            "HDE     EBCBE     EDH",
-            "HDE     EBBBE     EDH",
-            " ADE     EEE     EDA ",
-            " ADE             EDA ",
-            "  A               A  ",
-            "                     ",
-            "                     ",
-            "       EE   EE       ",
-            "      ADDEEEDDA      ",
-            "       AADDDAA       ",
-            "         HHH         " },
-        {
-            "                     ",
-            "         HHH         ",
-            "       AA   AA       ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "  A               A  ",
-            "  A      AAA      A  ",
-            " H      AAAAA      H ",
-            " H      AACAA      H ",
-            " H      AAAAA      H ",
-            "  A      AAA      A  ",
-            "  A               A  ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "                     ",
-            "       AA   AA       ",
-            "         AAA         ",
-            "                     " },
-        { "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "         EEE         ", "         ECE         ", "         EEE         ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     " },
-        { "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "         EEE         ", "         ECE         ", "         EEE         ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     " },
-        { "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "         EEE         ", "         ECE         ", "         EEE         ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     " },
-        { "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "         EEE         ", "         ECE         ", "         EEE         ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     " },
-        { "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "         EEE         ", "         ECE         ", "         EEE         ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     ", "                     ", "                     ", "                     ",
-            "                     " } };
-    /*
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
+    // region Hatch Registration
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-    private final String[][] shapeMiddle = new String[][]{{
-        "                     ",
-        "         AAA         ",
-        "       AA   AA       ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "  A               A  ",
-        "  A               A  ",
-        " A       EEE       A ",
-        " A       ECE       A ",
-        " A       EEE       A ",
-        "  A               A  ",
-        "  A               A  ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "       AA   AA       ",
-        "         AAA         ",
-        "                     "
-    },{
-        "         HHH         ",
-        "       AADDDAA       ",
-        "      ADDEEEDDA      ",
-        "       EE   EE       ",
-        "                     ",
-        "                     ",
-        "  A               A  ",
-        " ADE             EDA ",
-        " ADE             EDA ",
-        "HDE      EEE      EDH",
-        "HDE      ECE      EDH",
-        "HDE      EEE      EDH",
-        " ADE             EDA ",
-        " ADE             EDA ",
-        "  A               A  ",
-        "                     ",
-        "                     ",
-        "       EE   EE       ",
-        "      ADDEEEDDA      ",
-        "       AADDDAA       ",
-        "         HHH         "
-    },{
-        "                     ",
-        "         AAA         ",
-        "       AA   AA       ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "  A               A  ",
-        "  A               A  ",
-        " A       EEE       A ",
-        " A       ECE       A ",
-        " A       EEE       A ",
-        "  A               A  ",
-        "  A               A  ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "       AA   AA       ",
-        "         AAA         ",
-        "                     "
-    },{
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "         EEE         ",
-        "         ECE         ",
-        "         EEE         ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     "
-    },{
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "         EEE         ",
-        "         ECE         ",
-        "         EEE         ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     "
-    },{
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "         EEE         ",
-        "         ECE         ",
-        "         EEE         ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     "
-    },{
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "         EEE         ",
-        "         ECE         ",
-        "         EEE         ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     "
-    },{
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "         EEE         ",
-        "         ECE         ",
-        "         EEE         ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     "
-    }} ;
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-    private final String[][] shapeEnd = new String[][] {{
-        "                     ",
-        "         AAA         ",
-        "       AA   AA       ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "  A               A  ",
-        "  A      AAA      A  ",
-        " A      AAAAA      A ",
-        " A      AACAA      A ",
-        " A      AAAAA      A ",
-        "  A      AAA      A  ",
-        "  A               A  ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "       AA   AA       ",
-        "         AAA         ",
-        "                     "
-    },{
-        "         HHH         ",
-        "       AADDDAA       ",
-        "      ADDEEEDDA      ",
-        "       EE   EE       ",
-        "                     ",
-        "                     ",
-        "  A               A  ",
-        " ADE             EDA ",
-        " ADE     EEE     EDA ",
-        "HDE     EBBBE     EDH",
-        "HDE     EBCBE     EDH",
-        "HDE     EBBBE     EDH",
-        " ADE     EEE     EDA ",
-        " ADE             EDA ",
-        "  A               A  ",
-        "                     ",
-        "                     ",
-        "       EE   EE       ",
-        "      ADDEEEDDA      ",
-        "       AADDDAA       ",
-        "         HHH         "
-    },{
-        "                     ",
-        "         AAA         ",
-        "       AA   AA       ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "  A               A  ",
-        "  A      AAA      A  ",
-        " A      AHHHA      A ",
-        " A      AHHHA      A ",
-        " A      AHHHA      A ",
-        "  A      AAA      A  ",
-        "  A               A  ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "                     ",
-        "       AA   AA       ",
-        "         AAA         ",
-        "                     "
-    }};
-    // spotless:on
     // endregion
 
 }

@@ -21,10 +21,40 @@ public class GT_TileEntity_LagrangeDysonSpaceStation
     extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_IntensifyChemicalDistorter>
     implements IConstructable, ISurvivalConstructable {
 
+    // region Class Constructor
+    protected GT_TileEntity_LagrangeDysonSpaceStation(int aID, String aName, String aNameRegional,
+        Integer stationIndex) {
+        super(aID, aName, aNameRegional);
+        this.stationIndex = stationIndex;
+    }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return null;
+    }
+    // endregion
+
+    // region Structure
+
+    @Override
+    public IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> getStructureDefinition() {
+        return null;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+
+    }
+    // endregion
+
+    // region Processing Logic
     // nodes types: 0:Maintain nodes, 1:compute nodes, 2:wireless energy output nodes, 3:advanced dyson nodes, 4:dyson
     // nodes
-
-    // region Member Variables
     private final Integer stationIndex;
 
     // the max number of Big dyson Nodes, include all kinds of big nodes.
@@ -41,14 +71,25 @@ public class GT_TileEntity_LagrangeDysonSpaceStation
 
     public Integer[] smallNodeNumber = { 0, 0, 0, 0, 0 };
 
-    // endregion
-    // region Construction
-    protected GT_TileEntity_LagrangeDysonSpaceStation(int aID, String aName, String aNameRegional,
-        Integer stationIndex) {
-        super(aID, aName, aNameRegional);
-        this.stationIndex = stationIndex;
+    @Override
+    public int getMaxEfficiency(ItemStack aStack) {
+        return 0;
     }
-    // endregion
+
+    @Override
+    public int getDamageToComponent(ItemStack aStack) {
+        return 0;
+    }
+
+    @Override
+    public boolean explodesOnComponentBreak(ItemStack aStack) {
+        return false;
+    }
+
+    @Override
+    public boolean isCorrectMachinePart(ItemStack aStack) {
+        return false;
+    }
 
     // regin logic
     public double computePointInNeed() {
@@ -107,54 +148,23 @@ public class GT_TileEntity_LagrangeDysonSpaceStation
 
     // endregion
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-
-    }
-
-    @Override
-    public IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> getStructureDefinition() {
-        return null;
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        return null;
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-
-    }
-
-    @Override
-    public int getMaxEfficiency(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public int getDamageToComponent(ItemStack aStack) {
-        return 0;
-    }
-
-    @Override
-    public boolean explodesOnComponentBreak(ItemStack aStack) {
-        return false;
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return null;
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
         int colorIndex, boolean active, boolean redstoneLevel) {
         return new ITexture[0];
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        return null;
+    }
+
+    // endregion
+
 }

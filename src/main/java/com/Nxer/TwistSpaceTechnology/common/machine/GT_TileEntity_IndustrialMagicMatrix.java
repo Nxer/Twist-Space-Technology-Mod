@@ -101,28 +101,7 @@ import thaumicenergistics.common.tiles.TileInfusionProvider;
 public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<GT_TileEntity_IndustrialMagicMatrix>
     implements ISidedInventory {
 
-    // region default value
-
-    protected int mParallel;
-    protected int blockTier;
-    protected int ExtraTime;
-    protected double mSpeedBonus;
-    protected double Mean;
-    protected double Variance;
-    protected final TST_ItemID EssentiaCell_Creative = TST_ItemID
-        .create(EnumEssentiaStorageTypes.Type_Creative.getCell());
-    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
-    protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
-    protected ArrayList<String> Research = new ArrayList<>();
-    public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
-        .ofFailurePersistOnShutdown("Essentiainsentia");
-    public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
-        .ofFailurePersistOnShutdown("Research_not_completed");
-
-    // end region
-
     // region Class Constructor
-
     public GT_TileEntity_IndustrialMagicMatrix(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(AUTHOR, new ID[] { ID.XIAO_XING_521, ID.GODERIUM }, MAINTAINER, ID.YUE_LENG_M);
@@ -133,305 +112,12 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     }
 
     @Override
-    public Style getTooltipCreditStyle() {
-        return Style.INFUSION;
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_IndustrialMagicMatrix(this.mName);
     }
-
-    // end region
-
-    // region Processing Logic
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            final HashMap<Aspect, TileInfusionProvider> aspectProvider = new HashMap<>();
-            AspectList aspects = null;
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-                setSpeedBonus(getSpeedBonus());
-                setOverclockType(
-                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
-                // setOverclock(isEnablePerfectOverclock() ? 2 : 1, isEnablePerfectOverclock() ? 2 : 3);
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                int recipeIndex = recipe.getMetadataOrDefault(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, -1);
-                if (recipeIndex == -1) {
-                    return CheckRecipeResultRegistry.NO_RECIPE;
-                }
-
-                TCRecipeTools.InfusionCraftingRecipe tcRecipe = TCRecipeTools.ICR.get(recipeIndex);
-
-                if (!tcRecipe.getOutput()
-                    .isItemEqual(recipe.mOutputs[0])) {
-                    return CheckRecipeResultRegistry.NO_RECIPE;
-                }
-
-                if (!(isResearchComplete(tcRecipe.getResearch()))) {
-                    return Research_not_completed;
-                }
-
-                if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())
-                    || EssentiaCell_Creative.equalItemStack(getControllerSlot())) {
-                    return CheckRecipeResultRegistry.SUCCESSFUL;
-                }
-
-                aspectProvider.clear();
-                aspects = tcRecipe.getInputAspects();
-                if (aspects.visSize() == 0) {
-                    return CheckRecipeResultRegistry.SUCCESSFUL;
-                }
-                if (mTileInfusionProvider.isEmpty()) {
-                    return Essentia_InsentiaL;
-                }
-
-                HashMap<Aspect, Integer> aspectMaxParallel = new HashMap<>();
-                for (Aspect aspect : aspects.getAspects()) {
-                    int amount = aspects.getAmount(aspect);
-                    if (amount <= 0) {
-                        continue;
-                    }
-
-                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
-                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
-                        if (possibleParallel <= 0) {
-                            continue;
-                        }
-
-                        if (possibleParallel > aspectMaxParallel.computeIfAbsent(aspect, k -> 0)) {
-                            aspectMaxParallel.put(aspect, possibleParallel);
-                            aspectProvider.put(aspect, hatch);
-                        }
-                    }
-
-                    if (aspectMaxParallel.get(aspect) == 0) {
-                        return Essentia_InsentiaL;
-                    }
-                }
-                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
-
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult onRecipeStart(@NotNull GTRecipe recipe) {
-                for (Aspect aspect : aspectProvider.keySet()) {
-                    aspectProvider.get(aspect)
-                        .takeFromContainer(aspect, aspects.getAmount(aspect) * getCurrentParallels());
-                }
-                return super.onRecipeStart(recipe);
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    public boolean isResearchComplete(String key) {
-        if (!key.startsWith("@") && ResearchCategories.getResearch(key) == null) {
-            return false;
-        } else {
-            return this.Research != null && !this.Research.isEmpty() && this.Research.contains(key);
-        }
-    }
-
-    @Nonnull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        setupProcessingLogic(processingLogic);
-
-        CheckRecipeResult result = doCheckRecipe();
-        result = postCheckRecipe(result, processingLogic);
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-
-        if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
-            mMaxProgresstime = 1;
-        } else {
-            mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
-        }
-
-        setEnergyUsage(processingLogic);
-        ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
-        int size = 0;
-        for (ItemStack itemStack : processingLogic.getOutputItems()) {
-            if (!(itemStack.isItemEqual(new ItemStack(LudicrousItems.bigPearl)))) {
-                InfusionRecipe Recipe = ThaumcraftApi.getInfusionRecipe(itemStack);
-                for (ItemStack itemStack1 : Recipe.getComponents()) {
-                    if (itemStack1.isItemEqual(PrimordialPearl)) {
-                        size++;
-                    }
-                }
-            } else {
-                mOutputItems = processingLogic.getOutputItems();
-                mOutputFluids = processingLogic.getOutputFluids();
-                return result;
-            }
-        }
-        if (size != 0) {
-            int index = 0;
-            ItemStack[] OutputItems = new ItemStack[processingLogic.getOutputItems().length + 1];
-            for (ItemStack itemStack : processingLogic.getOutputItems()) {
-                OutputItems[index] = itemStack;
-            }
-            OutputItems[OutputItems.length - 1] = new ItemStack(itemEldritchObject, size, 3);
-            mOutputItems = OutputItems;
-            mOutputFluids = processingLogic.getOutputFluids();
-        } else {
-            mOutputItems = processingLogic.getOutputItems();
-            mOutputFluids = processingLogic.getOutputFluids();
-        }
-
-        return result;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.IndustrialMagicMatrixRecipe;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return mSpeedBonus == (double) 1 / 11.4514;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        mSpeedBonus = 0.0;
-        ExtraTime = 0;
-        countSpeedBonus();
-        return (float) mSpeedBonus;
-    }
-
-    protected void countSpeedBonus() {
-        int penalize = 0;
-        ArrayList<Double> MaxAmount = new ArrayList<>();
-        AspectList aspectList = new AspectList();
-        AspectList auraBase = (new AspectList()).add(Aspect.AIR, 20)
-            .add(Aspect.FIRE, 20)
-            .add(Aspect.EARTH, 20)
-            .add(Aspect.WATER, 20)
-            .add(Aspect.ORDER, 20)
-            .add(Aspect.ENTROPY, 20);
-        if (mNodeEnergized.isEmpty()) {
-            mSpeedBonus = 1;
-            return;
-        } else if (mNodeEnergized.size() < 6) {
-            mSpeedBonus = (6 - mNodeEnergized.size()) * 1.75;
-            return;
-        }
-        for (TileNodeEnergized tileNodeEnergized : mNodeEnergized) {
-            aspectList.add(
-                getMaxAspect(tileNodeEnergized.getAspects()),
-                tileNodeEnergized.getAspects()
-                    .getAmount(getMaxAspect(tileNodeEnergized.getAspects())));
-        }
-        for (Aspect aspect : auraBase.getAspects()) {
-            if (!(aspectList.aspects.containsKey(aspect))) {
-                penalize++;
-            }
-        }
-        if (penalize > 0) {
-            ExtraTime = penalize * 20;
-            mSpeedBonus = 1;
-            return;
-        }
-        for (Aspect aspect : aspectList.getAspects()) {
-            MaxAmount.add((double) aspectList.getAmount(aspect));
-        }
-        Mean = calculateMean(MaxAmount);
-        Variance = calculateVariance(MaxAmount);
-        double e = Math.E;
-        double ln1 = Math.log(1 + Math.pow(e, -Variance));
-        double ln2 = Math.log(2);
-        double SpeedBonus = 1 + ((0.4 + Math.pow(0.45 * e, -0.005 * Variance) + 0.15 * (ln1 / ln2)) * Mean / 500);
-        mSpeedBonus = Math.max(1 / SpeedBonus, 1 / 11.4514);
-    }
-
-    public static double calculateVariance(List<Double> data) {
-        int n = data.size();
-        double mean = calculateMean(data);
-        double sum = 0.0;
-
-        for (double value : data) {
-            double diff = value - mean;
-            sum += diff * diff;
-        }
-        return sum / n;
-    }
-
-    protected static double calculateMean(List<Double> data) {
-        int n = data.size();
-        double sum = 0.0;
-
-        for (double value : data) {
-            sum += value;
-        }
-
-        return sum / n;
-    }
-
-    protected Aspect getMaxAspect(@Nonnull AspectList aspectList) {
-        Aspect maxAspect = null;
-        int max = 0;
-        for (Aspect aspect : aspectList.getAspects()) {
-            int amount = aspectList.getAmount(aspect);
-            if (amount > max) {
-                max = amount;
-                maxAspect = aspect;
-            }
-        }
-        return maxAspect;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
-            return Integer.MAX_VALUE;
-        } else {
-            return this.mParallel;
-        }
-    }
-    // end region
-
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + "Mean: " + EnumChatFormatting.GOLD + this.Mean;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Variance: " + EnumChatFormatting.GOLD + this.Variance;
-        return ret;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    protected String getPlayName() {
-        return this.getBaseMetaTileEntity()
-            .getOwnerName();
-    }
-
-    // protected void onEssentiaCellFound(int tier) {
-    // this.mParallel = (int) (tier * 8L);
-    // }
-
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
+    // endregion
 
     // region Structure
-
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static final String STRUCTURE_PIECE_MAIN_ERR = "mainErr";
     protected static final int horizontalOffSet = 22;
@@ -439,2464 +125,118 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     protected static final int depthOffSet = 20;
 
     // spotless:off
+    protected static final String[][] shape = new String[][]{
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DZD               DZD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    D                                   D    ","   DZD                                 DZD   ","    D                                   D    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DZD               DZD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            D D               D D            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","   D D                                 D D   ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            D D               D D            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           DD DD             DD DD           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    D                                   D    ","   DDD                                 DDD   ","  DD DD                               DD DD  ","   DDD                                 DDD   ","    D                                   D    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           DD DD             DD DD           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","           D   D             D   D           ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","  D   D                               D   D  ","  D   D                               D   D  ","  D   D                               D   D  ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","           D   D             D   D           ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           D   D             D   D           ","          DD   DD           DD   DD          ","           D   D             D   D           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    D                                   D    ","   DDD               ZZZ               DDD   ","  D   D             ZZZZZ             D   D  "," DD   DD            ZZZZZ            DD   DD ","  D   D             ZZZZZ             D   D  ","   DDD               ZZZ               DDD   ","    D                                   D    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           D   D             D   D           ","          DD   DD           DD   DD          ","           D   D             D   D           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD              ZZZZZ              DDD   ","  D   D            ZZ   ZZ            D   D  "," D     D           Z     Z           D     D "," D     D           Z     Z           D     D "," D     D           Z     Z           D     D ","  D   D            ZZ   ZZ            D   D  ","   DDD              ZZZZZ              DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DD   DD           DD   DD          ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","          DD   DD           DD   DD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","  DDDDD            Z     Z            DDDDD  "," DD   DD          Z       Z          DD   DD "," D     D          Z  WWW  Z          D     D "," D     D          Z  WWW  Z          D     D "," D     D          Z  WWW  Z          D     D "," DD   DD          Z       Z          DD   DD ","  DDDDD            Z     Z            DDDDD  ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DD   DD           DD   DD          ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","          DD   DD           DD   DD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDD   DDD         DDD   DDD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DDD   DDD         DDD   DDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     ZZZ                     ","  DDDDD            ZZ   ZZ            DDDDD  "," DDDDDDD          Z       Z          DDDDDDD ","DDD   DDD         Z WWWWW Z         DDD   DDD","DD     DD        Z  W   W  Z        DD     DD","DD     DD        Z  W   W  Z        DD     DD","DD     DD        Z  W   W  Z        DD     DD","DDD   DDD         Z WWWWW Z         DDD   DDD"," DDDDDDD          Z       Z          DDDDDDD ","  DDDDD            ZZ   ZZ            DDDDD  ","                     ZZZ                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDD   DDD         DDD   DDD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DDD   DDD         DDD   DDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDDZDDB           BDDZDDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","                   Z     Z                   ","   BBB            Z  WWW  Z            BBB   ","  BDDDB          Z  W   W  Z          BDDDB  "," BDDDDDB         Z W     W Z         BDDDDDB "," BDDZDDB         Z W     W Z         BDDZDDB "," BDDDDDB         Z W     W Z         BDDDDDB ","  BDDDB          Z  W   W  Z          BDDDB  ","   BBB            Z  WWW  Z            BBB   ","                   Z     Z                   ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDDZDDB           BDDZDDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","           B D B             B D B           ","                                             ","           D   D             D   D           ","                                             ","           B D B             B D B           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","                   Z     Z                   ","                  Z  WGW  Z                  ","  B D B          Z  W   W  Z          B D B  ","                 Z W     W Z                 ","  D   D          Z G     G Z          D   D  ","                 Z W     W Z                 ","  B D B          Z  W   W  Z          B D B  ","                  Z  WGW  Z                  ","                   Z     Z                   ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           B D B             B D B           ","                                             ","           D   D             D   D           ","                                             ","           B D B             B D B           ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","                   Z     Z                   ","                  Z  WWW  Z                  ","  B   B          Z  W   W  Z          B   B  ","                 Z W     W Z                 ","                 Z W     W Z                 ","                 Z W     W Z                 ","  B   B          Z  W   W  Z          B   B  ","                  Z  WWW  Z                  ","                   Z     Z                   ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     ZZZ                     ","                   ZZ   ZZ                   ","                  Z       Z                  ","                  Z WWWWW Z                  ","                 Z  W   W  Z                 ","                 Z  W   W  Z                 ","                 Z  W   W  Z                 ","                  Z WWWWW Z                  ","                  Z       Z                  ","                   ZZ   ZZ                   ","                     ZZZ                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  JFZZZZZFJ                  ","                  FZ     ZF                  ","                  Z       Z                  ","   DDD           JZ  WWW  ZF           DDD   ","   DZD           JZ  WWW  ZJ           DZD   ","   DDD           JZ  WWW  ZF           DDD   ","                  Z       Z                  ","                  FZ     ZF                  ","                  JFZZZZZFJ                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  11FJJJF11                  ","                  1JZZZZZJ1                  ","   DDD            FZZ   ZZF            DDD   ","  DDDDD           FZ     ZF           DDDDD  ","  DD DD         11JZ     ZJ11         DD DD  ","  DDDDD           FZ     ZF           DDDDD  ","   DDD            FZZ   ZZF            DDD   ","                  1JZZZZZJ1                  ","                  11FJJJF11                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  11     11                  ","   BBB            1JJJJJJJ1            BBB   ","  BDDDB            J ZZZ J            BDDDB  "," BDDDDDB           JZZZZZJ           BDDDDDB "," BDD DDB        11 JZZZZZJ 11        BDD DDB "," BDDDDDB           JZZZZZJ           BDDDDDB ","  BDDDB            J ZZZ J            BDDDB  ","   BBB            1JJJJJJJ1            BBB   ","                  11     11                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMFMA             AMFMA           ","            BFB               BFB            ","             1                 1             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  11     11                  ","   BZB            1       1            BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EFF1       11         11       1FFE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB            1       1            BZB   ","                  11     11                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             1                 1             ","            BFB               BFB            ","           AMFMA             AMFMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMFMA             AMFMA           ","            BFB               BFB            ","             1                 1             ","              1               1              ","                                             ","                                             ","                                             ","                                             ","                                             ","                 1         1                 ","                  11     11                  ","   BZB            1       1            BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EFF11     11           11     11FFE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB            1       1            BZB   ","                  11     11                  ","                 1         1                 ","                                             ","                                             ","                                             ","                                             ","                                             ","              1               1              ","             1                 1             ","            BFB               BFB            ","           AMFMA             AMFMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMFMA             AMFMA           ","            BFB               BFB            ","             1                 1             ","              1               1              ","              1               1              ","                                             ","                                             ","                                             ","                                             ","                 1         1                 ","                  1       1                  ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EFF111    11           11    111FFE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                  1       1                  ","                 1         1                 ","                                             ","                                             ","                                             ","                                             ","              1               1              ","              1               1              ","             1                 1             ","            BFB               BFB            ","           AMFMA             AMFMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMDMA             AMDMA           ","            BBB               BBB            ","                                             ","              1               1              ","              1               1              ","               1             1               ","                                             ","                                             ","                1           1                ","                 1         1                 ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EDB 111  11             11  111 BDE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                 1         1                 ","                1           1                ","                                             ","                                             ","               1             1               ","              1               1              ","              1               1              ","                                             ","            BBB               BBB            ","           AMDMA             AMDMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","              1               1              ","               1             1               ","               1             1               ","                1           1                ","                1           1                ","                 1         1                 ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z  111111             111111  Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                 1         1                 ","                1           1                ","                1           1                ","               1             1               ","               1             1               ","              1               1              ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","               1             1               ","               1             1               ","                1           1                ","                1           1                ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z   1111               1111   Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                1           1                ","                1           1                ","               1             1               ","               1             1               ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BBB                                 BBB   ","  BDDDB                               BDDDB  "," BDDDDDB                             BDDDDDB "," BDD DDB                             BDD DDB "," BDDDDDB                             BDDDDDB ","  BDDDB                               BDDDB  ","   BBB                                 BBB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","  DDDDD                               DDDDD  ","  DD DD                               DD DD  ","  DDDDD                               DDDDD  ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","   DZD                                 DZD   ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             5                 5             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    5                                   5    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             5                 5             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","             Y                 Y             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","  B   B                               B   B  ","                                             ","    Y                                   Y    ","                                             ","  B   B                               B   B  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","             Y                 Y             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            B B               B B            ","           B   B             B   B           ","          B     B           B     B          ","             3                 3             ","          B     B           B     B          ","           B   B             B   B           ","            B B               B B            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   B B                                 B B   ","  B   B                               B   B  "," B     B                             B     B ","    3                 0                 3    "," B     B                             B     B ","  B   B                               B   B  ","   B B                                 B B   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            B B               B B            ","           B   B             B   B           ","          B     B           B     B          ","             3                 3             ","          B     B           B     B          ","           B   B             B   B           ","            B B               B B            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","            DDD               DDD            ","           DBBBD             DBBBD           ","          DBDDDBD           DBDDDBD          ","         DBDDDDDBD         DBDDDDDBD         ","         DBDD8DDBD         DBDD8DDBD         ","         DBDDDDDBD         DBDDDDDBD         ","          DBDDDBD           DBDDDBD          ","           DBBBD             DBBBD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","  DBBBD                               DBBBD  "," DBDDDBD                             DBDDDBD ","DBDDDDDBD            N N            DBDDDDDBD","DBDD8DDBD                           DBDD8DDBD","DBDDDDDBD            N N            DBDDDDDBD"," DBDDDBD                             DBDDDBD ","  DBBBD                               DBBBD  ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DBBBD             DBBBD           ","          DBDDDBD           DBDDDBD          ","         DBDDDDDBD         DBDDDDDBD         ","         DBDD8DDBD         DBDD8DDBD         ","         DBDDDDDBD         DBDDDDDBD         ","          DBDDDBD           DBDDDBD          ","           DBBBD             DBBBD           ","            DDD               DDD            ","                                             ","                                             "},
+        {"                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","  DDDDD                               DDDDD  "," DDDDDDD                             DDDDDDD ","DDDDDDDDD                           DDDDDDDDD","DDDCCCDDD            6 6            DDDCCCDDD","DDDCCCDDD             7             DDDCCCDDD","DDDCCCDDD            6 6            DDDCCCDDD","DDDDDDDDD                           DDDDDDDDD"," DDDDDDD                             DDDDDDD ","  DDDDD                               DDDDD  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             "},
+        {"                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","  DDDDD                               DDDDD  "," DDDDDDD                             DDDDDDD ","DDDDDDDDD            K~K            DDDDDDDDD","DDDDDDDDD           KKKKK           DDDDDDDDD","DDDDDDDDD           KKKKK           DDDDDDDDD","DDDDDDDDD           KKKKK           DDDDDDDDD","DDDDDDDDD            KKK            DDDDDDDDD"," DDDDDDD                             DDDDDDD ","  DDDDD                               DDDDD  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             "},
+        {"                  JJJJJJJJJ                  ","              JJJJ    O    JJJJ              ","           JJJJJ     O O     JJJJJ           ","          JJJJJJJ    O O    JJJJJJJ          ","         JJJJJJJJJ  O   O  JJJJJJJJJ         ","        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ","       J JJJJJJJJJ O     O JJJJJJJJJ J       ","      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ","     J   JJJJJJJJJO       OJJJJJJJJJ   J     ","    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ","   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ","   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ","  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ","  J  O      O IZIIIZZZZZZZIIIZI O      O  J  "," J    O     OIZZIZZIIZZZIIZZIZZIO     O    J "," J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J "," J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J "," J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J ","J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J","JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ","JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ","JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ","JJJJJJJJJOIZZZZZVK   KKK   KVZZZZZIOJJJJJJJJJ","JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ","JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ","JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ","J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J"," J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J "," J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J "," J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J "," J    O     OIZZIZZIIZZZIIZZIZZIO     O    J ","  J  O      O IZIIIZZZZZZZIIIZI O      O  J  ","  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ","   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ","   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ","    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ","     J   JJJJJJJJJO       OJJJJJJJJJ   J     ","      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ","       J JJJJJJJJJ O     O JJJJJJJJJ J       ","        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ","         JJJJJJJJJ  O   O  JJJJJJJJJ         ","          JJJJJJJ    O O    JJJJJJJ          ","           JJJJJ     O O     JJJJJ           ","              JJJJ    O    JJJJ              ","                  JJJJJJJJJ                  "},
+        {"                                             ","                                             ","           KKKKK             KKKKK           ","          KKXXXKK           KKXXXKK          ","         KKXXXXXKK         KKXXXXXKK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KKXXXXXKK         KKXXXXXKK         ","          KKXXXKK           KKXXXKK          ","           KKKKK   IIIIIII   KKKKK           ","                 IIHHHHHHHII                 ","               IIHHHHHHHHHHHII               ","              IHIIIHHHHHHHIIIHI              ","             IHHIQQIIHHHIIPPIHHI             ","            IHHHIQQQQIIIPPPPIHHHI            ","            IHHHIQQQIIKIIPPPIHHHI            ","           IHHHHIQQI     IPPIHHHHI           ","  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  "," KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ","KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK","KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK","KXXXXXXXK ITTTTTI           IUUUUUI KXXXXXXXK","KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK","KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK"," KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ","  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  ","           IHHHHISSI     IRRIHHHHI           ","            IHHHISSSIIKIIRRRIHHHI            ","            IHHHISSSSIIIRRRRIHHHI            ","             IHHISSIIHHHIIRRIHHI             ","              IHIIIHHHHHHHIIIHI              ","               IIHHHHHHHHHHHII               ","                 IIHHHHHHHII                 ","           KKKKK   IIIIIII   KKKKK           ","          KKXXXKK           KKXXXKK          ","         KKXXXXXKK         KKXXXXXKK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KKXXXXXKK         KKXXXXXKK         ","          KKXXXKK           KKXXXKK          ","           KKKKK             KKKKK           ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            KKK               KKK            ","           KKKKK             KKKKK           ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","           KKKKK             KKKKK           ","            KKK               KKK            ","                   IIIIIII                   ","                 IIZZZZZZZII                 ","               IIZZZZZZZZZZZII               ","              IZIIIZZZZZZZIIIZI              ","             IZZIZZIIZZZIIZZIZZI             ","            IZZZIZZZZIIIZZZZIZZZI            ","            IZZZIZZZII IIZZZIZZZI            ","           IZZZZIZZI     IZZIZZZZI           ","           IZZZZIII       IIIZZZZI           ","   KKK    IZZZZII           IIZZZZI    KKK   ","  KKKKK   IZZIIZI           IZIIZZI   KKKKK  "," KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK "," KKKKKKK  IZZZZZI           IZZZZZI  KKKKKKK "," KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK ","  KKKKK   IZZIIZI           IZIIZZI   KKKKK  ","   KKK    IZZZZII           IIZZZZI    KKK   ","           IZZZZIII       IIIZZZZI           ","           IZZZZIZZI     IZZIZZZZI           ","            IZZZIZZZII IIZZZIZZZI            ","            IZZZIZZZZIIIZZZZIZZZI            ","             IZZIZZIIZZZIIZZIZZI             ","              IZIIIZZZZZZZIIIZI              ","               IIZZZZZZZZZZZII               ","                 IIZZZZZZZII                 ","                   IIIIIII                   ","            KKK               KKK            ","           KKKKK             KKKKK           ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","           KKKKK             KKKKK           ","            KKK               KKK            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    OOOOO                    ","                  OO     OO                  ","                OO         OO                ","                O           O                ","               O             O               ","               O             O               ","              O               O              ","              O               O              ","              O               O              ","              O               O              ","              O               O              ","               O             O               ","               O             O               ","                O           O                ","                OO         OO                ","                  OO     OO                  ","                    OOOOO                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                  OOOOOOOOO                  ","               OOO         OOO               ","             OO               OO             ","           OO                   OO           ","          O  O                 O  O          ","         O   OOO             OOO   O         ","        O    O  OO         OO  O    O        ","       O     O    O       O    O     O       ","      O      O     OO   OO     O      O      ","     O       O       OOO       O       O     ","     O       O       O O       O       O     ","    O        O     OO   OO     O        O    ","    O        O   OO       OO   O        O    ","   O         O OO           OO O         O   ","   O         OO     OOOOO     OO         O   ","   O        OO    OO     OO    OO        O   ","  O       OO O   O         O   O OO       O  ","  O      O   O   O         O   O   O      O  ","  O    OO    O  O           O  O    OO    O  ","  O  OO      O  O           O  O      OO  O  ","  O O        O  O           O  O        O O  ","  O  OO      O  O           O  O      OO  O  ","  O    OO    O  O           O  O    OO    O  ","  O      O   O   O         O   O   O      O  ","  O       OO O   O         O   O OO       O  ","   O        OO    OO     OO    OO        O   ","   O         OO     OOOOO     OO         O   ","   O         O OO           OO O         O   ","    O        O   OO       OO   O        O    ","    O        O     OO   OO     O        O    ","     O       O       O O       O       O     ","     O       O       OOO       O       O     ","      O      O     OO   OO     O      O      ","       O     O    O       O    O     O       ","        O    O  OO         OO  O    O        ","         O   OOO             OOO   O         ","          O  O                 O  O          ","           OO                   OO           ","             OO               OO             ","               OOO         OOO               ","                  OOOOOOOOO                  ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                   OOOOOOO                   ","                 OO       OO                 ","                O           O                ","               O             O               ","              O               O              ","             O                 O             ","             O                 O             ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","             O                 O             ","             O                 O             ","              O               O              ","               O             O               ","                O           O                ","                 OO       OO                 ","                   OOOOOOO                   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     DDD                     ","                     DZD                     ","                     DDD                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                   JJJJJJJ                   ","                JJJKKKKKKKJJJ                ","              JJKKKKKKKKKKKKKJJ              ","             JKKKKKLLLLLLLKKKKKJ             ","            JKKKKLL       LLKKKKJ            ","           JKKKKL           LKKKKJ           ","          JKKKKL             LKKKKJ          ","          JKKKL               LKKKJ          ","         JKKKL                 LKKKJ         ","         JKKL                   LKKJ         ","         JKKL                   LKKJ         ","        JKKL                     LKKJ        ","        JKKL         DDD         LKKJ        ","        JKKL        DDDDD        LKKJ        ","        JKKL        DD DD        LKKJ        ","        JKKL        DDDDD        LKKJ        ","        JKKL         DDD         LKKJ        ","        JKKL                     LKKJ        ","         JKKL                   LKKJ         ","         JKKL                   LKKJ         ","         JKKKL                 LKKKJ         ","          JKKKL               LKKKJ          ","          JKKKKL             LKKKKJ          ","           JKKKKL           LKKKKJ           ","            JKKKKLL       LLKKKKJ            ","             JKKKKKLLLLLLLKKKKKJ             ","              JJKKKKKKKKKKKKKJJ              ","                JJJKKKKKKKJJJ                ","                   JJJJJJJ                   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                   JJJJJJJ                   ","                 JJKKKKKKKJJ                 ","                JKKKKKKKKKKKJ                ","               JKKKKLLLLLKKKKJ               ","              JKKKLLKKKKKLLKKKJ              ","             JKKKLKKKKKKKKKLKKKJ             ","             JKKLKKKKKKKKKKKLKKJ             ","            JKKKLKKKKBBBKKKKLKKKJ            ","            JKKLKKKKBDDDBKKKKLKKJ            ","            JKKLKKKBDDDDDBKKKLKKJ            ","            JKKLKKKBDD DDBKKKLKKJ            ","            JKKLKKKBDDDDDBKKKLKKJ            ","            JKKLKKKKBDDDBKKKKLKKJ            ","            JKKKLKKKKBBBKKKKLKKKJ            ","             JKKLKKKKKKKKKKKLKKJ             ","             JKKKLKKKKKKKKKLKKKJ             ","              JKKKLLKKKKKLLKKKJ              ","               JKKKKLLLLLKKKKJ               ","                JKKKKKKKKKKKJ                ","                 JJKKKKKKKJJ                 ","                   JJJJJJJ                   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    JJJJJ                    ","                  JJKKKKKJJ                  ","                 JKKKKKKKKKJ                 ","                 JKKKLLLKKKJ                 ","                JKKKLKKKLKKKJ                ","                JKKLKDDDKLKKJ                ","                JKKLKD DKLKKJ                ","                JKKLKDDDKLKKJ                ","                JKKKLKKKLKKKJ                ","                 JKKKLLLKKKJ                 ","                 JKKKKKKKKKJ                 ","                  JJKKKKKJJ                  ","                    JJJJJ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     JJJ                     ","                    JDDDJ                    ","                    JDDDJ                    ","                    JDDDJ                    ","                     JJJ                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "}
+    };
 
-    protected static final String[][] shape = new String[][] {
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DZD               DZD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "    D                                   D    ",
-                    "   DZD                                 DZD   ", "    D                                   D    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DZD               DZD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            D D               D D            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   DDD                                 DDD   ",
-                    "   D D                                 D D   ", "   DDD                                 DDD   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            D D               D D            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             D                 D             ", "            DDD               DDD            ",
-                    "           DD DD             DD DD           ", "            DDD               DDD            ",
-                    "             D                 D             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "    D                                   D    ", "   DDD                                 DDD   ",
-                    "  DD DD                               DD DD  ", "   DDD                                 DDD   ",
-                    "    D                                   D    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             D                 D             ", "            DDD               DDD            ",
-                    "           DD DD             DD DD           ", "            DDD               DDD            ",
-                    "             D                 D             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "           D   D             D   D           ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "   DDD                                 DDD   ", "  D   D                               D   D  ",
-                    "  D   D                               D   D  ", "  D   D                               D   D  ",
-                    "   DDD                                 DDD   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "           D   D             D   D           ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "          DD   DD           DD   DD          ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "    D                                   D    ",
-                    "   DDD               ZZZ               DDD   ", "  D   D             ZZZZZ             D   D  ",
-                    " DD   DD            ZZZZZ            DD   DD ", "  D   D             ZZZZZ             D   D  ",
-                    "   DDD               ZZZ               DDD   ", "    D                                   D    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "          DD   DD           DD   DD          ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "           D   D             D   D           ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "           D   D             D   D           ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   DDD              ZZZZZ              DDD   ",
-                    "  D   D            ZZ   ZZ            D   D  ", " D     D           Z     Z           D     D ",
-                    " D     D           Z     Z           D     D ", " D     D           Z     Z           D     D ",
-                    "  D   D            ZZ   ZZ            D   D  ", "   DDD              ZZZZZ              DDD   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "           D   D             D   D           ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "           D   D             D   D           ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "           DDDDD             DDDDD           ",
-                    "          DD   DD           DD   DD          ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "          DD   DD           DD   DD          ", "           DDDDD             DDDDD           ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                    ZZZZZ                    ", "  DDDDD            Z     Z            DDDDD  ",
-                    " DD   DD          Z       Z          DD   DD ", " D     D          Z  WWW  Z          D     D ",
-                    " D     D          Z  WWW  Z          D     D ", " D     D          Z  WWW  Z          D     D ",
-                    " DD   DD          Z       Z          DD   DD ", "  DDDDD            Z     Z            DDDDD  ",
-                    "                    ZZZZZ                    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "           DDDDD             DDDDD           ",
-                    "          DD   DD           DD   DD          ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "          DD   DD           DD   DD          ", "           DDDDD             DDDDD           ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDD   DDD         DDD   DDD         ", "         DD     DD         DD     DD         ",
-                    "         DD     DD         DD     DD         ", "         DD     DD         DD     DD         ",
-                    "         DDD   DDD         DDD   DDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                     ZZZ                     ",
-                    "  DDDDD            ZZ   ZZ            DDDDD  ", " DDDDDDD          Z       Z          DDDDDDD ",
-                    "DDD   DDD         Z WWWWW Z         DDD   DDD", "DD     DD        Z  W   W  Z        DD     DD",
-                    "DD     DD        Z  W   W  Z        DD     DD", "DD     DD        Z  W   W  Z        DD     DD",
-                    "DDD   DDD         Z WWWWW Z         DDD   DDD", " DDDDDDD          Z       Z          DDDDDDD ",
-                    "  DDDDD            ZZ   ZZ            DDDDD  ", "                     ZZZ                     ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDD   DDD         DDD   DDD         ", "         DD     DD         DD     DD         ",
-                    "         DD     DD         DD     DD         ", "         DD     DD         DD     DD         ",
-                    "         DDD   DDD         DDD   DDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDDZDDB           BDDZDDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                    ZZZZZ                    ",
-                    "                   Z     Z                   ", "   BBB            Z  WWW  Z            BBB   ",
-                    "  BDDDB          Z  W   W  Z          BDDDB  ", " BDDDDDB         Z W     W Z         BDDDDDB ",
-                    " BDDZDDB         Z W     W Z         BDDZDDB ", " BDDDDDB         Z W     W Z         BDDDDDB ",
-                    "  BDDDB          Z  W   W  Z          BDDDB  ", "   BBB            Z  WWW  Z            BBB   ",
-                    "                   Z     Z                   ", "                    ZZZZZ                    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDDZDDB           BDDZDDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "           D   D             D   D           ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                    ZZZZZ                    ",
-                    "                   Z     Z                   ", "                  Z  WGW  Z                  ",
-                    "  B D B          Z  W   W  Z          B D B  ", "                 Z W     W Z                 ",
-                    "  D   D          Z G     G Z          D   D  ", "                 Z W     W Z                 ",
-                    "  B D B          Z  W   W  Z          B D B  ", "                  Z  WGW  Z                  ",
-                    "                   Z     Z                   ", "                    ZZZZZ                    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "           D   D             D   D           ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                    ZZZZZ                    ",
-                    "                   Z     Z                   ", "                  Z  WWW  Z                  ",
-                    "  B   B          Z  W   W  Z          B   B  ", "                 Z W     W Z                 ",
-                    "                 Z W     W Z                 ", "                 Z W     W Z                 ",
-                    "  B   B          Z  W   W  Z          B   B  ", "                  Z  WWW  Z                  ",
-                    "                   Z     Z                   ", "                    ZZZZZ                    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                     ZZZ                     ",
-                    "                   ZZ   ZZ                   ", "                  Z       Z                  ",
-                    "                  Z WWWWW Z                  ", "                 Z  W   W  Z                 ",
-                    "                 Z  W   W  Z                 ", "                 Z  W   W  Z                 ",
-                    "                  Z WWWWW Z                  ", "                  Z       Z                  ",
-                    "                   ZZ   ZZ                   ", "                     ZZZ                     ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  JFZZZZZFJ                  ", "                  FZ     ZF                  ",
-                    "                  Z       Z                  ", "   DDD           JZ  WWW  ZF           DDD   ",
-                    "   DZD           JZ  WWW  ZJ           DZD   ", "   DDD           JZ  WWW  ZF           DDD   ",
-                    "                  Z       Z                  ", "                  FZ     ZF                  ",
-                    "                  JFZZZZZFJ                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  11FJJJF11                  ", "                  1JZZZZZJ1                  ",
-                    "   DDD            FZZ   ZZF            DDD   ", "  DDDDD           FZ     ZF           DDDDD  ",
-                    "  DD DD         11JZ     ZJ11         DD DD  ", "  DDDDD           FZ     ZF           DDDDD  ",
-                    "   DDD            FZZ   ZZF            DDD   ", "                  1JZZZZZJ1                  ",
-                    "                  11FJJJF11                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  11     11                  ", "   BBB            1JJJJJJJ1            BBB   ",
-                    "  BDDDB            J ZZZ J            BDDDB  ", " BDDDDDB           JZZZZZJ           BDDDDDB ",
-                    " BDD DDB        11 JZZZZZJ 11        BDD DDB ", " BDDDDDB           JZZZZZJ           BDDDDDB ",
-                    "  BDDDB            J ZZZ J            BDDDB  ", "   BBB            1JJJJJJJ1            BBB   ",
-                    "                  11     11                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMFMA             AMFMA           ", "            BFB               BFB            ",
-                    "             1                 1             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  11     11                  ", "   BZB            1       1            BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EFF1       11         11       1FFE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB            1       1            BZB   ",
-                    "                  11     11                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             1                 1             ", "            BFB               BFB            ",
-                    "           AMFMA             AMFMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMFMA             AMFMA           ", "            BFB               BFB            ",
-                    "             1                 1             ", "              1               1              ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                 1         1                 ",
-                    "                  11     11                  ", "   BZB            1       1            BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EFF11     11           11     11FFE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB            1       1            BZB   ",
-                    "                  11     11                  ", "                 1         1                 ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "              1               1              ",
-                    "             1                 1             ", "            BFB               BFB            ",
-                    "           AMFMA             AMFMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMFMA             AMFMA           ", "            BFB               BFB            ",
-                    "             1                 1             ", "              1               1              ",
-                    "              1               1              ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                 1         1                 ",
-                    "                  1       1                  ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EFF111    11           11    111FFE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                  1       1                  ", "                 1         1                 ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "              1               1              ", "              1               1              ",
-                    "             1                 1             ", "            BFB               BFB            ",
-                    "           AMFMA             AMFMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMDMA             AMDMA           ", "            BBB               BBB            ",
-                    "                                             ", "              1               1              ",
-                    "              1               1              ", "               1             1               ",
-                    "                                             ", "                                             ",
-                    "                1           1                ", "                 1         1                 ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EDB 111  11             11  111 BDE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                 1         1                 ",
-                    "                1           1                ", "                                             ",
-                    "                                             ", "               1             1               ",
-                    "              1               1              ", "              1               1              ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           AMDMA             AMDMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "              1               1              ", "               1             1               ",
-                    "               1             1               ", "                1           1                ",
-                    "                1           1                ", "                 1         1                 ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z  111111             111111  Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                 1         1                 ",
-                    "                1           1                ", "                1           1                ",
-                    "               1             1               ", "               1             1               ",
-                    "              1               1              ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "               1             1               ",
-                    "               1             1               ", "                1           1                ",
-                    "                1           1                ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z   1111               1111   Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                1           1                ", "                1           1                ",
-                    "               1             1               ", "               1             1               ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BBB                                 BBB   ",
-                    "  BDDDB                               BDDDB  ", " BDDDDDB                             BDDDDDB ",
-                    " BDD DDB                             BDD DDB ", " BDDDDDB                             BDDDDDB ",
-                    "  BDDDB                               BDDDB  ", "   BBB                                 BBB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "   DDD                                 DDD   ", "  DDDDD                               DDDDD  ",
-                    "  DD DD                               DD DD  ", "  DDDDD                               DDDDD  ",
-                    "   DDD                                 DDD   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   DDD                                 DDD   ",
-                    "   DZD                                 DZD   ", "   DDD                                 DDD   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             5                 5             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "    5                                   5    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             5                 5             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "             Y                 Y             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "  B   B                               B   B  ", "                                             ",
-                    "    Y                                   Y    ", "                                             ",
-                    "  B   B                               B   B  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "             Y                 Y             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            B B               B B            ",
-                    "           B   B             B   B           ", "          B     B           B     B          ",
-                    "             3                 3             ", "          B     B           B     B          ",
-                    "           B   B             B   B           ", "            B B               B B            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   B B                                 B B   ",
-                    "  B   B                               B   B  ", " B     B                             B     B ",
-                    "    3                 0                 3    ", " B     B                             B     B ",
-                    "  B   B                               B   B  ", "   B B                                 B B   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            B B               B B            ",
-                    "           B   B             B   B           ", "          B     B           B     B          ",
-                    "             3                 3             ", "          B     B           B     B          ",
-                    "           B   B             B   B           ", "            B B               B B            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DBBBD             DBBBD           ",
-                    "          DBDDDBD           DBDDDBD          ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "         DBDD8DDBD         DBDD8DDBD         ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "          DBDDDBD           DBDDDBD          ", "           DBBBD             DBBBD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "   DDD                                 DDD   ", "  DBBBD                               DBBBD  ",
-                    " DBDDDBD                             DBDDDBD ", "DBDDDDDBD            N N            DBDDDDDBD",
-                    "DBDD8DDBD                           DBDD8DDBD", "DBDDDDDBD            N N            DBDDDDDBD",
-                    " DBDDDBD                             DBDDDBD ", "  DBBBD                               DBBBD  ",
-                    "   DDD                                 DDD   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DBBBD             DBBBD           ",
-                    "          DBDDDBD           DBDDDBD          ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "         DBDD8DDBD         DBDD8DDBD         ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "          DBDDDBD           DBDDDBD          ", "           DBBBD             DBBBD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDCCCDDD         DDDCCCDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "  DDDDD                               DDDDD  ", " DDDDDDD                             DDDDDDD ",
-                    "DDDDDDDDD                           DDDDDDDDD", "DDDCCCDDD            6 6            DDDCCCDDD",
-                    "DDDCCCDDD             7             DDDCCCDDD", "DDDCCCDDD            6 6            DDDCCCDDD",
-                    "DDDDDDDDD                           DDDDDDDDD", " DDDDDDD                             DDDDDDD ",
-                    "  DDDDD                               DDDDD  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDCCCDDD         DDDCCCDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "  DDDDD                               DDDDD  ", " DDDDDDD                             DDDDDDD ",
-                    "DDDDDDDDD            K~K            DDDDDDDDD", "DDDDDDDDD           KKKKK           DDDDDDDDD",
-                    "DDDDDDDDD           KKKKK           DDDDDDDDD", "DDDDDDDDD           KKKKK           DDDDDDDDD",
-                    "DDDDDDDDD            KKK            DDDDDDDDD", " DDDDDDD                             DDDDDDD ",
-                    "  DDDDD                               DDDDD  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             " },
-            { "                  JJJJJJJJJ                  ", "              JJJJ    O    JJJJ              ",
-                    "           JJJJJ     O O     JJJJJ           ", "          JJJJJJJ    O O    JJJJJJJ          ",
-                    "         JJJJJJJJJ  O   O  JJJJJJJJJ         ", "        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ",
-                    "       J JJJJJJJJJ O     O JJJJJJJJJ J       ", "      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ",
-                    "     J   JJJJJJJJJO       OJJJJJJJJJ   J     ", "    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ",
-                    "   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ", "   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ",
-                    "  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ", "  J  O      O IZIIIZZZZZZZIIIZI O      O  J  ",
-                    " J    O     OIZZIZZIIZZZIIZZIZZIO     O    J ", " J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J ",
-                    " J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J ", " J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J ",
-                    "J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J", "JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ",
-                    "JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ", "JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ",
-                    "JJJJJJJJJOIZZZZZVK   KKK   KVZZZZZIOJJJJJJJJJ", "JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ",
-                    "JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ", "JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ",
-                    "J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J", " J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J ",
-                    " J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J ", " J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J ",
-                    " J    O     OIZZIZZIIZZZIIZZIZZIO     O    J ", "  J  O      O IZIIIZZZZZZZIIIZI O      O  J  ",
-                    "  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ", "   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ",
-                    "   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ", "    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ",
-                    "     J   JJJJJJJJJO       OJJJJJJJJJ   J     ", "      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ",
-                    "       J JJJJJJJJJ O     O JJJJJJJJJ J       ", "        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ",
-                    "         JJJJJJJJJ  O   O  JJJJJJJJJ         ", "          JJJJJJJ    O O    JJJJJJJ          ",
-                    "           JJJJJ     O O     JJJJJ           ", "              JJJJ    O    JJJJ              ",
-                    "                  JJJJJJJJJ                  " },
-            { "                                             ", "                                             ",
-                    "           KKKKK             KKKKK           ", "          KKXXXKK           KKXXXKK          ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KXXXXXXXK         KXXXXXXXK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "          KKXXXKK           KKXXXKK          ",
-                    "           KKKKK   IIIIIII   KKKKK           ", "                 IIHHHHHHHII                 ",
-                    "               IIHHHHHHHHHHHII               ", "              IHIIIHHHHHHHIIIHI              ",
-                    "             IHHIQQIIHHHIIPPIHHI             ", "            IHHHIQQQQIIIPPPPIHHHI            ",
-                    "            IHHHIQQQIIKIIPPPIHHHI            ", "           IHHHHIQQI     IPPIHHHHI           ",
-                    "  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  ", " KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ",
-                    "KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK", "KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK",
-                    "KXXXXXXXK ITTTTTI           IUUUUUI KXXXXXXXK", "KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK",
-                    "KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK", " KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ",
-                    "  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  ", "           IHHHHISSI     IRRIHHHHI           ",
-                    "            IHHHISSSIIKIIRRRIHHHI            ", "            IHHHISSSSIIIRRRRIHHHI            ",
-                    "             IHHISSIIHHHIIRRIHHI             ", "              IHIIIHHHHHHHIIIHI              ",
-                    "               IIHHHHHHHHHHHII               ", "                 IIHHHHHHHII                 ",
-                    "           KKKKK   IIIIIII   KKKKK           ", "          KKXXXKK           KKXXXKK          ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KXXXXXXXK         KXXXXXXXK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "          KKXXXKK           KKXXXKK          ",
-                    "           KKKKK             KKKKK           ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            KKK               KKK            ",
-                    "           KKKKK             KKKKK           ", "          KKKKKKK           KKKKKKK          ",
-                    "          KKKKKKK           KKKKKKK          ", "          KKKKKKK           KKKKKKK          ",
-                    "           KKKKK             KKKKK           ", "            KKK               KKK            ",
-                    "                   IIIIIII                   ", "                 IIZZZZZZZII                 ",
-                    "               IIZZZZZZZZZZZII               ", "              IZIIIZZZZZZZIIIZI              ",
-                    "             IZZIZZIIZZZIIZZIZZI             ", "            IZZZIZZZZIIIZZZZIZZZI            ",
-                    "            IZZZIZZZII IIZZZIZZZI            ", "           IZZZZIZZI     IZZIZZZZI           ",
-                    "           IZZZZIII       IIIZZZZI           ", "   KKK    IZZZZII           IIZZZZI    KKK   ",
-                    "  KKKKK   IZZIIZI           IZIIZZI   KKKKK  ", " KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK ",
-                    " KKKKKKK  IZZZZZI           IZZZZZI  KKKKKKK ", " KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK ",
-                    "  KKKKK   IZZIIZI           IZIIZZI   KKKKK  ", "   KKK    IZZZZII           IIZZZZI    KKK   ",
-                    "           IZZZZIII       IIIZZZZI           ", "           IZZZZIZZI     IZZIZZZZI           ",
-                    "            IZZZIZZZII IIZZZIZZZI            ", "            IZZZIZZZZIIIZZZZIZZZI            ",
-                    "             IZZIZZIIZZZIIZZIZZI             ", "              IZIIIZZZZZZZIIIZI              ",
-                    "               IIZZZZZZZZZZZII               ", "                 IIZZZZZZZII                 ",
-                    "                   IIIIIII                   ", "            KKK               KKK            ",
-                    "           KKKKK             KKKKK           ", "          KKKKKKK           KKKKKKK          ",
-                    "          KKKKKKK           KKKKKKK          ", "          KKKKKKK           KKKKKKK          ",
-                    "           KKKKK             KKKKK           ", "            KKK               KKK            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                    OOOOO                    ", "                  OO     OO                  ",
-                    "                OO         OO                ", "                O           O                ",
-                    "               O             O               ", "               O             O               ",
-                    "              O               O              ", "              O               O              ",
-                    "              O               O              ", "              O               O              ",
-                    "              O               O              ", "               O             O               ",
-                    "               O             O               ", "                O           O                ",
-                    "                OO         OO                ", "                  OO     OO                  ",
-                    "                    OOOOO                    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                  OOOOOOOOO                  ", "               OOO         OOO               ",
-                    "             OO               OO             ", "           OO                   OO           ",
-                    "          O  O                 O  O          ", "         O   OOO             OOO   O         ",
-                    "        O    O  OO         OO  O    O        ", "       O     O    O       O    O     O       ",
-                    "      O      O     OO   OO     O      O      ", "     O       O       OOO       O       O     ",
-                    "     O       O       O O       O       O     ", "    O        O     OO   OO     O        O    ",
-                    "    O        O   OO       OO   O        O    ", "   O         O OO           OO O         O   ",
-                    "   O         OO     OOOOO     OO         O   ", "   O        OO    OO     OO    OO        O   ",
-                    "  O       OO O   O         O   O OO       O  ", "  O      O   O   O         O   O   O      O  ",
-                    "  O    OO    O  O           O  O    OO    O  ", "  O  OO      O  O           O  O      OO  O  ",
-                    "  O O        O  O           O  O        O O  ", "  O  OO      O  O           O  O      OO  O  ",
-                    "  O    OO    O  O           O  O    OO    O  ", "  O      O   O   O         O   O   O      O  ",
-                    "  O       OO O   O         O   O OO       O  ", "   O        OO    OO     OO    OO        O   ",
-                    "   O         OO     OOOOO     OO         O   ", "   O         O OO           OO O         O   ",
-                    "    O        O   OO       OO   O        O    ", "    O        O     OO   OO     O        O    ",
-                    "     O       O       O O       O       O     ", "     O       O       OOO       O       O     ",
-                    "      O      O     OO   OO     O      O      ", "       O     O    O       O    O     O       ",
-                    "        O    O  OO         OO  O    O        ", "         O   OOO             OOO   O         ",
-                    "          O  O                 O  O          ", "           OO                   OO           ",
-                    "             OO               OO             ", "               OOO         OOO               ",
-                    "                  OOOOOOOOO                  ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                   OOOOOOO                   ",
-                    "                 OO       OO                 ", "                O           O                ",
-                    "               O             O               ", "              O               O              ",
-                    "             O                 O             ", "             O                 O             ",
-                    "            O                   O            ", "            O                   O            ",
-                    "            O                   O            ", "            O                   O            ",
-                    "            O                   O            ", "            O                   O            ",
-                    "            O                   O            ", "             O                 O             ",
-                    "             O                 O             ", "              O               O              ",
-                    "               O             O               ", "                O           O                ",
-                    "                 OO       OO                 ", "                   OOOOOOO                   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                     DDD                     ",
-                    "                     DZD                     ", "                     DDD                     ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                   JJJJJJJ                   ", "                JJJKKKKKKKJJJ                ",
-                    "              JJKKKKKKKKKKKKKJJ              ", "             JKKKKKLLLLLLLKKKKKJ             ",
-                    "            JKKKKLL       LLKKKKJ            ", "           JKKKKL           LKKKKJ           ",
-                    "          JKKKKL             LKKKKJ          ", "          JKKKL               LKKKJ          ",
-                    "         JKKKL                 LKKKJ         ", "         JKKL                   LKKJ         ",
-                    "         JKKL                   LKKJ         ", "        JKKL                     LKKJ        ",
-                    "        JKKL         DDD         LKKJ        ", "        JKKL        DDDDD        LKKJ        ",
-                    "        JKKL        DD DD        LKKJ        ", "        JKKL        DDDDD        LKKJ        ",
-                    "        JKKL         DDD         LKKJ        ", "        JKKL                     LKKJ        ",
-                    "         JKKL                   LKKJ         ", "         JKKL                   LKKJ         ",
-                    "         JKKKL                 LKKKJ         ", "          JKKKL               LKKKJ          ",
-                    "          JKKKKL             LKKKKJ          ", "           JKKKKL           LKKKKJ           ",
-                    "            JKKKKLL       LLKKKKJ            ", "             JKKKKKLLLLLLLKKKKKJ             ",
-                    "              JJKKKKKKKKKKKKKJJ              ", "                JJJKKKKKKKJJJ                ",
-                    "                   JJJJJJJ                   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                   JJJJJJJ                   ", "                 JJKKKKKKKJJ                 ",
-                    "                JKKKKKKKKKKKJ                ", "               JKKKKLLLLLKKKKJ               ",
-                    "              JKKKLLKKKKKLLKKKJ              ", "             JKKKLKKKKKKKKKLKKKJ             ",
-                    "             JKKLKKKKKKKKKKKLKKJ             ", "            JKKKLKKKKBBBKKKKLKKKJ            ",
-                    "            JKKLKKKKBDDDBKKKKLKKJ            ", "            JKKLKKKBDDDDDBKKKLKKJ            ",
-                    "            JKKLKKKBDD DDBKKKLKKJ            ", "            JKKLKKKBDDDDDBKKKLKKJ            ",
-                    "            JKKLKKKKBDDDBKKKKLKKJ            ", "            JKKKLKKKKBBBKKKKLKKKJ            ",
-                    "             JKKLKKKKKKKKKKKLKKJ             ", "             JKKKLKKKKKKKKKLKKKJ             ",
-                    "              JKKKLLKKKKKLLKKKJ              ", "               JKKKKLLLLLKKKKJ               ",
-                    "                JKKKKKKKKKKKJ                ", "                 JJKKKKKKKJJ                 ",
-                    "                   JJJJJJJ                   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                    JJJJJ                    ", "                  JJKKKKKJJ                  ",
-                    "                 JKKKKKKKKKJ                 ", "                 JKKKLLLKKKJ                 ",
-                    "                JKKKLKKKLKKKJ                ", "                JKKLKDDDKLKKJ                ",
-                    "                JKKLKD DKLKKJ                ", "                JKKLKDDDKLKKJ                ",
-                    "                JKKKLKKKLKKKJ                ", "                 JKKKLLLKKKJ                 ",
-                    "                 JKKKKKKKKKJ                 ", "                  JJKKKKKJJ                  ",
-                    "                    JJJJJ                    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                     JJJ                     ", "                    JDDDJ                    ",
-                    "                    JDDDJ                    ", "                    JDDDJ                    ",
-                    "                     JJJ                     ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " } };
-
-    protected static final String[][] shapeErr = new String[][] {
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DZD               DZD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "    D                                   D    ",
-                    "   DZD                                 DZD   ", "    D                                   D    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DZD               DZD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            D D               D D            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   DDD                                 DDD   ",
-                    "   D D                                 D D   ", "   DDD                                 DDD   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            D D               D D            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             D                 D             ", "            DDD               DDD            ",
-                    "           DD DD             DD DD           ", "            DDD               DDD            ",
-                    "             D                 D             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "    D                                   D    ", "   DDD                                 DDD   ",
-                    "  DD DD                               DD DD  ", "   DDD                                 DDD   ",
-                    "    D                                   D    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             D                 D             ", "            DDD               DDD            ",
-                    "           DD DD             DD DD           ", "            DDD               DDD            ",
-                    "             D                 D             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "           D   D             D   D           ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "   DDD                                 DDD   ", "  D   D                               D   D  ",
-                    "  D   D                               D   D  ", "  D   D                               D   D  ",
-                    "   DDD                                 DDD   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "           D   D             D   D           ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "          DD   DD           DD   DD          ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "    D                                   D    ",
-                    "   DDD               ZZZ               DDD   ", "  D   D             ZZZZZ             D   D  ",
-                    " DD   DD            ZZZZZ            DD   DD ", "  D   D             ZZZZZ             D   D  ",
-                    "   DDD               ZZZ               DDD   ", "    D                                   D    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "             D                 D             ",
-                    "            DDD               DDD            ", "           D   D             D   D           ",
-                    "          DD   DD           DD   DD          ", "           D   D             D   D           ",
-                    "            DDD               DDD            ", "             D                 D             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "           D   D             D   D           ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "           D   D             D   D           ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   DDD              ZZZZZ              DDD   ",
-                    "  D   D            ZZ   ZZ            D   D  ", " D     D           Z     Z           D     D ",
-                    " D     D           Z     Z           D     D ", " D     D           Z     Z           D     D ",
-                    "  D   D            ZZ   ZZ            D   D  ", "   DDD              ZZZZZ              DDD   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "           D   D             D   D           ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "           D   D             D   D           ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "           DDDDD             DDDDD           ",
-                    "          DD   DD           DD   DD          ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "          DD   DD           DD   DD          ", "           DDDDD             DDDDD           ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                    ZZZZZ                    ", "  DDDDD            Z     Z            DDDDD  ",
-                    " DD   DD          Z       Z          DD   DD ", " D     D          Z  WWW  Z          D     D ",
-                    " D     D          Z  WWW  Z          D     D ", " D     D          Z  WWW  Z          D     D ",
-                    " DD   DD          Z       Z          DD   DD ", "  DDDDD            Z     Z            DDDDD  ",
-                    "                    ZZZZZ                    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "           DDDDD             DDDDD           ",
-                    "          DD   DD           DD   DD          ", "          D     D           D     D          ",
-                    "          D     D           D     D          ", "          D     D           D     D          ",
-                    "          DD   DD           DD   DD          ", "           DDDDD             DDDDD           ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDD   DDD         DDD   DDD         ", "         DD     DD         DD     DD         ",
-                    "         DD     DD         DD     DD         ", "         DD     DD         DD     DD         ",
-                    "         DDD   DDD         DDD   DDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                     ZZZ                     ",
-                    "  DDDDD            ZZ   ZZ            DDDDD  ", " DDDDDDD          Z       Z          DDDDDDD ",
-                    "DDD   DDD         Z WWWWW Z         DDD   DDD", "DD     DD        Z  W   W  Z        DD     DD",
-                    "DD     DD        Z  W   W  Z        DD     DD", "DD     DD        Z  W   W  Z        DD     DD",
-                    "DDD   DDD         Z WWWWW Z         DDD   DDD", " DDDDDDD          Z       Z          DDDDDDD ",
-                    "  DDDDD            ZZ   ZZ            DDDDD  ", "                     ZZZ                     ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDD   DDD         DDD   DDD         ", "         DD     DD         DD     DD         ",
-                    "         DD     DD         DD     DD         ", "         DD     DD         DD     DD         ",
-                    "         DDD   DDD         DDD   DDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDDZDDB           BDDZDDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                    ZZZZZ                    ",
-                    "                   Z     Z                   ", "   BBB            Z  WWW  Z            BBB   ",
-                    "  BDDDB          Z  W   W  Z          BDDDB  ", " BDDDDDB         Z W     W Z         BDDDDDB ",
-                    " BDDZDDB         Z W     W Z         BDDZDDB ", " BDDDDDB         Z W     W Z         BDDDDDB ",
-                    "  BDDDB          Z  W   W  Z          BDDDB  ", "   BBB            Z  WWW  Z            BBB   ",
-                    "                   Z     Z                   ", "                    ZZZZZ                    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDDZDDB           BDDZDDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "           D   D             D   D           ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                    ZZZZZ                    ",
-                    "                   Z     Z                   ", "                  Z  WGW  Z                  ",
-                    "  B D B          Z  W   W  Z          B D B  ", "                 Z W     W Z                 ",
-                    "  D   D          Z G     G Z          D   D  ", "                 Z W     W Z                 ",
-                    "  B D B          Z  W   W  Z          B D B  ", "                  Z  WGW  Z                  ",
-                    "                   Z     Z                   ", "                    ZZZZZ                    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "           D   D             D   D           ", "                                             ",
-                    "           B D B             B D B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                    ZZZZZ                    ",
-                    "                   Z     Z                   ", "                  Z  WWW  Z                  ",
-                    "  B   B          Z  W   W  Z          B   B  ", "                 Z W     W Z                 ",
-                    "                 Z W     W Z                 ", "                 Z W     W Z                 ",
-                    "  B   B          Z  W   W  Z          B   B  ", "                  Z  WWW  Z                  ",
-                    "                   Z     Z                   ", "                    ZZZZZ                    ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                     ZZZ                     ",
-                    "                   ZZ   ZZ                   ", "                  Z       Z                  ",
-                    "                  Z WWWWW Z                  ", "                 Z  W   W  Z                 ",
-                    "                 Z  W   W  Z                 ", "                 Z  W   W  Z                 ",
-                    "                  Z WWWWW Z                  ", "                  Z       Z                  ",
-                    "                   ZZ   ZZ                   ", "                     ZZZ                     ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  JFZZZZZFJ                  ", "                  FZ     ZF                  ",
-                    "                  Z       Z                  ", "   DDD           JZ  WWW  ZF           DDD   ",
-                    "   DZD           JZ  WWW  ZJ           DZD   ", "   DDD           JZ  WWW  ZF           DDD   ",
-                    "                  Z       Z                  ", "                  FZ     ZF                  ",
-                    "                  JFZZZZZFJ                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  11FJJJF11                  ", "                  1JZZZZZJ1                  ",
-                    "   DDD            FZZ   ZZF            DDD   ", "  DDDDD           FZ     ZF           DDDDD  ",
-                    "  DD DD         11JZ     ZJ11         DD DD  ", "  DDDDD           FZ     ZF           DDDDD  ",
-                    "   DDD            FZZ   ZZF            DDD   ", "                  1JZZZZZJ1                  ",
-                    "                  11FJJJF11                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  11     11                  ", "   BBB            1JJJJJJJ1            BBB   ",
-                    "  BDDDB            J ZZZ J            BDDDB  ", " BDDDDDB           JZZZZZJ           BDDDDDB ",
-                    " BDD DDB        11 JZZZZZJ 11        BDD DDB ", " BDDDDDB           JZZZZZJ           BDDDDDB ",
-                    "  BDDDB            J ZZZ J            BDDDB  ", "   BBB            1JJJJJJJ1            BBB   ",
-                    "                  11     11                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMFMA             AMFMA           ", "            BFB               BFB            ",
-                    "             1                 1             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                  11     11                  ", "   BZB            1       1            BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EFF1       11         11       1FFE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB            1       1            BZB   ",
-                    "                  11     11                  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             1                 1             ", "            BFB               BFB            ",
-                    "           AMFMA             AMFMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMFMA             AMFMA           ", "            BFB               BFB            ",
-                    "             1                 1             ", "              1               1              ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                 1         1                 ",
-                    "                  11     11                  ", "   BZB            1       1            BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EFF11     11           11     11FFE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB            1       1            BZB   ",
-                    "                  11     11                  ", "                 1         1                 ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "              1               1              ",
-                    "             1                 1             ", "            BFB               BFB            ",
-                    "           AMFMA             AMFMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMFMA             AMFMA           ", "            BFB               BFB            ",
-                    "             1                 1             ", "              1               1              ",
-                    "              1               1              ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                 1         1                 ",
-                    "                  1       1                  ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EFF111    11           11    111FFE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                  1       1                  ", "                 1         1                 ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "              1               1              ", "              1               1              ",
-                    "             1                 1             ", "            BFB               BFB            ",
-                    "           AMFMA             AMFMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AMDMA             AMDMA           ", "            BBB               BBB            ",
-                    "                                             ", "              1               1              ",
-                    "              1               1              ", "               1             1               ",
-                    "                                             ", "                                             ",
-                    "                1           1                ", "                 1         1                 ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E EDB 111  11             11  111 BDE E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                 1         1                 ",
-                    "                1           1                ", "                                             ",
-                    "                                             ", "               1             1               ",
-                    "              1               1              ", "              1               1              ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           AMDMA             AMDMA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "              1               1              ", "               1             1               ",
-                    "               1             1               ", "                1           1                ",
-                    "                1           1                ", "                 1         1                 ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z  111111             111111  Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                 1         1                 ",
-                    "                1           1                ", "                1           1                ",
-                    "               1             1               ", "               1             1               ",
-                    "              1               1              ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "               1             1               ",
-                    "               1             1               ", "                1           1                ",
-                    "                1           1                ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z   1111               1111   Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                1           1                ", "                1           1                ",
-                    "               1             1               ", "               1             1               ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BZB                                 BZB   ",
-                    "  AM MA                               AM MA  ", " BM E MB                             BM E MB ",
-                    " Z E E Z                             Z E E Z ", " BM E MB                             BM E MB ",
-                    "  AM MA                               AM MA  ", "   BZB                                 BZB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BZB               BZB            ",
-                    "           AM MA             AM MA           ", "          BM E MB           BM E MB          ",
-                    "          Z E E Z           Z E E Z          ", "          BM E MB           BM E MB          ",
-                    "           AM MA             AM MA           ", "            BZB               BZB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   BBB                                 BBB   ",
-                    "  BDDDB                               BDDDB  ", " BDDDDDB                             BDDDDDB ",
-                    " BDD DDB                             BDD DDB ", " BDDDDDB                             BDDDDDB ",
-                    "  BDDDB                               BDDDB  ", "   BBB                                 BBB   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            BBB               BBB            ",
-                    "           BDDDB             BDDDB           ", "          BDDDDDB           BDDDDDB          ",
-                    "          BDD DDB           BDD DDB          ", "          BDDDDDB           BDDDDDB          ",
-                    "           BDDDB             BDDDB           ", "            BBB               BBB            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "   DDD                                 DDD   ", "  DDDDD                               DDDDD  ",
-                    "  DD DD                               DD DD  ", "  DDDDD                               DDDDD  ",
-                    "   DDD                                 DDD   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DDDDD             DDDDD           ",
-                    "           DD DD             DD DD           ", "           DDDDD             DDDDD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   DDD                                 DDD   ",
-                    "   DZD                                 DZD   ", "   DDD                                 DDD   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            DDD               DDD            ",
-                    "            DZD               DZD            ", "            DDD               DDD            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             5                 5             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "    5                                   5    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "             5                 5             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "             Y                 Y             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "  B   B                               B   B  ", "                                             ",
-                    "    Y                                   Y    ", "                                             ",
-                    "  B   B                               B   B  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "             Y                 Y             ", "                                             ",
-                    "           B   B             B   B           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            B B               B B            ",
-                    "           B   B             B   B           ", "          B     B           B     B          ",
-                    "             3                 3             ", "          B     B           B     B          ",
-                    "           B   B             B   B           ", "            B B               B B            ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "   B B                                 B B   ",
-                    "  B   B                               B   B  ", " B     B                             B     B ",
-                    "    3                 0                 3    ", " B     B                             B     B ",
-                    "  B   B                               B   B  ", "   B B                                 B B   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "            B B               B B            ",
-                    "           B   B             B   B           ", "          B     B           B     B          ",
-                    "             3                 3             ", "          B     B           B     B          ",
-                    "           B   B             B   B           ", "            B B               B B            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DBBBD             DBBBD           ",
-                    "          DBDDDBD           DBDDDBD          ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "         DBDD8DDBD         DBDD8DDBD         ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "          DBDDDBD           DBDDDBD          ", "           DBBBD             DBBBD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "   DDD                                 DDD   ", "  DBBBD                               DBBBD  ",
-                    " DBDDDBD                             DBDDDBD ", "DBDDDDDBD            N N            DBDDDDDBD",
-                    "DBDD8DDBD                           DBDD8DDBD", "DBDDDDDBD            N N            DBDDDDDBD",
-                    " DBDDDBD                             DBDDDBD ", "  DBBBD                               DBBBD  ",
-                    "   DDD                                 DDD   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "            DDD               DDD            ", "           DBBBD             DBBBD           ",
-                    "          DBDDDBD           DBDDDBD          ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "         DBDD8DDBD         DBDD8DDBD         ", "         DBDDDDDBD         DBDDDDDBD         ",
-                    "          DBDDDBD           DBDDDBD          ", "           DBBBD             DBBBD           ",
-                    "            DDD               DDD            ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDCCCDDD         DDDCCCDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "  DDDDD                               DDDDD  ", " DDDDDDD                             DDDDDDD ",
-                    "DDDDDDDDD                           DDDDDDDDD", "DDDCCCDDD            6 6            DDDCCCDDD",
-                    "DDDCCCDDD             7             DDDCCCDDD", "DDDCCCDDD            6 6            DDDCCCDDD",
-                    "DDDDDDDDD                           DDDDDDDDD", " DDDDDDD                             DDDDDDD ",
-                    "  DDDDD                               DDDDD  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDCCCDDD         DDDCCCDDD         ", "         DDDCCCDDD         DDDCCCDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "  DDDDD                               DDDDD  ", " DDDDDDD                             DDDDDDD ",
-                    "DDDDDDDDD            K~K            DDDDDDDDD", "DDDDDDDDD           KKKKK           DDDDDDDDD",
-                    "DDDDDDDDD           KKKKK           DDDDDDDDD", "DDDDDDDDD           KKKKK           DDDDDDDDD",
-                    "DDDDDDDDD            KKK            DDDDDDDDD", " DDDDDDD                             DDDDDDD ",
-                    "  DDDDD                               DDDDD  ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "           DDDDD             DDDDD           ", "          DDDDDDD           DDDDDDD          ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "         DDDDDDDDD         DDDDDDDDD         ",
-                    "         DDDDDDDDD         DDDDDDDDD         ", "          DDDDDDD           DDDDDDD          ",
-                    "           DDDDD             DDDDD           ", "                                             ",
-                    "                                             " },
-            { "                  JJJJJJJJJ                  ", "              JJJJ    O    JJJJ              ",
-                    "           JJJJJ     O O     JJJJJ           ", "          JJJJJJJ    O O    JJJJJJJ          ",
-                    "         JJJJJJJJJ  O   O  JJJJJJJJJ         ", "        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ",
-                    "       J JJJJJJJJJ O     O JJJJJJJJJ J       ", "      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ",
-                    "     J   JJJJJJJJJO       OJJJJJJJJJ   J     ", "    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ",
-                    "   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ", "   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ",
-                    "  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ", "  J  O      O IZIIIZZZZZZZIIIZI O      O  J  ",
-                    " J    O     OIZZIZZIIZZZIIZZIZZIO     O    J ", " J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J ",
-                    " J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J ", " J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J ",
-                    "J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J", "JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ",
-                    "JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ", "JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ",
-                    "JJJJJJJJJOIZZZZZVK   KKK   KVZZZZZIOJJJJJJJJJ", "JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ",
-                    "JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ", "JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ",
-                    "J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J", " J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J ",
-                    " J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J ", " J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J ",
-                    " J    O     OIZZIZZIIZZZIIZZIZZIO     O    J ", "  J  O      O IZIIIZZZZZZZIIIZI O      O  J  ",
-                    "  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ", "   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ",
-                    "   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ", "    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ",
-                    "     J   JJJJJJJJJO       OJJJJJJJJJ   J     ", "      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ",
-                    "       J JJJJJJJJJ O     O JJJJJJJJJ J       ", "        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ",
-                    "         JJJJJJJJJ  O   O  JJJJJJJJJ         ", "          JJJJJJJ    O O    JJJJJJJ          ",
-                    "           JJJJJ     O O     JJJJJ           ", "              JJJJ    O    JJJJ              ",
-                    "                  JJJJJJJJJ                  " },
-            { "                                             ", "                                             ",
-                    "           KKKKK             KKKKK           ", "          KKXXXKK           KKXXXKK          ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KXXXXXXXK         KXXXXXXXK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "          KKXXXKK           KKXXXKK          ",
-                    "           KKKKK   IIIIIII   KKKKK           ", "                 IIHHHHHHHII                 ",
-                    "               IIHHHHHHHHHHHII               ", "              IHIIIHHHHHHHIIIHI              ",
-                    "             IHHIQQIIHHHIIPPIHHI             ", "            IHHHIQQQQIIIPPPPIHHHI            ",
-                    "            IHHHIQQQIIKIIPPPIHHHI            ", "           IHHHHIQQI     IPPIHHHHI           ",
-                    "  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  ", " KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ",
-                    "KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK", "KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK",
-                    "KXXXXXXXK ITTTTTI           IUUUUUI KXXXXXXXK", "KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK",
-                    "KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK", " KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ",
-                    "  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  ", "           IHHHHISSI     IRRIHHHHI           ",
-                    "            IHHHISSSIIKIIRRRIHHHI            ", "            IHHHISSSSIIIRRRRIHHHI            ",
-                    "             IHHISSIIHHHIIRRIHHI             ", "              IHIIIHHHHHHHIIIHI              ",
-                    "               IIHHHHHHHHHHHII               ", "                 IIHHHHHHHII                 ",
-                    "            KKKK   IIIIIII   KKKKK           ", "          KKXXXKK           KKXXXKK          ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KXXXXXXXK         KXXXXXXXK         ", "         KXXXXXXXK         KXXXXXXXK         ",
-                    "         KKXXXXXKK         KKXXXXXKK         ", "          KKXXXKK           KKXXXKK          ",
-                    "           KKKKK             KKKKK           ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "            KKK               KKK            ",
-                    "           KKKKK             KKKKK           ", "          KKKKKKK           KKKKKKK          ",
-                    "          KKKKKKK           KKKKKKK          ", "          KKKKKKK           KKKKKKK          ",
-                    "           KKKKK             KKKKK           ", "            KKK               KKK            ",
-                    "                   IIIIIII                   ", "                 IIZZZZZZZII                 ",
-                    "               IIZZZZZZZZZZZII               ", "              IZIIIZZZZZZZIIIZI              ",
-                    "             IZZIZZIIZZZIIZZIZZI             ", "            IZZZIZZZZIIIZZZZIZZZI            ",
-                    "            IZZZIZZZII IIZZZIZZZI            ", "           IZZZZIZZI     IZZIZZZZI           ",
-                    "           IZZZZIII       IIIZZZZI           ", "   KKK    IZZZZII           IIZZZZI    KKK   ",
-                    "  KKKKK   IZZIIZI           IZIIZZI   KKKKK  ", " KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK ",
-                    " KKKKKKK  IZZZZZI           IZZZZZI  KKKKKKK ", " KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK ",
-                    "  KKKKK   IZZIIZI           IZIIZZI   KKKKK  ", "   KKK    IZZZZII           IIZZZZI    KKK   ",
-                    "           IZZZZIII       IIIZZZZI           ", "           IZZZZIZZI     IZZIZZZZI           ",
-                    "            IZZZIZZZII IIZZZIZZZI            ", "            IZZZIZZZZIIIZZZZIZZZI            ",
-                    "             IZZIZZIIZZZIIZZIZZI             ", "              IZIIIZZZZZZZIIIZI              ",
-                    "               IIZZZZZZZZZZZII               ", "                 IIZZZZZZZII                 ",
-                    "                   IIIIIII                   ", "            KKK               KKK            ",
-                    "           KKKKK             KKKKK           ", "          KKKKKKK           KKKKKKK          ",
-                    "          KKKKKKK           KKKKKKK          ", "          KKKKKKK           KKKKKKK          ",
-                    "           KKKKK             KKKKK           ", "            KKK               KKK            ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                    OOOOO                    ", "                  OO     OO                  ",
-                    "                OO         OO                ", "                O           O                ",
-                    "               O             O               ", "               O             O               ",
-                    "              O               O              ", "              O               O              ",
-                    "              O               O              ", "              O               O              ",
-                    "              O               O              ", "               O             O               ",
-                    "               O             O               ", "                O           O                ",
-                    "                OO         OO                ", "                  OO     OO                  ",
-                    "                    OOOOO                    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                  OOOOOOOOO                  ", "               OOO         OOO               ",
-                    "             OO               OO             ", "           OO                   OO           ",
-                    "          O  O                 O  O          ", "         O   OOO             OOO   O         ",
-                    "        O    O  OO         OO  O    O        ", "       O     O    O       O    O     O       ",
-                    "      O      O     OO   OO     O      O      ", "     O       O       OOO       O       O     ",
-                    "     O       O       O O       O       O     ", "    O        O     OO   OO     O        O    ",
-                    "    O        O   OO       OO   O        O    ", "   O         O OO           OO O         O   ",
-                    "   O         OO     OOOOO     OO         O   ", "   O        OO    OO     OO    OO        O   ",
-                    "  O       OO O   O         O   O OO       O  ", "  O      O   O   O         O   O   O      O  ",
-                    "  O    OO    O  O           O  O    OO    O  ", "  O  OO      O  O           O  O      OO  O  ",
-                    "  O O        O  O           O  O        O O  ", "  O  OO      O  O           O  O      OO  O  ",
-                    "  O    OO    O  O           O  O    OO    O  ", "  O      O   O   O         O   O   O      O  ",
-                    "  O       OO O   O         O   O OO       O  ", "   O        OO    OO     OO    OO        O   ",
-                    "   O         OO     OOOOO     OO         O   ", "   O         O OO           OO O         O   ",
-                    "    O        O   OO       OO   O        O    ", "    O        O     OO   OO     O        O    ",
-                    "     O       O       O O       O       O     ", "     O       O       OOO       O       O     ",
-                    "      O      O     OO   OO     O      O      ", "       O     O    O       O    O     O       ",
-                    "        O    O  OO         OO  O    O        ", "         O   OOO             OOO   O         ",
-                    "          O  O                 O  O          ", "           OO                   OO           ",
-                    "             OO               OO             ", "               OOO         OOO               ",
-                    "                  OOOOOOOOO                  ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                   OOOOOOO                   ",
-                    "                 OO       OO                 ", "                O           O                ",
-                    "               O             O               ", "              O               O              ",
-                    "             O                 O             ", "             O                 O             ",
-                    "            O                   O            ", "            O                   O            ",
-                    "            O                   O            ", "            O                   O            ",
-                    "            O                   O            ", "            O                   O            ",
-                    "            O                   O            ", "             O                 O             ",
-                    "             O                 O             ", "              O               O              ",
-                    "               O             O               ", "                O           O                ",
-                    "                 OO       OO                 ", "                   OOOOOOO                   ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                     DDD                     ",
-                    "                     DZD                     ", "                     DDD                     ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                   JJJJJJJ                   ", "                JJJKKKKKKKJJJ                ",
-                    "              JJKKKKKKKKKKKKKJJ              ", "             JKKKKKLLLLLLLKKKKKJ             ",
-                    "            JKKKKLL       LLKKKKJ            ", "           JKKKKL           LKKKKJ           ",
-                    "          JKKKKL             LKKKKJ          ", "          JKKKL               LKKKJ          ",
-                    "         JKKKL                 LKKKJ         ", "         JKKL                   LKKJ         ",
-                    "         JKKL                   LKKJ         ", "        JKKL                     LKKJ        ",
-                    "        JKKL         DDD         LKKJ        ", "        JKKL        DDDDD        LKKJ        ",
-                    "        JKKL        DD DD        LKKJ        ", "        JKKL        DDDDD        LKKJ        ",
-                    "        JKKL         DDD         LKKJ        ", "        JKKL                     LKKJ        ",
-                    "         JKKL                   LKKJ         ", "         JKKL                   LKKJ         ",
-                    "         JKKKL                 LKKKJ         ", "          JKKKL               LKKKJ          ",
-                    "          JKKKKL             LKKKKJ          ", "           JKKKKL           LKKKKJ           ",
-                    "            JKKKKLL       LLKKKKJ            ", "             JKKKKKLLLLLLLKKKKKJ             ",
-                    "              JJKKKKKKKKKKKKKJJ              ", "                JJJKKKKKKKJJJ                ",
-                    "                   JJJJJJJ                   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                   JJJJJJJ                   ", "                 JJKKKKKKKJJ                 ",
-                    "                JKKKKKKKKKKKJ                ", "               JKKKKLLLLLKKKKJ               ",
-                    "              JKKKLLKKKKKLLKKKJ              ", "             JKKKLKKKKKKKKKLKKKJ             ",
-                    "             JKKLKKKKKKKKKKKLKKJ             ", "            JKKKLKKKKBBBKKKKLKKKJ            ",
-                    "            JKKLKKKKBDDDBKKKKLKKJ            ", "            JKKLKKKBDDDDDBKKKLKKJ            ",
-                    "            JKKLKKKBDD DDBKKKLKKJ            ", "            JKKLKKKBDDDDDBKKKLKKJ            ",
-                    "            JKKLKKKKBDDDBKKKKLKKJ            ", "            JKKKLKKKKBBBKKKKLKKKJ            ",
-                    "             JKKLKKKKKKKKKKKLKKJ             ", "             JKKKLKKKKKKKKKLKKKJ             ",
-                    "              JKKKLLKKKKKLLKKKJ              ", "               JKKKKLLLLLKKKKJ               ",
-                    "                JKKKKKKKKKKKJ                ", "                 JJKKKKKKKJJ                 ",
-                    "                   JJJJJJJ                   ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                    JJJJJ                    ", "                  JJKKKKKJJ                  ",
-                    "                 JKKKKKKKKKJ                 ", "                 JKKKLLLKKKJ                 ",
-                    "                JKKKLKKKLKKKJ                ", "                JKKLKDDDKLKKJ                ",
-                    "                JKKLKD DKLKKJ                ", "                JKKLKDDDKLKKJ                ",
-                    "                JKKKLKKKLKKKJ                ", "                 JKKKLLLKKKJ                 ",
-                    "                 JKKKKKKKKKJ                 ", "                  JJKKKKKJJ                  ",
-                    "                    JJJJJ                    ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                     JJJ                     ", "                    JDDDJ                    ",
-                    "                    JDDDJ                    ", "                    JDDDJ                    ",
-                    "                     JJJ                     ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " },
-            { "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             ", "                                             ",
-                    "                                             " } };
-
+    protected static final String[][] shapeErr = new String[][]{
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DZD               DZD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    D                                   D    ","   DZD                                 DZD   ","    D                                   D    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DZD               DZD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            D D               D D            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","   D D                                 D D   ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            D D               D D            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           DD DD             DD DD           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    D                                   D    ","   DDD                                 DDD   ","  DD DD                               DD DD  ","   DDD                                 DDD   ","    D                                   D    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           DD DD             DD DD           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","           D   D             D   D           ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","  D   D                               D   D  ","  D   D                               D   D  ","  D   D                               D   D  ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","           D   D             D   D           ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           D   D             D   D           ","          DD   DD           DD   DD          ","           D   D             D   D           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    D                                   D    ","   DDD               ZZZ               DDD   ","  D   D             ZZZZZ             D   D  "," DD   DD            ZZZZZ            DD   DD ","  D   D             ZZZZZ             D   D  ","   DDD               ZZZ               DDD   ","    D                                   D    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             D                 D             ","            DDD               DDD            ","           D   D             D   D           ","          DD   DD           DD   DD          ","           D   D             D   D           ","            DDD               DDD            ","             D                 D             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD              ZZZZZ              DDD   ","  D   D            ZZ   ZZ            D   D  "," D     D           Z     Z           D     D "," D     D           Z     Z           D     D "," D     D           Z     Z           D     D ","  D   D            ZZ   ZZ            D   D  ","   DDD              ZZZZZ              DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           D   D             D   D           ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","           D   D             D   D           ","            DDD               DDD            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DD   DD           DD   DD          ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","          DD   DD           DD   DD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","  DDDDD            Z     Z            DDDDD  "," DD   DD          Z       Z          DD   DD "," D     D          Z  WWW  Z          D     D "," D     D          Z  WWW  Z          D     D "," D     D          Z  WWW  Z          D     D "," DD   DD          Z       Z          DD   DD ","  DDDDD            Z     Z            DDDDD  ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DD   DD           DD   DD          ","          D     D           D     D          ","          D     D           D     D          ","          D     D           D     D          ","          DD   DD           DD   DD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDD   DDD         DDD   DDD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DDD   DDD         DDD   DDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     ZZZ                     ","  DDDDD            ZZ   ZZ            DDDDD  "," DDDDDDD          Z       Z          DDDDDDD ","DDD   DDD         Z WWWWW Z         DDD   DDD","DD     DD        Z  W   W  Z        DD     DD","DD     DD        Z  W   W  Z        DD     DD","DD     DD        Z  W   W  Z        DD     DD","DDD   DDD         Z WWWWW Z         DDD   DDD"," DDDDDDD          Z       Z          DDDDDDD ","  DDDDD            ZZ   ZZ            DDDDD  ","                     ZZZ                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDD   DDD         DDD   DDD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DD     DD         DD     DD         ","         DDD   DDD         DDD   DDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDDZDDB           BDDZDDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","                   Z     Z                   ","   BBB            Z  WWW  Z            BBB   ","  BDDDB          Z  W   W  Z          BDDDB  "," BDDDDDB         Z W     W Z         BDDDDDB "," BDDZDDB         Z W     W Z         BDDZDDB "," BDDDDDB         Z W     W Z         BDDDDDB ","  BDDDB          Z  W   W  Z          BDDDB  ","   BBB            Z  WWW  Z            BBB   ","                   Z     Z                   ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDDZDDB           BDDZDDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","           B D B             B D B           ","                                             ","           D   D             D   D           ","                                             ","           B D B             B D B           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","                   Z     Z                   ","                  Z  WGW  Z                  ","  B D B          Z  W   W  Z          B D B  ","                 Z W     W Z                 ","  D   D          Z G     G Z          D   D  ","                 Z W     W Z                 ","  B D B          Z  W   W  Z          B D B  ","                  Z  WGW  Z                  ","                   Z     Z                   ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           B D B             B D B           ","                                             ","           D   D             D   D           ","                                             ","           B D B             B D B           ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    ZZZZZ                    ","                   Z     Z                   ","                  Z  WWW  Z                  ","  B   B          Z  W   W  Z          B   B  ","                 Z W     W Z                 ","                 Z W     W Z                 ","                 Z W     W Z                 ","  B   B          Z  W   W  Z          B   B  ","                  Z  WWW  Z                  ","                   Z     Z                   ","                    ZZZZZ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     ZZZ                     ","                   ZZ   ZZ                   ","                  Z       Z                  ","                  Z WWWWW Z                  ","                 Z  W   W  Z                 ","                 Z  W   W  Z                 ","                 Z  W   W  Z                 ","                  Z WWWWW Z                  ","                  Z       Z                  ","                   ZZ   ZZ                   ","                     ZZZ                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  JFZZZZZFJ                  ","                  FZ     ZF                  ","                  Z       Z                  ","   DDD           JZ  WWW  ZF           DDD   ","   DZD           JZ  WWW  ZJ           DZD   ","   DDD           JZ  WWW  ZF           DDD   ","                  Z       Z                  ","                  FZ     ZF                  ","                  JFZZZZZFJ                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  11FJJJF11                  ","                  1JZZZZZJ1                  ","   DDD            FZZ   ZZF            DDD   ","  DDDDD           FZ     ZF           DDDDD  ","  DD DD         11JZ     ZJ11         DD DD  ","  DDDDD           FZ     ZF           DDDDD  ","   DDD            FZZ   ZZF            DDD   ","                  1JZZZZZJ1                  ","                  11FJJJF11                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  11     11                  ","   BBB            1JJJJJJJ1            BBB   ","  BDDDB            J ZZZ J            BDDDB  "," BDDDDDB           JZZZZZJ           BDDDDDB "," BDD DDB        11 JZZZZZJ 11        BDD DDB "," BDDDDDB           JZZZZZJ           BDDDDDB ","  BDDDB            J ZZZ J            BDDDB  ","   BBB            1JJJJJJJ1            BBB   ","                  11     11                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMFMA             AMFMA           ","            BFB               BFB            ","             1                 1             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                  11     11                  ","   BZB            1       1            BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EFF1       11         11       1FFE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB            1       1            BZB   ","                  11     11                  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             1                 1             ","            BFB               BFB            ","           AMFMA             AMFMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMFMA             AMFMA           ","            BFB               BFB            ","             1                 1             ","              1               1              ","                                             ","                                             ","                                             ","                                             ","                                             ","                 1         1                 ","                  11     11                  ","   BZB            1       1            BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EFF11     11           11     11FFE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB            1       1            BZB   ","                  11     11                  ","                 1         1                 ","                                             ","                                             ","                                             ","                                             ","                                             ","              1               1              ","             1                 1             ","            BFB               BFB            ","           AMFMA             AMFMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMFMA             AMFMA           ","            BFB               BFB            ","             1                 1             ","              1               1              ","              1               1              ","                                             ","                                             ","                                             ","                                             ","                 1         1                 ","                  1       1                  ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EFF111    11           11    111FFE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                  1       1                  ","                 1         1                 ","                                             ","                                             ","                                             ","                                             ","              1               1              ","              1               1              ","             1                 1             ","            BFB               BFB            ","           AMFMA             AMFMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AMDMA             AMDMA           ","            BBB               BBB            ","                                             ","              1               1              ","              1               1              ","               1             1               ","                                             ","                                             ","                1           1                ","                 1         1                 ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E EDB 111  11             11  111 BDE E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                 1         1                 ","                1           1                ","                                             ","                                             ","               1             1               ","              1               1              ","              1               1              ","                                             ","            BBB               BBB            ","           AMDMA             AMDMA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","              1               1              ","               1             1               ","               1             1               ","                1           1                ","                1           1                ","                 1         1                 ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z  111111             111111  Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                 1         1                 ","                1           1                ","                1           1                ","               1             1               ","               1             1               ","              1               1              ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","               1             1               ","               1             1               ","                1           1                ","                1           1                ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z   1111               1111   Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                1           1                ","                1           1                ","               1             1               ","               1             1               ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BZB                                 BZB   ","  AM MA                               AM MA  "," BM E MB                             BM E MB "," Z E E Z                             Z E E Z "," BM E MB                             BM E MB ","  AM MA                               AM MA  ","   BZB                                 BZB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BZB               BZB            ","           AM MA             AM MA           ","          BM E MB           BM E MB          ","          Z E E Z           Z E E Z          ","          BM E MB           BM E MB          ","           AM MA             AM MA           ","            BZB               BZB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   BBB                                 BBB   ","  BDDDB                               BDDDB  "," BDDDDDB                             BDDDDDB "," BDD DDB                             BDD DDB "," BDDDDDB                             BDDDDDB ","  BDDDB                               BDDDB  ","   BBB                                 BBB   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            BBB               BBB            ","           BDDDB             BDDDB           ","          BDDDDDB           BDDDDDB          ","          BDD DDB           BDD DDB          ","          BDDDDDB           BDDDDDB          ","           BDDDB             BDDDB           ","            BBB               BBB            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","  DDDDD                               DDDDD  ","  DD DD                               DD DD  ","  DDDDD                               DDDDD  ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DDDDD             DDDDD           ","           DD DD             DD DD           ","           DDDDD             DDDDD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","   DZD                                 DZD   ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","            DZD               DZD            ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             5                 5             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","    5                                   5    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","             5                 5             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","             Y                 Y             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","  B   B                               B   B  ","                                             ","    Y                                   Y    ","                                             ","  B   B                               B   B  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           B   B             B   B           ","                                             ","             Y                 Y             ","                                             ","           B   B             B   B           ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            B B               B B            ","           B   B             B   B           ","          B     B           B     B          ","             3                 3             ","          B     B           B     B          ","           B   B             B   B           ","            B B               B B            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   B B                                 B B   ","  B   B                               B   B  "," B     B                             B     B ","    3                 0                 3    "," B     B                             B     B ","  B   B                               B   B  ","   B B                                 B B   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            B B               B B            ","           B   B             B   B           ","          B     B           B     B          ","             3                 3             ","          B     B           B     B          ","           B   B             B   B           ","            B B               B B            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","            DDD               DDD            ","           DBBBD             DBBBD           ","          DBDDDBD           DBDDDBD          ","         DBDDDDDBD         DBDDDDDBD         ","         DBDD8DDBD         DBDD8DDBD         ","         DBDDDDDBD         DBDDDDDBD         ","          DBDDDBD           DBDDDBD          ","           DBBBD             DBBBD           ","            DDD               DDD            ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","   DDD                                 DDD   ","  DBBBD                               DBBBD  "," DBDDDBD                             DBDDDBD ","DBDDDDDBD            N N            DBDDDDDBD","DBDD8DDBD                           DBDD8DDBD","DBDDDDDBD            N N            DBDDDDDBD"," DBDDDBD                             DBDDDBD ","  DBBBD                               DBBBD  ","   DDD                                 DDD   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","            DDD               DDD            ","           DBBBD             DBBBD           ","          DBDDDBD           DBDDDBD          ","         DBDDDDDBD         DBDDDDDBD         ","         DBDD8DDBD         DBDD8DDBD         ","         DBDDDDDBD         DBDDDDDBD         ","          DBDDDBD           DBDDDBD          ","           DBBBD             DBBBD           ","            DDD               DDD            ","                                             ","                                             "},
+        {"                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","  DDDDD                               DDDDD  "," DDDDDDD                             DDDDDDD ","DDDDDDDDD                           DDDDDDDDD","DDDCCCDDD            6 6            DDDCCCDDD","DDDCCCDDD             7             DDDCCCDDD","DDDCCCDDD            6 6            DDDCCCDDD","DDDDDDDDD                           DDDDDDDDD"," DDDDDDD                             DDDDDDD ","  DDDDD                               DDDDD  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDCCCDDD         DDDCCCDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             "},
+        {"                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","  DDDDD                               DDDDD  "," DDDDDDD                             DDDDDDD ","DDDDDDDDD            K~K            DDDDDDDDD","DDDDDDDDD           KKKKK           DDDDDDDDD","DDDDDDDDD           KKKKK           DDDDDDDDD","DDDDDDDDD           KKKKK           DDDDDDDDD","DDDDDDDDD            KKK            DDDDDDDDD"," DDDDDDD                             DDDDDDD ","  DDDDD                               DDDDD  ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","           DDDDD             DDDDD           ","          DDDDDDD           DDDDDDD          ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","         DDDDDDDDD         DDDDDDDDD         ","          DDDDDDD           DDDDDDD          ","           DDDDD             DDDDD           ","                                             ","                                             "},
+        {"                  JJJJJJJJJ                  ","              JJJJ    O    JJJJ              ","           JJJJJ     O O     JJJJJ           ","          JJJJJJJ    O O    JJJJJJJ          ","         JJJJJJJJJ  O   O  JJJJJJJJJ         ","        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ","       J JJJJJJJJJ O     O JJJJJJJJJ J       ","      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ","     J   JJJJJJJJJO       OJJJJJJJJJ   J     ","    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ","   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ","   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ","  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ","  J  O      O IZIIIZZZZZZZIIIZI O      O  J  "," J    O     OIZZIZZIIZZZIIZZIZZIO     O    J "," J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J "," J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J "," J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J ","J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J","JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ","JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ","JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ","JJJJJJJJJOIZZZZZVK   KKK   KVZZZZZIOJJJJJJJJJ","JJJJJJJJJOIIIZZZIK   KKK   KIZZZIIIOJJJJJJJJJ","JJJJJJJJJOIZZIIZIK         KIZIIZZIOJJJJJJJJJ","JJJJJJJJOOIZZZZIIVK       KVIIZZZZIOOJJJJJJJJ","J JJJJJ O OIZZZZIIIK     KIIIZZZZIO O JJJJJ J"," J     O  OIZZZZIZZIKKKKKIZZIZZZZIO  O     J "," J     O  O IZZZIZZZIIVIIZZZIZZZI O  O     J "," J    O    OIZZZIZZZZIIIZZZZIZZZIO    O    J "," J    O     OIZZIZZIIZZZIIZZIZZIO     O    J ","  J  O      O IZIIIZZZZZZZIIIZI O      O  J  ","  J  O       OOIIZZZZZZZZZZZIIOO       O  J  ","   JOOOOOOOOOOOOOIIZZZZZZZIIOOOOOOOOOOOOOJ   ","   J       JJJJJOOOIIIIIIIOOOJJJJJ       J   ","    J     JJJJJJJO OOOOOOO OJJJJJJJ     J    ","     J   JJJJJJJJJO       OJJJJJJJJJ   J     ","      J  JJJJJJJJJ O     O JJJJJJJJJ  J      ","       J JJJJJJJJJ O     O JJJJJJJJJ J       ","        JJJJJJJJJJ  O   O  JJJJJJJJJJ        ","         JJJJJJJJJ  O   O  JJJJJJJJJ         ","          JJJJJJJ    O O    JJJJJJJ          ","           JJJJJ     O O     JJJJJ           ","              JJJJ    O    JJJJ              ","                  JJJJJJJJJ                  "},
+        {"                                             ","                                             ","           KKKKK             KKKKK           ","          KKXXXKK           KKXXXKK          ","         KKXXXXXKK         KKXXXXXKK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KKXXXXXKK         KKXXXXXKK         ","          KKXXXKK           KKXXXKK          ","           KKKKK   IIIIIII   KKKKK           ","                 IIHHHHHHHII                 ","               IIHHHHHHHHHHHII               ","              IHIIIHHHHHHHIIIHI              ","             IHHIQQIIHHHIIPPIHHI             ","            IHHHIQQQQIIIPPPPIHHHI            ","            IHHHIQQQIIKIIPPPIHHHI            ","           IHHHHIQQI     IPPIHHHHI           ","  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  "," KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ","KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK","KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK","KXXXXXXXK ITTTTTI           IUUUUUI KXXXXXXXK","KXXXXXXXK IIITTTI           IUUUIII KXXXXXXXK","KKXXXXXKK IHHIITI           IUIIHHI KKXXXXXKK"," KKXXXKK  IHHHHIIK         KIIHHHHI  KKXXXKK ","  KKKKK    IHHHHIII       IIIHHHHI    KKKKK  ","           IHHHHISSI     IRRIHHHHI           ","            IHHHISSSIIKIIRRRIHHHI            ","            IHHHISSSSIIIRRRRIHHHI            ","             IHHISSIIHHHIIRRIHHI             ","              IHIIIHHHHHHHIIIHI              ","               IIHHHHHHHHHHHII               ","                 IIHHHHHHHII                 ","            KKKK   IIIIIII   KKKKK           ","          KKXXXKK           KKXXXKK          ","         KKXXXXXKK         KKXXXXXKK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KXXXXXXXK         KXXXXXXXK         ","         KKXXXXXKK         KKXXXXXKK         ","          KKXXXKK           KKXXXKK          ","           KKKKK             KKKKK           ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","            KKK               KKK            ","           KKKKK             KKKKK           ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","           KKKKK             KKKKK           ","            KKK               KKK            ","                   IIIIIII                   ","                 IIZZZZZZZII                 ","               IIZZZZZZZZZZZII               ","              IZIIIZZZZZZZIIIZI              ","             IZZIZZIIZZZIIZZIZZI             ","            IZZZIZZZZIIIZZZZIZZZI            ","            IZZZIZZZII IIZZZIZZZI            ","           IZZZZIZZI     IZZIZZZZI           ","           IZZZZIII       IIIZZZZI           ","   KKK    IZZZZII           IIZZZZI    KKK   ","  KKKKK   IZZIIZI           IZIIZZI   KKKKK  "," KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK "," KKKKKKK  IZZZZZI           IZZZZZI  KKKKKKK "," KKKKKKK  IIIZZZI           IZZZIII  KKKKKKK ","  KKKKK   IZZIIZI           IZIIZZI   KKKKK  ","   KKK    IZZZZII           IIZZZZI    KKK   ","           IZZZZIII       IIIZZZZI           ","           IZZZZIZZI     IZZIZZZZI           ","            IZZZIZZZII IIZZZIZZZI            ","            IZZZIZZZZIIIZZZZIZZZI            ","             IZZIZZIIZZZIIZZIZZI             ","              IZIIIZZZZZZZIIIZI              ","               IIZZZZZZZZZZZII               ","                 IIZZZZZZZII                 ","                   IIIIIII                   ","            KKK               KKK            ","           KKKKK             KKKKK           ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","          KKKKKKK           KKKKKKK          ","           KKKKK             KKKKK           ","            KKK               KKK            ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    OOOOO                    ","                  OO     OO                  ","                OO         OO                ","                O           O                ","               O             O               ","               O             O               ","              O               O              ","              O               O              ","              O               O              ","              O               O              ","              O               O              ","               O             O               ","               O             O               ","                O           O                ","                OO         OO                ","                  OO     OO                  ","                    OOOOO                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                  OOOOOOOOO                  ","               OOO         OOO               ","             OO               OO             ","           OO                   OO           ","          O  O                 O  O          ","         O   OOO             OOO   O         ","        O    O  OO         OO  O    O        ","       O     O    O       O    O     O       ","      O      O     OO   OO     O      O      ","     O       O       OOO       O       O     ","     O       O       O O       O       O     ","    O        O     OO   OO     O        O    ","    O        O   OO       OO   O        O    ","   O         O OO           OO O         O   ","   O         OO     OOOOO     OO         O   ","   O        OO    OO     OO    OO        O   ","  O       OO O   O         O   O OO       O  ","  O      O   O   O         O   O   O      O  ","  O    OO    O  O           O  O    OO    O  ","  O  OO      O  O           O  O      OO  O  ","  O O        O  O           O  O        O O  ","  O  OO      O  O           O  O      OO  O  ","  O    OO    O  O           O  O    OO    O  ","  O      O   O   O         O   O   O      O  ","  O       OO O   O         O   O OO       O  ","   O        OO    OO     OO    OO        O   ","   O         OO     OOOOO     OO         O   ","   O         O OO           OO O         O   ","    O        O   OO       OO   O        O    ","    O        O     OO   OO     O        O    ","     O       O       O O       O       O     ","     O       O       OOO       O       O     ","      O      O     OO   OO     O      O      ","       O     O    O       O    O     O       ","        O    O  OO         OO  O    O        ","         O   OOO             OOO   O         ","          O  O                 O  O          ","           OO                   OO           ","             OO               OO             ","               OOO         OOO               ","                  OOOOOOOOO                  ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                   OOOOOOO                   ","                 OO       OO                 ","                O           O                ","               O             O               ","              O               O              ","             O                 O             ","             O                 O             ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","            O                   O            ","             O                 O             ","             O                 O             ","              O               O              ","               O             O               ","                O           O                ","                 OO       OO                 ","                   OOOOOOO                   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     DDD                     ","                     DZD                     ","                     DDD                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                   JJJJJJJ                   ","                JJJKKKKKKKJJJ                ","              JJKKKKKKKKKKKKKJJ              ","             JKKKKKLLLLLLLKKKKKJ             ","            JKKKKLL       LLKKKKJ            ","           JKKKKL           LKKKKJ           ","          JKKKKL             LKKKKJ          ","          JKKKL               LKKKJ          ","         JKKKL                 LKKKJ         ","         JKKL                   LKKJ         ","         JKKL                   LKKJ         ","        JKKL                     LKKJ        ","        JKKL         DDD         LKKJ        ","        JKKL        DDDDD        LKKJ        ","        JKKL        DD DD        LKKJ        ","        JKKL        DDDDD        LKKJ        ","        JKKL         DDD         LKKJ        ","        JKKL                     LKKJ        ","         JKKL                   LKKJ         ","         JKKL                   LKKJ         ","         JKKKL                 LKKKJ         ","          JKKKL               LKKKJ          ","          JKKKKL             LKKKKJ          ","           JKKKKL           LKKKKJ           ","            JKKKKLL       LLKKKKJ            ","             JKKKKKLLLLLLLKKKKKJ             ","              JJKKKKKKKKKKKKKJJ              ","                JJJKKKKKKKJJJ                ","                   JJJJJJJ                   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                   JJJJJJJ                   ","                 JJKKKKKKKJJ                 ","                JKKKKKKKKKKKJ                ","               JKKKKLLLLLKKKKJ               ","              JKKKLLKKKKKLLKKKJ              ","             JKKKLKKKKKKKKKLKKKJ             ","             JKKLKKKKKKKKKKKLKKJ             ","            JKKKLKKKKBBBKKKKLKKKJ            ","            JKKLKKKKBDDDBKKKKLKKJ            ","            JKKLKKKBDDDDDBKKKLKKJ            ","            JKKLKKKBDD DDBKKKLKKJ            ","            JKKLKKKBDDDDDBKKKLKKJ            ","            JKKLKKKKBDDDBKKKKLKKJ            ","            JKKKLKKKKBBBKKKKLKKKJ            ","             JKKLKKKKKKKKKKKLKKJ             ","             JKKKLKKKKKKKKKLKKKJ             ","              JKKKLLKKKKKLLKKKJ              ","               JKKKKLLLLLKKKKJ               ","                JKKKKKKKKKKKJ                ","                 JJKKKKKKKJJ                 ","                   JJJJJJJ                   ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                    JJJJJ                    ","                  JJKKKKKJJ                  ","                 JKKKKKKKKKJ                 ","                 JKKKLLLKKKJ                 ","                JKKKLKKKLKKKJ                ","                JKKLKDDDKLKKJ                ","                JKKLKD DKLKKJ                ","                JKKLKDDDKLKKJ                ","                JKKKLKKKLKKKJ                ","                 JKKKLLLKKKJ                 ","                 JKKKKKKKKKJ                 ","                  JJKKKKKJJ                  ","                    JJJJJ                    ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                     JJJ                     ","                    JDDDJ                    ","                    JDDDJ                    ","                    JDDDJ                    ","                     JJJ                     ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "},
+        {"                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             ","                                             "}
+    };
     // spotless:on
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     protected static IStructureDefinition<GT_TileEntity_IndustrialMagicMatrix> STRUCTURE_DEFINITION = null;
 
@@ -3008,6 +348,344 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         return STRUCTURE_DEFINITION;
     }
 
+    // protected void onEssentiaCellFound(int tier) {
+    // this.mParallel = (int) (tier * 8L);
+    // }
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.mParallel = 0;
+        this.blockTier = -1;
+        this.mNodeEnergized.clear();
+        this.mTileInfusionProvider.clear();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (blockTier < 1) {
+            errors.add(internal_structure_issue);
+            return;
+        }
+        mParallel = blockTier << 3;
+    }
+    // endregion
+
+    // region Processing Logic
+    protected int mParallel;
+    protected int blockTier;
+    protected int ExtraTime;
+    protected double mSpeedBonus;
+    protected double Mean;
+    protected double Variance;
+
+    protected final TST_ItemID EssentiaCell_Creative = TST_ItemID
+        .create(EnumEssentiaStorageTypes.Type_Creative.getCell());
+
+    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
+    protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
+    protected ArrayList<String> Research = new ArrayList<>();
+
+    public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
+        .ofFailurePersistOnShutdown("Essentiainsentia");
+
+    public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
+        .ofFailurePersistOnShutdown("Research_not_completed");
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.IndustrialMagicMatrixRecipe;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
+            return Integer.MAX_VALUE;
+        } else {
+            return this.mParallel;
+        }
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        mSpeedBonus = 0.0;
+        ExtraTime = 0;
+        countSpeedBonus();
+        return (float) mSpeedBonus;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return mSpeedBonus == (double) 1 / 11.4514;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            final HashMap<Aspect, TileInfusionProvider> aspectProvider = new HashMap<>();
+            AspectList aspects = null;
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+                setSpeedBonus(getSpeedBonus());
+                setOverclockType(
+                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
+                // setOverclock(isEnablePerfectOverclock() ? 2 : 1, isEnablePerfectOverclock() ? 2 : 3);
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                int recipeIndex = recipe.getMetadataOrDefault(IndustrialMagicMatrixRecipeIndexKey.INSTANCE, -1);
+                if (recipeIndex == -1) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                TCRecipeTools.InfusionCraftingRecipe tcRecipe = TCRecipeTools.ICR.get(recipeIndex);
+
+                if (!tcRecipe.getOutput()
+                    .isItemEqual(recipe.mOutputs[0])) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+
+                if (!(isResearchComplete(tcRecipe.getResearch()))) {
+                    return Research_not_completed;
+                }
+
+                if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())
+                    || EssentiaCell_Creative.equalItemStack(getControllerSlot())) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+
+                aspectProvider.clear();
+                aspects = tcRecipe.getInputAspects();
+                if (aspects.visSize() == 0) {
+                    return CheckRecipeResultRegistry.SUCCESSFUL;
+                }
+                if (mTileInfusionProvider.isEmpty()) {
+                    return Essentia_InsentiaL;
+                }
+
+                HashMap<Aspect, Integer> aspectMaxParallel = new HashMap<>();
+                for (Aspect aspect : aspects.getAspects()) {
+                    int amount = aspects.getAmount(aspect);
+                    if (amount <= 0) {
+                        continue;
+                    }
+
+                    for (TileInfusionProvider hatch : mTileInfusionProvider) {
+                        int possibleParallel = GTUtility.safeInt(hatch.getAspectAmountInNetwork(aspect) / amount, 1);
+                        if (possibleParallel <= 0) {
+                            continue;
+                        }
+
+                        if (possibleParallel > aspectMaxParallel.computeIfAbsent(aspect, k -> 0)) {
+                            aspectMaxParallel.put(aspect, possibleParallel);
+                            aspectProvider.put(aspect, hatch);
+                        }
+                    }
+
+                    if (aspectMaxParallel.get(aspect) == 0) {
+                        return Essentia_InsentiaL;
+                    }
+                }
+                maxParallel = Integer.min(Collections.min(aspectMaxParallel.values()), maxParallel);
+
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@NotNull GTRecipe recipe) {
+                for (Aspect aspect : aspectProvider.keySet()) {
+                    aspectProvider.get(aspect)
+                        .takeFromContainer(aspect, aspects.getAmount(aspect) * getCurrentParallels());
+                }
+                return super.onRecipeStart(recipe);
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    @Nonnull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        setupProcessingLogic(processingLogic);
+
+        CheckRecipeResult result = doCheckRecipe();
+        result = postCheckRecipe(result, processingLogic);
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+
+        if (GTCMItemList.ProofOfHeroes.equal(getControllerSlot())) {
+            mMaxProgresstime = 1;
+        } else {
+            mMaxProgresstime = processingLogic.getDuration() + ExtraTime;
+        }
+
+        setEnergyUsage(processingLogic);
+        ItemStack PrimordialPearl = new ItemStack(itemEldritchObject, 1, 3);
+        int size = 0;
+        for (ItemStack itemStack : processingLogic.getOutputItems()) {
+            if (!(itemStack.isItemEqual(new ItemStack(LudicrousItems.bigPearl)))) {
+                InfusionRecipe Recipe = ThaumcraftApi.getInfusionRecipe(itemStack);
+                for (ItemStack itemStack1 : Recipe.getComponents()) {
+                    if (itemStack1.isItemEqual(PrimordialPearl)) {
+                        size++;
+                    }
+                }
+            } else {
+                mOutputItems = processingLogic.getOutputItems();
+                mOutputFluids = processingLogic.getOutputFluids();
+                return result;
+            }
+        }
+        if (size != 0) {
+            int index = 0;
+            ItemStack[] OutputItems = new ItemStack[processingLogic.getOutputItems().length + 1];
+            for (ItemStack itemStack : processingLogic.getOutputItems()) {
+                OutputItems[index] = itemStack;
+            }
+            OutputItems[OutputItems.length - 1] = new ItemStack(itemEldritchObject, size, 3);
+            mOutputItems = OutputItems;
+            mOutputFluids = processingLogic.getOutputFluids();
+        } else {
+            mOutputItems = processingLogic.getOutputItems();
+            mOutputFluids = processingLogic.getOutputFluids();
+        }
+
+        return result;
+    }
+
+    public boolean isResearchComplete(String key) {
+        if (!key.startsWith("@") && ResearchCategories.getResearch(key) == null) {
+            return false;
+        } else {
+            return this.Research != null && !this.Research.isEmpty() && this.Research.contains(key);
+        }
+    }
+
+    protected void countSpeedBonus() {
+        int penalize = 0;
+        ArrayList<Double> MaxAmount = new ArrayList<>();
+        AspectList aspectList = new AspectList();
+        AspectList auraBase = (new AspectList()).add(Aspect.AIR, 20)
+            .add(Aspect.FIRE, 20)
+            .add(Aspect.EARTH, 20)
+            .add(Aspect.WATER, 20)
+            .add(Aspect.ORDER, 20)
+            .add(Aspect.ENTROPY, 20);
+        if (mNodeEnergized.isEmpty()) {
+            mSpeedBonus = 1;
+            return;
+        } else if (mNodeEnergized.size() < 6) {
+            mSpeedBonus = (6 - mNodeEnergized.size()) * 1.75;
+            return;
+        }
+        for (TileNodeEnergized tileNodeEnergized : mNodeEnergized) {
+            aspectList.add(
+                getMaxAspect(tileNodeEnergized.getAspects()),
+                tileNodeEnergized.getAspects()
+                    .getAmount(getMaxAspect(tileNodeEnergized.getAspects())));
+        }
+        for (Aspect aspect : auraBase.getAspects()) {
+            if (!(aspectList.aspects.containsKey(aspect))) {
+                penalize++;
+            }
+        }
+        if (penalize > 0) {
+            ExtraTime = penalize * 20;
+            mSpeedBonus = 1;
+            return;
+        }
+        for (Aspect aspect : aspectList.getAspects()) {
+            MaxAmount.add((double) aspectList.getAmount(aspect));
+        }
+        Mean = calculateMean(MaxAmount);
+        Variance = calculateVariance(MaxAmount);
+        double e = Math.E;
+        double ln1 = Math.log(1 + Math.pow(e, -Variance));
+        double ln2 = Math.log(2);
+        double SpeedBonus = 1 + ((0.4 + Math.pow(0.45 * e, -0.005 * Variance) + 0.15 * (ln1 / ln2)) * Mean / 500);
+        mSpeedBonus = Math.max(1 / SpeedBonus, 1 / 11.4514);
+    }
+
+    public static double calculateVariance(List<Double> data) {
+        int n = data.size();
+        double mean = calculateMean(data);
+        double sum = 0.0;
+
+        for (double value : data) {
+            double diff = value - mean;
+            sum += diff * diff;
+        }
+        return sum / n;
+    }
+
+    protected static double calculateMean(List<Double> data) {
+        int n = data.size();
+        double sum = 0.0;
+
+        for (double value : data) {
+            sum += value;
+        }
+
+        return sum / n;
+    }
+
+    protected Aspect getMaxAspect(@Nonnull AspectList aspectList) {
+        Aspect maxAspect = null;
+        int max = 0;
+        for (Aspect aspect : aspectList.getAspects()) {
+            int amount = aspectList.getAmount(aspect);
+            if (amount > max) {
+                max = amount;
+                maxAspect = aspect;
+            }
+        }
+        return maxAspect;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 2];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA + "Mean: " + EnumChatFormatting.GOLD + this.Mean;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + "Variance: " + EnumChatFormatting.GOLD + this.Variance;
+        return ret;
+    }
+
+    protected String getPlayName() {
+        return this.getBaseMetaTileEntity()
+            .getOwnerName();
+    }
+
     public final boolean addCosmeticOpaque(TileEntity tileEntity) {
         if (tileEntity instanceof TileOwned) {
             if (getPlayName() != null && Objects.equals(((TileOwned) tileEntity).owner, "")) {
@@ -3034,12 +712,98 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         return false;
     }
 
-    // spotless:off
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+        if (aTick % 100 == 0) {
+            if (aBaseMetaTileEntity.isServerSide()) {
+                ArrayList<String> list = getResearchForPlayer(getPlayName());
+                if ((this.Research == null && list != null)
+                    || (list != null && !list.isEmpty() && this.Research.size() != list.size())) {
+                    this.Research = list;
+                }
+            }
+        }
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        NBTTagList list = new NBTTagList();
+        for (String string : Research) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("ResearchName", string);
+            list.appendTag(tag);
+        }
+        aNBT.setInteger("mParallel", this.mParallel);
+        aNBT.setInteger("blockTier", this.blockTier);
+        aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
+        aNBT.setTag("Research", list);
+        super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        this.Research.clear();
+        for (int i = 0; i < aNBT.getTagList("Research", 10)
+            .tagCount(); i++) {
+            if (aNBT.getTagList("Research", 10)
+                .getCompoundTagAt(i)
+                .hasKey("ResearchName")) {
+                this.Research.add(
+                    aNBT.getTagList("Research", 10)
+                        .getCompoundTagAt(i)
+                        .getString("ResearchName"));
+            }
+        }
+        this.mParallel = aNBT.getInteger("mParallel");
+        this.blockTier = aNBT.getInteger("blockTier");
+        this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
+        super.loadNBTData(aNBT);
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstoneLevel) {
+        if (side == facing) {
+            if (active) return new ITexture[] { TextureFactory.of(blockStoneDevice, 2), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { TextureFactory.of(blockStoneDevice, 2), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { TextureFactory.of(blockStoneDevice, 2) };
+    }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         tt.addMachineType(
+            // spotless:off
                 // #tr Tooltip_IndustrialMagicMatrix_MachineType
                 // # Magic Matrix
                 // #zh_CN §0工业注魔矩阵
@@ -3163,103 +927,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                 .addOtherStructurePart(TextEnums.tr("Tooltip_IndustrialMagicMatrix_25"),
                         TextEnums.tr("Tooltip_IndustrialMagicMatrix_25.1"))
                 .toolTipFinisher();
+                // spotless:on
         return tt;
     }
-    // spotless:on
-    // end region
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        NBTTagList list = new NBTTagList();
-        for (String string : Research) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("ResearchName", string);
-            list.appendTag(tag);
-        }
-        aNBT.setInteger("mParallel", this.mParallel);
-        aNBT.setInteger("blockTier", this.blockTier);
-        aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
-        aNBT.setTag("Research", list);
-        super.saveNBTData(aNBT);
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        this.Research.clear();
-        for (int i = 0; i < aNBT.getTagList("Research", 10)
-            .tagCount(); i++) {
-            if (aNBT.getTagList("Research", 10)
-                .getCompoundTagAt(i)
-                .hasKey("ResearchName")) {
-                this.Research.add(
-                    aNBT.getTagList("Research", 10)
-                        .getCompoundTagAt(i)
-                        .getString("ResearchName"));
-            }
-        }
-        this.mParallel = aNBT.getInteger("mParallel");
-        this.blockTier = aNBT.getInteger("blockTier");
-        this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
-        super.loadNBTData(aNBT);
-    }
+    // endregion
 
-    @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPreTick(aBaseMetaTileEntity, aTick);
-        if (aTick % 100 == 0) {
-            if (aBaseMetaTileEntity.isServerSide()) {
-                ArrayList<String> list = getResearchForPlayer(getPlayName());
-                if ((this.Research == null && list != null)
-                    || (list != null && !list.isEmpty() && this.Research.size() != list.size())) {
-                    this.Research = list;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.mParallel = 0;
-        this.blockTier = -1;
-        this.mNodeEnergized.clear();
-        this.mTileInfusionProvider.clear();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (blockTier < 1) {
-            errors.add(internal_structure_issue);
-            return;
-        }
-        mParallel = blockTier << 3;
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_IndustrialMagicMatrix(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            if (active) return new ITexture[] { TextureFactory.of(blockStoneDevice, 2), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { TextureFactory.of(blockStoneDevice, 2), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { TextureFactory.of(blockStoneDevice, 2) };
-    }
 }

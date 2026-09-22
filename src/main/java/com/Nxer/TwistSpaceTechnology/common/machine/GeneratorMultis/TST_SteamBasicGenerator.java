@@ -68,15 +68,127 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         super(aName);
     }
 
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_SteamBasicGenerator(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainSteamBasicGenerator";
+    private final int horizontalOffSet = 2;
+    private final int verticalOffSet = 2;
+    private final int depthOffSet = 1;
+    private final int mainTextureID = ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
+    private static IStructureDefinition<TST_SteamBasicGenerator> STRUCTURE_DEFINITION = null;
+
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"     ", " C C ", "  A  ", " C C ", "     "},
+        {"C   C", "  A  ", " ABA ", "  A  ", "C   C"},
+        {"C   C", "  ~  ", " ABA ", "  A  ", "C   C"},
+        {"C   C", " AAA ", " AAA ", " AAA ", "C   C"}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_SteamBasicGenerator> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_SteamBasicGenerator>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement(
+                    'A',
+                    ofChain(
+                        buildHatchAdder(TST_SteamBasicGenerator.class).atLeast(Dynamo)
+                            .hatchItemFilterAnd(t -> filterByMTETier(1, 1))
+                            .casingIndex(mainTextureID)
+                            .hint(1)
+                            .build(),
+                        buildHatchAdder(TST_SteamBasicGenerator.class).atLeast(InputHatch)
+                            .casingIndex(mainTextureID)
+                            .hint(1)
+                            .build(),
+                        onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings2, 0))))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 14))
+                .addElement('C', ofFrame(Materials.Bronze))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasings2, 0, ...);
+     * B -> ofBlock...(gt.blockcasings3, 14, ...);
+     * C -> ofBlock...(gt.blockframes, 300, ...);
+     */
+
+    @Override
+    public void construct(ItemStack itemStack, boolean b) {
+        buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        this.mCasing = 0;
+
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        DYNAMO_AMP = getDynamoAmperage();
+        checkHasInputHatch(errors);
+        checkCasingMin(errors, mCasing, 10);
+        checkHatchMin(errors, Dynamo, 1);
+        checkHatchMax(errors, Dynamo, 2);
+        if (setDynamoTier(1, true)) {
+            errors.add(hatch_tier_incompatible);
+        }
+    }
     // endregion
 
     // region Processing Logic
-
     private static final int STEAM_PER_SEC = 915;
     private static final int EU_PER_TICK = 32;
     private long DYNAMO_AMP = 0;
     private int mCasing = 0;
     public FluidStack steamFluid = steam;
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
 
     @Nonnull
     @Override
@@ -102,163 +214,12 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        this.mCasing = 0;
-
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        DYNAMO_AMP = getDynamoAmperage();
-        checkHasInputHatch(errors);
-        checkCasingMin(errors, mCasing, 10);
-        checkHatchMin(errors, Dynamo, 1);
-        checkHatchMax(errors, Dynamo, 2);
-        if (setDynamoTier(1, true)) {
-            errors.add(hatch_tier_incompatible);
-        }
-    }
-
-    // endregion
-
-    // region Structure
-    // spotless:off
-    @Override
-    public void construct(ItemStack itemStack, boolean b) {
-        buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
-
-    private static final String STRUCTURE_PIECE_MAIN = "mainSteamBasicGenerator";
-    private final int horizontalOffSet = 2;
-    private final int verticalOffSet = 2;
-    private final int depthOffSet = 1;
-    private final int mainTextureID = ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
-    private static IStructureDefinition<TST_SteamBasicGenerator> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public IStructureDefinition<TST_SteamBasicGenerator> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_SteamBasicGenerator>builder()
-                .addShape(STRUCTURE_PIECE_MAIN,
-                    transpose(shapeMain))
-                .addElement(
-                    'A',
-                    ofChain(
-                        buildHatchAdder(TST_SteamBasicGenerator.class)
-                            .atLeast(Dynamo)
-                            .hatchItemFilterAnd(t -> filterByMTETier(1, 1))
-                            .casingIndex(mainTextureID)
-                            .hint(1)
-                            .build(),
-                        buildHatchAdder(TST_SteamBasicGenerator.class)
-                            .atLeast(InputHatch)
-                            .casingIndex(mainTextureID)
-                            .hint(1)
-                            .build(),
-                        onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings2, 0))))
-                .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 14))
-                .addElement('C', ofFrame(Materials.Bronze))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-	/*
-	Blocks:
-A -> ofBlock...(gt.blockcasings2, 0, ...);
-B -> ofBlock...(gt.blockcasings3, 14, ...);
-C -> ofBlock...(gt.blockframes, 300, ...);
-	 */
-
-    private final String[][] shapeMain = new String[][]{
-        {"     ", " C C ", "  A  ", " C C ", "     "},
-        {"C   C", "  A  ", " ABA ", "  A  ", "C   C"},
-        {"C   C", "  ~  ", " ABA ", "  A  ", "C   C"},
-        {"C   C", " AAA ", " AAA ", " AAA ", "C   C"}
-    };
-    // spotless:on
-    // endregion
-
-    // region Overrides
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_SteamBasicGenerator_MachineType)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_00)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_01)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_02)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_03)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher();
-        return tt;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_SteamBasicGenerator(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID) };
-    }
-
-    @Override
     protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
         super.drawTexts(screenElements, inventorySlot);
         screenElements.widget(
             new TextWidget().setStringSupplier(
                 () -> EnumChatFormatting.WHITE
+                    // spotless:off
                     // #tr TST_SteamBasicGenerator.gui.01
                     // # Steam consumption:
                     // #zh_CN 蒸汽消耗 :
@@ -289,6 +250,75 @@ C -> ofBlock...(gt.blockframes, 300, ...);
                         + EnumChatFormatting.RESET)
                     .setEnabled(widget -> getBaseMetaTileEntity().isActive()))
             .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_AMP, val -> DYNAMO_AMP = val));
+                    // spotless:on
     }
+
     // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
+                    .extFacing()
+                    .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID) };
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_SteamBasicGenerator_MachineType
+        // # Steam generator
+        // #zh_CN 蒸汽发电机
+        tt.addMachineType(TextEnums.tr("Tooltip_SteamBasicGenerator_MachineType"))
+            // #tr Tooltip_SteamBasicGenerator_00
+            // # Converts steam into EU
+            // #zh_CN 将蒸汽转换成EU
+            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_00"))
+            // #tr Tooltip_SteamBasicGenerator_01
+            // # Base rate:§6 1L of Steam -> 0.7 EU§7
+            // #zh_CN 基础比率:§6 1L 蒸汽 -> 0.7 EU§7
+            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_01"))
+            // #tr Tooltip_SteamBasicGenerator_02
+            // # Fuel Efficiency:§c 140%§7
+            // #zh_CN 燃料效率:§c 140%§7
+            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_02"))
+            // #tr Tooltip_SteamBasicGenerator_03
+            // # Accepts simple or buffered LV dynamo hatch
+            // #zh_CN 兼容普通LV仓和缓冲LV动力仓
+            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_03"))
+            .addInputHatch(TextLocalization.textUseBlueprint, 1)
+            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

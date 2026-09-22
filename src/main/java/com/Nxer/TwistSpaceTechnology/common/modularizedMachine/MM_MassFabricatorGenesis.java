@@ -62,84 +62,14 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MM_MassFabricatorGenesis(mName);
     }
-
-    // endregion
-
-    // region Logics
-
-    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList
-        .of(ModularHatchTypes.PARALLEL_CONTROLLER);
-
-    @Override
-    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
-        return supportedModularHatchTypes;
-    }
-
-    @Override
-    protected OverclockType getDefaultOverclockType() {
-        return OverclockType.PerfectOverclock;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return true;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.MassFabricatorGenesis;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
     // endregion
 
     // region Structure
-
     protected static final int horizontalOffSet = 27;
     protected static final int verticalOffSet = 27;
     protected static final int depthOffSet = 0;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<MM_MassFabricatorGenesis> STRUCTURE_DEFINITION;
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<MM_MassFabricatorGenesis> getStructureDefinition() {
@@ -227,17 +157,107 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
         return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
     // endregion
 
-    // region General
+    // region Processing Logic
+    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList
+        .of(ModularHatchTypes.PARALLEL_CONTROLLER);
 
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.MassFabricatorGenesis;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    protected OverclockType getDefaultOverclockType() {
+        return OverclockType.PerfectOverclock;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
+        return supportedModularHatchTypes;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return true;
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_ON)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FUSION1_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_OFF)
+                .extFacing()
+                .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0] };
+    }
+
+    // endregion
+
+    // region Tooltip
     private static MultiblockTooltipBuilder tooltip;
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
             // #tr Tooltip_MassFabricatorGenesis_MachineType
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}质量发生器
@@ -268,24 +288,6 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
         return tooltip;
     }
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_ON)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FUSION1_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0] };
-    }
+    // endregion
+
 }

@@ -27,7 +27,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -65,51 +65,15 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_LargeIndustrialCokingFactory(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    public HeatingCoilLevel coilLevel;
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    public void setCoilLevel(HeatingCoilLevel coilLevel) {
-        this.coilLevel = coilLevel;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.CokingFactoryRecipes;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        this.speedBonus = 1F / (coilLevel.getTier() + 1);
-    }
     // endregion
 
     // region Structure
-    // spotless:off
-
     private final int horizontalOffSet = 7;
     private final int verticalOffSet = 13;
     private final int depthOffSet = 0;
     private final String STRUCTURE_PIECE_MAIN = "mainLargeIndustrialCokingFactory";
+
+    // spotless:off
     private final String[][] shapeMain = new String[][]{
         {"      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      ","      CCC      "},
         {"      CCC      ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","               ","      III      ","               ","      CCC      "},
@@ -126,9 +90,41 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
         {"CCCCCCCCCCCCCCC"," FFFFFFFFFFFFF ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," EDDDDDDDDDDDE "," EDDDDDDDDDDDE ","IEDDDDDDDDDDDEI"," FFFFFFFFFFFFF ","CCCCCCCCCCCCCCC"},
         {"CCCCCCC~CCCCCCC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CFFFFFFFFFFFFFC","CCCCCCCCCCCCCCC"}
     };
+    // spotless:on
+
     private static IStructureDefinition<TST_LargeIndustrialCokingFactory> STRUCTURE_DEFINITION = null;
 
-
+    @Override
+    public IStructureDefinition<TST_LargeIndustrialCokingFactory> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_LargeIndustrialCokingFactory>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 15))
+                .addElement(
+                    'C',
+                    HatchElementBuilder.<TST_LargeIndustrialCokingFactory>builder()
+                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
+                        .hint(1)
+                        .casingIndex(48)
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 0))
+                .addElement(
+                    'D',
+                    withChannel(
+                        "coil",
+                        ofCoil(
+                            TST_LargeIndustrialCokingFactory::setCoilLevel,
+                            TST_LargeIndustrialCokingFactory::getCoilLevel)))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasingsNH, 2))
+                .addElement('F', ofBlock(ModBlocks.blockCasingsMisc, 1))
+                .addElement('G', ofBlock(ModBlocks.blockCasingsMisc, 3))
+                .addElement('H', ofFrame(Materials.BlackSteel))
+                .addElement('I', ofFrame(Materials.Steel))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
@@ -151,76 +147,55 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     }
 
     /*
-Blocks:
-A -> ofBlock...(gt.blockcasings2, 15, ...);
-B -> ofBlock...(gt.blockcasings3, 15, ...);
-C -> ofBlock...(gt.blockcasings4, 0, ...); // IOs
-D -> ofBlock...(gt.blockcasings5, 0, ...); // Coils
-E -> ofBlock...(gt.blockcasingsNH, 2, ...);
-F -> ofBlock...(miscutils.blockcasings, 1, ...);
-G -> ofBlock...(miscutils.blockcasings, 3, ...);
-H -> ofFrame...(Materials.BlackSteel, ...);
-I -> ofFrame...(Materials.Steel, ...);
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasings2, 15, ...);
+     * B -> ofBlock...(gt.blockcasings3, 15, ...);
+     * C -> ofBlock...(gt.blockcasings4, 0, ...); // IOs
+     * D -> ofBlock...(gt.blockcasings5, 0, ...); // Coils
+     * E -> ofBlock...(gt.blockcasingsNH, 2, ...);
+     * F -> ofBlock...(miscutils.blockcasings, 1, ...);
+     * G -> ofBlock...(miscutils.blockcasings, 3, ...);
+     * H -> ofFrame...(Materials.BlackSteel, ...);
+     * I -> ofFrame...(Materials.Steel, ...);
      */
-    @Override
-    public IStructureDefinition<TST_LargeIndustrialCokingFactory> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition
-                                       .<TST_LargeIndustrialCokingFactory>builder()
-                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                                       .addElement('A', ofBlock(GregTechAPI.sBlockCasings2, 15))
-                                       .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 15))
-                                       .addElement(
-                                           'C',
-                                           HatchElementBuilder
-                                               .<TST_LargeIndustrialCokingFactory>builder()
-                                               .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                                               .adder(TST_LargeIndustrialCokingFactory::addToMachineList)
-                                               .hint(1)
-                                               .casingIndex(48)
-                                               .buildAndChain(GregTechAPI.sBlockCasings4, 0))
-                                       .addElement(
-                                           'D',
-                                           withChannel(
-                                               "coil",
-                                               ofCoil(
-                                                   TST_LargeIndustrialCokingFactory::setCoilLevel,
-                                                   TST_LargeIndustrialCokingFactory::getCoilLevel)))
-                                       .addElement('E', ofBlock(GregTechAPI.sBlockCasingsNH, 2))
-                                       .addElement('F', ofBlock(ModBlocks.blockCasingsMisc, 1))
-                                       .addElement('G', ofBlock(ModBlocks.blockCasingsMisc, 3))
-                                       .addElement('H', ofFrame(Materials.BlackSteel))
-                                       .addElement('I', ofFrame(Materials.Steel))
-                                       .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
 
-    // spotless:on
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        this.speedBonus = 1F / (coilLevel.getTier() + 1);
+    }
     // endregion
 
-    // region Info
+    // region Processing Logic
+    public HeatingCoilLevel coilLevel;
+
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_LargeIndustrialCokingFactory_MachineType)
-            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_Controller)
-            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_01)
-            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_02)
-            .addInfo(TextLocalization.Tooltip_LargeIndustrialCokingFactory_03)
-            .addController(textFrontBottom)
-            .addInputHatch(textUseBlueprint, 1)
-            .addOutputHatch(textUseBlueprint, 1)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 1)
-            .addEnergyHatch(textUseBlueprint, 1)
-            .toolTipFinisher();
-        return tt;
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.CokingFactoryRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
     }
 
     // endregion
 
-    // region General
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -247,4 +222,46 @@ I -> ofFrame...(Materials.Steel, ...);
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[0][48] };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_LargeIndustrialCokingFactory_MachineType
+        // # Coke Oven
+        // #zh_CN 焦炉
+        tt.addMachineType(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_MachineType"))
+            // #tr Tooltip_LargeIndustrialCokingFactory_Controller
+            // # Controller block for the Large Industrial Coking Factory
+            // #zh_CN 大型工业炼焦厂的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_Controller"))
+            // #tr Tooltip_LargeIndustrialCokingFactory_01
+            // # {\DARK_AQUA}{\BOLD}Seizing like a ravenous beast, lavishing like a breezing east.
+            // #zh_CN {\DARK_AQUA}{\BOLD}取之尽锱铢, 用之如泥沙.
+            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_01"))
+            // #tr Tooltip_LargeIndustrialCokingFactory_02
+            // # Process endless inputs in one time.
+            // #zh_CN 无尽的原料一次加工完成.
+            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_02"))
+            // #tr Tooltip_LargeIndustrialCokingFactory_03
+            // # Higher tier of coil make machine more faster.
+            // #zh_CN 更高级的线圈可以让机器更快.
+            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_03"))
+            .addController(textFrontBottom)
+            .addInputHatch(textUseBlueprint, 1)
+            .addOutputHatch(textUseBlueprint, 1)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 1)
+            .addEnergyHatch(textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

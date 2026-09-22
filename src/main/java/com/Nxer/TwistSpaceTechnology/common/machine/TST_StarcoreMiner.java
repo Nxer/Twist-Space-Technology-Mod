@@ -81,11 +81,9 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_StarcoreMiner(this.mName);
     }
-
     // endregion
 
     // region Structure
-    // spotless:off
     private static final int horizontalOffSetMain = 10;
     private static final int verticalOffSetMain = 22;
     private static final int depthOffSetMain = 1;
@@ -102,113 +100,383 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     @Override
     public IStructureDefinition<TST_StarcoreMiner> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION =
-                StructureDefinition
-                    .<TST_StarcoreMiner>builder()
-                    .addShape(
-                        STRUCTURE_PIECE_MAIN,
-                        transpose(new String[][]{
-                            {"        GGGGG        ","       GGGGGGG       ","      GGGGGGGGG      ","      GGGGGGGGG      ","      GGGGGGGGG      ","      GGGGGGGGG      ","      GGGGGGGGG      ","       GGGGGGG       ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","        GGGGG        ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HGIGH        ","        GGIGG        ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         AIA         ","         CCC         ","         CIC         ","         CCC         ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDGDH        ","        GDGDG        ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         DGD         ","         CCC         ","         CIC         ","         CCC         ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","         GGG         ","         GIG         ","         GGG         ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","          K          ","         KIK         ","          K          ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","                     ","        BBBBB        ","      BBBBBBBBB      ","     BBB     BBB     ","    BBB       BBB    ","    BB         BB    ","   BB           BB   ","   BB     K     BB   ","   BB    KIK    BB   ","   BB     K     BB   ","   BB           BB   ","    BB         BB    ","    BBB       BBB    ","     BBB     BBB     ","      BBBBBBBBB      ","        BBBBB        ","                     ","                     ","                     "},
-                            {"                     ","                     ","        G   G        ","        HHAHH        ","         GIG         ","        HDADH        ","        G   G        ","                     ","                     ","                     ","                     ","                     ","        EEEEE        ","      EEEEEEEEE      ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","   EEEEEFFFFFEEEEE   ","   EEEEFF   FFEEEE   ","  EEEEFF     FFEEEE  ","  EEEEF   K   FEEEE  ","  EEEEF  KIK  FEEEE  ","  EEEEF   K   FEEEE  ","  EEEEFF     FFEEEE  ","   EEEEFF   FFEEEE   ","   EEEEEFFFFFEEEEE   ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","      EEEEEEEEE      ","        EEEEE        ","                     ","                     "},
-                            {"                     ","         LLL         ","        GGGGG        ","       HHGGGHH       ","         GIG         ","       HHGGGHH       ","        GLLLG        ","        G   G        ","                     ","                     ","                     ","                     ","        EEEEE        ","      EEEEEEEEE      ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","   EEEEEFFFFFEEEEE   ","   EEEEFFFFFFFEEEE   ","  EEEEFFF   FFFEEEE  ","  EEEEFF  K  FFEEEE  ","  EEEEFF KIK FFEEEE  ","  EEEEFF  K  FFEEEE  ","  EEEEFFF   FFFEEEE  ","   EEEEFFFFFFFEEEE   ","   EEEEEFFFFFEEEEE   ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","      EEEEEEEEE      ","        EEEEE        ","                     ","                     "},
-                            {"                     ","         L~L         ","        GGIGG        ","      HHHGIGHHH      ","         GIG         ","      HHHGGGHHH      ","        GLLLG        ","        G   G        ","        G   G        ","                     ","                     ","                     ","        EEEEE        ","      EEEEEEEEE      ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","   EEEEEFFFFFEEEEE   ","   EEEEFFFFFFFEEEE   ","  EEEEFFF   FFFEEEE  ","  EEEEFF  K  FFEEEE  ","  EEEEFF KIK FFEEEE  ","  EEEEFF  K  FFEEEE  ","  EEEEFFF   FFFEEEE  ","   EEEEFFFFFFFEEEE   ","   EEEEEFFFFFEEEEE   ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","      EEEEEEEEE      ","        EEEEE        ","                     ","                     "},
-                            {"                     ","         LLL         ","        GGGGG        ","     HHHHGGGHHHH     ","         GGG         ","     HHHHGGGHHHH     ","        GLLLG        ","        G   G        ","        G   G        ","        G   G        ","                     ","                     ","        EEEEE        ","      EEEEEEEEE      ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","   EEEEEFFFFFEEEEE   ","   EEEEFFFFFFFEEEE   ","  EEEEFFF   FFFEEEE  ","  EEEEFF  K  FFEEEE  ","  EEEEFF KIK FFEEEE  ","  EEEEFF  K  FFEEEE  ","  EEEEFFF   FFFEEEE  ","   EEEEFFFFFFFEEEE   ","   EEEEEFFFFFEEEEE   ","    EEEEEEEEEEEEE    ","    EEEEEEEEEEEEE    ","      EEEEEEEEE      ","        EEEEE        ","                     ","                     "},
-                            {"                     ","       JJLLLJJ       ","      JJJJJJJJJ      ","     HHHHJJJHHHH     ","      JJJJJJJJJ      ","     HHHHJJJHHHH     ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","    JJJJJJJJJJJJJ    ","   JJJJJJJJJJJJJJJ   ","  JJJJJJJJJJJJJJJJJ  ","  JJJJJJJJJJJJJJJJJ  "," JJJJJJJFFFFFJJJJJJJ "," JJJJJJFFFFFFFJJJJJJ ","JJJJJJFFF   FFFJJJJJJ","JJJJJJFF  K  FFJJJJJJ","JJJJJJFF KIK FFJJJJJJ","JJJJJJFF  K  FFJJJJJJ","JJJJJJFFF   FFFJJJJJJ"," JJJJJJFFFFFFFJJJJJJ "," JJJJJJJFFFFFJJJJJJJ ","  JJJJJJJJJJJJJJJJJ  ","  JJJJJJJJJJJJJJJJJ  ","   JJJJJJJJJJJJJJJ   ","    JJJJJJJJJJJJJ    ","      JJJJJJJJJ      ","        JJJJJ        "},
-                            {"                     ","       JJLLLJJ       ","      JJJJJJJJJ      ","     HHHHJJJHHHH     ","      JJJJJJJJJ      ","     HHHHJJJHHHH     ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","      JJJJJJJJJ      ","    JJJJJJJJJJJJJ    ","   JJJJJJJJJJJJJJJ   ","  JJJJJJJJJJJJJJJJJ  ","  JJJJJJJJJJJJJJJJJ  "," JJJJJJJFFFFFJJJJJJJ "," JJJJJJFFFFFFFJJJJJJ ","JJJJJJFFF   FFFJJJJJJ","JJJJJJFF  K  FFJJJJJJ","JJJJJJFF KIK FFJJJJJJ","JJJJJJFF  K  FFJJJJJJ","JJJJJJFFF   FFFJJJJJJ"," JJJJJJFFFFFFFJJJJJJ "," JJJJJJJFFFFFJJJJJJJ ","  JJJJJJJJJJJJJJJJJ  ","  JJJJJJJJJJJJJJJJJ  ","   JJJJJJJJJJJJJJJ   ","    JJJJJJJJJJJJJ    ","      JJJJJJJJJ      ","        JJJJJ        "}
-                        })
-                    )
-                    .addShape(
-                        STRUCTURE_PIECE_MIDDLE,
-                        transpose(new String[][]{
-                            {"  FFFFF  "," FFFFFFF ","FFF   FFF","FF  K  FF","FF KIK FF","FF  K  FF","FFF   FFF"," FFFFFFF ","  FFFFF  "}
-                        })
-                    )
-                    .addShape(
-                        STRUCTURE_PIECE_END,
-                        new String[][]{
-                            {"Z"}
-                        }
-                    )
-                    .addElement('A', chainAllGlasses())
-                    .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 11))
-                    .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
-                    .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
-                    .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
-                    .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
-                    .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
-                    .addElement('H', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
-                    .addElement('I', ofBlock(sBlockCasingsTT, 8))
-                    .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
-                    .addElement(
-                        'K',
-                        ofChain(
-                            BorosilicateGlass.ofBoroGlassAnyTier(),
-                            ofFrame(Materials.NaquadahAlloy),
-                            ofBlock(GregTechAPI.sBlockCasings8, 10)
-                        ))
-                    .addElement(
-                        'L',
-                        HatchElementBuilder
-                            .<TST_StarcoreMiner>builder()
-                            .atLeast(InputBus, InputHatch, OutputBus, Energy.or(ExoticEnergy))
-                            .adder(TST_StarcoreMiner::addToMachineList)
-                            .hint(1)
-                            .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
-                            .buildAndChain(GregTechAPI.sBlockCasingsSE, 0)
-                    )
-                    /*
-                    Blocks:
-                        A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
-                        B -> ofBlock...(gt.blockcasings, 11, ...);
-                        C -> ofBlock...(gt.blockcasings, 14, ...);
-                        D -> ofBlock...(gt.blockcasings2, 15, ...);
-                        E -> ofBlock...(gt.blockcasings8, 7, ...);
-                        F -> ofBlock...(gt.blockcasings8, 10, ...); // Nq alloy casing
-                        G -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                        H -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                        I -> ofBlock...(gt.blockcasingsTT, 8, ...); // holo casing
-                        J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-                        K -> ofBlock...(tile.glass, 0, ...); // any glass or ofFrame(Materials.NaquadahAlloy) or ofBlock(NaquadahAlloy casing)
-                        L -> ofBlock...(gt.blockcasingsSE, 0); // hatches
-                     */
-                    .addElement('Z', ofBlock(Blocks.bedrock, 0))
-                    .build();
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_StarcoreMiner>builder()
+                .addShape(
+                    STRUCTURE_PIECE_MAIN,
+                    transpose(
+                        new String[][] {
+                            { "        GGGGG        ", "       GGGGGGG       ", "      GGGGGGGGG      ",
+                                "      GGGGGGGGG      ", "      GGGGGGGGG      ", "      GGGGGGGGG      ",
+                                "      GGGGGGGGG      ", "       GGGGGGG       ", "        GGGGG        ",
+                                "        GGGGG        ", "        GGGGG        ", "        GGGGG        ",
+                                "        GGGGG        ", "        GGGGG        ", "        GGGGG        ",
+                                "        GGGGG        ", "        GGGGG        ", "        GGGGG        ",
+                                "        GGGGG        ", "        GGGGG        ", "        GGGGG        ",
+                                "        GGGGG        ", "        GGGGG        ", "        GGGGG        ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HGIGH        ",
+                                "        GGIGG        ", "         AIA         ", "         AIA         ",
+                                "         AIA         ", "         AIA         ", "         AIA         ",
+                                "         AIA         ", "         AIA         ", "         AIA         ",
+                                "         AIA         ", "         AIA         ", "         AIA         ",
+                                "         AIA         ", "         CCC         ", "         CIC         ",
+                                "         CCC         ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDGDH        ",
+                                "        GDGDG        ", "         DGD         ", "         DGD         ",
+                                "         DGD         ", "         DGD         ", "         DGD         ",
+                                "         DGD         ", "         DGD         ", "         DGD         ",
+                                "         DGD         ", "         DGD         ", "         DGD         ",
+                                "         DGD         ", "         CCC         ", "         CIC         ",
+                                "         CCC         ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "         GGG         ", "         GIG         ",
+                                "         GGG         ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "          K          ", "         KIK         ",
+                                "          K          ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "                     ", "        BBBBB        ", "      BBBBBBBBB      ",
+                                "     BBB     BBB     ", "    BBB       BBB    ", "    BB         BB    ",
+                                "   BB           BB   ", "   BB     K     BB   ", "   BB    KIK    BB   ",
+                                "   BB     K     BB   ", "   BB           BB   ", "    BB         BB    ",
+                                "    BBB       BBB    ", "     BBB     BBB     ", "      BBBBBBBBB      ",
+                                "        BBBBB        ", "                     ", "                     ",
+                                "                     " },
+                            { "                     ", "                     ", "        G   G        ",
+                                "        HHAHH        ", "         GIG         ", "        HDADH        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "        EEEEE        ", "      EEEEEEEEE      ", "    EEEEEEEEEEEEE    ",
+                                "    EEEEEEEEEEEEE    ", "   EEEEEFFFFFEEEEE   ", "   EEEEFF   FFEEEE   ",
+                                "  EEEEFF     FFEEEE  ", "  EEEEF   K   FEEEE  ", "  EEEEF  KIK  FEEEE  ",
+                                "  EEEEF   K   FEEEE  ", "  EEEEFF     FFEEEE  ", "   EEEEFF   FFEEEE   ",
+                                "   EEEEEFFFFFEEEEE   ", "    EEEEEEEEEEEEE    ", "    EEEEEEEEEEEEE    ",
+                                "      EEEEEEEEE      ", "        EEEEE        ", "                     ",
+                                "                     " },
+                            { "                     ", "         LLL         ", "        GGGGG        ",
+                                "       HHGGGHH       ", "         GIG         ", "       HHGGGHH       ",
+                                "        GLLLG        ", "        G   G        ", "                     ",
+                                "                     ", "                     ", "                     ",
+                                "        EEEEE        ", "      EEEEEEEEE      ", "    EEEEEEEEEEEEE    ",
+                                "    EEEEEEEEEEEEE    ", "   EEEEEFFFFFEEEEE   ", "   EEEEFFFFFFFEEEE   ",
+                                "  EEEEFFF   FFFEEEE  ", "  EEEEFF  K  FFEEEE  ", "  EEEEFF KIK FFEEEE  ",
+                                "  EEEEFF  K  FFEEEE  ", "  EEEEFFF   FFFEEEE  ", "   EEEEFFFFFFFEEEE   ",
+                                "   EEEEEFFFFFEEEEE   ", "    EEEEEEEEEEEEE    ", "    EEEEEEEEEEEEE    ",
+                                "      EEEEEEEEE      ", "        EEEEE        ", "                     ",
+                                "                     " },
+                            { "                     ", "         L~L         ", "        GGIGG        ",
+                                "      HHHGIGHHH      ", "         GIG         ", "      HHHGGGHHH      ",
+                                "        GLLLG        ", "        G   G        ", "        G   G        ",
+                                "                     ", "                     ", "                     ",
+                                "        EEEEE        ", "      EEEEEEEEE      ", "    EEEEEEEEEEEEE    ",
+                                "    EEEEEEEEEEEEE    ", "   EEEEEFFFFFEEEEE   ", "   EEEEFFFFFFFEEEE   ",
+                                "  EEEEFFF   FFFEEEE  ", "  EEEEFF  K  FFEEEE  ", "  EEEEFF KIK FFEEEE  ",
+                                "  EEEEFF  K  FFEEEE  ", "  EEEEFFF   FFFEEEE  ", "   EEEEFFFFFFFEEEE   ",
+                                "   EEEEEFFFFFEEEEE   ", "    EEEEEEEEEEEEE    ", "    EEEEEEEEEEEEE    ",
+                                "      EEEEEEEEE      ", "        EEEEE        ", "                     ",
+                                "                     " },
+                            { "                     ", "         LLL         ", "        GGGGG        ",
+                                "     HHHHGGGHHHH     ", "         GGG         ", "     HHHHGGGHHHH     ",
+                                "        GLLLG        ", "        G   G        ", "        G   G        ",
+                                "        G   G        ", "                     ", "                     ",
+                                "        EEEEE        ", "      EEEEEEEEE      ", "    EEEEEEEEEEEEE    ",
+                                "    EEEEEEEEEEEEE    ", "   EEEEEFFFFFEEEEE   ", "   EEEEFFFFFFFEEEE   ",
+                                "  EEEEFFF   FFFEEEE  ", "  EEEEFF  K  FFEEEE  ", "  EEEEFF KIK FFEEEE  ",
+                                "  EEEEFF  K  FFEEEE  ", "  EEEEFFF   FFFEEEE  ", "   EEEEFFFFFFFEEEE   ",
+                                "   EEEEEFFFFFEEEEE   ", "    EEEEEEEEEEEEE    ", "    EEEEEEEEEEEEE    ",
+                                "      EEEEEEEEE      ", "        EEEEE        ", "                     ",
+                                "                     " },
+                            { "                     ", "       JJLLLJJ       ", "      JJJJJJJJJ      ",
+                                "     HHHHJJJHHHH     ", "      JJJJJJJJJ      ", "     HHHHJJJHHHH     ",
+                                "      JJJJJJJJJ      ", "      JJJJJJJJJ      ", "      JJJJJJJJJ      ",
+                                "      JJJJJJJJJ      ", "      JJJJJJJJJ      ", "      JJJJJJJJJ      ",
+                                "    JJJJJJJJJJJJJ    ", "   JJJJJJJJJJJJJJJ   ", "  JJJJJJJJJJJJJJJJJ  ",
+                                "  JJJJJJJJJJJJJJJJJ  ", " JJJJJJJFFFFFJJJJJJJ ", " JJJJJJFFFFFFFJJJJJJ ",
+                                "JJJJJJFFF   FFFJJJJJJ", "JJJJJJFF  K  FFJJJJJJ", "JJJJJJFF KIK FFJJJJJJ",
+                                "JJJJJJFF  K  FFJJJJJJ", "JJJJJJFFF   FFFJJJJJJ", " JJJJJJFFFFFFFJJJJJJ ",
+                                " JJJJJJJFFFFFJJJJJJJ ", "  JJJJJJJJJJJJJJJJJ  ", "  JJJJJJJJJJJJJJJJJ  ",
+                                "   JJJJJJJJJJJJJJJ   ", "    JJJJJJJJJJJJJ    ", "      JJJJJJJJJ      ",
+                                "        JJJJJ        " },
+                            { "                     ", "       JJLLLJJ       ", "      JJJJJJJJJ      ",
+                                "     HHHHJJJHHHH     ", "      JJJJJJJJJ      ", "     HHHHJJJHHHH     ",
+                                "      JJJJJJJJJ      ", "      JJJJJJJJJ      ", "      JJJJJJJJJ      ",
+                                "      JJJJJJJJJ      ", "      JJJJJJJJJ      ", "      JJJJJJJJJ      ",
+                                "    JJJJJJJJJJJJJ    ", "   JJJJJJJJJJJJJJJ   ", "  JJJJJJJJJJJJJJJJJ  ",
+                                "  JJJJJJJJJJJJJJJJJ  ", " JJJJJJJFFFFFJJJJJJJ ", " JJJJJJFFFFFFFJJJJJJ ",
+                                "JJJJJJFFF   FFFJJJJJJ", "JJJJJJFF  K  FFJJJJJJ", "JJJJJJFF KIK FFJJJJJJ",
+                                "JJJJJJFF  K  FFJJJJJJ", "JJJJJJFFF   FFFJJJJJJ", " JJJJJJFFFFFFFJJJJJJ ",
+                                " JJJJJJJFFFFFJJJJJJJ ", "  JJJJJJJJJJJJJJJJJ  ", "  JJJJJJJJJJJJJJJJJ  ",
+                                "   JJJJJJJJJJJJJJJ   ", "    JJJJJJJJJJJJJ    ", "      JJJJJJJJJ      ",
+                                "        JJJJJ        " } }))
+                .addShape(
+                    STRUCTURE_PIECE_MIDDLE,
+                    transpose(
+                        new String[][] { { "  FFFFF  ", " FFFFFFF ", "FFF   FFF", "FF  K  FF", "FF KIK FF", "FF  K  FF",
+                            "FFF   FFF", " FFFFFFF ", "  FFFFF  " } }))
+                .addShape(STRUCTURE_PIECE_END, new String[][] { { "Z" } })
+                .addElement('A', chainAllGlasses())
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings1, 11))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings1, 14))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasings8, 7))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasings8, 10))
+                .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+                .addElement('H', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('I', ofBlock(sBlockCasingsTT, 8))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
+                .addElement(
+                    'K',
+                    ofChain(
+                        BorosilicateGlass.ofBoroGlassAnyTier(),
+                        ofFrame(Materials.NaquadahAlloy),
+                        ofBlock(GregTechAPI.sBlockCasings8, 10)))
+                .addElement(
+                    'L',
+                    HatchElementBuilder.<TST_StarcoreMiner>builder()
+                        .atLeast(InputBus, InputHatch, OutputBus, Energy.or(ExoticEnergy))
+                        .adder(TST_StarcoreMiner::addToMachineList)
+                        .hint(1)
+                        .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
+                        .buildAndChain(GregTechAPI.sBlockCasingsSE, 0))
+                /*
+                 * Blocks:
+                 * A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
+                 * B -> ofBlock...(gt.blockcasings, 11, ...);
+                 * C -> ofBlock...(gt.blockcasings, 14, ...);
+                 * D -> ofBlock...(gt.blockcasings2, 15, ...);
+                 * E -> ofBlock...(gt.blockcasings8, 7, ...);
+                 * F -> ofBlock...(gt.blockcasings8, 10, ...); // Nq alloy casing
+                 * G -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                 * H -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                 * I -> ofBlock...(gt.blockcasingsTT, 8, ...); // holo casing
+                 * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+                 * K -> ofBlock...(tile.glass, 0, ...); // any glass or ofFrame(Materials.NaquadahAlloy) or
+                 * ofBlock(NaquadahAlloy casing)
+                 * L -> ofBlock...(gt.blockcasingsSE, 0); // hatches
+                 */
+                .addElement('Z', ofBlock(Blocks.bedrock, 0))
+                .build();
         }
         return STRUCTURE_DEFINITION;
     }
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain);
+        this.buildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hintsOnly,
+            horizontalOffSetMain,
+            verticalOffSetMain,
+            depthOffSetMain);
         int piece = stackSize.stackSize;
-        for (int i=0; i<piece; i++){
-            this.buildPiece(STRUCTURE_PIECE_MIDDLE, stackSize, hintsOnly, horizontalOffSetMiddle, verticalOffSetMiddle - i, depthOffSetMiddle);
+        for (int i = 0; i < piece; i++) {
+            this.buildPiece(
+                STRUCTURE_PIECE_MIDDLE,
+                stackSize,
+                hintsOnly,
+                horizontalOffSetMiddle,
+                verticalOffSetMiddle - i,
+                depthOffSetMiddle);
         }
     }
 
     @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (mMachine) return -1;
-        int builtMain = survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain, elementBudget, env, false, true);
+        int builtMain = survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSetMain,
+            verticalOffSetMain,
+            depthOffSetMain,
+            elementBudget,
+            env,
+            false,
+            true);
 
         // Construct Pipe Structure
         int piece = stackSize.stackSize - 1;
@@ -217,8 +485,17 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         boolean triedBuiltMiddle = false;
 
         if (piece > 0) {
-            for (int i=0;i<piece;i++) {
-                builtMiddleCurrent = survivalBuildPiece(STRUCTURE_PIECE_MIDDLE, stackSize, horizontalOffSetMiddle, verticalOffSetMiddle - i, depthOffSetMiddle, elementBudget, env, false, true);
+            for (int i = 0; i < piece; i++) {
+                builtMiddleCurrent = survivalBuildPiece(
+                    STRUCTURE_PIECE_MIDDLE,
+                    stackSize,
+                    horizontalOffSetMiddle,
+                    verticalOffSetMiddle - i,
+                    depthOffSetMiddle,
+                    elementBudget,
+                    env,
+                    false,
+                    true);
                 if (builtMiddleCurrent != -1) {
                     // if a piece has been built, mark the signal to confirm whether structure has been built complete
                     builtMiddle += builtMiddleCurrent;
@@ -247,7 +524,9 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         repairMachine();
         if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSetMain, verticalOffSetMain, depthOffSetMain, errors)) {
             IGregTechTileEntity b = getBaseMetaTileEntity();
-            TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() );
+            TwistSpaceTechnology.LOG.info(
+                "TST: Starcore Miner check main structure failed at x=" + b
+                    .getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord());
             return;
         }
         if (CheckMiningPipeStructure_StarcoreMiner) {
@@ -258,13 +537,25 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                 // continue check pipe structure
                 int needPiece = y_value - ValueEnum.HeightValueLimit_StarcoreMiner;
                 int p = 0;
-                for (;p<needPiece;p++) {
-                    if (checkPiece(STRUCTURE_PIECE_MIDDLE, horizontalOffSetMiddle, verticalOffSetMiddle - p, depthOffSetMiddle, errors)) continue;
+                for (; p < needPiece; p++) {
+                    if (checkPiece(
+                        STRUCTURE_PIECE_MIDDLE,
+                        horizontalOffSetMiddle,
+                        verticalOffSetMiddle - p,
+                        depthOffSetMiddle,
+                        errors)) continue;
                     // or check if stopped by a bedrock block
-                    if (checkPiece(STRUCTURE_PIECE_END, horizontalOffSetEnd, verticalOffSetMiddle - p, depthOffSetEnd, errors)) {
+                    if (checkPiece(
+                        STRUCTURE_PIECE_END,
+                        horizontalOffSetEnd,
+                        verticalOffSetMiddle - p,
+                        depthOffSetEnd,
+                        errors)) {
                         break;
                     } else {
-                        TwistSpaceTechnology.LOG.info("TST: Starcore Miner check main structure failed at x=" + b.getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() + " p=" + p );
+                        TwistSpaceTechnology.LOG.info(
+                            "TST: Starcore Miner check main structure failed at x=" + b
+                                .getXCoord() + " y=" + b.getYCoord() + " z=" + b.getZCoord() + " p=" + p);
                         return;
                     }
                 }
@@ -273,12 +564,9 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
 
         isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
     }
-
-    // spotless:on
     // endregion
 
     // region Processing Logic
-
     protected ModDimensionDef dimensionDef;
     protected VoidMinerUtility.DropMap dropMap = null;
     protected VoidMinerUtility.DropMap extraDropMap = null;
@@ -289,15 +577,48 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
     protected int oreStackSize = Config.StackSizeOfEveryOreItemStackWhenMining_StarcoreMiner;
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setBoolean("isWirelessMode", isWirelessMode);
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        isWirelessMode = aNBT.getBoolean("isWirelessMode");
+    public int getMaxParallelRecipes() {
+        return 1;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    public boolean isRotationChangeAllowed() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
     }
 
     @NotNull
@@ -419,54 +740,57 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         }
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    public boolean isRotationChangeAllowed() {
-        return false;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setBoolean("isWirelessMode", isWirelessMode);
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 1;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        isWirelessMode = aNBT.getBoolean("isWirelessMode");
     }
 
     // endregion
 
-    // region General
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        if (side == aFacing) {
+
+            if (aActive) {
+                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_DTPF_ON)
+                        .extFacing()
+                        .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FUSION1_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_DTPF_OFF)
+                    .extFacing()
+                    .build() };
+        }
+
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX) };
+    }
+
+    // endregion
+
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
@@ -530,37 +854,10 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
             .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
             .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();
-        return tt;
         // spotless:on
+        return tt;
     }
 
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-
-            if (aActive) {
-                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_DTPF_ON)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_OFF)
-                    .extFacing()
-                    .build() };
-        }
-
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(SPACE_ELEVATOR_BASE_CASING_INDEX) };
-    }
     // endregion
 
 }

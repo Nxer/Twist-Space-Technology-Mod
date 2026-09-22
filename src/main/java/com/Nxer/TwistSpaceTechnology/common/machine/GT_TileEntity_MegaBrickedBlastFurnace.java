@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.Horizont
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
 import static gregtech.api.enums.Textures.BlockIcons;
@@ -33,7 +34,6 @@ import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
@@ -68,484 +68,7 @@ import gregtech.common.pollution.Pollution;
 public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase<GT_TileEntity_MegaBrickedBlastFurnace>
     implements ISurvivalConstructable {
 
-    // 3600 seconds in an hour, 8 hours, 20 ticks in a second.
-    private static final double max_efficiency_time_in_ticks = 3600d * 8d * 20d;
-    private static final double maximum_fuelEfficiency = 8d;
-
-    // Current efficiency
-    private double fuelEfficiency = 1;
-    private long running_time = 0;
-
-    // coke coal
-    private static ItemStack cokeCoal;
-    private static ItemStack cokeCoalBlock;
-
-    private boolean usePrimitiveRecipes = false;
-
-    // needed to calculate fuel/material ratio
-    private static Set<TST_ItemID> fuels;
-
-    private static Set<TST_ItemID> fuelBlocks;
-
-    // irons
-    private static ItemStack iron;
-    private static ItemStack wroughtIron;
-    // steel
-    private static ItemStack steel;
-    // ash
-    private static ItemStack ash;
-
-    public static void initStatics() {
-        cokeCoal = GTModHandler.getModItem("Railcraft", "fuel.coke", 1);
-        if (cokeCoal == null) cokeCoal = Materials.Coal.getGems(1);
-        cokeCoalBlock = GTModHandler.getModItem("Railcraft", "cube", 1);
-        if (cokeCoalBlock == null) cokeCoalBlock = Materials.Coal.getBlocks(1);
-
-        ItemStack charCoal = Materials.Charcoal.getGems(1);
-        ItemStack charCoalBlock = Materials.Charcoal.getBlocks(1);
-        ItemStack gemCoal = Materials.Coal.getGems(1);
-        ItemStack dustCoal = Materials.Coal.getDust(1);
-        ItemStack blockCoal = Materials.Coal.getBlocks(1);
-        ItemStack dustCharCoal = Materials.Charcoal.getDust(1);
-        ItemStack cactusCoke = GTModHandler.getModItem("miscutils", "itemCactusCoke", 1);
-        ItemStack cactusCharCoal = GTModHandler.getModItem("miscutils", "itemCactusCharcoal", 1);
-        ItemStack sugarCharCoal = GTModHandler.getModItem("miscutils", "itemSugarCharcoal", 1);
-        ItemStack sugarCoke = GTModHandler.getModItem("miscutils", "itemSugarCoke", 1);
-
-        fuels = Sets.newHashSet(
-            TST_ItemID.create(charCoal),
-            TST_ItemID.create(charCoalBlock),
-            TST_ItemID.create(cokeCoal),
-            TST_ItemID.create(cokeCoalBlock),
-            TST_ItemID.create(blockCoal),
-            TST_ItemID.create(gemCoal),
-            TST_ItemID.create(dustCoal),
-            TST_ItemID.create(dustCharCoal),
-            TST_ItemID.create(cactusCoke),
-            TST_ItemID.create(cactusCharCoal),
-            TST_ItemID.create(sugarCharCoal),
-            TST_ItemID.create(sugarCoke));
-
-        fuelBlocks = Sets.newHashSet(TST_ItemID.create(charCoalBlock), TST_ItemID.create(cokeCoalBlock));
-
-        iron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
-        wroughtIron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
-        steel = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
-        ash = GTOreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
-    }
-
-    private static final int max_input_bus = 6;
-    private static final int max_output_bus = 6;
-
-    private static final ITexture[] FACING_SIDE = { TextureFactory.of(BlockIcons.MACHINE_CASING_DENSEBRICKS) };
-    private static final ITexture[] FACING_FRONT = {
-        TextureFactory.of(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE) };
-    private static final ITexture[] FACING_ACTIVE = {
-        TextureFactory.of(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE), TextureFactory.builder()
-            .addIcon(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
-            .glow()
-            .build() };
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] structure_string = new String[][] { { "                                 ",
-        "         N   N     N   N         ", "         N   N     N   N         ", "         N   N     N   N         ",
-        "                                 ", "                                 ", "                                 ",
-        "         N   N     N   N         ", "         N   N     N   N         ", " NNN   NNN   N     N   NNN   NNN ",
-        "                                 ", "                                 ", "                                 ",
-        " NNN   NNN             NNN   NNN ", "                                 ", "                                 ",
-        "                                 ", "                                 ", "                                 ",
-        " NNN   NNN             NNN   NNN ", "                                 ", "                                 ",
-        "                                 ", " NNN   NNN             NNN   NNN " },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "         bCCCb     bCCCb         ", "         N   N     N   N         ",
-            "                                 ", "         N   N     N   N         ",
-            "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "NbbbN NbbNCCCb     bCCCNbbN NbbbN", " CCC   CCC   N     N   CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN           NbbbN NbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CCC   CCC             CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN    N N    NbbbN NbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "      NNNbbbbbNNsNNbbbbbNNN      ",
-            "    ss   bCCCb     bCCCb   ss    ", "   s     N   N     N   N     s   ",
-            "   s                         s   ", "  N      N   N     N   N      N  ",
-            "  N      bCCCb     bCCCb      N  ", "  N     sbbbbbNNsNNbbbbbs     N  ",
-            "NbbbN NbbNCCCb     bCCCNbbN NbbbN", " CbC   CbC   N     N   CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbN           NbbbN NbbbN", " NNN   NNN             NNN   NNN ",
-            " NNN   NNN             NNN   NNN ", "  s     s               s     s  ",
-            " NNN   NNN             NNN   NNN ", " NNN   NNN             NNN   NNN ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CbC   CbC             CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "    ss   bCCCb     bCCCb   ss    ",
-            "         bCCCb     bCCCb         ", "  s      NCCCN     NCCCN      s  ",
-            "  s      NCCCN     NCCCN      s  ", "         NCCCN     NCCCN         ",
-            "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", " CCCCCCCCC   N     N   CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", " CCCCCCCCC             CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN    NbN    NbbbNNNbbbN", },
-        { "                                 ", "         N   N     N   N         ", "   s     N   N     N   N     s   ",
-            "  s      NCCCN     NCCCN      s  ", "                                 ",
-            "                                 ", "                                 ",
-            "         NCCCN     NCCCN         ", "         N   N     N   N         ",
-            " NNN   NN    N     N    NN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN     NbN     NNN   NNN ", },
-        { "                                 ", "                                 ", "   s                         s   ",
-            "  s      NCCCN     NCCCN      s  ", "                                 ",
-            "                                 ", "                                 ",
-            "         NCCCN     NCCCN         ", "                                 ",
-            "   N   N                 N   N   ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            "   N   N                 N   N   ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "   N   N                 N   N   ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            "   N   N       NbN       N   N   ", },
-        { "                                 ", "         N   N     N   N         ", "  N      N   N     N   N      N  ",
-            "         NCCCN     NCCCN         ", "                                 ",
-            "                                 ", "                                 ",
-            "         NCCCN     NCCCN         ", "         N   N     N   N         ",
-            " NNN   NN    N     N    NN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN     NbN     NNN   NNN ", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "  N      bCCCb     bCCCb      N  ",
-            "         bCCCb     bCCCb         ", "         NCCCN     NCCCN         ",
-            "         NCCCN     NCCCN         ", "         NCCCN     NCCCN         ",
-            "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", " CCCCCCCCC   N     N   CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", " CCCCCCCCC             CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN    NbN    NbbbNNNbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "  N     sbbbbbNNsNNbbbbbs     N  ",
-            "         bCCCb     bCCCb         ", "         N   N     N   N         ",
-            "                                 ", "         N   N     N   N         ",
-            "         bCCCb     bCCCb         ", "  s     sbbbbbNNsNNbbbbbs     s  ",
-            "NbbbN NbbNCCCb     bCCCNbbN NbbbN", " CbC   CbC   N     N   CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbN           NbbbN NbbbN", " NNN   NNN             NNN   NNN ",
-            " NNN   NNN             NNN   NNN ", "  s     s               s     s  ",
-            " NNN   NNN             NNN   NNN ", " NNN   NNN             NNN   NNN ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CbC   CbC             CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN", },
-        { " NNN   NNN   N     N   NNN   NNN ", "NbbbN NbbNCCCb     bCCCNbbN NbbbN", "NbbbN NbbNCCCb     bCCCNbbN NbbbN",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", " NNN   NNN   N     N   NNN   NNN ",
-            "   N   N                 N   N   ", " NNN   NNN   N     N   NNN   NNN ",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", "NbbbN NbbNCCCb     bCCCNbbN NbbbN",
-            "NNNN   NNNCCCb     bCCCNNN   NNNN", " CCC   CCC   N     N   CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN           NbbbN NbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CCC   CCC             CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN    NbN    NbbbN NbbbN", },
-        { "                                 ", " CCC   CCC   N     N   CCC   CCC ", " CbC   CbC   N     N   CbC   CbC ",
-            " CCCCCCCCC   N     N   CCCCCCCCC ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " CCCCCCCCC   N     N   CCCCCCCCC ", " CbC   CbC   N     N   CbC   CbC ",
-            " CCC   CCC   N     N   CCC   CCC ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN     NbN     NNN   NNN ", },
-        { "                                 ", " CCC   CCC             CCC   CCC ", " CbC   CbC             CbC   CbC ",
-            " CCCCCCCCC             CCCCCCCCC ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " CCCCCCCCC             CCCCCCCCC ", " CbC   CbC             CbC   CbC ",
-            " CCC   CCC             CCC   CCC ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N      NbN      N     N  ", },
-        { "                                 ", " CCC   CCC             CCC   CCC ", " CbC   CbC             CbC   CbC ",
-            " CCCCCCCCC             CCCCCCCCC ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " CCCCCCCCC             CCCCCCCCC ", " CbC   CbC             CbC   CbC ",
-            " CCC   CCC             CCC   CCC ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N      NbN      N     N  ", },
-        { " NNN   NNN             NNN   NNN ", "NbbbN NbbbN           NbbbN NbbbN", "NbbbN NbbbN           NbbbN NbbbN",
-            "NbbbNNNbbbN           NbbbNNNbbbN", " NNN   NNN             NNN   NNN ",
-            "   N   N                 N   N   ", " NNN   NNN             NNN   NNN ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", "NbbbN NbbbN           NbbbN NbbbN",
-            "NbbbN NbbbN           NbbbN NbbbN", " NNN   NNN             NNN   NNN ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N     NsNsN     N     N  ", },
-        { "                                 ", "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N    NbbbbbN    N     N  ", },
-        { "                                 ", "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                N                ",
-            " NsNNNNNsNNNNsbbbbbsNNNNsNNNNNsN ", },
-        { "                                 ", "                                 ", "  s     s               s     s  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "  s     s               s     s  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                ~                ", "               NNN               ",
-            "  NbbbbbNbbbbNbbbbbNbbbbNbbbbbN  ", },
-        { "                                 ", "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                N                ",
-            " NsNNNNNsNNNNsbbbbbsNNNNsNNNNNsN ", },
-        { "                                 ", "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "  N     N               N     N  ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N    NbbbbbN    N     N  ", },
-        { " NNN   NNN             NNN   NNN ", "NbbbN NbbbN           NbbbN NbbbN", "NbbbN NbbbN           NbbbN NbbbN",
-            "NbbbNNNbbbN           NbbbNNNbbbN", " NNN   NNN             NNN   NNN ",
-            "   N   N                 N   N   ", " NNN   NNN             NNN   NNN ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", "NbbbN NbbbN           NbbbN NbbbN",
-            "NbbbN NbbbN           NbbbN NbbbN", " NNN   NNN             NNN   NNN ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N     NsNsN     N     N  ", },
-        { "                                 ", " CCC   CCC             CCC   CCC ", " CbC   CbC             CbC   CbC ",
-            " CCCCCCCCC             CCCCCCCCC ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " CCCCCCCCC             CCCCCCCCC ", " CbC   CbC             CbC   CbC ",
-            " CCC   CCC             CCC   CCC ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N      NbN      N     N  ", },
-        { "                                 ", " CCC   CCC             CCC   CCC ", " CbC   CbC             CbC   CbC ",
-            " CCCCCCCCC             CCCCCCCCC ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " CCCCCCCCC             CCCCCCCCC ", " CbC   CbC             CbC   CbC ",
-            " CCC   CCC             CCC   CCC ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "  N     N      NbN      N     N  ", },
-        { "                                 ", " CCC   CCC   N     N   CCC   CCC ", " CbC   CbC   N     N   CbC   CbC ",
-            " CCCCCCCCC   N     N   CCCCCCCCC ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " CCCCCCCCC   N     N   CCCCCCCCC ", " CbC   CbC   N     N   CbC   CbC ",
-            " CCC   CCC   N     N   CCC   CCC ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN     NbN     NNN   NNN ", },
-        { " NNN   NNN   N     N   NNN   NNN ", "NbbbN NbbNCCCb     bCCCNbbN NbbbN", "NbbbN NbbNCCCb     bCCCNbbN NbbbN",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", " NNN   NNN   N     N   NNN   NNN ",
-            "   N   N                 N   N   ", " NNN   NNN   N     N   NNN   NNN ",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", "NbbbN NbbNCCCb     bCCCNbbN NbbbN",
-            "NNNN   NNNCCCb     bCCCNNN   NNNN", " CCC   CCC   N     N   CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN           NbbbN NbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CCC   CCC             CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN    NbN    NbbbN NbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "  N     sbbbbbNNsNNbbbbbs     N  ",
-            "         bCCCb     bCCCb         ", "         N   N     N   N         ",
-            "                                 ", "         N   N     N   N         ",
-            "         bCCCb     bCCCb         ", "  s     sbbbbbNNsNNbbbbbs     s  ",
-            "NbbbN NbbNCCCb     bCCCNbbN NbbbN", " CbC   CbC   N     N   CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbN           NbbbN NbbbN", " NNN   NNN             NNN   NNN ",
-            " NNN   NNN             NNN   NNN ", "  s     s               s     s  ",
-            " NNN   NNN             NNN   NNN ", " NNN   NNN             NNN   NNN ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CbC   CbC             CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "  N      bCCCb     bCCCb      N  ",
-            "         bCCCb     bCCCb         ", "         NCCCN     NCCCN         ",
-            "         NCCCN     NCCCN         ", "         NCCCN     NCCCN         ",
-            "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", " CCCCCCCCC   N     N   CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", " CCCCCCCCC             CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN    NbN    NbbbNNNbbbN", },
-        { "                                 ", "         N   N     N   N         ", "  N      N   N     N   N      N  ",
-            "         NCCCN     NCCCN         ", "                                 ",
-            "                                 ", "                                 ",
-            "         NCCCN     NCCCN         ", "         N   N     N   N         ",
-            " NNN   NN    N     N    NN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN     NbN     NNN   NNN ", },
-        { "                                 ", "                                 ", "   s                         s   ",
-            "  s      NCCCN     NCCCN      s  ", "                                 ",
-            "                                 ", "                                 ",
-            "         NCCCN     NCCCN         ", "                                 ",
-            "   N   N                 N   N   ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            "   N   N                 N   N   ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            "   N   N                 N   N   ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            "   N   N       NbN       N   N   ", },
-        { "                                 ", "         N   N     N   N         ", "   s     N   N     N   N     s   ",
-            "  s      NCCCN     NCCCN      s  ", "                                 ",
-            "                                 ", "                                 ",
-            "         NCCCN     NCCCN         ", "         N   N     N   N         ",
-            " NNN   NN    N     N    NN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "   C   C                 C   C   ",
-            "   C   C                 C   C   ", "   C   C                 C   C   ",
-            " NNN   NNN     NbN     NNN   NNN ", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "    ss   bCCCb     bCCCb   ss    ",
-            "         bCCCb     bCCCb         ", "  s      NCCCN     NCCCN      s  ",
-            "  s      NCCCN     NCCCN      s  ", "         NCCCN     NCCCN         ",
-            "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "NbbbNNNbbNCCCb     bCCCNbbNNNbbbN", " CCCCCCCCC   N     N   CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbNNNbbbN           NbbbNNNbbbN", " CCCCCCCCC             CCCCCCCCC ",
-            " CCCCCCCCC             CCCCCCCCC ", " CCCCCCCCC             CCCCCCCCC ",
-            "NbbbNNNbbbN    NbN    NbbbNNNbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "      NNNbbbbbNNsNNbbbbbNNN      ",
-            "    ss   bCCCb     bCCCb   ss    ", "   s     N   N     N   N     s   ",
-            "   s                         s   ", "  N      N   N     N   N      N  ",
-            "  N      bCCCb     bCCCb      N  ", "  N     sbbbbbNNsNNbbbbbs     N  ",
-            "NbbbN NbbNCCCb     bCCCNbbN NbbbN", " CbC   CbC   N     N   CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbN           NbbbN NbbbN", " NNN   NNN             NNN   NNN ",
-            " NNN   NNN             NNN   NNN ", "  s     s               s     s  ",
-            " NNN   NNN             NNN   NNN ", " NNN   NNN             NNN   NNN ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CbC   CbC             CbC   CbC ",
-            " CbC   CbC             CbC   CbC ", " CbC   CbC             CbC   CbC ",
-            "NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN", },
-        { "         N   N     N   N         ", "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "         bCCCb     bCCCb         ", "         N   N     N   N         ",
-            "                                 ", "         N   N     N   N         ",
-            "         bCCCb     bCCCb         ", "         bCCCb     bCCCb         ",
-            "NbbbN NbbNCCCb     bCCCNbbN NbbbN", " CCC   CCC   N     N   CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN           NbbbN NbbbN", "  N     N               N     N  ",
-            "  N     N               N     N  ", "                                 ",
-            "  N     N               N     N  ", "  N     N               N     N  ",
-            "NbbbN NbbbN           NbbbN NbbbN", " CCC   CCC             CCC   CCC ",
-            " CCC   CCC             CCC   CCC ", " CCC   CCC             CCC   CCC ",
-            "NbbbN NbbbN    N N    NbbbN NbbbN", },
-        { "                                 ", "         N   N     N   N         ", "         N   N     N   N         ",
-            "         N   N     N   N         ", "                                 ",
-            "                                 ", "                                 ",
-            "         N   N     N   N         ", "         N   N     N   N         ",
-            " NNN   NNN   N     N   NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", "                                 ",
-            "                                 ", "                                 ",
-            " NNN   NNN             NNN   NNN ", } };
-
-    private static final int BRONZE_PLATED_BRICKS_INDEX = 10;
-    private static final int FIREBRICK_METAID = 15;
-    private boolean isMultiChunkloaded = true;
-    protected static final String STRUCTURE_PIECE_MAIN = "main";
-    private static IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> STRUCTURE_DEFINITION = null;
-
+    // region Class Constructor
     public GT_TileEntity_MegaBrickedBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.HOLEFISH);
@@ -556,83 +79,52 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 0;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 0;
-    }
-
-    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_TileEntity_MegaBrickedBlastFurnace(mName);
     }
+    // endregion
 
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_MegaBrickedBlastFurnace_MachineType)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_Controller)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_00)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_01)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_02)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_03)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_04)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_05)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_06)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_07)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_08)
-            .addInfo(TextLocalization.Tooltip_MegaBrickedBlastFurnace_09)
-            .addPollutionAmount(getPollutionPerSecond(null))
-            .addInfo(TextEnums.tr("Tooltip_Channel_Helper"))
-            .addStructureInfo(TextLocalization.textMegaBrickedBlastFurnaceTips)
-            .addInputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
-            .addOutputBus(TextLocalization.textMegaBrickedBlastFurnaceLocation, 1)
-            .toolTipFinisher();
-        return tt;
-    }
+    // region Structure
+    // spotless:off
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final String[][] structure_string = new String[][]{
+        {"                                 ","         N   N     N   N         ","         N   N     N   N         ","         N   N     N   N         ","                                 ","                                 ","                                 ","         N   N     N   N         ","         N   N     N   N         "," NNN   NNN   N     N   NNN   NNN ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 "," NNN   NNN   N     N   NNN   NNN ","         N   N     N   N         ","         N   N     N   N         ","                                 ","                                 ","                                 ","         N   N     N   N         ","         N   N     N   N         ","         N   N     N   N         ","                                 "},
+        {"         N   N     N   N         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         N   N     N   N         ","                                 ","         N   N     N   N         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","NbbbN NbbNCCCb     bCCCNbbN NbbbN"," CCC   CCC   N     N   CCC   CCC "," CCC   CCC             CCC   CCC "," CCC   CCC             CCC   CCC ","NbbbN NbbbN           NbbbN NbbbN","                                 ","                                 ","                                 ","                                 ","                                 ","NbbbN NbbbN           NbbbN NbbbN"," CCC   CCC             CCC   CCC "," CCC   CCC             CCC   CCC "," CCC   CCC   N     N   CCC   CCC ","NbbbN NbbNCCCb     bCCCNbbN NbbbN","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         N   N     N   N         ","                                 ","         N   N     N   N         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         N   N     N   N         "},
+        {"         N   N     N   N         ","         bCCCb     bCCCb         ","      NNNbbbbbNNsNNbbbbbNNN      ","    ss   bCCCb     bCCCb   ss    ","   s     N   N     N   N     s   ","   s                         s   ","  N      N   N     N   N      N  ","  N      bCCCb     bCCCb      N  ","  N     sbbbbbNNsNNbbbbbs     N  ","NbbbN NbbNCCCb     bCCCNbbN NbbbN"," CbC   CbC   N     N   CbC   CbC "," CbC   CbC             CbC   CbC "," CbC   CbC             CbC   CbC ","NbbbN NbbbN           NbbbN NbbbN","  N     N               N     N  ","  N     N               N     N  ","  s     s               s     s  ","  N     N               N     N  ","  N     N               N     N  ","NbbbN NbbbN           NbbbN NbbbN"," CbC   CbC             CbC   CbC "," CbC   CbC             CbC   CbC "," CbC   CbC   N     N   CbC   CbC ","NbbbN NbbNCCCb     bCCCNbbN NbbbN","  N     sbbbbbNNsNNbbbbbs     N  ","  N      bCCCb     bCCCb      N  ","  N      N   N     N   N      N  ","   s                         s   ","   s     N   N     N   N     s   ","    ss   bCCCb     bCCCb   ss    ","      NNNbbbbbNNsNNbbbbbNNN      ","         bCCCb     bCCCb         ","         N   N     N   N         "},
+        {"         N   N     N   N         ","         bCCCb     bCCCb         ","    ss   bCCCb     bCCCb   ss    ","         bCCCb     bCCCb         ","  s      NCCCN     NCCCN      s  ","  s      NCCCN     NCCCN      s  ","         NCCCN     NCCCN         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN"," CCCCCCCCC   N     N   CCCCCCCCC "," CCCCCCCCC             CCCCCCCCC "," CCCCCCCCC             CCCCCCCCC ","NbbbNNNbbbN           NbbbNNNbbbN","                                 ","                                 ","                                 ","                                 ","                                 ","NbbbNNNbbbN           NbbbNNNbbbN"," CCCCCCCCC             CCCCCCCCC "," CCCCCCCCC             CCCCCCCCC "," CCCCCCCCC   N     N   CCCCCCCCC ","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         NCCCN     NCCCN         ","  s      NCCCN     NCCCN      s  ","  s      NCCCN     NCCCN      s  ","         bCCCb     bCCCb         ","    ss   bCCCb     bCCCb   ss    ","         bCCCb     bCCCb         ","         N   N     N   N         "},
+        {"                                 ","         N   N     N   N         ","   s     N   N     N   N     s   ","  s      NCCCN     NCCCN      s  ","                                 ","                                 ","                                 ","         NCCCN     NCCCN         ","         N   N     N   N         "," NNN   NNN   N     N   NNN   NNN ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," NNN   NNN   N     N   NNN   NNN ","         N   N     N   N         ","         NCCCN     NCCCN         ","                                 ","                                 ","                                 ","  s      NCCCN     NCCCN      s  ","   s     N   N     N   N     s   ","         N   N     N   N         ","                                 "},
+        {"                                 ","                                 ","   s                         s   ","  s      NCCCN     NCCCN      s  ","                                 ","                                 ","                                 ","         NCCCN     NCCCN         ","                                 ","   N   N                 N   N   ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   ","   N   N                 N   N   ","                                 ","                                 ","                                 ","                                 ","                                 ","   N   N                 N   N   ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   ","   N   N                 N   N   ","                                 ","         NCCCN     NCCCN         ","                                 ","                                 ","                                 ","  s      NCCCN     NCCCN      s  ","   s                         s   ","                                 ","                                 "},
+        {"                                 ","         N   N     N   N         ","  N      N   N     N   N      N  ","         NCCCN     NCCCN         ","                                 ","                                 ","                                 ","         NCCCN     NCCCN         ","         N   N     N   N         "," NNN   NNN   N     N   NNN   NNN ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," NNN   NNN   N     N   NNN   NNN ","         N   N     N   N         ","         NCCCN     NCCCN         ","                                 ","                                 ","                                 ","         NCCCN     NCCCN         ","  N      N   N     N   N      N  ","         N   N     N   N         ","                                 "},
+        {"         N   N     N   N         ","         bCCCb     bCCCb         ","  N      bCCCb     bCCCb      N  ","         bCCCb     bCCCb         ","         NCCCN     NCCCN         ","         NCCCN     NCCCN         ","         NCCCN     NCCCN         ","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN"," CCCCCCCCC   N     N   CCCCCCCCC "," CCCCCCCCC             CCCCCCCCC "," CCCCCCCCC             CCCCCCCCC ","NbbbNNNbbbN           NbbbNNNbbbN","                                 ","                                 ","                                 ","                                 ","                                 ","NbbbNNNbbbN           NbbbNNNbbbN"," CCCCCCCCC             CCCCCCCCC "," CCCCCCCCC             CCCCCCCCC "," CCCCCCCCC   N     N   CCCCCCCCC ","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN","         bCCCb     bCCCb         ","         bCCCb     bCCCb         ","         NCCCN     NCCCN         ","         NCCCN     NCCCN         ","         NCCCN     NCCCN         ","         bCCCb     bCCCb         ","  N      bCCCb     bCCCb      N  ","         bCCCb     bCCCb         ","         N   N     N   N         "},
+        {"         N   N     N   N         ","         bCCCb     bCCCb         ","  N     sbbbbbNNsNNbbbbbs     N  ","         bCCCb     bCCCb         ","         N   N     N   N         ","                                 ","         N   N     N   N         ","         bCCCb     bCCCb         ","  s     sbbbbbNNsNNbbbbbs     s  ","NbbbN NbbNCCCb     bCCCNbbN NbbbN"," CbC   CbC   N     N   CbC   CbC "," CbC   CbC             CbC   CbC "," CbC   CbC             CbC   CbC ","NbbbN NbbbN           NbbbN NbbbN","  N     N               N     N  ","  N     N               N     N  ","  s     s               s     s  ","  N     N               N     N  ","  N     N               N     N  ","NbbbN NbbbN           NbbbN NbbbN"," CbC   CbC             CbC   CbC "," CbC   CbC             CbC   CbC "," CbC   CbC   N     N   CbC   CbC ","NbbbN NbbNCCCb     bCCCNbbN NbbbN","  s     sbbbbbNNsNNbbbbbs     s  ","         bCCCb     bCCCb         ","         N   N     N   N         ","                                 ","         N   N     N   N         ","         bCCCb     bCCCb         ","  N     sbbbbbNNsNNbbbbbs     N  ","         bCCCb     bCCCb         ","         N   N     N   N         "},
+        {" NNN   NNN   N     N   NNN   NNN ","NbbbN NbbNCCCb     bCCCNbbN NbbbN","NbbbN NbbNCCCb     bCCCNbbN NbbbN","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN"," NNN   NN    N     N    NN   NNN ","   N   N                 N   N   "," NNN   NN    N     N    NN   NNN ","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN","NbbbN NbbNCCCb     bCCCNbbN NbbbN","NNNN   NNNCCCb     bCCCNNN   NNNN"," CCC   CCC   N     N   CCC   CCC "," CCC   CCC             CCC   CCC "," CCC   CCC             CCC   CCC ","NbbbN NbbbN           NbbbN NbbbN","                                 ","                                 ","                                 ","                                 ","                                 ","NbbbN NbbbN           NbbbN NbbbN"," CCC   CCC             CCC   CCC "," CCC   CCC             CCC   CCC "," CCC   CCC   N     N   CCC   CCC ","NNNN   NNNCCCb     bCCCNNN   NNNN","NbbbN NbbNCCCb     bCCCNbbN NbbbN","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN"," NNN   NN    N     N    NN   NNN ","   N   N                 N   N   "," NNN   NN    N     N    NN   NNN ","NbbbNNNbbNCCCb     bCCCNbbNNNbbbN","NbbbN NbbNCCCb     bCCCNbbN NbbbN","NbbbN NbbNCCCb     bCCCNbbN NbbbN"," NNN   NNN   N     N   NNN   NNN "},
+        {"                                 "," CCC   CCC   N     N   CCC   CCC "," CbC   CbC   N     N   CbC   CbC "," CCCCCCCCC   N     N   CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC   N     N   CCCCCCCCC "," CbC   CbC   N     N   CbC   CbC "," CCC   CCC   N     N   CCC   CCC ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 "," CCC   CCC   N     N   CCC   CCC "," CbC   CbC   N     N   CbC   CbC "," CCCCCCCCC   N     N   CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC   N     N   CCCCCCCCC "," CbC   CbC   N     N   CbC   CbC "," CCC   CCC   N     N   CCC   CCC ","                                 "},
+        {"                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 "},
+        {"                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 "},
+        {" NNN   NNN             NNN   NNN ","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbNNNbbbN           NbbbNNNbbbN"," NNN   NNN             NNN   NNN ","   N   N                 N   N   "," NNN   NNN             NNN   NNN ","NbbbNNNbbbN           NbbbNNNbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN"," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbNNNbbbN           NbbbNNNbbbN"," NNN   NNN             NNN   NNN ","   N   N                 N   N   "," NNN   NNN             NNN   NNN ","NbbbNNNbbbN           NbbbNNNbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN"," NNN   NNN             NNN   NNN "},
+        {"                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 "},
+        {"                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 "},
+        {"                                 ","                                 ","  s     s               s     s  ","                                 ","                                 ","                                 ","                                 ","                                 ","  s     s               s     s  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  s     s               s     s  ","                                 ","                                 ","                                 ","                                 ","                                 ","  s     s               s     s  ","                                 ","                                 "},
+        {"                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 "},
+        {"                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 ","                                 ","                                 ","  N     N               N     N  "," NNN   NNN             NNN   NNN ","  N     N               N     N  ","                                 "},
+        {" NNN   NNN             NNN   NNN ","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbNNNbbbN           NbbbNNNbbbN"," NNN   NNN             NNN   NNN ","   N   N                 N   N   "," NNN   NNN             NNN   NNN ","NbbbNNNbbbN           NbbbNNNbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN"," NNN   NNN             NNN   NNN ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," NNN   NNN             NNN   NNN ","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbNNNbbbN           NbbbNNNbbbN"," NNN   NNN             NNN   NNN ","   N   N                 N   N   "," NNN   NNN             NNN   NNN ","NbbbNNNbbbN           NbbbNNNbbbN","NbbbN NbbbN           NbbbN NbbbN","NbbbN NbbbN           NbbbN NbbbN"," NNN   NNN             NNN   NNN "},
+        {"                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 "},
+        {"                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                ~                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 "},
+        {"                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 ","                                 ","                                 ","                                 ","                                 ","                N                ","               NNN               ","                N                ","                                 ","                                 ","                                 ","                                 ","                                 "," CCC   CCC             CCC   CCC "," CbC   CbC             CbC   CbC "," CCCCCCCCC             CCCCCCCCC ","   C   C                 C   C   ","   C   C                 C   C   ","   C   C                 C   C   "," CCCCCCCCC             CCCCCCCCC "," CbC   CbC             CbC   CbC "," CCC   CCC             CCC   CCC ","                                 "},
+        {" NNN   NNN             NNN   NNN ","NbbbN NbbbN    N N    NbbbN NbbbN","NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN","NbbbNNNbbbN    NbN    NbbbNNNbbbN"," NNN   NNN     NbN     NNN   NNN ","   N   N       NbN       N   N   "," NNN   NNN     NbN     NNN   NNN ","NbbbNNNbbbN    NbN    NbbbNNNbbbN","NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN","NbbbN NbbbN    NbN    NbbbN NbbbN"," NNN   NNN     NbN     NNN   NNN ","  N     N      NbN      N     N  ","  N     N      NbN      N     N  ","  N     N     NsNsN     N     N  ","  N     N    NbbbbbN    N     N  "," NsNNNNNsNNNNsbbbbbsNNNNsNNNNNsN ","  NbbbbbNbbbbNbbbbbNbbbbNbbbbbN  "," NsNNNNNsNNNNsbbbbbsNNNNsNNNNNsN ","  N     N    NbbbbbN    N     N  ","  N     N     NsNsN     N     N  ","  N     N      NbN      N     N  ","  N     N      NbN      N     N  "," NNN   NNN     NbN     NNN   NNN ","NbbbN NbbbN    NbN    NbbbN NbbbN","NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN","NbbbNNNbbbN    NbN    NbbbNNNbbbN"," NNN   NNN     NbN     NNN   NNN ","   N   N       NbN       N   N   "," NNN   NNN     NbN     NNN   NNN ","NbbbNNNbbbN    NbN    NbbbNNNbbbN","NbbbN NbbbNNNNNsNsNNNNNbbbN NbbbN","NbbbN NbbbN    N N    NbbbN NbbbN"," NNN   NNN             NNN   NNN "}
+    };
+    // spotless:on
 
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        usePrimitiveRecipes = !usePrimitiveRecipes;
-        GTUtility.sendChatTrans(
-            aPlayer,
-            usePrimitiveRecipes ? "Now Bricked DTPF accepts primitive blast furnace recipes"
-                : "Now Bricked DTPF only accepts iron/wrought iron and charcoal");
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        if (side == aFacing) {
-            return aActive ? FACING_ACTIVE : FACING_FRONT;
-        }
-        return FACING_SIDE;
-    }
-
-    @Override
-    public int getPollutionPerSecond(ItemStack aStack) {
-        return 30000;
-    }
+    private static final int BRONZE_PLATED_BRICKS_INDEX = 10;
+    private static final int FIREBRICK_METAID = 15;
+    protected static final String STRUCTURE_PIECE_MAIN = "main";
+    private static IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> STRUCTURE_DEFINITION = null;
 
     @Override
     public IStructureDefinition<GT_TileEntity_MegaBrickedBlastFurnace> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_MegaBrickedBlastFurnace>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, structure_string)
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(structure_string))
                 .addElement(
                     'C',
                     ofVariableBlock(
@@ -656,115 +148,99 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return STRUCTURE_DEFINITION;
     }
 
-    private GTRecipe findRecipe(ArrayList<ItemStack> inputList) {
-        RecipeMap<RecipeMapBackend> primitiveBlastRecipes = RecipeMaps.primitiveBlastRecipes;
-        ItemStack[] inputArr = inputList.toArray(new ItemStack[inputList.size()]);
-        return primitiveBlastRecipes.findRecipeQuery()
-            .items(inputArr)
-            .find();
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 16, 21, 16);
     }
 
-    /*
-     * calculate parallelism, material/fuel ratio
-     * if there're multiple materials, use that of the largest amount
-     */
-    static MaterialConsumption calculateMaterialConsumption(GTRecipe recipe, List<ItemStack> inputList) {
-        // merge stacks
-        MaterialConsumption result = new MaterialConsumption();
-        Map<TST_ItemID, Integer> itemCountInput = new HashMap<>();
-        Map<TST_ItemID, Integer> recipeItems = new HashMap<>();
-
-        int recipefuelAmount = 0;
-        TST_ItemID fuelItem = null;
-        for (ItemStack ingredient : recipe.mInputs) {
-            if (ingredient != null) {
-                TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
-                recipeItems.put(itemWithDamage, ingredient.stackSize);
-                if (fuels.contains(itemWithDamage)) {
-                    recipefuelAmount = ingredient.stackSize;
-                    fuelItem = itemWithDamage;
-                }
-            }
-        }
-
-        for (ItemStack ingredient : recipe.mInputs) {
-            if (ingredient != null) {
-                TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
-                if (!fuels.contains(itemWithDamage)) {
-                    result.originalRatio.put(itemWithDamage, ingredient.stackSize / (double) recipefuelAmount);
-                }
-            }
-        }
-
-        for (ItemStack itemStack : inputList) {
-            TST_ItemID itemWithDamage = TST_ItemID.create(itemStack);
-            itemCountInput.merge(itemWithDamage, itemStack.stackSize, Integer::sum);
-        }
-
-        // get parallelism
-        int fuelAmount = itemCountInput.get(fuelItem);
-        int parallelism = Integer.MAX_VALUE;
-        for (TST_ItemID item : recipeItems.keySet()) {
-            if (item != null) {
-                parallelism = Math.min(itemCountInput.get(item) / recipeItems.get(item), parallelism);
-                if (!fuels.contains(item)) {
-                    result.actualRatio.put(item, itemCountInput.get(item) / (double) fuelAmount);
-                }
-            }
-        }
-        result.parallelism = parallelism;
-        ItemStack fuelToBeConsumed = ItemStack.copyItemStack(fuelItem.getItemStack());
-        fuelToBeConsumed.stackSize = fuelAmount;
-        result.fuelToBeConsumed = fuelToBeConsumed;
-        for (ItemStack ingredient : recipe.mInputs) {
-            if (ingredient != null) {
-                TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
-                if (!fuels.contains(itemWithDamage)) {
-                    ItemStack newstack = ItemStack.copyItemStack(ingredient);
-                    newstack.stackSize = parallelism * newstack.stackSize;
-                    result.materialToBeConsumed.add(newstack);
-                }
-            }
-        }
-        return result;
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 16, 21, 16, elementBudget, env, false, true);
     }
 
-    public ItemStack[] getPrimitiveOutputs(GTRecipe recipe, int parallelism) {
-        List<ItemStack> result = new ArrayList<>();
-        for (ItemStack output : recipe.mOutputs) {
-            if (output != null) {
-                int count = output.stackSize * parallelism;
-                ItemStack copy = output.copy();
-                copy.stackSize = count;
-                result.add(copy);
-            }
-        }
-        return result.toArray(new ItemStack[0]);
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        // Check the main structure
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16, errors)) return;
+        // Item input bus check.
+        checkHatchMax(errors, InputBus, max_input_bus);
+        // Item output bus check.
+        checkHatchMax(errors, OutputBus, max_output_bus);
+    }
+    // endregion
+
+    // region Processing Logic
+    // 3600 seconds in an hour, 8 hours, 20 ticks in a second.
+    private static final double max_efficiency_time_in_ticks = 3600d * 8d * 20d;
+
+    private static final double maximum_fuelEfficiency = 8d;
+
+    // Current efficiency
+    private double fuelEfficiency = 1;
+
+    private long running_time = 0;
+
+    // coke coal
+    private static ItemStack cokeCoal;
+
+    private static ItemStack cokeCoalBlock;
+    private boolean usePrimitiveRecipes = false;
+
+    // needed to calculate fuel/material ratio
+    private static Set<TST_ItemID> fuels;
+
+    private static Set<TST_ItemID> fuelBlocks;
+
+    // irons
+    private static ItemStack iron;
+
+    private static ItemStack wroughtIron;
+
+    // steel
+    private static ItemStack steel;
+
+    // ash
+    private static ItemStack ash;
+
+    private static final int max_input_bus = 6;
+    private static final int max_output_bus = 6;
+    private boolean isMultiChunkloaded = true;
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
-    public void consumePrimitiveInput(MaterialConsumption materialConsumption, List<ItemStack> inputList) {
-        for (int i = 0; i < inputList.size(); i++) {
-            ItemStack input = inputList.get(i);
-            if (input != null) {
-                if (input.getItem() == materialConsumption.fuelToBeConsumed.getItem()
-                    && input.getItemDamage() == materialConsumption.fuelToBeConsumed.getItemDamage()) {
-                    input.stackSize = 0;
-                }
-            }
-        }
-        for (ItemStack toBeConsumed : materialConsumption.materialToBeConsumed) {
-            int consumeSize = toBeConsumed.stackSize;
-            while (consumeSize > 0) {
-                for (int i = 0; i < inputList.size(); i++) {
-                    ItemStack input = inputList.get(i);
-                    if (input != null && GTUtility.areStacksEqual(input, toBeConsumed, false)) {
-                        int consumeThisTime = Math.min(input.stackSize, consumeSize);
-                        input.stackSize -= consumeThisTime;
-                        consumeSize -= consumeThisTime;
-                    }
-                }
-            }
-        }
+    @Override
+    public int getMaxParallelRecipes() {
+        return 0;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 0;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    public int getPollutionPerSecond(ItemStack aStack) {
+        return 30000;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
     }
 
     @Override
@@ -885,6 +361,166 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         }
     }
 
+    public static void initStatics() {
+        cokeCoal = GTModHandler.getModItem("Railcraft", "fuel.coke", 1);
+        if (cokeCoal == null) cokeCoal = Materials.Coal.getGems(1);
+        cokeCoalBlock = GTModHandler.getModItem("Railcraft", "cube", 1);
+        if (cokeCoalBlock == null) cokeCoalBlock = Materials.Coal.getBlocks(1);
+
+        ItemStack charCoal = Materials.Charcoal.getGems(1);
+        ItemStack charCoalBlock = Materials.Charcoal.getBlocks(1);
+        ItemStack gemCoal = Materials.Coal.getGems(1);
+        ItemStack dustCoal = Materials.Coal.getDust(1);
+        ItemStack blockCoal = Materials.Coal.getBlocks(1);
+        ItemStack dustCharCoal = Materials.Charcoal.getDust(1);
+        ItemStack cactusCoke = GTModHandler.getModItem("miscutils", "itemCactusCoke", 1);
+        ItemStack cactusCharCoal = GTModHandler.getModItem("miscutils", "itemCactusCharcoal", 1);
+        ItemStack sugarCharCoal = GTModHandler.getModItem("miscutils", "itemSugarCharcoal", 1);
+        ItemStack sugarCoke = GTModHandler.getModItem("miscutils", "itemSugarCoke", 1);
+
+        fuels = Sets.newHashSet(
+            TST_ItemID.create(charCoal),
+            TST_ItemID.create(charCoalBlock),
+            TST_ItemID.create(cokeCoal),
+            TST_ItemID.create(cokeCoalBlock),
+            TST_ItemID.create(blockCoal),
+            TST_ItemID.create(gemCoal),
+            TST_ItemID.create(dustCoal),
+            TST_ItemID.create(dustCharCoal),
+            TST_ItemID.create(cactusCoke),
+            TST_ItemID.create(cactusCharCoal),
+            TST_ItemID.create(sugarCharCoal),
+            TST_ItemID.create(sugarCoke));
+
+        fuelBlocks = Sets.newHashSet(TST_ItemID.create(charCoalBlock), TST_ItemID.create(cokeCoalBlock));
+
+        iron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Iron, 1L);
+        wroughtIron = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.WroughtIron, 1L);
+        steel = GTOreDictUnificator.get(OrePrefixes.ingot, Materials.Steel, 1L);
+        ash = GTOreDictUnificator.get(OrePrefixes.dust, Materials.Ash, 1L);
+    }
+
+    @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
+        usePrimitiveRecipes = !usePrimitiveRecipes;
+        GTUtility.sendChatTrans(
+            aPlayer,
+            usePrimitiveRecipes ? "Now Bricked DTPF accepts primitive blast furnace recipes"
+                : "Now Bricked DTPF only accepts iron/wrought iron and charcoal");
+    }
+
+    private GTRecipe findRecipe(ArrayList<ItemStack> inputList) {
+        RecipeMap<RecipeMapBackend> primitiveBlastRecipes = RecipeMaps.primitiveBlastRecipes;
+        ItemStack[] inputArr = inputList.toArray(new ItemStack[inputList.size()]);
+        return primitiveBlastRecipes.findRecipeQuery()
+            .items(inputArr)
+            .find();
+    }
+
+    /*
+     * calculate parallelism, material/fuel ratio
+     * if there're multiple materials, use that of the largest amount
+     */
+    static MaterialConsumption calculateMaterialConsumption(GTRecipe recipe, List<ItemStack> inputList) {
+        // merge stacks
+        MaterialConsumption result = new MaterialConsumption();
+        Map<TST_ItemID, Integer> itemCountInput = new HashMap<>();
+        Map<TST_ItemID, Integer> recipeItems = new HashMap<>();
+
+        int recipefuelAmount = 0;
+        TST_ItemID fuelItem = null;
+        for (ItemStack ingredient : recipe.mInputs) {
+            if (ingredient != null) {
+                TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
+                recipeItems.put(itemWithDamage, ingredient.stackSize);
+                if (fuels.contains(itemWithDamage)) {
+                    recipefuelAmount = ingredient.stackSize;
+                    fuelItem = itemWithDamage;
+                }
+            }
+        }
+
+        for (ItemStack ingredient : recipe.mInputs) {
+            if (ingredient != null) {
+                TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
+                if (!fuels.contains(itemWithDamage)) {
+                    result.originalRatio.put(itemWithDamage, ingredient.stackSize / (double) recipefuelAmount);
+                }
+            }
+        }
+
+        for (ItemStack itemStack : inputList) {
+            TST_ItemID itemWithDamage = TST_ItemID.create(itemStack);
+            itemCountInput.merge(itemWithDamage, itemStack.stackSize, Integer::sum);
+        }
+
+        // get parallelism
+        int fuelAmount = itemCountInput.get(fuelItem);
+        int parallelism = Integer.MAX_VALUE;
+        for (TST_ItemID item : recipeItems.keySet()) {
+            if (item != null) {
+                parallelism = Math.min(itemCountInput.get(item) / recipeItems.get(item), parallelism);
+                if (!fuels.contains(item)) {
+                    result.actualRatio.put(item, itemCountInput.get(item) / (double) fuelAmount);
+                }
+            }
+        }
+        result.parallelism = parallelism;
+        ItemStack fuelToBeConsumed = ItemStack.copyItemStack(fuelItem.getItemStack());
+        fuelToBeConsumed.stackSize = fuelAmount;
+        result.fuelToBeConsumed = fuelToBeConsumed;
+        for (ItemStack ingredient : recipe.mInputs) {
+            if (ingredient != null) {
+                TST_ItemID itemWithDamage = TST_ItemID.create(ingredient);
+                if (!fuels.contains(itemWithDamage)) {
+                    ItemStack newstack = ItemStack.copyItemStack(ingredient);
+                    newstack.stackSize = parallelism * newstack.stackSize;
+                    result.materialToBeConsumed.add(newstack);
+                }
+            }
+        }
+        return result;
+    }
+
+    public ItemStack[] getPrimitiveOutputs(GTRecipe recipe, int parallelism) {
+        List<ItemStack> result = new ArrayList<>();
+        for (ItemStack output : recipe.mOutputs) {
+            if (output != null) {
+                int count = output.stackSize * parallelism;
+                ItemStack copy = output.copy();
+                copy.stackSize = count;
+                result.add(copy);
+            }
+        }
+        return result.toArray(new ItemStack[0]);
+    }
+
+    public void consumePrimitiveInput(MaterialConsumption materialConsumption, List<ItemStack> inputList) {
+        for (int i = 0; i < inputList.size(); i++) {
+            ItemStack input = inputList.get(i);
+            if (input != null) {
+                if (input.getItem() == materialConsumption.fuelToBeConsumed.getItem()
+                    && input.getItemDamage() == materialConsumption.fuelToBeConsumed.getItemDamage()) {
+                    input.stackSize = 0;
+                }
+            }
+        }
+        for (ItemStack toBeConsumed : materialConsumption.materialToBeConsumed) {
+            int consumeSize = toBeConsumed.stackSize;
+            while (consumeSize > 0) {
+                for (int i = 0; i < inputList.size(); i++) {
+                    ItemStack input = inputList.get(i);
+                    if (input != null && GTUtility.areStacksEqual(input, toBeConsumed, false)) {
+                        int consumeThisTime = Math.min(input.stackSize, consumeSize);
+                        input.stackSize -= consumeThisTime;
+                        consumeSize -= consumeThisTime;
+                    }
+                }
+            }
+        }
+    }
+
     protected ItemStack[] calculateOutputs(int consumeTotalIron, int consumeCoal) {
         ItemStack outputSteel = steel.copy();
         outputSteel.stackSize = consumeTotalIron;
@@ -934,17 +570,6 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
     protected void resetEfficiency() {
         running_time = 0;
         fuelEfficiency = 1;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        // Check the main structure
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, 16, 21, 16, errors)) return;
-        // Item input bus check.
-        checkHatchMax(errors, InputBus, max_input_bus);
-        // Item output bus check.
-        checkHatchMax(errors, OutputBus, max_output_bus);
     }
 
     @Override
@@ -1022,16 +647,9 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         return true;
     }
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 16, 21, 16);
-    }
+    // endregion
 
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 16, 21, 16, elementBudget, env, false, true);
-    }
+    // region NBT
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -1049,15 +667,104 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         super.loadNBTData(aNBT);
     }
 
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
+    // endregion
+
+    // region Textures
+    private static final ITexture[] FACING_SIDE = { TextureFactory.of(BlockIcons.MACHINE_CASING_DENSEBRICKS) };
+
+    private static final ITexture[] FACING_FRONT = {
+        TextureFactory.of(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_INACTIVE) };
+
+    private static final ITexture[] FACING_ACTIVE = {
+        TextureFactory.of(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE), TextureFactory.builder()
+            .addIcon(BlockIcons.MACHINE_CASING_BRICKEDBLASTFURNACE_ACTIVE_GLOW)
+            .glow()
+            .build() };
 
     @Override
-    public boolean supportsInputSeparation() {
-        return false;
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        if (side == aFacing) {
+            return aActive ? FACING_ACTIVE : FACING_FRONT;
+        }
+        return FACING_SIDE;
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_MegaBrickedBlastFurnace_MachineType
+        // # Blast Furnace
+        // #zh_CN 高炉
+        tt.addMachineType(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_MachineType"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_Controller
+            // # Controller block for the Mega Bricked Blast Furnace
+            // #zh_CN 巨型砖高炉的控制器方块
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_Controller"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_00
+            // # {\WHITE}Who could ever imagine the power of the Steam Age?
+            // #zh_CN {\WHITE}谁能想象出蒸汽时代之伟力?
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_00"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_01
+            // # consume iron/wrought iron ingots and coke coals (blocks) to produce steel (and ash byproduct)
+            // #zh_CN 消耗铁/锻铁锭与焦煤/焦煤块炼钢(与灰烬副产物).
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_01"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_02
+            // # Default recipe time is {\GOLD}240s{\GRAY}. More wrought iron and coal input will reduce process time.
+            // #zh_CN 初始配方时间为{\GOLD}240s{\GRAY}. 输入更多锻铁与焦煤以减少处理时间.
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_02"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_03
+            // # actual progress time = default x parallels /((1 + 4 x Ratio of wrought iron input) x sqrt(Coke coal input))
+            // #zh_CN 实际处理时间 = 初始值 x 并行 / ((1 + 4 x 输入锻铁比例) x sqrt(输入焦煤))
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_03"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_04
+            // # process {\RED}50%{\GRAY} of (wrought) iron input and consume all coke coal input at once.
+            // #zh_CN 一次性消耗输入的(锻)铁锭的{\RED}50%{\GRAY}与输入的全部焦煤.
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_04"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_05
+            // # minimum coke coal requirement:2 x (wrought) iron processed
+            // #zh_CN 焦煤的最低需求量: 2 x 处理的(锻)铁锭的量
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_05"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_06
+            // # Takes {\RED}8{\GRAY} hours of continuous run time to achieve maximum efficiency.
+            // #zh_CN 需要连续运行{\RED}8{\GRAY}小时来达到最大效率.
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_06"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_07
+            // # This improve coal efficiency by up to {\RED}800%{\GRAY}. Reduce minimum coal requirement and calculate in actual progress time.
+            // #zh_CN 最多可使焦煤的使用效率提高至{\RED}800%{\GRAY},降低焦煤最低需求量并计入处理时间计算
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_07"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_08
+            // # {\YELLOW}It is recommended not to force yourself to build it until you have enough resources.
+            // #zh_CN {\YELLOW}建议在你有充足的资源之前不要强迫自己建造它!
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_08"))
+            // #tr Tooltip_MegaBrickedBlastFurnace_09
+            // # {\AQUA}Use a screwdriver to switch to primitive mode so you can process all primitive recipes here, but you cannot use wrought iron anymore
+            // #zh_CN 使用螺丝刀切换到土高模式以处理原本的土高炉配方，但不再能通过锻铁加速
+            .addInfo(TextEnums.tr("Tooltip_MegaBrickedBlastFurnace_09"))
+            .addPollutionAmount(getPollutionPerSecond(null))
+            .addInfo(TextEnums.tr("Tooltip_Channel_Helper"))
+            // #tr textMegaBrickedBlastFurnaceTips
+            // # {\YELLOW}Dirt must be Horizontal dirt in Chisel Mod!
+            // #zh_CN {\YELLOW}泥土必须为Chisel模组中的水平花纹泥土!
+            .addStructureInfo(TextEnums.tr("textMegaBrickedBlastFurnaceTips"))
+            // #tr textMegaBrickedBlastFurnaceLocation
+            // # any Bronze Plated Bricks, 0-6x
+            // #zh_CN 任意镀铜机械方块, 0-6x
+            .addInputBus(TextEnums.tr("textMegaBrickedBlastFurnaceLocation"), 1)
+            .addOutputBus(TextEnums.tr("textMegaBrickedBlastFurnaceLocation"), 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Nested Classes
 
     static class MaterialConsumption {
 
@@ -1067,4 +774,7 @@ public class GT_TileEntity_MegaBrickedBlastFurnace extends GTCM_MultiMachineBase
         List<ItemStack> materialToBeConsumed = new ArrayList<>();
         ItemStack fuelToBeConsumed;
     }
+
+    // endregion
+
 }

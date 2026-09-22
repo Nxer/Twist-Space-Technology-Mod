@@ -115,23 +115,7 @@ import thaumicenergistics.common.tiles.TileInfusionProvider;
 @SkipGenerateDescription
 public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_IndustrialAlchemyTower> {
 
-    // region default value
-    private double mSpeedBonus;
-    private int essentiaCellTier = -1;
-    private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
-    private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
-    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
-    protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
-    protected ArrayList<String> Research = new ArrayList<>();
-    public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
-        .ofFailurePersistOnShutdown("Essentiainsentia");
-    public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
-        .ofFailurePersistOnShutdown("Research_not_completed");
-
-    // endregion
-
-    // region constructor
-
+    // region Class Constructor
     public TST_IndustrialAlchemyTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(AUTHOR, ID.TC_TRAVELER, MAINTAINER, ID.KERIILS);
@@ -142,13 +126,193 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     }
 
     @Override
-    public Style getTooltipCreditStyle() {
-        return Style.INFUSION;
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_IndustrialAlchemyTower(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private final int horizontalOffSet = 7;
+    private final int verticalOffSet = 15;
+    private final int depthOffSet = 1;
+
+    // spotless:off
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final String[][] shape = new String[][]{
+        {"               ","               ","               ","               ","               ","               ","      HHH      ","      H H      ","      HHH      ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","      HHH      ","     H   H     ","     H   H     ","     H   H     ","      HHH      ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      ONO      ","     O   O     ","    O     O    ","    N     N    ","    O     O    ","     O   O     ","      ONO      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","     GSSSG     ","    G     G    ","    D     D    ","    D     D    ","    D     D    ","    G     G    ","     GSSSG     ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","     GSSSG     ","    G     G    ","    D     D    ","    D     D    ","    D     D    ","    G     G    ","     GSSSG     ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","     GSSSG     ","    GX   XG    ","    D     D    ","    D  Y  D    ","    D     D    ","    GX   XG    ","     GSSSG     ","               ","               ","               ","               "},
+        {"               ","               ","      EEE      ","     EHHHE     ","    EHBBBHE    ","   EHFBBBFHE   ","  EHBBCCCBBHE  ","  EHBBCCCBBHE  ","  EHBBCCCBBHE  ","   EHFBBBFHE   ","    EHBBBHE    ","     EHHHE     ","      EEE      ","               ","               "},
+        {"               ","               ","     OONOO     ","    OHQQQHO    ","   OHQQBQQHO   ","  OHQQBCBQQHO  ","  OQQBCCCBQQO  ","  NQBCCCCCBQN  ","  OQQBCCCBQQO  ","  OHQQBCBQQHO  ","   OHQQBQQHO   ","    OHQQQHO    ","     OONOO     ","               ","               "},
+        {"               ","               ","     GSSSG     ","    S     S    ","   S       S   ","  G         G  ","  D         D  ","  D         D  ","  D         D  ","  G         G  ","   S       S   ","    S     S    ","     GSSSG     ","               ","               "},
+        {"               ","               ","     GSSSG     ","    S     S    ","   S       S   ","  G         G  ","  D         D  ","  D         D  ","  D         D  ","  G         G  ","   S       S   ","    S     S    ","     GSSSG     ","               ","               "},
+        {"               ","               ","     GSSSG     ","    S  X  S    ","   S       S   ","  G         G  ","  D         D  ","  DX   X   XD  ","  D         D  ","  G         G  ","   S       S   ","    S  X  S    ","     GSSSG     ","               ","               "},
+        {"               ","     EEEEE     ","    EHBBBHE    ","   EBBBFBBBE   ","  EBAABBBAABE  "," EHBABBSBBABHE "," EBBBBSSSBBBBE "," EBFBSSSSSBFBE "," EBBBBSSSBBBBE "," EHBABBSBBABHE ","  EBAABBBAABE  ","   EBBBFBBBE   ","    EHBBBHE    ","     EEEEE     ","               "},
+        {"               ","    OOONOOO    ","   OHBBBBBHO   ","  OHBBALABBHO  "," OHBBBAJABBBHO "," OBBBJAJAJBBBO "," OBAAAJJJAAABO "," NBLJJJJJJJLBN "," OBAAAJJJAAABO "," OBBBJAJAJBBBO "," OHBBBAJABBBHO ","  OHBBALABBHO  ","   OHBBBBBHO   ","    OOONOOO    ","               "},
+        {"               ","    IGHHHGI    ","   IB     BI   ","  IB       BI  "," IB         BI "," G           G "," H           H "," H           H "," H           H "," G           G "," IB         BI ","  IB       BI  ","   IB     BI   ","    IGHHHGI    ","               "},
+        {"               ","     GSSSG     ","    S     S    ","   S       S   ","  S V     V S  "," G           G "," D           D "," D     K     D "," D           D "," G           G ","  S V     V S  ","   S       S   ","    S     S    ","     GSSSG     ","               "},
+        {"               ","     GS~SG     ","    S     S    ","   S       S   ","  S W     W S  "," G           G "," D           D "," D     K     D "," D           D "," G           G ","  S W     W S  ","   S       S   ","    S     S    ","     GSSSG     ","               "},
+        {"     Z   Z     ","    EGSSSGE    ","   EB     BE   ","  EB       BE  "," EB U     U BE ","ZG           GZ"," D           D "," D     R     D "," D           D ","ZG           GZ"," EB U     U BE ","  EB       BE  ","   EB     BE   ","    EGSSSGE    ","     Z   Z     "},
+        {"     NEEEN     ","   OOHHHHHOO   ","  OHMMMMMMMHO  "," OHMMBBBBBMMHO "," OMMBBPPPBBMMO ","NHMBBPPCPPBBMHN","EHMBPPCCCPPBMHE","EHMBPCCCCCPBMHE","EHMBPPCCCPPBMHE","NHMBBPPCPPBBMHN"," OMMBBPPPBBMMO "," OHMMBBBBBMMHO ","  OHMMMMMMMHO  ","   OOHHHHHOO   ","     NEEEN     "}};
+    // spotless:on
+
+    private static IStructureDefinition<TST_IndustrialAlchemyTower> STRUCTURE_DEFINITION = null;
+
+    @Override
+    public IStructureDefinition<TST_IndustrialAlchemyTower> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            var channel = "chisel";
+            var list = ImmutableList.of(
+                TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
+                TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
+            STRUCTURE_DEFINITION = StructureDefinitionBuilder(TST_IndustrialAlchemyTower.class)
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement(
+                    'A',
+                    withChannel(
+                        "essentia_cell",
+                        ofBlocksTiered(
+                            (a, b) -> a == essentiaCell ? b + 1 : 0,
+                            ImmutableList.of(
+                                Pair.of(essentiaCell, 0),
+                                Pair.of(essentiaCell, 1),
+                                Pair.of(essentiaCell, 2),
+                                Pair.of(essentiaCell, 3)),
+                            -1,
+                            (x, y) -> x.essentiaCellTier = y,
+                            x -> x.essentiaCellTier)))
+                .addElement(
+                    'B',
+                    ofChain(
+                        buildHatchAdder(TST_IndustrialAlchemyTower.class).atLeast(InputBus, OutputBus, Energy)
+                            .adder(TST_IndustrialAlchemyTower::addToMachineList)
+                            .casingIndex(1536)
+                            .hint(1)
+                            .buildAndChain(magicCasing, 0),
+                        ofAccurateTileAdder(
+                            TST_IndustrialAlchemyTower::addInfusionProvider,
+                            BlockEnum.INFUSION_PROVIDER.getBlock(),
+                            0),
+                        ofAccurateBlockAdder(
+                            TST_IndustrialAlchemyTower::addTravelAnchor,
+                            BlockTravelAnchor.getLeft(),
+                            BlockTravelAnchor.getRight())))
+                .addElement('C', ofBlock(FieryBlock.getLeft(), FieryBlock.getRight()))
+                .addElement(
+                    'D',
+                    ofChain(
+                        ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2),
+                        ofAccurateTile(TileArcaneHole.class, TstBlocks.BlockArcaneHole, 0)))
+                .addElement('E', ofBlockStrict(blockSlabStone, 0))
+                .addElement('F', ofBlock(blockCosmeticSolid, 0))
+                .addElement('G', ofVariableBlock(channel, blockCosmeticSolid, 6, list))
+                .addElement('H', ofBlock(blockCosmeticSolid, 7))
+                .addElement('I', ofBlockStrictExt(blockSlabStone, 8, blockSlabStone, 0))
+                .addElement('J', ofBlock(blockMetalDevice, 3))
+                .addElement('K', ofBlock(blockMetalDevice, 9))
+                .addElement('L', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
+                .addElement('M', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
+                .addElement('N', ofVariableBlock(channel, BlockArcane_1.getLeft(), BlockArcane_1.getRight(), list))
+                .addElement('O', ofVariableBlock(channel, BlockArcane_4.getLeft(), BlockArcane_4.getRight(), list))
+                .addElement('P', ofBlock(EldritchArk.getLeft(), EldritchArk.getRight()))
+                .addElement('Q', ofBlock(CarvedEminenceStone.getLeft(), CarvedEminenceStone.getRight()))
+                .addElement('R', ofAccurateTile(TileCrucible.class, blockMetalDevice, 0))
+                .addElement(
+                    'S',
+                    ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2))
+                .addElement('U', ofAccurateTile(TileNodeStabilizer.class, blockStoneDevice, 10))
+                .addElement('V', ofAccurateTile(TileNodeConverter.class, blockStoneDevice, 11))
+                .addElement(
+                    'W',
+                    ofChain(
+                        ofTileAdder(TST_IndustrialAlchemyTower::addNodeEnergized, blockAiry, 0),
+                        StructureUtility.isAir()))
+                .addElement('X', ofAccurateTile(TileElectricCloud.class, electricCloud, 0))
+                .addElement('Y', TSTStructureUtility.CommonElements.BlockBeacon.get())
+                .addElement('Z', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        essentiaCellTier = -1;
+        mNodeEnergized.clear();
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
     // endregion
 
     // region Processing Logic
+    private double mSpeedBonus;
+    private int essentiaCellTier = -1;
+    private final ItemStack EssentiaCell_Creative = EnumEssentiaStorageTypes.Type_Creative.getCell();
+    private final ItemStack ProofOfHeroes = GTCMItemList.ProofOfHeroes.get(1, 0);
+    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
+    protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
+    protected ArrayList<String> Research = new ArrayList<>();
+
+    public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
+        .ofFailurePersistOnShutdown("Essentiainsentia");
+
+    public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
+        .ofFailurePersistOnShutdown("Research_not_completed");
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.IndustrialAlchemyTowerRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        if (getControllerSlot() == null) {
+            return getmParallel();
+        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
+            return Integer.MAX_VALUE;
+        } else return getmParallel();
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        mSpeedBonus = 0.0;
+        countSpeedBonus();
+        return (float) mSpeedBonus;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return mSpeedBonus == (double) 1 / 11.4514;
+    }
 
     @Override
     protected ProcessingLogic createProcessingLogic() {
@@ -234,6 +398,12 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
         }.setMaxParallelSupplier(this::getMaxParallelRecipes);
     }
 
+    // WIP
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+        return super.checkProcessing();
+    }
+
     public boolean isResearchComplete(String key) {
         if (!key.startsWith("@") && ResearchCategories.getResearch(key) == null) {
             return false;
@@ -242,32 +412,9 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
         }
     }
 
-    // WIP
-    @Override
-    public @NotNull CheckRecipeResult checkProcessing() {
-        return super.checkProcessing();
-    }
-
     private String getUsername() {
         return this.getBaseMetaTileEntity()
             .getOwnerName();
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.IndustrialAlchemyTowerRecipes;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return mSpeedBonus == (double) 1 / 11.4514;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        mSpeedBonus = 0.0;
-        countSpeedBonus();
-        return (float) mSpeedBonus;
     }
 
     private void countSpeedBonus() {
@@ -325,136 +472,8 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     }
 
     @Override
-    public int getMaxParallelRecipes() {
-        if (getControllerSlot() == null) {
-            return getmParallel();
-        } else if (getControllerSlot().isItemEqual(ProofOfHeroes)) {
-            return Integer.MAX_VALUE;
-        } else return getmParallel();
-    }
-
-    // endregion
-
-    @Override
     public String[] getInfoData() {
         return super.getInfoData();
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    // region Structure
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private final int horizontalOffSet = 7;
-    private final int verticalOffSet = 15;
-    private final int depthOffSet = 1;
-    // spotless:off
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] shape = new String[][]{
-        {"               ","               ","               ","               ","               ","               ","      HHH      ","      H H      ","      HHH      ","               ","               ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","               ","      HHH      ","     H   H     ","     H   H     ","     H   H     ","      HHH      ","               ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","      ONO      ","     O   O     ","    O     O    ","    N     N    ","    O     O    ","     O   O     ","      ONO      ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     GSSSG     ","    G     G    ","    D     D    ","    D     D    ","    D     D    ","    G     G    ","     GSSSG     ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     GSSSG     ","    G     G    ","    D     D    ","    D     D    ","    D     D    ","    G     G    ","     GSSSG     ","               ","               ","               ","               "},
-        {"               ","               ","               ","               ","     GSSSG     ","    GX   XG    ","    D     D    ","    D  Y  D    ","    D     D    ","    GX   XG    ","     GSSSG     ","               ","               ","               ","               "},
-        {"               ","               ","      EEE      ","     EHHHE     ","    EHBBBHE    ","   EHFBBBFHE   ","  EHBBCCCBBHE  ","  EHBBCCCBBHE  ","  EHBBCCCBBHE  ","   EHFBBBFHE   ","    EHBBBHE    ","     EHHHE     ","      EEE      ","               ","               "},
-        {"               ","               ","     OONOO     ","    OHQQQHO    ","   OHQQBQQHO   ","  OHQQBCBQQHO  ","  OQQBCCCBQQO  ","  NQBCCCCCBQN  ","  OQQBCCCBQQO  ","  OHQQBCBQQHO  ","   OHQQBQQHO   ","    OHQQQHO    ","     OONOO     ","               ","               "},
-        {"               ","               ","     GSSSG     ","    S     S    ","   S       S   ","  G         G  ","  D         D  ","  D         D  ","  D         D  ","  G         G  ","   S       S   ","    S     S    ","     GSSSG     ","               ","               "},
-        {"               ","               ","     GSSSG     ","    S     S    ","   S       S   ","  G         G  ","  D         D  ","  D         D  ","  D         D  ","  G         G  ","   S       S   ","    S     S    ","     GSSSG     ","               ","               "},
-        {"               ","               ","     GSSSG     ","    S  X  S    ","   S       S   ","  G         G  ","  D         D  ","  DX   X   XD  ","  D         D  ","  G         G  ","   S       S   ","    S  X  S    ","     GSSSG     ","               ","               "},
-        {"               ","     EEEEE     ","    EHBBBHE    ","   EBBBFBBBE   ","  EBAABBBAABE  "," EHBABBSBBABHE "," EBBBBSSSBBBBE "," EBFBSSSSSBFBE "," EBBBBSSSBBBBE "," EHBABBSBBABHE ","  EBAABBBAABE  ","   EBBBFBBBE   ","    EHBBBHE    ","     EEEEE     ","               "},
-        {"               ","    OOONOOO    ","   OHBBBBBHO   ","  OHBBALABBHO  "," OHBBBAJABBBHO "," OBBBJAJAJBBBO "," OBAAAJJJAAABO "," NBLJJJJJJJLBN "," OBAAAJJJAAABO "," OBBBJAJAJBBBO "," OHBBBAJABBBHO ","  OHBBALABBHO  ","   OHBBBBBHO   ","    OOONOOO    ","               "},
-        {"               ","    IGHHHGI    ","   IB     BI   ","  IB       BI  "," IB         BI "," G           G "," H           H "," H           H "," H           H "," G           G "," IB         BI ","  IB       BI  ","   IB     BI   ","    IGHHHGI    ","               "},
-        {"               ","     GSSSG     ","    S     S    ","   S       S   ","  S V     V S  "," G           G "," D           D "," D     K     D "," D           D "," G           G ","  S V     V S  ","   S       S   ","    S     S    ","     GSSSG     ","               "},
-        {"               ","     GS~SG     ","    S     S    ","   S       S   ","  S W     W S  "," G           G "," D           D "," D     K     D "," D           D "," G           G ","  S W     W S  ","   S       S   ","    S     S    ","     GSSSG     ","               "},
-        {"     Z   Z     ","    EGSSSGE    ","   EB     BE   ","  EB       BE  "," EB U     U BE ","ZG           GZ"," D           D "," D     R     D "," D           D ","ZG           GZ"," EB U     U BE ","  EB       BE  ","   EB     BE   ","    EGSSSGE    ","     Z   Z     "},
-        {"     NEEEN     ","   OOHHHHHOO   ","  OHMMMMMMMHO  "," OHMMBBBBBMMHO "," OMMBBPPPBBMMO ","NHMBBPPCPPBBMHN","EHMBPPCCCPPBMHE","EHMBPCCCCCPBMHE","EHMBPPCCCPPBMHE","NHMBBPPCPPBBMHN"," OMMBBPPPBBMMO "," OHMMBBBBBMMHO ","  OHMMMMMMMHO  ","   OOHHHHHOO   ","     NEEEN     "}};
-    // spotless:on
-    private static IStructureDefinition<TST_IndustrialAlchemyTower> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public IStructureDefinition<TST_IndustrialAlchemyTower> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            var channel = "chisel";
-            var list = ImmutableList.of(
-                TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
-                TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
-                TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
-            STRUCTURE_DEFINITION = StructureDefinitionBuilder(TST_IndustrialAlchemyTower.class)
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement(
-                    'A',
-                    withChannel(
-                        "essentia_cell",
-                        ofBlocksTiered(
-                            (a, b) -> a == essentiaCell ? b + 1 : 0,
-                            ImmutableList.of(
-                                Pair.of(essentiaCell, 0),
-                                Pair.of(essentiaCell, 1),
-                                Pair.of(essentiaCell, 2),
-                                Pair.of(essentiaCell, 3)),
-                            -1,
-                            (x, y) -> x.essentiaCellTier = y,
-                            x -> x.essentiaCellTier)))
-                .addElement(
-                    'B',
-                    ofChain(
-                        buildHatchAdder(TST_IndustrialAlchemyTower.class).atLeast(InputBus, OutputBus, Energy)
-                            .adder(TST_IndustrialAlchemyTower::addToMachineList)
-                            .casingIndex(1536)
-                            .hint(1)
-                            .buildAndChain(magicCasing, 0),
-                        ofAccurateTileAdder(
-                            TST_IndustrialAlchemyTower::addInfusionProvider,
-                            BlockEnum.INFUSION_PROVIDER.getBlock(),
-                            0),
-                        ofAccurateBlockAdder(
-                            TST_IndustrialAlchemyTower::addTravelAnchor,
-                            BlockTravelAnchor.getLeft(),
-                            BlockTravelAnchor.getRight())))
-                .addElement('C', ofBlock(FieryBlock.getLeft(), FieryBlock.getRight()))
-                .addElement(
-                    'D',
-                    ofChain(
-                        ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2),
-                        ofAccurateTile(TileArcaneHole.class, TstBlocks.BlockArcaneHole, 0)))
-                .addElement('E', ofBlockStrict(blockSlabStone, 0))
-                .addElement('F', ofBlock(blockCosmeticSolid, 0))
-                .addElement('G', ofVariableBlock(channel, blockCosmeticSolid, 6, list))
-                .addElement('H', ofBlock(blockCosmeticSolid, 7))
-                .addElement('I', ofBlockStrictExt(blockSlabStone, 8, blockSlabStone, 0))
-                .addElement('J', ofBlock(blockMetalDevice, 3))
-                .addElement('K', ofBlock(blockMetalDevice, 9))
-                .addElement('L', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
-                .addElement('M', ofBlock(BlockTranslucent.getLeft(), BlockTranslucent.getRight()))
-                .addElement('N', ofVariableBlock(channel, BlockArcane_1.getLeft(), BlockArcane_1.getRight(), list))
-                .addElement('O', ofVariableBlock(channel, BlockArcane_4.getLeft(), BlockArcane_4.getRight(), list))
-                .addElement('P', ofBlock(EldritchArk.getLeft(), EldritchArk.getRight()))
-                .addElement('Q', ofBlock(CarvedEminenceStone.getLeft(), CarvedEminenceStone.getRight()))
-                .addElement('R', ofAccurateTile(TileCrucible.class, blockMetalDevice, 0))
-                .addElement(
-                    'S',
-                    ofAccurateTileAdder(TST_IndustrialAlchemyTower::addCosmeticOpaque, blockCosmeticOpaque, 2))
-                .addElement('U', ofAccurateTile(TileNodeStabilizer.class, blockStoneDevice, 10))
-                .addElement('V', ofAccurateTile(TileNodeConverter.class, blockStoneDevice, 11))
-                .addElement(
-                    'W',
-                    ofChain(
-                        ofTileAdder(TST_IndustrialAlchemyTower::addNodeEnergized, blockAiry, 0),
-                        StructureUtility.isAir()))
-                .addElement('X', ofAccurateTile(TileElectricCloud.class, electricCloud, 0))
-                .addElement('Y', TSTStructureUtility.CommonElements.BlockBeacon.get())
-                .addElement('Z', ofAccurateTileExt(TileNitor.class, blockAiry, 1, ConfigItems.itemResource, 1))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
     }
 
     private String getPlayName() {
@@ -497,23 +516,93 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        if (aTick % 100 == 0) {
+            super.onPreTick(aBaseMetaTileEntity, aTick);
+            if (aBaseMetaTileEntity.isServerSide()) {
+                ArrayList<String> list = getResearchForPlayer(getUsername());
+                if ((this.Research == null && list != null)
+                    || (list != null && !list.isEmpty() && this.Research.size() != list.size())) {
+                    this.Research = list;
+                }
+            }
+        }
     }
 
-    // spotless:off
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        NBTTagList nbtTagList = new NBTTagList();
+        for (String string : Research) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("ResearchName", string);
+            nbtTagList.appendTag(tag);
+        }
+        aNBT.setInteger("essentiaCellTier", this.essentiaCellTier);
+        aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
+        super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        this.Research.clear();
+        for (int i = 0; i < aNBT.getTagList("Research", 10)
+            .tagCount(); i++) {
+            if (aNBT.getTagList("Research", 10)
+                .getCompoundTagAt(i)
+                .hasKey("ResearchName")) {
+                this.Research.add(
+                    aNBT.getTagList("Research", 10)
+                        .getCompoundTagAt(i)
+                        .getString("ResearchName"));
+            }
+        }
+        this.essentiaCellTier = aNBT.getInteger("essentiaCellTier");
+        this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
+        super.loadNBTData(aNBT);
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstoneLevel) {
+        if (side == facing) {
+            if (active) return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
+                .extFacing()
+                .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { TextureFactory.of(blockMetalDevice, 9) };
+    }
+
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_IndustrialAlchemyTower_MachineType
         // # Alchemy Tower
         // #zh_CN 炼金塔
@@ -630,96 +719,17 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
                 TextEnums.tr("Tooltip_IndustrialAlchemyTower_20"),
                 TextEnums.tr("Tooltip_IndustrialAlchemyTower_21"))
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
-    // spotless:on
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
+    }
 
     // endregion
 
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        NBTTagList nbtTagList = new NBTTagList();
-        for (String string : Research) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("ResearchName", string);
-            nbtTagList.appendTag(tag);
-        }
-        aNBT.setInteger("essentiaCellTier", this.essentiaCellTier);
-        aNBT.setDouble("mSpeedBonus", this.mSpeedBonus);
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        this.Research.clear();
-        for (int i = 0; i < aNBT.getTagList("Research", 10)
-            .tagCount(); i++) {
-            if (aNBT.getTagList("Research", 10)
-                .getCompoundTagAt(i)
-                .hasKey("ResearchName")) {
-                this.Research.add(
-                    aNBT.getTagList("Research", 10)
-                        .getCompoundTagAt(i)
-                        .getString("ResearchName"));
-            }
-        }
-        this.essentiaCellTier = aNBT.getInteger("essentiaCellTier");
-        this.mSpeedBonus = aNBT.getDouble("mSpeedBonus");
-        super.loadNBTData(aNBT);
-    }
-
-    @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if (aTick % 100 == 0) {
-            super.onPreTick(aBaseMetaTileEntity, aTick);
-            if (aBaseMetaTileEntity.isServerSide()) {
-                ArrayList<String> list = getResearchForPlayer(getUsername());
-                if ((this.Research == null && list != null)
-                    || (list != null && !list.isEmpty() && this.Research.size() != list.size())) {
-                    this.Research = list;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        essentiaCellTier = -1;
-        mNodeEnergized.clear();
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_IndustrialAlchemyTower(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            if (active) return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] { TextureFactory.of(blockMetalDevice, 9), TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE)
-                .extFacing()
-                .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ELECTRIC_BLAST_FURNACE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { TextureFactory.of(blockMetalDevice, 9) };
-    }
 }
 
 // Structure:

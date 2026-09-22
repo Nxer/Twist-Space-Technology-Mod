@@ -83,16 +83,23 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMeteorMiner>
     implements ISurvivalConstructable, TSTTooltipCredit {
 
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons
-        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE = Textures.BlockIcons
-        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = Textures.BlockIcons
-        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
-    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_GLOW = Textures.BlockIcons
-        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
+    // region Class Constructor
+    public TST_LaserMeteorMiner(int aID, String aName, String aNameRegional) {
+        super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.TOTTO);
+    }
 
-    private static final int distanceFromMeteor = 48;
+    public TST_LaserMeteorMiner(String aName) {
+        super(aName);
+    }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_LaserMeteorMiner(this.mName);
+    }
+    // endregion
+
+    // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "main";
     protected static final int horizontalOffSet_T1 = 9;
     protected static final int verticalOffSet_T1 = 13;
@@ -101,19 +108,74 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     protected static final int horizontalOffSet_T2 = 9;
     protected static final int verticalOffSet_T2 = 15;
     protected static final int depthOffSet_T2 = 3;
-    private static final int MAX_RADIUS = 40;
     private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION;
-    protected TileEntityLaserBeacon renderer;
-    private int currentRadius = MAX_RADIUS;
-    private int xDrill, yDrill, zDrill;
-    private int xStart, yStart, zStart;
-    private int fortuneTier = 0;
-    private boolean isStartInitialized = false;
-    private boolean hasFinished = true;
-    private boolean isWaiting = false;
-    private boolean isResetting = false;
-    Collection<ItemStack> res = new HashSet<>();
-    private int multiTier = 0;
+
+    // spotless:off
+    /*
+    A -> ofBlock...(blockAlloyGlass, 0, ...);
+    B -> ofBlock...(gt.blockcasings, 15, ...);
+    C -> ofBlock...(gt.blockcasings4, 7, ...);
+    D -> ofBlock...(gt.blockcasings8, 2, ...);
+    E -> ofBlock...(gt.blockcasings8, 3, ...);
+    F -> ofBlock...(gt.blockcasings9, 11, ...);
+    G -> ofBlock...(gt.blockframes, 129, ...);
+    H -> ofBlock...(gt.blockframes, 388, ...);
+    I -> ofBlock...(gt.blockcasings5, 5, ...);
+    J -> ofBlock...(gt.blockframes, 306, ...);
+    K -> ofBlock...(gtplusplus.blockspecialcasings.1, 6, ...); //
+    L -> ofBlock...(gtplusplus.blockspecialcasings.1, 8, ...);
+    W -> ofBlock...(tile.wood, 0, ...); // T1 hatches
+    X -> ofBlock...(tile.wood, 0, ...); // T2 hatches
+    Y -> ofBlock...(tile.stone, 0, ...); // special input bus
+    Z -> ofSpecialTileAdder(com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon, ...);
+     */
+    protected static final String[][] shape_T1 = new String[][]{
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","       J   J       ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","         J         ","       J   J       ","                   ","      J     J      ","                   ","       J   J       ","         J         ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","         J         ","      J     J      ","                   ","                   ","     J   Z   J     ","                   ","                   ","      J     J      ","         J         ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","         J         ","     J       J     ","                   ","                   ","    J              ","    J    B    J    ","                   ","                   ","                   ","     J       J     ","         J         ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","         J         ","    J         J    ","                   ","                   ","                   ","         I         ","   J    IBI    J   ","         I         ","                   ","                   ","                   ","    J         J    ","         J         ","                   ","                   ","                   "},
+        {"                   ","                   ","    JJJJJJJJJJJ    ","   JJLLLLLLLLLJJ   ","  JJLL       LLJJ  ","  JLL         LLJ  ","  JL           LJ  ","  JL           LJ  ","  JL     I     LJ  ","  JL    IBI    LJ  ","  JL     I     LJ  ","  JL           LJ  ","  JL           LJ  ","  JLL         LLJ  ","  JJLL       LLJJ  ","   JJLLLLLLLLLJJ   ","    JJJJJJJJJJJ    ","                   ","                   "},
+        {"                   ","                   ","                   ","         J         ","      LLLLLLL      ","     LL     LL     ","    LL       LL    ","    L         L    ","    L    I    L    ","   JL   IBI   LJ   ","    L    I    L    ","    L         L    ","    LL       LL    ","     LL     LL     ","      LLLLLLL      ","         J         ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","         J         ","       LLLLL       ","      LL   LL      ","     LL  I  LL     ","     L  III  L     ","    JL IIBII LJ    ","     L  III  L     ","     LL  I  LL     ","      LL   LL      ","       LLLLL       ","         J         ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","         J         ","        LLL        ","       LLLLL       ","      LLLLLLL      ","     JLLLBLLLJ     ","      LLLLLLL      ","       LLLLL       ","        LLL        ","         J         ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        JJJ        ","       JKAKJ       ","      JJABAJJ      ","       JKAKJ       ","        JJJ        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","        KAK        ","        ABA        ","        KAK        ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","        KAK        ","        ABA        ","        KAK        ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","        W~W        ","       WKKKW       ","       WKBKW       ","       WKKKW       ","        WWW        ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","        KYK        ","       KKKKK       ","      KKBBBKK      ","      KKBBBKK      ","      KKBBBKK      ","       KKKKK       ","        KKK        ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","        K K        ","       K   K       ","      A     A      ","     K       K     ","    K         K    ","                   ","    K         K    ","     K       K     ","      A     A      ","       K   K       ","        K K        ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","        K K        ","                   ","       K   K       ","      A     A      ","     K       K     ","   K           K   ","                   ","   K           K   ","     K       K     ","      A     A      ","       K   K       ","                   ","        K K        ","                   ","                   ","                   "},
+        {"                   ","                   ","        K K        ","                   ","                   ","       K   K       ","      A     A      ","     K       K     ","  K             K  ","                   ","  K             K  ","     K       K     ","      A     A      ","       K   K       ","                   ","                   ","        K K        ","                   ","                   "},
+        {"         K         ","        K K        ","       K   K       ","       K   K       ","       K   K       ","      K     K      ","     KK     KK     ","  KKK         KKK  "," K               K ","K                 K"," K               K ","  KKK         KKK  ","     KK     KK     ","      K     K      ","       K   K       ","       K   K       ","       K   K       ","        K K        ","         K         "}
+    };
+
+    protected static final String[][] shape_T2 = new String[][]{
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         Z         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         B         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         B         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        EBE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        EBE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        EBE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        ECE        ","       ECBCE       ","        ECE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        ECE        ","       ECBCE       ","        ECE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        CCC        ","       ECBCE       ","        CCC        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","         E         ","         E         ","        C C        ","      EE B EE      ","        C C        ","         E         ","         E         ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        HEH        ","       HC CH       ","      EE B EE      ","       HC CH       ","        HEH        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","                   ","        HEH        ","       H C H       ","      H C C H      ","      EC B CE      ","      H C C H      ","       H C H       ","        HEH        ","                   ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","         E         ","        AEA        ","       E C E       ","      A     A      ","     EEC B CEE     ","      A     A      ","       E C E       ","        AEA        ","         E         ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","                   ","         E         ","        A A        ","       E C E       ","      A     A      ","     E C B C E     ","      A     A      ","       E C E       ","        A A        ","         E         ","                   ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","                   ","         E         ","         E         ","       EA AE       ","      EE   EE      ","      A     A      ","    EE       EE    ","      A     A      ","      EE   EE      ","       EA AE       ","         E         ","         E         ","                   ","                   ","                   ","                   "},
+        {"                   ","                   ","                   ","         ~         ","       DD DD       ","      D     D      ","     D  FFF  D     ","    D  F   F  D    ","    D F     F D    ","   E  F     F  E   ","    D F     F D    ","    D  F   F  D    ","     D  FFF  D     ","      D     D      ","       DD DD       ","         E         ","                   ","                   ","                   "},
+        {"                   ","                   ","         X         ","        E E        ","                   ","                   ","                   ","                   ","   E           E   ","  X             X  ","   E           E   ","                   ","                   ","                   ","                   ","        E E        ","         X         ","                   ","                   "},
+        {"                   ","         X         ","        X X        ","      GGG GGG      ","     GG     GG     ","    GG       GG    ","   GG         GG   ","   G           G   ","  XG           GX  "," X               X ","  XG           GX  ","   G           G   ","   GG         GG   ","    GG       GG    ","     GG     GG     ","      GGG GGG      ","        X X        ","         X         ","                   "},
+        {"         X         ","        X X        ","       X   X       ","                   ","                   ","                   ","                   ","  X             X  "," X               X ","X                 X"," X               X ","  X             X  ","                   ","                   ","                   ","                   ","       X   X       ","        X X        ","         X         "},
+        {"         X         ","        X X        ","       X   X       ","                   ","                   ","                   ","                   ","  X             X  "," X               X ","X                 X"," X               X ","  X             X  ","                   ","                   ","                   ","                   ","       X   X       ","        X X        ","         X         "},
+        {"         X         ","        X X        ","                   ","                   ","                   ","                   ","                   ","                   "," X               X ","X                 X"," X               X ","                   ","                   ","                   ","                   ","                   ","                   ","        X X        ","         X         "},
+        {"         X         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","X                 X","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         X         "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_LaserMeteorMiner> getStructureDefinition() {
@@ -156,111 +218,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
                 .build();
         }
         return STRUCTURE_DEFINITION;
-    }
-
-    // spotless:off
-
-    /*
-    A -> ofBlock...(blockAlloyGlass, 0, ...);
-    B -> ofBlock...(gt.blockcasings, 15, ...);
-    C -> ofBlock...(gt.blockcasings4, 7, ...);
-    D -> ofBlock...(gt.blockcasings8, 2, ...);
-    E -> ofBlock...(gt.blockcasings8, 3, ...);
-    F -> ofBlock...(gt.blockcasings9, 11, ...);
-    G -> ofBlock...(gt.blockframes, 129, ...);
-    H -> ofBlock...(gt.blockframes, 388, ...);
-    I -> ofBlock...(gt.blockcasings5, 5, ...);
-    J -> ofBlock...(gt.blockframes, 306, ...);
-    K -> ofBlock...(gtplusplus.blockspecialcasings.1, 6, ...); //
-    L -> ofBlock...(gtplusplus.blockspecialcasings.1, 8, ...);
-    W -> ofBlock...(tile.wood, 0, ...); // T1 hatches
-    X -> ofBlock...(tile.wood, 0, ...); // T2 hatches
-    Y -> ofBlock...(tile.stone, 0, ...); // special input bus
-    Z -> ofSpecialTileAdder(com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon, ...);
-     */
-    protected static final String[][] shape_T1 = new String[][]{
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","       J   J       ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","         J         ","       J   J       ","                   ","      J     J      ","                   ","       J   J       ","         J         ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","         J         ","      J     J      ","                   ","                   ","     J   Z   J     ","                   ","                   ","      J     J      ","         J         ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","         J         ","     J       J     ","                   ","                   ","    J              ","    J    B    J    ","                   ","                   ","                   ","     J       J     ","         J         ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","         J         ","    J         J    ","                   ","                   ","                   ","         I         ","   J    IBI    J   ","         I         ","                   ","                   ","                   ","    J         J    ","         J         ","                   ","                   ","                   "},
-        {"                   ","                   ","    JJJJJJJJJJJ    ","   JJLLLLLLLLLJJ   ","  JJLL       LLJJ  ","  JLL         LLJ  ","  JL           LJ  ","  JL           LJ  ","  JL     I     LJ  ","  JL    IBI    LJ  ","  JL     I     LJ  ","  JL           LJ  ","  JL           LJ  ","  JLL         LLJ  ","  JJLL       LLJJ  ","   JJLLLLLLLLLJJ   ","    JJJJJJJJJJJ    ","                   ","                   "},
-        {"                   ","                   ","                   ","         J         ","      LLLLLLL      ","     LL     LL     ","    LL       LL    ","    L         L    ","    L    I    L    ","   JL   IBI   LJ   ","    L    I    L    ","    L         L    ","    LL       LL    ","     LL     LL     ","      LLLLLLL      ","         J         ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","         J         ","       LLLLL       ","      LL   LL      ","     LL  I  LL     ","     L  III  L     ","    JL IIBII LJ    ","     L  III  L     ","     LL  I  LL     ","      LL   LL      ","       LLLLL       ","         J         ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","         J         ","        LLL        ","       LLLLL       ","      LLLLLLL      ","     JLLLBLLLJ     ","      LLLLLLL      ","       LLLLL       ","        LLL        ","         J         ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        JJJ        ","       JKAKJ       ","      JJABAJJ      ","       JKAKJ       ","        JJJ        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","        KAK        ","        ABA        ","        KAK        ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","        KAK        ","        ABA        ","        KAK        ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","        W~W        ","       WKKKW       ","       WKBKW       ","       WKKKW       ","        WWW        ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","        KYK        ","       KKKKK       ","      KKBBBKK      ","      KKBBBKK      ","      KKBBBKK      ","       KKKKK       ","        KKK        ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","        K K        ","       K   K       ","      A     A      ","     K       K     ","    K         K    ","                   ","    K         K    ","     K       K     ","      A     A      ","       K   K       ","        K K        ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","        K K        ","                   ","       K   K       ","      A     A      ","     K       K     ","   K           K   ","                   ","   K           K   ","     K       K     ","      A     A      ","       K   K       ","                   ","        K K        ","                   ","                   ","                   "},
-        {"                   ","                   ","        K K        ","                   ","                   ","       K   K       ","      A     A      ","     K       K     ","  K             K  ","                   ","  K             K  ","     K       K     ","      A     A      ","       K   K       ","                   ","                   ","        K K        ","                   ","                   "},
-        {"         K         ","        K K        ","       K   K       ","       K   K       ","       K   K       ","      K     K      ","     KK     KK     ","  KKK         KKK  "," K               K ","K                 K"," K               K ","  KKK         KKK  ","     KK     KK     ","      K     K      ","       K   K       ","       K   K       ","       K   K       ","        K K        ","         K         "}
-    };
-
-
-    protected static final String[][] shape_T2 = new String[][]{
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         Z         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         B         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         B         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        EBE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        EBE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        EBE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        ECE        ","       ECBCE       ","        ECE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        ECE        ","       ECBCE       ","        ECE        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        CCC        ","       ECBCE       ","        CCC        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","         E         ","         E         ","        C C        ","      EE B EE      ","        C C        ","         E         ","         E         ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","         E         ","        HEH        ","       HC CH       ","      EE B EE      ","       HC CH       ","        HEH        ","         E         ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","                   ","        HEH        ","       H C H       ","      H C C H      ","      EC B CE      ","      H C C H      ","       H C H       ","        HEH        ","                   ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","         E         ","        AEA        ","       E C E       ","      A     A      ","     EEC B CEE     ","      A     A      ","       E C E       ","        AEA        ","         E         ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","                   ","         E         ","        A A        ","       E C E       ","      A     A      ","     E C B C E     ","      A     A      ","       E C E       ","        A A        ","         E         ","                   ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","                   ","         E         ","         E         ","       EA AE       ","      EE   EE      ","      A     A      ","    EE       EE    ","      A     A      ","      EE   EE      ","       EA AE       ","         E         ","         E         ","                   ","                   ","                   ","                   "},
-        {"                   ","                   ","                   ","         ~         ","       DD DD       ","      D     D      ","     D  FFF  D     ","    D  F   F  D    ","    D F     F D    ","   E  F     F  E   ","    D F     F D    ","    D  F   F  D    ","     D  FFF  D     ","      D     D      ","       DD DD       ","         E         ","                   ","                   ","                   "},
-        {"                   ","                   ","         X         ","        E E        ","                   ","                   ","                   ","                   ","   E           E   ","  X             X  ","   E           E   ","                   ","                   ","                   ","                   ","        E E        ","         X         ","                   ","                   "},
-        {"                   ","         X         ","        X X        ","      GGG GGG      ","     GG     GG     ","    GG       GG    ","   GG         GG   ","   G           G   ","  XG           GX  "," X               X ","  XG           GX  ","   G           G   ","   GG         GG   ","    GG       GG    ","     GG     GG     ","      GGG GGG      ","        X X        ","         X         ","                   "},
-        {"         X         ","        X X        ","       X   X       ","                   ","                   ","                   ","                   ","  X             X  "," X               X ","X                 X"," X               X ","  X             X  ","                   ","                   ","                   ","                   ","       X   X       ","        X X        ","         X         "},
-        {"         X         ","        X X        ","       X   X       ","                   ","                   ","                   ","                   ","  X             X  "," X               X ","X                 X"," X               X ","  X             X  ","                   ","                   ","                   ","                   ","       X   X       ","        X X        ","         X         "},
-        {"         X         ","        X X        ","                   ","                   ","                   ","                   ","                   ","                   "," X               X ","X                 X"," X               X ","                   ","                   ","                   ","                   ","                   ","                   ","        X X        ","         X         "},
-        {"         X         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","X                 X","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         X         "}
-    };
-
-    // spotless:on
-
-    @Override
-    protected IAlignmentLimits getInitialAlignmentLimits() {
-        return (d, r, f) -> (d.flag & (ForgeDirection.UP.flag | ForgeDirection.DOWN.flag)) == 0 && r.isNotRotated()
-            && !f.isVerticallyFliped();
-    }
-
-    public TST_LaserMeteorMiner(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional);
-        registerTooltipCredits(ID.TOTTO);
-    }
-
-    public TST_LaserMeteorMiner(String aName) {
-        super(aName);
-    }
-
-    @Override
-    public void onDisableWorking() {
-        if (renderer != null) renderer.setShouldRender(false);
-        super.onDisableWorking();
-    }
-
-    @Override
-    public void onBlockDestroyed() {
-        if (renderer != null) renderer.setShouldRender(false);
-        super.onBlockDestroyed();
-    }
-
-    private boolean addInjector(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
-        IMetaTileEntity aMetaTileEntity = aBaseMetaTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (!(aMetaTileEntity instanceof MTEHatchInputBus bus)) return false;
-        bus.updateTexture(aBaseCasingIndex);
-        return mInputBusses.add(bus);
     }
 
     @Override
@@ -311,206 +268,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_LaserMeteorMiner(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
-        int colorIndex, boolean aActive, boolean redstoneLevel) {
-        ITexture[] rTexture;
-        if (side == aFacing) {
-            if (aActive) {
-                rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER_ACTIVE)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            } else {
-                rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER)
-                        .extFacing()
-                        .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_METEOR_MINER_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-        } else {
-            rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)) };
-        }
-        return rTexture;
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        // #tr TST_LaserMeteorMiner_tooltips_machineType
-        // # Meteor Miner
-        // #zh_CN 陨星采矿机
-        tt.addMachineType(tr("TST_LaserMeteorMiner_tooltips_machineType"))
-            // #tr TST_LaserMeteorMiner_tooltips_01
-            // # Controller Block for the Laser Meteor Miner!
-            // #zh_CN 激光陨星采矿场的控制器方块！
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_01"))
-            // #tr TST_LaserMeteorMiner_tooltips_02
-            // # To work properly the center of the meteor has to be 48 blocks above the highest block of the multi.
-            // #zh_CN 陨星的中心必须位于机器最高点上方48个方块的位置, 机器方可正常工作.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_02"))
-            // #tr TST_LaserMeteorMiner_tooltips_03
-            // # The laser will mine in a radius of up to 40 blocks in each direction from the center of the meteor.
-            // #zh_CN 激光将在陨星中心半径40方块内进行采矿作业.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_03"))
-            // #tr TST_LaserMeteorMiner_tooltips_04
-            // # All the chunks involved must be chunkloaded.
-            // #zh_CN 所涉及区块都必须保证加载.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_04"))
-            // #tr TST_LaserMeteorMiner_tooltips_05
-            // # The laser will automatically set its radius based on the meteorite,
-            // #zh_CN 激光将根据陨石自动设置其运行半径.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_05"))
-            // #tr TST_LaserMeteorMiner_tooltips_06
-            // # if it doesn't find any it will wait for a meteor to spawn,
-            // #zh_CN 没有找到陨星时机器会等待陨星生成.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_06"))
-            // #tr TST_LaserMeteorMiner_tooltips_07
-            // # considering the block right above the center of the meteor (like Warded Glass).
-            // #zh_CN 顾及了中心正上方的方块(比如守卫者玻璃).
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_07"))
-            // #tr TST_LaserMeteorMiner_tooltips_08
-            // # The reset button will restart the machine without optimizing the radius.
-            // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_08"))
-            // #tr TST_LaserMeteorMiner_tooltips_needSchematic
-            // # Machine need Meteor Miner Schematic put in controller slot to run.
-            // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_needSchematic"))
-            // #tr TST_LaserMeteorMiner_tooltips_09
-            // # {\RED}{\BOLD} TIER I
-            // #zh_CN {\RED}{\BOLD} 等级 I
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_09"))
-            // #tr TST_LaserMeteorMiner_tooltips_10
-            // # Mines one block every cycle.
-            // #zh_CN 每次运行挖掘一个方块.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_10"))
-            // #tr TST_LaserMeteorMiner_tooltips_11
-            // # Default Fortune is 0, it can be increased by putting in the input bus special pickaxes:
-            // #zh_CN 默认没有时运效果. 输入总线内放置以下镐子可以获得时运效果:
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_11"))
-            // #tr TST_LaserMeteorMiner_tooltips_12
-            // # Fortune I: Pickaxe of the Core
-            // #zh_CN 时运I : 炽心镐
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_12"))
-            // #tr TST_LaserMeteorMiner_tooltips_13
-            // # Fortune II: Bound Pickaxe
-            // #zh_CN 时运II : 约束之镐
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_13"))
-            // #tr TST_LaserMeteorMiner_tooltips_14
-            // # Fortune III: Terra Shatterer
-            // #zh_CN 时运III : 泰拉粉碎者
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_14"))
-            // #tr TST_LaserMeteorMiner_tooltips_15
-            // # {\RED}{\BOLD} TIER II
-            // #zh_CN {\RED}{\BOLD} 等级 II
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_15"))
-            // #tr TST_LaserMeteorMiner_tooltips_16
-            // # Always has Fortune III
-            // #zh_CN 总是时运III.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_16"))
-            // #tr TST_LaserMeteorMiner_tooltips_17
-            // # Mines one row every cycle.
-            // #zh_CN 每次运行挖掘一行.
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_17"))
-            // #tr TST_LaserMeteorMiner_tooltips_18
-            // # {\BLUE}{\BOLD}Finally some good Meteors!
-            // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)
-            .addInfo(tr("TST_LaserMeteorMiner_tooltips_18"))
-            // #tr TST_LaserMeteorMiner_tooltips_T1
-            // # {\GOLD}{\BOLD}TIER I
-            // #zh_CN {\GOLD}{\BOLD}等级 I
-            .addStructureInfo(tr("TST_LaserMeteorMiner_tooltips_T1"))
-            // #tr TST_LaserMeteorMiner_structure_info_T1_controller
-            // # Center of the second layer above the ritual
-            // #zh_CN 仪式上方第二层的中心
-            .addController(tr("TST_LaserMeteorMiner_structure_info_T1_controller"))
-            // #tr TST_LaserMeteorMiner_structure_info_T1_hatches
-            // # Any Structural Solar Casing around the controller
-            // #zh_CN 控制器周边的太阳能塔机械方块
-            .addOutputBus(tr("TST_LaserMeteorMiner_structure_info_T1_hatches"), 1)
-            .addEnergyHatch(tr("TST_LaserMeteorMiner_structure_info_T1_hatches"), 1)
-            .addMaintenanceHatch(tr("TST_LaserMeteorMiner_structure_info_T1_hatches"), 1)
-            // #tr TST_LaserMeteorMiner_structure_info_T1_hatches_input_bus
-            // # Below the controller
-            // #zh_CN 控制器下侧
-            .addInputBus(tr("TST_LaserMeteorMiner_structure_info_T1_hatches_input_bus"), 2)
-            // #tr TST_LaserMeteorMiner_tooltips_T2
-            // # {\GOLD}{\BOLD}TIER II
-            // #zh_CN {\GOLD}{\BOLD}等级 II
-            .addStructureInfo(tr("TST_LaserMeteorMiner_tooltips_T2"))
-            // #tr TST_LaserMeteorMiner_structure_info_T2_controller
-            // # Highest layer of the ritual
-            // #zh_CN 仪式最上层
-            .addController(tr("TST_LaserMeteorMiner_structure_info_T2_controller"))
-            // #tr TST_LaserMeteorMiner_structure_info_T2_hatches
-            // # Any Neutronium Casing below the controller
-            // #zh_CN 控制器下方的中子采矿机械方块
-            .addOutputBus(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
-            .addEnergyHatch(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
-            .addMaintenanceHatch(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
-            .toolTipFinisher();
-        return tt;
-        // spotless:on
-    }
-
-    private boolean findLaserRenderer() {
-        this.setStartCoords();
-
-        if (getBaseMetaTileEntity().getWorld()
-            .getTileEntity(
-                xStart,
-                getBaseMetaTileEntity().getYCoord() + (this.multiTier == 1 ? 10 : 15),
-                zStart) instanceof TileEntityLaserBeacon laser) {
-            renderer = laser;
-            renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean stopAllRendering = false;
-
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        stopAllRendering = !stopAllRendering;
-        // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_off
-        // # Rendering off
-        // #zh_CN 渲染特效关闭
-        // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_on
-        // # Rendering on
-        // #zh_CN 渲染特效开启
-        if (stopAllRendering) {
-            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_off");
-            if (renderer != null) renderer.setShouldRender(false);
-        } else {
-            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_on");
-        }
-    }
-
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         this.multiTier = 0;
         if (checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_T1, verticalOffSet_T1, depthOffSet_T1, errors)) {
@@ -531,12 +288,23 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         checkHasEnergyHatch(errors);
 
     }
+    // endregion
 
-    private int getMultiTier(ItemStack inventory) {
-        if (inventory == null || inventory.stackSize < 1) return 0;
-        return GTCMItemList.MeteorMinerSchematic2.equal(inventory) ? 2
-            : GTCMItemList.MeteorMinerSchematic1.equal(inventory) ? 1 : 0;
-    }
+    // region Processing Logic
+    private static final int distanceFromMeteor = 48;
+    private static final int MAX_RADIUS = 40;
+    protected TileEntityLaserBeacon renderer;
+    private int currentRadius = MAX_RADIUS;
+    private int xDrill, yDrill, zDrill;
+    private int xStart, yStart, zStart;
+    private int fortuneTier = 0;
+    private boolean isStartInitialized = false;
+    private boolean hasFinished = true;
+    private boolean isWaiting = false;
+    private boolean isResetting = false;
+    Collection<ItemStack> res = new HashSet<>();
+    private int multiTier = 0;
+    private boolean stopAllRendering = false;
 
     @Override
     public int getMaxEfficiency(ItemStack aStack) {
@@ -549,106 +317,26 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     }
 
     @Override
+    public boolean isCorrectMachinePart(ItemStack aStack) {
+        return true;
+    }
+
+    @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        return (d, r, f) -> (d.flag & (ForgeDirection.UP.flag | ForgeDirection.DOWN.flag)) == 0 && r.isNotRotated()
+            && !f.isVerticallyFliped();
+    }
+
+    @Override
     protected boolean supportsCraftingMEBuffer() {
         return false;
-    }
-
-    protected int getXDrill() {
-        return xDrill;
-    }
-
-    protected int getYDrill() {
-        return yDrill;
-    }
-
-    protected int getZDrill() {
-        return zDrill;
-    }
-
-    private int getLaserToEndHeight() {
-        return (this.multiTier == 1 ? 3 : 0);
-    }
-
-    private void setFortuneTier() {
-        this.fortuneTier = 0;
-        if (this.multiTier == 2) {
-            this.fortuneTier = 3;
-            return;
-        }
-        if (!mInputBusses.isEmpty()) {
-            Optional<ItemStack> input = Optional.ofNullable(
-                mInputBusses.get(0)
-                    .getInventoryHandler()
-                    .getStackInSlot(0));
-            if (input.isPresent()) {
-                this.fortuneTier = getFortuneTier(input.get());
-            }
-        }
-    }
-
-    private static int getFortuneTier(ItemStack itemStack) {
-        if (itemStack == null || itemStack.stackSize < 1) return 0;
-        Item t = itemStack.getItem();
-        if (MiscHelper.PickaxeOfTheCore.equals(t)) return 1;
-        if (MiscHelper.BoundPickaxe.equals(t)) return 2;
-        if (MiscHelper.TerraShatterer.equals(t)) return 3;
-        return 0;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("currentRadius", currentRadius);
-        aNBT.setInteger("xDrill", xDrill);
-        aNBT.setInteger("yDrill", yDrill);
-        aNBT.setInteger("zDrill", zDrill);
-        aNBT.setInteger("xStart", xStart);
-        aNBT.setInteger("yStart", yStart);
-        aNBT.setInteger("zStart", zStart);
-        aNBT.setBoolean("isStartInitialized", isStartInitialized);
-        aNBT.setBoolean("hasFinished", hasFinished);
-        aNBT.setBoolean("isWaiting", isWaiting);
-        aNBT.setBoolean("stopAllRendering", stopAllRendering);
-        aNBT.setInteger("multiTier", multiTier);
-        aNBT.setInteger("fortuneTier", fortuneTier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        currentRadius = aNBT.getInteger("currentRadius");
-        xDrill = aNBT.getInteger("xDrill");
-        yDrill = aNBT.getInteger("yDrill");
-        zDrill = aNBT.getInteger("zDrill");
-        xStart = aNBT.getInteger("xStart");
-        yStart = aNBT.getInteger("yStart");
-        zStart = aNBT.getInteger("zStart");
-        isStartInitialized = aNBT.getBoolean("isStartInitialized");
-        hasFinished = aNBT.getBoolean("hasFinished");
-        isWaiting = aNBT.getBoolean("isWaiting");
-        stopAllRendering = aNBT.getBoolean("stopAllRendering");
-        multiTier = aNBT.getInteger("multiTier");
-        fortuneTier = aNBT.getInteger("fortuneTier");
-    }
-
-    private void reset() {
-        this.isResetting = false;
-        this.hasFinished = true;
-        this.isWaiting = false;
-        currentRadius = MAX_RADIUS;
-        this.initializeDrillPos();
-    }
-
-    private void startReset() {
-        this.isResetting = true;
-        stopMachine(ShutDownReasonRegistry.NONE);
-        enableWorking();
     }
 
     @Override
     @NotNull
     public CheckRecipeResult checkProcessing() {
         if (this.multiTier != this.getMultiTier(mInventory[1])) {
+            // spotless:off
             // #tr GT5U.gui.text.recipe_result.missing_schematic
             // # {\LIGHT_PURPLE}Missing Schematic.
             // #zh_CN {\LIGHT_PURPLE}缺少设计图.
@@ -706,6 +394,114 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         // # {\LIGHT_PURPLE}Currently Mining!
         // #zh_CN {\LIGHT_PURPLE}正在开采!
         return SimpleCheckRecipeResult.ofSuccess("meteor_mining");
+            // spotless:on
+    }
+
+    @Override
+    public void onDisableWorking() {
+        if (renderer != null) renderer.setShouldRender(false);
+        super.onDisableWorking();
+    }
+
+    @Override
+    public void onBlockDestroyed() {
+        if (renderer != null) renderer.setShouldRender(false);
+        super.onBlockDestroyed();
+    }
+
+    private boolean findLaserRenderer() {
+        this.setStartCoords();
+
+        if (getBaseMetaTileEntity().getWorld()
+            .getTileEntity(
+                xStart,
+                getBaseMetaTileEntity().getYCoord() + (this.multiTier == 1 ? 10 : 15),
+                zStart) instanceof TileEntityLaserBeacon laser) {
+            renderer = laser;
+            renderer.setRotationFields(ExtendedFacing.of(getDirection(), getRotation(), getFlip()));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
+        stopAllRendering = !stopAllRendering;
+        // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_off
+        // # Rendering off
+        // #zh_CN 渲染特效关闭
+        // #tr TST_LaserMeteorMiner_message_screwdriverRightClick_on
+        // # Rendering on
+        // #zh_CN 渲染特效开启
+        if (stopAllRendering) {
+            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_off");
+            if (renderer != null) renderer.setShouldRender(false);
+        } else {
+            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_on");
+        }
+    }
+
+    private int getMultiTier(ItemStack inventory) {
+        if (inventory == null || inventory.stackSize < 1) return 0;
+        return GTCMItemList.MeteorMinerSchematic2.equal(inventory) ? 2
+            : GTCMItemList.MeteorMinerSchematic1.equal(inventory) ? 1 : 0;
+    }
+
+    protected int getXDrill() {
+        return xDrill;
+    }
+
+    protected int getYDrill() {
+        return yDrill;
+    }
+
+    protected int getZDrill() {
+        return zDrill;
+    }
+
+    private int getLaserToEndHeight() {
+        return (this.multiTier == 1 ? 3 : 0);
+    }
+
+    private void setFortuneTier() {
+        this.fortuneTier = 0;
+        if (this.multiTier == 2) {
+            this.fortuneTier = 3;
+            return;
+        }
+        if (!mInputBusses.isEmpty()) {
+            Optional<ItemStack> input = Optional.ofNullable(
+                mInputBusses.get(0)
+                    .getInventoryHandler()
+                    .getStackInSlot(0));
+            if (input.isPresent()) {
+                this.fortuneTier = getFortuneTier(input.get());
+            }
+        }
+    }
+
+    private static int getFortuneTier(ItemStack itemStack) {
+        if (itemStack == null || itemStack.stackSize < 1) return 0;
+        Item t = itemStack.getItem();
+        if (MiscHelper.PickaxeOfTheCore.equals(t)) return 1;
+        if (MiscHelper.BoundPickaxe.equals(t)) return 2;
+        if (MiscHelper.TerraShatterer.equals(t)) return 3;
+        return 0;
+    }
+
+    private void reset() {
+        this.isResetting = false;
+        this.hasFinished = true;
+        this.isWaiting = false;
+        currentRadius = MAX_RADIUS;
+        this.initializeDrillPos();
+    }
+
+    private void startReset() {
+        this.isResetting = true;
+        stopMachine(ShutDownReasonRegistry.NONE);
+        enableWorking();
     }
 
     private void startMining(int tier) {
@@ -956,9 +752,238 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         // #tr Tooltip_METEOR_MINER_CONTROLLER.fortune.3
         // # Augment: {\WHITE}Fortune III
         // #zh_CN 增强效果: 时运III
-        // spotless:on
         currentTip.add(tr("Tooltip_METEOR_MINER_CONTROLLER.tier." + tag.getInteger("tier")) + EnumChatFormatting.RESET);
+        // spotless:on
         currentTip
             .add(tr("Tooltip_METEOR_MINER_CONTROLLER.fortune." + tag.getInteger("fortune")) + EnumChatFormatting.RESET);
     }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("currentRadius", currentRadius);
+        aNBT.setInteger("xDrill", xDrill);
+        aNBT.setInteger("yDrill", yDrill);
+        aNBT.setInteger("zDrill", zDrill);
+        aNBT.setInteger("xStart", xStart);
+        aNBT.setInteger("yStart", yStart);
+        aNBT.setInteger("zStart", zStart);
+        aNBT.setBoolean("isStartInitialized", isStartInitialized);
+        aNBT.setBoolean("hasFinished", hasFinished);
+        aNBT.setBoolean("isWaiting", isWaiting);
+        aNBT.setBoolean("stopAllRendering", stopAllRendering);
+        aNBT.setInteger("multiTier", multiTier);
+        aNBT.setInteger("fortuneTier", fortuneTier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        currentRadius = aNBT.getInteger("currentRadius");
+        xDrill = aNBT.getInteger("xDrill");
+        yDrill = aNBT.getInteger("yDrill");
+        zDrill = aNBT.getInteger("zDrill");
+        xStart = aNBT.getInteger("xStart");
+        yStart = aNBT.getInteger("yStart");
+        zStart = aNBT.getInteger("zStart");
+        isStartInitialized = aNBT.getBoolean("isStartInitialized");
+        hasFinished = aNBT.getBoolean("hasFinished");
+        isWaiting = aNBT.getBoolean("isWaiting");
+        stopAllRendering = aNBT.getBoolean("stopAllRendering");
+        multiTier = aNBT.getInteger("multiTier");
+        fortuneTier = aNBT.getInteger("fortuneTier");
+    }
+
+    // endregion
+
+    // region Textures
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER");
+
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE");
+
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW");
+
+    public static IIconContainer OVERLAY_FRONT_METEOR_MINER_GLOW = Textures.BlockIcons
+        .custom("gtnhcommunitymod:iconSets/OVERLAY_FRONT_METEOR_MINER_GLOW");
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
+        int colorIndex, boolean aActive, boolean redstoneLevel) {
+        ITexture[] rTexture;
+        if (side == aFacing) {
+            if (aActive) {
+                rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FRONT_METEOR_MINER_ACTIVE)
+                        .extFacing()
+                        .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FRONT_METEOR_MINER_ACTIVE_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            } else {
+                rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FRONT_METEOR_MINER)
+                        .extFacing()
+                        .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FRONT_METEOR_MINER_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+        } else {
+            rTexture = new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.getIndexFromPage(0, 8)) };
+        }
+        return rTexture;
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr TST_LaserMeteorMiner_tooltips_machineType
+        // # Meteor Miner
+        // #zh_CN 陨星采矿机
+        tt.addMachineType(tr("TST_LaserMeteorMiner_tooltips_machineType"))
+            // #tr TST_LaserMeteorMiner_tooltips_01
+            // # Controller Block for the Laser Meteor Miner!
+            // #zh_CN 激光陨星采矿场的控制器方块！
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_01"))
+            // #tr TST_LaserMeteorMiner_tooltips_02
+            // # To work properly the center of the meteor has to be 48 blocks above the highest block of the multi.
+            // #zh_CN 陨星的中心必须位于机器最高点上方48个方块的位置, 机器方可正常工作.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_02"))
+            // #tr TST_LaserMeteorMiner_tooltips_03
+            // # The laser will mine in a radius of up to 40 blocks in each direction from the center of the meteor.
+            // #zh_CN 激光将在陨星中心半径40方块内进行采矿作业.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_03"))
+            // #tr TST_LaserMeteorMiner_tooltips_04
+            // # All the chunks involved must be chunkloaded.
+            // #zh_CN 所涉及区块都必须保证加载.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_04"))
+            // #tr TST_LaserMeteorMiner_tooltips_05
+            // # The laser will automatically set its radius based on the meteorite,
+            // #zh_CN 激光将根据陨石自动设置其运行半径.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_05"))
+            // #tr TST_LaserMeteorMiner_tooltips_06
+            // # if it doesn't find any it will wait for a meteor to spawn,
+            // #zh_CN 没有找到陨星时机器会等待陨星生成.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_06"))
+            // #tr TST_LaserMeteorMiner_tooltips_07
+            // # considering the block right above the center of the meteor (like Warded Glass).
+            // #zh_CN 顾及了中心正上方的方块(比如守卫者玻璃).
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_07"))
+            // #tr TST_LaserMeteorMiner_tooltips_08
+            // # The reset button will restart the machine without optimizing the radius.
+            // #zh_CN 点击重启按钮将重启机器, 并且不进行半径适配优化.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_08"))
+            // #tr TST_LaserMeteorMiner_tooltips_needSchematic
+            // # Machine need Meteor Miner Schematic put in controller slot to run.
+            // #zh_CN 机器需要在控制器方块内放置陨星采矿场设计图才可运行.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_needSchematic"))
+            // #tr TST_LaserMeteorMiner_tooltips_09
+            // # {\RED}{\BOLD} TIER I
+            // #zh_CN {\RED}{\BOLD} 等级 I
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_09"))
+            // #tr TST_LaserMeteorMiner_tooltips_10
+            // # Mines one block every cycle.
+            // #zh_CN 每次运行挖掘一个方块.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_10"))
+            // #tr TST_LaserMeteorMiner_tooltips_11
+            // # Default Fortune is 0, it can be increased by putting in the input bus special pickaxes:
+            // #zh_CN 默认没有时运效果. 输入总线内放置以下镐子可以获得时运效果:
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_11"))
+            // #tr TST_LaserMeteorMiner_tooltips_12
+            // # Fortune I: Pickaxe of the Core
+            // #zh_CN 时运I : 炽心镐
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_12"))
+            // #tr TST_LaserMeteorMiner_tooltips_13
+            // # Fortune II: Bound Pickaxe
+            // #zh_CN 时运II : 约束之镐
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_13"))
+            // #tr TST_LaserMeteorMiner_tooltips_14
+            // # Fortune III: Terra Shatterer
+            // #zh_CN 时运III : 泰拉粉碎者
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_14"))
+            // #tr TST_LaserMeteorMiner_tooltips_15
+            // # {\RED}{\BOLD} TIER II
+            // #zh_CN {\RED}{\BOLD} 等级 II
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_15"))
+            // #tr TST_LaserMeteorMiner_tooltips_16
+            // # Always has Fortune III
+            // #zh_CN 总是时运III.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_16"))
+            // #tr TST_LaserMeteorMiner_tooltips_17
+            // # Mines one row every cycle.
+            // #zh_CN 每次运行挖掘一行.
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_17"))
+            // #tr TST_LaserMeteorMiner_tooltips_18
+            // # {\BLUE}{\BOLD}Finally some good Meteors!
+            // #zh_CN {\BLUE}{\BOLD}终是好陨星! (Finally some good Meteors!)
+            .addInfo(tr("TST_LaserMeteorMiner_tooltips_18"))
+            // #tr TST_LaserMeteorMiner_tooltips_T1
+            // # {\GOLD}{\BOLD}TIER I
+            // #zh_CN {\GOLD}{\BOLD}等级 I
+            .addStructureInfo(tr("TST_LaserMeteorMiner_tooltips_T1"))
+            // #tr TST_LaserMeteorMiner_structure_info_T1_controller
+            // # Center of the second layer above the ritual
+            // #zh_CN 仪式上方第二层的中心
+            .addController(tr("TST_LaserMeteorMiner_structure_info_T1_controller"))
+            // #tr TST_LaserMeteorMiner_structure_info_T1_hatches
+            // # Any Structural Solar Casing around the controller
+            // #zh_CN 控制器周边的太阳能塔机械方块
+            .addOutputBus(tr("TST_LaserMeteorMiner_structure_info_T1_hatches"), 1)
+            .addEnergyHatch(tr("TST_LaserMeteorMiner_structure_info_T1_hatches"), 1)
+            .addMaintenanceHatch(tr("TST_LaserMeteorMiner_structure_info_T1_hatches"), 1)
+            // #tr TST_LaserMeteorMiner_structure_info_T1_hatches_input_bus
+            // # Below the controller
+            // #zh_CN 控制器下侧
+            .addInputBus(tr("TST_LaserMeteorMiner_structure_info_T1_hatches_input_bus"), 2)
+            // #tr TST_LaserMeteorMiner_tooltips_T2
+            // # {\GOLD}{\BOLD}TIER II
+            // #zh_CN {\GOLD}{\BOLD}等级 II
+            .addStructureInfo(tr("TST_LaserMeteorMiner_tooltips_T2"))
+            // #tr TST_LaserMeteorMiner_structure_info_T2_controller
+            // # Highest layer of the ritual
+            // #zh_CN 仪式最上层
+            .addController(tr("TST_LaserMeteorMiner_structure_info_T2_controller"))
+            // #tr TST_LaserMeteorMiner_structure_info_T2_hatches
+            // # Any Neutronium Casing below the controller
+            // #zh_CN 控制器下方的中子采矿机械方块
+            .addOutputBus(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
+            .addEnergyHatch(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
+            .addMaintenanceHatch(tr("TST_LaserMeteorMiner_structure_info_T2_hatches"), 3)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    private boolean addInjector(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
+        IMetaTileEntity aMetaTileEntity = aBaseMetaTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (!(aMetaTileEntity instanceof MTEHatchInputBus bus)) return false;
+        bus.updateTexture(aBaseCasingIndex);
+        return mInputBusses.add(bus);
+    }
+
+    // endregion
+
 }

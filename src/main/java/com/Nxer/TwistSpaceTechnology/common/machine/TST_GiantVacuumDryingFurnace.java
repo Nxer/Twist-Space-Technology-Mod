@@ -61,12 +61,7 @@ import gtPlusPlus.core.block.ModBlocks;
 @SkipGenerateDescription
 public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_GiantVacuumDryingFurnace> {
 
-    private static final int MACHINEMODE_VACUUMFURNACE = 0;
-    private static final int MACHINEMODE_DEHYDRATOR = 1;
-    private int piece = 1;
-    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
-
-    // region constructor
+    // region Class Constructor
     public TST_GiantVacuumDryingFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
         registerTooltipCredits(ID.AEFHMV);
@@ -75,68 +70,17 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     public TST_GiantVacuumDryingFurnace(String aName) {
         super(aName);
     }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_GiantVacuumDryingFurnace(this.mName);
+    }
     // endregion
 
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Vacuum Furnace
-         * 1 - Dehydrator
-         */
-        return 2;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    // }
-    //
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("GT5U.GTPP_MULTI_INDUSTRIAL_DEHYDRATOR.mode." + machineMode);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return (machineMode == MACHINEMODE_VACUUMFURNACE) ? GTPPRecipeMaps.vacuumFurnaceRecipes
-            : GTPPRecipeMaps.chemicalDehydratorNonCellRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTPPRecipeMaps.chemicalDehydratorNonCellRecipes, GTPPRecipeMaps.vacuumFurnaceRecipes);
-    }
-
-    // region Processing Logic
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setInteger("piece", piece);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        piece = aNBT.getInteger("piece");
-    }
-
+    // region Structure
     private static IStructureDefinition<TST_GiantVacuumDryingFurnace> STRUCTURE_DEFINITION = null;
 
-    // region Structure
-
+    // spotless:off
     // 'S' = Stainless casing
     // 'A' = Glasses
     // 'C' = Coil
@@ -149,23 +93,16 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     // 'H' = Invar Frame
 
     // VacuumPump height = 8 , length = width = 9 , and x-OffSet = 10 , y-OffSet = 4 ;
-    private static final String[][] shapeVacuumPump = new String[][] {
-        { "         ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ",
-            "         " },
-        { "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV",
-            "VVVVVVVVV" } };
+    private static final String[][] shapeVacuumPump = new String[][]{
+        {"         "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS ","         "},
+        {"VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV"}
+    };
 
     // mainFrame height = 7 , length = 9 , width = 3 ,and x-OffSet = 1 , y-OffSet = 3 ;
     private static final String[][] shapeMainFrame = new String[][] {
@@ -178,41 +115,32 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" } };
 
     // dryingTowerBase height = 5 , length = width = 11 , x-os = -2 , y-os = 1;
-    private static final String[][] shapeDryingTowerBase = new String[][] {
-        { "           ", " IIIIIIIII ", " IJJJAJJJI ", " IJJJAJJJI ", " IJJJAJJJI ", " AAAAGAAAA ", " IJJJAJJJI ",
-            " IJJJAJJJI ", " IJJJAJJJI ", " IIIIIIIII ", "           " },
-        { "           ", " H       H ", "           ", "  FFFFFFF  ", "     V     ", "    VGV    ", "     V     ",
-            "  FFFFFFF  ", "           ", " H       H ", "           " },
-        { "           ", " H       H ", "  FFFFFFF  ", " FGGGGGGGF ", "  FFFFFFF  ", "           ", "  FFFFFFF  ",
-            " FGGGGGGGF ", "  FFFFFFF  ", " H       H ", "           " },
-        { "  HHHHHHH  ", " H       H ", "H         H", "H FFFFFFF H", "H         H", "H         H", "H         H",
-            "H FFFFFFF H", " H       H ", " H       H ", "  HHHHHHH  " },
-        { " VVVVVVVVV ", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV",
-            "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", " VVVVVVVVV " } };
+    private static final String[][] shapeDryingTowerBase = new String[][]{
+        {"           "," IIIIIIIII "," IJJJAJJJI "," IJJJAJJJI "," IJJJAJJJI "," AAAAGAAAA "," IJJJAJJJI "," IJJJAJJJI "," IJJJAJJJI "," IIIIIIIII ","           "},
+        {"           "," H       H ","           ","  FFFFFFF  ","     V     ","    VGV    ","     V     ","  FFFFFFF  ","           "," H       H ","           "},
+        {"           "," H       H ","  FFFFFFF  "," FGGGGGGGF ","  FFFFFFF  ","           ","  FFFFFFF  "," FGGGGGGGF ","  FFFFFFF  "," H       H ","           "},
+        {"  HHHHHHH  "," H       H ","H         H","H FFFFFFF H","H         H","H         H","H         H","H FFFFFFF H"," H       H "," H       H ","  HHHHHHH  "},
+        {" VVVVVVVVV ","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV"," VVVVVVVVV "}
+    };
+
     // dryingTowerMiddle height = 7 , length = width = 11 , x-os = -2 , y-os = 1+7n ; n is the number of this part
-    private static final String[][] shapeDryingTowerMiddle = new String[][] {
-        { "           ", "   I   I   ", "  JJJAJJJ  ", " IJJJAJJJI ", "  JJJAJJJ  ", " AAAAGAAAA ", "  JJJAJJJ  ",
-            " IJJJAJJJI ", "  JJJAJJJ  ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "           ", " I C   C I ", "           ", "     G     ", "           ",
-            " I C   C I ", "           ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "   C   C   ", " IC C C CI ", "   C   C   ", "     G     ", "   C   C   ",
-            " IC C C CI ", "   C   C   ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "  CCC CCC  ", " IC C C CI ", "  CCC CCC  ", "     G     ", "  CCC CCC  ",
-            " IC C C CI ", "  CCC CCC  ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "  CCC CCC  ", " IC C C CI ", "  CCC CCC  ", "     G     ", "  CCC CCC  ",
-            " IC C C CI ", "  CCC CCC  ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "   C   C   ", " IC C C CI ", "   C   C   ", "     G     ", "   C   C   ",
-            " IC C C CI ", "   C   C   ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "           ", " I C   C I ", "           ", "     G     ", "           ",
-            " I C   C I ", "           ", "   I   I   ", "           " } };
+    private static final String[][] shapeDryingTowerMiddle = new String[][]{
+        {"           ","   I   I   ","  JJJAJJJ  "," IJJJAJJJI ","  JJJAJJJ  "," AAAAGAAAA ","  JJJAJJJ  "," IJJJAJJJI ","  JJJAJJJ  ","   I   I   ","           "},
+        {"           ","   I   I   ","           "," I C   C I ","           ","     G     ","           "," I C   C I ","           ","   I   I   ","           "},
+        {"           ","   I   I   ","   C   C   "," IC C C CI ","   C   C   ","     G     ","   C   C   "," IC C C CI ","   C   C   ","   I   I   ","           "},
+        {"           ","   I   I   ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","     G     ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","   I   I   ","           "},
+        {"           ","   I   I   ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","     G     ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","   I   I   ","           "},
+        {"           ","   I   I   ","   C   C   "," IC C C CI ","   C   C   ","     G     ","   C   C   "," IC C C CI ","   C   C   ","   I   I   ","           "},
+        {"           ","   I   I   ","           "," I C   C I ","           ","     G     ","           "," I C   C I ","           ","   I   I   ","           "}
+    };
+
     // dryingTowerMiddle height = 3 , length = width = 11 , x-os = -2 , y-os = 4+7n;
-    private static final String[][] shapeDryingTowerHat = new String[][] {
-        { "           ", "           ", "           ", "    VVV    ", "   VGGGV   ", "   VGGGV   ", "   VGGGV   ",
-            "    VVV    ", "           ", "           ", "           " },
-        { "           ", "           ", "   I   I   ", "  IV   VI  ", "     V     ", "    VGV    ", "     V     ",
-            "  IV   VI  ", "   I   I   ", "           ", "           " },
-        { "           ", "           ", "   I   I   ", "  I     I  ", "           ", "     G     ", "           ",
-            "  I     I  ", "   I   I   ", "           ", "           " } };
+    private static final String[][] shapeDryingTowerHat = new String[][]{
+        {"           ","           ","           ","    VVV    ","   VGGGV   ","   VGGGV   ","   VGGGV   ","    VVV    ","           ","           ","           "},
+        {"           ","           ","   I   I   ","  IV   VI  ","     V     ","    VGV    ","     V     ","  IV   VI  ","   I   I   ","           ","           "},
+        {"           ","           ","   I   I   ","  I     I  ","           ","     G     ","           ","  I     I  ","   I   I   ","           ","           "}
+    };
+    // spotless:on
 
     private final int VP_horizontalOffSet = 10;
     private final int VP_verticalOffSet = 4;
@@ -220,14 +148,15 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
 
     // MF
     private final int MF_horizontalOffSet = 1;
+
     private final int MF_verticalOffSet = 3;
     private final int MF_depthOffSet = 0;
 
     // DT
     private final int DT_horizontalOffSet = -2;
+
     private final int DT_verticalOffSet = 1;
     private final int DT_depthOffSet = 0;
-
     private static final String STRUCTURE_PIECE_VP = "VacuumPump";
     private static final String STRUCTURE_PIECE_MF = "MainFrame";
     private static final String STRUCTURE_PIECE_DTB = "DryingTowerBase";
@@ -396,7 +325,100 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         return TstUtils.multiBuildPiece(built);
     }
 
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        coilLevel = HeatingCoilLevel.None;
+
+        this.piece = 0;
+
+        if (!checkPiece(STRUCTURE_PIECE_VP, VP_horizontalOffSet, VP_verticalOffSet, VP_depthOffSet, errors)) {
+            return;
+        }
+        if (!checkPiece(STRUCTURE_PIECE_MF, MF_horizontalOffSet, MF_verticalOffSet, MF_depthOffSet, errors)) {
+            return;
+        }
+        if (!checkPiece(STRUCTURE_PIECE_DTB, DT_horizontalOffSet, DT_verticalOffSet, DT_depthOffSet, errors)) {
+            return;
+        }
+
+        while (checkPiece(
+            STRUCTURE_PIECE_DTM,
+            DT_horizontalOffSet,
+            DT_verticalOffSet + 7 * piece + 7,
+            DT_depthOffSet,
+            errors)) {
+            this.piece++;
+        }
+
+        if (piece < 1) return;
+
+        errors.clear();
+
+        if (!checkPiece(
+            STRUCTURE_PIECE_DTH,
+            DT_horizontalOffSet,
+            DT_verticalOffSet + 7 * piece + 3,
+            DT_depthOffSet,
+            errors)) {
+            return;
+        }
+
+        // parallel = piece * 32
+        maxParallel = (int) Math
+            .min((long) piece * getCoilTier() * Parallel_PerPiece_GiantVacuumDryingFurnace, Integer.MAX_VALUE);
+
+        // speed bonus = 0.8^voltageTier
+        speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, getTotalPowerTier()))
+            / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
+
+    }
     // endregion
+
+    // region Processing Logic
+    private static final int MACHINEMODE_VACUUMFURNACE = 0;
+    private static final int MACHINEMODE_DEHYDRATOR = 1;
+    private int piece = 1;
+    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return (machineMode == MACHINEMODE_VACUUMFURNACE) ? GTPPRecipeMaps.vacuumFurnaceRecipes
+            : GTPPRecipeMaps.chemicalDehydratorNonCellRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTPPRecipeMaps.chemicalDehydratorNonCellRecipes, GTPPRecipeMaps.vacuumFurnaceRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Vacuum Furnace
+         * 1 - Dehydrator
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    // @Override
+    // public void setMachineModeIcons() {
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
+    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
+    // }
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("GT5U.GTPP_MULTI_INDUSTRIAL_DEHYDRATOR.mode." + machineMode);
+    }
 
     public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
         this.coilLevel = aCoilLevel;
@@ -410,9 +432,70 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         return TstUtils.getVoltageForCoil(coilLevel);
     }
 
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setInteger("piece", piece);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        piece = aNBT.getInteger("piece");
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
+        ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
+
+        if (sideDirection == facingDirection) {
+            if (active) return new ITexture[] {
+                Textures.BlockIcons
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
+                    .extFacing()
+                    .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+            return new ITexture[] {
+                Textures.BlockIcons
+                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
+                    .extFacing()
+                    .build(),
+                TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+                    .extFacing()
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)) };
+    }
+
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
         // #tr Tooltip_GVDF_MachineType
         // # Vacuum Furnace | Dehydrator
         // #zh_CN 真空干燥炉 | 化学脱水机
@@ -466,95 +549,10 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             .addEnergyHatch(TextEnums.tr("Tooltip_GVDF_EnergyHatch"))
 
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
 
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        coilLevel = HeatingCoilLevel.None;
-
-        this.piece = 0;
-
-        if (!checkPiece(STRUCTURE_PIECE_VP, VP_horizontalOffSet, VP_verticalOffSet, VP_depthOffSet, errors)) {
-            return;
-        }
-        if (!checkPiece(STRUCTURE_PIECE_MF, MF_horizontalOffSet, MF_verticalOffSet, MF_depthOffSet, errors)) {
-            return;
-        }
-        if (!checkPiece(STRUCTURE_PIECE_DTB, DT_horizontalOffSet, DT_verticalOffSet, DT_depthOffSet, errors)) {
-            return;
-        }
-
-        while (checkPiece(
-            STRUCTURE_PIECE_DTM,
-            DT_horizontalOffSet,
-            DT_verticalOffSet + 7 * piece + 7,
-            DT_depthOffSet,
-            errors)) {
-            this.piece++;
-        }
-
-        if (piece < 1) return;
-
-        errors.clear();
-
-        if (!checkPiece(
-            STRUCTURE_PIECE_DTH,
-            DT_horizontalOffSet,
-            DT_verticalOffSet + 7 * piece + 3,
-            DT_depthOffSet,
-            errors)) {
-            return;
-        }
-
-        // parallel = piece * 32
-        maxParallel = (int) Math
-            .min((long) piece * getCoilTier() * Parallel_PerPiece_GiantVacuumDryingFurnace, Integer.MAX_VALUE);
-
-        // speed bonus = 0.8^voltageTier
-        speedBonus = (float) (Math.pow(SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace, getTotalPowerTier()))
-            / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
-
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_GiantVacuumDryingFurnace(this.mName);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
-        ForgeDirection facingDirection, int colorIndex, boolean active, boolean redstoneLevel) {
-
-        if (sideDirection == facingDirection) {
-            if (active) return new ITexture[] {
-                Textures.BlockIcons
-                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-            return new ITexture[] {
-                Textures.BlockIcons
-                    .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
-                    .extFacing()
-                    .build(),
-                TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)) };
-    }
+    // endregion
 
 }
