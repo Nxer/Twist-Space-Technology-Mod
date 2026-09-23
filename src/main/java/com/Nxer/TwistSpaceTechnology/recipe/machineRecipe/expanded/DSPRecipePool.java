@@ -61,8 +61,8 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.dreammaster.item.NHItemList;
 
 import goodgenerator.items.GGMaterial;
@@ -295,7 +295,7 @@ public class DSPRecipePool {
                 // #tr NEI.AntimatterFuelRodGeneratingRecipe.01
                 // # Chance to recover some raw materials. Probability is affected by module tier.
                 // #zh_CN 有概率回收部分材料. 概率受模块等级影响.
-                TextEnums.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
+                TSTUtils.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
             .specialValue((int) (EUEveryAntimatterFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -304,7 +304,7 @@ public class DSPRecipePool {
         GTValues.RA.stdBuilder()
             .itemInputs(StrangeAnnihilationFuelRod.get(1))
             .itemOutputs(StellarConstructionFrameMaterial.get(1).setStackDisplayName(
-                TextEnums.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
+                TSTUtils.tr("NEI.AntimatterFuelRodGeneratingRecipe.01")))
             .specialValue((int) (EUEveryStrangeAnnihilationFuelRod / Integer.MAX_VALUE))
             .eut(0)
             .duration(0)
@@ -743,28 +743,28 @@ public class DSPRecipePool {
                     // #zh_CN 基础材料, 从通用输入总线输入, 实际数量与机器内部参数有关
                     appendToItemStackDisplayName(
                         Antimatter.get(256),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     // #tr StrangeMatterAggregation.RecipeDescription.secondSlot
                     // # input from the right input bus and consumption rate set by structure
                     // #zh_CN 由右侧输入总线输入, 消耗率与结构有关
                     appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
                     // #tr StrangeMatterAggregation.RecipeDescription.thirdSlot
                     // # auxiliary material, input from general input bus, only consume 1 per parallel
                     // #zh_CN 辅助材料, 从通用输入总线输入, 每并行只消耗1个
                     appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     // #tr StrangeMatterAggregation.RecipeDescription.fourthSlot
                     // # auxiliary material, input from general input bus, consumed amount same as output amount, affected by structure
                     // #zh_CN 辅助材料, 从通用输入总线输入, 消耗量等于产物数量, 受结构等级影响
                     appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
                 .fluidInputs(
                     // general input , amount is set by machine internal parameters
                     Materials.Hydrogen.getPlasma(256 * 1000),
@@ -777,14 +777,14 @@ public class DSPRecipePool {
                     // #zh_CN 1级产物
                     appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     // #tr StrangeMatterAggregation.RecipeDescription.output2
                     // # T2 production
                     // #zh_CN 2级产物
                     appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
                     // here is T1 byproduct
                     Materials.Infinity.getMolten(Config.ByproductBaseAmount_T1_StrangeMatterAggregator),
@@ -795,7 +795,7 @@ public class DSPRecipePool {
                 .special(
                     appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
@@ -807,19 +807,19 @@ public class DSPRecipePool {
                     // first slot is the general input , amount is set by machine internal parameters
                     appendToItemStackDisplayName(
                         Antimatter.get(256),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
                     appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     appendToItemStackDisplayName(
                         StellarConstructionFrameMaterial.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.fourthSlot")))
                 .fluidInputs(
                     // general input , amount is set by machine internal parameters
                     Materials.Hydrogen.getPlasma(256 * 1000),
@@ -829,11 +829,11 @@ public class DSPRecipePool {
                     // first output is T1 output
                     appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
                     // here is T2 byproduct
                     Materials.SpaceTime.getMolten(Config.ByproductBaseAmount_T2_StrangeMatterAggregator),
@@ -841,7 +841,7 @@ public class DSPRecipePool {
                 .special(
                     appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)
@@ -852,15 +852,15 @@ public class DSPRecipePool {
                     // first slot is the general input , amount is set by machine internal parameters
                     appendToItemStackDisplayName(
                         Antimatter.get(256),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.firstSlot")),
                     // second slot is the right input bus input and consumption rate set by structure
                     appendToItemStackDisplayName(
                         AnnihilationConstrainer.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.secondSlot")),
                     // third slot is only consume one time per process
                     appendToItemStackDisplayName(
                         ItemList.Tesseract.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.thirdSlot")),
                     // fourth slot is consume same amount with output, can be saved by high tier structure
                     StellarConstructionFrameMaterial.get(1))
                 .fluidInputs(
@@ -872,18 +872,18 @@ public class DSPRecipePool {
                     // first output is T1 output
                     appendToItemStackDisplayName(
                         AntimatterFuelRod.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output1")),
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.output1")),
                     // second output is T2 output, when input special item then turn to output this instead of T1 output
                     appendToItemStackDisplayName(
                         StrangeAnnihilationFuelRod.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.output2")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.output2")))
                 .fluidOutputs(
                     // here is T3 byproduct
                     Materials.Universium.getMolten(Config.ByproductBaseAmount_T3_StrangeMatterAggregator))
                 .special(
                     appendToItemStackDisplayName(
                         GTCMItemList.CoreElement.get(1),
-                        "// " + TextEnums.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
+                        "// " + TSTUtils.tr("StrangeMatterAggregation.RecipeDescription.specialSlot")))
                 // machine will always use a fixed power, adjusted by structure
                 .eut(RECIPE_MAX)
                 .duration(20 * 120)

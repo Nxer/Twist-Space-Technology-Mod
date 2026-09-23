@@ -3,8 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.P
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -116,11 +117,11 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
                       // #tr Tooltips.DynamicParallelController.01
                       // # Parallel controller module with adjustable parameters.
                       // #zh_CN 可调参数的并行控制器模块.
-                      TextEnums.tr("Tooltips.DynamicParallelController.01"),
+                      TSTUtils.tr("Tooltips.DynamicParallelController.01"),
                       // #tr Tooltips.DynamicParallelController.02
                       // # Provides up to
                       // #zh_CN 最多提供
-                      TextEnums.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TextEnums.Word_Parallel + ".",
+                      TSTUtils.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TSTSharedLocalization.General.Word_Parallel + ".",
                 };
         }
         return description;

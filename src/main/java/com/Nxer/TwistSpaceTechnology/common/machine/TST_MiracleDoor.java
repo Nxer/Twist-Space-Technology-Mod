@@ -4,10 +4,10 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMira
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.MoltenToIngot;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -44,10 +44,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.Wireless
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -454,7 +453,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
             // # {\AQUA}Current Overclock Parameter{\RESET}: {\GOLD}%s
             // #zh_CN {\AQUA}当前额外超频系数{\RESET}: {\GOLD}%s
             currentTip
-                .add(TstUtils.tr("tst.miracleDoor.waila.currentOverclockParameter", tag.getLong("overclockParameter")));
+                .add(TSTUtils.tr("tst.miracleDoor.waila.currentOverclockParameter", tag.getLong("overclockParameter")));
         }
     }
 
@@ -609,68 +608,68 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         // #tr Tooltip_MiracleDoor_MachineType
         // # Stellar Forge | Stellar Forge : Alloy Smelter
         // #zh_CN 恒星锻炉 | 恒星锻炉:合金冶炼
-        tt.addMachineType(TextEnums.tr("Tooltip_MiracleDoor_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MiracleDoor_MachineType"))
             // #tr Tooltip_MiracleDoor_Controller
             // # Controller block for the Miracle Door
             // #zh_CN 奇迹之门的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_Controller"))
             // #tr Tooltip_MiracleDoor_00
             // # {\GOLD}{\BOLD}Mere mortals can't even begin to understand the progress we've made.
             // #zh_CN {\GOLD}{\BOLD}凡夫俗子根本无法理解我们的进步.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_00"))
             // #tr Tooltip_MiracleDoor_01
             // # Enslaving Stellaris to work for us.
             // #zh_CN 奴役群星为我们工作.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_01"))
             // #tr Tooltip_MiracleDoor_02
             // # No matter how large the workload, it can be done in one time.
             // #zh_CN 无论多大的工作量, 都能一次完成.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_02"))
             // #tr Tooltip_MiracleDoor_03
             // # No matter how large the workload, it need one Critical Photon to start.
             // #zh_CN 无论多大的工作量, 都需要临界光子启动.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_03"))
             // #tr Tooltip_MiracleDoor_04
             // # Power consumption: Alloy Smelter {\RED}100%{\GRAY} | Stellar Forge {\RED}200%{\GRAY}
             // #zh_CN 能量消耗: {\RESET}合金冶炼模式 {\RED}{\BOLD}100% {\GRAY}| {\RESET}恒星锻炉模式 {\RED}{\BOLD}200%
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_04"))
             // #tr Tooltip_MiracleDoor_05
             // # Directly get EU from the Wireless EU Net.
             // #zh_CN 直接从无线EU网络获取能量.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_05"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_05"))
             // #tr Tooltip_MiracleDoor_06
             // # Warning! If trying to start machine when Wireless EU Net has not enough EU,
             // #zh_CN 警告! 如果尝试在网络内能量不足时启动机器,
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_06"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_06"))
             // #tr Tooltip_MiracleDoor_07
             // # the materials will fade.
             // #zh_CN 输入的原料将直接寂灭.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_07"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_07"))
             // #tr Tooltip_MiracleDoor_08
             // # Put Integrated Circuit into Controller block to decrease process time interval.
             // #zh_CN 在控制器方块内放置编程电路以减少处理时间间隔.
-            .addInfo(TextEnums.tr("Tooltip_MiracleDoor_08"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleDoor_08"))
             .addStructureInfo(Tooltip_Details)
             // #tr Tooltip_MiracleDoor_2_01
             // # Each run takes the same amount of time, (ABS) 25.6s | (EBF) 64s default.
             // #zh_CN 每次运行消耗相同的时间, 默认 (恒星锻炉) 64s | (合金冶炼) 25.6s .
-            .addStructureInfo(TextEnums.tr("Tooltip_MiracleDoor_2_01"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_MiracleDoor_2_01"))
             // #tr Tooltip_MiracleDoor_2_02
             // # If putting Integrated Circuit into Controller block slot,
             // #zh_CN 如果在控制器方块输入槽放置编程电路,
-            .addStructureInfo(TextEnums.tr("Tooltip_MiracleDoor_2_02"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_MiracleDoor_2_02"))
             // #tr Tooltip_MiracleDoor_2_03
             // # actual progress time = default / (Integrated Circuit Number * Stack Size)
             // #zh_CN 实际处理时间 = 默认耗时 / (编号 * 物品数量)
-            .addStructureInfo(TextEnums.tr("Tooltip_MiracleDoor_2_03"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_MiracleDoor_2_03"))
             // #tr Tooltip_MiracleDoor_2_04
             // # Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)
             // #zh_CN 实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 2 (合金冶炼) 1
-            .addStructureInfo(TextEnums.tr("Tooltip_MiracleDoor_2_04"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_MiracleDoor_2_04"))
             // #tr Tooltip_MiracleDoor_2_05
             // # Each run cost number of OverClock Times Critical Photon to start(Default 1).
             // #zh_CN 每次运行需要消耗超频次数颗临界光子(默认为1).
-            .addStructureInfo(TextEnums.tr("Tooltip_MiracleDoor_2_05"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_MiracleDoor_2_05"))
             .addStructureInfo(Text_SeparatingLine)
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)

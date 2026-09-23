@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.block;
 
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 
 import java.util.List;
 

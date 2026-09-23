@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.roundUpToMultiple;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
 
 import net.minecraftforge.fluids.FluidStack;
 

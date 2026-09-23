@@ -25,7 +25,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.OreDictItem;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import cpw.mods.fml.common.Loader;
@@ -101,7 +101,7 @@ public class ExtremeCraftRecipeHandler {
                 @SuppressWarnings("unchecked")
                 ArrayList<ItemStack> itemList = (ArrayList<ItemStack>) list;
 
-                String oreName = TstUtils.getOreNameByOreList(itemList);
+                String oreName = TSTUtils.getOreNameByOreList(itemList);
                 if (oreName != null) {
                     // if we managed to get the ore name of the list, we use the ore name.
                     sorted.add(new Object[] { oreName, pair.getValue() });

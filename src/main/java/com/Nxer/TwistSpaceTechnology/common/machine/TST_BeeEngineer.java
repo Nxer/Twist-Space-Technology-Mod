@@ -22,10 +22,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -317,42 +317,42 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         // #tr Tooltip_BeeEngineer_Type
         // # Bee Engineer
         // #zh_CN 蜜蜂操纵者
-        tt.addMachineType(TextEnums.tr("Tooltip_BeeEngineer_Type"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_BeeEngineer_Type"))
             // #tr Tooltip_BeeEngineer_Controller
             // # Controller of the Bee Engineer
             // #zh_CN 蜜蜂操纵者的控制器
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_Controller"))
             // #tr Tooltip_BeeEngineer_01
             // # Still in test.
             // #zh_CN 其实还在测试中.
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_01"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_01"))
             // #tr Tooltip_BeeEngineer_02
             // # Transforming drones into princesses.
             // #zh_CN 将雄蜂转化为公主蜂.
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_02"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_02"))
             // #tr Tooltip_BeeEngineer_03
             // # Who knows how many drones became stepping stones for the Last Queen?
             // #zh_CN 谁知道有多少雄蜂成为了蜂后的垫脚石？
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_03"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_03"))
             // #tr Tooltip_BeeEngineer_04
             // # Cost {\GOLD}128kL{\GRAY} Honey to transform a drone into princess, but with {\RED}40%{\GRAY} failing chance.
             // #zh_CN 消耗{\GOLD}128k{\GRAY}L蜂蜜, 将雄蜂转化为公主蜂，但失败几率为{\RED}40%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_04"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_04"))
             // #tr Tooltip_BeeEngineer_05
             // # Will try to consume {\GOLD}32kL{\GRAY} UUM (if exists) to increase success rate to {\RED}80%{\GRAY}.
             // #zh_CN 将尝试消耗{\GOLD}32kL{\GRAY}的UU物质(如果存在)以将成功率提高到{\RED}80%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_05"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_05"))
             // #tr Tooltip_BeeEngineer_06
             // # In case of failure, all consumed ingredients will not be returned.
             // #zh_CN 在失败的情况下, 所有投入的原料都不会返还.
-            .addInfo(TextEnums.tr("Tooltip_BeeEngineer_06"))
+            .addInfo(TSTUtils.tr("Tooltip_BeeEngineer_06"))
             // #tr Tooltip_BeeEngineer_07
             // # Don't put too many drones in at once, that will result in a long run time!
             // #zh_CN 不要一次性放入太多雄蜂, 那会导致运行时间过长!
-            // .addInfo(TextEnums.tr("Tooltip_BeeEngineer_07"))
-            .addInputBus(TextLocalization.textUseBlueprint)
-            .addInputHatch(TextLocalization.textUseBlueprint)
-            .addOutputBus(TextLocalization.textUseBlueprint)
+            // .addInfo(TstUtils.tr("Tooltip_BeeEngineer_07"))
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
             .toolTipFinisher();
         // spotless:on
         return tt;

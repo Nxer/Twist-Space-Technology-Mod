@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
 import net.minecraft.item.ItemStack;

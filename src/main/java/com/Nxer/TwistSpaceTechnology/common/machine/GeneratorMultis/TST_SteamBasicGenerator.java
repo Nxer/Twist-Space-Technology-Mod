@@ -28,10 +28,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -223,7 +223,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                     // #tr TST_SteamBasicGenerator.gui.01
                     // # Steam consumption:
                     // #zh_CN 蒸汽消耗 :
-                    + TextEnums.tr("TST_SteamBasicGenerator.gui.01")
+                    + TSTUtils.tr("TST_SteamBasicGenerator.gui.01")
                     + " "
                     + EnumChatFormatting.GOLD
                     + numberFormat.format(STEAM_PER_SEC * DYNAMO_AMP)
@@ -231,7 +231,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                     // #tr TST_SteamBasicGenerator.gui.02
                     // # /s
                     // #zh_CN /s
-                    + TextEnums.tr("TST_SteamBasicGenerator.gui.02")
+                    + TSTUtils.tr("TST_SteamBasicGenerator.gui.02")
                     + EnumChatFormatting.RESET)
                 .setEnabled((STEAM_PER_SEC * DYNAMO_AMP) != 0))
             .widget(
@@ -240,7 +240,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                         // #tr TST_SteamBasicGenerator.gui.03
                         // # Currently generates:
                         // #zh_CN 当前发电 :
-                        + TextEnums.tr("TST_SteamBasicGenerator.gui.03")
+                        + TSTUtils.tr("TST_SteamBasicGenerator.gui.03")
                         + " "
                         + EnumChatFormatting.GOLD
                         + numberFormat.format(EU_PER_TICK * DYNAMO_AMP)
@@ -248,7 +248,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                         // #tr TST_SteamBasicGenerator.gui.04
                         // # eu/t
                         // #zh_CN eu/t
-                        + TextEnums.tr("TST_SteamBasicGenerator.gui.04")
+                        + TSTUtils.tr("TST_SteamBasicGenerator.gui.04")
                         + EnumChatFormatting.RESET)
                     .setEnabled(widget -> getBaseMetaTileEntity().isActive()))
             .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_AMP, val -> DYNAMO_AMP = val));
@@ -297,25 +297,25 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         // #tr Tooltip_SteamBasicGenerator_MachineType
         // # Steam generator
         // #zh_CN 蒸汽发电机
-        tt.addMachineType(TextEnums.tr("Tooltip_SteamBasicGenerator_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_SteamBasicGenerator_MachineType"))
             // #tr Tooltip_SteamBasicGenerator_00
             // # Converts steam into EU
             // #zh_CN 将蒸汽转换成EU
-            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_00"))
+            .addInfo(TSTUtils.tr("Tooltip_SteamBasicGenerator_00"))
             // #tr Tooltip_SteamBasicGenerator_01
             // # Base rate:§6 1L of Steam -> 0.7 EU§7
             // #zh_CN 基础比率:§6 1L 蒸汽 -> 0.7 EU§7
-            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_01"))
+            .addInfo(TSTUtils.tr("Tooltip_SteamBasicGenerator_01"))
             // #tr Tooltip_SteamBasicGenerator_02
             // # Fuel Efficiency:§c 140%§7
             // #zh_CN 燃料效率:§c 140%§7
-            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_02"))
+            .addInfo(TSTUtils.tr("Tooltip_SteamBasicGenerator_02"))
             // #tr Tooltip_SteamBasicGenerator_03
             // # Accepts simple or buffered LV dynamo hatch
             // #zh_CN 兼容普通LV仓和缓冲LV动力仓
-            .addInfo(TextEnums.tr("Tooltip_SteamBasicGenerator_03"))
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
+            .addInfo(TSTUtils.tr("Tooltip_SteamBasicGenerator_03"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

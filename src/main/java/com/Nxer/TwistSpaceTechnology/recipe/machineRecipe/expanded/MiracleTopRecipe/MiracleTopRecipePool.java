@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRe
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.clearMTRecipeCache;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.flushMTRecipeCache;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;

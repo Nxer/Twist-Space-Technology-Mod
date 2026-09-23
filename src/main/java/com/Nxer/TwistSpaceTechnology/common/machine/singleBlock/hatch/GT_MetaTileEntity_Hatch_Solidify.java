@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.AutoSeparation;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.FluidCapacity;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.AutoSeparation;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.FluidCapacity;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
 import java.util.Arrays;
@@ -16,10 +16,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.ModularUITextures;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -140,7 +140,7 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
             // #tr ToolTip_SolidifyHatch_1
             // # {\RESET}Fluid Input with Mold for {\GOLD}Fluid Solidifier{\RESET}
             // #zh_CN {\RESET}为{\GOLD}流体固化机{\RESET}带模具输入流体
-            new String[] { TextEnums.tr("ToolTip_SolidifyHatch_1"),
+            new String[] { TSTUtils.tr("ToolTip_SolidifyHatch_1"),
                 FluidCapacity + " " + getCapacityPerTank(aTier) + " L x " + getFluidSlotsAmount(aTier),
                 AutoSeparation });
         registerTooltipCredits(ID.GODERIUM);

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.sendMessageKeyToPlayer;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.sendMessageKeyToPlayer;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.ART;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
@@ -35,10 +35,10 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -832,7 +832,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         // #tr getInfoData.StoredWater
         // # Stored Water
         // #zh_CN 已存储水
-        ret[origin.length] = TextEnums.tr("getInfoData.StoredWater") + " : "
+        ret[origin.length] = TSTUtils.tr("getInfoData.StoredWater") + " : "
             + EnumChatFormatting.BLUE
             + storedWater
             + EnumChatFormatting.RESET
@@ -842,7 +842,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         // #tr getInfoData.StoredLava
         // # Stored Lava
         // #zh_CN 已存储岩浆
-        ret[origin.length + 1] = TextEnums.tr("getInfoData.StoredLava") + " : "
+        ret[origin.length + 1] = TSTUtils.tr("getInfoData.StoredLava") + " : "
             + EnumChatFormatting.RED
             + storedLava
             + EnumChatFormatting.RESET
@@ -852,7 +852,7 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         // #tr getInfoData.SuccessChance
         // # Success Chance
         // #zh_CN 成功几率
-        ret[origin.length + 2] = TextEnums.tr("getInfoData.SuccessChance") + " : "
+        ret[origin.length + 2] = TSTUtils.tr("getInfoData.SuccessChance") + " : "
             + EnumChatFormatting.GOLD
             + getSuccessChance()
             + " / 10000";
@@ -1193,79 +1193,79 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
             // #tr Tooltip_EyeOfWood_MachineType
             // # Happiness Master
             // #zh_CN Happiness Master
-            tt.addMachineType(TextEnums.tr("Tooltip_EyeOfWood_MachineType"))
+            tt.addMachineType(TSTUtils.tr("Tooltip_EyeOfWood_MachineType"))
                 // #tr Tooltip_EyeOfWood_Controller
                 // # Controller block for the Eye of Wood
                 // #zh_CN 武德之眼的控制器方块
-                .addInfo(TextEnums.tr("Tooltip_EyeOfWood_Controller"))
+                .addInfo(TSTUtils.tr("Tooltip_EyeOfWood_Controller"))
                 // #tr Tooltip_EyeOfWood_01
                 // # You'd better to do a sanity check, if you are looking at this.
                 // #zh_CN 如果你在看这个东西的话, 你最好去检查一下你的san值.
-                .addInfo(TextEnums.tr("Tooltip_EyeOfWood_01"))
+                .addInfo(TSTUtils.tr("Tooltip_EyeOfWood_01"))
                 // #tr Tooltip_EyeOfWood_02
                 // # Can only be deployed in the Overworld, otherwise it will have a festive effect.
                 // #zh_CN 仅可部署在主世界, 否则将产生节庆效果.
-                .addInfo(TextEnums.tr("Tooltip_EyeOfWood_02"))
+                .addInfo(TSTUtils.tr("Tooltip_EyeOfWood_02"))
                 // #tr Tooltip_EyeOfWood_2_01
                 // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY}in Input Hatches and store it inside the machine, like the Eye of Harmony.
                 // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_01"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_01"))
                 // #tr Tooltip_EyeOfWood_2_02
                 // # The success rate of processing depends on the amount of water and magma that has been stored inside machine.
                 // #zh_CN 机器运行的成功率取决于已存储的水和岩浆的数量.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_02"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_02"))
                 // #tr Tooltip_EyeOfWood_2_03
                 // # Maximum success rate : 75%% when the amount of stored water and lava are both equal to 256,000L.
                 // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_03"))
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_03"))
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 // #tr Tooltip_EyeOfWood_2_04
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}Success Rate{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}成功率{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_04"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_04"))
                 // #tr Tooltip_EyeOfWood_2_05
                 // # Of Which :
                 // #zh_CN 其中 :
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_05"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_05"))
                 // #tr Tooltip_EyeOfWood_2_06
                 // # Value-specific base {\GOLD}S{\WHITE} ≈ 1.087
                 // #zh_CN 特定值底数 {\GOLD}S{\WHITE} ≈ 1.087
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_06"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_06"))
                 // #tr Tooltip_EyeOfWood_2_07
                 // # {\BLUE}dW{\GRAY} is the difference between stored water and demand (256,000L) divided by 1000, rounded down, unit L : {\BLUE}dW{\WHITE} = floor( |Stored Water - Demand | / 1000 )
                 // #zh_CN {\BLUE}dW{\GRAY} 为已存储水量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\BLUE}dW{\WHITE} = floor( |已存储水量 - 需求量| / 1000 )
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_07"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_07"))
                 // #tr Tooltip_EyeOfWood_2_08
                 // # {\RED}dL{\GRAY} is the difference between stored lava and demand (256,000L) divided by 1000, rounded down, unit L : {\RED}dL{\WHITE} = floor( |Stored Lava - Demand | / 1000 )
                 // #zh_CN {\RED}dL{\GRAY} 为已存储岩浆量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\RED}dL{\WHITE} = floor( |已存储岩浆量 - 需求量| / 1000 )
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_08"))
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_08"))
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 // #tr Tooltip_EyeOfWood_2_09
                 // # The machine takes a constant 60 seconds per run.
                 // #zh_CN 机器每次运行耗时恒定为60秒.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_09"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_09"))
                 // #tr Tooltip_EyeOfWood_2_10
                 // # If processing succeed, machine will output lots of ore resource of Overworld.
                 // #zh_CN 如果机器运行成功, 将产出大量主世界矿资源.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_10"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_10"))
                 // #tr Tooltip_EyeOfWood_2_11
                 // # If processing fail, machine will output lots of Steam.
                 // #zh_CN 如果机器运行失败, 则产出大量蒸汽.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_11"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_11"))
                 // #tr Tooltip_EyeOfWood_2_12
                 // # Amount of steam produced (in L) = Success Rate * 360,000,000L (max. 270,000,000L)
                 // #zh_CN 产出蒸汽数量(单位L) = 成功几率 * 360,000,000L (最多270,000,000L)
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_12"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_EyeOfWood_2_12"))
                 /*
                  * 成功率 = {7500 - 7499 * [1 - 1/(S^dW * S^dL)]} / 10000
                  * <P>S ≈ 1.087</P>
                  * <P>dW, dL 分别为已存储的水量与需求量(256,000L)的差值除以1000和已存储的岩浆量和需求量的差值除以1000, 并向下取整.</P>
                  */
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .beginStructureBlock(33, 33, 33, false)
-                .addController(TextLocalization.textFrontCenter)
-                .addInputBus(TextLocalization.textAnyCasing, 2)
-                .addOutputBus(TextLocalization.textAnyCasing, 2)
+                .addController(TSTSharedLocalization.Structure.textFrontCenter)
+                .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+                .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
                 .toolTipFinisher();
             // spotless:on
         }

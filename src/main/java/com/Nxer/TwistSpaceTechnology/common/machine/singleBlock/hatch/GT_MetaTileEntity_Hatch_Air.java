@@ -5,9 +5,9 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfi
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
@@ -60,11 +60,11 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator implemen
         // #tr GT_MetaTileEntity_Hatch_Air.Tooltip0
         // # Infinite air supply hatch
         // #zh_CN 无限进气仓
-        aTooltip[0] = TextEnums.tr("GT_MetaTileEntity_Hatch_Air.Tooltip0");
+        aTooltip[0] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Air.Tooltip0");
         // #tr GT_MetaTileEntity_Hatch_Air.Tooltip1
         // # Fills to max capacity every second
         // #zh_CN 每5秒填满内部空间
-        aTooltip[1] = TextEnums.tr("GT_MetaTileEntity_Hatch_Air.Tooltip1");
+        aTooltip[1] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Air.Tooltip1");
         return aTooltip;
     }
 

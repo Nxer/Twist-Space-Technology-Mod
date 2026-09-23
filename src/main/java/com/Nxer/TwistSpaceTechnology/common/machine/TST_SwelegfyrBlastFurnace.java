@@ -3,14 +3,14 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.MoreInfoCheckingInScanner;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Kelvin;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textColon;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textSpace;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Kelvin;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textColon;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textSpace;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -57,10 +57,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -608,14 +607,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
             drainPyrotheumFromBlazeHatch(BlazeAmount, true);
             isBlazeFinishClear = false;
-            TstUtils
+            TSTUtils
                 .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Blaze);
             isBlazeFinishSet = true;
             return true;
         } else if (!isBlazeFinishClear) {
             // clear will not return existing pyrotheum
             isBlazeFinishSet = false;
-            TstUtils
+            TSTUtils
                 .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Air);
             isBlazeFinishClear = true;
             return true;
@@ -848,7 +847,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #tr Waila.SBF.0
             // # Recipe Heat
             // #zh_CN 配方炉温限制
-            (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.0")
+            (EnumChatFormatting.YELLOW + TSTUtils.tr("Waila.SBF.0")
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("recipeHeatLimitation")) + Kelvin);
@@ -856,7 +855,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #tr Waila.SBF.1
             // # Current Heat
             // #zh_CN 当前炉温
-            (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.1")
+            (EnumChatFormatting.YELLOW + TSTUtils.tr("Waila.SBF.1")
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("mHeatingCapacity")) + Kelvin);
@@ -865,7 +864,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 // #tr Waila.SBF.2
                 // # Max Heat
                 // #zh_CN 最高炉温
-                (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.2")
+                (EnumChatFormatting.YELLOW + TSTUtils.tr("Waila.SBF.2")
                     + textColon
                     + EnumChatFormatting.WHITE
                     + tag.getInteger("maxHeatingCapacity")) + Kelvin);
@@ -874,14 +873,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #tr Waila.SBF.3
             // # Current Blazing Pyrotheum Cost
             // #zh_CN 当前炽焰消耗
-            (EnumChatFormatting.YELLOW + TextEnums.tr(
+            (EnumChatFormatting.YELLOW + TSTUtils.tr(
                 "Waila.SBF.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
 
         if (updated) {
             // #tr Waila.SBF.4
             // # {\GOLD}Machine Updated
             // #zh_CN {\GOLD}已升级至二级
-            currentTip.add(TextEnums.tr("Waila.SBF.4"));
+            currentTip.add(TSTUtils.tr("Waila.SBF.4"));
             // spotless:on
         }
 
@@ -892,9 +891,9 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums
+        ret[origin.length] = EnumChatFormatting.AQUA + TSTUtils
             .tr("Waila.SBF.0") + textColon + EnumChatFormatting.GOLD + recipeHeatLimitation + Kelvin;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TSTUtils
             .tr("Waila.SBF.1") + textColon + EnumChatFormatting.GOLD + mHeatingCapacity + Kelvin;
         return ret;
     }
@@ -987,104 +986,104 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         // #tr Tooltip_SwelegfyrBlastFurnace_MachineType
         // # Blast Furnace
         // #zh_CN 工业高炉
-        tt.addMachineType(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace_MachineType"))
             // #tr Tooltip_SwelegfyrBlastFurnace_Controller
             // # Controller block for the Swelegfyr Blast Furnace
             // #zh_CN 熯焱高炉的控制方块
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
             // #tr Tooltip_SwelegfyrBlastFurnace.01
             // # {\ITALIC}{\GOLD}Blaze Pyrotheum feeds celestial forges. Soulsteel wrought, flame-bound cosmic rite.
             // #zh_CN {\ITALIC}{\GOLD}炽焱为薪，焚天作工。铸形炼魄，器道同烽。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.01"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.01"))
             // #tr Tooltip_SwelegfyrBlastFurnace.02
             // # A Volcanus blast furnace specialized in continuous processing, also capable of conventional processes.
             // #zh_CN 专注于持续加工的炽焱高炉，同时也可以进行常规处理。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.02"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.02"))
             // #tr Tooltip_SwelegfyrBlastFurnace.03
             // # Blast furnace temp gradually increases in Passive Mode.
             // #zh_CN 当处于被动模式时炉温会缓慢升高。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.03"))
             // #tr Tooltip_SwelegfyrBlastFurnace.04
             // # Additional furnace heat will reset upon recipe change.
             // #zh_CN 切换配方时，额外炉温会被清空。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.04"))
             // #tr Tooltip_SwelegfyrBlastFurnace.05
             // # Power consumption decreases by 10% per 1800K above recipe temperature threshold.
             // #zh_CN 炉温每高出配方1800K， 耗电减少10% 。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.05"))
             // #tr Tooltip_SwelegfyrBlastFurnace.06
             // # Glass tier restricts Energy Hatch tier.
             // #zh_CN 玻璃等级限制能源仓等级。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.06"))
             // #tr Tooltip_SwelegfyrBlastFurnace.07
             // # Upgrade machine and build additional structure to unlock additional functions.
             // #zh_CN 升级机器并搭建附加结构以解锁更多功能。
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.07"))
             .addInfo(textSpace)
             // #tr Tooltip_SwelegfyrBlastFurnace.08
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门！
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
+            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.08"))
             .addSeparator()
-            .addInfo(MoreInfoCheckingInScanner.getText())
+            .addInfo(MoreInfoCheckingInScanner)
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.11
             // # {\GOLD}Heat{\WHITE}Upper Limit:
             // #zh_CN {\GOLD}炉温{\WHITE}上限：
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.11"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.11"))
             // #tr Tooltip_SwelegfyrBlastFurnace.12
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Coil Heat
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\AQUA}线圈炉温
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.12"))
             // #tr Tooltip_SwelegfyrBlastFurnace.13
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ {\GOLD}1.08
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.08
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.13"))
             // #tr Tooltip_SwelegfyrBlastFurnace.14
             // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
             // #zh_CN {\GOLD}炽焱{\WHITE}消耗：
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.14"))
             // #tr Tooltip_SwelegfyrBlastFurnace.15
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\GOLD}1000 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\GOLD}1000 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.15"))
             // #tr Tooltip_SwelegfyrBlastFurnace.16
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}5 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.16"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.16"))
             // #tr Tooltip_SwelegfyrBlastFurnace.17
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Current Heat {\WHITE}× {\AQUA}Max Heat{\WHITE}) / {\AQUA}Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.17"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.17"))
             // #tr Tooltip_SwelegfyrBlastFurnace.18
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式： {\AQUA}当前炉温 {\WHITE}/ {\GOLD}20 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.18"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.18"))
             // #tr Tooltip_SwelegfyrBlastFurnace.21
             // # {\GOLD}Heat Capacity {\WHITE}Change:
             // #zh_CN {\GOLD}炉温{\WHITE}改变:
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.21"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.21"))
             // #tr Tooltip_SwelegfyrBlastFurnace.22
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\GOLD}5 {\WHITE}K/s [{\RED}Increasing{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式： {\GOLD}5 {\WHITE}K/s [{\RED}升温{\WHITE}]
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.22"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.22"))
             // #tr Tooltip_SwelegfyrBlastFurnace.23
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: {\GOLD}100 {\WHITE}K/s [{\RED}Increasing{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式： {\GOLD}100 {\WHITE}K/s [{\RED}升温{\WHITE}]
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.23"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.23"))
             // #tr Tooltip_SwelegfyrBlastFurnace.24
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Current Heat {\WHITE}× {\GOLD}10% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式： {\AQUA}当前炉温 {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}降温{\WHITE}]， 不低于线圈炉温
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.24"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.24"))
             // #tr Tooltip_SwelegfyrBlastFurnace.25
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown in Non-Retention Mode: {\AQUA}Current Heat {\WHITE}× {\GOLD}20% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}非保温模式关机： {\AQUA}当前炉温 {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}降温{\WHITE}]， 不低于线圈炉温
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.25"))
             .addStructureInfo(Text_SeparatingLine)
             // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
             // # Attention: Pyrotheum's dedicated input hatch location will be changed when upgrade machine.
             // #zh_CN 注意：升级结构后炽焱专用的输入仓位置会发生变化.
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
             .addInputHatch(getBlueprintWithDot(1), 1)
@@ -1095,7 +1094,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             // #tr Tooltip_SwelegfyrBlastFurnace.31
             // # Pyrotheum's dedicated input hatch
             // #zh_CN 炽焱专用的输入仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
+            .addOtherStructurePart(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

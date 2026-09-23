@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DTPF_OFF;
@@ -36,9 +36,9 @@ import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.MachineTexture.UITextures;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -292,7 +292,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         // #tr HyperThermalConvector.modeMsg.1
         // # Rapid Cooling
         // #zh_CN 快速冷却模式
-        return TextEnums.tr("HyperThermalConvector.modeMsg." + machineMode);
+        return TSTUtils.tr("HyperThermalConvector.modeMsg." + machineMode);
 
     }
 
@@ -522,43 +522,43 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         // #tr Tooltip_HyperThermalConvector_MachineType
         // # Heat Exchanger | Heat Cooler
         // #zh_CN 热交换机 | 热冷却机
-        tt.addMachineType(TextEnums.tr("Tooltip_HyperThermalConvector_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_HyperThermalConvector_MachineType"))
             // #tr Tooltip_HyperThermalConvector_Controller
             // # Controller block for the Hyper Thermal Convector
             // #zh_CN 高能态热对流器的控制方块
-            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperThermalConvector_Controller"))
             // #tr Tooltip_HyperThermalConvector.1
             // # {\AQUA}Where did all the heat go?
             // #zh_CN {\AQUA}热量都到哪去了？
-            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.1"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperThermalConvector.1"))
             // #tr Tooltip_HyperThermalConvector.2
             // # The fastest and most efficient heat exchange device ever made.
             // #zh_CN 有史以来最快最充分的热交换装置
-            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.2"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperThermalConvector.2"))
             // #tr Tooltip_HyperThermalConvector.3
             // # Processes the input thermal fluid as thoroughly as possible in a single pass.
             // #zh_CN 尽可能一次性处理完全输入的热流体
-            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.3"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperThermalConvector.3"))
             // #tr Tooltip_HyperThermalConvector.4
             // # This device complies with {\YELLOW}GB/T 28712{\RESET} standards and will not explode!
             // #zh_CN 本设备符合GB/T 28712标准，不会爆炸！
-            .addInfo(TextEnums.tr("Tooltip_HyperThermalConvector.4"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperThermalConvector.4"))
             // #tr Tooltip_HyperThermalConvector.11
             // # Hot fluid input hatch
             // #zh_CN 热流体输入仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.11"), getBlueprintWithDot(1), 1)
+            .addOtherStructurePart(TSTUtils.tr("Tooltip_HyperThermalConvector.11"), getBlueprintWithDot(1), 1)
             // #tr Tooltip_HyperThermalConvector.12
             // # Cold fluid output hatch
             // #zh_CN 冷流体输出仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.12"), getBlueprintWithDot(2), 2)
+            .addOtherStructurePart(TSTUtils.tr("Tooltip_HyperThermalConvector.12"), getBlueprintWithDot(2), 2)
             // #tr Tooltip_HyperThermalConvector.13
             // # Steam output hatch
             // #zh_CN 蒸汽输出仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.13"), getBlueprintWithDot(3), 3)
+            .addOtherStructurePart(TSTUtils.tr("Tooltip_HyperThermalConvector.13"), getBlueprintWithDot(3), 3)
             // #tr Tooltip_HyperThermalConvector.14
             // # Distilled water input hatch
             // #zh_CN 蒸馏水输入仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip_HyperThermalConvector.14"), getBlueprintWithDot(4), 4)
+            .addOtherStructurePart(TSTUtils.tr("Tooltip_HyperThermalConvector.14"), getBlueprintWithDot(4), 4)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();
         // spotless:on

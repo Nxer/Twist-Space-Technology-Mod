@@ -54,9 +54,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -1648,56 +1649,56 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
             // #tr BigBroArray.type
             // # Processing Array | Generator Array
             // #zh_CN 处理阵列 | 能源处理阵列
-            .addMachineType(TextEnums.tr("BigBroArray.type"))
-            .addInfo(TextEnums.OutOfMaintenance.toString())
+            .addMachineType(TSTUtils.tr("BigBroArray.type"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.OutOfMaintenance)
             // #tr BigBroArray.desc.1
             // # This is MEGA!
             // #zh_CN 牢大哥在看着你
-            .addInfo(TextEnums.tr("BigBroArray.desc.1"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.1"))
             // #tr BigBroArray.desc.2
             // # A perfect toy for those who hates GT++.
             // #zh_CN 给痛恨九合一的人准备的完美工具。使用蓝图堆叠以预览附加结构。
-            .addInfo(TextEnums.tr("BigBroArray.desc.2"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.2"))
             // #tr BigBroArray.desc.3
             // # Put machines in input bus and right click controller with screw driver to setup. Machines will get consumed.
             // #zh_CN 在输入总线放入机器并使用螺丝刀右击控制器以设定机器，输入的机器会消耗
-            .addInfo(TextEnums.tr("BigBroArray.desc.3"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.3"))
             // #tr BigBroArray.desc.4
             // # Right clicking the controller again with screw driver will get them back in output bus.
             // #zh_CN 再次右键控制器会返还机器到输出总线
-            .addInfo(TextEnums.tr("BigBroArray.desc.4"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.4"))
             // #tr BigBroArray.desc.5
             // # Max parallelism of the machine is 320/1280/5120/20480/5242880/>2147483647, Base parallelism is 64. You can get extra parallelism through building addon structures and upgrading parallelism casings.
             // #zh_CN 机器最大并行为64(无附加结构)/1280/5120/20480/5242880/MAX+, 基础为64. 建造附加结构和升级并行处理机械方块可以提升并行度。
-            .addInfo(TextEnums.tr("BigBroArray.desc.5"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.5"))
             // #tr BigBroArray.desc.6
             // # Supports almost all processing single block machine in GT. Supports GT single-block generator and ASP Solar panels, EMT solars.
             // #zh_CN 支持几乎所有GT机器, GT单方块发电机 高级太阳能, 8压水.
-            .addInfo(TextEnums.tr("BigBroArray.desc.6"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.6"))
             // #tr BigBroArray.desc.7
             // # Will overclock recipes to energy level of energy hatch, but can't process recipes with energy level higher than that of machines in controller.
             // #zh_CN 机器会根据能源仓等级超频加工的配方,但是不能执行超过内部机器电压等级的配方。
-            .addInfo(TextEnums.tr("BigBroArray.desc.7"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.7"))
             // #tr BigBroArray.desc.8
             // # Produces 20 points of pollution per parallelism（200000/s max), you may need up to 20 mufflers. Dynamo/Energy hatches should only be put at 4 corners of bottom, other hatches replace any tungstensteel casing.
             // #zh_CN 每个并行度产生20点污染每秒(最大污染为200000),你可能需要安装最多20个消声仓排放污染！不安装消声仓会导致机器无法运行。
-            .addInfo(TextEnums.tr("BigBroArray.desc.8"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.8"))
             // #tr BigBroArray.desc.9
             // # Energy hatch tier follows glass, dynamo hatch tier follows machine casing, UV level glass/casing unlocks laser hatches. Tier of machines that can put in the array is restricted by frames, UMV casings will unlock all dynamo hatches and unlocks global wireless mode. Enable it without a dynamo hatch.
             // #zh_CN 能源仓等级跟随玻璃，动力仓等级跟随机器外壳，UV等级玻璃解锁激光。可放入的机器等级被框架等级限制。UMV外壳解锁无线，不安装能源仓即可进入，出现内部错误时尝试重新放置。
-            .addInfo(TextEnums.tr("BigBroArray.desc.9"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.9"))
             // #tr BigBroArray.desc.10
             // # The tier of machines is not limited when there's no addon structures. Level of parallelism casing in addon structures limits the parallelism.
             // #zh_CN 动力和能源仓只能放底层4个角，其他舱室替换任意钨钢机械方块。没有附加结构时，框架不会限制放入机器的等级。附加结构的并行处理机械方块等级限制了最大并行。
-            .addInfo(TextEnums.tr("BigBroArray.desc.10"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.10"))
             // #tr BigBroArray.desc.11
             // # Energy consumption will decrease 10%% for each coil upgrade, processing speed will increase 50%% for each parallelism upgrade. Each machine provides 2^(tier of parallelism block) parallelisms，with casing MK4/5 each machine can provide 512/1024 parallelism.
             // #zh_CN 附加结构的线圈每升级一级，能量消耗减少10%%(乘法叠加),并行处理机械方块每升级一级，处理速度增加50%%(乘法叠加)，每台机器提供2^(并行机械方块等级)个并行, 4级和5级并行方块可以让每台机器提供512/1024并行。
-            .addInfo(TextEnums.tr("BigBroArray.desc.11"))
+            .addInfo(TSTUtils.tr("BigBroArray.desc.11"))
             // #tr BigBroArray.desc.12
             // # The upgrade in energy/consumption/processing speed/parallelism will also take effect in energy generation. Structure of addon: parallelism casing*134, glassx530, framex64, coilx42，stainless steel casing*86, Assembly line casing*64
             // #zh_CN 能量消耗减少,并行度和处理速度提升对发电有效(其中能量消耗减少体现为发电量提升)。附加结构的方块为:并行机械方块*134, 玻璃x530, 框架x42, 线圈x42，洁净不锈钢方块*86,装配线机械方块*64
-            .addInfo(TextEnums.tr("BigBroArray.desc.12"));
+            .addInfo(TSTUtils.tr("BigBroArray.desc.12"));
         gt_multiblock_tooltip_builder.toolTipFinisher();
             // spotless:on
         return gt_multiblock_tooltip_builder;

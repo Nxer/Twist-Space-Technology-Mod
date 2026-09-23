@@ -27,10 +27,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -212,10 +212,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr MachineInfoData.GlassTier
-        // # {\AQUA}Glass Tier
-        // #zh_CN {\AQUA}玻璃等级
-        ret[origin.length] = TextEnums.tr("MachineInfoData.GlassTier") + ": "
+        ret[origin.length] = TSTSharedLocalization.MachineInfo.GlassTier + ": "
             + EnumChatFormatting.GOLD
             + this.glassTier;
         return ret;
@@ -278,41 +275,41 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         // #tr Tooltips_AdvancedMegaOilCracker_MachineType
         // # Cracker
         // #zh_CN 石油裂化机
-        tt.addMachineType(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_MachineType"))
             // #tr Tooltips_AdvancedMegaOilCracker_Controller
             // # Controller block for the Advanced Mega Oil Cracker
             // #zh_CN 进阶巨型石油裂化机的控制器方块
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_Controller"))
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_Controller"))
             // #tr Tooltips_AdvancedMegaOilCracker_01
             // # {\ITALIC}Freedom as a basis for self-government.
             // #zh_CN {\ITALIC}自由是自治之基础.
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_01"))
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_01"))
             // #tr Tooltips_AdvancedMegaOilCracker_02
             // # As the Mega Oil Cracker do.
             // #zh_CN 就像巨型石油裂化机那样.
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_02"))
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_02"))
             // #tr Tooltips_AdvancedMegaOilCracker_03
             // # Chamber placement no longer has restrictions.
             // #zh_CN 仓室位置不再受限.
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_03"))
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_03"))
             // #tr Tooltips_AdvancedMegaOilCracker_04
             // # Operates {\AQUA}100%{\GRAY} faster than the Mega Oil Cracker.
             // #zh_CN 运行速度比巨型石油裂化机快{\AQUA}100%.
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_04"))
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_04"))
             // #tr Tooltips_AdvancedMegaOilCracker_05
             // # Power Loss Reduction = {\AQUA}100%{\GRAY} / {\WHITE}Coil Tier{\GRAY}.
             // #zh_CN 能耗减免 = {\AQUA}100%{\GRAY} / {\WHITE}线圈等级{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_05"))
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_05"))
             // #tr Tooltips_AdvancedMegaOilCracker_06
             // # Hypogen coil (or better) enable {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
             // #zh_CN 海珀珍及以上等级线圈解锁{\LIGHT_PURPLE}无损超频{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltips_AdvancedMegaOilCracker_06"))
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_06"))
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();
         // spotless:on
         return tt;

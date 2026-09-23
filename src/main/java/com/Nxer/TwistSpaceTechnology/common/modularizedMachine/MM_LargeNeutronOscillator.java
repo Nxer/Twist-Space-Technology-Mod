@@ -23,10 +23,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -256,38 +256,38 @@ public class MM_LargeNeutronOscillator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}中子活化器
             tooltip
                 .addMachineType(
-                    TextEnums.tr("Tooltip_LargeNeutronOscillator_MachineType"))
+                    TSTUtils.tr("Tooltip_LargeNeutronOscillator_MachineType"))
                 // #tr Tooltip_LargeNeutronOscillator_01
                 // # {\AQUA}{\UNDERLINE}The more physics you know the less engineering you need.
                 // #zh_CN {\AQUA}{\UNDERLINE}掌握的物理学越多， 需要的工程学越少。
-                .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_01"))
+                .addInfo(TSTUtils.tr("Tooltip_LargeNeutronOscillator_01"))
 
                 // #tr Tooltip_LargeNeutronOscillator_02
                 // # It consumes a lot of electricity to produce large quantities quickly.
                 // #zh_CN 通过消耗大量电力来进行快速大批量生产.
-                .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_02"))
+                .addInfo(TSTUtils.tr("Tooltip_LargeNeutronOscillator_02"))
 
                 // #tr Tooltip_LargeNeutronOscillator_03
                 // # Installing module hatches near the controller block can significantly improve machine performance.
                 // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
-                .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_03"))
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.OverclockControllerDescription.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
-                .addStructureInfo(TextEnums.SpeedControllerDescription.getText())
-                .addStructureInfo(TextEnums.ExecutionCoreDescription.getText())
-                .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModule.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .addInfo(TSTUtils.tr("Tooltip_LargeNeutronOscillator_03"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .beginStructureBlock(23, 40, 13, false)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-                .addInputHatch(TextLocalization.textUseBlueprint, 3)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 3)
-                .addInputBus(TextLocalization.textUseBlueprint, 3)
-                .addOutputBus(TextLocalization.textUseBlueprint, 3)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 1)
                 .toolTipFinisher();
             // spotless:on
         }

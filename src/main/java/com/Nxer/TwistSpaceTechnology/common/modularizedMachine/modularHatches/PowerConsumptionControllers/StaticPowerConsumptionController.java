@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.PowerConsumptionControllers;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -55,11 +55,11 @@ public class StaticPowerConsumptionController extends StaticPowerConsumptionCont
                     // #tr Tooltips.StaticPowerConsumptionController.01
                     // # Parallel controller module with a fixed parameter.
                     // #zh_CN 固定参数的耗能控制器模块.
-                    TextEnums.tr("Tooltips.StaticPowerConsumptionController.01"),
+                    TSTUtils.tr("Tooltips.StaticPowerConsumptionController.01"),
                     // #tr Tooltips.StaticPowerConsumptionController.02
                     // # The actual power consumption is multiplied by
                     // #zh_CN 机器实际耗电量乘以
-                    TextEnums.tr("Tooltips.StaticPowerConsumptionController.02") + value,
+                    TSTUtils.tr("Tooltips.StaticPowerConsumptionController.02") + value,
                 };
         }
         return description;

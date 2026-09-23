@@ -39,10 +39,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -433,42 +433,42 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         // #tr Tooltip_HyperSpacetimeTransformer_MachineType
         // # HyperSpacetimeTransformer
         // #zh_CN 分子重组仪/{\DARK_BLUE}时空转换仪
-        tt.addMachineType(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_MachineType"))
             // #tr Tooltip_HyperSpacetimeTransformer_00
             // # To change the material itself in a higher dimension.
             // #zh_CN 于更高维度改变物质本身。
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_00"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_00"))
             // #tr Tooltip_HyperSpacetimeTransformer_01
             // # Molecular Transformer Mode
             // #zh_CN {\YELLOW}分子重组仪模式
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_01"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_01"))
             // #tr Tooltip_HyperSpacetimeTransformer_02
             // # Parallel:Product of three types of field generators.
             // #zh_CN 并行：时空场发生器等级的乘积，最多512并行。
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_02"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_02"))
             // #tr Tooltip_HyperSpacetimeTransformer_03
             // # Tier 9 field generator will decrease energy use by {\RED}25%{\GRAY}, max {\RED}75%{\GRAY}.
             // #zh_CN 9级时空场会带来额外的能耗降低，最多降低{\RED}75%{\GRAY}。
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_03"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_03"))
             // #tr Tooltip_HyperSpacetimeTransformer_04
             // # {\DARK_BLUE}Spacetime Transformer Mode
             // #zh_CN {\DARK_BLUE}时空转换仪模式
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_04"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_04"))
             // #tr Tooltip_HyperSpacetimeTransformer_05
             // # Pulse Manipulator and Shielding Core tier determine the number parallel of the machine, with a maximum of 16 parallels.
             // #zh_CN 屏蔽核心等级与脉冲控制等级决定了该机器并行，最高16并行。
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_05"))
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_05"))
             // #tr Tooltip_HyperSpacetimeTransformer_06
             // # Upgrade the Spacetime Field Generator to reduce energy consumption, with a maximum reduction of 87.5%% in EU consumption.
             // #zh_CN 升级时空场以降低能耗，最多降低87.5%%EU消耗。
-            .addInfo(TextEnums.tr("Tooltip_HyperSpacetimeTransformer_06"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_06"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(45, 11, 45, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -56,7 +56,7 @@ public abstract class ParallelControllerBase extends ModularHatchBase {
             // #tr Waila.ParallelControllerBase.1
             // # Parallel
             // #zh_CN 并行
-            EnumChatFormatting.AQUA + TextEnums.tr("Waila.ParallelControllerBase.1")
+            EnumChatFormatting.AQUA + TSTUtils.tr("Waila.ParallelControllerBase.1")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD

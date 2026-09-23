@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -44,7 +44,7 @@ public class DragonBloodRecipe {
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
-                    TstUtils.setStackSize(
+                    TSTUtils.setStackSize(
                         GTModHandler.getModItem("witchery", "infinityegg", 0, GTCMItemList.TestItem0.get(1)),
                         0))
                 .fluidInputs(getFluidStack("potion.dragonblood", 16000))

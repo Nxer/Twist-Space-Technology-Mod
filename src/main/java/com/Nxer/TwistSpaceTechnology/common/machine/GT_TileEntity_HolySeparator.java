@@ -33,11 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -213,7 +212,7 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
             false,
             true);
 
-        return TstUtils.multiBuildPiece(built);
+        return TSTUtils.multiBuildPiece(built);
     }
 
     @Override
@@ -399,37 +398,37 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
         // #tr Tooltip_HolySeparator_MachineType
         // # Cutter | Slicer | Lathe
         // #zh_CN 切割机 | 切片机 | 车床
-        tt.addMachineType(TextEnums.tr("Tooltip_HolySeparator_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_HolySeparator_MachineType"))
             // #tr Tooltip_HolySeparator_00
             // # Controller block for the Holy Separator
             // #zh_CN 神圣分离者的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_HolySeparator_00"))
+            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_00"))
             // #tr Tooltip_HolySeparator_01
             // # {\YELLOW}Precision {\GRAY}and {\AQUA}Grace.
             // #zh_CN {\YELLOW}精准{\GRAY}而{\AQUA}优雅.
-            .addInfo(TextEnums.tr("Tooltip_HolySeparator_01"))
+            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_01"))
             // #tr Tooltip_HolySeparator_02
             // # Another form of laser engraving.
             // #zh_CN 激光蚀刻的另一个形式.
-            .addInfo(TextEnums.tr("Tooltip_HolySeparator_02"))
+            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_02"))
             // #tr Tooltip_HolySeparator_03
             // # You can even slice potato chips with this.
             // #zh_CN 你甚至可以用这机器切薯片.
-            .addInfo(TextEnums.tr("Tooltip_HolySeparator_03"))
+            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_03"))
             // #tr Tooltip_HolySeparator_04
             // # Extra {\AQUA}8x{\GRAY} Parallel per Piece. {\GOLD}16{\GRAY} Piece enable Perfect Overclock.
             // #zh_CN 每层提供{\AQUA}8x{\GRAY}并行. {\GOLD}16{\GRAY}层启用无损超频.
-            .addInfo(TextEnums.tr("Tooltip_HolySeparator_04"))
+            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_04"))
             // #tr Tooltip_HolySeparator_05
             // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_HolySeparator_05"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_05"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.structure;
 
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textCasing;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.ModName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW;
@@ -19,8 +19,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -182,7 +182,7 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TextEnums.tr("Tooltip_ICD_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_ICD_MachineType"))
             .beginStructureBlock(11, 13, 11, false)
             .addController(textFrontBottom)
             .addCasingInfoRange(textCasing, 8, 26, false)

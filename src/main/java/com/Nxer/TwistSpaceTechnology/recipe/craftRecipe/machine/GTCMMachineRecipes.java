@@ -80,7 +80,7 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.ge
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
 import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeUtils.getCircuits;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;

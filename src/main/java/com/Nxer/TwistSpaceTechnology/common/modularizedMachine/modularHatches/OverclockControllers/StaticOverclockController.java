@@ -3,8 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.O
 import net.minecraft.client.renderer.texture.IIconRegister;
 
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -62,12 +62,12 @@ public class StaticOverclockController extends StaticOverclockControllerBase {
                     // #tr Tooltips.StaticOverclockController.01
                     // # The overclock controller module determines the machine overclocking efficiency.
                     // #zh_CN 决定机器超频效率的超频控制器模块.
-                    TextEnums.tr("Tooltips.StaticOverclockController.01"),
+                    TSTUtils.tr("Tooltips.StaticOverclockController.01"),
                     getOverclockType().getDescription(),
                     // #tr Tooltips.StaticOverclockController.03
                     // # Each machine can only install one overclock controller.
                     // #zh_CN 每台机器只可安装一个超频控制器.
-                    TextEnums.tr("Tooltips.StaticOverclockController.03"),
+                    TSTUtils.tr("Tooltips.StaticOverclockController.03"),
                 };
         }
         return description;

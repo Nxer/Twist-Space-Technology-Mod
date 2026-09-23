@@ -31,10 +31,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -480,48 +480,48 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         // #tr Tooltip_MiracleTop_MachineType
         // # Circuit Assembler/Gravitation Breaker
         // #zh_CN 电路组装机/引力驱使核心
-        tt.addMachineType(TextEnums.tr("Tooltip_MiracleTop_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MiracleTop_MachineType"))
             // #tr Tooltip_MiracleTop_00
             // # Controller block for the Miracle Top.
             // #zh_CN 奇迹顶点的控制器方块.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_00"))
             // #tr Tooltip_MiracleTop_01
             // # {\LIGHT_PURPLE}I never think about the future because it will come sooner or later.
             // #zh_CN {\LIGHT_PURPLE}我从不思考未来，因为未来迟早会来.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_01"))
             // #tr Tooltip_MiracleTop_02
             // # For absolute precision and efficiency, please abandon traditional manufacturing methods.
             // #zh_CN 为了绝对的精准和高效，请放弃传统的制造思路.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_02"))
             // #tr Tooltip_MiracleTop_03
             // # The machine consists of a ring section and a conveying section.
             // #zh_CN 整个机器由环部分和传输部分组成.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_03"))
             // #tr Tooltip_MiracleTop_04
             // # The number of rings is variable:{\SPACE}{\SPACE}Maximum {\GOLD}16{\GRAY} rings, Minimum {\GOLD}2{\GRAY} rings(the first and the last).
             // #zh_CN 环的数量是可变的:{\SPACE}{\SPACE}最多{\GOLD}16{\GRAY}环, 最少{\GOLD}2{\GRAY}环(第一个环和最后一个环).
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_04"))
             // #tr Tooltip_MiracleTop_05
             // # Total speed multiplier is equal to {\RED}400%{\GRAY} x num of rings.
             // #zh_CN 速度倍率 = 环数 x {\RED}400%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_05"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_05"))
             // #tr Tooltip_MiracleTop_06
             // # Enable Perfect overclock when num of rings >= {\GOLD}8{\GRAY}.
             // #zh_CN 环数大于等于{\RED}8{\GRAY}时开启无损超频.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_06"))
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_06"))
             // #tr Tooltip_MiracleTop_07
             // # {\AQUA}128x{\GRAY} Parallel per Ring.
             // #zh_CN 每环 {\AQUA}128x{\GRAY} 并行.
-            .addInfo(TextEnums.tr("Tooltip_MiracleTop_07"))
-            .addController(TextLocalization.textFrontCenter)
+            .addInfo(TSTUtils.tr("Tooltip_MiracleTop_07"))
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
             // #tr textMiracleTopHatchLocation
             // # Outermost 12 blocks on the ring (outermost 3 on each side).
             // #zh_CN 环上最外侧的12个方块(每侧最外边3个).
-            .addInputHatch(TextEnums.tr("textMiracleTopHatchLocation"), 2)
-            .addOutputHatch(TextEnums.tr("textMiracleTopHatchLocation"), 2)
-            .addInputBus(TextEnums.tr("textMiracleTopHatchLocation"), 2)
-            .addOutputBus(TextEnums.tr("textMiracleTopHatchLocation"), 2)
-            .addEnergyHatch(TextEnums.tr("textMiracleTopHatchLocation"), 2)
+            .addInputHatch(TSTUtils.tr("textMiracleTopHatchLocation"), 2)
+            .addOutputHatch(TSTUtils.tr("textMiracleTopHatchLocation"), 2)
+            .addInputBus(TSTUtils.tr("textMiracleTopHatchLocation"), 2)
+            .addOutputBus(TSTUtils.tr("textMiracleTopHatchLocation"), 2)
+            .addEnergyHatch(TSTUtils.tr("textMiracleTopHatchLocation"), 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Mark_TwistSpaceTechnology_TecTech;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,9 +10,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -144,7 +144,7 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
                 // #tr WirelessDataInput.tooltips.01
                 // # Wireless Quantum Data Input for Multiblocks
                 // #zh_CN 多方块机器无线数据输入
-                TextEnums.tr("WirelessDataInput.tooltips.01") };
+                TSTUtils.tr("WirelessDataInput.tooltips.01") };
         }
         return tooltips;
     }

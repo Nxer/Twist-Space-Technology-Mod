@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.NEISpecialInfoFormatters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.nei.RecipeDisplayInfo;
 import gregtech.nei.formatter.INEISpecialInfoFormatter;
@@ -19,7 +19,7 @@ public class ArtificialStar_SpecialValueFormatter implements INEISpecialInfoForm
             // #tr NEI.ArtificialStarGeneratingRecipes.specialValue.pre
             // # Generate :
             // #zh_CN 产生 :
-            TextEnums.tr("NEI.ArtificialStarGeneratingRecipes.specialValue.pre") + recipeInfo.recipe.mSpecialValue
+            TSTUtils.tr("NEI.ArtificialStarGeneratingRecipes.specialValue.pre") + recipeInfo.recipe.mSpecialValue
                 + " × 2,147,483,647 EU");
         return msgs;
     }

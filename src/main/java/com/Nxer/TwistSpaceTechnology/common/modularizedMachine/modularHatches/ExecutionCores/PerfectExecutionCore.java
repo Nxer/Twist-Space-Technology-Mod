@@ -16,9 +16,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -69,7 +68,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
         BigInteger costEU = BigInteger.valueOf(eut)
             .multiply(BigInteger.valueOf(maxProgressingTime));
         // check wireless EU at this moment
-        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(TstUtils.NEGATIVE_ONE))) {
+        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(TSTUtils.NEGATIVE_ONE))) {
             shutDown();
             IGregTechTileEntity mte = getBaseMetaTileEntity();
             TwistSpaceTechnology.LOG.info(
@@ -98,7 +97,7 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                     // #tr Waila.PerfectExecutionCore.1
                     // # Total progressing time
                     // #zh_CN 总耗时
-                    TextEnums.tr("Waila.PerfectExecutionCore.1") + " : "
+                    TSTUtils.tr("Waila.PerfectExecutionCore.1") + " : "
                         + maxProgressingTime + " tick ("
                         + (maxProgressingTime / 20) + "s)");
                 int progressedTime = tag.getInteger("progressedTime");
@@ -106,14 +105,14 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                     // #tr Waila.ExecutionCore.2
                     // # Progressed time
                     // #zh_CN 已执行时间
-                    TextEnums.tr("Waila.ExecutionCore.2") + " : "
+                    TSTUtils.tr("Waila.ExecutionCore.2") + " : "
                         + progressedTime + " tick ("
                         + (progressedTime / 20) + "s)"
                 );
                 String costEU = tag.getString("costEU");
                 if (costEU != null && !costEU.isEmpty()) {
                     currentTip.add(
-                        EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_MiracleDoor.1")
+                        EnumChatFormatting.AQUA + TSTUtils.tr("Waila.TST_MiracleDoor.1")
                             + EnumChatFormatting.RESET
                             + ": "
                             + EnumChatFormatting.GOLD
@@ -126,13 +125,13 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                 // #tr Waila.ExecutionCore.IsIdle
                 // # This §fExecution Core§7 is idle.
                 // #zh_CN 此§f执行核心§7处于空闲状态
-                currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
+                currentTip.add(TSTUtils.tr("Waila.ExecutionCore.IsIdle"));
             }
         } else {
             // #tr Waila.ExecutionCore.HasNotBeenSetup
             // # This execution core has not been setup.
             // #zh_CN 此执行核心未初始化
-            currentTip.add(TextEnums.tr("Waila.ExecutionCore.HasNotBeenSetup"));
+            currentTip.add(TSTUtils.tr("Waila.ExecutionCore.HasNotBeenSetup"));
         }
 
     }
@@ -177,19 +176,19 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                     // #tr Tooltips.PerfectExecutionCore.01
                     // # Add a second self to your modularized machine, but more powerful.
                     // #zh_CN 为你的模块化机器添加第二个自我, 但更加强大.
-                    TextEnums.tr("Tooltips.PerfectExecutionCore.01"),
+                    TSTUtils.tr("Tooltips.PerfectExecutionCore.01"),
                     // #tr Tooltips.PerfectExecutionCore.02
                     // # Use the logic parameters of the machine, but without energy constraints, and parallel infinity.
                     // #zh_CN 使用机器的逻辑参数, 但不受能源限制, 并且并行无限.
-                    TextEnums.tr("Tooltips.PerfectExecutionCore.02"),
+                    TSTUtils.tr("Tooltips.PerfectExecutionCore.02"),
                     // #tr Tooltips.PerfectExecutionCore.03
                     // # Directly use wireless EU energy.
                     // #zh_CN 直接使用无线EU能源.
-                    TextEnums.tr("Tooltips.PerfectExecutionCore.03"),
+                    TSTUtils.tr("Tooltips.PerfectExecutionCore.03"),
                     // #tr Tooltips.PerfectExecutionCore.04
                     // # Any task is completed within 1 second.
                     // #zh_CN 任何任务都在 1 秒内完成.
-                    TextEnums.tr("Tooltips.PerfectExecutionCore.04"),
+                    TSTUtils.tr("Tooltips.PerfectExecutionCore.04"),
                 };
         }
         return description;

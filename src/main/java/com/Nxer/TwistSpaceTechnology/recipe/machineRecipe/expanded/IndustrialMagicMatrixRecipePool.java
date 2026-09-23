@@ -24,8 +24,8 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.IndustrialMagicMatrixRecipeIndexKey;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
 import com.Nxer.TwistSpaceTechnology.util.TSTArrayUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GTValues;
@@ -113,7 +113,7 @@ public class IndustrialMagicMatrixRecipePool {
             // #tr IndustrialMagicMatrixRecipeInputAspects
             // # Recipe required Essentia
             // #zh_CN 配方所需源质
-            Essence.setStackDisplayName(TextEnums.tr("IndustrialMagicMatrixRecipeInputAspects"));
+            Essence.setStackDisplayName(TSTUtils.tr("IndustrialMagicMatrixRecipeInputAspects"));
             setAspects(Essence, Recipe.getInputAspects());
 
             GTValues.RA.stdBuilder()

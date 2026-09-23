@@ -38,10 +38,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -384,61 +384,61 @@ public class GT_TileEntity_MagneticDrivePressureFormer
         // #tr Tooltip_MagneticDrivePressureFormer_MachineType
         // # Extruder | Bending Machine | Forming Press | Forge Hammer
         // #zh_CN 压模机 | 卷板机 | 冲压机床 | 锻造锤
-        tt.addMachineType(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_MachineType"))
             // #tr Tooltip_MagneticDrivePressureFormer_00
             // # Controller block for the Magnetic Drive Pressure Former.
             // #zh_CN 磁驱压力成型机的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_00"))
             // #tr Tooltip_MagneticDrivePressureFormer_01
             // # {\AQUA}Simple applications of Maxwell's equations.
             // #zh_CN {\AQUA}麦克斯韦方程的简单应用.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_01"))
             // #tr Tooltip_MagneticDrivePressureFormer_02
             // # No difficulty ! No hurry !
             // #zh_CN 轻而易举, 从容不迫！
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_02"))
             // #tr Tooltip_MagneticDrivePressureFormer_03
             // # {\GOLD}Extruder Mode:
             // #zh_CN {\GOLD}压模机模式:
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_03"))
             // #tr Tooltip_MagneticDrivePressureFormer_04
             // # {\RED}700%{\GRAY} faster than normal | Infinity Coil+ enable Perfect Overclock
             // #zh_CN 8倍速 | 无尽线圈解锁无损超频
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_04"))
             // #tr Tooltip_MagneticDrivePressureFormer_05
             // # {\GOLD}Bending and Forming Press and Forge Hammer Mode:
             // #zh_CN {\GOLD}卷板机|冲压机床|锻造锤模式:
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_05"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_05"))
             // #tr Tooltip_MagneticDrivePressureFormer_06
             // # {\RED}1500%{\GRAY} faster than normal | Enable Perfect Overclock
             // #zh_CN 16倍速 | 无损超频
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_06"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_06"))
             .addSeparator()
             // #tr Tooltip_MagneticDrivePressureFormer_09
             // # {\AQUA}1024x{\GRAY} Parallel.
             // #zh_CN {\AQUA}1024x{\GRAY} 并行.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_09"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_09"))
             // #tr Tooltip_MagneticDrivePressureFormer_07
             // # Extra {\RED}+100%{\GRAY} speed multiplier per Coil Level.
             // #zh_CN 线圈等级每提高1级, 额外加速{\RED}100%{\GRAY}, 线圈加速部分独立计算.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_07"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_07"))
             // #tr Tooltip_MagneticDrivePressureFormer_08
             // # Need Infinity Glass to use Laser energy hatch.
             // #zh_CN 无尽强化硼玻璃解锁激光仓.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_08"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_08"))
             .beginStructureBlock(15, 25, 15, false)
-            .addController(TextLocalization.textTopCenter)
+            .addController(TSTSharedLocalization.Structure.textTopCenter)
             // #tr Tooltip_MagneticDrivePressureFormer_Hatches
             // # Frame location, Osmiridium Casing.
             // #zh_CN 框架位置, 铱锇机械方块.
-            .addInputHatch(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            .addOutputHatch(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            .addInputBus(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            .addOutputBus(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addInputHatch(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addOutputHatch(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addInputBus(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
+            .addOutputBus(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
             // #tr Tooltip_MagneticDrivePressureFormer_EnergyHatch
             // # The white, Iridium Casing, and the bottom center.
             // #zh_CN 铱强化机械方块, 和机器底层中心.
-            .addEnergyHatch(TextEnums.tr("Tooltip_MagneticDrivePressureFormer_EnergyHatch"), 2)
+            .addEnergyHatch(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_EnergyHatch"), 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

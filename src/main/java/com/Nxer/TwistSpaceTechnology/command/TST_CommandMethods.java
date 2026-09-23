@@ -24,7 +24,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCel
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -312,7 +312,7 @@ public class TST_CommandMethods implements IDSP_IO {
     }
 
     public void sendFormatError(ICommandSender sender) {
-        sender.addChatMessage(TstSharedLocalization.Command.formatError());
+        sender.addChatMessage(TSTSharedLocalization.Command.formatError());
     }
 
     public void printHelp(ICommandSender sender) {

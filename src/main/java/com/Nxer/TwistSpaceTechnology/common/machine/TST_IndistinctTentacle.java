@@ -4,8 +4,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ComponentCa
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ExtraEuCostMultiplierAstralArrayOverclocked_WirelessMode_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_LaserHatch_IndistinctTentacle;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.GlassTierLimit_WirelessMode_IndistinctTentacle;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -50,12 +50,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -414,8 +412,8 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(glassTier);
-        ret[origin.length + 1] = TstSharedLocalization.MachineInfo.componentTier(this.tierComponentCasing + 1);
+        ret[origin.length] = TSTSharedLocalization.MachineInfo.glassTier(glassTier);
+        ret[origin.length + 1] = TSTSharedLocalization.MachineInfo.componentTier(this.tierComponentCasing + 1);
 
         return ret;
     }
@@ -432,7 +430,7 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
                 // # {\BLUE}{\BOLD} Extra EU cost multiplier{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
                 // #zh_CN {\BLUE}{\BOLD} 额外EU消耗倍率{\RESET}: {\GOLD}{\BOLD}%s{\RESET}
                 currentTip.add(
-                    TstUtils
+                    TSTUtils
                         .tr("tst.indistinctTentacle.waila.extraEuMultiplier", tag.getInteger("extraEuCostMultiplier")));
             }
         }
@@ -531,86 +529,86 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
         // #tr Tooltip_IndistinctTentacle_MachineType
         // # Assembly Line | Component Assembly Line | Assembler | Precise Assembler
         // #zh_CN 装配线 | 部件装配线 | 组装机 | 精密组装机
-        tt.addMachineType(TextEnums.tr("Tooltip_IndistinctTentacle_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_IndistinctTentacle_MachineType"))
             // #tr Tooltip_IndistinctTentacle_Controller
             // # Controller block for the Indistinct Tentacle
             // #zh_CN 不可视之触的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_Controller"))
             // #tr Tooltip_IndistinctTentacle_01
             // # {\BOLD}{\ITALIC}In the midst of this sea and endless solitude there appears a dim road, a road without human footprints.
             // #zh_CN {\BOLD}{\ITALIC}在这片海和无尽的孤独中出现了一条昏暗的道路，一条没有人类足迹的道路。
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_01"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_01"))
             // #tr Tooltip_IndistinctTentacle_02
             // # {\BOLD}{\ITALIC}No man has ever passed this place; no ship has ever sailed here.
             // #zh_CN {\BOLD}{\ITALIC}没有人曾经过此地；亦没有船只曾在此航行。
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_02"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_02"))
             // #tr Tooltip_IndistinctTentacle_03
             // # Made everything in its where should be.
             // #zh_CN 让所有事情都各得其所.
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_03"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_03"))
             // #tr Tooltip_IndistinctTentacle_04
             // # Glass tier limit energy hatch, laser hatch need UV glass.
             // #zh_CN 玻璃限制能源仓等级, 激光仓需要UV玻璃.
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_04"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_04"))
             // #tr Tooltip_IndistinctTentacle_05
             // # Component Casing tier limit recipe can process. Casing tier require at least the recipe voltage level -1.
             // #zh_CN 部件装配外壳等级限制可执行配方等级. 外壳等级最少需要配方电压等级-1.
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_05"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_05"))
             // #tr Tooltip_IndistinctTentacle_06
             // # If Component Casing tier is higher than recipe voltage, enable §cPerfect Overclock§7.
             // #zh_CN 如果部件装配外壳等级高于配方等级则启用{\RED}无损超频{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_06"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_06"))
             // #tr Tooltip_IndistinctTentacle_07
             // # UMV+ glass and Component Casing allow Wireless mode by placing no energy hatch.
             // #zh_CN {\LIGHT_PURPLE}{\BOLD}UMV{\GRAY}+ 玻璃与部件装配外壳允许使用无线电网模式(无能源仓自动进入).
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_07"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_07"))
             // #tr Tooltip_IndistinctTentacle_08
             // # Progressing time is fixed in Wireless mode.
             // #zh_CN 无线电网模式下处理时间是固定的.
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_08"))
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_08"))
             // #tr Tooltip_IndistinctTentacle_09
             // # Watch out your Global energy storage if use wireless mode, you should not want to see the power drain's landscape.
             // #zh_CN 注意你的无线电网电量, 你应该不会想看到跳电的风景对吧.
-            .addInfo(TextEnums.tr("Tooltip_IndistinctTentacle_09"))
-            .addStructureInfo(TextLocalization.Tooltip_Details)
+            .addInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_09"))
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_Details)
             // #tr Tooltip_IndistinctTentacle_2_01
             // # Speed (default) of mode:
             // #zh_CN 模式下速度乘数(默认) :
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_01"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_01"))
             // #tr Tooltip_IndistinctTentacle_2_02
             // # Assembly Line = 100%%
             // #zh_CN 装配线 = 100%%
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_02"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_02"))
             // #tr Tooltip_IndistinctTentacle_2_03
             // # Component Assembly Line = 200%%;
             // #zh_CN 部件装配线 = 200%%
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_03"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_03"))
             // #tr Tooltip_IndistinctTentacle_2_04
             // # Assembler = 400%%
             // #zh_CN 组装机 = 400%%
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_04"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_04"))
             // #tr Tooltip_IndistinctTentacle_2_05
             // # Precise Assembler = 400%%
             // #zh_CN 精密组装机 = 400%%
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_05"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_05"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             // #tr Tooltip_IndistinctTentacle_2_06
             // # Default power mode parallel 256.
             // #zh_CN 默认能源仓模式下256并行.
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_06"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_06"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             // #tr Tooltip_IndistinctTentacle_2_07
             // # Progressing time is fixed at 25.6s in Wireless mode.
             // #zh_CN 无线电网模式下处理时间固定为25.6s.
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_07"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_07"))
             // #tr Tooltip_IndistinctTentacle_2_08
             // # Put an Astral Array Fabricator into controller slot,
             // #zh_CN 在控制器方块放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} ,
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_08"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_08"))
             // #tr Tooltip_IndistinctTentacle_2_09
             // # the Progressing time will be fixed at 1.0s, and EU cost increase to 64 times.
             // #zh_CN 则处理时间固定为1.0s, 同时耗能提高到{\RED}64{\GRAY}倍.
-            .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentacle_2_09"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndistinctTentacle_2_09"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addInputBus(textUseBlueprint, 2)

@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
@@ -39,11 +39,10 @@ import org.jetbrains.annotations.Nullable;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -247,19 +246,19 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
             // #tr BiosphereIII_Mode_00
             // # {\GOLD}----- Bacterial Vat Mode -----
             // #zh_CN {\GOLD}----- 细菌培养缸模式 -----
-            case 0 -> TextEnums.tr("BiosphereIII_Mode_00");
+            case 0 -> TSTUtils.tr("BiosphereIII_Mode_00");
             // #tr BiosphereIII_Mode_01
             // # {\GOLD}----- Bacterial Vat Automation Mode -----
             // #zh_CN {\GOLD}----- 细菌培养缸自动化模式 -----
-            case 1 -> TextEnums.tr("BiosphereIII_Mode_01");
+            case 1 -> TSTUtils.tr("BiosphereIII_Mode_01");
             // #tr BiosphereIII_Mode_02
             // # {\GOLD}----- Brewing Machine Mode -----
             // #zh_CN {\GOLD}----- 酿造室模式 -----
-            case 2 -> TextEnums.tr("BiosphereIII_Mode_02");
+            case 2 -> TSTUtils.tr("BiosphereIII_Mode_02");
             // #tr BiosphereIII_Mode_03
             // # {\GOLD}----- Fermenter Mode -----
             // #zh_CN {\GOLD}----- 发酵槽模式 -----
-            default -> TextEnums.tr("BiosphereIII_Mode_03");
+            default -> TSTUtils.tr("BiosphereIII_Mode_03");
             // spotless:on
         };
     }
@@ -420,12 +419,12 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = TstSharedLocalization.MachineInfo.glassTier(this.mGlassTier);
+        ret[origin.length] = TSTSharedLocalization.MachineInfo.glassTier(this.mGlassTier);
         ret[origin.length + 1] = EnumChatFormatting.BLUE + getMachineModeName();
         // #tr BiosphereIIIEfficiency
         // # Efficiency:
         // #zh_CN 效率:
-        ret[origin.length + 2] = TextEnums.tr("BiosphereIIIEfficiency") + ((machineMode == 2 || machineMode == 3) ?
+        ret[origin.length + 2] = TSTUtils.tr("BiosphereIIIEfficiency") + ((machineMode == 2 || machineMode == 3) ?
         // Brewing & Fermenting
             (EnumChatFormatting.GREEN + "100" + EnumChatFormatting.RESET + "%") :
             // Bio Vat
@@ -498,78 +497,78 @@ public class TST_BiosphereIII extends GTCM_MultiMachineBase<TST_BiosphereIII> {
         // #tr Tooltip_BiosphereIII_MachineType
         // # Bacterial Vat | Brewing Machine | Fermenter
         // #zh_CN 细菌培养缸 | 酿造室 | 发酵槽
-        tt.addMachineType(TextEnums.tr("Tooltip_BiosphereIII_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_BiosphereIII_MachineType"))
             // #tr Tooltip_BiosphereIII_Controller
             // # Controller block for Biosphere III
             // #zh_CN 生物圈III号的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Controller"))
             // #tr Tooltip_BiosphereIII_00
             // # {\AQUA}{\BOLD}Control the thoughts of those microorganisms...
             // #zh_CN {\BLUE}{\BOLD}操控微生物们的思想……
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_00"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addInfo(TextEnums.tr("BiosphereIII_Mode_00"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_00"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("BiosphereIII_Mode_00"))
             // #tr Tooltip_BiosphereIII_Mode0_00
             // # Need Petri Dish in controller slot
             // #zh_CN 需要在主机中放入培养皿.加速{\RED}100%{\GOLD}.
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode0_00"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode0_00"))
             // #tr Tooltip_BiosphereIII_Mode0_01
             // # Every Petri Dish provides {\AQUA}4x{\GRAY} parallel
             // #zh_CN 每个培养皿提供{\AQUA}4x{\GRAY}并行
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode0_01"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode0_01"))
             // #tr Tooltip_BiosphereIII_Mode0_02
             // # Keep the Output Hatch always half filled for maximum efficiency
             // #zh_CN 保持输出仓半满以达到最高效率
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode0_02"))
-            .addInfo(TextEnums.tr("BiosphereIII_Mode_01"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode0_02"))
+            .addInfo(TSTUtils.tr("BiosphereIII_Mode_01"))
             // #tr Tooltip_BiosphereIII_Mode1_00
             // # Need Petri Dish in controller slot
             // #zh_CN 需要在主机中放入培养皿
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode1_00"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode1_00"))
             // #tr Tooltip_BiosphereIII_Mode1_01
             // # Every Petri Dish provides {\AQUA}1x{\GRAY} parallel
             // #zh_CN 每个培养皿提供{\AQUA}1x{\GRAY}并行
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode1_01"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode1_01"))
             // #tr Tooltip_BiosphereIII_Mode1_02
             // # Advanced artificial intelligence controls the breeding of bacteria
             // #zh_CN 使用先进的人工智能控制细菌的繁殖
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode1_02"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode1_02"))
             // #tr Tooltip_BiosphereIII_Mode1_03
             // # Original efficiency of control is {\RED}40%{\GRAY} of the maximum. Each glass tier over recipe requirement improve the efficiency by {\RED}15%{\GRAY}.
             // #zh_CN 初始控制效率为最高效率的{\RED}160%{\GRAY}.玻璃等级每超出配方要求1级,将控制效率提高{\RED}60%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode1_03"))
-            .addInfo(TextEnums.tr("BiosphereIII_Mode_02"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode1_03"))
+            .addInfo(TSTUtils.tr("BiosphereIII_Mode_02"))
             // #tr Tooltip_BiosphereIII_Mode2n3_00
             // # Don't need Petri Dish
             // #zh_CN 不需要培养皿.加速300%%.
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode2n3_00"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode2n3_00"))
             // #tr Tooltip_BiosphereIII_Mode2n3_01
             // # Each glass tier over HV provides 4 times parallel
             // #zh_CN 玻璃等级每超出HV一级,提供4倍并行
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode2n3_01"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode2n3_01"))
             // #tr Tooltip_BiosphereIII_Mode2n3_02
             // # EV glass provides {\AQUA}4x{\GRAY} parallel, IV glass provides {\AQUA}16x{\GRAY} parallel, etc.
             // #zh_CN EV玻璃提供{\AQUA}4x{\GRAY}并行,IV玻璃提供{\AQUA}16x{\GRAY}并行,以此类推
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode2n3_02"))
-            .addInfo(TextEnums.tr("BiosphereIII_Mode_03"))
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode2n3_00"))
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode2n3_01"))
-            .addInfo(TextEnums.tr("Tooltip_BiosphereIII_Mode2n3_02"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode2n3_02"))
+            .addInfo(TSTUtils.tr("BiosphereIII_Mode_03"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode2n3_00"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode2n3_01"))
+            .addInfo(TSTUtils.tr("Tooltip_BiosphereIII_Mode2n3_02"))
             .beginStructureBlock(13, 19, 17, false)
             .addController(textFrontBottom)
             // #tr textBiosphereIIIHatchLocation
             // # Any Bottom Clean Stainless Steel Machine Casing
             // #zh_CN 任意底层洁净不锈钢机械方块
-            .addInputHatch(TextEnums.tr("textBiosphereIIIHatchLocation"), 1)
-            .addOutputHatch(TextEnums.tr("textBiosphereIIIHatchLocation"), 1)
-            .addInputBus(TextEnums.tr("textBiosphereIIIHatchLocation"), 1)
-            .addOutputBus(TextEnums.tr("textBiosphereIIIHatchLocation"), 1)
-            .addEnergyHatch(TextEnums.tr("textBiosphereIIIHatchLocation"), 1)
+            .addInputHatch(TSTUtils.tr("textBiosphereIIIHatchLocation"), 1)
+            .addOutputHatch(TSTUtils.tr("textBiosphereIIIHatchLocation"), 1)
+            .addInputBus(TSTUtils.tr("textBiosphereIIIHatchLocation"), 1)
+            .addOutputBus(TSTUtils.tr("textBiosphereIIIHatchLocation"), 1)
+            .addEnergyHatch(TSTUtils.tr("textBiosphereIIIHatchLocation"), 1)
             .addStructureInfo(
                 // #tr textBiosphereIIIRadioHatch
                 // # Radiation Hatch: 0-1x
                 // #zh_CN 放射仓: 0-1x
-                TextEnums.tr("textBiosphereIIIRadioHatch") + ", " + TextEnums.tr("textBiosphereIIIHatchLocation"))
+                TSTUtils.tr("textBiosphereIIIRadioHatch") + ", " + TSTUtils.tr("textBiosphereIIIHatchLocation"))
             .toolTipFinisher();
         // spotless:on
         return tt;

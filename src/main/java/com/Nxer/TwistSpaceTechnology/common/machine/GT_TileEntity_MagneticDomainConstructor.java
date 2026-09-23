@@ -31,11 +31,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -281,7 +280,7 @@ public class GT_TileEntity_MagneticDomainConstructor
             false,
             true);
 
-        return TstUtils.multiBuildPiece(built);
+        return TSTUtils.multiBuildPiece(built);
 
     }
 
@@ -460,33 +459,33 @@ public class GT_TileEntity_MagneticDomainConstructor
         // #tr Tooltip_MagneticDomainConstructor_MachineType
         // # Electromagnetic Separator | Electromagnetic Polarizer
         // #zh_CN 电磁离析机 | 磁化机
-        tt.addMachineType(TextEnums.tr("Tooltip_MagneticDomainConstructor_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MagneticDomainConstructor_MachineType"))
             // #tr Tooltip_MagneticDomainConstructor_00
             // # Controller block for the Magnetic Domain Constructor
             // #zh_CN 磁畴构建器的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_MagneticDomainConstructor_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_00"))
             // #tr Tooltip_MagneticDomainConstructor_01
             // # {\DARK_GRAY}Don't give up your imagination.
             // #zh_CN {\DARK_GRAY}不要放弃你的幻想.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDomainConstructor_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_01"))
             // #tr Tooltip_MagneticDomainConstructor_02
             // # Controlling the magnetic domains inside the crystal, yes that's it.
             // #zh_CN 操控晶体内部的磁畴子, 就是这样.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDomainConstructor_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_02"))
             // #tr Tooltip_MagneticDomainConstructor_03
             // # {\AQUA}64x{\GRAY} Parallel per Ring.(Don't use a lot of blueprints when first scanning.)
             // #zh_CN 每环增加{\AQUA}64x{\GRAY}并行.(不要一开始就用很多{\BLUE}蓝{\AQUA}图{\GRAY}去扫描.)
-            .addInfo(TextEnums.tr("Tooltip_MagneticDomainConstructor_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_03"))
             // #tr Tooltip_MagneticDomainConstructor_04
             // # Additional {\RED}25%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}25%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_MagneticDomainConstructor_04"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 3)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 3)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_04"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

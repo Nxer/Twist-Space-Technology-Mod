@@ -3,11 +3,11 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.laser_hatch_incompatible;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textEndSides;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textEndSides;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -41,10 +41,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -367,31 +367,31 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         // #tr Tooltip_AdvCircuitAssemblyLine_MachineType
         // # Circuit Assembly Line
         // #zh_CN 电路装配线
-        tt.addMachineType(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine_MachineType"))
             // #tr Tooltip_AdvCircuitAssemblyLine_Controller
             // # Controller block for the Advanced Circuit Assembly Line
             // #zh_CN 进阶电路装配线的控制方块
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine_Controller"))
             // #tr Tooltip_AdvCircuitAssemblyLine.1
             // # {\AQUA}Crystal Circuit Ti Super OC Crafting not D version
             // #zh_CN {\AQUA}晶体电路板Ti Super OC Crafting not D version
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.1"))
+            .addInfo(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.1"))
             // #tr Tooltip_AdvCircuitAssemblyLine.2
             // # Circuit assembly line with 64 times overclocking
             // #zh_CN 拥有64倍超频上限的电路装配线
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.2"))
+            .addInfo(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.2"))
             // #tr Tooltip_AdvCircuitAssemblyLine.3
             // # Allows installation of one energy hatch with max 64 amp limitation
             // #zh_CN 允许安装一个能源仓, 最高64A电流
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.3"))
+            .addInfo(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.3"))
             // #tr Tooltip_AdvCircuitAssemblyLine.4
             // # Allows installation of crafting input buffer
             // #zh_CN 允许使用样板输入总成
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"))
+            .addInfo(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.4"))
             // #tr Tooltip_AdvCircuitAssemblyLine.5
             // # Install imprint circuit hatch for more recipe support (more than one hatch is not allowed)
             // #zh_CN 安装压印电路仓以获得更多配方支持 (只允许安装一个压印电路仓)
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"))
+            .addInfo(TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.5"))
             .addEnergyHatch(textUseBlueprint, 2)
             .addInputBus(textUseBlueprint, 1)
             .addInputHatch(textUseBlueprint, 1)
@@ -404,8 +404,8 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             // # Grate machine casing next to the controller
             // #zh_CN 主机旁的格栅机械方块
             .addOtherStructurePart(
-                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.6"),
-                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.7"),
+                TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.6"),
+                TSTUtils.tr("Tooltip_AdvCircuitAssemblyLine.7"),
                 3)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();

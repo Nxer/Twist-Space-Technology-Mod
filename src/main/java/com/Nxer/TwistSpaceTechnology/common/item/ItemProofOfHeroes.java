@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.util.CraftedTokens;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -49,13 +49,13 @@ public class ItemProofOfHeroes extends Item {
                     // #tr tooltips.ProofOfHeroes.line2
                     // # {\LIGHT_PURPLE}The physical culmination of your journey, capable to rend gods asunder.
                     // #zh_CN {\LIGHT_PURPLE}你旅途的怨种顶点，拥有使神明笑嘻的力量.
-                    TextEnums.tr("tooltips.ProofOfHeroes.line2"));
+                    TSTUtils.tr("tooltips.ProofOfHeroes.line2"));
             } else {
                 toolTip.add(
                     // #tr tooltips.ProofOfHeroes.line1
                     // # The physical culmination of your journey, capable to rend gods asunder.
                     // #zh_CN 你旅途的物理顶点，拥有使神明分崩离析的力量.
-                    TextEnums.tr("tooltips.ProofOfHeroes.line1"));
+                    TSTUtils.tr("tooltips.ProofOfHeroes.line1"));
             }
         } else {
             if (isShiftKeyDown()) {
@@ -63,19 +63,19 @@ public class ItemProofOfHeroes extends Item {
                     // #tr tooltips.ProofOfGods.line2
                     // # {\LIGHT_PURPLE}Go touch some grass
                     // #zh_CN {\LIGHT_PURPLE}多留意下窗外的碧水蓝天
-                    TextEnums.tr("tooltips.ProofOfGods.line2"));
+                    TSTUtils.tr("tooltips.ProofOfGods.line2"));
                 toolTip.add("");
                 // #tr tooltips.ProofOfGods.line3
                 // # The first people to make a TwistToken
                 // #zh_CN 成功登顶的人们
-                toolTip.add(EnumChatFormatting.WHITE + TextEnums.tr("tooltips.ProofOfGods.line3"));
+                toolTip.add(EnumChatFormatting.WHITE + TSTUtils.tr("tooltips.ProofOfGods.line3"));
                 toolTip.addAll(CraftedTokens.getAllName());
             } else {
                 toolTip.add(
                     // #tr tooltips.ProofOfGods.line1
                     // # Impossible final goal
                     // #zh_CN 可能，也许，最后……
-                    TextEnums.tr("tooltips.ProofOfGods.line1"));
+                    TSTUtils.tr("tooltips.ProofOfGods.line1"));
             }
         }
     }

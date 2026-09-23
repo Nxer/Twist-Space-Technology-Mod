@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
@@ -37,11 +37,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -240,7 +239,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = TstSharedLocalization.MachineInfo.componentTier(this.casingTier + 1);
+        ret[origin.length] = TSTSharedLocalization.MachineInfo.componentTier(this.casingTier + 1);
 
         return ret;
     }
@@ -251,7 +250,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("batchMode")) {
-            currentTip.add(EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.1"));
+            currentTip.add(EnumChatFormatting.GREEN + TSTUtils.tr("Waila.TST_MegaSolarPanelFactory.1"));
             // #tr Waila.TST_MegaSolarPanelFactory.1
             // # {\GREEN}Batch mode is ON
             // #zh_CN {\GREEN}批处理已开启
@@ -259,7 +258,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         float speedBonus = tag.getFloat("speedBonus");
         if (speedBonus > -1) {
             currentTip.add(
-                EnumChatFormatting.GREEN + TextEnums.tr("Waila.TST_MegaSolarPanelFactory.2")
+                EnumChatFormatting.GREEN + TSTUtils.tr("Waila.TST_MegaSolarPanelFactory.2")
                     + "="
                     + EnumChatFormatting.GOLD
                     + formatNumber(tag.getFloat("speedBonus"))
@@ -353,11 +352,11 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
             // #zh_CN 耗时倍率 = 100% / 部件装配线外壳等级.
             .addInfo(tr("Tooltip_MegaSolarPanelFactory_1_02"))
             .beginStructureBlock(13, 16, 13, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tttt;

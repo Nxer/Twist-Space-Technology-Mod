@@ -24,7 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.tile.TileLargeSolarBoilerRender;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileStar;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.Materials;
@@ -118,11 +118,11 @@ public class BlockRegister {
                 // #tr Tooltips_HighPowerRadiationProofCasing.01
                 // # Constrained the overflowing energy
                 // #zh_CN {\GREEN}约束住了外溢的能量{\GRAY}.
-                new String[] { TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.01"),
+                new String[] { TSTUtils.tr("Tooltips_HighPowerRadiationProofCasing.01"),
                     // #tr Tooltips_HighPowerRadiationProofCasing.02
                     // # The power levels are still rising!!!
                     // #zh_CN {\BOLD}{\AQUA}能量仍在上升!!!
-                    TextEnums.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
+                    TSTUtils.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
 
         // #tr tile.MetaBlockCasing01.2.name
         // # Advanced High Power Coil Block
@@ -133,11 +133,11 @@ public class BlockRegister {
                 // #tr Tooltips_AdvancedHighPowerCoil.01
                 // # Constrained the overflowing energy
                 // #zh_CN {\BLUE}电流涌动于其中.
-                new String[] { TextEnums.tr("Tooltips_AdvancedHighPowerCoil.01"),
+                new String[] { TSTUtils.tr("Tooltips_AdvancedHighPowerCoil.01"),
                     // #tr Tooltips_AdvancedHighPowerCoil.02
                     // # The power levels are still rising!!!
                     // #zh_CN {\AQUA}目中闪烁雷霆.
-                    TextEnums.tr("Tooltips_AdvancedHighPowerCoil.02") }));
+                    TSTUtils.tr("Tooltips_AdvancedHighPowerCoil.02") }));
 
         // #tr tile.MetaBlockCasing01.3.name
         // # Parallelism Casing Mark 0
@@ -153,8 +153,8 @@ public class BlockRegister {
         GTCMItemList.ParallelismCasing0.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 3,
-                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_0"),
-                    TextEnums.tr("Tooltip_MetaBlockCasing01.3.name_1") }));
+                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.3.name_0"),
+                    TSTUtils.tr("Tooltip_MetaBlockCasing01.3.name_1") }));
 
         // #tr tile.MetaBlockCasing01.4.name
         // # Parallelism Casing Mark 1
@@ -170,8 +170,8 @@ public class BlockRegister {
         GTCMItemList.ParallelismCasing1.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 4,
-                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_0"),
-                    TextEnums.tr("Tooltip_MetaBlockCasing01.4.name_1") }));
+                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.4.name_0"),
+                    TSTUtils.tr("Tooltip_MetaBlockCasing01.4.name_1") }));
 
         // #tr tile.MetaBlockCasing01.5.name
         // # Parallelism Casing Mark 2
@@ -187,8 +187,8 @@ public class BlockRegister {
         GTCMItemList.ParallelismCasing2.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 5,
-                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_0"),
-                    TextEnums.tr("Tooltip_MetaBlockCasing01.5.name_1") }));
+                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.5.name_0"),
+                    TSTUtils.tr("Tooltip_MetaBlockCasing01.5.name_1") }));
 
         // #tr tile.MetaBlockCasing01.6.name
         // # Parallelism Casing Mark 3
@@ -204,8 +204,8 @@ public class BlockRegister {
         GTCMItemList.ParallelismCasing3.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 6,
-                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_0"),
-                    TextEnums.tr("Tooltip_MetaBlockCasing01.6.name_1") }));
+                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.6.name_0"),
+                    TSTUtils.tr("Tooltip_MetaBlockCasing01.6.name_1") }));
 
         // #tr tile.MetaBlockCasing01.7.name
         // # Parallelism Casing Mark 4
@@ -221,8 +221,8 @@ public class BlockRegister {
         GTCMItemList.ParallelismCasing4.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 7,
-                new String[] { TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_0"),
-                    TextEnums.tr("Tooltip_MetaBlockCasing01.7.name_1") }));
+                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.7.name_0"),
+                    TSTUtils.tr("Tooltip_MetaBlockCasing01.7.name_1") }));
 
         // #tr tile.MetaBlockCasing01.8.name
         // # Anti-Magnetic Casing
@@ -238,7 +238,7 @@ public class BlockRegister {
         // #zh_CN 只是块石头?
         GTCMItemList.ReinforcedStoneBrickCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(9, new String[] { TextEnums.tr("Tooltip_ReinforcedStoneBrickCasing") }));
+                .registerVariantWithTooltips(9, new String[] { TSTUtils.tr("Tooltip_ReinforcedStoneBrickCasing") }));
 
         // #tr tile.MetaBlockCasing01.10.name
         // # Composite Farm Casing
@@ -249,7 +249,7 @@ public class BlockRegister {
         // #zh_CN 一个更比四个强
         GTCMItemList.CompositeFarmCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(10, new String[] { TextEnums.tr("Tooltip_CompositeFarmCasing") }));
+                .registerVariantWithTooltips(10, new String[] { TSTUtils.tr("Tooltip_CompositeFarmCasing") }));
 
         // #tr tile.MetaBlockCasing01.11.name
         // # Dense Particle Constraint Casing
@@ -270,7 +270,7 @@ public class BlockRegister {
         // #zh_CN 一尘不染!
         GTCMItemList.AsepticGreenhouseCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(13, new String[] { TextEnums.tr("Tooltip_AsepticGreenhouseCasing") }));
+                .registerVariantWithTooltips(13, new String[] { TSTUtils.tr("Tooltip_AsepticGreenhouseCasing") }));
 
         // #tr tile.MetaBlockCasing01.14.name
         // # Reinforced Bedrock Casing
@@ -281,7 +281,7 @@ public class BlockRegister {
         // #zh_CN 比磐石更坚！
         GTCMItemList.ReinforcedBedrockCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(14, new String[] { TextEnums.tr("Tooltip_ReinforcedBedrockCasing") }));
+                .registerVariantWithTooltips(14, new String[] { TSTUtils.tr("Tooltip_ReinforcedBedrockCasing") }));
 
         // #tr tile.MetaBlockCasing01.15.name
         // # Swelegfyr Casing
@@ -291,8 +291,7 @@ public class BlockRegister {
         // # {\GOLD}Withstands the inferno!
         // #zh_CN {\GOLD}御火而生!
         GTCMItemList.SwelegfyrCasing.set(
-            MetaBlockCasing01
-                .registerVariantWithTooltips(15, new String[] { TextEnums.tr("Tooltip_SwelegfyrCasing") }));
+            MetaBlockCasing01.registerVariantWithTooltips(15, new String[] { TSTUtils.tr("Tooltip_SwelegfyrCasing") }));
 
         // #tr tile.MetaBlockCasing02.0.name
         // # Gore Casing
@@ -391,9 +390,8 @@ public class BlockRegister {
         // # The Beginning?
         // #zh_CN 开始了?
         GTCMItemList.StabilisationFieldGeneratorFramework.set(
-            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
-                0,
-                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.0") }));
+            TstBlocks.StabilisationFieldGenerator
+                .registerVariantWithTooltips(0, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.0") }));
 
         // #tr tile.StabilisationFieldGenerator.1.name
         // # Stabilisation Field Generator UEV Tier
@@ -403,9 +401,8 @@ public class BlockRegister {
         // # The Beginning
         // #zh_CN 开始了
         GTCMItemList.StabilisationFieldGeneratorUEV.set(
-            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
-                1,
-                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.1") }));
+            TstBlocks.StabilisationFieldGenerator
+                .registerVariantWithTooltips(1, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.1") }));
 
         // #tr tile.StabilisationFieldGenerator.2.name
         // # Stabilisation Field Generator UIV Tier
@@ -415,9 +412,8 @@ public class BlockRegister {
         // # How Did We Get Here?
         // #zh_CN 为什么会变成这样呢？
         GTCMItemList.StabilisationFieldGeneratorUIV.set(
-            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
-                2,
-                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.2") }));
+            TstBlocks.StabilisationFieldGenerator
+                .registerVariantWithTooltips(2, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.2") }));
 
         // #tr tile.StabilisationFieldGenerator.3.name
         // # Stabilisation Field Generator UMV Tier
@@ -427,9 +423,8 @@ public class BlockRegister {
         // # We Need to Go Deeper
         // #zh_CN 我们需要再深入些
         GTCMItemList.StabilisationFieldGeneratorUMV.set(
-            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
-                3,
-                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.3") }));
+            TstBlocks.StabilisationFieldGenerator
+                .registerVariantWithTooltips(3, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.3") }));
 
         // #tr tile.StabilisationFieldGenerator.4.name
         // # Stabilisation Field Generator UXV Tier
@@ -439,9 +434,8 @@ public class BlockRegister {
         // # The End?
         // #zh_CN 结束了?
         GTCMItemList.StabilisationFieldGeneratorUXV.set(
-            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
-                4,
-                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.4") }));
+            TstBlocks.StabilisationFieldGenerator
+                .registerVariantWithTooltips(4, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.4") }));
 
         // #tr tile.StabilisationFieldGenerator.5.name
         // # Stabilisation Field Generator MAX Tier
@@ -451,9 +445,8 @@ public class BlockRegister {
         // # The End
         // #zh_CN 结束了
         GTCMItemList.StabilisationFieldGeneratorMAX.set(
-            TstBlocks.StabilisationFieldGenerator.registerVariantWithTooltips(
-                5,
-                new String[] { TextEnums.tr("Tooltip_StabilisationFieldGenerator.5") }));
+            TstBlocks.StabilisationFieldGenerator
+                .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.5") }));
 
         // #tr tile.EnergySustainmentMatrix.0.name
         // # Energy Sustainment Matrix Framework
@@ -464,7 +457,7 @@ public class BlockRegister {
         // #zh_CN 小心轻放
         GTCMItemList.EnergySustainmentMatrixFramework.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(0, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.0") }));
+                .registerVariantWithTooltips(0, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.0") }));
 
         // #tr tile.EnergySustainmentMatrix.1.name
         // # Energy Sustainment Matrix UEV Tier
@@ -475,7 +468,7 @@ public class BlockRegister {
         // #zh_CN 无尽工程师
         GTCMItemList.EnergySustainmentMatrixUEV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(1, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.1") }));
+                .registerVariantWithTooltips(1, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.1") }));
 
         // #tr tile.EnergySustainmentMatrix.2.name
         // # Energy Sustainment Matrix UIV Tier
@@ -486,7 +479,7 @@ public class BlockRegister {
         // #zh_CN 亚空间立方体
         GTCMItemList.EnergySustainmentMatrixUIV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(2, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.2") }));
+                .registerVariantWithTooltips(2, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.2") }));
 
         // #tr tile.EnergySustainmentMatrix.3.name
         // # Energy Sustainment Matrix UMV Tier
@@ -497,7 +490,7 @@ public class BlockRegister {
         // #zh_CN 悖论
         GTCMItemList.EnergySustainmentMatrixUMV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(3, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.3") }));
+                .registerVariantWithTooltips(3, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.3") }));
 
         // #tr tile.EnergySustainmentMatrix.4.name
         // # Energy Sustainment Matrix UXV Tier
@@ -508,7 +501,7 @@ public class BlockRegister {
         // #zh_CN 热门话题
         GTCMItemList.EnergySustainmentMatrixUXV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(4, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.4") }));
+                .registerVariantWithTooltips(4, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.4") }));
 
         // #tr tile.EnergySustainmentMatrix.5.name
         // # Energy Sustainment Matrix MAX Tier
@@ -519,7 +512,7 @@ public class BlockRegister {
         // #zh_CN 这上面的视野不错
         GTCMItemList.EnergySustainmentMatrixMAX.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(5, new String[] { TextEnums.tr("Tooltip_EnergySustainmentMatrix.5") }));
+                .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.5") }));
 
         // end region
 
@@ -545,7 +538,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeLV.tooltips.01
                 // # Extra {\RED}1%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}1%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeLV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeLV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.1.name
         // # Photonic Intensifier MV Tier
@@ -556,7 +549,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeMV.tooltips.01
                 // # Extra {\RED}2%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}2%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeMV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeMV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.2.name
         // # Photonic Intensifier HV Tier
@@ -567,7 +560,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeHV.tooltips.01
                 // # Extra {\RED}3%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}3%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeHV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeHV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.3.name
         // # Photonic Intensifier EV Tier
@@ -578,7 +571,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeEV.tooltips.01
                 // # Extra {\RED}4%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}4%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeEV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeEV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.4.name
         // # Photonic Intensifier IV Tier
@@ -589,7 +582,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeIV.tooltips.01
                 // # Extra {\RED}5%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}5%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeIV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeIV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.5.name
         // # Photonic Intensifier LuV Tier
@@ -600,7 +593,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeLuV.tooltips.01
                 // # Extra {\RED}10%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}10%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeLuV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeLuV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.6.name
         // # Photonic Intensifier ZPM Tier
@@ -611,7 +604,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeZPM.tooltips.01
                 // # Extra {\RED}20%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}20%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeZPM.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeZPM.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.7.name
         // # Photonic Intensifier UV Tier
@@ -622,7 +615,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeUV.tooltips.01
                 // # Extra {\RED}40%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}40%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeUV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeUV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.8.name
         // # Photonic Intensifier UHV Tier
@@ -633,7 +626,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeUHV.tooltips.01
                 // # Extra {\RED}70%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}70%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeUHV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeUHV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.9.name
         // # Photonic Intensifier UEV Tier
@@ -644,7 +637,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeUEV.tooltips.01
                 // # Extra {\RED}100%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}100%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeUEV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeUEV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.10.name
         // # Photonic Intensifier UIV Tier
@@ -655,7 +648,7 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeUIV.tooltips.01
                 // # Extra 140%% Speed Up !
                 // #zh_CN 额外140%%的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeUIV.tooltips.01") }));
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeUIV.tooltips.01") }));
 
         // #tr tile.PhotonControllerUpgrades.11.name
         // # Photonic Intensifier UMV Tier
@@ -666,11 +659,11 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeUMV.tooltips.01
                 // # Extra {\RED}190%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}190%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.01"),
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeUMV.tooltips.01"),
                     // #tr PhotonControllerUpgradeUMV.tooltips.02
                     // # Enable perfect overclocks!
                     // #zh_CN 启用无损超频！
-                    TextEnums.tr("PhotonControllerUpgradeUMV.tooltips.02") }));
+                    TSTUtils.tr("PhotonControllerUpgradeUMV.tooltips.02") }));
 
         // #tr tile.PhotonControllerUpgrades.12.name
         // # Photonic Intensifier UXV Tier
@@ -681,11 +674,11 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeUXV.tooltips.01
                 // # Extra {\RED}250%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}250%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.01"),
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeUXV.tooltips.01"),
                     // #tr PhotonControllerUpgradeUXV.tooltips.02
                     // # Enable perfect overclocks!
                     // #zh_CN 启用无损超频！
-                    TextEnums.tr("PhotonControllerUpgradeUXV.tooltips.02") }));
+                    TSTUtils.tr("PhotonControllerUpgradeUXV.tooltips.02") }));
 
         // #tr tile.PhotonControllerUpgrades.13.name
         // # Photonic Intensifier MAX Tier
@@ -696,11 +689,11 @@ public class BlockRegister {
                 // #tr PhotonControllerUpgradeMAX.tooltips.01
                 // # Extra {\RED}320%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}320%{\GRAY}的速度提升！
-                new String[] { TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.01"),
+                new String[] { TSTUtils.tr("PhotonControllerUpgradeMAX.tooltips.01"),
                     // #tr PhotonControllerUpgradeMAX.tooltips.02
                     // # Enable perfect overclocks!
                     // #zh_CN 启用无损超频！
-                    TextEnums.tr("PhotonControllerUpgradeMAX.tooltips.02") }));
+                    TSTUtils.tr("PhotonControllerUpgradeMAX.tooltips.02") }));
 
         // endregion
         // ---------------------------------------------------------------------------------------------------------------------------//

@@ -35,9 +35,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmen
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -192,7 +192,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The voltage tier should be in of this machine total EU/t, allow over MAX calculation.
      */
     public int getTotalPowerTier() {
-        return TstUtils.getMachineTotalPowerTier(this);
+        return TSTUtils.getMachineTotalPowerTier(this);
     }
 
     /**
@@ -501,24 +501,15 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 3];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr MachineInfoData.Parallels
-        // # Parallels
-        // #zh_CN 并行
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.Parallels")
+        ret[origin.length] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.Parallels
             + ": "
             + EnumChatFormatting.GOLD
             + this.getTrueParallel();
-        // #tr MachineInfoData.SpeedMultiplier
-        // # Speed multiplier
-        // #zh_CN 耗时倍率
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.SpeedMultiplier")
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.SpeedMultiplier
             + ": "
             + EnumChatFormatting.GOLD
             + dSpeed;
-        // #tr MachineInfoData.EuModifier
-        // # EU Modifier
-        // #zh_CN 耗电倍率
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.EuModifier")
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.EuModifier
             + ": "
             + EnumChatFormatting.GOLD
             + dEUMod;

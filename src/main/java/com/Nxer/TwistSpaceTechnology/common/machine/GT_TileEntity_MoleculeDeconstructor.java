@@ -4,9 +4,9 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.Parallel_Pe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.PieceAmount_EnablePerfectOverclock_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_MoleculeDeconstructor;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.internal_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textScrewdriverChangeMode;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -38,10 +38,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -262,7 +261,7 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
             false,
             true);
 
-        return TstUtils.multiBuildPiece(built);
+        return TSTUtils.multiBuildPiece(built);
     }
 
     @Override
@@ -440,31 +439,31 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
         // #tr Tooltip_MoleculeDeconstructor_MachineType
         // # Electrolyzer | Centrifuge
         // #zh_CN 电解机 | 离心机
-        tt.addMachineType(TextEnums.tr("Tooltip_MoleculeDeconstructor_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MoleculeDeconstructor_MachineType"))
             // #tr Tooltip_MoleculeDeconstructor_00
             // # Controller block for the Molecule Deconstructor
             // #zh_CN 分子解构器的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_MoleculeDeconstructor_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_00"))
             // #tr Tooltip_MoleculeDeconstructor_01
             // # {\AQUA}The lightning seemed to roll down a ladder.
             // #zh_CN {\AQUA}雷电好像从一架梯子上滚下来.
-            .addInfo(TextEnums.tr("Tooltip_MoleculeDeconstructor_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_01"))
             // #tr Tooltip_MoleculeDeconstructor_02
             // # Separate the molecules one by one with tweezers.
             // #zh_CN 用镊子将分子一个一个一个分开.
-            .addInfo(TextEnums.tr("Tooltip_MoleculeDeconstructor_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_02"))
             // #tr Tooltip_MoleculeDeconstructor_03
             // # Extra {\AQUA}24x{\GRAY} Parallel per Piece. {\GOLD}16{\GRAY} Piece enable Perfect Overclock.
             // #zh_CN 每层提供{\AQUA}24x{\GRAY}并行. {\GOLD}16{\GRAY}层启用无损超频.
-            .addInfo(TextEnums.tr("Tooltip_MoleculeDeconstructor_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_03"))
             // #tr Tooltip_MoleculeDeconstructor_04
             // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_MoleculeDeconstructor_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_04"))
             // #tr Tooltip_MoleculeDeconstructor_05
             // # The Glass Tier limit the Energy hatch voltage Tier.
             // #zh_CN 玻璃等级限制能源仓等级.
-            .addInfo(TextEnums.tr("Tooltip_MoleculeDeconstructor_05"))
+            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_05"))
             .addInfo(textScrewdriverChangeMode)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 4)

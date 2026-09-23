@@ -27,11 +27,11 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.multiuse.BlockMultiUseCore;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedFormat;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TstSharedFormat;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -405,49 +405,49 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
     protected MultiblockTooltipBuilder createTooltip() {
         var tt = new TSTMultiblockTooltipBuilder();
 
-        TstSharedFormat.setDefaultColor(EnumChatFormatting.GRAY);
+        TSTSharedFormat.setDefaultColor(EnumChatFormatting.GRAY);
 
         // spotless:off
         // #tr ManufacturingCenter_Tooltips_MachineType
         // # Manufacturing Center | Nine in One
         // #zh_CN 加工中心 | 九合一
-        tt.addMachineType(TextEnums.tr("ManufacturingCenter_Tooltips_MachineType"))
+        tt.addMachineType(TSTUtils.tr("ManufacturingCenter_Tooltips_MachineType"))
             // #tr ManufacturingCenter_Tooltips_1
             // # A Combination of Machines.
             // #zh_CN 一些机器的组合。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_1"))
+            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_1"))
             // #tr ManufacturingCenter_Tooltips_2
             // # Recipe voltages are limited by the §aMultiUse Core§7.
             // #zh_CN §a多功能核心§7限制配方电压等级。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_2"))
+            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_2"))
             // #tr ManufacturingCenter_Tooltips_3
             // # Manufacturing Center cannot handle recipes over %s.
             // #zh_CN 加工中心不能制作%s及以上的配方。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_3", TstSharedFormat.getTierName(VoltageIndex.UHV)))
+            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_3", TSTSharedFormat.getTierName(VoltageIndex.UHV)))
             // #tr ManufacturingCenter_Tooltips_4
             // # §b20%§7 faster than single blocks.
             // #zh_CN 比单方块机器快§b20%§7。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_4"))
+            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_4"))
             // #tr ManufacturingCenter_Tooltips_5
             // # Each Core Tier over %s gains §b%s§7 Speed Bonus comparing to single block machines.
             // #zh_CN 每级超过%s的核心等级获得§b%s§7的速度提升。
             .addInfo(
-                TextEnums.tr(
+                TSTUtils.tr(
                     "ManufacturingCenter_Tooltips_5",
-                    TstSharedFormat.getTierName(LOWEST_CORE_TIER),
-                    TstSharedFormat.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
+                    TSTSharedFormat.getTierName(LOWEST_CORE_TIER),
+                    TSTSharedFormat.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_6
             // # Each Core Tier over %s gains §b%s§7 EU/t Reduction.
             // #zh_CN 每级超过%s的核心等级获得§b%s§7的能量减免。
             .addInfo(
-                TextEnums.tr(
+                TSTUtils.tr(
                     "ManufacturingCenter_Tooltips_6",
-                    TstSharedFormat.getTierName(LOWEST_CORE_TIER),
-                    TstSharedFormat.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
+                    TSTSharedFormat.getTierName(LOWEST_CORE_TIER),
+                    TSTSharedFormat.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
             // #tr ManufacturingCenter_Tooltips_7
             // # Max parallel is §b%sx§7 max voltage tier.
             // #zh_CN 最大并行为§b%sx§7最大电压等级。
-            .addInfo(TextEnums.tr("ManufacturingCenter_Tooltips_7", MAX_PARALLEL_MODIFIER))
+            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_7", MAX_PARALLEL_MODIFIER))
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
             .addController("Front Center")

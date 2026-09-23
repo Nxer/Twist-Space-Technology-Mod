@@ -26,11 +26,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.text.TstSharedFormat;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -114,27 +114,28 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     }
 
     private static String[] createDescription() {
-        return new String[] { TextLocalization.HatchTier + " " + TstSharedFormat.getTierName(VoltageIndex.UIV),
+        return new String[] {
+            TSTSharedLocalization.General.HatchTier + " " + TSTSharedFormat.getTierName(VoltageIndex.UIV),
             // #tr Tooltip_AEStorageCellInputBus.0
             // # Advanced stocking input bus upgrade for multiblock item input
             // #zh_CN 进阶存储输入总线的升级版，为多方块机器输入物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.0"),
+            TSTUtils.tr("Tooltip_AEStorageCellInputBus.0"),
             // #tr Tooltip_AEStorageCellInputBus.1
             // # Retrieves up to 16 marked item types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.1"),
+            TSTUtils.tr("Tooltip_AEStorageCellInputBus.1"),
             // #tr Tooltip_AEStorageCellInputBus.2
             // # An inserted ME storage cell supplies items instead and disconnects the ME network
             // #zh_CN 放入ME存储元件后改从元件中拉取，且无法连接ME网络
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.2"),
+            TSTUtils.tr("Tooltip_AEStorageCellInputBus.2"),
             // #tr Tooltip_AEStorageCellInputBus.3
             // # Per recipe, TST machines handle %s x 2147483647 items in total
             // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647件物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.3", Config.MaxTotalIntSegments_AEStorageCellInput),
+            TSTUtils.tr("Tooltip_AEStorageCellInputBus.3", Config.MaxTotalIntSegments_AEStorageCellInput),
             // #tr Tooltip_AEStorageCellInputBus.4
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.4") };
+            TSTUtils.tr("Tooltip_AEStorageCellInputBus.4") };
     }
 
     @Override

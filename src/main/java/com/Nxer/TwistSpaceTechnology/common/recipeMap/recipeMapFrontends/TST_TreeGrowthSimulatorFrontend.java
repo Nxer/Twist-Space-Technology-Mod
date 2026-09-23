@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
@@ -71,7 +71,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         // Special Stack
         if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 2).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESP.TreeGrowthSimulator.nei.tooltip.0"));
             // #tr ESP.TreeGrowthSimulator.nei.tooltip.0
             // # Place in machine controller slot
             // #zh_CN 放入控制器插槽
@@ -80,7 +80,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         }
         // Fluid Stack
         else if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.1"));
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESP.TreeGrowthSimulator.nei.tooltip.1"));
             // #tr ESP.TreeGrowthSimulator.nei.tooltip.1
             // # Input fluid to grow trees
             // #zh_CN 输入流体以拟生树木
@@ -92,19 +92,19 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
 
         // Inputs
         int slot = 0;
-        String[] tooltipInputs = { TextEnums.tr("ESP.TreeGrowthSimulator.nei.tooltip.2"),
+        String[] tooltipInputs = { TSTUtils.tr("ESP.TreeGrowthSimulator.nei.tooltip.2"),
             // #tr ESP.TreeGrowthSimulator.nei.tooltip.2
             // # Place in an input bus to harvest logs
             // #zh_CN 放入输入总线以收获原木
-            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.3"),
+            TSTUtils.tr("ESS.TreeGrowthSimulator.nei.tooltip.3"),
             // #tr ESS.TreeGrowthSimulator.nei.tooltip.3
             // # Place in an input bus to harvest saplings
             // #zh_CN 放入输入总线以收获树苗
-            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.4"),
+            TSTUtils.tr("ESS.TreeGrowthSimulator.nei.tooltip.4"),
             // #tr ESS.TreeGrowthSimulator.nei.tooltip.4
             // # Place in an input bus to harvest leaves
             // #zh_CN 放入输入总线以收获树叶
-            TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.5")
+            TSTUtils.tr("ESS.TreeGrowthSimulator.nei.tooltip.5")
             // #tr ESS.TreeGrowthSimulator.nei.tooltip.5
             // # Place in an input bus to harvest fruit
             // #zh_CN 放入输入总线以收获果实
@@ -127,7 +127,7 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
             if (mode < recipe.mOutputs.length && recipe.mOutputs[mode] != null) {
                 // There is a valid output in this mode.
                 if (slot < neiCachedRecipe.mOutputs.size() && stack == neiCachedRecipe.mOutputs.get(slot).item) {
-                    currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.6")
+                    currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.TreeGrowthSimulator.nei.tooltip.6")
                     // #tr ESS.TreeGrowthSimulator.nei.tooltip.6
                     // # Requires correct Integrated Circuit to harvest
                     // #zh_CN 需要正确的编程电路才能收获
@@ -149,11 +149,11 @@ public class TST_TreeGrowthSimulatorFrontend extends RecipeMapFrontend {
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
             return Arrays.asList(
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"),
+                TSTUtils.tr("ESS.TreeGrowthSimulator.nei.info.1"),
                 // #tr ESS.TreeGrowthSimulator.nei.info.1
                 // # Output is further boosted
                 // #zh_CN 产量随电压等级进一步提高
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.2")
+                TSTUtils.tr("ESS.TreeGrowthSimulator.nei.info.2")
             // #tr ESS.TreeGrowthSimulator.nei.info.2
             // # by machine energy tier
             // #zh_CN {\SPACE}

@@ -4,20 +4,20 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.CriticalPhoton;
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.GravitationalLens;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SPACE_ELEVATOR_BASE_CASING_INDEX;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUPerCriticalPhoton;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.DSPName;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_00;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_01;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_02;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_03;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_04;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_05;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_06;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_01;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_02;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_launch_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -58,12 +58,10 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Galaxy;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Planet;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -371,7 +369,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                 // Generate EU directly
                 if (this.storageEU > 0 || storageEUMAX > 0) {
                     BigInteger eu = BigInteger.valueOf(storageEUMAX)
-                        .multiply(TstUtils.INTEGER_MAX_VALUE)
+                        .multiply(TSTUtils.INTEGER_MAX_VALUE)
                         .add(BigInteger.valueOf(storageEU));
                     addEUToGlobalEnergyMap(ownerUUID, eu);
                     this.storageEU = 0;
@@ -430,28 +428,28 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // #tr TST_DSPReceiver.getInfoData.01
             // # Generating EU/t:
             // #zh_CN 实际接收 EU/t:
-            + TextEnums.tr("TST_DSPReceiver.getInfoData.01")
+            + TSTUtils.tr("TST_DSPReceiver.getInfoData.01")
             + EnumChatFormatting.RESET + " "
             + generateTickEU());
         ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.02
             // # Used Power Point:
             // #zh_CN 已占用产能点数:
-            + TextEnums.tr("TST_DSPReceiver.getInfoData.02")
+            + TSTUtils.tr("TST_DSPReceiver.getInfoData.02")
             + EnumChatFormatting.RESET + " "
             + usedPowerPoint);
         ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.03
             // # Gravitational Lens Intensify Mode remaining time:
             // #zh_CN 引力透镜增强模式剩余时间:
-            + TextEnums.tr("TST_DSPReceiver.getInfoData.03")
+            + TSTUtils.tr("TST_DSPReceiver.getInfoData.03")
             + EnumChatFormatting.RESET + " "
             + (gravitationalLensTime/20) + " s");
         ret.add(EnumChatFormatting.AQUA
             // #tr TST_DSPReceiver.getInfoData.04
             // # Overload Multiplier:
             // #zh_CN 过载倍率:
-            + TextEnums.tr("TST_DSPReceiver.getInfoData.04")
+            + TSTUtils.tr("TST_DSPReceiver.getInfoData.04")
             + EnumChatFormatting.RESET + " "
             + astralArrayOverloadMultiplier);
         // DSPDataCell
@@ -484,7 +482,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // #tr infoText_CurrentStellarCoefficient
             // # Current Stellar Coefficient:
             // #zh_CN 当前恒星系数:
-            + TextEnums.tr("infoText_CurrentStellarCoefficient")
+            + TSTUtils.tr("infoText_CurrentStellarCoefficient")
             + EnumChatFormatting.RESET
             + dspDataCell.getGalaxy()
             + " -> "
@@ -495,7 +493,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             // #tr infoText_CurrentPlanetCoefficient
             // # Current Planet Coefficient:
             // #zh_CN 当前行星系数:
-            + TextEnums.tr("infoText_CurrentPlanetCoefficient")
+            + TSTUtils.tr("infoText_CurrentPlanetCoefficient")
             + EnumChatFormatting.RESET
             + DSP_Planet.getPlanetFromDimID(dimID)
             + " -> "
@@ -516,7 +514,7 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
                     // #tr Waila.TST_DSPReceiver.1
                     // # Energy Receiving:
                     // #zh_CN 接收能源:
-                    + TextEnums.tr("Waila.TST_DSPReceiver.1")
+                    + TSTUtils.tr("Waila.TST_DSPReceiver.1")
                     + EnumChatFormatting.GOLD
                     + formatNumber(tag.getLong("TickEU"))
                     + EnumChatFormatting.RESET
@@ -778,76 +776,76 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
         // #tr Tooltip_DSPReceiver_MachineType
         // # Dyson Sphere Program: Ray Receiving Station
         // #zh_CN 戴森球计划: 射线接收站
-        tt.addMachineType(TextEnums.tr("Tooltip_DSPReceiver_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_DSPReceiver_MachineType"))
             // #tr Tooltip_DSPReceiver_00
             // # Controller block for the Dyson Sphere Ray Receiving Station.
             // #zh_CN 戴森球射线接收站的控制器方块.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_00"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_00"))
             // #tr Tooltip_DSPReceiver_01
             // # {\DARK_PURPLE}{\BOLD}You hold in your hands the true power of Master Nebula ...
             // #zh_CN {\DARK_PURPLE}{\BOLD}你的手中掌握着星云法师真正的力量 ...
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_01"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_01"))
             // #tr Tooltip_DSPReceiver_02
             // # Receive high-energy rays transmitted back from the Dyson Cloud or the Dyson Sphere.
             // #zh_CN 接收从戴森云或戴森球上传输回来的高能射线.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_02"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_02"))
             // #tr Tooltip_DSPReceiver_03
             // # The received energy can be exported directly to the Wireless EU Net or Dynamo Hatches or stored as Critical Photons.
             // #zh_CN 可以将接收到的能量直接输出到无线EU电网或动力仓, 或者存储为临界状态的光子.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_03"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_03"))
             // #tr Tooltip_DSPReceiver_04
             // # Ratio of the requesting from Dyson Sphere power point can be limited by putting Integrated Circuit into controller block.
             // #zh_CN 在控制器方块内放置编程电路可以限制请求功率的比率.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_04"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_04"))
             // #tr Tooltip_DSPReceiver_05
             // # At the same time, the maximum requested power point is {\GOLD}1024{\GRAY}A Max (default).
             // #zh_CN 同时, 最大请求功率 {\GOLD}1024{\GRAY}A Max (默认).
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_05"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_05"))
             // #tr Tooltip_DSPReceiver_06
             // # Actual output power is affected by stellar and planetary coefficients.
             // #zh_CN 实际输出功率受恒星系数和行星系数影响.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_06"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_06"))
             // #tr Tooltip_DSPReceiver_07
             // # Inputting Gravitational Lens will enable intensify mode. Increase actual output power.
             // #zh_CN 输入引力透镜将启用增强模式. 提高实际输出功率.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_07"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_07"))
             // #tr Tooltip_DSPReceiver_08
             // # Joining the wireless EU network when without installing a dynamo hatch.
             // #zh_CN 未安装动力仓时自动进入无线电力网络模式.
-            .addInfo(TextEnums.tr("Tooltip_DSPReceiver_08"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPReceiver_08"))
             .addStructureInfo(Tooltip_Details)
             // #tr Tooltip_DSPReceiver_02_06
             // # Requesting ratio = Integrated Circuit Number / Stack Size
             // #zh_CN 请求比率 = 编程电路编号 / 堆叠数量
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_06"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_06"))
             // #tr Tooltip_DSPReceiver_02_01
             // # Actual Generating EU = used power point * stellar coefficient * planet coefficient * 1 or 2 in intensify mode
             // #zh_CN 实际产生EU = 已占用产能点数 * 恒星系数 * 行星系数 * 1 或 4 在增强模式时
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_01"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_01"))
             // #tr Tooltip_DSPReceiver_02_02
             // # Personal Dimension was been classified as Overworld(Earth).
             // #zh_CN 私人维度归类于主世界(地球).
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_02"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_02"))
             // #tr Tooltip_DSPReceiver_02_03
             // # Every Gravitational Lens will provide (default) 10 minutes of intensify mode.
             // #zh_CN 每个引力透镜可以提供 (默认) 10 分钟的增强模式.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_03"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_03"))
             // #tr Tooltip_DSPReceiver_02_04
             // # Input Gravitational Lens will be consumed immediately.
             // #zh_CN 输入的引力透镜会立刻被消耗.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_04"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_04"))
             // #tr Tooltip_DSPReceiver_02_05
             // # Converted to remaining time of intensify mode.
             // #zh_CN 转换成剩余的增强模式时间.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_05"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_05"))
             // #tr Tooltip_DSPReceiver_02_07
             // # Put §b§l§oAstral Array Fabricator§7 into controller slot then this machine can request over 1024A Max power point.
             // #zh_CN 在控制器内放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} 可以使此机器请求超过1024A Max的能量点数.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_07"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_07"))
             // #tr Tooltip_DSPReceiver_02_08
             // # Final requesting power point limit = Astral Array Fabricator amount^2 * 2048A Max
             // #zh_CN 最终请求能量点数上限 = 星阵数量^2 * 2048A Max
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPReceiver_02_08"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPReceiver_02_08"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(DSPName + ":")
             .addStructureInfo(Tooltip_DSPInfo_launch_01)

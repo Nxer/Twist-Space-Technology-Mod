@@ -6,9 +6,9 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInf
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.BloodInfusedIronBlock;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler.ChiselBeacon_1;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing02;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAroundController;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textAroundController;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -55,12 +55,11 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata.BloodyHellTierKey
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeResult.ResultInsufficientTier;
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.TaskerenAdvancedMathUtils;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.block.BlockList;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
@@ -909,7 +908,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public String[] getInfoData() {
-        return TstUtils.buildInfoData(super.getInfoData(), (info) -> {
+        return TSTUtils.buildInfoData(super.getInfoData(), (info) -> {
             info.add(EnumChatFormatting.BLUE + "Structure Tier: " + EnumChatFormatting.GOLD + mTier);
             info.add(
                 EnumChatFormatting.BLUE + "Speed Rune Count: "
@@ -1134,24 +1133,24 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         // #tr Tooltip_BloodyHell_MachineType
         // # Altar of Blood | Alchemic Chemistry Set | Ritual of Binding
         // #zh_CN 血之祭坛 | 炼金术台 | 绑定仪式
-        tt.addMachineType(TextEnums.tr("Tooltip_BloodyHell_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_BloodyHell_MachineType"))
             // #tr Tooltip_BloodyHell_0
             // # After years of researching, you finally find the last piece to mass-produce the Blood Magic things!
             // #zh_CN 经过多年的研究，你终于找到了量产血魔法物品的最后一块拼图！
-            .addInfo(TextEnums.tr("Tooltip_BloodyHell_0"))
+            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_0"))
             .addSeparator()
             // #tr Tooltip_BloodyHell_1
             // # Researches show that the speed of soaking ritual is highly related to the greatness of the altar and the runes it used.
             // #zh_CN 研究表明浸血仪式的速度与祭坛的精致度和它使用的符文高度相关。
-            .addInfo(TextEnums.tr("Tooltip_BloodyHell_1"))
+            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_1"))
             // #tr Tooltip_BloodyHell_2
             // # And there is a small text on the corner said, "Speed Runes can be the key."
             // #zh_CN 在角落里有一行小字写道，“速度符文也许是关键。”
-            .addInfo(TextEnums.tr("Tooltip_BloodyHell_2"))
+            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_2"))
             // #tr Tooltip_BloodyHell_3
             // # Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
             // #zh_CN 还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
-            .addInfo(TextEnums.tr("Tooltip_BloodyHell_3"))
+            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_3"))
             .addController(textUseBlueprint)
             .addInputBus(textAroundController+" "+getBlueprintWithDot(1))
             .addOutputBus(textAroundController+" "+getBlueprintWithDot(1))

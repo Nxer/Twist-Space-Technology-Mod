@@ -28,10 +28,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -410,7 +410,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = "" + EnumChatFormatting.RED
             + EnumChatFormatting.BOLD
-            + TextLocalization.Info_Wireless_mode_enabled;
+            + TSTSharedLocalization.MachineInfo.Info_Wireless_mode_enabled;
         return ret;
     }
 
@@ -470,36 +470,36 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
         // #tr Tooltip_DeployedNanoCore_MachineType
         // # Nano Forge
         // #zh_CN 纳米锻炉
-        tt.addMachineType(TextEnums.tr("Tooltip_DeployedNanoCore_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_DeployedNanoCore_MachineType"))
             // #tr Tooltip_DeployedNanoCore_Controller
             // # Controller block for the Deployed Nano Core
             // #zh_CN 展开的纳米核心的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_DeployedNanoCore_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_Controller"))
             // #tr Tooltip_DeployedNanoCore_01
             // # {\WHITE}{\ITALIC}If you shed tears when you miss the sun, you also miss the stars.
             // #zh_CN {\WHITE}{\ITALIC}如果你因错过太阳而流泪, 你也会错过繁星.
-            .addInfo(TextEnums.tr("Tooltip_DeployedNanoCore_01"))
+            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_01"))
             // #tr Tooltip_DeployedNanoCore_02
             // # It'll take care of itself.
             // #zh_CN 它们会打理好的.
-            .addInfo(TextEnums.tr("Tooltip_DeployedNanoCore_02"))
+            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_02"))
             // #tr Tooltip_DeployedNanoCore_03
             // # With perfect overclock and {\AQUA}infinite parallel{\GRAY}.
             // #zh_CN 以无损超频和无限并行.
-            .addInfo(TextEnums.tr("Tooltip_DeployedNanoCore_03"))
+            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_03"))
             // #tr Tooltip_DeployedNanoCore_04
             // # What are you worried about?
             // #zh_CN 你在担心什么?
-            .addInfo(TextEnums.tr("Tooltip_DeployedNanoCore_04"))
-            .addStructureInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_04"))
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltips_JoinWirelessNetWithoutEnergyHatch)
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(81, 167, 81, false)
-            .addController(TextLocalization.textUseBlueprint)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addController(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

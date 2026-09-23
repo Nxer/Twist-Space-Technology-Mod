@@ -6,9 +6,9 @@ import java.util.Arrays;
 
 import net.minecraft.util.EnumChatFormatting;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -72,7 +72,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamo
         // # Infinite output voltage limit.
         // #zh_CN 无限输出电压限制.
         description[gtDescription.length] = EnumChatFormatting.WHITE
-            + TextEnums.tr("Description.InfiniteWirelessDynamoHatch.1");
+            + TSTUtils.tr("Description.InfiniteWirelessDynamoHatch.1");
         return description;
     }
 

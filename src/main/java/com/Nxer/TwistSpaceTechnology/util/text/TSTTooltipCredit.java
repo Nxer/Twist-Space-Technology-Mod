@@ -32,8 +32,8 @@ public interface TSTTooltipCredit {
     /** Footer tags are independent from text effects and render in the order returned by the machine. */
     enum Tag {
 
-        DYSON_SPHERE(() -> TextLocalization.DSPName),
-        MODULARIZED(TextEnums.ModularizedMachineSystem::getText);
+        DYSON_SPHERE(() -> TSTSharedLocalization.DysonSphere.DSPName),
+        MODULARIZED(() -> TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystem);
 
         private final Supplier<String> text;
 

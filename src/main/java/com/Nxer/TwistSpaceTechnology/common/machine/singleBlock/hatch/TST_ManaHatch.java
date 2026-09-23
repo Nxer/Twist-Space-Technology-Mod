@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.FluidCapacity;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.HatchTier;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.FluidCapacity;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.HatchTier;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,10 +17,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -147,19 +147,19 @@ public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
         // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip0
         // # Mana transform hatch
         // #zh_CN 魔力转换阀
-        aTooltip[0] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip0");
+        aTooltip[0] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip0");
 
         // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip1
         // # Transform mana up to 10000 mana or 1000L every second
         // #zh_CN 每秒至多转换1000L液态魔力/10000mana.
-        aTooltip[1] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip1");
+        aTooltip[1] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip1");
 
         // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip2
         // # Need to facing at a mana pool to work.
         // #zh_CN 需要正面朝向魔力池来工作.
-        aTooltip[2] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip2");
+        aTooltip[2] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip2");
 
-        aTooltip[3] = TextLocalization.textScrewdriverChangeMode;
+        aTooltip[3] = TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode;
 
         return aTooltip;
     }

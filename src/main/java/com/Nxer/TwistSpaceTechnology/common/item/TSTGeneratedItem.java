@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.items.MetaGeneratedItemX32;
 
@@ -31,11 +31,11 @@ public class TSTGeneratedItem extends MetaGeneratedItemX32 {
             // #tr item.metaitem.tst.1.name
             // # AAL modification log
             // #zh_CN 进阶装配线的改造记录
-            $ -> TextEnums.tr("item.metaitem.tst.1.name"),
+            $ -> TSTUtils.tr("item.metaitem.tst.1.name"),
             // #tr item.metaitem.tst.1.desc
             // # I need a smarter, more efficient way to assemble things…
             // #zh_CN 我需要更加智能、更加高效的组装技术……
-            $ -> TextEnums.tr("item.metaitem.tst.1.desc"));
+            $ -> TSTUtils.tr("item.metaitem.tst.1.desc"));
         GTCMItemList.ResearchOnAAL.set(ResearchOnAAL);
     }
 }

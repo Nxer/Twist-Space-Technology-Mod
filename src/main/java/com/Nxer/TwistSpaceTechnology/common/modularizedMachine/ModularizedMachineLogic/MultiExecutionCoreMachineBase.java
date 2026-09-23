@@ -33,8 +33,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.Ex
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.PerfectExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
@@ -360,7 +359,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             // #tr Waila.ExecutionCore.5
             // # Power for boosting
             // #zh_CN 已用于加速的功率
-                TextEnums.tr("Waila.ExecutionCore.5")
+                TSTUtils.tr("Waila.ExecutionCore.5")
                 + EnumChatFormatting.GRAY
                 + " : "
                 + tag.getLong("eutForBoostLastTick")
@@ -374,7 +373,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 // #tr Waila.ExecutionCore.1
                 // # Total basic max progressing time
                 // #zh_CN 配方总基础耗时
-                TextEnums.tr("Waila.ExecutionCore.1") + " : "
+                TSTUtils.tr("Waila.ExecutionCore.1") + " : "
                     + maxProgressingTime + " tick ("
                     + (maxProgressingTime / 20) + "s)");
             int progressedTime = tag.getInteger("progressedTime");
@@ -382,7 +381,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 // #tr Waila.ExecutionCore.2
                 // # Progressed time
                 // #zh_CN 已执行时间
-                TextEnums.tr("Waila.ExecutionCore.2") + " : "
+                TSTUtils.tr("Waila.ExecutionCore.2") + " : "
                     + progressedTime + " tick ("
                     + (progressedTime / 20) + "s)"
             );
@@ -391,7 +390,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 // #tr Waila.ExecutionCore.4
                 // # Boosted time
                 // #zh_CN 已加速时间
-                TextEnums.tr("Waila.ExecutionCore.4") + " : "
+                TSTUtils.tr("Waila.ExecutionCore.4") + " : "
                     + boostedTime + " tick ("
                     + (boostedTime / 20) + "s)"
             );
@@ -399,14 +398,14 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
                 // #tr Waila.ExecutionCore.3
                 // # Basic power consumption
                 // #zh_CN 基础功率
-                TextEnums.tr("Waila.ExecutionCore.3") + " : "
+                TSTUtils.tr("Waila.ExecutionCore.3") + " : "
                     + tag.getLong("usingEut") + " EU/t"
             );
         } else {
             // #tr Waila.ExecutionCore.IsIdle
             // # This {\WHITE}Execution Core{\GRAY} is idle.
             // #zh_CN 此{\WHITE}执行核心{\GRAY}处于空闲状态
-            currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
+            currentTip.add(TSTUtils.tr("Waila.ExecutionCore.IsIdle"));
         }
         // spotless:on
     }
@@ -679,7 +678,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
             } else {
                 long eutMultiplier = eutExtraMultiplier + 1;
                 int canOverclockTimes = (int) Math
-                    .min(Math.log(eutMultiplier) / TstUtils.LOG4, Math.log(maxTickCanBoost) / TstUtils.LOG2);
+                    .min(Math.log(eutMultiplier) / TSTUtils.LOG4, Math.log(maxTickCanBoost) / TSTUtils.LOG2);
                 boostedTick = (int) Math.pow(2, canOverclockTimes) - 1;
                 thisCoreUsed = (long) ((Math.pow(4, canOverclockTimes) - 1) * thisCoreEUt);
             }

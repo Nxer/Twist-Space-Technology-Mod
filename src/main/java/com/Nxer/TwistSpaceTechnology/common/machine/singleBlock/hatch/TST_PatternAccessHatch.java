@@ -13,9 +13,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.google.common.collect.ImmutableList;
 
 import appeng.api.config.AccessRestriction;
@@ -56,19 +56,19 @@ public class TST_PatternAccessHatch extends MTEHatch
         // #tr Tooltip_PatternAccessHatch_1
         // # Access Hatch for Extreme Crafting Center
         // #zh_CN 梦魇工业合成中心的访问仓
-        TextEnums.tr("Tooltip_PatternAccessHatch_1"),
+        TSTUtils.tr("Tooltip_PatternAccessHatch_1"),
         // #tr Tooltip_PatternAccessHatch_2
         // # Connect to ME net to access patterns stored in Extreme Crafting Center.
         // #zh_CN 连接ME网络以访问梦魇工业合成中心存储的样板
-        TextEnums.tr("Tooltip_PatternAccessHatch_2"),
+        TSTUtils.tr("Tooltip_PatternAccessHatch_2"),
         // #tr Tooltip_PatternAccessHatch_3
         // # Extreme Crafting Center can only accept 1 Pattern Access Hatch at maximum.
         // #zh_CN 梦魇工业合成中心最多接受一个样板访问仓
-        TextEnums.tr("Tooltip_PatternAccessHatch_3"),
+        TSTUtils.tr("Tooltip_PatternAccessHatch_3"),
         // #tr Tooltip_PatternAccessHatch_4
         // # Invalid items or duplicated patterns will be rejected.
         // #zh_CN 错误或重复的样板不会由此输入
-        TextEnums.tr("Tooltip_PatternAccessHatch_4") };
+        TSTUtils.tr("Tooltip_PatternAccessHatch_4") };
 
     public TST_PatternAccessHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 0, "");

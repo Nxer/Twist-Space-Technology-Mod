@@ -4,9 +4,9 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier1P
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.BlockTier2Parallel_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_MegaMacerator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MegaMacerator;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -35,9 +35,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -385,35 +385,35 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         // #tr Tooltip_MegaMacerator_MachineType
         // # Macerator
         // #zh_CN Macerator
-        tt.addMachineType(TextEnums.tr("Tooltip_MegaMacerator_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MegaMacerator_MachineType"))
             // #tr Tooltip_MegaMacerator_Controller
             // # Controller block for the "Mini" Household Cell Fragmentizer
             // #zh_CN "小型"家用破壁机的控制方块
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_Controller"))
             // #tr Tooltip_MegaMacerator_01
             // # Squeezed Collision of Material.
             // #zh_CN {\GOLD}物质的挤压碰撞
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_01"))
             // #tr Tooltip_MegaMacerator_02
             // # This is way better than a forge hammer.
             // #zh_CN 这玩意可比锻造锤好用多了
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_02"))
             // #tr Tooltip_MegaMacerator_03
             // # Can parallel up to {\AQUA}2 ^ (2 ^ (Tier + 2) - 1){\GRAY}.
             // #zh_CN 最大并行：{\AQUA}2 ^ (2 ^ (等级 + 2) - 1){\GRAY}
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_03"))
             // #tr Tooltip_MegaMacerator_04
             // # Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.
             // #zh_CN 取决于可选方块:大马士革钢、中子、宇宙素
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_04"))
             // #tr Tooltip_MegaMacerator_05
             // # The max voltage tier is limited by the glass tier.
             // #zh_CN 玻璃等级限制可执行配方等级
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_05"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_05"))
             // #tr Tooltip_MegaMacerator_06
             // # Enable {\RED}8x{\GRAY} speed multiplier when glass tier > recipe tier.
             // #zh_CN 当玻璃等级高于配方等级时获得{\RED}8x{\GRAY}倍速
-            .addInfo(TextEnums.tr("Tooltip_MegaMacerator_06"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_06"))
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 2)
             .addOutputBus(textUseBlueprint, 2)

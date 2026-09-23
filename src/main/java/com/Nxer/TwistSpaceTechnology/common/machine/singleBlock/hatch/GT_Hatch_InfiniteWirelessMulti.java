@@ -5,9 +5,9 @@ import static gregtech.common.misc.WirelessNetworkManager.strongCheckOrAddUser;
 
 import java.util.UUID;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
@@ -50,15 +50,15 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti implem
             // #tr ToolTip_InfiniteWirelessMulti.1
             // # {\GRAY}Stores energy globally in a network, up to 2^(2^31) EU.
             // #zh_CN {\GRAY}将能量存储于全局网络中，上限为2^(2^31)EU.
-            TextEnums.tr("ToolTip_InfiniteWirelessMulti.1"),
+            TSTUtils.tr("ToolTip_InfiniteWirelessMulti.1"),
             // #tr ToolTip_InfiniteWirelessMulti.2
             // # {\GRAY}Does not connect to wires. This block withdraws EU from the network.
             // #zh_CN {\GRAY}不连接导线，此方块可以从网络中抽取EU.
-            TextEnums.tr("ToolTip_InfiniteWirelessMulti.2"),
+            TSTUtils.tr("ToolTip_InfiniteWirelessMulti.2"),
             // #tr ToolTip_InfiniteWirelessMulti.3
             // # {\GRAY}Be careful of energy overflow.
             // #zh_CN {\GRAY}小心能量溢出.
-            TextEnums.tr("ToolTip_InfiniteWirelessMulti.3"),
+            TSTUtils.tr("ToolTip_InfiniteWirelessMulti.3"),
             GTUtility.translate("gt.tileentity.amperage", TooltipHelper.ampText(Amperes)) };
     }
 

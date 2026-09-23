@@ -34,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -370,37 +370,37 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         // #tr Tooltip_PhysicalFormSwitcher_MachineType
         // # Fluid Solidifier | Fluid Extractor
         // #zh_CN 流体固化器 | 流体提取机
-        tt.addMachineType(TextEnums.tr("Tooltip_PhysicalFormSwitcher_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_MachineType"))
             // #tr Tooltip_PhysicalFormSwitcher_00
             // # Controller block for the Physical Form Switcher
             // #zh_CN 物质形态转换器的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_PhysicalFormSwitcher_00"))
+            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_00"))
             // #tr Tooltip_PhysicalFormSwitcher_01
             // # {\YELLOW}Forming Master !
             // #zh_CN {\YELLOW}体态多端！
-            .addInfo(TextEnums.tr("Tooltip_PhysicalFormSwitcher_01"))
+            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_01"))
             // #tr Tooltip_PhysicalFormSwitcher_02
             // # The ultimate method of melt operation.
             // #zh_CN 熔体操作的最终手段.
-            .addInfo(TextEnums.tr("Tooltip_PhysicalFormSwitcher_02"))
+            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_02"))
             // #tr Tooltip_PhysicalFormSwitcher_03
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TextEnums.tr("Tooltip_PhysicalFormSwitcher_03"))
+            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_03"))
             // #tr Tooltip_PhysicalFormSwitcher_04
             // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_PhysicalFormSwitcher_04"))
+            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_04"))
             // #tr Tooltip_PhysicalFormSwitcher_05
             // # The Glass Tier limit the recipe voltage tier.
             // #zh_CN 玻璃等级限制可执行配方等级.
-            .addInfo(TextEnums.tr("Tooltip_PhysicalFormSwitcher_05"))
+            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_05"))
             .beginStructureBlock(15, 20, 15, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 1)
-            .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

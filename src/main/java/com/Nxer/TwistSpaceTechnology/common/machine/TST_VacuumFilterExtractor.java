@@ -29,10 +29,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -315,44 +315,44 @@ G -> ofFrame...(Materials.Neutronium);
         // #tr Tooltip_VacuumFilterExtractor_MachineType
         // # Distillation Tower | Distillery
         // #zh_CN 蒸馏塔 | 蒸馏室
-        tt.addMachineType(TextEnums.tr("Tooltip_VacuumFilterExtractor_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_VacuumFilterExtractor_MachineType"))
             // #tr Tooltip_VacuumFilterExtractor_Controller
             // # Controller block for the Vacuum Filter Extractor
             // #zh_CN 真空抽滤器的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_Controller"))
             // #tr Tooltip_VacuumFilterExtractor_01
             // # {\ITALIC}Engineers think something isn't broken because it has too few features.
             // #zh_CN {\ITALIC}工程师认为东西没坏是它功能太少.
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_01"))
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_01"))
             // #tr Tooltip_VacuumFilterExtractor_02
             // # By manipulating space in order to achieve separation of matter
             // #zh_CN 通过操控空间以实现分离物质,
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_02"))
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_02"))
             // #tr Tooltip_VacuumFilterExtractor_03
             // # rather than direct manipulation of matter.
             // #zh_CN 而非直接操控物质.
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_03"))
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_03"))
             // #tr Tooltip_VacuumFilterExtractor_04
             // # Recipe voltage is only {\RED}50%{\GRAY} of normal.
             // #zh_CN 只需要正常配方电压的{\RED}50%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_04"))
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_04"))
             // #tr Tooltip_VacuumFilterExtractor_05
             // # Increasing the energy input will result in more speed boosts.
             // #zh_CN 提高能量输入将提供更多的速度提升.
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_05"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_05"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             // #tr Tooltip_VacuumFilterExtractor_06
             // # In distillery mode, machine will enable {\AQUA}Perfect Overclock{\GRAY}.
             // #zh_CN 蒸馏室模式将启用{\AQUA}无损超频{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_VacuumFilterExtractor_06"))
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_06"))
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(13, 22, 14, false)
-            .addController(TextLocalization.textUseBlueprint)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
+            .addController(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

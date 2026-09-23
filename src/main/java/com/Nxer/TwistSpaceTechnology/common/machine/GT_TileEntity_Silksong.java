@@ -27,11 +27,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.WirelessEnergyMultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -240,7 +239,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
             false,
             true);
 
-        return TstUtils.multiBuildPiece(built);
+        return TSTUtils.multiBuildPiece(built);
     }
 
     @Override
@@ -343,7 +342,7 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
     }
 
     public int getCoilTier() {
-        return TstUtils.getVoltageForCoil(coilLevel);
+        return TSTUtils.getVoltageForCoil(coilLevel);
     }
 
     @Override
@@ -418,40 +417,40 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
         // #tr Tooltip_Silksong_MachineType
         // # Wiremill
         // #zh_CN 线材轧机
-        tt.addMachineType(TextEnums.tr("Tooltip_Silksong_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_Silksong_MachineType"))
             // #tr Tooltip_Silksong_00
             // # Controller block for the Silksong
             // #zh_CN 丝之歌的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_Silksong_00"))
+            .addInfo(TSTUtils.tr("Tooltip_Silksong_00"))
             // #tr Tooltip_Silksong_01
             // # {\WHITE}Maybe dreams aren't such a good thing ......
             // #zh_CN {\WHITE}也许梦想并不是那么好的东西 ......
-            .addInfo(TextEnums.tr("Tooltip_Silksong_01"))
+            .addInfo(TSTUtils.tr("Tooltip_Silksong_01"))
             // #tr Tooltip_Silksong_02
             // # Endless cables spew from this machine.
             // #zh_CN 无穷无尽的导线从这里喷薄而出.
-            .addInfo(TextEnums.tr("Tooltip_Silksong_02"))
+            .addInfo(TSTUtils.tr("Tooltip_Silksong_02"))
             // #tr Tooltip_Silksong_03
             // # Parallel = {\AQUA}32 × piece × coil tier{\GRAY}.
             // #zh_CN 每16个线圈为1层. 并行数 = 层数 × 线圈等级
-            .addInfo(TextEnums.tr("Tooltip_Silksong_03"))
+            .addInfo(TSTUtils.tr("Tooltip_Silksong_03"))
             // #tr Tooltip_Silksong_04
             // # Each level of coil increases the speed by {\RED}100%{\GRAY}.
             // #zh_CN 线圈每提高1级额外加速{\RED}100%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_Silksong_04"))
+            .addInfo(TSTUtils.tr("Tooltip_Silksong_04"))
             // #tr Tooltip_Silksong_05
             // # Additional {\RED}15%{\GRAY} reduction in time per Coil Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}15%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_Silksong_05"))
-            .addInputHatch(TextLocalization.textUseBlueprint, 3)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 3)
-            .addInputBus(TextLocalization.textUseBlueprint, 3)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addInfo(TSTUtils.tr("Tooltip_Silksong_05"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             // #tr Tooltip_Silksong_SilksongReleaseDate
             // # {\BLACK}Something special when piece reaches 94.
             // #zh_CN {\BLACK}层数达到94层后有一些特别的东西.
-            .addStructureInfo(TextEnums.tr("Tooltip_Silksong_SilksongReleaseDate"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_Silksong_SilksongReleaseDate"))
             .toolTipFinisher();
         // spotless:on
         return tt;

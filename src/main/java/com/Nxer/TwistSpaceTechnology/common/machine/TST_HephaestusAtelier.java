@@ -5,8 +5,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutP
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.addStacksToList;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -45,11 +45,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -493,14 +492,14 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         if (coilTier > 1) {
             ret = new String[origin.length + 2];
             System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length - 1] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
+            ret[origin.length - 1] = TSTSharedLocalization.MachineInfo.coilTier(coilTier);
             ret[origin.length] = "" + EnumChatFormatting.RED
                 + EnumChatFormatting.BOLD
-                + TextLocalization.Info_Wireless_mode_enabled;
+                + TSTSharedLocalization.MachineInfo.Info_Wireless_mode_enabled;
         } else {
             ret = new String[origin.length + 1];
             System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
+            ret[origin.length] = TSTSharedLocalization.MachineInfo.coilTier(coilTier);
         }
 
         return ret;
@@ -802,82 +801,82 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         // #tr Tooltip_HephaestusAtelier_MachineType
         // # Furnace | Alloy Smelter
         // #zh_CN 熔炉 | 合金炉
-        tt.addMachineType(TextEnums.tr("Tooltip_HephaestusAtelier_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_HephaestusAtelier_MachineType"))
             // #tr Tooltip_HephaestusAtelier_Controller
             // # Controller block for the Hephaestus' Atelier
             // #zh_CN 赫菲斯托斯的工坊的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_Controller"))
             // #tr Tooltip_HephaestusAtelier_01
             // # {\DARK_RED}{\ITALIC}“And first Hephaestus makes a great and massive shield ...
             // #zh_CN {\DARK_RED}{\ITALIC}“最先，火神赫菲斯托斯做了一个超级厉害的巨大盾牌 ...
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_01"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_01"))
             // #tr Tooltip_HephaestusAtelier_02
             // # {\DARK_RED}{\ITALIC}{\SPACE}{\SPACE}{\SPACE}{\SPACE}... And he forged on the shield two noble cities.”
             // #zh_CN {\DARK_RED}{\ITALIC}{\SPACE}{\SPACE}{\SPACE}{\SPACE}... 他在盾牌上锻造了两座宏伟城市。”
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_02"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_02"))
             // #tr Tooltip_HephaestusAtelier_03
             // # Even in the future, the most primitive means of smelting will be needed.
             // #zh_CN 即使是在未来, 这最原始的冶炼手段也是有需要的.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_03"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_03"))
             // #tr Tooltip_HephaestusAtelier_04
             // # Parallelism across recipes is possible, even using Crafting Input hatches.
             // #zh_CN 可以跨配方并行, 即便使用样板输入仓室.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_04"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_04"))
             // #tr Tooltip_HephaestusAtelier_05
             // # The machine will adjust its operation according to the installed coil level.
             // #zh_CN 机器将根据线圈等级调整自身运行状态.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_05"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_05"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             // #tr Tooltip_HephaestusAtelier_06
             // # {\GOLD} ----- T1 Coil : Molecular Coil -----
             // #zh_CN {\GOLD} ----- T1 线圈 : 分子线圈 -----
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_06"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_06"))
             // #tr Tooltip_HephaestusAtelier_07
             // # Like other normal machine, use energy from energy hatches and do overclock.
             // #zh_CN 和其他普通机器一样, 使用能源仓获取能源, 进行超频.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_07"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_07"))
             // #tr Tooltip_HephaestusAtelier_08
             // # {\AQUA}2.1G{\GRAY} parallel. Furnace mode every item smelting consume {\GOLD}7 EU/t{\GRAY} and {\GOLD}25.6s{\GRAY}.
             // #zh_CN {\AQUA}2.1G{\GRAY} 并行. 熔炉模式每冶炼一个物品消耗 {\GOLD}7 EU/t{\GRAY} 和耗时 {\GOLD}25.6s{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_08"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_08"))
             // #tr Tooltip_HephaestusAtelier_09
             // # {\GOLD} ----- T2 Coil : Ultimate Containment Field Generator -----
             // #zh_CN {\GOLD} ----- T2 线圈 : 终极遏制场发生器 -----
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_09"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_09"))
             // #tr Tooltip_HephaestusAtelier_10
             // # Directly consume energy from wireless EU net.
             // #zh_CN 直接从无线EU网络获取能量.(无线模式).
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_10"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_10"))
             // #tr Tooltip_HephaestusAtelier_11
             // # {\AQUA}Infinite parallel{\GRAY}. Furnace mode every item smelting consume 2048 EU.
             // #zh_CN 无限并行. 熔炉模式每冶炼一个物品消耗 {\GOLD}2048 EU{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_11"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_11"))
             // #tr Tooltip_HephaestusAtelier_12
             // # Processing time is fixed at {\GOLD}12.8s{\GRAY}.
             // #zh_CN 每次运行时间固定为 {\GOLD}12.8s{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_12"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_12"))
             // #tr Tooltip_HephaestusAtelier_13
             // # {\GOLD} ----- T3 Coil : Teleportation Casing -----
             // #zh_CN {\GOLD} ----- T3 线圈 : 传输机械方块 -----
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_13"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_13"))
             // #tr Tooltip_HephaestusAtelier_14
             // # Processing time {\GOLD}1s{\GRAY}.
             // #zh_CN 每次运行时间固定为 {\GOLD}1s{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_14"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_14"))
             // #tr Tooltip_HephaestusAtelier_15
             // # Otherwise same as T2.
             // #zh_CN 其他方面与 T2 相同.
-            .addInfo(TextEnums.tr("Tooltip_HephaestusAtelier_15"))
+            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_15"))
             // #tr Tooltip_HephaestusAtelier_2_01
             // # Must install energy hatch when in T1.
             // #zh_CN T1等级线圈(普通模式)时必须安装能源仓.
-            .addStructureInfo(TextEnums.tr("Tooltip_HephaestusAtelier_2_01"))
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+            .addStructureInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_2_01"))
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(33, 11, 33, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 1)
-            .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 1)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

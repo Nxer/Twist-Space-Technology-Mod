@@ -15,7 +15,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -60,8 +60,8 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTT
             aNameRegional,
             aTier,
             aInvSlotCount,
-            new String[] { TstUtils.tr("BufferedEnergyHatch.Tooltips.01"),
-                TstUtils.tr("BufferedEnergyHatch.Tooltips.02") });
+            new String[] { TSTUtils.tr("BufferedEnergyHatch.Tooltips.01"),
+                TSTUtils.tr("BufferedEnergyHatch.Tooltips.02") });
         registerTooltipCredits(ID.SHORDINGER);
     }
 
@@ -77,7 +77,7 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTT
         // #tr Slots
         // #en_US Slots
         // #zh_CN 格
-        desc[mDescriptionArray.length] = mInventory.length + " " + TstUtils.tr("Slots");
+        desc[mDescriptionArray.length] = mInventory.length + " " + TSTUtils.tr("Slots");
         return desc;
     }
 

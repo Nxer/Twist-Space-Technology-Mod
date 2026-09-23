@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.LaserBeaconRender;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_block_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.config.Config.StandardRecipeDuration_Second_LaserMeteorMiner;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.*;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
@@ -436,10 +436,10 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         // # Rendering on
         // #zh_CN 渲染特效开启
         if (stopAllRendering) {
-            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_off");
+            TSTUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_off");
             if (renderer != null) renderer.setShouldRender(false);
         } else {
-            TstUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_on");
+            TSTUtils.sendMessageKeyToPlayer(aPlayer, "TST_LaserMeteorMiner_message_screwdriverRightClick_on");
         }
     }
 

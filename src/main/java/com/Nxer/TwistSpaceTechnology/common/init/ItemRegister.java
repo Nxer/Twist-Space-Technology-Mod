@@ -10,9 +10,9 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MultiStructures
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ProofOfGods;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ProofOfHeroes;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.Yamato;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.RiseOfDarkFog;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.RiseOfDarkFog;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -305,7 +305,7 @@ public class ItemRegister {
         // #tr EnergyShard.tooltips.01
         // # A piece of pure energy, from dark...
         // #zh_CN 一片纯净的能量, 来自黑暗的...
-        GTCMItemList.EnergyShard.set(MetaItem01.registerVariantWithTooltips(25, new String[]{tr("EnergyShard.tooltips.01"), DSPName, RiseOfDarkFog.getText()}));
+        GTCMItemList.EnergyShard.set(MetaItem01.registerVariantWithTooltips(25, new String[]{tr("EnergyShard.tooltips.01"), DSPName, RiseOfDarkFog}));
 
         // #tr item.MetaItem01.26.name
         // # Silicon-based Neuron
@@ -314,7 +314,7 @@ public class ItemRegister {
         // #tr SiliconBasedNeuron.tooltips.01
         // # Very... uh, natural.
         // #zh_CN 非常的... 呃, 自然.
-        GTCMItemList.SiliconBasedNeuron.set(MetaItem01.registerVariantWithTooltips(26, new String[]{tr("SiliconBasedNeuron.tooltips.01"), DSPName, RiseOfDarkFog.getText()}));
+        GTCMItemList.SiliconBasedNeuron.set(MetaItem01.registerVariantWithTooltips(26, new String[]{tr("SiliconBasedNeuron.tooltips.01"), DSPName, RiseOfDarkFog}));
 
         // #tr item.MetaItem01.27.name
         // # Matter Recombinator
@@ -323,7 +323,7 @@ public class ItemRegister {
         // #tr MatterRecombinator.tooltips.01
         // # The fundamental unit of material manipulation at the scale of elementary particles.
         // #zh_CN 基本粒子尺度上物质操作的基本单元.
-        GTCMItemList.MatterRecombinator.set(MetaItem01.registerVariantWithTooltips(27, new String[]{tr("MatterRecombinator.tooltips.01"), DSPName, RiseOfDarkFog.getText()}));
+        GTCMItemList.MatterRecombinator.set(MetaItem01.registerVariantWithTooltips(27, new String[]{tr("MatterRecombinator.tooltips.01"), DSPName, RiseOfDarkFog}));
 
         // #tr item.MetaItem01.28.name
         // # Core Element
@@ -340,7 +340,7 @@ public class ItemRegister {
         // #tr CoreElement.tooltips.03
         // # and make it proceed in an orderly manner.
         // #zh_CN 使其有序进行.
-        GTCMItemList.CoreElement.set(MetaItem01.registerVariantWithTooltips(28, new String[]{tr("CoreElement.tooltips.01"), tr("CoreElement.tooltips.02"), tr("CoreElement.tooltips.03"), DSPName, RiseOfDarkFog.getText()}));
+        GTCMItemList.CoreElement.set(MetaItem01.registerVariantWithTooltips(28, new String[]{tr("CoreElement.tooltips.01"), tr("CoreElement.tooltips.02"), tr("CoreElement.tooltips.03"), DSPName, RiseOfDarkFog}));
 
         // #tr item.MetaItem01.29.name
         // # Strange Annihilation Fuel Rod
@@ -353,7 +353,7 @@ public class ItemRegister {
         // #tr StrangeAnnihilationFuelRod.tooltips.02
         // # the energy density and output power are greatly improved.
         // #zh_CN 能量密度和输出功率均大幅提高.
-        GTCMItemList.StrangeAnnihilationFuelRod.set(MetaItem01.registerVariantWithTooltips(29, new String[]{tr("StrangeAnnihilationFuelRod.tooltips.01"), tr("StrangeAnnihilationFuelRod.tooltips.02"), DSPName, RiseOfDarkFog.getText()}));
+        GTCMItemList.StrangeAnnihilationFuelRod.set(MetaItem01.registerVariantWithTooltips(29, new String[]{tr("StrangeAnnihilationFuelRod.tooltips.01"), tr("StrangeAnnihilationFuelRod.tooltips.02"), DSPName, RiseOfDarkFog}));
 
         // #tr item.MetaItem01.30.name
         // # SpaceTime Superconducting Inlaid Motherboard

@@ -5,8 +5,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ParallelMultiply_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBouns_IndustrialMagnetarSeparator;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.multi_Amp_hatch_incompatible;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -28,9 +28,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -216,29 +216,29 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
         // #tr Tooltip_IndustrialMagnetarSeparator_MachineType
         // # Electromagnetic Separator
         // #zh_CN 电磁离析机
-        tt.addMachineType(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator_MachineType"))
             // #tr Tooltip_IndustrialMagnetarSeparator_Controller
             // # Controller block for the Industrial Magnetar Separator
             // #zh_CN 工业电磁离析机的控制方块
-            .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator_Controller"))
             // #tr Tooltip_IndustrialMagnetarSeparator.01
             // # 300%% faster than using single block machines of the same voltage
             // #zh_CN 比相同电压的单方块机器快300%%
-            .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.01"))
+            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.01"))
             // #tr Tooltip_IndustrialMagnetarSeparator.02
             // # Only uses 80%% of the EU/t normally required
             // #zh_CN 只需要使用配方要求功率的80%%
-            .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.02"))
+            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.02"))
             // #tr Tooltip_IndustrialMagnetarSeparator.03
             // # Processes 4 items per voltage tier
             // #zh_CN 每提升一个电压等级，每次运行可以多处理4个物品
-            .addInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.03"))
+            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.03"))
             .addPollutionAmount(300)
             .addController(textFrontCenter)
             // #tr Tooltip_IndustrialMagnetarSeparator.casingAmount
             // # §69x §7Anti-Magnetic Casing (minimum)
             // #zh_CN 剩余方块为§7抗磁机械方块§r(至少§69§r个！)
-            .addStructureInfo(TextEnums.tr("Tooltip_IndustrialMagnetarSeparator.casingAmount"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.casingAmount"))
             .addInputBus(textAnyCasing, 1)
             .addOutputBus(textAnyCasing, 1)
             .addEnergyHatch(textAnyCasing, 1)

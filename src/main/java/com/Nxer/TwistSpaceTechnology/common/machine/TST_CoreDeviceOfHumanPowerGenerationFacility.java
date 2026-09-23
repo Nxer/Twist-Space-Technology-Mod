@@ -24,11 +24,11 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.enums.TierName;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -285,7 +285,7 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.GlassTier.toString()
+        ret[origin.length] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.GlassTier
             + ": "
             + EnumChatFormatting.GOLD
             + this.glassTier
@@ -349,26 +349,26 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
         // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType
         // # Fluid Heater
         // #zh_CN 流体加热器
-        tt.addMachineType(TextEnums.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType"))
             // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller
             // # Controller block for the Core Device of Human Power Generation Facility
             // #zh_CN 人类能源设施的核心装置的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller"))
             // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01
             // # {\RED}The use of "The Fast-Heater" is prohibited in the dormitories.
             // #zh_CN {\RED}禁止在宿舍使用 "热得快"。
-            .addInfo(TextEnums.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01"))
+            .addInfo(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01"))
             // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02
             // # Upgrade coils for faster speeds.
             // #zh_CN 升级线圈以获得更快的速度.
-            .addInfo(TextEnums.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02"))
-            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
+            .addInfo(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
             .beginStructureBlock(15, 20, 15, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Dynamo;
@@ -45,7 +45,7 @@ import com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleSh
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -583,10 +583,10 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             // #zh_CN 使用剪线钳开启/关闭闪电特效
             .addInfo(tr("GTCM_LightningSpire_12"))
             .beginStructureBlock(11, 23, 11, false)
-            .addInputHatch(TextLocalization.textUseBlueprint)
-            .addInputBus(TextLocalization.textUseBlueprint)
-            .addOutputBus(TextLocalization.textUseBlueprint)
-            .addDynamoHatch(TextLocalization.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint)
             .toolTipFinisher();
         // spotless:on
         return tt;

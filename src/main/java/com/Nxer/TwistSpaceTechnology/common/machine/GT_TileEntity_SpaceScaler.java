@@ -40,10 +40,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -525,54 +525,54 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         // #tr Tooltip_SpaceScaler_MachineType
         // # Compressor | Extractor | Particle Collider | Electric Implosion Compressor | Neutronium Compressor
         // #zh_CN 压缩机 | 提取机 | 粒子对撞机 | 电动聚爆压缩机 | 中子态素压缩机
-        tt.addMachineType(TextEnums.tr("Tooltip_SpaceScaler_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_SpaceScaler_MachineType"))
             // #tr Tooltip_SpaceScaler_00
             // # Controller block for the Space Scaler
             // #zh_CN 空间缩放仪的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_00"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_00"))
             // #tr Tooltip_SpaceScaler_01
             // # {\AQUA} First Look Space Technology.
             // #zh_CN {\AQUA}初见空间科技.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_01"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_01"))
             // #tr Tooltip_SpaceScaler_02
             // # Another method to operate matter.
             // #zh_CN 操作物质的另一种方式.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_02"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_02"))
             // #tr Tooltip_SpaceScaler_03
             // # Only if the space is manageable...
             // #zh_CN 前提是空间是可控的 ...
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_03"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_03"))
             // #tr Tooltip_SpaceScaler_04
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_04"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_04"))
             // #tr Tooltip_SpaceScaler_05
             // # If use Ultimate Containment Field Generator, enable {\RED}10x{\GRAY} speed multiplier.
             // #zh_CN 如果换装终极遏制场发生器, 获得{\RED}10x{\GRAY}倍速.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_05"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_05"))
             // #tr Tooltip_SpaceScaler_06
             // # Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.
             // #zh_CN 粗制稳定力场发生器等级+允许使用粒子对撞机模式.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_06"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_06"))
             // #tr Tooltip_SpaceScaler_07
             // # Gallifreyan Stabilisation Field Generator block enables Electric Implosion Compressor & Neutronium Compressor mode.
             // #zh_CN 鸿蒙稳定力场发生器等级允许使用电动聚爆压缩机模式和中子态素压缩机模式.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_07"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_07"))
             // #tr Tooltip_SpaceScaler_08
             // # In Particle Collider mode, higher tier has more output.
             // #zh_CN 粒子对撞机模式下, 高级方块带来额外产出.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_08"))
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_08"))
             // #tr Tooltip_SpaceScaler_09
             // # T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
             // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
-            .addInfo(TextEnums.tr("Tooltip_SpaceScaler_09"))
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_09"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(31, 31, 32, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

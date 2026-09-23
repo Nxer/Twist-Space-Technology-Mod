@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -25,9 +25,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -234,23 +234,23 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
         // #tr Tooltip_LargeIndustrialCokingFactory_MachineType
         // # Coke Oven
         // #zh_CN 焦炉
-        tt.addMachineType(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_MachineType"))
             // #tr Tooltip_LargeIndustrialCokingFactory_Controller
             // # Controller block for the Large Industrial Coking Factory
             // #zh_CN 大型工业炼焦厂的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_Controller"))
             // #tr Tooltip_LargeIndustrialCokingFactory_01
             // # {\DARK_AQUA}{\BOLD}Seizing like a ravenous beast, lavishing like a breezing east.
             // #zh_CN {\DARK_AQUA}{\BOLD}取之尽锱铢, 用之如泥沙.
-            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_01"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_01"))
             // #tr Tooltip_LargeIndustrialCokingFactory_02
             // # Process endless inputs in one time.
             // #zh_CN 无尽的原料一次加工完成.
-            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_02"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_02"))
             // #tr Tooltip_LargeIndustrialCokingFactory_03
             // # Higher tier of coil make machine more faster.
             // #zh_CN 更高级的线圈可以让机器更快.
-            .addInfo(TextEnums.tr("Tooltip_LargeIndustrialCokingFactory_03"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_03"))
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 1)

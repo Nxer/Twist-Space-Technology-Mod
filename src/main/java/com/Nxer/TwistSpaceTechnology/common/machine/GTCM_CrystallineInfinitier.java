@@ -42,10 +42,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -431,43 +431,43 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         // #tr Tooltip_CrystallineInfinitier_MachineType
         // # Autoclave | Crystalline Infinitier | Chemical Bath
         // #zh_CN 高压釜 | 晶胞铸造器 | 化学浸洗机
-        tt.addMachineType(TextEnums.tr("Tooltip_CrystallineInfinitier_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_CrystallineInfinitier_MachineType"))
             // #tr Tooltip_CrystallineInfinitier_00
             // # Controller block for the Crystalline Infinitier
             // #zh_CN 无限晶胞的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_00"))
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_00"))
             // #tr Tooltip_CrystallineInfinitier_01
             // # {\GREEN}They're here. Grow and multiply without end.
             // #zh_CN {\GREEN}它在这里. 生生不息.
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_01"))
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_01"))
             // #tr Tooltip_CrystallineInfinitier_02
             // # With Gravitation Tech as a medium, we can control growth of crystalline cells more conveniently.
             // #zh_CN 有了引力科技作为媒介, 我们可以更方便的控制晶胞的生长.
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_02"))
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_02"))
             // #tr Tooltip_CrystallineInfinitier_03
             // # Higher glass tier, higher field generator tier, higher voltage tier means higher value of parallel.
             // #zh_CN 更高的玻璃等级, 力场发生器等级, 电压等级意味着更多的并行数.
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_03"))
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_03"))
             // #tr Tooltip_CrystallineInfinitier_04
             // # And higher field generator tier means lower Energy cost.
             // #zh_CN 同时更高的力场发生器等级让耗电变得更低.
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_04"))
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_04"))
             // #tr Tooltip_CrystallineInfinitier_05
             // # Crude Stabilisation Field Generator enable Perfect Overclock.
             // #zh_CN 粗制稳定力场发生器等级+启用无损超频.
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_05"))
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_05"))
             // #tr Tooltip_CrystallineInfinitier_06
             // # Extra {\RED}+300%{\GRAY} speed in Autoclave mode. Extra {\RED}+1500%{\GRAY} speed in Chemical Bath mode.
             // #zh_CN 高压釜模式额外加速{\RED}300%{\GRAY}. 化学浸洗机模式额外加速{\RED}1500%{\GRAY}.
-            .addInfo(TextEnums.tr("Tooltip_CrystallineInfinitier_06"))
-            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_06"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(31, 36, 32, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

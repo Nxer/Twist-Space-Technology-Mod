@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses;
 
 import static com.Nxer.TwistSpaceTechnology.config.Config.DefaultCycleNum_WirelessEnergyMultiMachineBase;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.NEGATIVE_ONE;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static gregtech.common.misc.WirelessNetworkManager.addEUToGlobalEnergyMap;
 
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
@@ -77,9 +77,9 @@ public abstract class WirelessEnergyMultiMachineBase<T extends WirelessEnergyMul
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("wirelessMode")) {
-            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TextLocalization.Waila_WirelessMode);
+            currentTip.add(EnumChatFormatting.LIGHT_PURPLE + TSTSharedLocalization.Waila.Waila_WirelessMode);
             currentTip.add(
-                EnumChatFormatting.AQUA + TextLocalization.Waila_CurrentEuCost
+                EnumChatFormatting.AQUA + TSTSharedLocalization.Waila.Waila_CurrentEuCost
                     + EnumChatFormatting.RESET
                     + ": "
                     + EnumChatFormatting.GOLD

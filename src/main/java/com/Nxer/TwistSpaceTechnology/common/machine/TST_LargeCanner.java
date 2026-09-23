@@ -21,10 +21,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -222,29 +222,29 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
         // #tr Tooltip_LargeCanner_MachineType
         // # Fluid/Solid Canner
         // #zh_CN 流体/固体装罐机
-        tt.addMachineType(TextEnums.tr("Tooltip_LargeCanner_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_LargeCanner_MachineType"))
             // #tr Tooltip_LargeCanner_Controller
             // # Controller block for the Large Canner
             // #zh_CN 大型灌装机的控制方块
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_Controller"))
             // #tr Tooltip_LargeCanner_01
             // # "Use unimaginable force to press items into containers!"
             // #zh_CN "使用超乎想象的力量把物品压入容器中！”
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_01"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_01"))
             // #tr Tooltip_LargeCanner_02
             // # Having almost infinite parallelism!
             // #zh_CN 拥有近乎无限的并行！
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_02"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_02"))
             // #tr Tooltip_LargeCanner_03
             // # Please use a screwdriver to switch modes.
             // #zh_CN 请使用螺丝刀来切换模式。
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_03"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_03"))
             .beginStructureBlock(13, 17, 13, false)
-            .addInputBus(TextLocalization.textUseBlueprint)
-            .addOutputBus(TextLocalization.textUseBlueprint)
-            .addInputHatch(TextLocalization.textUseBlueprint)
-            .addOutputHatch(TextLocalization.textUseBlueprint)
-            .addEnergyHatch(TextLocalization.textUseBlueprint)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint)
             .toolTipFinisher();
         // spotless:on
         return tt;

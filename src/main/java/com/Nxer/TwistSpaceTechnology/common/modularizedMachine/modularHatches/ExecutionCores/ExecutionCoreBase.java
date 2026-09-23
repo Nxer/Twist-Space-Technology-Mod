@@ -17,7 +17,7 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IStaticModularHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
 import com.Nxer.TwistSpaceTechnology.util.NBTUtils;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.VoidingMode;
 import gregtech.api.interfaces.IOutputBus;
@@ -69,7 +69,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                     // #tr Waila.ExecutionCore.1
                     // # Total basic max progressing time
                     // #zh_CN 配方总基础耗时
-                    TextEnums.tr("Waila.ExecutionCore.1") + " : "
+                    TSTUtils.tr("Waila.ExecutionCore.1") + " : "
                         + maxProgressingTime + " tick ("
                         + (maxProgressingTime / 20) + "s)");
                 int progressedTime = tag.getInteger("progressedTime");
@@ -77,7 +77,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                     // #tr Waila.ExecutionCore.2
                     // # Progressed time
                     // #zh_CN 已执行时间
-                    TextEnums.tr("Waila.ExecutionCore.2") + " : "
+                    TSTUtils.tr("Waila.ExecutionCore.2") + " : "
                         + progressedTime + " tick ("
                         + (progressedTime / 20) + "s)"
                 );
@@ -86,7 +86,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                     // #tr Waila.ExecutionCore.4
                     // # Boosted time
                     // #zh_CN 已加速时间
-                    TextEnums.tr("Waila.ExecutionCore.4") + " : "
+                    TSTUtils.tr("Waila.ExecutionCore.4") + " : "
                         + boostedTime + " tick ("
                         + (boostedTime / 20) + "s)"
                 );
@@ -94,7 +94,7 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                     // #tr Waila.ExecutionCore.3
                     // # Basic power consumption
                     // #zh_CN 基础功率
-                    TextEnums.tr("Waila.ExecutionCore.3") + " : "
+                    TSTUtils.tr("Waila.ExecutionCore.3") + " : "
                         + tag.getLong("usingEut") + " EU/t"
                 );
                 // spotless:on
@@ -102,13 +102,13 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
                 // #tr Waila.ExecutionCore.IsIdle
                 // # This {\WHITE}Execution Core{\GRAY} is idle.
                 // #zh_CN 此{\WHITE}执行核心{\GRAY}处于空闲状态
-                currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
+                currentTip.add(TSTUtils.tr("Waila.ExecutionCore.IsIdle"));
             }
         } else {
             // #tr Waila.ExecutionCore.HasNotBeenSetup
             // # This execution core has not been setup.
             // #zh_CN 此执行核心未初始化
-            currentTip.add(TextEnums.tr("Waila.ExecutionCore.HasNotBeenSetup"));
+            currentTip.add(TSTUtils.tr("Waila.ExecutionCore.HasNotBeenSetup"));
         }
     }
 

@@ -37,10 +37,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.block.meta.casing.PhotonControllerUpgradeCasing;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -367,63 +367,63 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
         // #tr Tooltip_PhC_MachineType
         // # Photon Controller/Laser Engraver
         // #zh_CN 光子掌控者/激光蚀刻机
-        tt.addMachineType(TextEnums.tr("Tooltip_PhC_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_PhC_MachineType"))
             // #tr Tooltip_PhC_00
             // # Controller block for the Precise High-Energy Photonic Quantum Master
             // #zh_CN 精密高能光量子掌控者的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_PhC_00"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_00"))
             // #tr Tooltip_PhC_01
             // # {\BLUE}Prism tank in order, sir.
             // #zh_CN {\BLUE}Prism tank in order, sir.
-            .addInfo(TextEnums.tr("Tooltip_PhC_01"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_01"))
             // #tr Tooltip_PhC_02
             // # Control Photons on the scale of 10⁻² meters.
             // #zh_CN 在10¯¹² m 尺度上掌控光子.
-            .addInfo(TextEnums.tr("Tooltip_PhC_02"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_02"))
             // #tr Tooltip_PhC_03
             // # Install Photonic Intensifier on the back side of the structure to dramatically increase production speeds.
             // #zh_CN 可以在机器背面对应位置安装光量子增幅器,大幅提高处理速度.
-            .addInfo(TextEnums.tr("Tooltip_PhC_03"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_03"))
             // #tr Tooltip_PhC_04
             // # Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing.
             // #zh_CN 多个光量子增幅器效果可以叠加,当然也可以不安装,使用强化镀铱机械方块占位.
-            .addInfo(TextEnums.tr("Tooltip_PhC_04"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_04"))
             // #tr Tooltip_PhC_05
             // # Use screwdriver to change mode.
             // #zh_CN 使用螺丝刀切换模式.
-            .addInfo(TextEnums.tr("Tooltip_PhC_05"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_05"))
             // #tr Tooltip_PhC_06
             // # {\GOLD}Photon Controller mode:
             // #zh_CN {\GOLD}光子掌控者模式:
-            .addInfo(TextEnums.tr("Tooltip_PhC_06"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_06"))
             // #tr Tooltip_PhC_07
             // # {\AQUA}16x{\GRAY} Parallel
             // #zh_CN {\AQUA}16x{\GRAY} 并行
-            .addInfo(TextEnums.tr("Tooltip_PhC_07"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_07"))
             // #tr Tooltip_PhC_08
             // # {\GOLD}Laser Engraver mode:
             // #zh_CN {\GOLD}激光蚀刻机模式:
-            .addInfo(TextEnums.tr("Tooltip_PhC_08"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_08"))
             // #tr Tooltip_PhC_09
             // # {\AQUA}256x{\GRAY} Parallel | Extra reduce {\RED}50%{\GRAY} recipe time spent
             // #zh_CN {\AQUA}256x{\GRAY} 并行 | 额外降低{\RED}50%{\GRAY}耗时
-            .addInfo(TextEnums.tr("Tooltip_PhC_09"))
+            .addInfo(TSTUtils.tr("Tooltip_PhC_09"))
             .beginStructureBlock(15, 7, 9, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addCasingInfoRange(TextLocalization.textCasingAdvIrPlated, 296, 347, false)
-            .addCasingInfoRange(TextLocalization.textCasingTT_0, 0, 78, false)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addCasingInfoRange(TSTSharedLocalization.Structure.textCasingAdvIrPlated, 296, 347, false)
+            .addCasingInfoRange(TSTSharedLocalization.Structure.textCasingTT_0, 0, 78, false)
             // #tr textUpgradeCasingAndLocation
             // # Upgrade module casing at backside area wrapped by AdvIrPlated Casing
             // #zh_CN Upgrade module casing at backside area wrapped by AdvIrPlated Casing
-            .addCasingInfoRange(TextEnums.tr("textUpgradeCasingAndLocation"), 0, 25, false)
-            .addInputHatch(TextLocalization.textCenterOfLRSides, 2)
-            .addOutputHatch(TextLocalization.textCenterOfLRSides, 2)
-            .addInputBus(TextLocalization.textCenterOfLRSides, 2)
-            .addOutputBus(TextLocalization.textCenterOfLRSides, 2)
+            .addCasingInfoRange(TSTUtils.tr("textUpgradeCasingAndLocation"), 0, 25, false)
+            .addInputHatch(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
+            .addInputBus(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
             // #tr textHighPowerCasingUDSides
             // # High Power Casing area of up and down side
             // #zh_CN 上下两侧的超能机械方块区域
-            .addEnergyHatch(TextEnums.tr("textHighPowerCasingUDSides"), 3)
+            .addEnergyHatch(TSTUtils.tr("textHighPowerCasingUDSides"), 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

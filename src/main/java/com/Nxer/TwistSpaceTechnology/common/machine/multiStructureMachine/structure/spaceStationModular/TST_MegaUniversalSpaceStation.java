@@ -17,9 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.GT_TileEntity_MultiStructureMachine;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.StructureLoader;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -305,45 +305,45 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
         // #tr Tooltip_MegaUniversalSpaceStation_MachineType
         // # space station
         // #zh_CN temp
-        tt.addMachineType(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_MachineType"))
             // #tr Tooltip_MegaUniversalSpaceStation_00
             // # Use auto build item to build instead of build your self
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_00"))
             // #tr Tooltip_MegaUniversalSpaceStation_01
             // # Auto-SpaceStation build core
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_01"))
             // #tr Tooltip_MegaUniversalSpaceStation_02
             // # If your station broke, you can put fix block inside the input hatch to fix it
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_02"))
             // #tr Tooltip_MegaUniversalSpaceStation_03
             // # temp
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_03"))
             // #tr Tooltip_MegaUniversalSpaceStation_04
             // # temp
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_04"))
             // #tr Tooltip_MegaUniversalSpaceStation_05
             // # temp
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_05"))
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_05"))
             // #tr Tooltip_MegaUniversalSpaceStation_06
             // # temp
             // #zh_CN temp
-            .addInfo(TextEnums.tr("Tooltip_MegaUniversalSpaceStation_06"))
-            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
+            .addInfo(TSTUtils.tr("Tooltip_MegaUniversalSpaceStation_06"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(448, 256, 431, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addMaintenanceHatch(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addMaintenanceHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .toolTipFinisher(TSTSharedLocalization.General.ModName);
         // spotless:on
         return tt;
     }

@@ -17,10 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -224,19 +224,19 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
         // #tr Tooltip_LargeSteamAlloySmelter_MachineType
         // # Alloy Smelter
         // #zh_CN 合金炉
-        tt.addMachineType(TextEnums.tr("Tooltip_LargeSteamAlloySmelter_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_LargeSteamAlloySmelter_MachineType"))
             // #tr Tooltip_LargeSteamAlloySmelter_Controller
             // # Controller block for the Large Steam Alloy Smelter
             // #zh_CN 大型蒸汽合金炉的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_LargeSteamAlloySmelter_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeSteamAlloySmelter_Controller"))
             // #tr Tooltip_LargeSteamAlloySmelter_01
             // # Steam Tech Operational
             // #zh_CN 蒸汽科技，启动！
-            .addInfo(TextEnums.tr("Tooltip_LargeSteamAlloySmelter_01"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeSteamAlloySmelter_01"))
             .beginStructureBlock(5, 3, 3, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

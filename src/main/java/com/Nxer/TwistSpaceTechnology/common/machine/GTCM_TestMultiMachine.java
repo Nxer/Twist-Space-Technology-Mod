@@ -24,7 +24,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -204,12 +204,12 @@ public class GTCM_TestMultiMachine extends GTCM_MultiMachineBase<GTCM_TestMultiM
             tooltip.addMachineType("test")
                 .addInfo("testing")
                 .beginStructureBlock(3, 3, 3, false)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 2)
-                .addOutputBus(TextLocalization.textUseBlueprint, 2)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
-                .toolTipFinisher(TextLocalization.ModName);
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .toolTipFinisher(TSTSharedLocalization.General.ModName);
 
         }
         return tooltip;

@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.recipe.RecipeMetadataKey;
 import gregtech.nei.RecipeDisplayInfo;
@@ -21,6 +21,6 @@ public class BloodyHellTierKey extends RecipeMetadataKey<Integer> {
         // #tr BloodyHell_Recipe_Tier
         // # Bloody Hell Tier:
         // #zh_CN 血狱等级：
-        recipeInfo.drawText(TextEnums.tr("BloodyHell_Recipe_Tier") + tier);
+        recipeInfo.drawText(TSTUtils.tr("BloodyHell_Recipe_Tier") + tier);
     }
 }

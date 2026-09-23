@@ -8,7 +8,7 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.VoltageIndex;
 import gregtech.api.util.GTUtility;
 
-public class TstSharedFormat {
+public class TSTSharedFormat {
 
     private static EnumChatFormatting DefaultColor = EnumChatFormatting.RESET;
 

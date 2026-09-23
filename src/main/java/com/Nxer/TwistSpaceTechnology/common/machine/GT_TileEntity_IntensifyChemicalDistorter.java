@@ -38,10 +38,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -403,47 +403,47 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         // #tr Tooltip_ICD_MachineType
         // # Intensify Chemical Distorter/Chemical Reactor
         // #zh_CN 深度化学扭曲仪/化学反应釜
-        tt.addMachineType(TextEnums.tr("Tooltip_ICD_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_ICD_MachineType"))
             // #tr Tooltip_ICD_00
             // # Controller block for the Intensify Chemical Distorter
             // #zh_CN 深度化学扭曲仪的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_ICD_00"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_00"))
             // #tr Tooltip_ICD_01
             // # {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
             // #zh_CN {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
-            .addInfo(TextEnums.tr("Tooltip_ICD_01"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_01"))
             // #tr Tooltip_ICD_02
             // # The most advanced base chemical reactor.
             // #zh_CN 最先进的基础化学反应设备
-            .addInfo(TextEnums.tr("Tooltip_ICD_02"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_02"))
             // #tr Tooltip_ICD_03
             // # Use screwdriver to change mode.
             // #zh_CN 使用螺丝刀切换模式.
-            .addInfo(TextEnums.tr("Tooltip_ICD_03"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_03"))
             // #tr Tooltip_ICD_04
             // # {\GOLD}Intensify Chemical Distorter mode:
             // #zh_CN {\GOLD}深度化学扭曲模式:
-            .addInfo(TextEnums.tr("Tooltip_ICD_04"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_04"))
             // #tr Tooltip_ICD_05
             // # Focus on processing the most complex chemical reaction - {\AQUA}16x {\GRAY}Parallel.
             // #zh_CN 专注于处理更复杂的化学反应 - {\AQUA}16x {\GRAY}并行
-            .addInfo(TextEnums.tr("Tooltip_ICD_05"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_05"))
             // #tr Tooltip_ICD_06
             // # {\GOLD}Chemical Reactor mode:
             // #zh_CN {\GOLD}化学反应釜模式:
-            .addInfo(TextEnums.tr("Tooltip_ICD_06"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_06"))
             // #tr Tooltip_ICD_07
             // # {\AQUA}1024x {\GRAY}Parallel and {\RED}900% {\GRAY}faster than using LCR of the same voltage.
             // #zh_CN 拥有 {\AQUA}1024x{\GRAY} 并行并且比相同电压的大型化学反应釜快 {\RED}900%{\GRAY}
-            .addInfo(TextEnums.tr("Tooltip_ICD_07"))
+            .addInfo(TSTUtils.tr("Tooltip_ICD_07"))
             .beginStructureBlock(11, 13, 11, false)
-            .addController(TextLocalization.textFrontBottom)
-            .addCasingInfoRange(TextLocalization.textCasing, 8, 26, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 3)
+            .addController(TSTSharedLocalization.Structure.textFrontBottom)
+            .addCasingInfoRange(TSTSharedLocalization.Structure.textCasing, 8, 26, false)
+            .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

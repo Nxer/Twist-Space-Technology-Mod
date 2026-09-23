@@ -18,7 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
@@ -72,7 +72,7 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
         ArrayList<ItemStack> allSaplingWithTagCopy = new ArrayList<>();
         for (ItemStack aSapling : allSaplingsIn) {
             ItemStack aStack = aSapling.copy();
-            aStack.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"
+            aStack.setStackDisplayName(TSTUtils.tr("ESS.TreeGrowthSimulator.nei.tooltip.7"
             // #tr ESS.TreeGrowthSimulator.nei.tooltip.7
             // # Any Sapling
             // #zh_CN 任意树苗
@@ -129,28 +129,28 @@ public class TreeGrowthSimulatorWithoutToolFakeRecipe {
 
         // UU Matter
         ItemStack LogSymbol = new ItemStack(Blocks.log, 1, 0);
-        LogSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.0"
+        LogSymbol.setStackDisplayName(TSTUtils.tr("ESS.TreeGrowthSimulator.nei.fakeItem.0"
         // #tr ESS.TreeGrowthSimulator.nei.fakeItem.0
         // # Random logs
         // #zh_CN 随机原木
         ));
         addEnchantmentLight(LogSymbol);
         ItemStack SaplingSymbol = new ItemStack(Blocks.sapling, 1, 0);
-        SaplingSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.1"
+        SaplingSymbol.setStackDisplayName(TSTUtils.tr("ESS.TreeGrowthSimulator.nei.fakeItem.1"
         // #tr ESS.TreeGrowthSimulator.nei.fakeItem.1
         // # Random saplings
         // #zh_CN 随机树苗
         ));
         addEnchantmentLight(SaplingSymbol);
         ItemStack LeavesSymbol = new ItemStack(Blocks.leaves, 1, 0);
-        LeavesSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.2"
+        LeavesSymbol.setStackDisplayName(TSTUtils.tr("ESS.TreeGrowthSimulator.nei.fakeItem.2"
         // #tr ESS.TreeGrowthSimulator.nei.fakeItem.2
         // # Random leaves
         // #zh_CN 随机树叶
         ));
         addEnchantmentLight(LeavesSymbol);
         ItemStack FruitSymbol = new ItemStack(Items.apple, 1, 0);
-        FruitSymbol.setStackDisplayName(TextEnums.tr("ESS.TreeGrowthSimulator.nei.fakeItem.3"
+        FruitSymbol.setStackDisplayName(TSTUtils.tr("ESS.TreeGrowthSimulator.nei.fakeItem.3"
         // #tr ESS.TreeGrowthSimulator.nei.fakeItem.3
         // # Random fruits
         // #zh_CN 随机果实

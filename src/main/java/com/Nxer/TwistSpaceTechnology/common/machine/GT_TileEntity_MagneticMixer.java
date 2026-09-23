@@ -25,10 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -274,33 +274,33 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
         // #tr Tooltip_MagneticMixer_MachineType
         // # Mixer
         // #zh_CN 搅拌机
-        tt.addMachineType(TextEnums.tr("Tooltip_MagneticMixer_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_MagneticMixer_MachineType"))
             // #tr Tooltip_MagneticMixer_00
             // # Controller block for the "Mini" Magnetic Mixer
             // #zh_CN "小型"磁力搅拌机的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_MagneticMixer_00"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_00"))
             // #tr Tooltip_MagneticMixer_01
             // # {\RED}Watch out for the Bumps !
             // #zh_CN {\RED}我叫磁力棒！
-            .addInfo(TextEnums.tr("Tooltip_MagneticMixer_01"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_01"))
             // #tr Tooltip_MagneticMixer_02
             // # Looks more like a tumble washing machine.
             // #zh_CN 看起来更像一个滚筒洗衣机.
-            .addInfo(TextEnums.tr("Tooltip_MagneticMixer_02"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_02"))
             // #tr Tooltip_MagneticMixer_03
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TextEnums.tr("Tooltip_MagneticMixer_03"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_03"))
             // #tr Tooltip_MagneticMixer_04
             // # Additional {\RED}20%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}20%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_MagneticMixer_04"))
+            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_04"))
             .beginStructureBlock(19, 19, 21, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

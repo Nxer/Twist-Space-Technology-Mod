@@ -11,20 +11,20 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.DSPName;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_00;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_01;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_02;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_03;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_04;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_05;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_06;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_01;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DSPInfo_launch_02;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_launch_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_launch_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -56,12 +56,11 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -495,7 +494,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             // # Overload time:
             // #zh_CN 剩余过载时间:
             + EnumChatFormatting.GOLD
-            + TextEnums.tr("TST_DSPLauncher.getInfoData.01")
+            + TSTUtils.tr("TST_DSPLauncher.getInfoData.01")
             + EnumChatFormatting.RESET + " "
             + (overloadTime / 20)
             + "s");
@@ -607,56 +606,56 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
         // #tr Tooltip_DSPLauncher_MachineType
         // # Dyson Sphere Program: Launch Site
         // #zh_CN 戴森球计划: 垂直发射井
-        tt.addMachineType(TextEnums.tr("Tooltip_DSPLauncher_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_DSPLauncher_MachineType"))
             // #tr Tooltip_DSPLauncher_00
             // # Controller block for the Dyson Sphere Module Launch Site
             // #zh_CN 戴森球模块发射场的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_00"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_00"))
             // #tr Tooltip_DSPLauncher_01
             // # {\BLUE}"Low altitude flight..."
             // #zh_CN {\BLUE}"低空飞行 ..."
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_01"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_01"))
             // #tr Tooltip_DSPLauncher_02
             // # Launching Dyson Sphere components into Dyson Sphere orbit to form a Dyson Sphere.
             // #zh_CN 发射装载有戴森球组件的小型运载火箭到戴森球轨道上组建戴森球.
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_02"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_02"))
             // #tr Tooltip_DSPLauncher_03
             // # No overclock and no extra parallel.
             // #zh_CN 不会超频且没有额外并行.
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_03"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_03"))
             // #tr Tooltip_DSPLauncher_04
             // # Higher tier of Elevator motor Module means faster launching.
             // #zh_CN 更高级的加速轨道可以减少发射耗时.
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_04"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_04"))
             // #tr Tooltip_DSPLauncher_05
             // # Inputting Space Warper will enable overlord mode. Reduce launch intervals.
             // #zh_CN 输入空间翘曲器可以进入过载模式. 减少发射时间间隔.
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_05"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_05"))
             // #tr Tooltip_DSPLauncher_06
             // # Joining the wireless EU network when without installing an energy hatch.
             // #zh_CN 未安装能源仓时自动进入无线电力网络模式.
-            .addInfo(TextEnums.tr("Tooltip_DSPLauncher_06"))
+            .addInfo(TSTUtils.tr("Tooltip_DSPLauncher_06"))
             .addStructureInfo(Tooltip_Details)
             // #tr Tooltip_DSPLauncher_2_01
             // # Final progress time = recipe time / ( module tier * overload mode parameter )
             // #zh_CN 最终处理时间 = 配方时间 /( 加速轨道等级 * 过载模式参数 )
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_01"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPLauncher_2_01"))
             // #tr Tooltip_DSPLauncher_2_01_OverloadParameterCalculation
             // # Overload Parameter = t ^ [ 1 / (1000*900/t + 5) ] ; t = Overload Time (second)
             // #zh_CN 过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_01_OverloadParameterCalculation"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPLauncher_2_01_OverloadParameterCalculation"))
             // #tr Tooltip_DSPLauncher_2_02
             // # Every Space Warper will provide (default) 15 minutes of overload mode.
             // #zh_CN 每个空间翘曲器提供(默认)15分钟的过载模式.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_02"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPLauncher_2_02"))
             // #tr Tooltip_DSPLauncher_2_03
             // # Input Space Warper will be consumed immediately.
             // #zh_CN 输入的空间翘曲器会立刻被消耗.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_03"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPLauncher_2_03"))
             // #tr Tooltip_DSPLauncher_2_04
             // # Converted to remaining time of overload mode.
             // #zh_CN 转换成剩余的过载模式时间.
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_04"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_DSPLauncher_2_04"))
             .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
             .addStructureInfo(DSPName + ":")
             .addStructureInfo(Tooltip_DSPInfo_launch_01)

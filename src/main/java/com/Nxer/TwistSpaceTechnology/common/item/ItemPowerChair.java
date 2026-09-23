@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -43,12 +43,12 @@ public class ItemPowerChair extends Item {
             // #tr tooltips.PowerChair.page2.line1
             // # {\LIGHT_PURPLE}If you want it, then you'll have to take it.
             // #zh_CN {\LIGHT_PURPLE}If you want it, then you'll have to take it.
-            toolTip.add(TextEnums.tr("tooltips.PowerChair.page2.line1"));
+            toolTip.add(TSTUtils.tr("tooltips.PowerChair.page2.line1"));
         } else {
             // #tr tooltips.PowerChair.page1.line1
             // # Your portal opening day's over.
             // #zh_CN Your portal opening day's over.
-            toolTip.add(TextEnums.tr("tooltips.PowerChair.page1.line1"));
+            toolTip.add(TSTUtils.tr("tooltips.PowerChair.page1.line1"));
         }
     }
 }

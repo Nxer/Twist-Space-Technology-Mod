@@ -3,8 +3,8 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.S
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -115,11 +115,11 @@ public class DynamicSpeedController extends DynamicSpeedControllerBase {
                     // #tr Tooltips.DynamicSpeedController.01
                     // # Speed controller module with adjustable parameters.
                     // #zh_CN 可调参数的速度控制器模块.
-                    TextEnums.tr("Tooltips.DynamicSpeedController.01"),
+                    TSTUtils.tr("Tooltips.DynamicSpeedController.01"),
                     // #tr Tooltips.DynamicSpeedController.02
                     // # Provides up to speed x
                     // #zh_CN 最高提供速度增幅
-                    TextEnums.tr("Tooltips.DynamicSpeedController.02") + " " + getMaxSpeedMultiplier() + "00%",
+                    TSTUtils.tr("Tooltips.DynamicSpeedController.02") + " " + getMaxSpeedMultiplier() + "00%",
                 };
         }
         return description;

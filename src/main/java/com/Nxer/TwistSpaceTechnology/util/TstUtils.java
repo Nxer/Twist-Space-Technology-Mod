@@ -101,7 +101,7 @@ import gregtech.api.util.GTUtility;
  * @since 0.6.4
  */
 @SuppressWarnings("unused")
-public class TstUtils {
+public class TSTUtils {
 
     public static final double LOG2 = Math.log(2);
     public static final double LOG4 = Math.log(4);

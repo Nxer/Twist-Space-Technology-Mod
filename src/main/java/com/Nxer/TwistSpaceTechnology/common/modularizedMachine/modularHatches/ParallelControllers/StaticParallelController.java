@@ -1,7 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ParallelControllers;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -47,11 +48,11 @@ public class StaticParallelController extends StaticParallelControllerBase {
                     // #tr Tooltips.StaticParallelController.01
                     // # Parallel controller module with a fixed parameter.
                     // #zh_CN 固定参数的并行控制器模块.
-                    TextEnums.tr("Tooltips.StaticParallelController.01"),
+                    TSTUtils.tr("Tooltips.StaticParallelController.01"),
                     // #tr Tooltips.StaticParallelController.02
                     // # Provides
                     // #zh_CN 提供
-                    TextEnums.tr("Tooltips.StaticParallelController.02") + " " + getParallel() + " " + TextEnums.Word_Parallel + ".",
+                    TSTUtils.tr("Tooltips.StaticParallelController.02") + " " + getParallel() + " " + TSTSharedLocalization.General.Word_Parallel + ".",
                 };
         }
         return description;

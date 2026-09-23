@@ -33,10 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -393,12 +393,12 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         // #tr DTMPFP.getInfoData.01
         // # Running time (tick)
         // #zh_CN 已运行时间(tick)
-        ret[origin.length] = TextEnums.tr("DTMPFP.getInfoData.01") + ": " + EnumChatFormatting.YELLOW + runningTime;
+        ret[origin.length] = TSTUtils.tr("DTMPFP.getInfoData.01") + ": " + EnumChatFormatting.YELLOW + runningTime;
 
         // #tr DTMPFP.getInfoData.02
         // # Fuel discount
         // #zh_CN 维度催化剂消耗率
-        ret[origin.length + 1] = TextEnums.tr("DTMPFP.getInfoData.02") + ": " + EnumChatFormatting.YELLOW + fuelCostMultiplier;
+        ret[origin.length + 1] = TSTUtils.tr("DTMPFP.getInfoData.02") + ": " + EnumChatFormatting.YELLOW + fuelCostMultiplier;
 
         // spotless:on
         return ret;
@@ -464,49 +464,49 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉
             tooltip
                 .addMachineType(
-                    TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType"))
+                    TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01
                 // # {\BLUE}{\ITALIC}If the facts don't fit the theory, change the facts.
                 // #zh_CN {\BLUE}{\ITALIC}如果事实与理论不符， 那就修改事实。
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01"))
+                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02
                 // # The Prototype of Dimensionally Transcendent Plasma Forge
                 // #zh_CN 超维度等离子锻炉的原型机.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02"))
+                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03
                 // # Better at continuous long-term operation and mass production.
                 // #zh_CN 更擅长连续长时间运行和大批量生产.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03"))
+                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04
                 // # But it is not good enough in miniaturization.
                 // #zh_CN 但在小型化方面不够好.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04"))
+                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05
                 // # Reach the best operating state after {\RED}24 {\GRAY} hours of continuous operation, reducing {\AQUA}75%%{\GRAY} fuel consumption.
                 // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%%{\GRAY} 燃料消耗.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05"))
+                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05"))
                 // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06
                 // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%%{\GRAY} within {\RED}1{\GRAY} hours.
                 // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06"))
-                .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.OverclockControllerDescription.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
-                .addStructureInfo(TextEnums.SpeedControllerDescription.getText())
-                .addStructureInfo(TextEnums.ExecutionCoreDescription.getText())
-                .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModule.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06"))
+                .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .beginStructureBlock(65, 43, 65, false)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputBus(TextLocalization.textUseBlueprint, 1)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 2)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 2)
                 .toolTipFinisher();
             // spotless:on
         }

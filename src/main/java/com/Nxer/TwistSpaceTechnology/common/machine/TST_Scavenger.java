@@ -3,10 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_Scavenger;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -28,9 +28,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -240,27 +240,27 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
         // #tr Tooltip_Scavenger_MachineType
         // # Sifter
         // #zh_CN 筛选机
-        tt.addMachineType(TextEnums.tr("Tooltip_Scavenger_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_Scavenger_MachineType"))
             // #tr Tooltip_Scavenger_Controller
             // # Controller block for the Scavenger
             // #zh_CN 拾荒者的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_Scavenger_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_Scavenger_Controller"))
             // #tr Tooltip_Scavenger_01
             // # {\BOLD}I like pigs. Dogs look up to us. Cats look down on us. Pigs treat us as equals.
             // #zh_CN {\BOLD}我喜欢猪. 狗崇拜人类. 猫鄙视人类. 猪对我们一视同仁.
-            .addInfo(TextEnums.tr("Tooltip_Scavenger_01"))
+            .addInfo(TSTUtils.tr("Tooltip_Scavenger_01"))
             // #tr Tooltip_Scavenger_02
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TextEnums.tr("Tooltip_Scavenger_02"))
+            .addInfo(TSTUtils.tr("Tooltip_Scavenger_02"))
             // #tr Tooltip_Scavenger_03
             // # Only uses {\RED}60%{\GRAY} of the EU/t normally required.
             // #zh_CN 只需要使用配方要求功率的{\RED}60%{\GRAY} .
-            .addInfo(TextEnums.tr("Tooltip_Scavenger_03"))
+            .addInfo(TSTUtils.tr("Tooltip_Scavenger_03"))
             // #tr Tooltip_Scavenger_04
             // # Additional {\RED}20%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}20%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TextEnums.tr("Tooltip_Scavenger_04"))
+            .addInfo(TSTUtils.tr("Tooltip_Scavenger_04"))
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 2)

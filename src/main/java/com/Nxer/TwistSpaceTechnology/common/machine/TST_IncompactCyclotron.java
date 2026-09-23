@@ -5,10 +5,10 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfe
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.MaxParallel_IncompactCyclotron;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBouns_IncompactCyclotron;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -29,9 +29,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -215,39 +215,39 @@ public class TST_IncompactCyclotron extends GTCM_MultiMachineBase<TST_IncompactC
         // #tr Tooltip_IncompactCyclotron_MachineType
         // # Particle Accelerator
         // #zh_CN 粒子加速器
-        tt.addMachineType(TextEnums.tr("Tooltip_IncompactCyclotron_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_IncompactCyclotron_MachineType"))
             // #tr Tooltip_IncompactCyclotron_Controller
             // # Controller block for the Incompact Cyclotron
             // #zh_CN 非紧凑式回旋加速器的控制方块
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_Controller"))
             // #tr Tooltip_IncompactCyclotron_01
             // # {\DARK_PURPLE}Pulsed Ultrafast Linear Synchronized Accelerator Ring
             // #zh_CN {\DARK_PURPLE}脉冲超快线性同步加速器
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_01"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_01"))
             // #tr Tooltip_IncompactCyclotron_02
             // # The particles are accelerated to {\YELLOW}99%%{\GRAY} of the speed of light by the electric field!
             // #zh_CN 粒子在电场下被加速到{\YELLOW}99%%{\GRAY}光速！
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_02"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_02"))
             // #tr Tooltip_IncompactCyclotron_03
             // # But you can extract the accelerated particles at any time.
             // #zh_CN 但是你随时可以取出加工的粒子
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_03"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_03"))
             // #tr Tooltip_IncompactCyclotron_04
             // # "That's incredible!"
             // #zh_CN 这太神奇了！
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_04"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_04"))
             // #tr Tooltip_IncompactCyclotron_05
             // # Thanks to the upgrade of technology
             // #zh_CN 得益于工艺的升级
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_05"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_05"))
             // #tr Tooltip_IncompactCyclotron_06
             // # The accelerator upgraded 100%% speedup and 256 parallel
             // #zh_CN 加速器拥有了额外100%%的额外加速,以及256并行
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_06"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_06"))
             // #tr Tooltip_IncompactCyclotron_07
             // # But it requires additional 60%% of power to work
             // #zh_CN 但是需要额外60%%的供电来运行
-            .addInfo(TextEnums.tr("Tooltip_IncompactCyclotron_07"))
+            .addInfo(TSTUtils.tr("Tooltip_IncompactCyclotron_07"))
             .addController(textFrontCenter)
             .addInputHatch(getBlueprintWithDot(1))
             .addOutputHatch(getBlueprintWithDot(1))

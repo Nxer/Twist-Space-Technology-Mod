@@ -9,10 +9,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
@@ -52,11 +52,11 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets, 
             // # extra slots for imprint circuits
             // #zh_CN 个额外插槽
             // spotless:on
-            new String[] { TextEnums.tr("Tooltips.CircuitImprintHatch.01"),
-                TextEnums.tr("Tooltips.CircuitImprintHatch.02") + " "
+            new String[] { TSTUtils.tr("Tooltips.CircuitImprintHatch.01"),
+                TSTUtils.tr("Tooltips.CircuitImprintHatch.02") + " "
                     + (aTier > 5 ? 16 : 4)
                     + " "
-                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03") });
+                    + TSTUtils.tr("Tooltips.CircuitImprintHatch.03") });
         registerTooltipCredits(ID.GODERIUM);
     }
 

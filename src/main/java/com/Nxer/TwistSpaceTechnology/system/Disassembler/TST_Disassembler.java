@@ -33,11 +33,11 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -618,7 +618,7 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         // #tr MachineInfoData.ComponentBlockTier
         // # Component Assembly Line Casing Tier
         // #zh_CN 部件结构方块等级
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.ComponentBlockTier")
+        ret[origin.length] = EnumChatFormatting.AQUA + TSTUtils.tr("MachineInfoData.ComponentBlockTier")
             + ": "
             + EnumChatFormatting.GOLD
             + getRealTierComponentCasing();
@@ -798,60 +798,60 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
             // #tr Tooltip_TSTDisassembler_MachineType
             // # Disassembler
             // #zh_CN 拆解机
-            tooltip.addMachineType(TextEnums.tr("Tooltip_TSTDisassembler_MachineType"))
+            tooltip.addMachineType(TSTUtils.tr("Tooltip_TSTDisassembler_MachineType"))
                 // #tr Tooltip_TSTDisassembler_Controller
                 // # Controller block for the TST Disassembler
                 // #zh_CN TST大型拆解机的控制器方块
-                .addInfo(TextEnums.tr("Tooltip_TSTDisassembler_Controller"))
+                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_Controller"))
                 // #tr Tooltip_TSTDisassembler_01
                 // # {\BLUE}The incomplete becomes complete; the crooked becomes straight; the empty becomes full; the worn out becomes new.
                 // #zh_CN {\BLUE}曲则全，枉则直，洼则盈，敝则新。
-                .addInfo(TextEnums.tr("Tooltip_TSTDisassembler_01"))
+                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_01"))
                 // #tr Tooltip_TSTDisassembler_02
                 // # How your other machine assembles the item, this one disassembles it back.
                 // #zh_CN 你的其他机器怎样组装物品, 这个机器就怎样把它拆回去.
-                .addInfo(TextEnums.tr("Tooltip_TSTDisassembler_02"))
+                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_02"))
                 // #tr Tooltip_TSTDisassembler_03
                 // # Note: The component assembly line casing level limit recipe the machine can perform.
                 // #zh_CN 注意: 结构中的部件装配线外壳等级限制可拆卸的配方等级.
-                .addInfo(TextEnums.tr("Tooltip_TSTDisassembler_03"))
+                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_03"))
                 // #tr Tooltip_TSTDisassembler_04
                 // # No energy consumption.
                 // #zh_CN 不消耗能源.
-                .addInfo(TextEnums.tr("Tooltip_TSTDisassembler_04"))
-                .addStructureInfo(TextLocalization.Tooltip_Details)
+                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_04"))
+                .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_Details)
                 // #tr Tooltip_TSTDisassembler_2_01
                 // # Supported:
                 // #zh_CN 支持:
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_01"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_01"))
                 // #tr Tooltip_TSTDisassembler_2_02
                 // # {\SPACE}- {\AQUA}Component Assembly Line Recipes
                 // #zh_CN {\SPACE}- {\AQUA}部件装配线配方
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_02"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_02"))
                 // #tr Tooltip_TSTDisassembler_2_03
                 // # {\SPACE}- {\AQUA}Miracle Top Recipes
                 // #zh_CN {\SPACE}- {\AQUA}奇迹顶点配方
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_03"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_03"))
                 // #tr Tooltip_TSTDisassembler_2_04
                 // # {\SPACE}- {\AQUA}Assembly Line Recipes
                 // #zh_CN {\SPACE}- {\AQUA}装配线配方
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_04"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_04"))
                 // #tr Tooltip_TSTDisassembler_2_05
                 // # {\SPACE}- {\AQUA}Assembler Recipes
                 // #zh_CN {\SPACE}- {\AQUA}组装机配方
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_05"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_05"))
                 // #tr Tooltip_TSTDisassembler_2_06
                 // # {\SPACE}- {\AQUA}Photon Controller Recipes
                 // #zh_CN {\SPACE}- {\AQUA}光子掌控者配方
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_06"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_06"))
                 // #tr Tooltip_TSTDisassembler_2_07
                 // # {\RED}NOT SUPPORTED CRAFTING TABLE RECIPES !
                 // #zh_CN {\RED}不兼容工作台配方!
-                .addStructureInfo(TextEnums.tr("Tooltip_TSTDisassembler_2_07"))
+                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_07"))
                 .beginStructureBlock(27, 23, 28, false)
-                .addInputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .toolTipFinisher();
             // spotless:on
         }

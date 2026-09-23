@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.MultiStructureManager;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -43,11 +43,11 @@ public class ItemMultiStructuresLinkTool extends Item {
         // #tr tooltips.MultiStructuresLinkTool.line1
         // # {\LIGHT_PURPLE}left Click to set Main machine
         // #zh_CN {\LIGHT_PURPLE}left Click to set Main machine
-        toolTip.add(TextEnums.tr("tooltips.MultiStructuresLinkTool.line1"));
+        toolTip.add(TSTUtils.tr("tooltips.MultiStructuresLinkTool.line1"));
         // #tr tooltips.MultiStructuresLinkTool.line2
         // # {\LIGHT_PURPLE}right Click to set Sub machine
         // #zh_CN {\LIGHT_PURPLE}right Click to set Sub machine
-        toolTip.add(TextEnums.tr("tooltips.MultiStructuresLinkTool.line2"));
+        toolTip.add(TSTUtils.tr("tooltips.MultiStructuresLinkTool.line2"));
     }
 
     public void link(EntityPlayer aPlayer) {

@@ -5,7 +5,7 @@ import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.fo
 import net.minecraft.util.StatCollector;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis.TST_LargeSolarBoiler;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -72,7 +72,7 @@ public class TST_Gui_LargeSolarBoiler extends TST_Gui<TST_LargeSolarBoiler> {
                 // #tr TST_LargeSolarBoiler.gui.01
                 // # Press to clear the machine
                 // #zh_CN 点击以清洁机器的钙化
-                t -> t.addLine(TextEnums.tr("TST_LargeSolarBoiler.gui.01")));
+                t -> t.addLine(TSTUtils.tr("TST_LargeSolarBoiler.gui.01")));
 
     }
 

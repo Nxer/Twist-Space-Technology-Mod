@@ -23,10 +23,10 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -263,25 +263,25 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}质量发生器
             tooltip
                 .addMachineType(
-                    TextEnums.tr("Tooltip_MassFabricatorGenesis_MachineType"))
+                    TSTUtils.tr("Tooltip_MassFabricatorGenesis_MachineType"))
                 // #tr Tooltip_MassFabricatorGenesis_01
                 // # {\BLUE}{\ITALIC}“Even though the future seems far away, it is actually beginning right now.”
                 // #zh_CN {\BLUE}{\ITALIC}“虽然未来似乎很遥远，但其实已经开始了。”
-                .addInfo(TextEnums.tr("Tooltip_MassFabricatorGenesis_01"))
+                .addInfo(TSTUtils.tr("Tooltip_MassFabricatorGenesis_01"))
 
                 // #tr Tooltip_MassFabricatorGenesis_02
                 // # Energy - Mass : Interface.
                 // #zh_CN 能量 - 质量 : 接口.
-                .addInfo(TextEnums.tr("Tooltip_MassFabricatorGenesis_02"))
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
+                .addInfo(TSTUtils.tr("Tooltip_MassFabricatorGenesis_02"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
                 .beginStructureBlock(55, 55, 56, false)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 1)
                 .toolTipFinisher();
             // spotless:on
         }

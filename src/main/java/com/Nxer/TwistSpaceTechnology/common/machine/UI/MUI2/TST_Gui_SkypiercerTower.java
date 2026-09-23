@@ -9,7 +9,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SkypiercerTower;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
@@ -61,7 +61,7 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 }
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(TextEnums.tr("SkypiercerTower.UI.AspectSelection.name")))
+            .tooltipBuilder(t -> t.addLine(TSTUtils.tr("SkypiercerTower.UI.AspectSelection.name")))
             // spotless:off
             // #tr SkypiercerTower.UI.AspectSelection.name
             // #en_US Aspect Selection
@@ -148,7 +148,7 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 syncer.setValue(!syncer.getValue());
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(TextEnums.tr("SkypiercerTower.UI.AspectSelection.SelectAll")))
+            .tooltipBuilder(t -> t.addLine(TSTUtils.tr("SkypiercerTower.UI.AspectSelection.SelectAll")))
             // spotless:off
             // #tr SkypiercerTower.UI.AspectSelection.SelectAll
             // #en_US Select All / Deselect All

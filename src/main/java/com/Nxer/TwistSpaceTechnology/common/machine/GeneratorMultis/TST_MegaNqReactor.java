@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.GeneratorMultis;
 
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.ART;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextEnums.tr;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;

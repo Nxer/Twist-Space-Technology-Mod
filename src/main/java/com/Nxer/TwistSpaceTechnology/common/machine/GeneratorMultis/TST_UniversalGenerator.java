@@ -32,10 +32,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -342,7 +342,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                     // #tr TST_UniversalGenerator.gui.01
                     // # Mode:
                     // #zh_CN 模式 :
-                    + TextEnums.tr("TST_UniversalGenerator.gui.01")
+                    + TSTUtils.tr("TST_UniversalGenerator.gui.01")
                     + " "
                     + EnumChatFormatting.GOLD
                     // #tr TST_UniversalGenerator.gui.02
@@ -352,8 +352,8 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                     // #tr TST_UniversalGenerator.gui.03
                     // # Fuel:
                     // #zh_CN 燃油 :
-                    + (mSetTier == 2 ? TextEnums.tr("TST_UniversalGenerator.gui.03")
-                        : TextEnums.tr("TST_UniversalGenerator.gui.02"))
+                    + (mSetTier == 2 ? TSTUtils.tr("TST_UniversalGenerator.gui.03")
+                        : TSTUtils.tr("TST_UniversalGenerator.gui.02"))
                     + EnumChatFormatting.RESET)
                 .setEnabled(mSetTier != 0))
             .widget(
@@ -362,7 +362,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         // #tr TST_UniversalGenerator.gui.04
                         // # Current fluid:
                         // #zh_CN 当前使用:
-                        + TextEnums.tr("TST_UniversalGenerator.gui.04")
+                        + TSTUtils.tr("TST_UniversalGenerator.gui.04")
                         + " "
                         + EnumChatFormatting.GOLD
                         + fuelName
@@ -374,7 +374,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         // #tr TST_UniversalGenerator.gui.05
                         // # Eu per tick:
                         // #zh_CN 发电量 EU/t :
-                        + TextEnums.tr("TST_UniversalGenerator.gui.05")
+                        + TSTUtils.tr("TST_UniversalGenerator.gui.05")
                         + " "
                         + EnumChatFormatting.GOLD
                         + numberFormat.format(euPerTick)
@@ -386,7 +386,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         // #tr TST_UniversalGenerator.gui.06
                         // # Fuel burning:
                         // #zh_CN 燃料消耗速度 :
-                        + TextEnums.tr("TST_UniversalGenerator.gui.06")
+                        + TSTUtils.tr("TST_UniversalGenerator.gui.06")
                         + " "
                         + EnumChatFormatting.GOLD
                         + numberFormat.format(1000.0 / fuelBurning)
@@ -394,7 +394,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         // #tr TST_SteamBasicGenerator.gui.02
                         // # /s
                         // #zh_CN /s
-                        + TextEnums.tr("TST_SteamBasicGenerator.gui.02")
+                        + TSTUtils.tr("TST_SteamBasicGenerator.gui.02")
                         + EnumChatFormatting.RESET)
                     .setEnabled(fuelBurning != 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> euPerTick, val -> euPerTick = val))
@@ -468,25 +468,25 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
         // #tr Tooltip_UniversalGenerator_MachineType
         // # Universal Generator
         // #zh_CN 通用发电机
-        tt.addMachineType(TextEnums.tr("Tooltip_UniversalGenerator_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_UniversalGenerator_MachineType"))
             // #tr Tooltip_UniversalGenerator_00
             // # Has 2 modes: Gas | Fuel
             // #zh_CN 拥有两种模式: 燃气 | 燃油
-            .addInfo(TextEnums.tr("Tooltip_UniversalGenerator_00"))
+            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_00"))
             // #tr Tooltip_UniversalGenerator_01
             // # Maximum 2 dynamo hatches
             // #zh_CN 最多2个动力仓
-            .addInfo(TextEnums.tr("Tooltip_UniversalGenerator_01"))
+            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_01"))
             // #tr Tooltip_UniversalGenerator_02
             // # Dynamo hatches Lv-Hv tier
             // #zh_CN 动力仓等级 LV-HV
-            .addInfo(TextEnums.tr("Tooltip_UniversalGenerator_02"))
+            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_02"))
             // #tr Tooltip_UniversalGenerator_03
             // # Fuel Efficiency: 100%
             // #zh_CN 燃料效率: 100%
-            .addInfo(TextEnums.tr("Tooltip_UniversalGenerator_03"))
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
+            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_03"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -35,10 +35,10 @@ import com.Nxer.TwistSpaceTechnology.common.api.random.RandomPackageFactory;
 import com.Nxer.TwistSpaceTechnology.common.api.random.XSTR;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -324,25 +324,25 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
         // #tr Tooltip_NetherInterface_MachineType
         // # Otherworld Teleporter
         // #zh_CN 异界传送器
-        tt.addMachineType(TextEnums.tr("Tooltip_NetherInterface_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_NetherInterface_MachineType"))
           // #tr Tooltip_NetherInterface_01
           // # {\BOLD}The imprisoned souls of an ancient civilization now serve you.
           // #zh_CN {\BOLD}古老文明被囚禁的灵魂现在为你效命.
-          .addInfo(TextEnums.tr("Tooltip_NetherInterface_01"))
+          .addInfo(TSTUtils.tr("Tooltip_NetherInterface_01"))
           // #tr Tooltip_NetherInterface_02
           // # Build portals and transport the dirty but useful resources of Hell back to you.
           // #zh_CN 构建传送门, 并将地狱那些肮脏但有用的资源传送回来.
-          .addInfo(TextEnums.tr("Tooltip_NetherInterface_02"))
+          .addInfo(TSTUtils.tr("Tooltip_NetherInterface_02"))
           // #tr Tooltip_NetherInterface_03
           // # Machine takes 2A IV to maintain the teleporter, and 1A IV per parallel.
           // #zh_CN 需要消耗 2A IV 维持传送器, 并且每个并行消耗1A IV.
-          .addInfo(TextEnums.tr("Tooltip_NetherInterface_03"))
+          .addInfo(TSTUtils.tr("Tooltip_NetherInterface_03"))
           .beginStructureBlock(15, 16, 3, false)
-          .addInputHatch(TextLocalization.textUseBlueprint, 1)
-          .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-          .addInputBus(TextLocalization.textUseBlueprint, 1)
-          .addOutputBus(TextLocalization.textUseBlueprint, 1)
-          .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
+          .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+          .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+          .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+          .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+          .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
           .toolTipFinisher();
         // spotless:on
         return tt;

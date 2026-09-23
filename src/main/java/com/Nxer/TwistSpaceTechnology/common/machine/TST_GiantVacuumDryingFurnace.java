@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerPiece_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -31,10 +31,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -322,7 +321,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             false,
             true);
 
-        return TstUtils.multiBuildPiece(built);
+        return TSTUtils.multiBuildPiece(built);
     }
 
     @Override
@@ -424,7 +423,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     }
 
     public int getCoilTier() {
-        return TstUtils.getVoltageForCoil(coilLevel);
+        return TSTUtils.getVoltageForCoil(coilLevel);
     }
 
     // endregion
@@ -494,53 +493,53 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         // #tr Tooltip_GVDF_MachineType
         // # Vacuum Furnace | Dehydrator
         // #zh_CN 真空干燥炉 | 化学脱水机
-        tt.addMachineType(TextEnums.tr("Tooltip_GVDF_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_GVDF_MachineType"))
             // #tr Tooltip_GVDF_00
             // # Controller block for the Giant Vacuum Drying Furnace
             // #zh_CN 巨型真空干燥炉的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_GVDF_00"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_00"))
             // #tr Tooltip_GVDF_01
             // # §9Harness the power of vacuum technology for industrial drying!!!
             // #zh_CN §9利用真空技术的力量进行工业干燥!!!
-            .addInfo(TextEnums.tr("Tooltip_GVDF_01"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_01"))
             // #tr Tooltip_GVDF_02
             // # This machine consists of vacuum pump, main structure, drying tower three parts.
             // #zh_CN 该设备由真空泵、主体结构和干燥塔三部分组成
-            .addInfo(TextEnums.tr("Tooltip_GVDF_02"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_02"))
             // #tr Tooltip_GVDF_03
             // # parallel = coil * piece * 32
             // #zh_CN 并行 = 线圈等级 * 层数 * 32
-            .addInfo(TextEnums.tr("Tooltip_GVDF_03"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_03"))
             // #tr Tooltip_GVDF_04
             // # Every additional voltage step reduces the time to 80%% of the original and The processing speed increases by 50%% for each step of the coil
             // #zh_CN 每超出一级电压, 所需时间为原来的§c80%§7, 线圈每升高一级处理速度增加§c50%§7
-            .addInfo(TextEnums.tr("Tooltip_GVDF_04"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_04"))
             // #tr Tooltip_GVDF_05
             // # Switch modes using a screwdriver
             // #zh_CN 由螺丝刀切换模式
-            .addInfo(TextEnums.tr("Tooltip_GVDF_05"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_05"))
             // #tr Tooltip_GVDF_06
             // # Every additional voltage step reduces the time to 80%% of the original
             // #zh_CN 注意你的电量小伙子,巨型真空干燥塔耗能200%%
-            .addInfo(TextEnums.tr("Tooltip_GVDF_06"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_06"))
             // #tr Tooltip_GVDF_07
             // # Would anyone really need this machine to handle space ice cream?
             // #zh_CN 真的会有人需要这台机器来处理太空冰淇淋吗？
-            .addInfo(TextEnums.tr("Tooltip_GVDF_07"))
+            .addInfo(TSTUtils.tr("Tooltip_GVDF_07"))
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
 
             // #tr Tooltip_GVDF_HatchBusInfo
             // # The input and output hatches/buses must be placed in the main frame.
             // #zh_CN 输入和输出舱口必须放置在主框架内
-            .addInputHatch(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            .addOutputHatch(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            .addInputBus(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            .addOutputBus(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
+            .addInputHatch(TSTUtils.tr("Tooltip_GVDF_HatchBusInfo"))
+            .addOutputHatch(TSTUtils.tr("Tooltip_GVDF_HatchBusInfo"))
+            .addInputBus(TSTUtils.tr("Tooltip_GVDF_HatchBusInfo"))
+            .addOutputBus(TSTUtils.tr("Tooltip_GVDF_HatchBusInfo"))
             // #tr Tooltip_GVDF_EnergyHatch
             // # Energy Hatch must be placed in the main frame.
             // #zh_CN 能量舱口必须放置在主框架内
-            .addEnergyHatch(TextEnums.tr("Tooltip_GVDF_EnergyHatch"))
+            .addEnergyHatch(TSTUtils.tr("Tooltip_GVDF_EnergyHatch"))
 
             .toolTipFinisher();
         // spotless:on

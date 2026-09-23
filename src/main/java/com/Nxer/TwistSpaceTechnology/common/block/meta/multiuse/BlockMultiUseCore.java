@@ -26,7 +26,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
@@ -66,7 +66,7 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
             // #tr tst.blockcasings.multi.tooltip
             // # Break with Wrench to retrieve the machines
             // #zh_CN 使用扳手破坏返还机器
-            aList.add(EnumChatFormatting.GREEN + TextEnums.tr("tst.blockcasings.multi.tooltip"));
+            aList.add(EnumChatFormatting.GREEN + TSTUtils.tr("tst.blockcasings.multi.tooltip"));
         }
     }
 

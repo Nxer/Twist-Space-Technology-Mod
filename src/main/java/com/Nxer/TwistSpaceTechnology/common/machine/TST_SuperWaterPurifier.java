@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.onElementPass;
@@ -39,10 +39,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -356,29 +356,29 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
         // #tr Tooltip_SuperwaterPurifier_MachineType
         // # Perfect Water Creator
         // #zh_CN 完美水体制造器
-        tt.addMachineType(TextEnums.tr("Tooltip_SuperwaterPurifier_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_SuperwaterPurifier_MachineType"))
             // #tr Tooltip_SuperWaterPurifier_00
             // # Per cycle, it produces§4 3§7 or§4 6 (Concentrated UU) §7randomly selected liquids from the list,{\SPACE}
             // #zh_CN 每次运行从产出列表中抽§4 3 或 6(浓缩UU) §7份产物输出
-            .addInfo(TextEnums.tr("Tooltip_SuperWaterPurifier_00"))
+            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_00"))
             // #tr Tooltip_SuperWaterPurifier_01
             // # Water Grade has a§4 12% §7chance each
             // #zh_CN 每级水有 12% 概率
-            .addInfo(TextEnums.tr("Tooltip_SuperWaterPurifier_01"))
+            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_01"))
             // #tr Tooltip_SuperWaterPurifier_02
             // # Stable Baryonic Matter has a§4 4% §7chance
             // #zh_CN 稳定重子物质有 4% 概率
-            .addInfo(TextEnums.tr("Tooltip_SuperWaterPurifier_02"))
+            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_02"))
             // #tr Tooltip_SuperWaterPurifier_03
             // # Maximum of§b 2,000,000 §7parallels
             // #zh_CN 最大 2,000,000 并行
-            .addInfo(TextEnums.tr("Tooltip_SuperWaterPurifier_03"))
+            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_03"))
             // #tr Tooltip_SuperWaterPurifier_04
             // # Each parallel requires 1 UMV amp
             // #zh_CN 每并行耗电 1A UMV
-            .addInfo(TextEnums.tr("Tooltip_SuperWaterPurifier_04"))
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
+            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_04"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();
         // spotless:on
         return tt;

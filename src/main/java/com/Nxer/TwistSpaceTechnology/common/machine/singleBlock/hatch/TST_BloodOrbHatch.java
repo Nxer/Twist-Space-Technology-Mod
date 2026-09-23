@@ -10,10 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.util.BloodMagicHelper;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import WayofTime.alchemicalWizardry.AlchemicalWizardry;
 import WayofTime.alchemicalWizardry.api.soulNetwork.SoulNetworkHandler;
@@ -39,26 +39,26 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator implements TSTTool
         // #tr Tooltip_BloodOrbHatch_1
         // # Life Essence Input for Multiblocks
         // #zh_CN 多方块结构的生命本质输入仓
-        TextEnums.tr("Tooltip_BloodOrbHatch_1"),
+        TSTUtils.tr("Tooltip_BloodOrbHatch_1"),
         // #tr Tooltip_BloodOrbHatch_2
         // # Capacity is equal to the Blood Orb capacity inserted.
         // #zh_CN 容量等于插入的气血宝珠的容量
-        TextEnums.tr("Tooltip_BloodOrbHatch_2"),
+        TSTUtils.tr("Tooltip_BloodOrbHatch_2"),
         // #tr Tooltip_BloodOrbHatch_3
         // # A hatch drain Life Essence from the Blood Orb.
         // #zh_CN 可以从气血宝珠中提取生命本质
-        TextEnums.tr("Tooltip_BloodOrbHatch_3"),
+        TSTUtils.tr("Tooltip_BloodOrbHatch_3"),
         // #tr Tooltip_BloodOrbHatch_4
         // # Drains LP as much as possible from the Soul Network.
         // #zh_CN 尽可能多地从灵魂网络中抽取LP
-        TextEnums.tr("Tooltip_BloodOrbHatch_4"),
+        TSTUtils.tr("Tooltip_BloodOrbHatch_4"),
         // #tr Tooltip_BloodOrbHatch_5
         // # Deactivating the Hatch will refund the Life Essence back to the Blood Orb.
         // #zh_CN 关闭血液仓将会把生命本质输回气血宝珠
-        TextEnums.tr("Tooltip_BloodOrbHatch_5") };
+        TSTUtils.tr("Tooltip_BloodOrbHatch_5") };
 
-    private static final String[] TOOLTIP = new String[] { TextEnums.tr("Tooltip_BloodOrbHatch_3"),
-        TextEnums.tr("Tooltip_BloodOrbHatch_4"), TextEnums.tr("Tooltip_BloodOrbHatch_5"), };
+    private static final String[] TOOLTIP = new String[] { TSTUtils.tr("Tooltip_BloodOrbHatch_3"),
+        TSTUtils.tr("Tooltip_BloodOrbHatch_4"), TSTUtils.tr("Tooltip_BloodOrbHatch_5"), };
 
     @Override
     public Style getTooltipCreditStyle() {
@@ -299,11 +299,11 @@ public class TST_BloodOrbHatch extends MTEHatchFluidGenerator implements TSTTool
             // tr Tooltip_BloodOrbHatch_1
             // Life Essence Input for Multiblocks
             // zh_CN 多方块结构的生命本质输入仓
-            TextEnums.tr("Tooltip_BloodOrbHatch_1"),
+            TSTUtils.tr("Tooltip_BloodOrbHatch_1"),
             // #tr Tooltip_DebugBloodHatch
             // # {\GOLD}Infinity Life Essence.
             // #zh_CN {\GOLD}提供无限的生命本质
-            TextEnums.tr("Tooltip_DebugBloodHatch") };
+            TSTUtils.tr("Tooltip_DebugBloodHatch") };
 
         @Override
         public synchronized String[] getDescription() {

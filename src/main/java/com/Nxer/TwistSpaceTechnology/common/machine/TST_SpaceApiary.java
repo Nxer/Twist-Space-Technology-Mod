@@ -33,11 +33,11 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
@@ -54,7 +54,6 @@ import forestry.api.apiculture.IBeekeepingMode;
 import forestry.apiculture.genetics.Bee;
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -289,28 +288,28 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
             // #tr Tooltip_SpaceApiary_desc0
             // # Module that adds Space Apiary Operations to the Space Elevator
             // #zh_CN 将太空蜂箱功能添加到太空电梯
-            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+            tt.addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
                 // #tr Tooltip_SpaceApiary_t1_desc1
                 // # Time to let the lazy bees absorb some cosmic rays.
                 // #zh_CN 该让懒惰的蜜蜂们晒晒太阳了
-                    + TextEnums.tr("Tooltip_SpaceApiary_t1_desc1"))
+                    + TSTUtils.tr("Tooltip_SpaceApiary_t1_desc1"))
                 // #tr Tooltip_SpaceApiary_desc1
                 // # Accurately distort bee working progress in low-gravity environments.
                 // #zh_CN 在低重力环境中精准扭曲蜜蜂工作时间.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc1"))
                 // #tr Tooltip_SpaceApiary_desc2
                 // # Need queen bee in controller slot.
                 // #zh_CN 需要在控制器中放入蜂后.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc2"))
                 // #tr Tooltip_SpaceApiary_t1_desc3
                 // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}100L{\GRAY} liquid DNA/parallel per run.
                 // #zh_CN Consumes {\GOLD}1A{\GRAY}-Luv per parallel, while consuming {\GOLD}100L{\GRAY} liquid DNA/parallel per run.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t1_desc3"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t1_desc3"))
                 // #tr Tooltip_SpaceApiary_t1_desc4
                 // # Max parallels: {\AQUA}256{\GRAY}
                 // #zh_CN 最大并行：{\AQUA}256{\GRAY}
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t1_desc4"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t1_desc4"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT1"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
@@ -372,22 +371,22 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+            tt.addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
                 // #tr Tooltip_SpaceApiary_t2_desc1
                 // # Surrender to the hive mind..
                 // #zh_CN 臣服于蜂巢思维..
-                    + TextEnums.tr("Tooltip_SpaceApiary_t2_desc1"))
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                    + TSTUtils.tr("Tooltip_SpaceApiary_t2_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc2"))
                 // #tr Tooltip_SpaceApiary_t2_desc3
                 // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}25L{\GRAY} liquid DNA/parallel per run.
                 // #zh_CN 每并行消耗 {\GOLD}1A-Luv{\GRAY} ，同时每次运行消耗 {\GOLD}25L{\GRAY} 液态DNA/并行.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t2_desc3"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t2_desc3"))
                 // #tr Tooltip_SpaceApiary_t2_desc4
                 // # Max parallels: {\AQUA}4096{\GRAY}
                 // #zh_CN 最大并行：{\AQUA}4096{\GRAY}
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t2_desc4"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t2_desc4"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT2"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
@@ -449,22 +448,22 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+            tt.addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
                 // #tr Tooltip_SpaceApiary_t3_desc1
                 // # The Great Creator of the Void!
                 // #zh_CN 伟大的虚空造物主!
-                    + TextEnums.tr("Tooltip_SpaceApiary_t3_desc1"))
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                    + TSTUtils.tr("Tooltip_SpaceApiary_t3_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc2"))
                 // #tr Tooltip_SpaceApiary_t3_desc3
                 // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}5L{\GRAY} liquid DNA/parallel per run.
                 // #zh_CN 每并行消耗 {\GOLD}1A-Luv{\GRAY} ，同时每次运行消耗 {\GOLD}5L{\GRAY} 液态DNA/并行.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t3_desc3"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t3_desc3"))
                 // #tr Tooltip_SpaceApiary_t3_desc4
                 // # Max parallels: {\AQUA}32768{\GRAY}
                 // #zh_CN 最大并行：{\AQUA}32768{\GRAY}
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t3_desc4"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t3_desc4"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT3"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)
@@ -526,26 +525,26 @@ public abstract class TST_SpaceApiary extends TileEntityModuleBase implements TS
         protected MultiblockTooltipBuilder createTooltip() {
             final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            tt.addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc0"))
+            tt.addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc0"))
                 .addInfo(EnumChatFormatting.LIGHT_PURPLE.toString() + EnumChatFormatting.BOLD
                 // #tr Tooltip_SpaceApiary_t4_desc1
                 // # Bees give birth to all things to nourish humanity.
                 // #zh_CN Bee生万物以养人
-                    + TextEnums.tr("Tooltip_SpaceApiary_t4_desc1"))
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc1"))
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_desc2"))
+                    + TSTUtils.tr("Tooltip_SpaceApiary_t4_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc1"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_desc2"))
                 // #tr Tooltip_SpaceApiary_t4_desc3
                 // # Consumes {\GOLD}1A-Luv{\GRAY} per parallel, while consuming {\GOLD}1L{\GRAY} liquid DNA/parallel per run.
                 // #zh_CN 每并行消耗 {\GOLD}1A-Luv{\GRAY} ，同时每次运行消耗 {\GOLD}1L{\GRAY} 液态DNA/并行.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t4_desc3"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t4_desc3"))
                 // #tr Tooltip_SpaceApiary_t4_desc4
                 // # Max parallels: {\AQUA}2147483647{\GRAY}
                 // #zh_CN 最大并行：{\AQUA}2147483647{\GRAY}
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t4_desc4"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t4_desc4"))
                 // #tr Tooltip_SpaceApiary_t4_desc5
                 // # But humans have nothing to repay the bees.
                 // #zh_CN 人无一物以报Bee.
-                .addInfo(TextEnums.tr("Tooltip_SpaceApiary_t4_desc5"))
+                .addInfo(TSTUtils.tr("Tooltip_SpaceApiary_t4_desc5"))
                 .addInfo(translateToLocal("gt.blockmachines.multimachine.project.ig.motorT4"))
                 .beginStructureBlock(1, 5, 2, false)
                 .addCasingInfoRange(translateToLocal("gt.blockcasings.ig.0.name"), 0, 9, false)

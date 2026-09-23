@@ -34,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -799,60 +799,60 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
         // #tr VoidMiner
         // # Void Miner
         // #zh_CN 虚空采矿场
-        tt.addMachineType(TextEnums.tr("VoidMiner"))
+        tt.addMachineType(TSTUtils.tr("VoidMiner"))
             .addInfo(" ")
             // #tr Tooltip_Starcore_01
             // # {\ITALIC} " Do you sell them ? "
             // #zh_CN {\ITALIC} " Do you sell them ? "
-            .addInfo(TextEnums.tr("Tooltip_Starcore_01"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_01"))
             // #tr Tooltip_Starcore_02
             // # {\ITALIC} " I'm afraid not. "
             // #zh_CN {\ITALIC} " I'm afraid not. "
-            .addInfo(TextEnums.tr("Tooltip_Starcore_02"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_02"))
             // #tr Tooltip_Starcore_03
             // # {\ITALIC} " But, maybe we could make a deal ? "
             // #zh_CN {\ITALIC} " But, maybe we could make a deal ? "
-            .addInfo(TextEnums.tr("Tooltip_Starcore_03"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_03"))
             // #tr Tooltip_Starcore_04
             // # {\SPACE}
             // #zh_CN {\SPACE}
-            .addInfo(TextEnums.tr("Tooltip_Starcore_04"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_04"))
             // #tr Tooltip_Starcore_05
             // # To the depths, to gather for you the deepest riches of the planet.
             // #zh_CN 直达深处, 为你采集这个星球最深层的财富.
-            .addInfo(TextEnums.tr("Tooltip_Starcore_05"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_05"))
             // #tr Tooltip_Starcore_06
             // # Each run produces 24 types of ore, 131072 of each type,
             // #zh_CN 每次运行产出 24 种矿石, 每种 131072个,
-            .addInfo(TextEnums.tr("Tooltip_Starcore_06"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_06"))
             // #tr Tooltip_Starcore_07
             // # {\SPACE}{\SPACE}and takes 6.4s, 2,013,265,920 EU/t (MAX).
             // #zh_CN {\SPACE}{\SPACE}耗时 6.4s, 耗电 2,013,265,920 EU/t (MAX).
-            .addInfo(TextEnums.tr("Tooltip_Starcore_07"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_07"))
             // #tr Tooltip_Starcore_08
             // # The mining access portion of the structure needs to extend at least to a height of 20 below.
             // #zh_CN 结构中采矿通道部分需要至少延伸至高度20以下.
-            .addInfo(TextEnums.tr("Tooltip_Starcore_08"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_08"))
             // #tr Tooltip_Starcore_09
             // # Put §b§l§oAstral Array Fabricator§7 into controller slot then machine can further increase ore production.
             // #zh_CN 控制器内放入 {\AQUA}{\BOLD}{\ITALIC}星阵{\GRAY} 可以进一步提高矿石产量.
-            .addInfo(TextEnums.tr("Tooltip_Starcore_09"))
+            .addInfo(TSTUtils.tr("Tooltip_Starcore_09"))
             // #tr Tooltip_Starcore_Crash_20240606
             // # There is a serious bug in the blueprint automatic construction function of borosilicate glass,
             // #zh_CN {\RED}{\BOLD}蓝图自动搭建硼玻璃功能发现严重bug,
-//            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606"))
+//            .addInfo(TstUtils.tr("Tooltip_Starcore_Crash_20240606"))
             // #tr Tooltip_Starcore_Crash_20240606_02
             // # {\RED}{\BOLD}{\SPACE}which may cause the save file to crash and become inaccessible.
             // #zh_CN {\RED}{\BOLD}{\SPACE}可能导致存档崩溃无法进入.
-//            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_02"))
+//            .addInfo(TstUtils.tr("Tooltip_Starcore_Crash_20240606_02"))
             // #tr Tooltip_Starcore_Crash_20240606_03
             // # In case of emergency, you can install ZeroPointBugFix mod for temporary fix.
             // #zh_CN {\RED}紧急情况可安装 ZeroPointBugFix mod 临时修复.
-//            .addInfo(TextEnums.tr("Tooltip_Starcore_Crash_20240606_03"))
-            .addInfo(TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
+//            .addInfo(TstUtils.tr("Tooltip_Starcore_Crash_20240606_03"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.Tooltips_JoinWirelessNetWithoutEnergyHatch)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .toolTipFinisher();
         // spotless:on
         return tt;

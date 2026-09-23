@@ -1,9 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.system.CircuitConverter.machines;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.too_more_hatches;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.textAnyCasing;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textAnyCasing;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
 import static gregtech.api.enums.HatchElement.OutputBus;
@@ -23,9 +23,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -244,19 +244,19 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
         // #tr Tooltip_CircuitConverter_MachineType
         // # Circuit Converter
         // #zh_CN 电路板转换器
-        tt.addMachineType(TextEnums.tr("Tooltip_CircuitConverter_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_CircuitConverter_MachineType"))
             // #tr Tooltip_CircuitConverter_Controller
             // # Controller block for the General Circuit Converter
             // #zh_CN 通用电路板转换器的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_CircuitConverter_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_CircuitConverter_Controller"))
             // #tr Tooltip_CircuitConverter_01
             // # Transform input circuits to Any Circuit.
             // #zh_CN 将输入的电路板转换成通用电路板.
-            .addInfo(TextEnums.tr("Tooltip_CircuitConverter_01"))
+            .addInfo(TSTUtils.tr("Tooltip_CircuitConverter_01"))
             // #tr Tooltip_CircuitConverter_2_01
             // # Maximum 8 In/Output Buses.
             // #zh_CN 最多 8 个输入总线或输出总线.
-            .addStructureInfo(TextEnums.tr("Tooltip_CircuitConverter_2_01"))
+            .addStructureInfo(TSTUtils.tr("Tooltip_CircuitConverter_2_01"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
             .addInputBus(textAnyCasing, 1)

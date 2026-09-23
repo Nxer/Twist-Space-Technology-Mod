@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;
@@ -32,7 +32,7 @@ public class IndustrialAlchemyTowerRecipePool {
                 // #tr IndustrialAlchemyTowerRecipeInputAspects
                 // # Recipe required Essentia
                 // #zh_CN 配方所需要素
-                Essence.setStackDisplayName(TextEnums.tr("IndustrialAlchemyTowerRecipeInputAspects"));
+                Essence.setStackDisplayName(TSTUtils.tr("IndustrialAlchemyTowerRecipeInputAspects"));
                 new ItemEssence().setAspects(Essence, recipe.getInputAspects());
                 Object inputItem = recipe.getInputItem();
                 Object[] combined = new Object[] { inputItem, GTUtility.getIntegratedCircuit(i + 1) };

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;

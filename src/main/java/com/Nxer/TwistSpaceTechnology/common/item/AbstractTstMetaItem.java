@@ -23,7 +23,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -138,7 +138,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     protected static ItemStack checkAndGetVariant(Item self, int meta, Collection<Integer> allowMetaValues)
         throws IllegalArgumentException {
         if (allowMetaValues.contains(meta)) {
-            return TstUtils.newItemWithMeta(self, meta);
+            return TSTUtils.newItemWithMeta(self, meta);
         } else {
             throw new IllegalArgumentException("Invalid meta value: " + meta);
         }
@@ -169,7 +169,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
                     + ")");
         } else {
             allowMetaValues.add(meta);
-            return TstUtils.newItemWithMeta(self, meta);
+            return TSTUtils.newItemWithMeta(self, meta);
         }
     }
 
@@ -185,7 +185,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     @ApiStatus.Internal
     protected static ItemStack[] getAllVariants(Item self, Collection<Integer> allowMetaValues) {
         return allowMetaValues.stream()
-            .map(m -> TstUtils.newItemWithMeta(self, m))
+            .map(m -> TSTUtils.newItemWithMeta(self, m))
             .toArray(ItemStack[]::new);
     }
 

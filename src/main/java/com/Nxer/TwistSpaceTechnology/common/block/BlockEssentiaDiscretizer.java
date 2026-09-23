@@ -20,9 +20,9 @@ import net.minecraft.world.World;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.tile.TileEssentiaDiscretizer;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.Style;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import appeng.block.AEBaseTileBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -109,7 +109,7 @@ public class BlockEssentiaDiscretizer extends AEBaseTileBlock {
             // #tr tile.essentia_discretizer.name
             // #en_US Essentia Discretizer
             // #zh_CN 源质离散器
-            return TextEnums.tr("tile.essentia_discretizer.name");
+            return TSTUtils.tr("tile.essentia_discretizer.name");
         }
 
         @SideOnly(Side.CLIENT)
@@ -119,19 +119,19 @@ public class BlockEssentiaDiscretizer extends AEBaseTileBlock {
             // #tr tile.essentia.discretizer.tooltip.0
             // #en_US Link the essentia with the CrystalEssence.
             // #zh_CN 将源质与晶化源质相互关联.
-            list.add(EnumChatFormatting.GREEN + TextEnums.tr("tile.essentia.discretizer.tooltip.0"));
+            list.add(EnumChatFormatting.GREEN + TSTUtils.tr("tile.essentia.discretizer.tooltip.0"));
             // #tr tile.essentia.discretizer.tooltip.1
             // #en_US Ensure essentia cell is sufficient,otherwise,inserted CrystalEssence will be thorough item and will not be recognized by the infusion provider supplier as essentia.
             // #zh_CN 确保插入的源质元件空间充足,否则插入至物品元件的晶化源质将彻底变为物品,无法被注魔供应器识别为源质.
-            list.add(TextEnums.tr("tile.essentia.discretizer.tooltip.1"));
+            list.add(TSTUtils.tr("tile.essentia.discretizer.tooltip.1"));
             // #tr tile.essentia.discretizer.tooltip.2
             // #en_US This block was inspired by ae2t. We are grateful for its exploration in this area.
             // #zh_CN 本方块灵感来自ae2t,感谢其对此方面做出的探索.
-            list.add(TextEnums.tr("tile.essentia.discretizer.tooltip.2"));
+            list.add(TSTUtils.tr("tile.essentia.discretizer.tooltip.2"));
             // #tr tile.essentia.discretizer.tooltip.3
             // #en_US With the update of version 2.9.0, this block has lost its significance.Perhaps it can now be used to quickly convert CrystalEssence back into essentia?
             // #zh_CN 伴随着2.9.0版本的更新,此方块已失去了意义,也许现在可以用来快速转化晶化源质为源质?
-            list.add(EnumChatFormatting.RED + TextEnums.tr("tile.essentia.discretizer.tooltip.3"));
+            list.add(EnumChatFormatting.RED + TSTUtils.tr("tile.essentia.discretizer.tooltip.3"));
             // spotless:on
         }
     }

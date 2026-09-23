@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_LuV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UHV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UMV;
@@ -62,7 +62,7 @@ import net.minecraftforge.fluids.FluidStack;
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.TST_RecipeBuilder;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.dreammaster.item.NHItemList;
@@ -214,10 +214,10 @@ public class AssemblyLineWithoutResearchRecipePool {
             if (!hasCustomWildcardItemList) {
                 // debugLogInfo("Normal recipe generating.");
                 GTRecipeBuilder ra = GTValues.RA.stdBuilder();
-                ra.itemInputs(TstUtils.toNonNullItemStackArray(inputItems))
+                ra.itemInputs(TSTUtils.toNonNullItemStackArray(inputItems))
                     .itemOutputs(recipe.mOutput);
                 if (recipe.mFluidInputs != null) {
-                    ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
+                    ra.fluidInputs(TSTUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                 }
                 ra.eut(recipe.mEUt)
                     .duration(recipe.mDuration)
@@ -244,10 +244,10 @@ public class AssemblyLineWithoutResearchRecipePool {
                     // loopFlag++;
 
                     GTRecipeBuilder ra = GTValues.RA.stdBuilder();
-                    ra.itemInputs(TstUtils.toNonNullItemStackArray(inputs))
+                    ra.itemInputs(TSTUtils.toNonNullItemStackArray(inputs))
                         .itemOutputs(recipe.mOutput);
                     if (recipe.mFluidInputs != null) {
-                        ra.fluidInputs(TstUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
+                        ra.fluidInputs(TSTUtils.toNonNullFluidStackArray(recipe.mFluidInputs));
                     }
                     ra.eut(recipe.mEUt)
                         .duration(recipe.mDuration)

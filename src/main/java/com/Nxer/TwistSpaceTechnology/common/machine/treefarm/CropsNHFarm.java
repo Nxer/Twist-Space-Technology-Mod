@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.treefarm;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static com.gtnewhorizon.cropsnh.tileentity.TileEntityCropSticks.BASE_GROWTH_SPEED;
 import static com.gtnewhorizon.cropsnh.tileentity.multi.MTEIndustrialFarm.CYCLE_TICK_RATE_SCALAR;
 import static net.minecraft.item.ItemStack.areItemStacksEqual;

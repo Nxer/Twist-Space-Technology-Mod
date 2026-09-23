@@ -31,11 +31,11 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -303,9 +303,9 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
             // # Machine
             // #zh_CN 机器类型
             currentTip.add(
-                TextEnums.tr("TST_ProcessingArray.Waila.Machine") + " : "
+                TSTUtils.tr("TST_ProcessingArray.Waila.Machine") + " : "
                     + EnumChatFormatting.YELLOW
-                    + TextEnums.tr(tag.getString("recipeMap")));
+                    + TSTUtils.tr(tag.getString("recipeMap")));
         }
     }
 
@@ -350,35 +350,35 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
         // #tr TST_ProcessingArray.tooltips.MachineType
         // # Processing Array
         // #zh_CN 处理阵列
-        tooltips.addMachineType(TextEnums.tr("TST_ProcessingArray.tooltips.MachineType"))
-            .addInfo(TextEnums.Machine_of_TwistSpaceTechnology.getText())
+        tooltips.addMachineType(TSTUtils.tr("TST_ProcessingArray.tooltips.MachineType"))
+            .addInfo(TSTSharedLocalization.General.Machine_of_TwistSpaceTechnology)
             // #tr TST_ProcessingArray.tooltips.01
             // # Runs supplied machines as if placed in the world
             // #zh_CN 让其中的机器如同放置在世界中一样运行
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.01"))
+            .addInfo(TSTUtils.tr("TST_ProcessingArray.tooltips.01"))
             // #tr TST_ProcessingArray.tooltips.02
             // # Place up to 64 singleblock GT machines into the controller
             // #zh_CN 在控制器GUI中放置至多64个GT单方块机器
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.02"))
+            .addInfo(TSTUtils.tr("TST_ProcessingArray.tooltips.02"))
             // #tr TST_ProcessingArray.tooltips.03
             // # Note that you still need to supply power to them all
             // #zh_CN 请保证电力充足
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.03"))
+            .addInfo(TSTUtils.tr("TST_ProcessingArray.tooltips.03"))
             // #tr TST_ProcessingArray.tooltips.04
             // # Do general overclock
             // #zh_CN 执行有损超频
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.04"))
+            .addInfo(TSTUtils.tr("TST_ProcessingArray.tooltips.04"))
             // #tr TST_ProcessingArray.tooltips.05
             // # Centrifuge, Electrolyzer, Mixer do their multiblock machine recipe
             // #zh_CN 离心机,电解机,搅拌机执行其对应多方块机器配方
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.05"))
+            .addInfo(TSTUtils.tr("TST_ProcessingArray.tooltips.05"))
             .beginStructureBlock(3, 3, 3, true)
-            .addController(TextLocalization.textFrontCenter)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 1)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .toolTipFinisher();
         // spotless:on
         return tooltips;

@@ -12,10 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -248,19 +248,19 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
         // #tr Tooltip_LargeSteamForgeHammer_MachineType
         // # Forge Hammer
         // #zh_CN 锻造锤
-        tt.addMachineType(TextEnums.tr("Tooltip_LargeSteamForgeHammer_MachineType"))
+        tt.addMachineType(TSTUtils.tr("Tooltip_LargeSteamForgeHammer_MachineType"))
             // #tr Tooltip_LargeSteamForgeHammer_Controller
             // # Controller block for the Large Steam Forge Hammer
             // #zh_CN 大型蒸汽锻造锤的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_LargeSteamForgeHammer_Controller"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeSteamForgeHammer_Controller"))
             // #tr Tooltip_LargeSteamForgeHammer_01
             // # He has a hammer. Who has the Sickle?
             // #zh_CN 他有一柄锤子. 谁有镰刀?
-            .addInfo(TextEnums.tr("Tooltip_LargeSteamForgeHammer_01"))
+            .addInfo(TSTUtils.tr("Tooltip_LargeSteamForgeHammer_01"))
             .beginStructureBlock(3, 3, 3, true)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

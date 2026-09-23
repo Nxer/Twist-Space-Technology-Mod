@@ -9,7 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
@@ -65,7 +65,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
         // Fluid Stack
         if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
             // #tr ESS.AquaticZoneSimulator.nei.tooltip.0
             // # Input fluid to simulate waters
             // #zh_CN 输入流体以模拟水域
@@ -75,7 +75,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
         // Input Stack
         if (stack == neiCachedRecipe.mInputs.get(0).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.1")
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.AquaticZoneSimulator.nei.tooltip.1")
             // #tr ESS.AquaticZoneSimulator.nei.tooltip.1
             // # Place in machine controller slot to target aquaculture
             // #zh_CN 放入控制器插槽以定向产物
@@ -85,7 +85,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
         // Output Stack
         if (stack == neiCachedRecipe.mOutputs.get(0).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
             // #tr ESS.AquaticZoneSimulator.nei.tooltip.2
             // # Recipe size determines output chance.
             // #zh_CN 配方数值决定输出权重
@@ -102,8 +102,8 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
             return Arrays.asList(
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.1"),
-                TextEnums.tr("ESS.TreeGrowthSimulator.nei.info.2"));
+                TSTUtils.tr("ESS.TreeGrowthSimulator.nei.info.1"),
+                TSTUtils.tr("ESS.TreeGrowthSimulator.nei.info.2"));
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.SpeedConstrollers;
 
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -53,11 +53,11 @@ public class StaticSpeedController extends StaticSpeedControllerBase {
                     // #tr Tooltips.StaticSpeedController.01
                     // # Speed controller module with fixed parameters.
                     // #zh_CN 固定参数的速度控制器模块.
-                    TextEnums.tr("Tooltips.StaticSpeedController.01"),
+                    TSTUtils.tr("Tooltips.StaticSpeedController.01"),
                     // #tr Tooltips.StaticSpeedController.02
                     // # Provides speed x
                     // #zh_CN 提供速度增幅
-                    TextEnums.tr("Tooltips.StaticSpeedController.02") + " " + getSpeedMultiplier() + "00%",
+                    TSTUtils.tr("Tooltips.StaticSpeedController.02") + " " + getSpeedMultiplier() + "00%",
                 };
         }
         return description;

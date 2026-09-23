@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.AutoSeparation;
-import static com.Nxer.TwistSpaceTechnology.util.text.TextLocalization.FluidCapacity;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.AutoSeparation;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.FluidCapacity;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
 import java.util.Arrays;
@@ -16,9 +16,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_HatchGui_DualInput;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextEnums;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -125,16 +125,16 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
             // #tr ToolTip_DualInputHatch_4
             // # types of fluid
             // #zh_CN 种流体
-            new String[] { TextEnums.tr("ToolTip_DualInputHatch_1"),
+            new String[] { TSTUtils.tr("ToolTip_DualInputHatch_1"),
                 FluidCapacity + " " + getCapacityPerTank(aTier) + " L",
-                TextEnums.tr("ToolTip_DualInputHatch_2") + " "
+                TSTUtils.tr("ToolTip_DualInputHatch_2") + " "
                     + getSlots(aTier)
                     + " "
-                    + TextEnums.tr("ToolTip_DualInputHatch_3")
+                    + TSTUtils.tr("ToolTip_DualInputHatch_3")
                     + " "
                     + getFluidSlotsAmount(aTier)
                     + " "
-                    + TextEnums.tr("ToolTip_DualInputHatch_4"),
+                    + TSTUtils.tr("ToolTip_DualInputHatch_4"),
                 AutoSeparation });
         registerTooltipCredits(ID.HOLEFISH);
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];

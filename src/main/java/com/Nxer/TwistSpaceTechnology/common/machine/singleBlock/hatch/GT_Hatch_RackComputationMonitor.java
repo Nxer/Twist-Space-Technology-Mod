@@ -22,8 +22,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
-import com.Nxer.TwistSpaceTechnology.util.text.TextLocalization;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -80,7 +80,7 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch
             // #tr tst.computationhatchmonitor.desc2
             // # will not explode even without coolant? who knows.
             // #zh_CN 如果没有冷却也未必会爆炸, 但是谁也不敢保证
-            new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
+            new String[] { TSTSharedLocalization.MachineTooltip.Mark_TwistSpaceTechnology_TecTech,
                 translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
         registerTooltipCredits(ID.SHORDINGER);
