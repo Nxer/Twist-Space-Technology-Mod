@@ -158,6 +158,9 @@ public class BlockPowerChair extends Block {
 
         @Override
         public String getUnlocalizedName(ItemStack aStack) {
+            // #tr BlockPowerChair.0.name
+            // # PowerChair
+            // #zh_CN 抛瓦椅
             return this.field_150939_a.getUnlocalizedName() + "." + this.getDamage(aStack);
         }
 

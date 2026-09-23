@@ -220,6 +220,13 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     @Override
     public String getMachineModeName() {
+        // #tr PhysicalFormSwitcher.modeMsg.0
+        // # Mode: Fluid Solidifier
+        // #zh_CN 流体固化机模式
+
+        // #tr PhysicalFormSwitcher.modeMsg.1
+        // # Mode: Fluid Extractor
+        // #zh_CN 流体提取机模式
         return StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + machineMode);
     }
 

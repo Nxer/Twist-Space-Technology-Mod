@@ -323,6 +323,21 @@ L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
 
     @Override
     public String getMachineModeName() {
+        // #tr IndistinctTentacle.modeMsg.0
+        // # Mode: Assembly Line
+        // #zh_CN 装配线模式
+
+        // #tr IndistinctTentacle.modeMsg.1
+        // # Mode: Component Assembly Line
+        // #zh_CN 部件装配线模式
+
+        // #tr IndistinctTentacle.modeMsg.2
+        // # Mode: Assembler
+        // #zh_CN 组装机模式
+
+        // #tr IndistinctTentacle.modeMsg.3
+        // # Mode: Precise Assembler
+        // #zh_CN 精密组装机模式
         return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);
     }
 

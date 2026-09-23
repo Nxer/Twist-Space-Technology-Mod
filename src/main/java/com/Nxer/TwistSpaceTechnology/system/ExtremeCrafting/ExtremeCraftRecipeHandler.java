@@ -44,6 +44,9 @@ import gregtech.api.util.GTUtility;
 
 public class ExtremeCraftRecipeHandler {
 
+    // #tr gtcm.recipe.visualExtremeCraftRecipes
+    // # Extreme Craft Recipe Transform
+    // #zh_CN 梦魇工作台配方转换
     public static final RecipeMap<RecipeMapBackend> visualExtremeCraftRecipes = RecipeMapBuilder
         .of("gtcm.recipe.visualExtremeCraftRecipes")
         .maxIO(16, 1, 0, 0)

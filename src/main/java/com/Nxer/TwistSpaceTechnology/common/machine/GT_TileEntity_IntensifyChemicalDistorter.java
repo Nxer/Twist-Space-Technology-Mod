@@ -259,6 +259,13 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public String getMachineModeName() {
+        // #tr IntensifyChemicalDistorter.mode.0
+        // # Mode: Intense Chemical Distorter
+        // #zh_CN 深度化学扭曲模式
+
+        // #tr IntensifyChemicalDistorter.mode.1
+        // # Mode: Chemical Reactor
+        // #zh_CN 化学反应釜模式
         return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
     }
 

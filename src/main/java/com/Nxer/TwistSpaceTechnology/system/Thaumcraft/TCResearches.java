@@ -79,6 +79,13 @@ public class TCResearches {
                 .registerResearchItem();
 
         new ResearchItem(
+            // #tr tc.research_name.BH_ELVEN_WORKSHOP
+            // # Elven Workshop
+            // #zh_CN 精灵工坊
+
+            // #tr tc.research_text.BH_ELVEN_WORKSHOP
+            // # First attempt of GT-styled Mana Pool
+            // #zh_CN GT化魔力池的第一次尝试
             "BH_ELVEN_WORKSHOP",
             "TST",
             (new AspectList()).merge(Aspect.EARTH, 1)
@@ -89,7 +96,15 @@ public class TCResearches {
             3,
             GTCMItemList.ElvenWorkshop.get(1, 0)).setParents("BH_GAIA_PYLON")
                 .setPages(
+                    // spotless:off
+                    // #tr tc.research_text.BH_ELVEN_WORKSHOP.1
+                    // # Having mastered the power of Gaia's Spirit, you have finally explored a way to mechanize a facility capable of plant magic. The speed of the mana pool is limited to 1 recipe/t, making it unsuitable for large-scale processing. However, the machine is still unable to execute elven recipes. The elves' control of magic is so precise that it exceeds the machine's accuracy.
+                    // #zh_CN 在掌控了盖亚之魂的力量之后, 你终于探索出一种能够机械化植物魔法的设施的方法. 魔力池的速度被限制在1个配方/t, 使得其不适用于大规模处理. 然而, 这台机器仍然无法执行精灵配方. 精灵们对魔法的掌控过于精准以至于超过了机器的精度.
+                    // spotless:on
                     new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.1"),
+                    // #tr tc.research_text.BH_ELVEN_WORKSHOP.2
+                    // # Forturately, there is always a way out.
+                    // #zh_CN 好在天无绝人之路.
                     new ResearchPage("tc.research_text.BH_ELVEN_WORKSHOP.2"),
                     new ResearchPage(infusionRecipeElvenWorkshop))
                 .setParents("TST_WELCOME")
@@ -98,6 +113,13 @@ public class TCResearches {
         if (Config.Enable_IndustrialMagicMatrix) {
             new ResearchItem(
                 "INDUSTRIAL_MAGIC_MATRIX",
+                // #tr tc.research_name.INDUSTRIAL_MAGIC_MATRIX
+                // # IndustrialMagicMatrix
+                // #zh_CN 工业注魔矩阵
+
+                // #tr tc.research_text.INDUSTRIAL_MAGIC_MATRIX
+                // # Hey, hey, industrial infusion!
+                // #zh_CN 嘿嘿嘿, 工业化注魔!
                 "TST",
                 (new AspectList()).merge(Aspect.EARTH, 1)
                     .merge(Aspect.MECHANISM, 1)

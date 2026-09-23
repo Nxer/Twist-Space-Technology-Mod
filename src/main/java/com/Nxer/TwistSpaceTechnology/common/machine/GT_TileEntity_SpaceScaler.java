@@ -282,6 +282,25 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     public String getMachineModeName() {
+        // #tr SpaceScaler.modeMsg.0
+        // # Mode: Compressor
+        // #zh_CN 压缩机模式
+
+        // #tr SpaceScaler.modeMsg.1
+        // # Mode: Extractor
+        // #zh_CN 提取机模式
+
+        // #tr SpaceScaler.modeMsg.2
+        // # Mode: Particle Collider
+        // #zh_CN 粒子对撞机模式
+
+        // #tr SpaceScaler.modeMsg.3
+        // # Mode: Electric Implosion Compressor
+        // #zh_CN 电动聚爆压缩机模式
+
+        // #tr SpaceScaler.modeMsg.4
+        // # Mode: Neutronium Compressor
+        // #zh_CN 中子压缩机模式
         return StatCollector.translateToLocal("SpaceScaler.modeMsg." + machineMode);
     }
 

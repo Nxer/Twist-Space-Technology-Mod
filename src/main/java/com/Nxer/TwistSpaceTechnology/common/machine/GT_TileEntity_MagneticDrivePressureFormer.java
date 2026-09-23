@@ -259,6 +259,21 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     @Override
     public String getMachineModeName() {
+        // #tr MagneticDrivePressureFormer.modeMsg.0
+        // # Mode: Extruder
+        // #zh_CN 压模机模式
+
+        // #tr MagneticDrivePressureFormer.modeMsg.1
+        // # Mode: Bending Machine
+        // #zh_CN 卷板机模式
+
+        // #tr MagneticDrivePressureFormer.modeMsg.2
+        // # Mode: Forming Press
+        // #zh_CN 冲压机床模式
+
+        // #tr MagneticDrivePressureFormer.modeMsg.3
+        // # Mode: Forge Hammer
+        // #zh_CN 锻造锤模式
         return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);
     }
 

@@ -440,6 +440,21 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
 
     @Override
     public String getMachineModeName() {
+        // #tr BallLightning.modeMsg.0
+        // # Electric Arc Furnace
+        // #zh_CN 电弧炉
+
+        // #tr BallLightning.modeMsg.1
+        // # Electric Arc Furnace (Old Plasma Arc Furnace)
+        // #zh_CN 电弧炉 (旧等离子电弧炉)
+
+        // #tr BallLightning.modeMsg.2
+        // # Fusion Reactor
+        // #zh_CN 聚变反应堆
+
+        // #tr BallLightning.modeMsg.3
+        // # Star Kernel Generator
+        // #zh_CN 星核发生器
         return StatCollector.translateToLocal("BallLightning.modeMsg." + machineMode);
     }
 

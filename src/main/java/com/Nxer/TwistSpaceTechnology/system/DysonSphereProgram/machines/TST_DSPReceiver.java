@@ -315,6 +315,13 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
 
     @Override
     public String getMachineModeName() {
+        // #tr TST_DSPReceiver.modeMsg.0
+        // # Mode: Power Generation
+        // #zh_CN 发电模式
+
+        // #tr TST_DSPReceiver.modeMsg.1
+        // # Mode: Photon Collection
+        // #zh_CN 光子浓缩模式
         return StatCollector.translateToLocal("TST_DSPReceiver.modeMsg." + machineMode);
     }
 

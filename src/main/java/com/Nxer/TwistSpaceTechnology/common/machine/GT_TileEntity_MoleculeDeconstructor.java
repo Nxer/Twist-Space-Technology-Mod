@@ -341,6 +341,13 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 
     @Override
     public String getMachineModeName() {
+        // #tr MoleculeDeconstructor.modeMsg.0
+        // # Mode: Electrolyzer
+        // #zh_CN 电解机模式
+
+        // #tr MoleculeDeconstructor.modeMsg.1
+        // # Mode: Centrifuge
+        // #zh_CN 离心机模式
         return StatCollector.translateToLocal("MoleculeDeconstructor.modeMsg." + machineMode);
     }
 

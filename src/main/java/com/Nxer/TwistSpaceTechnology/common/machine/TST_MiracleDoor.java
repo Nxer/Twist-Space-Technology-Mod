@@ -355,6 +355,13 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
     @Override
     public String getMachineModeName() {
+        // #tr MiracleDoor.modeMsg.0
+        // # Mode: Stellar Forge : Alloy Smelter
+        // #zh_CN 恒星锻炉: 合金冶炼模式
+
+        // #tr MiracleDoor.modeMsg.1
+        // # Mode: Stellar Forge
+        // #zh_CN 恒星锻炉模式
         return StatCollector.translateToLocal("MiracleDoor.modeMsg." + machineMode);
     }
 

@@ -411,6 +411,13 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     public String getMachineModeName() {
+        // #tr HephaestusAtelier.modeMsg.0
+        // # Mode : Furnace
+        // #zh_CN 模式: 熔炉
+
+        // #tr HephaestusAtelier.modeMsg.1
+        // # Mode : Alloy Smelter
+        // #zh_CN 模式: 合金冶炼炉
         return StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + machineMode);
     }
 

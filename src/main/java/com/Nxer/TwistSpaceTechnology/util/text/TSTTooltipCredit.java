@@ -118,10 +118,8 @@ public interface TSTTooltipCredit {
         if (role == Role.AUTHOR) {
             creditLine = GTAuthors.buildAuthorsWithFormatSupplier(ids);
         } else {
-            String translationKey = (role == Role.MAINTAINER
-                ? "Tooltip_Maintainer"
-                : role == Role.STRUCTURE ? "Tooltip_Structure" : "Tooltip_Art")
-                + (ids.length == 1 ? "" : "s");
+            String translationKey = (role == Role.MAINTAINER ? "Tooltip_Maintainer"
+                : role == Role.STRUCTURE ? "Tooltip_Structure" : "Tooltip_Art") + (ids.length == 1 ? "" : "s");
             creditLine = () -> StatCollector.translateToLocalFormatted(
                 translationKey,
                 GTAuthors.formatAuthors(

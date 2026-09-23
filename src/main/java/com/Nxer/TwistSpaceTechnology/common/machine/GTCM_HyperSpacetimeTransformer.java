@@ -309,6 +309,13 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     @Override
     public String getMachineModeName() {
+        // #tr HyperSpacetimeTransformer.modeMsg.0
+        // # Mode: Molecular Transformer
+        // #zh_CN 分子重组仪模式
+
+        // #tr HyperSpacetimeTransformer.modeMsg.1
+        // # Mode: Spacetime Transformer
+        // #zh_CN 时空转换仪模式
         return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + machineMode);
     }
 

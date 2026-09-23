@@ -393,6 +393,7 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
                         + EnumChatFormatting.WHITE
                         // #tr TST_SteamBasicGenerator.gui.02
                         // # /s
+                        // #zh_CN /s
                         + TextEnums.tr("TST_SteamBasicGenerator.gui.02")
                         + EnumChatFormatting.RESET)
                     .setEnabled(fuelBurning != 0))

@@ -37,6 +37,9 @@ public class GTCMRecipe {
     public static final RecipeMap<TST_RecipeMapBackend> IntensifyChemicalDistorterRecipes = RecipeMapBuilder
         // At the same time , the localization key of the NEI Name
         // of this page.
+        // #tr gtcm.recipe.IntensifyChemicalDistorterRecipes
+        // # Intense Chemical Distorter
+        // #zh_CN 深度化学扭曲
         .of("gtcm.recipe.IntensifyChemicalDistorterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
         .neiSpecialInfoFormatter(HeatingCoilSpecialValueFormatter.INSTANCE)
@@ -47,6 +50,9 @@ public class GTCMRecipe {
                 .setMultipleWidgetsAllowed(false))
         .build();
 
+    // #tr gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes
+    // # Precise High-Energy Photonic Quantum Manipulator
+    // #zh_CN 光子掌控者
     public static final RecipeMap<TST_RecipeMapBackend> PreciseHighEnergyPhotonicQuantumMasterRecipes = RecipeMapBuilder
         .of("gtcm.recipe.PreciseHighEnergyPhotonicQuantumMasterRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 16)
@@ -57,6 +63,9 @@ public class GTCMRecipe {
                 .setMultipleWidgetsAllowed(false))
         .build();
 
+    // #tr gtcm.recipe.MiracleTopRecipes
+    // # Miracle Top
+    // #zh_CN 奇迹顶点
     public static final RecipeMap<TST_RecipeMapBackend> MiracleTopRecipes = RecipeMapBuilder
         .of("gtcm.recipe.MiracleTopRecipes", TST_RecipeMapBackend::new)
         .maxIO(16, 16, 16, 4)
@@ -67,6 +76,9 @@ public class GTCMRecipe {
                 .setMultipleWidgetsAllowed(false))
         .build();
 
+    // #tr gtcm.recipe.QuantumInversionRecipes
+    // # Quantum Inversion
+    // #zh_CN 量子逆变
     public static final RecipeMap<RecipeMapBackend> QuantumInversionRecipes = RecipeMapBuilder
         .of("gtcm.recipe.QuantumInversionRecipes")
         .maxIO(4, 4, 2, 2)
@@ -74,6 +86,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
         .build();
 
+    // #tr gtcm.recipe.CrystallineInfinitierRecipes
+    // # Crystalline Infinitier
+    // #zh_CN 晶胞铸造器
     public static final RecipeMap<TST_RecipeMapBackend> CrystallineInfinitierRecipes = RecipeMapBuilder
         .of("gtcm.recipe.CrystallineInfinitierRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 4, 1)
@@ -83,12 +98,18 @@ public class GTCMRecipe {
         .neiSpecialInfoFormatter(new SimpleSpecialValueFormatter("GT5U.nei.tier"))
         .build();
 
+    // #tr gtcm.recipe.DSPLauncherRecipes
+    // # Dyson Sphere Module Launch Site
+    // #zh_CN 戴森球模块发射
     public static final RecipeMap<RecipeMapBackend> DSP_LauncherRecipes = RecipeMapBuilder
         .of("gtcm.recipe.DSPLauncherRecipes")
         .maxIO(1, 1, 1, 0)
         .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
         .build();
 
+    // #tr gtcm.recipe.DSPReceiverRecipes
+    // # Dyson Sphere Ray Receiver
+    // #zh_CN 戴森球射线接收
     public static final RecipeMap<RecipeMapBackend> DSP_ReceiverRecipes = RecipeMapBuilder
         .of("gtcm.recipe.DSPReceiverRecipes")
         .maxIO(0, 1, 0, 0)
@@ -97,6 +118,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.DSPReceiver.get(1)))
         .build();
 
+    // #tr gtcm.recipe.ElvenWorkshopRecipes
+    // # Mana Infuser
+    // #zh_CN 魔力灌注
     public static final RecipeMap<RecipeMapBackend> ElvenWorkshopRecipes = RecipeMapBuilder
         .of("gtcm.recipe.ElvenWorkshopRecipes")
         .maxIO(4, 4, 1, 0)
@@ -104,6 +128,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ElvenWorkshop.get(1)))
         .build();
 
+    // #tr gtcm.recipe.RuneEngraverRecipes
+    // # Rune Engraver
+    // #zh_CN 符文雕刻
     public static final RecipeMap<RecipeMapBackend> RuneEngraverRecipes = RecipeMapBuilder
         .of("gtcm.recipe.RuneEngraverRecipes")
         .maxIO(6, 1, 1, 0)
@@ -111,6 +138,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ElvenWorkshop.get(1)))
         .build();
 
+    // #tr gtcm.recipe.ArtificialStarGeneratingRecipes
+    // # Artificial Star
+    // #zh_CN 人造恒星
     public static final RecipeMap<RecipeMapBackend> ArtificialStarGeneratingRecipes = RecipeMapBuilder
         .of("gtcm.recipe.ArtificialStarGeneratingRecipes")
         .maxIO(1, 1, 0, 0)
@@ -119,6 +149,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.ArtificialStar.get(1)))
         .build();
 
+    // #tr gtcm.recipe.megaUniversalSpaceStationRecipePool
+    // # §cThe §bMega §6Universal §9Space §8Station
+    // #zh_CN §c寰 §b宇 §6空 §9间 §8站
     public static final RecipeMap<RecipeMapBackend> megaUniversalSpaceStationRecipePool = RecipeMapBuilder
         .of("gtcm.recipe.megaUniversalSpaceStationRecipePool")
         .maxIO(16, 4, 16, 1)
@@ -127,6 +160,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleTop.get(1)))
         .build();
 
+    // #tr tst.recipe.OreProcessingVisualRecipes
+    // # Ore Processing Recipes
+    // #zh_CN 集成矿物处理
     public static final RecipeMap<RecipeMapBackend> OreProcessingVisualRecipes = RecipeMapBuilder
         .of("tst.recipe.OreProcessingVisualRecipes")
         .maxIO(1, 9, 1, 0)
@@ -134,6 +170,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.OreProcessingFactory.get(1)))
         .build();
 
+    // #tr tst.recipe.CokingFactoryRecipes
+    // # Coking Factory Recipes
+    // #zh_CN 工业炼焦
     public static final RecipeMap<RecipeMapBackend> CokingFactoryRecipes = RecipeMapBuilder
         .of("tst.recipe.CokingFactoryRecipes")
         .maxIO(2, 2, 1, 1)
@@ -164,6 +203,9 @@ public class GTCMRecipe {
         .useSpecialSlot()
         .build();
 
+    // #tr tst.recipe.HyperSpacetimeTransformerRecipe
+    // # Hyper Spacetime Transformer
+    // #zh_CN 极限时空转换仪
     public static final RecipeMap<RecipeMapBackend> HyperSpacetimeTransformerRecipe = RecipeMapBuilder
         .of("tst.recipe.HyperSpacetimeTransformerRecipe")
         .maxIO(4, 4, 4, 4)
@@ -172,6 +214,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.HyperSpacetimeTransformer.get(1)))
         .build();
 
+    // #tr tst.recipe.AssemblyLineWithoutResearchRecipe
+    // # Mega Assembly Line
+    // #zh_CN 巨型装配线
     public static final RecipeMap<TST_RecipeMapBackend> AssemblyLineWithoutResearchRecipe = RecipeMapBuilder
         .of("tst.recipe.AssemblyLineWithoutResearchRecipe", TST_RecipeMapBackend::new)
         .maxIO(16, 1, 4, 0)
@@ -191,6 +236,9 @@ public class GTCMRecipe {
         .neiHandlerInfo(builder -> builder.setDisplayStack(GTCMItemList.MiracleDoor.get(1)))
         .build();
 
+    // #tr tst.recipe.BallLightningRecipes
+    // # Star Kernel Generator
+    // #zh_CN 星核发生器
     public static final RecipeMap<TST_RecipeMapBackend> BallLightningRecipes = RecipeMapBuilder
         .of("tst.recipe.BallLightningRecipes", TST_RecipeMapBackend::new)
         .maxIO(4, 4, 4, 4)
@@ -201,6 +249,10 @@ public class GTCMRecipe {
             builder -> builder.setDisplayStack(GTCMItemList.BallLightning.get(1))
                 .setMultipleWidgetsAllowed(false))
         .build();
+
+    // #tr tst.recipe.IndustrialMagicMatrixRecipe
+    // # Industrial Infusion Matrix Recipes
+    // #zh_CN §0§k工业注魔矩阵配方
     public static final RecipeMap<RecipeMapBackend> IndustrialMagicMatrixRecipe = RecipeMapBuilder
         .of("tst.recipe.IndustrialMagicMatrixRecipe")
         .maxIO(25, 1, 0, 0)
@@ -428,8 +480,7 @@ public class GTCMRecipe {
 
     // #tr tst.recipe.SuperWaterPurifierVisualRecipeMap
     // # Super Water Purifier
-    // #zh_CN
-
+    // #zh_CN 超净水生成器
     public static final RecipeMap<TST_RecipeMapBackend> SuperWaterPurifierVisualRecipeMap = RecipeMapBuilder
         .of("tst.recipe.SuperWaterPurifierVisualRecipeMap", TST_RecipeMapBackend::new)
         .maxIO(0, 0, 1, 12)

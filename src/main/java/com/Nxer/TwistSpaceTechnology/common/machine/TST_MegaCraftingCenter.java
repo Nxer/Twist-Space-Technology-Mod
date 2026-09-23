@@ -950,6 +950,9 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
+        // #tr tst.megacraftingcenter.machinetype
+        // # molecularAssembler | extremeCraftTable
+        // #zh_CN 工作台 | 梦魇合成台
         tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
             // #tr tst.megacraftingcenter.desc.firstWords
             // # {\AQUA}{\ITALIC}{\BOLD}Goodbye, all crafting lags.{\RESET}{\GRAY}

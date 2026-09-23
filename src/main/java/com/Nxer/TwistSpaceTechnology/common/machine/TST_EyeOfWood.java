@@ -870,6 +870,13 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.enableRender = !enableRender;
+            // #tr EyeOfWood.enableRender.false
+            // # Disable Render
+            // #zh_CN 关闭特效渲染
+
+            // #tr EyeOfWood.enableRender.true
+            // # Enable Render
+            // #zh_CN 开启特效渲染
             sendMessageKeyToPlayer(aPlayer, "EyeOfWood.enableRender." + this.enableRender);
             if ((!enableRender) && isRendering) {
                 destroyRenderBlock();

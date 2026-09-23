@@ -291,6 +291,13 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 
     @Override
     public String getMachineModeName() {
+        // #tr HolySeparator.modeMsg.0
+        // # Mode: Cutting
+        // #zh_CN 切割机模式
+
+        // #tr HolySeparator.modeMsg.1
+        // # Mode: Lathe
+        // #zh_CN 车床模式
         return StatCollector.translateToLocal("HolySeparator.modeMsg." + machineMode);
     }
 

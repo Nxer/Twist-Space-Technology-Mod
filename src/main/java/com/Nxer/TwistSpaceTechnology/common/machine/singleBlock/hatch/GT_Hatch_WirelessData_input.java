@@ -116,6 +116,9 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        // #tr tst.wirelessInputData.config.text
+        // # configure the weight of your slave
+        // #zh_CN 设置光学输入的权重
         builder.widget(
             TextWidget.localised("tst.wirelessInputData.config.text")
                 .setPos(49, 18)

@@ -356,6 +356,13 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     @Override
     public String getMachineModeName() {
+        // #tr MagneticDomainConstructor.modeMsg.0
+        // # Mode: Electromagnetic Separator
+        // #zh_CN 电磁离析机模式
+
+        // #tr MagneticDomainConstructor.modeMsg.1
+        // # Mode: Electromagnetic Polarizer
+        // #zh_CN 磁化机模式
         return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + machineMode);
     }
 

@@ -142,6 +142,14 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.3.name
         // # Parallelism Casing Mark 0
         // #zh_CN 初等处理阵列并行机械方块
+
+        // #tr Tooltip_MetaBlockCasing01.3.name_0
+        // # Well, look, it's multiprocessing!
+        // #zh_CN 哦, 你看, 这个东西可以多线程
+
+        // #tr Tooltip_MetaBlockCasing01.3.name_1
+        // # 2 in 1
+        // #zh_CN 使用该方块组成附加结构后每个小机器提供2并行
         GTCMItemList.ParallelismCasing0.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 3,
@@ -151,6 +159,14 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.4.name
         // # Parallelism Casing Mark 1
         // #zh_CN 进阶处理阵列并行机械方块
+
+        // #tr Tooltip_MetaBlockCasing01.4.name_0
+        // # More processors!
+        // #zh_CN 更多的处理器!
+
+        // #tr Tooltip_MetaBlockCasing01.4.name_1
+        // # 4 in 1
+        // #zh_CN 使用该方块组成附加结构后每个小机器提供4并行
         GTCMItemList.ParallelismCasing1.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 4,
@@ -160,6 +176,14 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.5.name
         // # Parallelism Casing Mark 2
         // #zh_CN 高能处理阵列并行机械方块
+
+        // #tr Tooltip_MetaBlockCasing01.5.name_0
+        // # C10K!
+        // #zh_CN C10K!
+
+        // #tr Tooltip_MetaBlockCasing01.5.name_1
+        // # 8 in 1
+        // #zh_CN 使用该方块组成附加结构后每个小机器提供8并行
         GTCMItemList.ParallelismCasing2.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 5,
@@ -169,6 +193,14 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.6.name
         // # Parallelism Casing Mark 3
         // #zh_CN 超能处理阵列并行机械方块
+
+        // #tr Tooltip_MetaBlockCasing01.6.name_0
+        // # The whole base relies on you!
+        // #zh_CN 整个基地都靠你了! 前方狗屎警告.
+
+        // #tr Tooltip_MetaBlockCasing01.6.name_1
+        // # 1024 in 1
+        // #zh_CN 使用该方块组成附加结构后每个小机器提供1024并行
         GTCMItemList.ParallelismCasing3.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 6,
@@ -178,6 +210,14 @@ public class BlockRegister {
         // #tr tile.MetaBlockCasing01.7.name
         // # Parallelism Casing Mark 4
         // #zh_CN 寰宇处理阵列并行机械方块
+
+        // #tr Tooltip_MetaBlockCasing01.7.name_0
+        // # Power of MAX.
+        // #zh_CN MAX之力, 宇宙的尽头不过如此.
+
+        // #tr Tooltip_MetaBlockCasing01.7.name_1
+        // # 2048 in 1
+        // #zh_CN 一台能顶2048台撒! 肥料就用金坷垃!
         GTCMItemList.ParallelismCasing4.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 7,

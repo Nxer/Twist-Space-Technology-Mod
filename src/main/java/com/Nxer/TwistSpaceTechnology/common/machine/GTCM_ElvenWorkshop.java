@@ -180,6 +180,13 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 
     @Override
     public String getMachineModeName() {
+        // #tr ElvenWorkshop.modeMsg.0
+        // # Mode: Rune Engraver
+        // #zh_CN 符文雕刻模式
+
+        // #tr ElvenWorkshop.modeMsg.1
+        // # Mode: Mana Infuser
+        // #zh_CN 魔力灌注模式
         return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + machineMode);
     }
 

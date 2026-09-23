@@ -400,9 +400,15 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
     protected ArrayList<TileNodeEnergized> mNodeEnergized = new ArrayList<>();
     protected ArrayList<String> Research = new ArrayList<>();
 
+    // #tr GT5U.gui.text.recipe_result.Essentiainsentia
+    // # Essentia insentia
+    // #zh_CN §c§k源质不足
     public static final CheckRecipeResult Essentia_InsentiaL = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Essentiainsentia");
 
+    // #tr GT5U.gui.text.recipe_result.Research_not_completed
+    // # Research not completed
+    // #zh_CN §c§k小朋友, 作业还没写完呢§c§k
     public static final CheckRecipeResult Research_not_completed = SimpleCheckRecipeResult
         .ofFailurePersistOnShutdown("Research_not_completed");
 

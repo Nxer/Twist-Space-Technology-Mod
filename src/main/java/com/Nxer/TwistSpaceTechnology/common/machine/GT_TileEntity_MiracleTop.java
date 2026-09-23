@@ -402,6 +402,13 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
 
     @Override
     public String getMachineModeName() {
+        // #tr MiracleTop.modeMsg.0
+        // # Mode: Miracle Top (Circuit Assembler)
+        // #zh_CN 电路装配模式
+
+        // #tr MiracleTop.modeMsg.1
+        // # Mode: Gravitation Inversion
+        // #zh_CN 引力逆变模式
         return StatCollector.translateToLocal("MiracleTop.modeMsg." + machineMode);
     }
 

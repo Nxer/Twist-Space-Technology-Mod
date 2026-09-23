@@ -615,6 +615,9 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
+        // #tr MachineInfoData.ComponentBlockTier
+        // # Component Assembly Line Casing Tier
+        // #zh_CN 部件结构方块等级
         ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.ComponentBlockTier")
             + ": "
             + EnumChatFormatting.GOLD

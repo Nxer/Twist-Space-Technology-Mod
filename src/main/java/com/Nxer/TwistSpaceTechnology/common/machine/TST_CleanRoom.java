@@ -644,16 +644,50 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_TST_CleanRoom_MachineType
+        // # Cleanroom
+        // #zh_CN 超净间
         tt.addMachineType(translateToLocal("Tooltip_TST_CleanRoom_MachineType"));
+        // #tr Tooltip_TST_CleanRoom_00
+        // # Controller block for the Cleanroom
+        // #zh_CN TST超净间的控制器方块
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_00"));
+        // #tr Tooltip_TST_CleanRoom_01
+        // # Consumes §640 EU/t§7 when first turned on
+        // #zh_CN 初次启动功率: §640EU/t§7
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_01"));
+        // #tr Tooltip_TST_CleanRoom_02
+        // # and §64 EU/t§7 once at §c100%§7 efficiency
+        // #zh_CN §c100%§7洁净度稳定运行功率: §64EU/t§7
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_02"));
+        // #tr Tooltip_TST_CleanRoom_03
+        // # If you use an LV energy hatch, it will actually accept §62A§7 instead of just §61A§7.
+        // #zh_CN 如果你使用一个LV能源仓供电, 它将接受§62A§7电流
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_03"));
+        // #tr Tooltip_TST_CleanRoom_04
+        // # MV+ energy hatches just accept 1A as usual. For HV+ the cleanroom will overclock and gain efficiency faster.
+        // #zh_CN MV能源仓使用1A电流, 使用HV以上能源仓, TST超净间将会超频, 更快地提升洁净度.
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_04"));
+        // #tr Tooltip_TST_CleanRoom_05
+        // # always clean，can be use as laser nodes，max §664*64*64§7
+        // #zh_CN 任何情况不会掉落洁净度, 可以作为有源变压器使用, 最大§664*64*64§7, 属于超净间的输入仓/总线的流体/物品会按一定顺序输出到输出仓/总线, 如果有me输出仓/总线, 则会统一输出到此内部.
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_05"));
+        // #tr Tooltip_TST_CleanRoom_06
+        // # Machines that cause pollution aren't allowed to be put in.
+        // #zh_CN 不可放入会产生污染的机器
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_06"));
+        // #tr Tooltip_TST_CleanRoom_07
+        // # §4§lWATCH OUT! DO NOT DESTROY STRUCTURE BLOCK WHEN MACHINE IS WORKING!
+        // #zh_CN §4§o§l小心, 不要在开机状态下破坏结构!
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_07"));
+        // #tr Tooltip_TST_CleanRoom_08
+        // # §6§lBuffered by TST
+        // #zh_CN §6§lBuffered by TST
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_08"));
+        // #tr Tooltip_TST_CleanRoom_09
+        // # §lAuthor:§p§lShordinger
+        // #zh_CN §lAuthor:§p§lShordinger
         tt.addInfo(translateToLocal("Tooltip_TST_CleanRoom_09"));
         tt.beginVariableStructureBlock(3, MAX_WIDTH, 4, MAX_HEIGHT, 3, MAX_WIDTH, true);
         tt.addController(translateToLocal("Tooltip_TST_CleanRoom_Controller"));
@@ -669,6 +703,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_Door"));
         tt.addStructureInfo(translateToLocal("Tooltip_TST_CleanRoom_Hull"));
         tt.toolTipFinisher();
+        // spotless:on
         return tt;
     }
 

@@ -42,9 +42,11 @@ public class ItemMultiStructuresLinkTool extends Item {
         final boolean advancedToolTips) {
         // #tr tooltips.MultiStructuresLinkTool.line1
         // # {\LIGHT_PURPLE}left Click to set Main machine
+        // #zh_CN {\LIGHT_PURPLE}left Click to set Main machine
         toolTip.add(TextEnums.tr("tooltips.MultiStructuresLinkTool.line1"));
         // #tr tooltips.MultiStructuresLinkTool.line2
         // # {\LIGHT_PURPLE}right Click to set Sub machine
+        // #zh_CN {\LIGHT_PURPLE}right Click to set Sub machine
         toolTip.add(TextEnums.tr("tooltips.MultiStructuresLinkTool.line2"));
     }
 

@@ -117,6 +117,13 @@ public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
         ItemStack aTool) {
         super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aTool);
         isLiquidizerMode = !isLiquidizerMode;
+        // #tr Mana_Hatch.modeMsg.0
+        // # Mode: Liquidizer
+        // #zh_CN Liquidizer Mode
+
+        // #tr Mana_Hatch.modeMsg.1
+        // # Mode: Magicalizer
+        // #zh_CN Magicalizer Mode
         GTUtility
             .sendChatTrans(aPlayer, StatCollector.translateToLocal("Mana_Hatch.modeMsg." + (isLiquidizerMode ? 0 : 1)));
     }

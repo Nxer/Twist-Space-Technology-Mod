@@ -393,9 +393,15 @@ public final class MachineLoader {
                     TextEnums.tr("NameMegaTreeFarm")));
         }
 
+        // #tr NameExtremeCraftCenter
+        // # Extreme Crafting Center
+        // #zh_CN 梦魇工业合成中心
         GTCMItemList.ExtremeCraftCenter
             .set(new TST_MegaCraftingCenter(19052, "NameExtremeCraftCenter", TextEnums.tr("NameExtremeCraftCenter")));
 
+        // #tr NamePatternAccessHatch
+        // # Pattern Access Hatch
+        // #zh_CN 样板访问仓
         GTCMItemList.PatternAccessHatch.set(
             new TST_PatternAccessHatch(18847, "NamePatternAccessHatch", TextEnums.tr("NamePatternAccessHatch"), 9));
 
@@ -733,6 +739,61 @@ public final class MachineLoader {
 
         // region buffered energy hatch
 
+        // #tr NameBufferedEnergyHatchLV
+        // # Buffered Energy Hatch LV
+        // #zh_CN 缓存能源仓LV
+
+        // #tr NameBufferedEnergyHatchMV
+        // # Buffered Energy Hatch MV
+        // #zh_CN 缓存能源仓MV
+
+        // #tr NameBufferedEnergyHatchHV
+        // # Buffered Energy Hatch HV
+        // #zh_CN 缓存能源仓HV
+
+        // #tr NameBufferedEnergyHatchEV
+        // # Buffered Energy Hatch EV
+        // #zh_CN 缓存能源仓EV
+
+        // #tr NameBufferedEnergyHatchIV
+        // # Buffered Energy Hatch IV
+        // #zh_CN 缓存能源仓IV
+
+        // #tr NameBufferedEnergyHatchLuV
+        // # Buffered Energy Hatch LuV
+        // #zh_CN 缓存能源仓LuV
+
+        // #tr NameBufferedEnergyHatchZPM
+        // # Buffered Energy Hatch ZPM
+        // #zh_CN 缓存能源仓ZPM
+
+        // #tr NameBufferedEnergyHatchUV
+        // # Buffered Energy Hatch UV
+        // #zh_CN 缓存能源仓UV
+
+        // #tr NameBufferedEnergyHatchUHV
+        // # Buffered Energy Hatch UHV
+        // #zh_CN 缓存能源仓UHV
+
+        // #tr NameBufferedEnergyHatchUEV
+        // # Buffered Energy Hatch UEV
+        // #zh_CN 缓存能源仓UEV
+
+        // #tr NameBufferedEnergyHatchUIV
+        // # Buffered Energy Hatch UIV
+        // #zh_CN 缓存能源仓UIV
+
+        // #tr NameBufferedEnergyHatchUMV
+        // # Buffered Energy Hatch UMV
+        // #zh_CN 缓存能源仓UMV
+
+        // #tr NameBufferedEnergyHatchUXV
+        // # Buffered Energy Hatch UXV
+        // #zh_CN 缓存能源仓UXV
+
+        // #tr NameBufferedEnergyHatchMAX
+        // # Buffered Energy Hatch MAX
+        // #zh_CN 缓存能源仓MAX
         GTCMItemList.BufferedEnergyHatchLV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18984,

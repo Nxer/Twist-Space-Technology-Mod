@@ -306,6 +306,17 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 
     @Override
     public String getMachineModeName() {
+        // #tr CrystallineInfinitier.modeMsg.0
+        // # Mode: Autoclave
+        // #zh_CN 高压釜模式
+
+        // #tr CrystallineInfinitier.modeMsg.1
+        // # Mode: Crystalline Forge
+        // #zh_CN 晶胞铸造器模式
+
+        // #tr CrystallineInfinitier.modeMsg.2
+        // # Mode: Chemical Bath
+        // #zh_CN 化学浸洗机模式
         return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + machineMode);
     }
 

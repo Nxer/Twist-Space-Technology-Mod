@@ -32,6 +32,9 @@ public class ResultInsufficientPedestals implements CheckRecipeResult {
     @Override
     @Nonnull
     public String getDisplayString() {
+        // #tr GT5U.gui.text.recipe_result.insufficient_pedestals
+        // # §c(Right-click screwdriver to check again) Missing pedestals: %d
+        // #zh_CN §c(螺丝刀右键可重新检查) 基座缺少数量: %d
         return StatCollector
             .translateToLocalFormatted("GT5U.gui.text.recipe_result.insufficient_pedestals", missingCount);
     }

@@ -337,6 +337,13 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         if (wirelessMode) {
             return TextLocalization.Waila_WirelessMode;
         }
+        // #tr ThermalEnergyDevourer.modeMsg.0
+        // # High speed mode
+        // #zh_CN 高速模式
+
+        // #tr ThermalEnergyDevourer.modeMsg.1
+        // # Devourer mode
+        // #zh_CN 饕餮模式
         return StatCollector.translateToLocal("ThermalEnergyDevourer.modeMsg." + machineMode);
     }
 

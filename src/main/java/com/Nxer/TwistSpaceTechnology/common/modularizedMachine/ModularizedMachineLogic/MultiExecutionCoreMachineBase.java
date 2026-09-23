@@ -357,6 +357,7 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
         if (tag.getBoolean("isActive")) {
             currentTip.add(EnumChatFormatting.AQUA +
+            // #tr Waila.ExecutionCore.5
             // # Power for boosting
             // #zh_CN 已用于加速的功率
                 TextEnums.tr("Waila.ExecutionCore.5")

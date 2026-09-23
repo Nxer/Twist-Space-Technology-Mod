@@ -219,6 +219,13 @@ G -> ofFrame...(Materials.Neutronium);
 
     @Override
     public String getMachineModeName() {
+        // #tr VacuumFilterExtractor.modeMsg.0
+        // # Mode: Distillation Tower
+        // #zh_CN 蒸馏塔模式
+
+        // #tr VacuumFilterExtractor.modeMsg.1
+        // # Mode: Distillery
+        // #zh_CN 蒸馏室模式
         return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + machineMode);
     }
 

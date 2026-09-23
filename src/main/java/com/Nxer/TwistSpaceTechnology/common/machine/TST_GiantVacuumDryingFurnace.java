@@ -512,9 +512,8 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             // #zh_CN 并行 = 线圈等级 * 层数 * 32
             .addInfo(TextEnums.tr("Tooltip_GVDF_03"))
             // #tr Tooltip_GVDF_04
-            // # Every additional voltage step reduces the time to 80%% of the original and The processing speed
-            // increases by 50%% for each step of the coil
-            // #zh_CN 每超出一级电压,所需时间为原来的80%%,线圈每升高一级处理速度增加50%%
+            // # Every additional voltage step reduces the time to 80%% of the original and The processing speed increases by 50%% for each step of the coil
+            // #zh_CN 每超出一级电压, 所需时间为原来的§c80%§7, 线圈每升高一级处理速度增加§c50%§7
             .addInfo(TextEnums.tr("Tooltip_GVDF_04"))
             // #tr Tooltip_GVDF_05
             // # Switch modes using a screwdriver
@@ -538,8 +537,8 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             .addOutputHatch(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
             .addInputBus(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
             .addOutputBus(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            // #tr Tooltip_GVDF_HatchBusInfo
-            // # The input and output hatches/buses must be placed in the main frame.
+            // #tr Tooltip_GVDF_EnergyHatch
+            // # Energy Hatch must be placed in the main frame.
             // #zh_CN 能量舱口必须放置在主框架内
             .addEnergyHatch(TextEnums.tr("Tooltip_GVDF_EnergyHatch"))
 

@@ -268,6 +268,13 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     @Override
     public String getMachineModeName() {
+        // #tr PreciseHighEnergyPhotonicQuantumMaster.mode.0
+        // # Mode: Laser Engraver
+        // #zh_CN 激光蚀刻机模式
+
+        // #tr PreciseHighEnergyPhotonicQuantumMaster.mode.1
+        // # Mode: Photon Manipulator
+        // #zh_CN 光子掌控者模式
         return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
     }
 

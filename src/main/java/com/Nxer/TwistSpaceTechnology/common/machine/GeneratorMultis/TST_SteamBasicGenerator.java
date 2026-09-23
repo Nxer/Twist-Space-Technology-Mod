@@ -230,6 +230,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                     + EnumChatFormatting.WHITE
                     // #tr TST_SteamBasicGenerator.gui.02
                     // # /s
+                    // #zh_CN /s
                     + TextEnums.tr("TST_SteamBasicGenerator.gui.02")
                     + EnumChatFormatting.RESET)
                 .setEnabled((STEAM_PER_SEC * DYNAMO_AMP) != 0))
@@ -246,6 +247,7 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
                         + EnumChatFormatting.WHITE
                         // #tr TST_SteamBasicGenerator.gui.04
                         // # eu/t
+                        // #zh_CN eu/t
                         + TextEnums.tr("TST_SteamBasicGenerator.gui.04")
                         + EnumChatFormatting.RESET)
                     .setEnabled(widget -> getBaseMetaTileEntity().isActive()))

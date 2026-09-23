@@ -47,6 +47,13 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTT
 
     public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
         String[] aDescription) {
+        // #tr BufferedEnergyHatch.Tooltips.01
+        // # Buffered Energy Injector for Multiblocks
+        // #zh_CN 为多方块机器提供更高缓存的能源输入
+
+        // #tr BufferedEnergyHatch.Tooltips.02
+        // # Accepts up to 2 Amps
+        // #zh_CN 最大输入2安
         super(
             aID,
             aName,

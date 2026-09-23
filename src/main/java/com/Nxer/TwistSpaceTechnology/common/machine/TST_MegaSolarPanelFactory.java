@@ -336,7 +336,7 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MegaSolarPanelFactory
+        // #tr Tooltip_MegaSolarPanelFactory_MachineType
         // # Solar Factory
         // #zh_CN 太阳能板制造厂
         tttt.addMachineType(tr("Tooltip_MegaSolarPanelFactory_MachineType"))

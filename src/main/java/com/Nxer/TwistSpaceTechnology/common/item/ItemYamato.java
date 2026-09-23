@@ -49,6 +49,9 @@ public class ItemYamato extends ItemSword implements IItemOfTravel {
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
+        // #tr item.YamatoUnsheathed.name
+        // # Yamato(Unsheathed)
+        // #zh_CN 阎魔刀(未开鞘)
         switch (itemStack.getItemDamage()) {
             case 0 -> {
                 return this.getUnlocalizedName() + "Unsheathed";

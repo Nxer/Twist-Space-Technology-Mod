@@ -1741,10 +1741,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             .topRel(0)
             .size(240, 80);
 
+        // spotless:off
         // #tr StrangeMatterAggregator.UI.Running.ConfigurationDescription.text
-        // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium,
-        // 3-MagnetoConstrainedStarMatter
+        // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium, 3-MagnetoConstrainedStarMatter
         // #zh_CN 设置时空维护流体等级: 1-熔融时空, 2-熔融宇宙素, 3-磁流体约束恒星物质
+        // spotless:on
         panel.child(
             new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Running.ConfigurationDescription.text"))
                 .textAlign(Alignment.Center)

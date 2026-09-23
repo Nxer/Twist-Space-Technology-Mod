@@ -87,7 +87,8 @@ abstract class GenerateLanguageTask : DefaultTask() {
         allKeys.removeAll(englishKeys)
         englishKeys.addAll(allKeys)
 
-        writeLanguageFiles(outputDirectory, englishKeys, languageMaps, false, keysOnlyInLanguageFiles, englishMap)
+        // All live translations are declared in source; discard legacy keys that only remain in .lang files.
+        writeLanguageFiles(outputDirectory, englishKeys, languageMaps, true, keysOnlyInLanguageFiles, englishMap)
     }
 
     private sealed interface MatchingState

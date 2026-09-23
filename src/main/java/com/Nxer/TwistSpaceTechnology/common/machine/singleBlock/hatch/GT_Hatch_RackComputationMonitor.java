@@ -73,6 +73,13 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch
             aNameRegional,
             aTier,
             64,
+            // #tr tst.computationhatchmonitor.desc1
+            // # centralized controller, do not use more than one.
+            // #zh_CN 中央集成设备, 请不要放多个
+
+            // #tr tst.computationhatchmonitor.desc2
+            // # will not explode even without coolant? who knows.
+            // #zh_CN 如果没有冷却也未必会爆炸, 但是谁也不敢保证
             new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
                 translateToLocal("tst.computationhatchmonitor.desc1"),
                 EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });

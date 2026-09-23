@@ -491,7 +491,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
                 + (amountOfSailsBeforeVoid * -1));
         }
         ret.add(space
-            // #tr DSPDataCell.getInfoData.01
+            // #tr TST_DSPLauncher.getInfoData.01
             // # Overload time:
             // #zh_CN 剩余过载时间:
             + EnumChatFormatting.GOLD
@@ -500,7 +500,7 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             + (overloadTime / 20)
             + "s");
         ret.add(space
-            // #tr DSPDataCell.getInfoData.02
+            // #tr TST_DSPLauncher.getInfoData.02
             // # Speed Up:
             // #zh_CN 速度倍率:
             + EnumChatFormatting.GOLD

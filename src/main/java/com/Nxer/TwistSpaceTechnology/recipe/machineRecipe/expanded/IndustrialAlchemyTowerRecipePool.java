@@ -29,6 +29,9 @@ public class IndustrialAlchemyTowerRecipePool {
                 TCRecipeTools.CrucibleCraftingRecipe recipe = value.get(i);
                 ItemStack Essence = new ItemStack(itemEssence);
                 Essence.setItemDamage(1);
+                // #tr IndustrialAlchemyTowerRecipeInputAspects
+                // # Recipe required Essentia
+                // #zh_CN 配方所需要素
                 Essence.setStackDisplayName(TextEnums.tr("IndustrialAlchemyTowerRecipeInputAspects"));
                 new ItemEssence().setAspects(Essence, recipe.getInputAspects());
                 Object inputItem = recipe.getInputItem();

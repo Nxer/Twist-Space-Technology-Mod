@@ -14,6 +14,9 @@ public class ItemRegister {
     }
 
     private static void registryItems() {
+        // #tr item.combatrework.swordWooden.name
+        // # Wooden Sword
+        // #zh_CN 木剑
         GameRegistry.registerItem(
             new WoodenSword(ToolMaterial.WOOD, "Wooden Sword", "combatrework.swordWooden", TstCreativeTabs.TabGears),
             "combatrework.swordWooden");
