@@ -11,6 +11,7 @@ import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 
 import appeng.api.AEApi;
+import ggfab.GGItemList;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OreDictNames;
@@ -100,5 +101,6 @@ public class ShapedCraftRecipePool {
                     'C', ItemList.MolecularTransformer.get(1) });
         }
 
+        addCraftingRecipe(GTCMItemList.ResearchOnAAL.get(1), new Object[] { "X", 'X', GGItemList.AdvAssLine.get(1) });
     }
 }

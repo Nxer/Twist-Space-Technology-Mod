@@ -1,6 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -25,8 +28,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
-            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask };
+        // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
+        Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
+            MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
+            MetaItemFlask, InfinityDistilledWaterStorageCell, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -46,6 +51,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.0.name
         // # Test Item
         // #zh_CN 测试物品
+
         // #tr tooltips.TestItem0.line1
         // # A test item, no use.
         // #zh_CN A test item, no use.
@@ -54,6 +60,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.1.name
         // # Space Warper
         // #zh_CN 空间翘曲器
+
         // #tr tooltips.SpaceWarper.line1
         // # Power of gravitation !
         // #zh_CN {\DARK_BLUE}Power of gravitation !
@@ -63,6 +70,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.2.name
         // # Gravitational Constraint Optical Quantum Crystal
         // #zh_CN 引力约束光量子晶体
+
         // #tr tooltips.OpticalSOC.line1
         // # These Photons have their own mind.
         // #zh_CN 这些光子有他们自己的想法.
@@ -72,6 +80,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.3.name
         // # Mold (Singularity)
         // #zh_CN 模具 (奇点)
+
         // #tr tooltips.MoldSingularity.line1
         // # Mold for making Singularity
         // #zh_CN 用来制作奇点的模具
@@ -81,6 +90,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.4.name
         // # Particle Trap - SpaceTime Shield
         // #zh_CN 粒子阱 - 时空鞘
+
         // #tr tooltips.ParticleTrapTimeSpaceShield.line1
         // # Constrain the operator(the photon) to a miniature spacetime.
         // #zh_CN 将算子(光子)限制在一个微型时空中.
@@ -90,6 +100,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.5.name
         // # Lapotron Shard
         // #zh_CN 兰波顿碎片
+
         // #tr tooltips.LapotronShard.line1
         // # Even though it's just a shard, the energy fluctuations inside are also visible to the naked eye.
         // #zh_CN 尽管只是一块碎片, 它里面的能量波动也是肉眼可见的.
@@ -99,6 +110,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.6.name
         // # Perfect Lapotron Crystal
         // #zh_CN 完美兰波顿水晶
+
         // #tr tooltips.PerfectLapotronCrystal.line1
         // # Immaculate !
         // #zh_CN 完美无瑕 !
@@ -108,6 +120,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.7.name
         // # Energy Crystal Shard
         // #zh_CN 能量水晶碎片
+
         // #tr tooltips.EnergyCrystalShard.line1
         // # A red crystal shard, doesn't look like anything special.
         // #zh_CN 一块红色的水晶碎片, 看起来没什么特殊的.
@@ -117,6 +130,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.8.name
         // # Perfect Energy Crystal
         // #zh_CN 完美能量水晶
+
         // #tr tooltips.PerfectEnergyCrystal.line1
         // # As it grew in size, it displayed incredible traits on energy control.
         // #zh_CN 随着体型变大，它在能量控制方面表现出了不可思议的特性.
@@ -126,6 +140,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.9.name
         // # Solar Sail
         // #zh_CN 太阳帆
+
         // #tr tooltips.SolarSail.line1
         // # Collect and concentrate light energy.
         // #zh_CN 收集并浓缩光能.
@@ -135,6 +150,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.10.name
         // # Dyson Sphere Frame Component
         // #zh_CN 戴森球框架部件
+
         // #tr tooltips.DysonSphereFrameComponent.line1
         // # Stellar gravity can't destroy these structures, even black hole.
         // #zh_CN 恒星的引力无法破坏这些结构, 黑洞也不行.
@@ -144,6 +160,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.11.name
         // # Small Launch Vehicle
         // #zh_CN 小型运载火箭
+
         // #tr tooltips.SmallLaunchVehicle.line1
         // # Subtle and sophisticated.
         // #zh_CN 巧妙且精致.
@@ -153,6 +170,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.12.name
         // # Empty Small Launch Vehicle
         // #zh_CN 空的小型运载火箭
+
         // #tr tooltips.EmptySmallLaunchVehicle.line1
         // # Subtle and sophisticated but Empty.
         // #zh_CN 巧妙且精致, 但是是空的.
@@ -162,6 +180,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.13.name
         // # Critical Photon
         // #zh_CN 临界光子
+
         // #tr tooltips.CriticalPhoton.line1
         // # The future has arrived.
         // #zh_CN 未来已至.
@@ -171,6 +190,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.14.name
         // # Antimatter
         // #zh_CN 反物质
+
         // #tr tooltips.Antimatter.line1
         // # The Other Side of Matter.
         // #zh_CN 物质的另一面.
@@ -180,6 +200,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.15.name
         // # Annihilation Constrainer
         // #zh_CN 湮灭约束器
+
         // #tr tooltips.AnnihilationConstrainer.line1
         // # Encourage indirect operation.
         // #zh_CN 鼓励间接操纵.
@@ -189,6 +210,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.16.name
         // # Antimatter Fuel Rod
         // #zh_CN 反物质燃料棒
+
         // #tr tooltips.AntimatterFuelRod.line1
         // # More...
         // #zh_CN More...
@@ -198,6 +220,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.17.name
         // # Stellar Construction Frame Material
         // #zh_CN 恒星结构框架材料
+
         // #tr tooltips.StellarConstructionFrameMaterial.line1
         // # Perfect and expensive.
         // #zh_CN 完美且昂贵.
@@ -207,12 +230,15 @@ public class ItemRegister {
         // #tr item.MetaItem01.18.name
         // # Gravitational Lens
         // #zh_CN 引力透镜
+
         // #tr tooltips.GravitationalLens.line1
         // # Its twisted and powerful gravitational field is shielded in a container.
         // #zh_CN 其扭曲而强大的引力场被屏蔽在容器中.
+
         // #tr tooltips.GravitationalLens.line2
         // # It is usually utilized to work and alter spatial structures,
         // #zh_CN 通常会利用它来加工和改变空间结构,
+
         // #tr tooltips.GravitationalLens.line3
         // # but that doesn't stop some people from taking it and focusing sunlight to light fires for fun.
         // #zh_CN  但也不妨碍有些人会拿它聚焦阳光点火玩.
@@ -225,6 +251,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.19.name
         // # Purple Magnolia Petal
         // #zh_CN 紫玉兰花瓣
+
         // #tr tooltips.PurpleMagnoliaPetal.line1
         // # Petals falling from Alfheim...
         // #zh_CN {\ITALIC}{\GRAY}于精灵之乡飘落...
@@ -234,6 +261,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.20.name
         // # Purple Magnolia Sapling
         // #zh_CN 紫玉兰树苗
+
         // #tr tooltips.PurpleMagnoliaSapling.line1
         // # Not plantable. Need to be on CropsNH crop sticks.
         // #zh_CN 不可种植.需要使用CropsNH作物架.
@@ -243,6 +271,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.21.name
         // # Void Pollen
         // #zh_CN 虚空花粉
+
         // #tr tooltips.VoidPollen.line1
         // # Pollen yet to be arisen.
         // #zh_CN 未有之花的花粉.
@@ -252,6 +281,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.22.name
         // # Primitive Man's SpaceTime Distortion Device
         // #zh_CN 原始人的时空扭曲装置
+
         // #tr tooltips.PrimitiveMansSpaceTimeDistortionDevice.line1
         // # Anyway...
         // #zh_CN 反正吧...
@@ -266,6 +296,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.24.name
         // # Ball Lightning Upgrade Chip
         // #zh_CN 球状闪电升级芯片
+
         // #tr tooltips.ItemBallLightningUpgradeChip.line1
         // # Power, give me, more power!
         // #zh_CN {\AQUA}Power, give me, more power!
@@ -275,6 +306,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.25.name
         // # Energy Shard
         // #zh_CN 能量碎片
+
         // #tr EnergyShard.tooltips.01
         // # A piece of pure energy, from dark...
         // #zh_CN 一片纯净的能量, 来自黑暗的...
@@ -283,6 +315,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.26.name
         // # Silicon-based Neuron
         // #zh_CN 硅基神经元
+
         // #tr SiliconBasedNeuron.tooltips.01
         // # Very... uh, natural.
         // #zh_CN 非常的... 呃, 自然.
@@ -291,6 +324,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.27.name
         // # Matter Recombinator
         // #zh_CN 物质重组器
+
         // #tr MatterRecombinator.tooltips.01
         // # The fundamental unit of material manipulation at the scale of elementary particles.
         // #zh_CN 基本粒子尺度上物质操作的基本单元.
@@ -299,12 +333,15 @@ public class ItemRegister {
         // #tr item.MetaItem01.28.name
         // # Core Element
         // #zh_CN 核心素
+
         // #tr CoreElement.tooltips.01
         // # Adding core elements to the singularization reaction of strange matter
         // #zh_CN 在奇异物质的奇异化反应中加入核心素,
+
         // #tr CoreElement.tooltips.02
         // # can slow down the singularization reaction
         // #zh_CN 可以慢化奇异化反应,
+
         // #tr CoreElement.tooltips.03
         // # and make it proceed in an orderly manner.
         // #zh_CN 使其有序进行.
@@ -313,9 +350,11 @@ public class ItemRegister {
         // #tr item.MetaItem01.29.name
         // # Strange Annihilation Fuel Rod
         // #zh_CN 奇异湮灭燃料棒
+
         // #tr StrangeAnnihilationFuelRod.tooltips.01
         // # Using strange matter as the main annihilation reaction raw material,
         // #zh_CN 使用了奇异物质为主要的湮灭反应原料,
+
         // #tr StrangeAnnihilationFuelRod.tooltips.02
         // # the energy density and output power are greatly improved.
         // #zh_CN 能量密度和输出功率均大幅提高.
@@ -356,6 +395,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.38.name
         // # Perfect Engraved Energy Chip
         // #zh_CN 完美铭刻能量芯片
+
         // #tr PerfectEngravedEnergyChip.tooltips.01
         // # Excellent conductive chip
         // #zh_CN 优秀的导能芯片
@@ -367,6 +407,7 @@ public class ItemRegister {
         // #tr item.MetaItem01.40.name
         // # Perfect Engraved Laptron Chip
         // #zh_CN 完美铭刻兰波顿芯片
+
         // #tr PerfectEngravedLaptronChip.tooltips.01
         // # Excellent energy storage chip
         // #zh_CN 优秀的储能芯片
@@ -919,6 +960,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.0.name
         // # Rune of Vigilance
         // #zh_CN 恂戒符文
+
         // #tr tooltips.Rune_of_Vigilance.line1
         // # Vigilance.
         // #zh_CN {\RED}笼中之鸟从未意识到警戒的重要性。
@@ -926,6 +968,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.1.name
         // # Rune of Erelong
         // #zh_CN 须臾符文
+
         // #tr tooltips.Rune_of_Erelong.line1
         // # Erelong.
         // #zh_CN {\DARK_BLUE}永恒不过是一刻的缩影。
@@ -933,6 +976,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.2.name
         // # Rune of Ether
         // #zh_CN 以太符文
+
         // #tr tooltips.Rune_of_Ether.line1
         // # Ether.
         // #zh_CN {\AQUA}对未来最大的慷慨，是把一切献给现在。
@@ -940,6 +984,7 @@ public class ItemRegister {
         // #tr item.MetaItemRune.3.name
         // # Rune of Perdition
         // #zh_CN 永劫符文
+
         // #tr tooltips.Rune_of_Perdition.line1
         // # Perdition.
         // #zh_CN {\DARK_RED}永远不为从未存在的救赎祈祷。
@@ -948,45 +993,59 @@ public class ItemRegister {
         /*    ---Meta Item Izumik---    */
 
         // #tr item.MetaItemIzumik.0.name
-        // # {\BLUE}{\BOLD}Fount Of Ecology
+        // # {\BLUE}{\BOLD}Fount of Ecology
         // #zh_CN {\BLUE}{\BOLD}生态泉源
-        // #tr FountOfEcology.tooltips.01
-        // # {\AQUA}A unique looking jellyfish
-        // #zh_CN {\AQUA}一只长相奇特的水母
-        // #tr FountOfEcology.tooltips.02
-        // # {\AQUA}Well......
-        // #zh_CN {\AQUA}等下......
-        // #tr FountOfEcology.tooltips.03
-        // # {\GOLD}A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
-        // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
-        // #tr FountOfEcology.tooltips.04
-        // # {\GOLD}"The Afterborn Firstborn", Seaborn
-        // #zh_CN {\GOLD}"后生的出初生" 海嗣
-        GTCMItemList.FountOfEcology.set(MetaItemIzumik.registerVariantWithTooltips(0, new String[]{tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02")}, new String[]{tr("FountOfEcology.tooltips.03"), tr("FountOfEcology.tooltips.04")}));
+        GTCMItemList.FountOfEcology.set(MetaItemIzumik.registerVariantWithTooltips(
+            0,
+            new String[] {
+                // #tr FountOfEcology.tooltips.01
+                // # {\AQUA}A unique looking jellyfish
+                // #zh_CN {\AQUA}一只长相奇特的水母
+                tr("FountOfEcology.tooltips.01"),
+                // #tr FountOfEcology.tooltips.02
+                // # {\AQUA}Well......
+                // #zh_CN {\AQUA}等下......
+                tr("FountOfEcology.tooltips.02") },
+            new String[] {
+                // #tr FountOfEcology.tooltips.03
+                // # {\GOLD}A perfect creature nearing the singularity of evolution, the counselor and guide of The Many.
+                // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
+                tr("FountOfEcology.tooltips.03"),
+                // #tr FountOfEcology.tooltips.04
+                // # {\GOLD}"The Afterborn Firstborn", Seaborn
+                // #zh_CN {\GOLD}"后生的出初生" 海嗣
+                tr("FountOfEcology.tooltips.04") }));
 
         // #tr item.MetaItemIzumik.1.name
         // # {\DARK_AQUA}"Offspring"
         // #zh_CN {\DARK_AQUA}"子代"
-        // #tr Offspring.tooltips.01
-        // # {\AQUA}A weak little jellyfish
-        // #zh_CN {\AQUA}一只弱不禁风的小水母
-        // #tr Offspring.tooltips.02
-        // # {\AQUA}Seems to be containing additional information
-        // #zh_CN {\AQUA}似乎包含着额外的信息
-        // #tr Offspring.tooltips.03
-        // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
-        // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
-        // #tr Offspring.tooltips.04
-        // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
-        // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
-
-        GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(1, new String[]{tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02")}, new String[]{tr("Offspring.tooltips.03"), tr("Offspring.tooltips.04")}));
+        GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(
+            1,
+            new String[] {
+                // #tr Offspring.tooltips.01
+                // # {\AQUA}A weak little jellyfish
+                // #zh_CN {\AQUA}一只弱不禁风的小水母
+                tr("Offspring.tooltips.01"),
+                // #tr Offspring.tooltips.02
+                // # {\AQUA}Seems to be containing additional information
+                // #zh_CN {\AQUA}似乎包含着额外的信息
+                tr("Offspring.tooltips.02") },
+            new String[] {
+                // #tr Offspring.tooltips.03
+                // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
+                // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
+                tr("Offspring.tooltips.03"),
+                // #tr Offspring.tooltips.04
+                // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
+                // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
+                tr("Offspring.tooltips.04") }));
 
         /*    ---Meta Item Named Circuit---    */
 
         // #tr item.MetaItemNamedCircuit.0.name
         // # Ultimate Energy Flow Circuit
         // #zh_CN 终极能量流电路
+
         // #tr UltimateEnergyFlowCircuit.tooltips.01
         // # The ultimate choice for high-load circuits
         // #zh_CN 高负载电路的终极选择
@@ -1055,6 +1114,150 @@ public class ItemRegister {
         GTCMItemList.HatchUpdateTool.set(new ItemStack(TstItems.HatchUpdateTool, 1));
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
+
+        // #tr item.EcoSphereExecutionProtocol.0.name
+        // # Eco-Sphere Execution Protocol: Arboreal Genesis
+        // #zh_CN 生态圈执行协议: 原木拟生
+        GTCMItemList.EcoSphereExecutionProtocol1.set(EcoSphereExecutionProtocol.registerVariant(0));
+
+        // #tr item.EcoSphereExecutionProtocol.1.name
+        // # Eco-Sphere Execution Protocol: Arboreal Genesis
+        // #zh_CN 生态圈执行协议: 原木拟生
+        GTCMItemList.EcoSphereExecutionProtocol2.set(EcoSphereExecutionProtocol.registerVariant(1));
+
+        // #tr item.EcoSphereExecutionProtocol.2.name
+        // # Eco-Sphere Execution Protocol: Aquatic Simulation
+        // #zh_CN 生态圈执行协议: 水域模拟
+        GTCMItemList.EcoSphereExecutionProtocol3.set(EcoSphereExecutionProtocol.registerVariant(2));
+
+        // #tr item.EcoSphereExecutionProtocol.3.name
+        // # Eco-Sphere Execution Protocol: Aquatic Simulation
+        // #zh_CN 生态圈执行协议: 水域模拟
+        GTCMItemList.EcoSphereExecutionProtocol4.set(EcoSphereExecutionProtocol.registerVariant(3));
+
+        // #tr item.EcoSphereExecutionProtocol.4.name
+        // # Eco-Sphere Execution Protocol: Artificial Greenhouse
+        // #zh_CN 生态圈执行协议: 人工温室
+        GTCMItemList.EcoSphereExecutionProtocol5.set(EcoSphereExecutionProtocol.registerVariant(4));
+
+        // #tr item.EcoSphereExecutionProtocol.5.name
+        // # Eco-Sphere Execution Protocol: Artificial Greenhouse
+        // #zh_CN 生态圈执行协议: 人工温室
+        GTCMItemList.EcoSphereExecutionProtocol6.set(EcoSphereExecutionProtocol.registerVariant(5));
+
+        // #tr item.EcoSphereExecutionProtocol.6.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereExecutionProtocol7.set(EcoSphereExecutionProtocol.registerVariant(6));
+
+        // #tr item.EcoSphereExecutionProtocol.7.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereExecutionProtocol8.set(EcoSphereExecutionProtocol.registerVariant(7));
+
+        // #tr item.EcoSphereExecutionProtocol.8.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereExecutionProtocol9.set(EcoSphereExecutionProtocol.registerVariant(8));
+        EcoSphereExecutionProtocol.setTooltips(
+            8,
+            new String[] {
+                // #tr item.EcoSphereExecutionProtocol.8.tooltip.0
+                // # Fully Authorized
+                // #zh_CN 已完全授权
+                tr("item.EcoSphereExecutionProtocol.8.tooltip.0") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.0.name
+        // # Eco-Sphere Upgrade: Fluid Reduction
+        // #zh_CN 生态圈升级: 流体减免
+        GTCMItemList.EcoSphereUpgrade1.set(EcoSphereUpgrade.registerVariant(0));
+        EcoSphereUpgrade.setTooltips(
+            0,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.0.tooltip
+                // # Fluid Consumption x 0.5
+                // #zh_CN 流体消耗 x 0.5
+                tr("item.EcoSphereUpgrade.0.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.1.name
+        // # Eco-Sphere Upgrade: Capacity
+        // #zh_CN 生态圈升级: 扩容
+        GTCMItemList.EcoSphereUpgrade2.set(EcoSphereUpgrade.registerVariant(1));
+        EcoSphereUpgrade.setTooltips(
+            1,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.1.tooltip
+                // # Input Slots + 1, Stack Limit x 4
+                // #zh_CN 输入槽位 + 1, 堆叠上限 x 4
+                tr("item.EcoSphereUpgrade.1.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.2.name
+        // # Eco-Sphere Upgrade: Output
+        // #zh_CN 生态圈升级: 产量
+        GTCMItemList.EcoSphereUpgrade3.set(EcoSphereUpgrade.registerVariant(2));
+        EcoSphereUpgrade.setTooltips(
+            2,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.2.tooltip
+                // # Output x 1.5
+                // #zh_CN 产出 x 1.5
+                tr("item.EcoSphereUpgrade.2.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.3.name
+        // # Eco-Sphere Upgrade: Speed
+        // #zh_CN 生态圈升级: 速度
+        GTCMItemList.EcoSphereUpgrade4.set(EcoSphereUpgrade.registerVariant(3));
+        EcoSphereUpgrade.setTooltips(
+            3,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.3.tooltip
+                // # Cycle Time Set to 1 s
+                // #zh_CN 运行时间改为 1秒
+                tr("item.EcoSphereUpgrade.3.tooltip") + ", " + tr("item.EcoSphereUpgrade.0.tooltip")},
+            false);
+
+        // #tr item.EcoSphereUpgrade.4.name
+        // # Eco-Sphere Upgrade: Blood Orb
+        // #zh_CN 生态圈升级: 气血宝珠
+        GTCMItemList.EcoSphereUpgrade5.set(EcoSphereUpgrade.registerVariant(4));
+        EcoSphereUpgrade.setTooltips(
+            4,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.4.tooltip
+                // # LP Network Access
+                // #zh_CN LP 网络访问
+                tr("item.EcoSphereUpgrade.4.tooltip") + ", " + tr("item.EcoSphereUpgrade.1.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.5.name
+        // # Eco-Sphere Upgrade: Perfect Genetics
+        // #zh_CN 生态圈升级: 完美基因
+        GTCMItemList.EcoSphereUpgrade6.set(EcoSphereUpgrade.registerVariant(5));
+        EcoSphereUpgrade.setTooltips(
+            5,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.5.tooltip
+                // # Enhanced Genetic Attributes
+                // #zh_CN 基因属性强化
+                tr("item.EcoSphereUpgrade.5.tooltip") + ", " + tr("item.EcoSphereUpgrade.2.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.6.name
+        // # Eco-Sphere Upgrade: Output Pulverization
+        // #zh_CN 生态圈升级: 产物粉碎
+        GTCMItemList.EcoSphereUpgrade7.set(EcoSphereUpgrade.registerVariant(6));
+        EcoSphereUpgrade.setTooltips(
+            6,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.6.tooltip
+                // # Pulverized Outputs
+                // #zh_CN 产物粉碎
+                tr("item.EcoSphereUpgrade.6.tooltip") + ", " + tr("item.EcoSphereUpgrade.2.tooltip") },
+            false);
 
         // endregion
     }

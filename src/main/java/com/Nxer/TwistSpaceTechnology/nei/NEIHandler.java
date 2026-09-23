@@ -20,6 +20,42 @@ public class NEIHandler {
 
     public static void IMCSender() {
         API.addRecipeCatalyst(GTCMItemList.HephaestusAtelier.get(1), "smelting");
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol1.get(1),
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol2.get(1),
+            "tst.recipe.TreeGrowthSimulatorWithoutToolFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol3.get(1),
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol4.get(1),
+            "tst.recipe.AquaticZoneSimulatorFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol5.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol6.get(1),
+            "tst.recipe.ArtificialGreenHouseFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol7.get(1),
+            "tst.recipe.DirectedMobClonerFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol8.get(1),
+            "tst.recipe.DirectedMobClonerFakeRecipes",
+            -10);
+        API.addRecipeCatalyst(
+            GTCMItemList.EcoSphereExecutionProtocol9.get(1),
+            "tst.recipe.DirectedMobClonerFakeRecipes",
+            -10);
 
         /*
          * sendCatalyst("mc.recipe.furnace", "gregtech:gt.blockmachines:19037", -10);
@@ -31,7 +67,7 @@ public class NEIHandler {
          * sendHandler("gtcm.recipe.DSPLauncherRecipes", "gregtech:gt.blockmachines:19013");
          * sendHandler("gtcm.recipe.DSPReceiverRecipes", "gregtech:gt.blockmachines:19014");
          * sendHandler("gtcm.recipe.ArtificialStarGeneratingRecipes", "gregtech:gt.blockmachines:19015");
-         * sendHandler("tst.recipe.OreProcessingRecipes", "gregtech:gt.blockmachines:19017");
+         * sendHandler("tst.recipe.OreProcessingVisualRecipes", "gregtech:gt.blockmachines:19017");
          * sendHandler("gtcm.recipe.megaUniversalSpaceStationRecipes", "gregtech:gt.blockmachines:19018");
          * sendHandler("gtcm.recipe.ElvenWorkshopRecipes", "gregtech:gt.blockmachines:19500");
          * sendHandler("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");
@@ -69,7 +105,7 @@ public class NEIHandler {
          * sendCatalyst("gtcm.recipe.DSPReceiverRecipes", "gregtech:gt.blockmachines:19014");
          * sendCatalyst("gtcm.recipe.ArtificialStarGeneratingRecipes", "gregtech:gt.blockmachines:19015");
          * sendCatalyst("gtpp.recipe.alloyblastsmelter", "gregtech:gt.blockmachines:19016");
-         * sendCatalyst("tst.recipe.OreProcessingRecipes", "gregtech:gt.blockmachines:19017");
+         * sendCatalyst("tst.recipe.OreProcessingVisualRecipes", "gregtech:gt.blockmachines:19017");
          * sendCatalyst("gtcm.recipe.megaUniversalSpaceStationRecipes", "gregtech:gt.blockmachines:19018");
          * sendCatalyst("gtcm.recipe.ElvenWorkshopRecipes", "gregtech:gt.blockmachines:19500");
          * sendCatalyst("gtcm.recipe.RuneEngraverRecipes", "gregtech:gt.blockmachines:19500");

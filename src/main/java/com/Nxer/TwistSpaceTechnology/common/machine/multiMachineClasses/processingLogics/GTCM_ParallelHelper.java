@@ -5,6 +5,7 @@ import static gregtech.api.util.GTRecipe.GTppRecipeHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
@@ -15,6 +16,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
 
 import gregtech.api.enums.GTValues;
@@ -137,6 +140,12 @@ public class GTCM_ParallelHelper extends ParallelHelper {
 
     private Function<Integer, FluidStack[]> customFluidOutputCalculation;
 
+    private boolean calculateOutputsAsLong;
+
+    private final List<ItemStackLong> longItemOutputs = new ArrayList<>();
+
+    private final List<FluidStackLong> longFluidOutputs = new ArrayList<>();
+
     // endregion
     public GTCM_ParallelHelper() {
     }
@@ -258,6 +267,11 @@ public class GTCM_ParallelHelper extends ParallelHelper {
         return this;
     }
 
+    public GTCM_ParallelHelper enableLongOutputCalculation() {
+        calculateOutputsAsLong = true;
+        return this;
+    }
+
     /**
      * Set a custom way to calculate item outputs. You are given the amount of parallels and must return an ItemStack
      * array
@@ -346,6 +360,24 @@ public class GTCM_ParallelHelper extends ParallelHelper {
                 "Tried to get fluid outputs before building or without enabling calculation of outputs");
         }
         return fluidOutputs;
+    }
+
+    public boolean isCalculatingOutputsAsLong() {
+        return calculateOutputsAsLong;
+    }
+
+    public List<ItemStackLong> getLongItemOutputs() {
+        if (!built || !calculateOutputsAsLong) {
+            throw new IllegalStateException("Tried to get long item outputs when long output calculation is disabled");
+        }
+        return longItemOutputs;
+    }
+
+    public List<FluidStackLong> getLongFluidOutputs() {
+        if (!built || !calculateOutputsAsLong) {
+            throw new IllegalStateException("Tried to get long fluid outputs when long output calculation is disabled");
+        }
+        return longFluidOutputs;
     }
 
     /**
@@ -544,14 +576,99 @@ public class GTCM_ParallelHelper extends ParallelHelper {
 
         // If we want to calculate outputs we do it here
         if (calculateOutputs && currentParallel > 0) {
-            if (recipe.mOutputs != null) {
+            if (calculateOutputsAsLong) {
+                calculateLongOutputs();
+            } else if (recipe.mOutputs != null) {
                 calculateItemOutputs(truncatedItemOutputs);
             }
-            if (recipe.mFluidOutputs != null) {
+            if (!calculateOutputsAsLong && recipe.mFluidOutputs != null) {
                 calculateFluidOutputs(truncatedFluidOutputs);
             }
         }
         result = CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    private void calculateLongOutputs() {
+        itemOutputs = GTValues.emptyItemStackArray;
+        fluidOutputs = GTValues.emptyFluidStackArray;
+        longItemOutputs.clear();
+        longFluidOutputs.clear();
+
+        if (customItemOutputCalculation != null) {
+            mergeLongItemOutputs(customItemOutputCalculation.apply(currentParallel));
+        } else if (recipe.mOutputs != null) {
+            for (int i = 0; i < recipe.mOutputs.length; i++) {
+                ItemStack origin = recipe.getOutput(i).copy();
+                int outputChance = recipe.getOutputChance(i);
+                long outputParallels;
+                if (outputChance < 10000) {
+                    outputParallels = (long) currentParallel * outputChance / 10000;
+                    long remainder = (long) currentParallel * outputChance % 10000;
+                    if (remainder > 0 && remainder > XSTR.XSTR_INSTANCE.nextInt(10000)) outputParallels++;
+                } else {
+                    outputParallels = currentParallel;
+                }
+                mergeLongItemOutput(origin, multiplySaturated(outputParallels, origin.stackSize));
+            }
+        }
+
+        if (customFluidOutputCalculation != null) {
+            mergeLongFluidOutputs(customFluidOutputCalculation.apply(currentParallel));
+        } else if (recipe.mFluidOutputs != null) {
+            for (FluidStack recipeOutput : recipe.mFluidOutputs) {
+                if (recipeOutput == null) continue;
+                mergeLongFluidOutput(recipeOutput, multiplySaturated(recipeOutput.amount, currentParallel));
+            }
+        }
+    }
+
+    private void mergeLongItemOutputs(ItemStack[] outputs) {
+        if (outputs == null) return;
+        for (ItemStack output : outputs) {
+            if (output != null) mergeLongItemOutput(output, output.stackSize);
+        }
+    }
+
+    private void mergeLongItemOutput(ItemStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < longItemOutputs.size(); i++) {
+            ItemStackLong output = longItemOutputs.get(i);
+            if (GTUtility.areStacksEqual(output.itemStack(), stack)) {
+                long merged = output.stackSize() > Long.MAX_VALUE - amount ? Long.MAX_VALUE
+                    : output.stackSize() + amount;
+                longItemOutputs.set(i, new ItemStackLong(output.itemStack(), merged));
+                return;
+            }
+        }
+        longItemOutputs.add(new ItemStackLong(GTUtility.copyAmountUnsafe(1, stack), amount));
+    }
+
+    private void mergeLongFluidOutputs(FluidStack[] outputs) {
+        if (outputs == null) return;
+        for (FluidStack output : outputs) {
+            if (output != null) mergeLongFluidOutput(output, output.amount);
+        }
+    }
+
+    private void mergeLongFluidOutput(FluidStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < longFluidOutputs.size(); i++) {
+            FluidStackLong output = longFluidOutputs.get(i);
+            if (output.fluidStack()
+                .isFluidEqual(stack)) {
+                long merged = output.amount() > Long.MAX_VALUE - amount ? Long.MAX_VALUE : output.amount() + amount;
+                longFluidOutputs.set(i, new FluidStackLong(output.fluidStack(), merged));
+                return;
+            }
+        }
+        FluidStack template = stack.copy();
+        template.amount = 1;
+        longFluidOutputs.add(new FluidStackLong(template, amount));
+    }
+
+    private static long multiplySaturated(long first, long second) {
+        if (first <= 0 || second <= 0) return 0;
+        return first > Long.MAX_VALUE / second ? Long.MAX_VALUE : first * second;
     }
 
     @Override

@@ -582,6 +582,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             // #tr Tooltip_IndustrialAlchemyTower_15
             // # Infusion Provider
             // #zh_CN 注魔供应器
+
             // #tr Tooltip_IndustrialAlchemyTower_16
             // # §bAny magic mechanical block
             // #zh_CN §b任意魔法机械方块
@@ -597,6 +598,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             // #tr Tooltip_IndustrialAlchemyTower_17
             // # Travel anchor
             // #zh_CN 旅行锚
+
             // #tr Tooltip_IndustrialAlchemyTower_16
             // # §bAny magic mechanical block
             // #zh_CN §b任意魔法机械方块
@@ -606,6 +608,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             // #tr Tooltip_IndustrialAlchemyTower_18
             // # Essentia diffusion unit
             // #zh_CN 源质扩散单元
+
             // #tr Tooltip_IndustrialAlchemyTower_19
             // # Each level provides tier^5 parallel
             // #zh_CN §b每级提供tier^5的并行
@@ -615,6 +618,7 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             // #tr Tooltip_IndustrialAlchemyTower_20
             // # §l§dArcane Empty Space
             // #zh_CN §l§d奥术裂隙
+
             // #tr Tooltip_IndustrialAlchemyTower_21
             // # Replaceable warded glass on both sides of the machine
             // #zh_CN 可替换机器两侧守卫者玻璃
