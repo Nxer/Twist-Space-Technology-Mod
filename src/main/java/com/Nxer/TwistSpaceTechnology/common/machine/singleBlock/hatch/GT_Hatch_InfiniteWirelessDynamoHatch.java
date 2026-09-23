@@ -2,8 +2,6 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAYS_ENERGY_ON_WIRELESS;
 
-import java.util.Arrays;
-
 import net.minecraft.util.EnumChatFormatting;
 
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -14,6 +12,7 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessDynamoMulti;
 
 @SkipGenerateDescription
@@ -66,14 +65,15 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamo
     // region General
     @Override
     public String[] getDescription() {
-        String[] gtDescription = super.getDescription();
-        String[] description = Arrays.copyOf(gtDescription, gtDescription.length + 1);
         // #tr tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01
         // # Infinite output voltage limit.
         // #zh_CN 无限输出电压限制.
-        description[gtDescription.length] = EnumChatFormatting.WHITE
-            + TSTUtils.tr("tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01");
-        return description;
+        return MTEHatch.formatEnergyInfoDesc(
+            EnumChatFormatting.WHITE + TSTUtils.tr("tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01"),
+            true,
+            mTier,
+            maxAmperes,
+            "gt.blockmachines.dynamo_hatch.wireless");
     }
 
     @Override
