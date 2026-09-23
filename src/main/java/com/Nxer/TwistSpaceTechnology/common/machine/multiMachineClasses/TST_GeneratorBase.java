@@ -51,6 +51,17 @@ public abstract class TST_GeneratorBase<T extends TST_GeneratorBase<T>> extends 
     }
 
     @Override
+    public boolean addEnergyOutput(long totalEU) {
+        if (totalEU <= 0) {
+            return true;
+        }
+        if (!mDynamoHatches.isEmpty() || !mExoticDynamoHatches.isEmpty()) {
+            return addEnergyOutputMultipleDynamos(totalEU, true);
+        }
+        return false;
+    }
+
+    @Override
     public boolean addEnergyOutputMultipleDynamos(long totalEU, boolean aAllowMixedVoltageDynamos) {
         // check positive
         if (totalEU < 0) totalEU = -totalEU;

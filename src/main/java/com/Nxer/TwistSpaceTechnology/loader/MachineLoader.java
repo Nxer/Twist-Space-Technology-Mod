@@ -152,7 +152,7 @@ public final class MachineLoader {
                 TextLocalization.NamePreciseHighEnergyPhotonicQuantumMaster));
 
         GTCMItemList.MiracleTop
-            .set(new GT_TileEntity_MiracleTop(19003, TextLocalization.NameMiracleTop, TextLocalization.NameMiracleTop));
+            .set(new GT_TileEntity_MiracleTop(19003, "NameMiracleTop", TextLocalization.NameMiracleTop));
 
         GTCMItemList.MagneticDrivePressureFormer.set(
             new GT_TileEntity_MagneticDrivePressureFormer(
