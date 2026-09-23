@@ -2603,3 +2603,6 @@ Tooltip_AEStorageCellInputBus.4=Supported special processing can use the full st
 Tooltip_AEStorageCellInputHatch.4=Supported special processing can use the full stored amount
 item.metaitem.tst.1.name=AAL modification log
 item.metaitem.tst.1.desc=I need a smarter, more efficient way to assemble things…
+Tooltip_SwelegfyrBlastFurnace.09=§eDo not open the cabin door while the machine is running!
+tst.shared.machineTooltip.temporaryController=§cTemporary controller; will be removed in the next update!
+tst.shared.machineTooltip.replacementController=§cSee NEI for the replacement controller and conversion recipes.
