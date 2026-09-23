@@ -7,15 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.Or
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessWirelessMaxProcess;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.moveUnprocessedItemsToOutputs;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.ticksOfPerFluidConsuming;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_OreProcessingFactory_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltips_JoinWirelessNetWithoutEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltips_JoinWirelessNetWithoutEnergyHatch;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -55,8 +47,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Logic;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -66,6 +60,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
@@ -80,11 +75,13 @@ import gregtech.api.util.OverclockCalculator;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
+@SkipGenerateDescription
 public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProcessingFactory> {
 
     // region Class Constructor
     public TST_OreProcessingFactory(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_OreProcessingFactory(String aName) {
@@ -95,7 +92,130 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_OreProcessingFactory(this.mName);
     }
+    // endregion
 
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainOreProcessingFactory";
+    private final int horizontalOffSet = 30;
+    private final int verticalOffSet = 11;
+    private final int depthOffSet = 0;
+
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"                                ","                             LLL","                             LLL","                             LLL","                             LLL","                             LLL","                             LLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","                                ","                                ","                                ","                                "},
+        {"                                ","                                ","                             MDM","                              D ","                              D ","                              D ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","FHHFFHHFFHHFFHHFFHHFFHHFFHHFFHHF","FDDFFDDFFDDFFDDFFDDFFDDFFDDFFDDF","FDDFFDDFFDDFFDDFFDDFFDDFFDDFFDDF","FHHFFHHFFHHFFHHFFHHFFHHFFHHFFHHF","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","                                ","                                ","                                "},
+        {"                                ","                                ","                             MDM","                                ","                                ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GCC  CC  CC  CC  CC  CC  CC  CCG","FCC  CC  CC  CC  CC  CC  CC  CCF","A                              A","A                              A","FCC  CC  CC  CC  CC  CC  CC  CCF","GCC  CC  CC  CC  CC  CC  CC  CCG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","                                ","                                "},
+        {"                                ","                                ","                             MDM","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GCC  CC  CC  CC  CC  CC  CC  CCG","FCC  CC  CC  CC  CC  CC  CC  CCF","A                              A","A                              A","FCC  CC  CC  CC  CC  CC  CC  CCF","GCC  CC  CC  CC  CC  CC  CC  CCG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"},
+        {"                                ","                                ","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GDD  DD  DD  DD  DD  DD  DD  DDG","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","GDD  DD  DD  DD  DD  DD  DD  DDG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                                ","                                ","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                                ","                                ","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                             JJJ","                             EEE","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                             MJM","                             MDM","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                             JJJ","                             EEE","                             EEE"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                             GGG","                             KKK","                             GGG"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                             G~G","                             KIK","                             GHG"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
+        {"                             GGG","                             KKK","                             GGG"," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_OreProcessingFactory> getStructureDefinition() {
+        return IStructureDefinition.<TST_OreProcessingFactory>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+            .addElement('A', chainAllGlasses())
+            .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 4))
+            .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 6))
+            .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
+            .addElement('E', ofBlock(GregTechAPI.sBlockCasings4, 0))
+            .addElement('F', ofBlock(GregTechAPI.sBlockCasings4, 1))
+            .addElement('G', ofBlock(GregTechAPI.sBlockCasings8, 7))
+            .addElement('H', ofBlock(sBlockCasingsTT, 0))
+            .addElement('I', ofBlock(sBlockCasingsTT, 7))
+            .addElement(
+                'J',
+                HatchElementBuilder.<TST_OreProcessingFactory>builder()
+                    .atLeast(InputHatch)
+                    .adder(TST_OreProcessingFactory::addFluidInputToMachineList)
+                    .hint(1)
+                    .casingIndex(48)
+                    .buildAndChain(GregTechAPI.sBlockCasings4, 0))
+            .addElement(
+                'K',
+                HatchElementBuilder.<TST_OreProcessingFactory>builder()
+                    .atLeast(Energy.or(ExoticEnergy))
+                    .adder(TST_OreProcessingFactory::addEnergyHatchOrExoticEnergyHatchToMachineList)
+                    .hint(2)
+                    .casingIndex(1024)
+                    .buildAndChain(sBlockCasingsTT, 0))
+            .addElement(
+                'L',
+                HatchElementBuilder.<TST_OreProcessingFactory>builder()
+                    .atLeast(InputBus, OutputBus)
+                    .adder(TST_OreProcessingFactory::addInputBusOrOutputBusToMachineList)
+                    .hint(3)
+                    .casingIndex(48)
+                    .buildAndChain(GregTechAPI.sBlockCasings4, 0))
+            .addElement('M', ofFrame(Materials.TungstenSteel))
+            .build();
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(blockAlloyGlass, 0, ...);
+     * B -> ofBlock...(gt.blockcasings2, 4, ...);
+     * C -> ofBlock...(gt.blockcasings2, 6, ...);
+     * D -> ofBlock...(gt.blockcasings2, 15, ...);
+     * E -> ofBlock...(gt.blockcasings4, 0, ...);
+     * F -> ofBlock...(gt.blockcasings4, 1, ...);
+     * G -> ofBlock...(gt.blockcasings8, 7, ...);
+     * H -> ofBlock...(gt.blockcasingsTT, 0, ...);
+     * I -> ofBlock...(gt.blockcasingsTT, 7, ...);
+     * J -> ofBlock...(gt.blockcasings4, 0, ...); // input hatches
+     * K -> ofBlock...(gt.blockcasingsTT, 0, ...); // energy hatches
+     * L -> ofBlock...(gt.blockcasings8, 7, ...); // input output buses
+     * M -> ofFrame...(Materials.TungstenSteel, 0, ...);
+     */
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.mExoticEnergyHatches.clear();
+        this.mEnergyHatches.clear();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+
+        isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
+        if (isWirelessMode) {
+            EUtCanUse = 0;
+        } else if (this.mExoticEnergyHatches.isEmpty() && this.mEnergyHatches.size() == 1) {
+            // 1/16 Power losing region with single normal energy hatch
+            EUtCanUse = this.mEnergyHatches.get(0)
+                .maxEUInput() * 15L / 16L;
+        } else {
+            // 1/32 Power losing region with multi energy hatch
+            EUtCanUse = getMaxInputEu() * 31L / 32L;
+        }
+    }
     // endregion
 
     // region Processing Logic
@@ -107,19 +227,69 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     private long usingEU = 0;
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setBoolean("isWirelessMode", isWirelessMode);
-        aNBT.setLong("EUtCanUse", EUtCanUse);
-        aNBT.setShort("runTicks", runTicks);
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.OreProcessingVisualRecipeMap;
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        isWirelessMode = aNBT.getBoolean("isWirelessMode");
-        EUtCanUse = aNBT.getLong("EUtCanUse");
-        runTicks = aNBT.getShort("runTicks");
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return 1;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return OverclockCalculator.ofNoOverclock(recipe);
+            }
+
+        }.setMaxParallel(Integer.MAX_VALUE);
+    }
+
+    @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
+        logic.setAvailableVoltage(EUtCanUse);
+        logic.setAvailableAmperage(1);
+        logic.setAmperageOC(false);
+    }
+
+    @NotNull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        return isWirelessMode ? checkProcessing_wirelessMode() : checkProcessing_normalMode();
     }
 
     @Override
@@ -128,27 +298,25 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isWirelessMode")) {
-            // #tr Waila.TST_OreProcessingFactory.1
+            // #tr tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.1
             // # In Wireless mode
             // #zh_CN 无线EU电网模式
-            currentTip.add(EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.1"));
+            currentTip.add(
+                EnumChatFormatting.AQUA
+                    + TSTUtils.tr("tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.1"));
         }
         if (tag.getBoolean("isActive") && tag.getBoolean("isWirelessMode")) {
             currentTip.add(
-                // #tr Waila.TST_OreProcessingFactory.2
+                // #tr tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.2
                 // # Current Using EU:
                 // #zh_CN 当前消耗EU:
-                EnumChatFormatting.AQUA + TextEnums.tr("Waila.TST_OreProcessingFactory.2")
+                EnumChatFormatting.AQUA
+                    + TSTUtils.tr("tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.2")
                     + EnumChatFormatting.GOLD
                     + formatNumber(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET
                     + " EU");
         }
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
     }
 
     @Override
@@ -249,12 +417,6 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
     }
 
-    @NotNull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        return isWirelessMode ? checkProcessing_wirelessMode() : checkProcessing_normalMode();
-    }
-
     protected CheckRecipeResult checkProcessing_wirelessMode() {
 
         CheckRecipeResult result = OP_Process_Wireless();
@@ -285,31 +447,6 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         mMaxProgresstime = OreProcessRecipeDuration;
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
-    }
-
-    @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        logic.setAvailableVoltage(EUtCanUse);
-        logic.setAvailableAmperage(1);
-        logic.setAmperageOC(false);
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                return OverclockCalculator.ofNoOverclock(recipe);
-            }
-
-        }.setMaxParallel(Integer.MAX_VALUE);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.OreProcessingVisualRecipes;
     }
 
     @Override
@@ -359,184 +496,29 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         return false;
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setBoolean("isWirelessMode", isWirelessMode);
+        aNBT.setLong("EUtCanUse", EUtCanUse);
+        aNBT.setShort("runTicks", runTicks);
     }
 
     @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 1;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    protected boolean supportsCraftingMEBuffer() {
-        return false;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.mExoticEnergyHatches.clear();
-        this.mEnergyHatches.clear();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-
-        isWirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
-        if (isWirelessMode) {
-            EUtCanUse = 0;
-        } else if (this.mExoticEnergyHatches.isEmpty() && this.mEnergyHatches.size() == 1) {
-            // 1/16 Power losing region with single normal energy hatch
-            EUtCanUse = this.mEnergyHatches.get(0)
-                .maxEUInput() * 15L / 16L;
-        } else {
-            // 1/32 Power losing region with multi energy hatch
-            EUtCanUse = getMaxInputEu() * 31L / 32L;
-        }
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        isWirelessMode = aNBT.getBoolean("isWirelessMode");
+        EUtCanUse = aNBT.getLong("EUtCanUse");
+        runTicks = aNBT.getShort("runTicks");
     }
 
     // endregion
 
-    // region Structure
-    // spotless:off
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-    private static final String STRUCTURE_PIECE_MAIN = "mainOreProcessingFactory";
-    private final int horizontalOffSet = 30;
-    private final int verticalOffSet = 11;
-    private final int depthOffSet = 0;
-    @Override
-    public IStructureDefinition<TST_OreProcessingFactory> getStructureDefinition() {
-        return IStructureDefinition
-                   .<TST_OreProcessingFactory>builder()
-                   .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                   .addElement('A', chainAllGlasses())
-                   .addElement('B', ofBlock(GregTechAPI.sBlockCasings2,4))
-                   .addElement('C', ofBlock(GregTechAPI.sBlockCasings2,6))
-                   .addElement('D', ofBlock(GregTechAPI.sBlockCasings2,15))
-                   .addElement('E', ofBlock(GregTechAPI.sBlockCasings4,0))
-                   .addElement('F', ofBlock(GregTechAPI.sBlockCasings4,1))
-                   .addElement('G', ofBlock(GregTechAPI.sBlockCasings8,7))
-                   .addElement('H', ofBlock(sBlockCasingsTT,0))
-                   .addElement('I', ofBlock(sBlockCasingsTT,7))
-                   .addElement('J',
-                               HatchElementBuilder
-                                   .<TST_OreProcessingFactory>builder()
-                                   .atLeast(InputHatch)
-                                   .adder(TST_OreProcessingFactory::addFluidInputToMachineList)
-                                   .hint(1)
-                                   .casingIndex(48)
-                                   .buildAndChain(GregTechAPI.sBlockCasings4,0))
-                   .addElement('K',
-                               HatchElementBuilder
-                                   .<TST_OreProcessingFactory>builder()
-                                   .atLeast(Energy.or(ExoticEnergy))
-                                   .adder(TST_OreProcessingFactory::addEnergyHatchOrExoticEnergyHatchToMachineList)
-                                   .hint(2)
-                                   .casingIndex(1024)
-                                   .buildAndChain(sBlockCasingsTT,0))
-                   .addElement('L',
-                               HatchElementBuilder
-                                   .<TST_OreProcessingFactory>builder()
-                                   .atLeast(InputBus, OutputBus)
-                                   .adder(TST_OreProcessingFactory::addInputBusOrOutputBusToMachineList)
-                                   .hint(3)
-                                   .casingIndex(48)
-                                   .buildAndChain(GregTechAPI.sBlockCasings4,0))
-                   .addElement('M', ofFrame(Materials.TungstenSteel))
-                   .build();
-    }
-    /*
-    Blocks:
-A -> ofBlock...(blockAlloyGlass, 0, ...);
-B -> ofBlock...(gt.blockcasings2, 4, ...);
-C -> ofBlock...(gt.blockcasings2, 6, ...);
-D -> ofBlock...(gt.blockcasings2, 15, ...);
-E -> ofBlock...(gt.blockcasings4, 0, ...);
-F -> ofBlock...(gt.blockcasings4, 1, ...);
-G -> ofBlock...(gt.blockcasings8, 7, ...);
-H -> ofBlock...(gt.blockcasingsTT, 0, ...);
-I -> ofBlock...(gt.blockcasingsTT, 7, ...);
-J -> ofBlock...(gt.blockcasings4, 0, ...); // input hatches
-K -> ofBlock...(gt.blockcasingsTT, 0, ...); // energy hatches
-L -> ofBlock...(gt.blockcasings8, 7, ...); // input output buses
-M -> ofFrame...(Materials.TungstenSteel, 0, ...);
-
-     */
-    private final String[][] shapeMain = new String[][]{
-        {"                                ","                             LLL","                             LLL","                             LLL","                             LLL","                             LLL","                             LLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL","                                ","                                ","                                ","                                "},
-        {"                                ","                                ","                             MDM","                              D ","                              D ","                              D ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","FHHFFHHFFHHFFHHFFHHFFHHFFHHFFHHF","FDDFFDDFFDDFFDDFFDDFFDDFFDDFFDDF","FDDFFDDFFDDFFDDFFDDFFDDFFDDFFDDF","FHHFFHHFFHHFFHHFFHHFFHHFFHHFFHHF","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","                                ","                                ","                                "},
-        {"                                ","                                ","                             MDM","                                ","                                ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GCC  CC  CC  CC  CC  CC  CC  CCG","FCC  CC  CC  CC  CC  CC  CC  CCF","A                              A","A                              A","FCC  CC  CC  CC  CC  CC  CC  CCF","GCC  CC  CC  CC  CC  CC  CC  CCG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","                                ","                                "},
-        {"                                ","                                ","                             MDM","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GCC  CC  CC  CC  CC  CC  CC  CCG","FCC  CC  CC  CC  CC  CC  CC  CCF","A                              A","A                              A","FCC  CC  CC  CC  CC  CC  CC  CCF","GCC  CC  CC  CC  CC  CC  CC  CCG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"},
-        {"                                ","                                ","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GDD  DD  DD  DD  DD  DD  DD  DDG","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","GDD  DD  DD  DD  DD  DD  DD  DDG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                                ","                                ","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                                ","                                ","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                             JJJ","                             EEE","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                             MJM","                             MDM","                             MDM"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                             JJJ","                             EEE","                             EEE"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                             GGG","                             KKK","                             GGG"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                             G~G","                             KIK","                             GHG"," HH  HH  HH  HH  HH  HH  HH  HH ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","EDD  DD  DD  DD  DD  DD  DD  DDE","GBB  BB  BB  BB  BB  BB  BB  BBG","FBB  BB  BB  BB  BB  BB  BB  BBF","A                              A","A                              A","FBB  BB  BB  BB  BB  BB  BB  BBF","GBB  BB  BB  BB  BB  BB  BB  BBG","EDD  DD  DD  DD  DD  DD  DD  DDE","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," HH  HH  HH  HH  HH  HH  HH  HH "},
-        {"                             GGG","                             KKK","                             GGG"," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "}
-    };
-
-    // spotless:on
-    // endregion
-
-    // region Info
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(Tooltip_OreProcessingFactory_MachineType)
-            .addInfo(Tooltip_OreProcessingFactory_Controller)
-            .addInfo(Tooltip_OreProcessingFactory_01)
-            .addInfo(Tooltip_OreProcessingFactory_02)
-            .addInfo(Tooltip_OreProcessingFactory_03)
-            .addInfo(Tooltip_OreProcessingFactory_04)
-            .addInfo(Tooltip_OreProcessingFactory_05)
-            .addInfo(Tooltips_JoinWirelessNetWithoutEnergyHatch)
-            .addInfo(Tooltip_OreProcessingFactory_06)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addInputBus(TextLocalization.textUseBlueprint, 3)
-            .addOutputBus(TextLocalization.textUseBlueprint, 3)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -564,4 +546,57 @@ M -> ofFrame...(Materials.TungstenSteel, 0, ...);
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.OreProcessingFactory.tooltip.machine_type
+        // # Ore Processor
+        // #zh_CN 矿石处理厂
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.machine_type"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.controller
+            // # Controller block for the General Ore Processing Factory TST
+            // #zh_CN 通用矿物处理厂TST的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.controller"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.01
+            // # {\WHITE}Engineering is the art of directing the great sources of power in nature for the use and convenience of man.
+            // #zh_CN {\WHITE}所谓工程, 就是一门将大自然中绝佳的能量源用于惠世济民的艺术.
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.01"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.02
+            // # The ores will line up and go in through the entrance and out through the exit.
+            // #zh_CN 矿石们将排好队从入口进去, 再从出口出来.
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.02"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.03
+            // # This machine will not do overclock. Progress time is always {\GOLD}6.4s{\GRAY} (default).
+            // #zh_CN 机器不会进行超频. 处理时间固定为 {\GOLD}6.4s{\GRAY} (默认) .
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.03"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.04
+            // # It will process as many inputs as possible at once, if power allow.
+            // #zh_CN 将尽可能一次处理全部输入的原料, 供电允许的话.
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.04"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.05
+            // # Consume {\GOLD}3200L{\GRAY} Lubricant every {\GOLD}12.8s{\GRAY} (default).
+            // #zh_CN 每{\GOLD}12.8s{\GRAY} 消耗 {\GOLD}3200L{\GRAY} 润滑油(默认) .
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.05"))
+            .addInfo(Tooltips_JoinWirelessNetWithoutEnergyHatch)
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.06
+            // # Non-ore inputs will be transferred to the output bus.
+            // #zh_CN 非矿石输入物将被转移到输出总线.
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.06"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

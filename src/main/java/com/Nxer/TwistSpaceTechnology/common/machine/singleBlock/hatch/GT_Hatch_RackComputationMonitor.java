@@ -21,7 +21,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -38,6 +40,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -48,7 +51,9 @@ import tectech.TecTech;
 import tectech.thing.gui.TecTechUITextures;
 import tectech.util.TTUtility;
 
-public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGregtechLogo, IAddUIWidgets {
+@SkipGenerateDescription
+public class GT_Hatch_RackComputationMonitor extends MTEHatch
+    implements IAddGregtechLogo, IAddUIWidgets, TSTTooltipCredit {
 
     private static IIconContainer EM_R;
     private static IIconContainer EM_R_ACTIVE;
@@ -68,9 +73,17 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
             aNameRegional,
             aTier,
             64,
-            new String[] { TextLocalization.Mark_TwistSpaceTechnology_TecTech,
-                translateToLocal("tst.computationhatchmonitor.desc1"),
-                EnumChatFormatting.AQUA + translateToLocal("tst.computationhatchmonitor.desc2") });
+            // #tr tst.common.machine.RackComputationMonitor.tooltip.info.01
+            // # centralized controller, do not use more than one.
+            // #zh_CN 中央集成设备, 请不要放多个
+
+            // #tr tst.common.machine.RackComputationMonitor.tooltip.info.02
+            // # will not explode even without coolant? who knows.
+            // #zh_CN 如果没有冷却也未必会爆炸, 但是谁也不敢保证
+            new String[] { TSTSharedLocalization.MachineTooltip.Mark_TwistSpaceTechnology_TecTech,
+                translateToLocal("tst.common.machine.RackComputationMonitor.tooltip.info.01"), EnumChatFormatting.AQUA
+                    + translateToLocal("tst.common.machine.RackComputationMonitor.tooltip.info.02") });
+        registerTooltipCredits(ID.SHORDINGER);
         TTUtility.setTier(aTier, this);
         this.isMeanHatch = isMeanHatch;
 
@@ -314,11 +327,6 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
         // Heat==1-10? --> 1
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return isMeanHatch;
-    // }
-
     @Override
     public void addGregTechLogo(ModularWindow.Builder builder) {
         builder.widget(
@@ -335,17 +343,8 @@ public class GT_Hatch_RackComputationMonitor extends MTEHatch implements IAddGre
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         if (!isMeanHatch) return;
-        // builder.addWidgetInternal();
         builder.setSize(206, 270);
-        // builder.addPlayerInventoryLabel(2,200);
         builder.bindPlayerInventory(buildContext.getPlayer(), new Pos2d(8, 181), getGUITextureSet().getItemSlot());
-        // builder.widget(
-        // new DrawableWidget().setDrawable(TecTechUITextures.PICTURE_HEAT_SINK).setPos(46, 17).setSize(84, 60));
-
-        // Pos2d[] positions = new Pos2d[]{
-        // new Pos2d(68, 27), new Pos2d(90, 27),
-        // new Pos2d(68, 49), new Pos2d(90, 49),
-        // };
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 Pos2d position = new Pos2d(8 + 22 * x, 5 + 22 * y);

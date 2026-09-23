@@ -24,7 +24,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.EcoSphereFakeRecipes.AquaticZoneSimulatorFakeRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.github.bsideup.jabel.Desugar;
 
 import gregtech.api.objects.XSTR;
@@ -45,7 +45,7 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return StatCollector.translateToLocal("EcoSphereSimulator.modeMsg.1");
+        return StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.mode.1");
     }
 
     @Override
@@ -107,11 +107,11 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
             // #zh_CN {\AQUA}定向中
 
             StatCollector.translateToLocal("GT5U.gui.text.recipe_result.focus_on") + "\n"
-            // #tr EcoSphereSimulator.gui.focusOn
+            // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.focus_on
             // # Target:
             // #zh_CN 目标:
                 + EnumChatFormatting.WHITE
-                + StatCollector.translateToLocal("EcoSphereSimulator.gui.focusOn")
+                + StatCollector.translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.gui.focus_on")
                 + " "
                 + EnumChatFormatting.GOLD
                 + EnumChatFormatting.getTextWithoutFormattingCodes(focusStack.getDisplayName())
@@ -177,10 +177,10 @@ public final class AquaticZoneSimulatorMode implements IEcoSphereMode {
     }
 
     private static int calculateOffspringChance(int voltageTier, int baseChance, double tierChance) {
-        int maxVoltageTier = (int) Math.floor(TstUtils.calculateVoltageTier((double) Integer.MAX_VALUE + 1));
+        int maxVoltageTier = (int) Math.floor(TSTUtils.calculateVoltageTier((double) Integer.MAX_VALUE + 1));
         if (voltageTier < maxVoltageTier) return 0;
         long maximumInputPower = (long) Integer.MAX_VALUE * Integer.MAX_VALUE;
-        int maximumInputTier = (int) Math.floor(TstUtils.calculateVoltageTier(maximumInputPower));
+        int maximumInputTier = (int) Math.floor(TSTUtils.calculateVoltageTier(maximumInputPower));
         double maxTierChance = Math.log(maxVoltageTier + 2) / Math.log(2);
         double probability = 0.0002 * baseChance * tierChance / maxTierChance;
 

@@ -5,7 +5,7 @@ import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.ge
 import static com.Nxer.TwistSpaceTechnology.common.api.ThaumcraftRecipeHandler.addInfusionCraftingRecipeAspectNotNull;
 import static com.Nxer.TwistSpaceTechnology.common.api.ThaumcraftRecipeHandler.getAspect;
 import static com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCBasic.EVOLUTION;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.newItemStackWithNBT;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.newItemStackWithNBT;
 import static com.glodblock.github.loader.ItemAndBlockHolder.INTERFACE;
 import static fox.spiteful.avaritia.compat.thaumcraft.Lucrum.ULTRA_DEATH;
 import static goodgenerator.loader.Loaders.huiCircuit;

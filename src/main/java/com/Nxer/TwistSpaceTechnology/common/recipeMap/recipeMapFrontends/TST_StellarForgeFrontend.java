@@ -7,7 +7,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
@@ -26,8 +26,9 @@ public class TST_StellarForgeFrontend extends RecipeMapFrontend {
     @Override
     public @NotNull List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
-        String aToolTip = EnumChatFormatting.YELLOW + TextEnums.tr("MiracleDoor.nei.tooltip.0");
-        // #tr MiracleDoor.nei.tooltip.0
+        String aToolTip = EnumChatFormatting.YELLOW
+            + TSTUtils.tr("tst.common.recipe.StellarForgeRecipeMap.melt_into_ingots");
+        // #tr tst.common.recipe.StellarForgeRecipeMap.melt_into_ingots
         // # Place in input bus to melt molten metal into ingots
         // #zh_CN 放入输入总线,将熔融金属熔铸为锭
 

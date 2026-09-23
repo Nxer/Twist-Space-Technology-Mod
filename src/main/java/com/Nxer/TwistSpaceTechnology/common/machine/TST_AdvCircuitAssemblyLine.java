@@ -3,12 +3,11 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.laser_hatch_incompatible;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textEndSides;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textEndSides;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -42,8 +41,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -57,6 +58,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
@@ -71,11 +73,13 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.IGTHatchAdder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
+@SkipGenerateDescription
 public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCircuitAssemblyLine> {
 
     // region Class Constructor
     public TST_AdvCircuitAssemblyLine(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.GODERIUM, MAINTAINER, ID.NXER);
     }
 
     public TST_AdvCircuitAssemblyLine(String aName) {
@@ -86,7 +90,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_AdvCircuitAssemblyLine(this.mName);
     }
-
     // endregion
 
     // region Structure
@@ -94,6 +97,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     private static final int baseVerticalOffSet = 1;
     private static final int baseDepthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainAdvCAL";
+
     // spotless:off
     private static final String[][] shapeMain = new String[][]{
         {"       ","DDDDDDD","       "},
@@ -101,8 +105,8 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         {"AAAAAAA","CCCCCCC","AAAAAAA"},
         {"BBBBBBB","BBBBBBB","BBBBBBB"}
     };
-
     // spotless:on
+
     private static IStructureDefinition<TST_AdvCircuitAssemblyLine> STRUCTURE_DEFINITION;
 
     @Override
@@ -139,6 +143,17 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hintsOnly,
+            baseHorizontalOffSet,
+            baseVerticalOffSet,
+            baseDepthOffSet);
+    }
+
+    @Override
     public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         if (this.mMachine) return -1;
         return survivalBuildPiece(
@@ -151,17 +166,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             env,
             false,
             true);
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            hintsOnly,
-            baseHorizontalOffSet,
-            baseVerticalOffSet,
-            baseDepthOffSet);
     }
 
     @Override
@@ -217,7 +221,6 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             errors.add(StructureErrors.hatchCount(ErrorType.TOO_FEW, HatchElement.Energy, 0, 1));
         }
     }
-
     // endregion
 
     // region Processing Logic
@@ -226,60 +229,16 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     HashSet<TST_ItemID> circuitType = new HashSet<>();
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 16;
-    }
-
-    @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.advCircuitAssemblyLineRecipes;
+        return GTCMRecipe.AdvCircuitAssemblyLineRecipeMap;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(
-            Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe ? GTCMRecipe.advCircuitAssemblyLineRecipes
+            Debug_DisplayAdvCircuitAssemblyLineCurrentRecipe ? GTCMRecipe.AdvCircuitAssemblyLineRecipeMap
                 : BartWorksRecipeMaps.circuitAssemblyLineRecipes);
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setLong("maxVoltageAllow", maxVoltageAllow);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        maxVoltageAllow = aNBT.getLong("maxVoltageAllow");
-    }
-
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    public boolean addCircuitImprintHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof TST_CircuitImprintHatch) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            return mCircuitImprintHatches.add((TST_CircuitImprintHatch) aMetaTileEntity);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
     }
 
     @Override
@@ -288,7 +247,17 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
-    public boolean isInputSeparationEnabled() {
+    public int getMaxParallelRecipes() {
+        return 16;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
         return false;
     }
 
@@ -329,12 +298,37 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
     }
 
     @Override
+    public boolean isInputSeparationEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean onRunningTick(ItemStack aStack) {
         for (TST_CircuitImprintHatch hatch_circuitImprint : mCircuitImprintHatches) {
             hatch_circuitImprint.setActive(true);
         }
         return super.onRunningTick(aStack);
     }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setLong("maxVoltageAllow", maxVoltageAllow);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        maxVoltageAllow = aNBT.getLong("maxVoltageAllow");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -362,59 +356,87 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(16) };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // #tr Tooltip_AdvCircuitAssemblyLine_MachineType
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.machine_type
         // # Circuit Assembly Line
         // #zh_CN 电路装配线
-        tt.addMachineType(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_MachineType"))
-            // #tr Tooltip_AdvCircuitAssemblyLine_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.machine_type"))
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.controller
             // # Controller block for the Advanced Circuit Assembly Line
             // #zh_CN 进阶电路装配线的控制方块
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine_Controller"))
-            // #tr Tooltip_AdvCircuitAssemblyLine.1
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.controller"))
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.01
             // # {\AQUA}Crystal Circuit Ti Super OC Crafting not D version
             // #zh_CN {\AQUA}晶体电路板Ti Super OC Crafting not D version
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.1"))
-            // #tr Tooltip_AdvCircuitAssemblyLine.2
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.01"))
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.02
             // # Circuit assembly line with 64 times overclocking
             // #zh_CN 拥有64倍超频上限的电路装配线
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.2"))
-            // #tr Tooltip_AdvCircuitAssemblyLine.3
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.02"))
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.03
             // # Allows installation of one energy hatch with max 64 amp limitation
             // #zh_CN 允许安装一个能源仓, 最高64A电流
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.3"))
-            // #tr Tooltip_AdvCircuitAssemblyLine.4
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.03"))
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.04
             // # Allows installation of crafting input buffer
             // #zh_CN 允许使用样板输入总成
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.4"))
-            // #tr Tooltip_AdvCircuitAssemblyLine.5
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.04"))
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.05
             // # Install imprint circuit hatch for more recipe support (more than one hatch is not allowed)
             // #zh_CN 安装压印电路仓以获得更多配方支持 (只允许安装一个压印电路仓)
-            .addInfo(TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.5"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.05"))
             .addEnergyHatch(textUseBlueprint, 2)
             .addInputBus(textUseBlueprint, 1)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputBus(textEndSides, 1)
-            // #tr Tooltip_AdvCircuitAssemblyLine.6
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.06
             // # Imprint circuit hatch
             // #zh_CN 压印电路仓
 
-            // #tr Tooltip_AdvCircuitAssemblyLine.7
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.tooltip.structure.01
             // # Grate machine casing next to the controller
             // #zh_CN 主机旁的格栅机械方块
             .addOtherStructurePart(
-                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.6"),
-                TextEnums.tr("Tooltip_AdvCircuitAssemblyLine.7"),
+                TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.info.06"),
+                TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.tooltip.structure.01"),
                 3)
             .addStructureInfo(Text_SeparatingLine)
-            .toolTipFinisher(ModName);
+            .toolTipFinisher();
+        // spotless:on
         return tt;
     }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public boolean addCircuitImprintHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof TST_CircuitImprintHatch) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            return mCircuitImprintHatches.add((TST_CircuitImprintHatch) aMetaTileEntity);
+        }
+        return false;
+    }
+
+    // endregion
+
+    // region Nested Classes
 
     private enum CircuitImprintHatchElement implements IHatchElement<TST_AdvCircuitAssemblyLine> {
 
@@ -435,4 +457,7 @@ public class TST_AdvCircuitAssemblyLine extends GTCM_MultiMachineBase<TST_AdvCir
             return t.mCircuitImprintHatches.size();
         }
     }
+
+    // endregion
+
 }

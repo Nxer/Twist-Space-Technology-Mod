@@ -23,8 +23,10 @@ import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -34,6 +36,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
@@ -42,11 +45,13 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import tectech.thing.block.BlockQuantumGlass;
 
+@SkipGenerateDescription
 public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModuleBase<MM_MassFabricatorGenesis> {
 
     // region Class Constructor
     public MM_MassFabricatorGenesis(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_MassFabricatorGenesis(String aName) {
@@ -57,84 +62,14 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MM_MassFabricatorGenesis(mName);
     }
-
-    // endregion
-
-    // region Logics
-
-    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList
-        .of(ModularHatchTypes.PARALLEL_CONTROLLER);
-
-    @Override
-    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
-        return supportedModularHatchTypes;
-    }
-
-    @Override
-    protected OverclockType getDefaultOverclockType() {
-        return OverclockType.PerfectOverclock;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return true;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.MassFabricatorGenesis;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
     // endregion
 
     // region Structure
-
     protected static final int horizontalOffSet = 27;
     protected static final int verticalOffSet = 27;
     protected static final int depthOffSet = 0;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     protected static IStructureDefinition<MM_MassFabricatorGenesis> STRUCTURE_DEFINITION;
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<MM_MassFabricatorGenesis> getStructureDefinition() {
@@ -222,51 +157,75 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
         return STRUCTURE_DEFINITION;
     }
 
-    // endregion
-
-    // region General
-
-    private static MultiblockTooltipBuilder tooltip;
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            // #tr Tooltip_MassFabricatorGenesis_MachineType
-            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
-            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}质量发生器
-            tooltip
-                .addMachineType(
-                    TextEnums.tr("Tooltip_MassFabricatorGenesis_MachineType"))
-                // #tr Tooltip_MassFabricatorGenesis_01
-                // # {\BLUE}{\ITALIC}“Even though the future seems far away, it is actually beginning right now.”
-                // #zh_CN {\BLUE}{\ITALIC}“虽然未来似乎很遥远，但其实已经开始了。”
-                .addInfo(TextEnums.tr("Tooltip_MassFabricatorGenesis_01"))
-
-                // #tr Tooltip_MassFabricatorGenesis_02
-                // # Energy - Mass : Interface.
-                // #zh_CN 能量 - 质量 : 接口.
-                .addInfo(TextEnums.tr("Tooltip_MassFabricatorGenesis_02"))
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                .beginStructureBlock(55, 55, 56, false)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
-                .toolTipFinisher(TextLocalization.ModName);
-            // spotless:on
-        }
-        return tooltip;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
+
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList
+        .of(ModularHatchTypes.PARALLEL_CONTROLLER);
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.MassFabricatorGenesisRecipeMap;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    protected OverclockType getDefaultOverclockType() {
+        return OverclockType.PerfectOverclock;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
+        return supportedModularHatchTypes;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return true;
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -288,4 +247,47 @@ public class MM_MassFabricatorGenesis extends ModularizedMachineSupportAllModule
         }
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][0] };
     }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
+            // #tr tst.modular.machine.MassFabricatorGenesis.tooltip.machine_type
+            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
+            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}质量发生器
+            tooltip
+                .addMachineType(
+                    TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.machine_type"))
+                // #tr tst.modular.machine.MassFabricatorGenesis.tooltip.info.01
+                // # {\BLUE}{\ITALIC}“Even though the future seems far away, it is actually beginning right now.”
+                // #zh_CN {\BLUE}{\ITALIC}“虽然未来似乎很遥远，但其实已经开始了。”
+                .addInfo(TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.info.01"))
+
+                // #tr tst.modular.machine.MassFabricatorGenesis.tooltip.info.02
+                // # Energy - Mass : Interface.
+                // #zh_CN 能量 - 质量 : 接口.
+                .addInfo(TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.tooltip.info.02"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                .beginStructureBlock(55, 55, 56, false)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 1)
+                .toolTipFinisher();
+            // spotless:on
+        }
+        return tooltip;
+    }
+
+    // endregion
+
 }

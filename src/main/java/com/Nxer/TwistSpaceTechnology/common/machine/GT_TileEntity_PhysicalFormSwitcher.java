@@ -34,7 +34,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -45,6 +48,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -62,47 +66,109 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings8;
 import gregtech.common.tileentities.machines.IDualInputInventoryWithPattern;
 
+@SkipGenerateDescription
 public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT_TileEntity_PhysicalFormSwitcher> {
 
     // region Class Constructor
     public GT_TileEntity_PhysicalFormSwitcher(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_PhysicalFormSwitcher(String aName) {
         super(aName);
     }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_PhysicalFormSwitcher(this.mName);
+    }
     // endregion
 
-    // region Processing Logic
-    public int glassTier;
+    // region Structure
+    private final int horizontalOffSet = 7;
+    private final int verticalOffSet = 18;
+    private final int depthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
 
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Fluid Solidifier
-         * 1 - Fluid Extractor
-         */
-        return 2;
+    private static IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> STRUCTURE_DEFINITION = null;
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(BW_GlasBlocks, 14, ...);
+     * B -> ofBlock...(MAR_Casing, 0, ...);
+     * C -> ofBlock...(gt.blockcasings2, 8, ...);
+     * D -> ofBlock...(gt.blockcasings2, 15, ...);
+     * E -> ofBlock...(gt.blockcasings8, 10, ...); // Hatches
+     * F -> ofFrame
+     */
+
+    // spotless:off
+	protected static final String[][] shape = new String[][]{
+	    {"               ","      EEE      ","      EEE      ","      EEE      ","     EEEEE     ","    EEEEEEE    "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","    EEEEEEE    ","     EEEEE     ","      EEE      ","      EEE      ","      EEE      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","               "," F     B     F ","      BDB      "," F     B     F ","               ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","               "," F     A     F ","      ADA      "," F     A     F ","               ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","      AAA      "," F   AA AA   F ","     A   A     "," F   AA AA   F ","      AAA      ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","       A       ","     AA AA     "," F   A   A   F ","    A     A    "," F   A   A   F ","     AA AA     ","       A       ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","      AAA      ","     A   A     "," F  A     A  F ","    A     A    "," F  A     A  F ","     A   A     ","      AAA      ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","       A       ","     AA AA     "," F   A   A   F ","    A     A    "," F   A   A   F ","     AA AA     ","       A       ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","      AAA      "," F   AA AA   F ","     A   A     "," F   AA AA   F ","      AAA      ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","               "," F     A     F ","      ADA      "," F     A     F ","               ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","               "," F     B     F ","      BDB      "," F     B     F ","               ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
+	    {"      E~E      ","      EEE      ","    EEEEEEE    ","   EEEEEEEEE   ","  EEEEEEEEEEE  ","  EEEEEEEEEEE  ","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE","  EEEEEEEEEEE  ","  EEEEEEEEEEE  ","   EEEEEEEEE   ","    EEEEEEE    ","      EEE      ","      EEE      "},
+	    {"      EEE      ","    EEEEEEE    ","   EEEEEEEEE   ","  EEEEEEEEEEE  "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE"," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","  EEEEEEEEEEE  ","   EEEEEEEEE   ","    EEEEEEE    ","      EEE      "}
+	};
+    // spotless:on
+
+    public IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_PhysicalFormSwitcher>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
+                .addElement('B', ofBlock(MAR_Casing, 0))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 8))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasings2, 15))
+                .addElement(
+                    'E',
+                    HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
+                        .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
+                        .hint(1)
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 10))
+                .addElement('F', ofFrame(Materials.NaquadahAlloy))
+                .build();
+        }
+
+        return STRUCTURE_DEFINITION;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID };
-
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_FORMING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    // }
-    //
     @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + machineMode);
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
 
     @Override
@@ -115,6 +181,53 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
         speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_PhysicalFormSwitcher, getTotalPowerTier());
 
+    }
+    // endregion
+
+    // region Processing Logic
+    public int glassTier;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_FORMING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+
+        if (machineMode == 1) return RecipeMaps.fluidExtractionRecipes;
+
+        return RecipeMaps.fluidSolidifierRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.fluidExtractionRecipes, RecipeMaps.fluidSolidifierRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Fluid Solidifier
+         * 1 - Fluid Extractor
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        // #tr tst.common.machine.PhysicalFormSwitcher.mode.0
+        // # Mode: Fluid Solidifier
+        // #zh_CN 流体固化机模式
+
+        // #tr tst.common.machine.PhysicalFormSwitcher.mode.1
+        // # Mode: Fluid Extractor
+        // #zh_CN 流体提取机模式
+        return StatCollector.translateToLocal("tst.common.machine.PhysicalFormSwitcher.mode." + machineMode);
     }
 
     public int getMaxParallelRecipes() {
@@ -175,133 +288,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         }.setMaxParallelSupplier(this::getTrueParallel);
     }
 
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-
-        if (machineMode == 1) return RecipeMaps.fluidExtractionRecipes;
-
-        return RecipeMaps.fluidSolidifierRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.fluidExtractionRecipes, RecipeMaps.fluidSolidifierRecipes);
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    // endregion
-
-    // region Structure
-    // spotless:off
-	private final int horizontalOffSet = 7;
-	private final int verticalOffSet = 18;
-	private final int depthOffSet = 0;
-	private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> STRUCTURE_DEFINITION = null;
-
-	/*
-	Blocks:
-		A -> ofBlock...(BW_GlasBlocks, 14, ...);
-		B -> ofBlock...(MAR_Casing, 0, ...);
-		C -> ofBlock...(gt.blockcasings2, 8, ...);
-		D -> ofBlock...(gt.blockcasings2, 15, ...);
-		E -> ofBlock...(gt.blockcasings8, 10, ...); // Hatches
-		F -> ofFrame
-	 */
-
-	public IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition
-                                       .<GT_TileEntity_PhysicalFormSwitcher>builder()
-                                       .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                                       .addElement(
-                                           'A',chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
-                                       .addElement('B', ofBlock(MAR_Casing,0))
-                                       .addElement('C', ofBlock(GregTechAPI.sBlockCasings2,8))
-                                       .addElement('D', ofBlock(GregTechAPI.sBlockCasings2,15))
-                                       .addElement('E',
-                                                   HatchElementBuilder.<GT_TileEntity_PhysicalFormSwitcher>builder()
-                                                                         .atLeast(InputBus, OutputBus, InputHatch, OutputHatch, Energy.or(ExoticEnergy))
-                                                                         .adder(GT_TileEntity_PhysicalFormSwitcher::addToMachineList)
-                                                                         .hint(1)
-                                                                         .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
-                                                                         .buildAndChain(GregTechAPI.sBlockCasings8,10))
-                                       .addElement('F', ofFrame(Materials.NaquadahAlloy))
-                                       .build();
-        }
-
-		return STRUCTURE_DEFINITION;
-	}
-
-	@Override
-	public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-		return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-			       || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-	}
-
-	protected static final String[][] shape = new String[][]{
-		{"               ","      EEE      ","      EEE      ","      EEE      ","     EEEEE     ","    EEEEEEE    "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","    EEEEEEE    ","     EEEEE     ","      EEE      ","      EEE      ","      EEE      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","               "," F     B     F ","      BDB      "," F     B     F ","               ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","               "," F     A     F ","      ADA      "," F     A     F ","               ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","      AAA      "," F   AA AA   F ","     A   A     "," F   AA AA   F ","      AAA      ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","       A       ","     AA AA     "," F   A   A   F ","    A     A    "," F   A   A   F ","     AA AA     ","       A       ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","      AAA      ","     A   A     "," F  A     A  F ","    A     A    "," F  A     A  F ","     A   A     ","      AAA      ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","       A       ","     AA AA     "," F   A   A   F ","    A     A    "," F   A   A   F ","     AA AA     ","       A       ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","      AAA      "," F   AA AA   F ","     A   A     "," F   AA AA   F ","      AAA      ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","               "," F     A     F ","      ADA      "," F     A     F ","               ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","               "," F     B     F ","      BDB      "," F     B     F ","               ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"               ","      F F      ","               ","               ","               ","       C       "," F    CBC    F ","     CBDBC     "," F    CBC    F ","       C       ","               ","               ","               ","      F F      ","               "},
-		{"      E~E      ","      EEE      ","    EEEEEEE    ","   EEEEEEEEE   ","  EEEEEEEEEEE  ","  EEEEEEEEEEE  ",
-			"EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE","  EEEEEEEEEEE  ","  EEEEEEEEEEE  ","   EEEEEEEEE   ","    EEEEEEE    ","      EEE      ","      EEE      "},
-		{"      EEE      ","    EEEEEEE    ","   EEEEEEEEE   ","  EEEEEEEEEEE  "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE","EEEEEEEEEEEEEEE"," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","  EEEEEEEEEEE  ","   EEEEEEEEE   ","    EEEEEEE    ","      EEE      "}
-	};
-	// spotless:on
-
-    // endregion
-
-    // region Overrides
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setBoolean("mode", machineMode == 1);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        machineMode = aNBT.getBoolean("mode") ? 1 : 0;
-    }
-
     // Scanner Info
     @Override
     public String[] getInfoData() {
@@ -318,33 +304,27 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
         return ret;
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_PhysicalFormSwitcher_MachineType)
-            .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_00)
-            .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_01)
-            .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_02)
-            .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_03)
-            .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_04)
-            .addInfo(TextLocalization.Tooltip_PhysicalFormSwitcher_05)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(15, 20, 15, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 1)
-            .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setBoolean("mode", machineMode == 1);
     }
 
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_PhysicalFormSwitcher(this.mName);
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        machineMode = aNBT.getBoolean("mode") ? 1 : 0;
     }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
@@ -380,4 +360,62 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     }
 
     // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.machine_type
+        // # Fluid Solidifier | Fluid Extractor
+        // #zh_CN 流体固化器 | 流体提取机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.machine_type"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.01
+            // # Controller block for the Physical Form Switcher
+            // #zh_CN 物质形态转换器的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.01"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.02
+            // # {\YELLOW}Forming Master !
+            // #zh_CN {\YELLOW}体态多端！
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.02"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.03
+            // # The ultimate method of melt operation.
+            // #zh_CN 熔体操作的最终手段.
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.03"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.04
+            // # Has parallel equivalent to Perfect Overclock.
+            // #zh_CN 拥有与无损超频等效的并行(但有损超频).
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.04"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.05
+            // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
+            // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.05"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.06
+            // # The Glass Tier limit the recipe voltage tier.
+            // #zh_CN 玻璃等级限制可执行配方等级.
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.06"))
+            .beginStructureBlock(15, 20, 15, false)
+            .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
+
 }

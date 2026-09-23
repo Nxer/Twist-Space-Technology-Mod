@@ -4,7 +4,7 @@ import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.fo
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
@@ -30,11 +30,11 @@ public class TST_StrangeMatterAggregatorFrontend extends RecipeMapFrontend {
                 + " EU");
         // 1000 / (20 ticks * 5 seconds) = 10L/t. 10L/t * x EU/L = 10 * x EU/t.
         long averageUsage = 256L * recipeInfo.recipe.mEUt;
-        // #tr TST_StrangeMatterAggregatorFrontend.drawEnergyInfo.Power
+        // #tr tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.power
         // # Usage
         // #zh_CN 消耗功率
         recipeInfo.drawText(
-            TextEnums.tr("TST_StrangeMatterAggregatorFrontend.drawEnergyInfo.Power") + ": "
+            TSTUtils.tr("tst.dyson.recipe.StrangeMatterAggregatorRecipeMap.power") + ": "
                 + formatNumber(averageUsage)
                 + " EU/t"
                 + GTUtility.getTierNameWithParentheses(averageUsage));

@@ -9,76 +9,76 @@ public final class CheckRecipeResults {
         CheckRecipeResultRegistry.register(new SimpleResultWithText(false, "", false));
     }
 
-    // #tr CheckRecipeResult.NoIdleExecutionCore
+    // #tr tst.common.shared.result.no_idle_execution_core
     // # No idle execution core.
     // #zh_CN 没有空闲的执行核心
     public static final CheckRecipeResult NoIdleExecutionCore = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.NoIdleExecutionCore");
+        .ofFailure("tst.common.shared.result.no_idle_execution_core");
 
-    // #tr CheckRecipeResult.SetProcessingFailed
+    // #tr tst.common.shared.result.set_processing_failed
     // # Set processing failed. Check your power system or wireless EU net.
     // #zh_CN 设置处理任务失败，检查你的能源系统或无线EU网络。
     public static final CheckRecipeResult SetProcessingFailed = SimpleResultWithText
-        .ofFailurePersistOnShutdown("CheckRecipeResult.SetProcessingFailed");
+        .ofFailurePersistOnShutdown("tst.common.shared.result.set_processing_failed");
 
-    // #tr CheckRecipeResult.NoSpaceTimeMaintenanceFluidInput
+    // #tr tst.common.shared.result.no_space_time_maintenance_fluid_input
     // # No Space Time Maintenance Fluid Input
     // #zh_CN 没有时空维护流体输入
     public static final CheckRecipeResult NoSpaceTimeMaintenanceFluidInput = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.NoSpaceTimeMaintenanceFluidInput");
+        .ofFailure("tst.common.shared.result.no_space_time_maintenance_fluid_input");
 
-    // #tr CheckRecipeResult.NoAnnihilationConstrainerInput
+    // #tr tst.common.shared.result.no_annihilation_constrainer_input
     // # No Annihilation Constrainers Input
     // #zh_CN 没有湮灭约束器输入
     public static final CheckRecipeResult NoAnnihilationConstrainerInput = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.NoAnnihilationConstrainerInput");
+        .ofFailure("tst.common.shared.result.no_annihilation_constrainer_input");
 
-    // #tr CheckRecipeResult.NoCorrectFluidInput
+    // #tr tst.common.shared.result.no_correct_fluid_input
     // # No Correct Fluid Input
     // #zh_CN 没有正确的流体输入
     public static final CheckRecipeResult NoCorrectFluidInput = SimpleResultWithText
-        .ofFailurePersistOnShutdown("CheckRecipeResult.NoCorrectFluidInput");
+        .ofFailurePersistOnShutdown("tst.common.shared.result.no_correct_fluid_input");
 
-    // #tr CheckRecipeResult.RapidHeating
+    // #tr tst.common.machine.SwelegfyrBlastFurnace.result.rapid_heating
     // # Rapid Thermal Boosting
     // #zh_CN 快速升温中
     public static final CheckRecipeResult RapidHeating = SimpleResultWithText
-        .ofSuccess("CheckRecipeResult.RapidHeating");
+        .ofSuccess("tst.common.machine.SwelegfyrBlastFurnace.result.rapid_heating");
 
-    // #tr CheckRecipeResult.RapidHeatFinish
+    // #tr tst.common.machine.SwelegfyrBlastFurnace.result.rapid_heat_finish
     // # Heating Complete: Thermal Retention Activated
     // #zh_CN 升温完成：已自动执行热保持操作
     public static final CheckRecipeResult RapidHeatFinish = SimpleResultWithText
-        .ofSuccess("CheckRecipeResult.RapidHeatFinish");
+        .ofSuccess("tst.common.machine.SwelegfyrBlastFurnace.result.rapid_heat_finish");
 
-    // #tr CheckRecipeResult.NoSeedInController
+    // #tr tst.common.shared.result.no_seed_in_controller
     // # No valid seed input detected
     // #zh_CN 未检测到有效种子输入
     public static final CheckRecipeResult NoSeedInController = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.NoSeedInController");
+        .ofFailure("tst.common.shared.result.no_seed_in_controller");
 
-    // #tr CheckRecipeResult.NotEnoughWater
+    // #tr tst.common.shared.result.not_enough_water
     // # Insufficient water supply
     // #zh_CN 供水量不足
     public static final CheckRecipeResult NotEnoughWater = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.NotEnoughWater");
+        .ofFailure("tst.common.shared.result.not_enough_water");
 
-    // #tr CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection
+    // #tr tst.ecosphere.machine.EcoSphereSimulator.result.missing_tree_output_selection
     // # No arboreal output category selected
     // #zh_CN 未指定林木输出类别
     public static final CheckRecipeResult MissingTreeOutputSelection = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection");
+        .ofFailure("tst.ecosphere.machine.EcoSphereSimulator.result.missing_tree_output_selection");
 
-    // #tr CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput
+    // #tr tst.ecosphere.machine.EcoSphereSimulator.result.missing_sapling_input
     // # No valid sapling input detected
     // #zh_CN 未检测到有效树苗输入
     public static final CheckRecipeResult MissingSaplingInput = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
+        .ofFailure("tst.ecosphere.machine.EcoSphereSimulator.result.missing_sapling_input");
 
-    // #tr CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch
+    // #tr tst.ecosphere.machine.EcoSphereSimulator.result.execution_protocol_input_mismatch
     // # Authorization level insufficient
     // #zh_CN 授权等级不足
     public static final CheckRecipeResult ExecutionProtocolInputMismatch = SimpleResultWithText
-        .ofFailure("CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch");
+        .ofFailure("tst.ecosphere.machine.EcoSphereSimulator.result.execution_protocol_input_mismatch");
 
 }

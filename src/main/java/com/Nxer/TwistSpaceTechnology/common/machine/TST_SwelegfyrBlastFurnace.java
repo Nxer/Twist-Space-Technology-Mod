@@ -3,16 +3,14 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.MetaBlockCasing01;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.numericalApproximation;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Kelvin;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.getBlueprintWithDot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textColon;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textSpace;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Kelvin;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.getBlueprintWithDot;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textColon;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textSpace;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -60,8 +58,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processi
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.CheckRecipeResults;
 import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -75,6 +74,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
@@ -102,12 +102,13 @@ import gtPlusPlus.xmod.thermalfoundation.fluid.TFFluids;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-@IMetaTileEntity.SkipGenerateDescription
+@SkipGenerateDescription
 public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_SwelegfyrBlastFurnace> {
 
     // region Class Constructor
     public TST_SwelegfyrBlastFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_SwelegfyrBlastFurnace(String aName) {
@@ -118,7 +119,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_SwelegfyrBlastFurnace(this.mName);
     }
-    // end region
+    // endregion
 
     // region Structure
     protected static final int baseHorizontalOffSet = 5;
@@ -131,6 +132,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     protected static final String STRUCTURE_PIECE_MAIN_T2 = "mainT2";
     protected static final String STRUCTURE_PIECE_Blaze_T1 = "BlazeT1";
     protected static final String STRUCTURE_PIECE_Blaze_T2 = "BlazeT2";
+
     // spotless:off
     protected static final String[][] shapeMainT1 = new String[][]{
         {"           ","           ","   NNNNN   ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","  NNNNNNN  ","   NNNNN   ","           ","           "},
@@ -315,14 +317,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public void clearHatches() {
-        super.clearHatches();
-        this.glassTier = -1;
-        this.mBlazeHatch = null;
-        this.setCoilLevel(HeatingCoilLevel.None);
-    }
-
-    @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
         recipeHeatLimitation = 0;
@@ -363,6 +357,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         recipeHeatLimitation = (int) getCoilLevel().getHeat() + 100 * Math.max(getDominantInputVoltageTier() - 2, 0);
 
     }
+    // endregion
 
     // region Processing Logic
     public int glassTier = -1;
@@ -386,18 +381,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     public int mHeatingCapacity;
     public int maxHeatingCapacity;
     public int recipeHeatLimitation;
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    public int getCoilHeat() {
-        return (int) getCoilLevel().getHeat();
-    }
-
-    public void setCoilLevel(HeatingCoilLevel coilLevel) {
-        this.coilLevel = coilLevel;
-    }
+    protected long runningTick = 0;
 
     private static int getRecipeCode(GTRecipe recipe) {
         int result = 1;
@@ -424,71 +408,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfyrUpgradeChip.get(1);
-    }
-
-    protected boolean setRemoveBlaze() {
-        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
-        String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
-        Block Air = Blocks.air;
-        Block Blaze = TFFluids.fluidPyrotheum.getBlock();
-        boolean isFlipped = this.getFlip()
-            .isHorizontallyFlipped();
-        int BlazeAmount = controllerTier > 1 ? 168000 : 72000;
-        int OffSetX = BlazeHorizontalOffSet;
-        int OffSetY = BlazeVerticalOffSet;
-        int OffSetZ = BlazeDepthOffSet;
-        // if (!checkStructure(true)) return false;
-        if (!isBlazeFinishSet) {
-            if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
-            drainPyrotheumFromBlazeHatch(BlazeAmount, true);
-            isBlazeFinishClear = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Blaze);
-            isBlazeFinishSet = true;
-            return true;
-        } else if (!isBlazeFinishClear) {
-            // clear will not return existing pyrotheum
-            isBlazeFinishSet = false;
-            TstUtils
-                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Air);
-            isBlazeFinishClear = true;
-            return true;
-        }
-        return false;
-    }
-
-    protected boolean checkBlaze() {
-        // If blaze illegal return true
-        if (isBlazeFinishClear || !isBlazeFinishSet) {
-            return !setRemoveBlaze();
-        }
-        return false;
-    }
-
-    public boolean addBlazeHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
-            mBlazeHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected IAlignmentLimits getInitialAlignmentLimits() {
-        // only can face to X, Z direction
-        // return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
-        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
-    }
-
-    @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.blastFurnaceRecipes;
     }
@@ -500,8 +419,71 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
+    protected boolean useMui2() {
+        return super.useMui2();
+    }
+
+    @Override
+    public int totalMachineMode() {
+        return 2;
+    }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        isPassiveMode = index != 0;
+    }
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SBF_ModeBase,
+        UITextures.SBF_ModePassive };
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        // An unbound meta tile entity has no running state; use its selected mode until it is placed.
+        IGregTechTileEntity base = getBaseMetaTileEntity();
+        return getMachineModeName(
+            base != null && base.isActive(),
+            machineMode != 0,
+            inPassiveMode,
+            inRapidHeating,
+            isHoldingHeat);
+    }
+
+    private String getMachineModeName(boolean isActive, boolean isPassiveMode, boolean inPassiveMode,
+        boolean inRapidHeating, boolean isHoldingHeat) {
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.mode.0
+        // # Normal Mode
+        // #zh_CN 普通模式
+
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.mode.1
+        // # Passive Mode
+        // #zh_CN 被动模式
+        boolean passive = isActive ? inPassiveMode : isPassiveMode;
+        String suffixKey = null;
+        if (passive) {
+            if (isActive && inRapidHeating)
+                suffixKey = "tst.common.machine.SwelegfyrBlastFurnace.message.enable_rapid_heating";
+            else if (!isActive && isHoldingHeat)
+                suffixKey = "tst.common.machine.SwelegfyrBlastFurnace.message.enable_holding_heat";
+        }
+
+        String base = StatCollector
+            .translateToLocal("tst.common.machine.SwelegfyrBlastFurnace.mode." + (passive ? 1 : 0));
+        if (suffixKey != null) {
+            return base + "-" + StatCollector.translateToLocal(suffixKey);
+        }
+        return base;
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return isPassiveMode ? Config.Parallel_PassiveMode_SwelegfyrBlastFurnace
+            : Config.Parallel_NormalMode_SwelegfyrBlastFurnace;
     }
 
     @Override
@@ -511,9 +493,15 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public int getMaxParallelRecipes() {
-        return isPassiveMode ? Config.Parallel_PassiveMode_SwelegfyrBlastFurnace
-            : Config.Parallel_NormalMode_SwelegfyrBlastFurnace;
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    protected IAlignmentLimits getInitialAlignmentLimits() {
+        // only can face to X, Z direction
+        // return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && f.isNotFlipped();
+        return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
     @Override
@@ -686,7 +674,70 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     }
 
-    protected long runningTick = 0;
+    @Override
+    public void clearHatches() {
+        super.clearHatches();
+        this.glassTier = -1;
+        this.mBlazeHatch = null;
+        this.setCoilLevel(HeatingCoilLevel.None);
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    public int getCoilHeat() {
+        return (int) getCoilLevel().getHeat();
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (UpgradeItem == null) UpgradeItem = GTCMItemList.SwelegfyrUpgradeChip.get(1);
+    }
+
+    protected boolean setRemoveBlaze() {
+        IGregTechTileEntity aBaseMetaTileEntity = this.getBaseMetaTileEntity();
+        String[][] StructureDef = controllerTier > 1 ? shapeBlazeT2 : shapeBlazeT1;
+        Block Air = Blocks.air;
+        Block Blaze = TFFluids.fluidPyrotheum.getBlock();
+        boolean isFlipped = this.getFlip()
+            .isHorizontallyFlipped();
+        int BlazeAmount = controllerTier > 1 ? 168000 : 72000;
+        int OffSetX = BlazeHorizontalOffSet;
+        int OffSetY = BlazeVerticalOffSet;
+        int OffSetZ = BlazeDepthOffSet;
+        // if (!checkStructure(true)) return false;
+        if (!isBlazeFinishSet) {
+            if (!drainPyrotheumFromBlazeHatch(BlazeAmount, false)) return false;
+            drainPyrotheumFromBlazeHatch(BlazeAmount, true);
+            isBlazeFinishClear = false;
+            TSTUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Blaze);
+            isBlazeFinishSet = true;
+            return true;
+        } else if (!isBlazeFinishClear) {
+            // clear will not return existing pyrotheum
+            isBlazeFinishSet = false;
+            TSTUtils
+                .setStringBlockXZ(aBaseMetaTileEntity, OffSetX, OffSetY, OffSetZ, StructureDef, isFlipped, "Z", Air);
+            isBlazeFinishClear = true;
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean checkBlaze() {
+        // If blaze illegal return true
+        if (isBlazeFinishClear || !isBlazeFinishSet) {
+            return !setRemoveBlaze();
+        }
+        return false;
+    }
 
     @Override
     protected void outputAfterRecipe() {
@@ -812,65 +863,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         super.stopMachine(reason);
     }
 
-    @Override
-    public int totalMachineMode() {
-        return 2;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SBF_ModeBase,
-        UITextures.SBF_ModePassive };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    @Override
-    public void setMachineMode(int index) {
-        super.setMachineMode(index);
-        isPassiveMode = index != 0;
-    }
-
-    @Override
-    public String getMachineModeName() {
-        // Override the origin logic, check machine mode name with the machine status
-        return getMachineModeName(
-            this.getBaseMetaTileEntity()
-                .isActive(),
-            machineMode != 0,
-            inPassiveMode,
-            inRapidHeating,
-            isHoldingHeat);
-    }
-
-    private String getMachineModeName(boolean isActive, boolean isPassiveMode, boolean inPassiveMode,
-        boolean inRapidHeating, boolean isHoldingHeat) {
-        // #tr Swelegfyr.modeMsg.0
-        // # Normal Mode
-        // #zh_CN 普通模式
-
-        // #tr Swelegfyr.modeMsg.1
-        // # Passive Mode
-        // #zh_CN 被动模式
-        boolean passive = isActive ? inPassiveMode : isPassiveMode;
-        String suffixKey = null;
-        if (passive) {
-            if (isActive && inRapidHeating) suffixKey = "SBF.Msg.enableRapidHeating";
-            else if (!isActive && isHoldingHeat) suffixKey = "SBF.Msg.enableHoldingHeat";
-        }
-
-        String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + (passive ? 1 : 0));
-        if (suffixKey != null) {
-            return base + "-" + StatCollector.translateToLocal(suffixKey);
-        }
-        return base;
-    }
-
-    @Override
-    protected boolean useMui2() {
-        return super.useMui2();
-    }
-
     protected @NotNull MTEMultiBlockBaseGui<?> getGui() {
         return new TST_Gui_SwelegfyrBlastFurnace(this).withMachineModeIcons(getMachineModeIcons());
     }
@@ -941,12 +933,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     }
 
     @Override
-    public void setItemNBT(NBTTagCompound aNBT) {
-        super.setItemNBT(aNBT);
-        if (controllerTier > 1) aNBT.setByte("mTier", controllerTier);
-    }
-
-    @Override
     public void initDefaultModes(NBTTagCompound aNBT) {
         super.initDefaultModes(aNBT);
         if (aNBT == null || !aNBT.hasKey("mTier")) {
@@ -954,51 +940,6 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         } else {
             controllerTier = aNBT.getByte("mTier");
         }
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mTier", controllerTier);
-        aNBT.setInteger("mGlass", glassTier);
-        aNBT.setByte("mMode", (byte) machineMode);
-        aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
-        aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
-        aNBT.setBoolean("isBlazeFinishClear", isBlazeFinishClear);
-        aNBT.setBoolean("isPassiveMode", isPassiveMode);
-        aNBT.setBoolean("inPassiveMode", inPassiveMode);
-        aNBT.setBoolean("isRapidHeating", isRapidHeating);
-        aNBT.setBoolean("inRapidHeating", inRapidHeating);
-        aNBT.setInteger("pendingRapidHeatingStep", pendingRapidHeatingStep);
-        aNBT.setBoolean("isHoldingHeat", isHoldingHeat);
-        aNBT.setInteger("previousRecipeCode", previousRecipeCode);
-        aNBT.setInteger("previousRecipeVoltageTier", previousRecipeVoltageTier);
-        aNBT.setInteger("correctBlazeCost", correctBlazeCost);
-        aNBT.setInteger("recipeHeatLimitation", recipeHeatLimitation);
-        aNBT.setLong("runningTick", runningTick);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        previousRecipe = null;
-        controllerTier = aNBT.getByte("mTier");
-        glassTier = aNBT.getInteger("mGlass");
-        machineMode = aNBT.getByte("mMode");
-        mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
-        isBlazeFinishSet = aNBT.getBoolean("isBlazeFinishSet");
-        isBlazeFinishClear = aNBT.getBoolean("isBlazeFinishClear");
-        isPassiveMode = aNBT.getBoolean("isPassiveMode");
-        inPassiveMode = aNBT.getBoolean("inPassiveMode");
-        isRapidHeating = aNBT.getBoolean("isRapidHeating");
-        inRapidHeating = aNBT.getBoolean("inRapidHeating");
-        pendingRapidHeatingStep = aNBT.getInteger("pendingRapidHeatingStep");
-        isHoldingHeat = aNBT.getBoolean("isHoldingHeat");
-        previousRecipeCode = aNBT.getInteger("previousRecipeCode");
-        previousRecipeVoltageTier = aNBT.getInteger("previousRecipeVoltageTier");
-        correctBlazeCost = aNBT.getInteger("correctBlazeCost");
-        recipeHeatLimitation = aNBT.getInteger("recipeHeatLimitation");
-        runningTick = aNBT.getLong("runningTick");
     }
 
     @Override
@@ -1046,7 +987,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             rapidHeatingStep);
 
         // The inherited mode line uses unsynchronized client-side fields, replace it with server Waila data.
-        String runningModeLabel = StatCollector.translateToLocal("TST.machines.running_mode");
+        String runningModeLabel = StatCollector.translateToLocal("tst.common.shared.machine_info.running_mode");
         currentTip.removeIf(s -> s.contains(runningModeLabel));
         currentTip.add(
             runningModeLabel + " "
@@ -1055,18 +996,19 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 + EnumChatFormatting.RESET);
 
         currentTip.add(
-            // #tr Waila.SBF.0
+            // spotless:off
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.0
             // # Recipe Heat
             // #zh_CN 配方炉温限制
-            (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.0")
+            (EnumChatFormatting.YELLOW + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.0")
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("recipeHeatLimitation")) + Kelvin);
         currentTip.add(
-            // #tr Waila.SBF.1
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.1
             // # Current Heat
             // #zh_CN 当前炉温
-            (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.1")
+            (EnumChatFormatting.YELLOW + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.1")
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("mHeatingCapacity")
@@ -1074,26 +1016,27 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 + heatChangeSuffix));
         if ((IsActive && InPassiveMode) || (!IsActive && IsPassiveMode)) {
             currentTip.add(
-                // #tr Waila.SBF.2
+                // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.2
                 // # Max Heat
                 // #zh_CN 最高炉温
-                (EnumChatFormatting.YELLOW + TextEnums.tr("Waila.SBF.2")
+                (EnumChatFormatting.YELLOW + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.2")
                     + textColon
                     + EnumChatFormatting.WHITE
                     + tag.getInteger("maxHeatingCapacity")) + Kelvin);
         }
         currentTip.add(
-            // #tr Waila.SBF.3
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.3
             // # Current Blazing Pyrotheum Cost
             // #zh_CN 当前炽焰消耗
-            (EnumChatFormatting.YELLOW + TextEnums.tr(
-                "Waila.SBF.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
+            (EnumChatFormatting.YELLOW + TSTUtils.tr(
+                "tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
 
         if (updated) {
-            // #tr Waila.SBF.4
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.4
             // # {\GOLD}Machine Updated
             // #zh_CN {\GOLD}已升级至二级
-            currentTip.add(TextEnums.tr("Waila.SBF.4"));
+            currentTip.add(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.4"));
+            // spotless:on
         }
 
     }
@@ -1139,9 +1082,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums
-            .tr("Waila.SBF.0") + textColon + EnumChatFormatting.GOLD + recipeHeatLimitation + Kelvin;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.tr("Waila.SBF.1")
+        ret[origin.length] = EnumChatFormatting.AQUA
+            + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.0")
+            + textColon
+            + EnumChatFormatting.GOLD
+            + recipeHeatLimitation
+            + Kelvin;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA
+            + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.1")
             + textColon
             + EnumChatFormatting.GOLD
             + mHeatingCapacity
@@ -1158,6 +1106,65 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 pendingRapidHeatingStep);
         return ret;
     }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mTier", controllerTier);
+        aNBT.setInteger("mGlass", glassTier);
+        aNBT.setByte("mMode", (byte) machineMode);
+        aNBT.setInteger("mHeatingCapacity", mHeatingCapacity);
+        aNBT.setBoolean("isBlazeFinishSet", isBlazeFinishSet);
+        aNBT.setBoolean("isBlazeFinishClear", isBlazeFinishClear);
+        aNBT.setBoolean("isPassiveMode", isPassiveMode);
+        aNBT.setBoolean("inPassiveMode", inPassiveMode);
+        aNBT.setBoolean("isRapidHeating", isRapidHeating);
+        aNBT.setBoolean("inRapidHeating", inRapidHeating);
+        aNBT.setInteger("pendingRapidHeatingStep", pendingRapidHeatingStep);
+        aNBT.setBoolean("isHoldingHeat", isHoldingHeat);
+        aNBT.setInteger("previousRecipeCode", previousRecipeCode);
+        aNBT.setInteger("previousRecipeVoltageTier", previousRecipeVoltageTier);
+        aNBT.setInteger("correctBlazeCost", correctBlazeCost);
+        aNBT.setInteger("recipeHeatLimitation", recipeHeatLimitation);
+        aNBT.setLong("runningTick", runningTick);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        previousRecipe = null;
+        controllerTier = aNBT.getByte("mTier");
+        glassTier = aNBT.getInteger("mGlass");
+        machineMode = aNBT.getByte("mMode");
+        mHeatingCapacity = aNBT.getInteger("mHeatingCapacity");
+        isBlazeFinishSet = aNBT.getBoolean("isBlazeFinishSet");
+        isBlazeFinishClear = aNBT.getBoolean("isBlazeFinishClear");
+        isPassiveMode = aNBT.getBoolean("isPassiveMode");
+        inPassiveMode = aNBT.getBoolean("inPassiveMode");
+        isRapidHeating = aNBT.getBoolean("isRapidHeating");
+        inRapidHeating = aNBT.getBoolean("inRapidHeating");
+        pendingRapidHeatingStep = aNBT.getInteger("pendingRapidHeatingStep");
+        isHoldingHeat = aNBT.getBoolean("isHoldingHeat");
+        previousRecipeCode = aNBT.getInteger("previousRecipeCode");
+        previousRecipeVoltageTier = aNBT.getInteger("previousRecipeVoltageTier");
+        correctBlazeCost = aNBT.getInteger("correctBlazeCost");
+        recipeHeatLimitation = aNBT.getInteger("recipeHeatLimitation");
+        runningTick = aNBT.getLong("runningTick");
+    }
+
+    @Override
+    public void setItemNBT(NBTTagCompound aNBT) {
+        super.setItemNBT(aNBT);
+        if (controllerTier > 1) aNBT.setByte("mTier", controllerTier);
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -1182,120 +1189,123 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         return new ITexture[] { base };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // #tr Tooltip_SwelegfyrBlastFurnace_MachineType
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.machine_type
         // # Blast Furnace
         // #zh_CN 工业高炉
-        tt.addMachineType(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_MachineType"))
-            // #tr Tooltip_SwelegfyrBlastFurnace_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.machine_type"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.controller
             // # Controller block for the Swelegfyr Blast Furnace
             // #zh_CN 熯焱高炉的控制方块
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.01
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.controller"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.01
             // # {\ITALIC}{\GOLD}Blaze Pyrotheum feeds celestial forges. Soulsteel wrought, flame-bound cosmic rite.
             // #zh_CN {\ITALIC}{\GOLD}炽焱为薪, 焚天作工. 铸形炼魄, 器道同烽.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.01"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.02
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.01"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.02
             // # Excels at continuous processing, but also handles conventional recipes.
             // #zh_CN 专精持续加工, 也可处理常规配方.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.02"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.03
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.02"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.03
             // # Blast furnace temp gradually increases in Passive Mode.
             // #zh_CN 当处于被动模式时炉温会缓慢升高.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.03"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.04
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.03"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.04
             // # Recipe changes recalculate extra heat based on structure tier.
             // #zh_CN 切换配方会按结构等级重算额外炉温.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.04"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.05
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.04"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.05
             // # Power consumption decreases by 10% per 900K above recipe temperature threshold.
             // #zh_CN 炉温每高出配方900K, 耗电减少10%.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.05"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.06
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.05"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.06
             // # Max parallels: 4096x in Normal Mode; 256x in Passive Mode.
             // #zh_CN 最大并行: 普通模式4096x, 被动模式256x.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.06"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.07
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.06"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.07
             // # Processes recipes at 390% speed; Glass tier restricts Energy Hatch tier.
             // #zh_CN 配方处理速度为390%, 玻璃等级限制能源仓等级.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.07"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.08
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.07"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.08
             // # Upgrade machine and build additional structure to unlock additional functions.
             // #zh_CN 升级机器并搭建附加结构以解锁更多功能.
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.08"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.08"))
             .addInfo(textSpace)
-            // #tr Tooltip_SwelegfyrBlastFurnace.09
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.09
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门!
-            .addInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.09"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.09"))
             .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
+            .addInfo(MoreInfoCheckingInScanner)
             .addStructureInfo(Text_SeparatingLine)
-            // #tr Tooltip_SwelegfyrBlastFurnace.11
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.01
             // # {\GOLD}Heat {\WHITE}Upper Limit:
             // #zh_CN {\GOLD}炉温{\WHITE}上限:
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.11"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.12
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.01"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.02
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Coil Heat
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\AQUA}线圈炉温
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.12"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.13
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.02"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.03
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ {\GOLD}1.08
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.08
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.13"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.14
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.03"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.04
             // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
             // #zh_CN {\GOLD}炽焱{\WHITE}消耗:
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.14"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.15
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.04"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.05
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\GOLD}1000 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\GOLD}1000 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.15"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.16
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.05"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.06
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}5 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.16"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.17
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: {\AQUA}Current Heat {\WHITE}x {\AQUA}Max Heat {\WHITE}/ {\AQUA}Input Voltage Tier {\WHITE}^ {\GOLD}3 {\WHITE}(affected by remaining heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: {\AQUA}当前炉温 {\WHITE}x {\AQUA}最高炉温 {\WHITE}/ {\AQUA}输入电压等级 {\WHITE}^ {\GOLD}3 {\WHITE}(受剩余温差影响)
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.17"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.18
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.06"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.07
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating: {\GOLD}10x {\WHITE}passive cost + dynamic surcharge per 1 s cycle (heat, voltage, remaining gap)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: 每1秒循环消耗{\GOLD}10倍{\WHITE}被动基础量, 另加随炉温, 电压和剩余温差变化的附加量
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.07"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.08
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}20 {\WHITE}L/s
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.18"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.21
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.08"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.09
             // # {\GOLD}Heat Capacity {\WHITE}Change:
             // #zh_CN {\GOLD}炉温{\WHITE}改变:
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.21"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.22
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.09"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.10
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\GOLD}5 {\WHITE}K/s [{\RED}Increasing{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\GOLD}5 {\WHITE}K/s [{\RED}升温{\WHITE}]
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.22"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.23
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: (Max Heat - Current Heat) x 20% K/s (affected by input voltage) [{\RED}Increasing{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: (最高炉温 - 当前炉温) x 20% K/s (受输入电压影响) [{\RED}升温{\WHITE}]
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.23"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.24
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Current Heat {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\AQUA}当前炉温 {\WHITE}x {\GOLD}10% {\WHITE}K/s [{\BLUE}降温{\WHITE}], 不低于线圈炉温
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.24"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.25
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown: {\AQUA}Current Heat {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}Decreasing{\WHITE}] (Minimum: Coil Heat)
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}关机状态: {\AQUA}当前炉温 {\WHITE}x {\GOLD}20% {\WHITE}K/s [{\BLUE}降温{\WHITE}], 不低于线圈炉温
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.25"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.26
-            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Recipe Change: Tier I {\GOLD}0%{\WHITE}, Tier II {\GOLD}25%-75% {\WHITE}(scaled by recipe voltage) [{\BLUE}Decreasing{\WHITE}]
-            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}切换配方: 一级结构 {\GOLD}0%{\WHITE}, 二级结构 {\GOLD}25%-75% {\WHITE}(按配方电压折算) [{\BLUE}降温{\WHITE}]
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.26"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.10"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.11
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Max Heat {\WHITE}- {\AQUA}Current Heat{\WHITE}) x {\GOLD}10%-45% {\WHITE}per 1 s cycle (200 K floor, capped at max) [{\RED}Increasing{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: 每1秒补足({\AQUA}最高炉温 {\WHITE}- {\AQUA}当前炉温{\WHITE}) x {\GOLD}10%-45% {\WHITE}(下限200K, 以最高炉温封顶) [{\RED}升温{\WHITE}]
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.11"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.12
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: gap to {\AQUA}Coil Heat {\WHITE}x {\GOLD}10% {\WHITE}per 10 s (min. 1 K) [{\BLUE}Approaching{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: 与{\AQUA}线圈炉温{\WHITE}的温差 x {\GOLD}10% {\WHITE}/ 10秒 (至少1K) [{\BLUE}趋近{\WHITE}]
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.12"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.13
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown (no retention): gap to {\AQUA}Coil Heat {\WHITE}x {\GOLD}20% {\WHITE}per 10 s (min. 1 K) [{\BLUE}Approaching{\WHITE}]
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}关机未保温: 与{\AQUA}线圈炉温{\WHITE}的温差 x {\GOLD}20% {\WHITE}/ 10秒 (至少1K) [{\BLUE}趋近{\WHITE}]
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.13"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.14
+            // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Recipe Change: Tier I resets excess heat; Tier II retains {\GOLD}25%-75% {\WHITE}(by voltage tier difference)
+            // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}切换配方: 一级结构清除额外炉温; 二级结构保留{\GOLD}25%-75% {\WHITE}(按新旧配方电压等级差计算)
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.14"))
             .addStructureInfo(Text_SeparatingLine)
-            // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.15
             // # Attention: Pyrotheum's dedicated input hatch location will be changed when upgrade machine.
             // #zh_CN 注意: 升级结构后炽焱专用的输入仓位置会发生变化.
-            .addStructureInfo(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.15"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
             .addInputHatch(getBlueprintWithDot(1), 1)
@@ -1303,12 +1313,32 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInputBus(getBlueprintWithDot(1), 1)
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
-            // #tr Tooltip_SwelegfyrBlastFurnace.31
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.16
             // # Pyrotheum's dedicated input hatch
             // #zh_CN 炽焱专用的输入仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
-            .toolTipFinisher(ModName);
-        return tt;
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.16"), getBlueprintWithDot(3), 3)
+            .toolTipFinisher();
         // spotless:on
+        return tt;
     }
+
+    // endregion
+
+    // region Hatch Registration
+
+    public boolean addBlazeHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
+            mBlazeHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    // endregion
+
 }

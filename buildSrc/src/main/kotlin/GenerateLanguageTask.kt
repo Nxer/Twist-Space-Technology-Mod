@@ -87,7 +87,9 @@ abstract class GenerateLanguageTask : DefaultTask() {
         allKeys.removeAll(englishKeys)
         englishKeys.addAll(allKeys)
 
-        writeLanguageFiles(outputDirectory, englishKeys, languageMaps, false, keysOnlyInLanguageFiles, englishMap)
+        // All live translations are declared in source; discard legacy keys that only remain in .lang files.
+        writeLanguageFiles(outputDirectory, englishKeys, languageMaps, true, keysOnlyInLanguageFiles, englishMap)
+        sortLanguageFiles(outputDirectory)
     }
 
     private sealed interface MatchingState
@@ -256,6 +258,42 @@ abstract class GenerateLanguageTask : DefaultTask() {
             }
         }
     }
+
+    private fun sortLanguageFiles(outputDirectory: DirectoryProperty) {
+        outputDirectory.asFileTree.matching { include("*.lang") }.forEach { file ->
+            val (comments, translations) = file.readLines(Charsets.UTF_8).partition { it.startsWith("#") || it.isBlank() }
+            val sortedTranslations = translations.sortedWith { first, second ->
+                val firstKey = first.substringBefore('=')
+                val secondKey = second.substringBefore('=')
+                compareNaturally(firstKey, secondKey).takeIf { it != 0 } ?: firstKey.compareTo(secondKey)
+            }
+            file.bufferedWriter(Charsets.UTF_8).use { writer ->
+                (comments + sortedTranslations).forEach { line ->
+                    writer.write("$line\n")
+                }
+            }
+        }
+    }
+}
+
+private val naturalParts = Regex("""\d+|\D+""")
+
+private fun compareNaturally(first: String, second: String): Int {
+    val left = naturalParts.findAll(first).map { it.value }.toList()
+    val right = naturalParts.findAll(second).map { it.value }.toList()
+    for (index in 0 until minOf(left.size, right.size)) {
+        val a = left[index]
+        val b = right[index]
+        val comparison = if (a[0].isDigit() && b[0].isDigit()) {
+            val numberA = a.trimStart('0').ifEmpty { "0" }
+            val numberB = b.trimStart('0').ifEmpty { "0" }
+            numberA.length.compareTo(numberB.length).takeIf { it != 0 } ?: numberA.compareTo(numberB)
+        } else {
+            a.compareTo(b, ignoreCase = true)
+        }
+        if (comparison != 0) return comparison
+    }
+    return left.size.compareTo(right.size)
 }
 
 /**

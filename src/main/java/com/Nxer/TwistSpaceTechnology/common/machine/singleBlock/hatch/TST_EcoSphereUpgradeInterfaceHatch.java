@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.ITEM_IN_SIGN;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_PIPE_IN;
 import static gregtech.api.util.GTUtility.dropItemToBlockPos;
@@ -15,6 +14,8 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere.EcoSphereUpgradeType;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.drawable.IDrawable;
 import com.gtnewhorizons.modularui.api.drawable.shapes.Rectangle;
 import com.gtnewhorizons.modularui.api.math.Alignment;
@@ -39,7 +40,7 @@ import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
 @SkipGenerateDescription
-public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implements IAddUIWidgets {
+public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
 
     private static final int MAX_UPGRADE_SLOTS = 4;
 
@@ -47,7 +48,8 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
     private int structureTier = 1;
 
     public TST_EcoSphereUpgradeInterfaceHatch(int id, String name, String nameRegional, int tier) {
-        super(id, name, nameRegional, tier, MAX_UPGRADE_SLOTS, new String[] { ModNameDesc });
+        super(id, name, nameRegional, tier, MAX_UPGRADE_SLOTS, new String[0]);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     private TST_EcoSphereUpgradeInterfaceHatch(String name, int tier, String[] description, ITexture[][][] textures) {
@@ -215,10 +217,12 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
                         })
                     .setPlayClickSound(true)
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_EXPORT)
-                    // #tr EcoSphereUpgradeInterface.gui.dropAllItems
+                    // #tr tst.ecosphere.machine.EcoSphereUpgradeInterface.gui.drop_all_items
                     // # Drop all stored items
                     // #zh_CN 清空所有物品
-                    .addTooltip(StatCollector.translateToLocal("EcoSphereUpgradeInterface.gui.dropAllItems"))
+                    .addTooltip(
+                        StatCollector
+                            .translateToLocal("tst.ecosphere.machine.EcoSphereUpgradeInterface.gui.drop_all_items"))
                     .setPos(7, 63)
                     .setSize(16, 16))
             .widget(

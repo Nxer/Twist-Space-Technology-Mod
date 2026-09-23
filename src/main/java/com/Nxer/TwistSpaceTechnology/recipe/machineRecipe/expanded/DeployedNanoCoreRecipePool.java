@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.DeployedNanoCoreRecipes;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.DeployedNanoCoreRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.getLCM;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class DeployedNanoCoreRecipePool {
                     .itemOutputs(aRecipe.mOutputs)
                     .eut(aRecipe.mEUt)
                     .duration(aRecipe.mDuration)
-                    .addTo(DeployedNanoCoreRecipes);
+                    .addTo(DeployedNanoCoreRecipeMap);
 
                 for (FluidStack aFluid : aRecipe.mFluidInputs) {
                     if (aFluid.isFluidEqual(Materials.UUMatter.getFluid(1))) {
@@ -68,7 +68,7 @@ public class DeployedNanoCoreRecipePool {
                             .itemOutputs(OutputItems.toArray(new ItemStack[0]))
                             .eut(aRecipe.mEUt)
                             .duration((int) (aRecipe.mDuration * 0.8 * Multiplier))
-                            .addTo(DeployedNanoCoreRecipes);
+                            .addTo(DeployedNanoCoreRecipeMap);
                     }
                     break;
                 }

@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_DATA_ACCESS;
 
 import java.util.HashSet;
@@ -10,21 +9,25 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
 import bartworks.API.enums.CircuitImprint;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
-public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
+@SkipGenerateDescription
+public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
 
     private int timeout = 4;
     public HashSet<TST_ItemID> circuitType = new HashSet<>();
@@ -37,24 +40,24 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
             aTier,
             aTier > 5 ? 16 : 4,
             // spotless:off
-            // #tr Tooltips.CircuitImprintHatch.01
+            // #tr tst.common.machine.CircuitImprintHatch.tooltip.info.01
             // # Extra imprint circuit input for TST Advanced Circuit Assembly Line
             // #zh_CN TST进阶电路装配线的额外压印电路输入
 
-            // #tr Tooltips.CircuitImprintHatch.02
+            // #tr tst.common.machine.CircuitImprintHatch.tooltip.info.02
             // # Adds
             // #zh_CN 为压印电路增加
 
-            // #tr Tooltips.CircuitImprintHatch.03
+            // #tr tst.common.machine.CircuitImprintHatch.tooltip.info.03
             // # extra slots for imprint circuits
             // #zh_CN 个额外插槽
             // spotless:on
-            new String[] { TextEnums.tr("Tooltips.CircuitImprintHatch.01"),
-                TextEnums.tr("Tooltips.CircuitImprintHatch.02") + " "
+            new String[] { TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tooltip.info.01"),
+                TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tooltip.info.02") + " "
                     + (aTier > 5 ? 16 : 4)
                     + " "
-                    + TextEnums.tr("Tooltips.CircuitImprintHatch.03"),
-                ModNameDesc });
+                    + TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tooltip.info.03") });
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_CircuitImprintHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -93,7 +96,6 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets {
 
     @Override
     public boolean onRightclick(IGregTechTileEntity aBaseMetaTileEntity, EntityPlayer aPlayer) {
-        // GTUIInfos.openGTTileEntityUI(aBaseMetaTileEntity, aPlayer);
         openGui(aPlayer);
         return true;
     }

@@ -35,7 +35,7 @@
 // import org.jetbrains.annotations.NotNull;
 //
 // import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
-// import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+// import com.Nxer.TwistSpaceTechnology.util.text.TstSharedLocalization;
 // import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 // import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 // import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;

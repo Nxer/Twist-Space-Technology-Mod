@@ -1,10 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofSpecificTileAdder;
@@ -34,7 +33,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -49,6 +51,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
 import gregtech.api.objects.XSTR;
@@ -69,110 +72,54 @@ import thaumcraft.common.lib.network.fx.PacketFXEssentiaSource;
 import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileEssentiaProvider;
 
+@SkipGenerateDescription
 public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_PrimordialDisjunctus>
     implements IConstructable, ISurvivalConstructable {
 
+    // region Class Constructor
     public TST_PrimordialDisjunctus(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.AEFHMV, MAINTAINER, ID.ABLAZING);
     }
-
-    private static final int CASING_INDEX = 1536;
-    private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
-    public AspectList mOutputAspects = new AspectList();
-
-    private final ArrayList<TileEssentiaProvider> mEssentiaInputHatches = new ArrayList<>();
-    // Just for the addressing of the animation
-    private int[][] cachedEssentiaCoords;
-
-    protected int mCasing = 0;
-    protected double mParallel = 0;
-    private int pTier = 0;
-    protected int primalAspectsGenerated = 0;
-    protected int nodeIncrease = 0;
-    protected int nodePurificationEfficiency = 0;
-    private static final int SECOND_IN_TICKS = 20;
-    private static final int RECIPE_EUT = 1920;
-    Aspect[] primalsAspect = new Aspect[] { Aspect.AIR, Aspect.EARTH, Aspect.FIRE, Aspect.WATER, Aspect.ORDER,
-        Aspect.ENTROPY };
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private IStructureDefinition<TST_PrimordialDisjunctus> multiDefinition = null;
-
-    // Config values
-    private static final int STANDARD_RECIPE_DURATION = ValueEnum.BaseRecipeDuration_PrimordialDisjunctus;
-    private static final int STANDARD_DIFFUSION_CELL_PARALLEL = ValueEnum.DiffusionCellParallel_PrimordialDisjunctus;
-    private static final int STANDARD_PRIMAL_ASPECTS_PER_PARALLEL = ValueEnum.PrimalAspectsPerParallel_PrimordialDisjunctus;
-    private static final int STANDARD_PURIFICATION_GAIN_MULTIPLIER = ValueEnum.PurificationGainMultiplier_PrimordialDisjunctus;
-    private static final int STANDARD_PURIFICATION_REDUCTION = ValueEnum.PurificationReduction_PrimordialDisjunctus;
-    private static final int STANDARD_BOOST_MULTIPLIER = ValueEnum.BoostMultiplier_PrimordialDisjunctus;
-    private static final int STANDARD_BOOST_GAIN_MULTIPLIER = ValueEnum.BoostGainMultiplier_PrimordialDisjunctus;
-    private static final int STANDARD_BOOST_REDUCTION = ValueEnum.BoostReduction_PrimordialDisjunctus;
-
-    @Override
-    public void clearHatches() {
-        super.clearHatches();
-        mEssentiaOutputHatches.clear();
-    }
-
-    private final XSTR xstr = new XSTR();
-    // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
-    private static final String[][] shapePrimordialDisjunctus = new String[][] {
-        { "               ", "               ", "ABA         ABA", "ABA         ABA", "BCB         BCB",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   DDDDDDDDD   ", "   DBBBEBBBD   ",
-            "   DBFBEBFBD   ", "   DBBBEBBBD   ", "   DEEEKEEED   ", "   DBBBEBBBD   ", "   DBFBEBFBD   ",
-            "   DBBBEBBBD   ", "   DDDDDDDDD   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", " J           J ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "   G       G   ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "J J         J J", " J GGGGGGGGG J ", "   G   I   G   ",
-            "   G   I   G   ", "   G   I   G   ", "   GIIIHIIIG   ", "   G   I   G   ", "   G   I   G   ",
-            "   G   I   G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "J JGGGGGGGGGJ J", " J G       G J ",
-            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "   G       G   ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "J JG       GJ J",
-            " J G I   I G J ", "   G  I I  G   ", "   G   H   G   ", "   G  I I  G   ", "   G I   I G   ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "J JG       GJ J", " J G       G J ", "   G   H   G   ", "   G       G   ", "   G       G   ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G   I   G   ", "J JG   I   GJ J", " J G IIHII G J ", "   G   I   G   ", "   G   I   G   ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G       G   ", "   G       G   ", "J JG   H   GJ J", " J G       G J ", "   G       G   ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G       G   ", "   G  I I  G   ", "   G   H   G   ", "J JG  I I  GJ J", " J G       G J ",
-            "   G       G   ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "J JG       GJ J",
-            " J G       G J ", "   GGGGGGGGG   ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G       G   ", "   G   I   G   ", "   G  IHI  G   ", "   G   I   G   ", "   G       G   ",
-            "J JG       GJ J", " J GGGGGGGGG J ", "               ", "               ", "               " },
-        { "               ", "ABA         ABA", "               ", "   GGGGGGGGG   ", "   G       G   ",
-            "   G       G   ", "   G       G   ", "   G   H   G   ", "   G       G   ", "   G       G   ",
-            "   G       G   ", "J JGGGGGGGGGJ J", " J           J ", "               ", "               " },
-        { "BBB         BBB", "ABBBBBB~BBBBBBA", "AAA         AAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA",
-            "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA",
-            "AAADDDDDDDDDAAA", "AAADDDDDDDDDAAA", "AAA         AAA", "AAA         AAA", "AAA         AAA" }
-
-    };
 
     public TST_PrimordialDisjunctus(String mName) {
         super(mName);
     }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+
+        return new TST_PrimordialDisjunctus(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final int CASING_INDEX = 1536;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private IStructureDefinition<TST_PrimordialDisjunctus> multiDefinition = null;
+
+    // spotless:off
+    // length=width=15 height = 17 x-offset = 7 y-offset = 16 z-offset = -1
+    private static final String[][] shapePrimordialDisjunctus = new String[][]{
+        {"               ","               ","ABA         ABA","ABA         ABA","BCB         BCB","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   DDDDDDDDD   ","   DBBBEBBBD   ","   DBFBEBFBD   ","   DBBBEBBBD   ","   DEEEKEEED   ","   DBBBEBBBD   ","   DBFBEBFBD   ","   DBBBEBBBD   ","   DDDDDDDDD   ","               ","               ","               "},
+        {"               ","ABA         ABA"," J           J ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","J J         J J"," J GGGGGGGGG J ","   G   I   G   ","   G   I   G   ","   G   I   G   ","   GIIIHIIIG   ","   G   I   G   ","   G   I   G   ","   G   I   G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","J JGGGGGGGGGJ J"," J G       G J ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","J JG       GJ J"," J G I   I G J ","   G  I I  G   ","   G   H   G   ","   G  I I  G   ","   G I   I G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","J JG       GJ J"," J G       G J ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G   I   G   ","J JG   I   GJ J"," J G IIHII G J ","   G   I   G   ","   G   I   G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","J JG   H   GJ J"," J G       G J ","   G       G   ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G  I I  G   ","   G   H   G   ","J JG  I I  GJ J"," J G       G J ","   G       G   ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","J JG       GJ J"," J G       G J ","   GGGGGGGGG   ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G   I   G   ","   G  IHI  G   ","   G   I   G   ","   G       G   ","J JG       GJ J"," J GGGGGGGGG J ","               ","               ","               "},
+        {"               ","ABA         ABA","               ","   GGGGGGGGG   ","   G       G   ","   G       G   ","   G       G   ","   G   H   G   ","   G       G   ","   G       G   ","   G       G   ","J JGGGGGGGGGJ J"," J           J ","               ","               "},
+        {"BBB         BBB","ABBBBBB~BBBBBBA","AAA         AAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAADDDDDDDDDAAA","AAA         AAA","AAA         AAA","AAA         AAA"}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_PrimordialDisjunctus> getStructureDefinition() {
@@ -224,80 +171,14 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     }
 
     @Override
-    public String[] getInfoData() {
-        // This info gets shown when scanning the controller block.
-        String[] inInfo = super.getInfoData();
-        String[] outInfo = new String[inInfo.length + 3];
-        System.arraycopy(inInfo, 0, outInfo, 0, inInfo.length);
-        outInfo[inInfo.length] = EnumChatFormatting.AQUA + "Generating: "
-            + EnumChatFormatting.GOLD
-            + this.primalAspectsGenerated
-            + " Primal Aspects";
-        outInfo[inInfo.length + 1] = EnumChatFormatting.AQUA + "Boost: "
-            + EnumChatFormatting.GOLD
-            + this.nodeIncrease * 100
-            + "%";
-        outInfo[inInfo.length + 2] = EnumChatFormatting.AQUA + "Purification Efficiency: "
-            + EnumChatFormatting.GOLD
-            + this.nodePurificationEfficiency
-            + "%";
-        return outInfo;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 7, 16, 1);
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setDouble("mParallel", this.mParallel);
-        aNBT.setDouble("nodePurificationEfficiency", this.nodePurificationEfficiency);
-        aNBT.setDouble("nodeIncrease", this.nodeIncrease);
-        Aspect[] aspectA = this.mOutputAspects.getAspects();
-        NBTTagList nbtTagList = new NBTTagList();
-        for (Aspect aspect : aspectA) {
-            if (aspect != null) {
-                NBTTagCompound f = new NBTTagCompound();
-                f.setString("key", aspect.getTag());
-                f.setInteger("amount", this.mOutputAspects.getAmount(aspect));
-                nbtTagList.appendTag(f);
-            }
-        }
-        aNBT.setTag("Aspects", nbtTagList);
-        if (this.cachedEssentiaCoords != null) {
-            NBTTagList coordsList = new NBTTagList();
-            for (int[] pos : this.cachedEssentiaCoords) {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setInteger("x", pos[0]);
-                tag.setInteger("y", pos[1]);
-                tag.setInteger("z", pos[2]);
-                coordsList.appendTag(tag);
-            }
-            aNBT.setTag("CachedCoords", coordsList);
-        }
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        this.mParallel = aNBT.getDouble("mParallel");
-        this.nodePurificationEfficiency = aNBT.getInteger("nodePurificationEfficiency");
-        this.nodeIncrease = aNBT.getInteger("nodeIncrease");
-        this.mOutputAspects.aspects.clear();
-        NBTTagList tlist = aNBT.getTagList("Aspects", 10);
-        for (int j = 0; j < tlist.tagCount(); ++j) {
-            NBTTagCompound rs = tlist.getCompoundTagAt(j);
-            if (rs.hasKey("key"))
-                this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
-        }
-        this.cachedEssentiaCoords = null;
-        if (aNBT.hasKey("CachedCoords")) {
-            NBTTagList coordsList = aNBT.getTagList("CachedCoords", 10);
-            this.cachedEssentiaCoords = new int[coordsList.tagCount()][3];
-            for (int i = 0; i < coordsList.tagCount(); i++) {
-                NBTTagCompound tag = coordsList.getCompoundTagAt(i);
-                this.cachedEssentiaCoords[i][0] = tag.getInteger("x");
-                this.cachedEssentiaCoords[i][1] = tag.getInteger("y");
-                this.cachedEssentiaCoords[i][2] = tag.getInteger("z");
-            }
-        }
-        super.loadNBTData(aNBT);
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
     }
 
     @Override
@@ -320,34 +201,43 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
         // Only reset this data if we have an invalid structure check
 
     }
+    // endregion
+
+    // region Processing Logic
+    private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
+    public AspectList mOutputAspects = new AspectList();
+    private final ArrayList<TileEssentiaProvider> mEssentiaInputHatches = new ArrayList<>();
+
+    // Just for the addressing of the animation
+    private int[][] cachedEssentiaCoords;
+
+    protected int mCasing = 0;
+    protected double mParallel = 0;
+    private int pTier = 0;
+    protected int primalAspectsGenerated = 0;
+    protected int nodeIncrease = 0;
+    protected int nodePurificationEfficiency = 0;
+    private static final int SECOND_IN_TICKS = 20;
+    private static final int RECIPE_EUT = 1920;
+
+    Aspect[] primalsAspect = new Aspect[] { Aspect.AIR, Aspect.EARTH, Aspect.FIRE, Aspect.WATER, Aspect.ORDER,
+        Aspect.ENTROPY };
+
+    // Config values
+    private static final int STANDARD_RECIPE_DURATION = ValueEnum.BaseRecipeDuration_PrimordialDisjunctus;
+
+    private static final int STANDARD_DIFFUSION_CELL_PARALLEL = ValueEnum.DiffusionCellParallel_PrimordialDisjunctus;
+    private static final int STANDARD_PRIMAL_ASPECTS_PER_PARALLEL = ValueEnum.PrimalAspectsPerParallel_PrimordialDisjunctus;
+    private static final int STANDARD_PURIFICATION_GAIN_MULTIPLIER = ValueEnum.PurificationGainMultiplier_PrimordialDisjunctus;
+    private static final int STANDARD_PURIFICATION_REDUCTION = ValueEnum.PurificationReduction_PrimordialDisjunctus;
+    private static final int STANDARD_BOOST_MULTIPLIER = ValueEnum.BoostMultiplier_PrimordialDisjunctus;
+    private static final int STANDARD_BOOST_GAIN_MULTIPLIER = ValueEnum.BoostGainMultiplier_PrimordialDisjunctus;
+    private static final int STANDARD_BOOST_REDUCTION = ValueEnum.BoostReduction_PrimordialDisjunctus;
+    private final XSTR xstr = new XSTR();
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, 7, 16, 1, elementBudget, env, false, true);
-    }
-
-    private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
-        if (aTileEntity instanceof MTEEssentiaOutputHatch) {
-            return this.mEssentiaOutputHatches.add(aTileEntity);
-        }
-        return false;
-    }
-
-    private boolean addEssentiaInputHatchToMachineList(TileEntity te) {
-        if (te instanceof TileEssentiaProvider provider) {
-            return mEssentiaInputHatches.add(provider);
-        }
-        return false;
-    }
-
-    protected void onCasingFound() {
-        this.mCasing++;
-    }
-
-    protected void onEssentiaCellFound(int tier) {
-        this.mParallel += (STANDARD_DIFFUSION_CELL_PARALLEL << tier); // 1 << 0 = 1, 1 << 1 = 2, 1 << 2 = 4, 1 << 3 = 8
-        this.pTier = Math.max(this.pTier, tier);
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -415,6 +305,42 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
         this.updateSlots();
 
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public void clearHatches() {
+        super.clearHatches();
+        mEssentiaOutputHatches.clear();
+    }
+
+    @Override
+    public String[] getInfoData() {
+        // This info gets shown when scanning the controller block.
+        String[] inInfo = super.getInfoData();
+        String[] outInfo = new String[inInfo.length + 3];
+        System.arraycopy(inInfo, 0, outInfo, 0, inInfo.length);
+        outInfo[inInfo.length] = EnumChatFormatting.AQUA + "Generating: "
+            + EnumChatFormatting.GOLD
+            + this.primalAspectsGenerated
+            + " Primal Aspects";
+        outInfo[inInfo.length + 1] = EnumChatFormatting.AQUA + "Boost: "
+            + EnumChatFormatting.GOLD
+            + this.nodeIncrease * 100
+            + "%";
+        outInfo[inInfo.length + 2] = EnumChatFormatting.AQUA + "Purification Efficiency: "
+            + EnumChatFormatting.GOLD
+            + this.nodePurificationEfficiency
+            + "%";
+        return outInfo;
+    }
+
+    protected void onCasingFound() {
+        this.mCasing++;
+    }
+
+    protected void onEssentiaCellFound(int tier) {
+        this.mParallel += (STANDARD_DIFFUSION_CELL_PARALLEL << tier); // 1 << 0 = 1, 1 << 1 = 2, 1 << 2 = 4, 1 << 3 = 8
+        this.pTier = Math.max(this.pTier, tier);
     }
 
     @Override
@@ -622,103 +548,6 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // spotless:off
-        // #tr Tooltip_PrimordialDisjunctus_MachineType
-        // # Essentia Extractor
-        // #zh_CN 初始源质提取者
-        tt.addMachineType(TextEnums.tr("Tooltip_PrimordialDisjunctus_MachineType"))
-            // #tr Tooltip_PrimordialDisjunctus_00
-            // # Controller block for the Primordial Disjunctus
-            // #zh_CN 初源解离机的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_00"))
-            // #tr Tooltip_PrimordialDisjunctus_01
-            // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
-            // #zh_CN §9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_01"))
-            // #tr Tooltip_PrimordialDisjunctus_02
-            // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation.However,due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
-            // #zh_CN 将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_02"))
-            // #tr Tooltip_PrimordialDisjunctus_03
-            // # parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
-            // #zh_CN 并行 = 扩散单元等级的总和 ( 新手=1，学徒=2，大师=4，宗师=8 )
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_03"))
-            // #tr Tooltip_PrimordialDisjunctus_04
-            // # Min voltage 1A EV, standard overclocks
-            // #zh_CN 最低使用1A EV, 使用标准超频 ( 即每提升一级电压加工时间减半 )
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_04"))
-            // #tr Tooltip_PrimordialDisjunctus_05
-            // # With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
-            // #zh_CN 借助科技的力量, 此过程仅需能量, 在1A EV电压下每20秒每个并行产出16单位基础源质.
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_05"))
-            // #tr Tooltip_PrimordialDisjunctus_06
-            // # Providing Ordo vis(at least 50) will reduce the flux produced to nothing, flux produced is not affected by muffler tier.
-            // #zh_CN 提供秩序vis(至少50)可将咒波污染降为零(与消声仓等级无关),
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06"))
-            // #tr Tooltip_PrimordialDisjunctus_06_01
-            // # while providing Perditio vis will boost primal aspect production.Every 10 increase the output by 100%. The maximum increase is 16 times.
-            // #zh_CN 提供混沌vis可提升源质产量,每40点增加100%产量,最高16倍.
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_01"))
-            // #tr Tooltip_PrimordialDisjunctus_06_02
-            // # It should be noted that the supply of VIS is specifically provided through Vis Relay located near the host.
-            // #zh_CN 注意VIS的供应,具体来说是通过在主机附近的源质中继器来提供的
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_06_02"))
-            // #tr Tooltip_PrimordialDisjunctus_07
-            // # This machine maxes out at 1 UMV amp anything more will just void power.
-            // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_07"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .beginStructureBlock(11, 10, 23, true)
-            .addController(textFrontCenter)
-            // #tr Tooltip_PrimordialDisjunctus_EssentiaProvider
-            // # Since EssentiaHatch has been removed and is now replaced by EssentiaProvider, it is still just a decoration and does not require input.
-            // #zh_CN 由于EssentiaHatch被删除现在由EssentiaProvide替代,但仍然只是装饰无需输入.
-            .addInfo(TextEnums.tr("Tooltip_PrimordialDisjunctus_EssentiaProvider"))
-            // #tr Tooltip_PrimordialDisjunctus_HatchBusInfo
-            // # Replace Magic mechanical blocks in any cabin
-            // #zh_CN 任何舱室替换魔法机械方块
-            .addOutputHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            .addEnergyHatch(TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            .addOtherStructurePart(TextEnums.tr("Tooltip.EssentiaOutputHatch"), TextEnums.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            .toolTipFinisher(ModName);
-        return tt;
-        // spotless:on
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
-                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
-                    .glow()
-                    .build() };
-            else return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
-                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR), TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
-                    .glow()
-                    .build() };
-        }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 7, 16, 1);
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-
-        return new TST_PrimordialDisjunctus(this.mName);
-    }
-
-    @Override
     public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
         int z) {
         super.getWailaNBTData(player, tile, tag, world, x, y, z);
@@ -760,8 +589,181 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
         }
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
+    public void saveNBTData(NBTTagCompound aNBT) {
+        aNBT.setDouble("mParallel", this.mParallel);
+        aNBT.setDouble("nodePurificationEfficiency", this.nodePurificationEfficiency);
+        aNBT.setDouble("nodeIncrease", this.nodeIncrease);
+        Aspect[] aspectA = this.mOutputAspects.getAspects();
+        NBTTagList nbtTagList = new NBTTagList();
+        for (Aspect aspect : aspectA) {
+            if (aspect != null) {
+                NBTTagCompound f = new NBTTagCompound();
+                f.setString("key", aspect.getTag());
+                f.setInteger("amount", this.mOutputAspects.getAmount(aspect));
+                nbtTagList.appendTag(f);
+            }
+        }
+        aNBT.setTag("Aspects", nbtTagList);
+        if (this.cachedEssentiaCoords != null) {
+            NBTTagList coordsList = new NBTTagList();
+            for (int[] pos : this.cachedEssentiaCoords) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setInteger("x", pos[0]);
+                tag.setInteger("y", pos[1]);
+                tag.setInteger("z", pos[2]);
+                coordsList.appendTag(tag);
+            }
+            aNBT.setTag("CachedCoords", coordsList);
+        }
+        super.saveNBTData(aNBT);
     }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        this.mParallel = aNBT.getDouble("mParallel");
+        this.nodePurificationEfficiency = aNBT.getInteger("nodePurificationEfficiency");
+        this.nodeIncrease = aNBT.getInteger("nodeIncrease");
+        this.mOutputAspects.aspects.clear();
+        NBTTagList tlist = aNBT.getTagList("Aspects", 10);
+        for (int j = 0; j < tlist.tagCount(); ++j) {
+            NBTTagCompound rs = tlist.getCompoundTagAt(j);
+            if (rs.hasKey("key"))
+                this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
+        }
+        this.cachedEssentiaCoords = null;
+        if (aNBT.hasKey("CachedCoords")) {
+            NBTTagList coordsList = aNBT.getTagList("CachedCoords", 10);
+            this.cachedEssentiaCoords = new int[coordsList.tagCount()][3];
+            for (int i = 0; i < coordsList.tagCount(); i++) {
+                NBTTagCompound tag = coordsList.getCompoundTagAt(i);
+                this.cachedEssentiaCoords[i][0] = tag.getInteger("x");
+                this.cachedEssentiaCoords[i][1] = tag.getInteger("y");
+                this.cachedEssentiaCoords[i][2] = tag.getInteger("z");
+            }
+        }
+        super.loadNBTData(aNBT);
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
+                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE), TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_ACTIVE_GLOW)
+                    .glow()
+                    .build() };
+            else return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX),
+                TextureFactory.of(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR), TextureFactory.builder()
+                    .addIcon(OVERLAY_FRONT_LARGE_CHEMICAL_REACTOR_GLOW)
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.PrimordialDisjunctus.tooltip.machine_type
+        // # Essentia Extractor
+        // #zh_CN 初始源质提取者
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.machine_type"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.01
+            // # Controller block for the Primordial Disjunctus
+            // #zh_CN 初源解离机的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.01"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.02
+            // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
+            // #zh_CN §9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.02"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.03
+            // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation.However,due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
+            // #zh_CN 将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.03"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.04
+            // # parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
+            // #zh_CN 并行 = 扩散单元等级的总和 ( 新手=1，学徒=2，大师=4，宗师=8 )
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.04"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.05
+            // # Min voltage 1A EV, standard overclocks
+            // #zh_CN 最低使用1A EV, 使用标准超频 ( 即每提升一级电压加工时间减半 )
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.05"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.06
+            // # With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
+            // #zh_CN 借助科技的力量, 此过程仅需能量, 在1A EV电压下每20秒每个并行产出16单位基础源质.
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.06"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.07
+            // # Providing Ordo vis(at least 50) will reduce the flux produced to nothing, flux produced is not affected by muffler tier.
+            // #zh_CN 提供秩序vis(至少50)可将咒波污染降为零(与消声仓等级无关),
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.07"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.08
+            // # while providing Perditio vis will boost primal aspect production.Every 10 increase the output by 100%. The maximum increase is 16 times.
+            // #zh_CN 提供混沌vis可提升源质产量,每40点增加100%产量,最高16倍.
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.08"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.09
+            // # It should be noted that the supply of VIS is specifically provided through Vis Relay located near the host.
+            // #zh_CN 注意VIS的供应,具体来说是通过在主机附近的源质中继器来提供的
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.09"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.10
+            // # This machine maxes out at 1 UMV amp anything more will just void power.
+            // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.10"))
+            .addSeparator()
+            .beginStructureBlock(11, 10, 23, true)
+            .addController(textFrontCenter)
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.11
+            // # Since EssentiaHatch has been removed and is now replaced by EssentiaProvider, it is still just a decoration and does not require input.
+            // #zh_CN 由于EssentiaHatch被删除现在由EssentiaProvide替代,但仍然只是装饰无需输入.
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.11"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.structure.01
+            // # Replace Magic mechanical blocks in any cabin
+            // #zh_CN 任何舱室替换魔法机械方块
+            .addOutputHatch(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.structure.01"))
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.structure.01"))
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.structure.02"), TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.structure.01"))
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
+        if (aTileEntity instanceof MTEEssentiaOutputHatch) {
+            return this.mEssentiaOutputHatches.add(aTileEntity);
+        }
+        return false;
+    }
+
+    private boolean addEssentiaInputHatchToMachineList(TileEntity te) {
+        if (te instanceof TileEssentiaProvider provider) {
+            return mEssentiaInputHatches.add(provider);
+        }
+        return false;
+    }
+
+    // endregion
+
 }

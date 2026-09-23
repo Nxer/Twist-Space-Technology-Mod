@@ -78,9 +78,9 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessDataOutp
 import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateItem;
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.common.machine.MiscHelper.scanningLV;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipes;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MiracleTopRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.util.RecipeUtils.getCircuits;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_EV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_HV;
 import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_IV;
@@ -626,7 +626,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_UXV)
             .duration(2560 * 20)
-            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap);
 
         // Upgrade MAX
         GTValues.RA.stdBuilder()
@@ -655,7 +655,7 @@ public class GTCMMachineRecipes {
 
             .eut(RECIPE_MAX)
             .duration(114514 * 20)
-            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes);
+            .addTo(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap);
 
         // endregion
 
@@ -1608,7 +1608,7 @@ public class GTCMMachineRecipes {
             .itemOutputs(GTCMItemList.IndistinctTentacle.get(1))
             .eut(TierEU.RECIPE_MAX)
             .duration(20 * 14400)
-            .addTo(MiracleTopRecipes);
+            .addTo(MiracleTopRecipeMap);
 
         // endregion
 
@@ -2040,7 +2040,7 @@ public class GTCMMachineRecipes {
                 .itemOutputs(GTCMItemList.DeployedNanoCore.get(1))
                 .eut(2000000000)
                 .duration(20 * 775500)
-                .addTo(MiracleTopRecipes);
+                .addTo(MiracleTopRecipeMap);
         }
         // endregion
 
@@ -2382,7 +2382,7 @@ public class GTCMMachineRecipes {
                 .itemOutputs(BallLightningUpgradeChip.get(1))
                 .eut(RECIPE_UIV)
                 .duration(630_720_000)
-                .addTo(MiracleTopRecipes);
+                .addTo(MiracleTopRecipeMap);
 
             GTValues.RA
                 .stdBuilder()
@@ -2420,7 +2420,7 @@ public class GTCMMachineRecipes {
                 .itemOutputs(BallLightningUpgradeChip.get(1))
                 .eut(RECIPE_UIV)
                 .duration(630_720_000)
-                .addTo(MiracleTopRecipes);
+                .addTo(MiracleTopRecipeMap);
 
             //Coil
             GTValues.RA
@@ -3180,7 +3180,7 @@ public class GTCMMachineRecipes {
                     .itemOutputs(GTCMItemList.IndistinctTentaclePrototypeMK2.get(1))
                     .eut(RECIPE_MAX)
                     .duration(20 * 3600 * 24)
-                    .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+                    .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipeMap);
             }
 
             GTValues.RA
@@ -3234,7 +3234,7 @@ public class GTCMMachineRecipes {
                 .eut(0)
                 .duration(20 * 18)
                 .metadata(BloodyHellTierKey.INSTANCE, 2)
-                .addTo(GTCMRecipe.BloodyHellRecipes);
+                .addTo(GTCMRecipe.BloodyHellRecipeMap);
 
             GTValues.RA
                 .stdBuilder()
@@ -3247,7 +3247,7 @@ public class GTCMMachineRecipes {
                 .eut(0)
                 .duration(20 * 300)
                 .metadata(BloodyHellTierKey.INSTANCE, 5)
-                .addTo(GTCMRecipe.BloodyHellRecipes);
+                .addTo(GTCMRecipe.BloodyHellRecipeMap);
         }
 
         if(Config.Enable_SwelegfyrBlastFurnace){
@@ -3666,7 +3666,7 @@ public class GTCMMachineRecipes {
             .itemOutputs(SuperWaterPurifier.get(1))
             .eut(TierEU.RECIPE_UXV)
             .duration(20 * 36_000)
-            .addTo(MiracleTopRecipes);
+            .addTo(MiracleTopRecipeMap);
 
         // endregion
 

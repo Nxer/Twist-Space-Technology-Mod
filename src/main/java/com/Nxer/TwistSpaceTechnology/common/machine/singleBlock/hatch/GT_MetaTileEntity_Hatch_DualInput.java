@@ -1,8 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.AutoSeparation;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.AutoSeparation;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.FluidCapacity;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_ME_CRAFTING_INPUT_BUFFER;
 
 import java.util.Arrays;
@@ -17,7 +16,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_HatchGui_DualInput;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -32,6 +33,7 @@ import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -40,7 +42,9 @@ import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import gregtech.common.tileentities.machines.IDualInputInventory;
 
-public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implements IAddUIWidgets, IDualInputHatch {
+@SkipGenerateDescription
+public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
+    implements IAddUIWidgets, IDualInputHatch, TSTTooltipCredit {
 
     public static final int ITEM_SLOT_AMOUNT = 19;
     public static final int CATALYST_SLOT_1 = 16;
@@ -106,32 +110,33 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
             aNameRegional,
             aTier,
             ITEM_SLOT_AMOUNT,
-            // #tr ToolTip_DualInputHatch_1
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.01
             // # Advanced input for Multiblocks
             // #zh_CN 多方块的进阶输入
 
-            // #tr ToolTip_DualInputHatch_2
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.02
             // # Can hold
             // #zh_CN 能容纳
 
-            // #tr ToolTip_DualInputHatch_3
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.03
             // # types of item and
             // #zh_CN 种物品与
 
-            // #tr ToolTip_DualInputHatch_4
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.04
             // # types of fluid
             // #zh_CN 种流体
-            new String[] { TextEnums.tr("ToolTip_DualInputHatch_1"),
+            new String[] { TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.01"),
                 FluidCapacity + " " + getCapacityPerTank(aTier) + " L",
-                TextEnums.tr("ToolTip_DualInputHatch_2") + " "
+                TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.02") + " "
                     + getSlots(aTier)
                     + " "
-                    + TextEnums.tr("ToolTip_DualInputHatch_3")
+                    + TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.03")
                     + " "
                     + getFluidSlotsAmount(aTier)
                     + " "
-                    + TextEnums.tr("ToolTip_DualInputHatch_4"),
-                AutoSeparation, ModNameDesc });
+                    + TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.04"),
+                AutoSeparation });
+        registerTooltipCredits(ID.HOLEFISH);
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];
         fluidTanks = new FluidStackTank[getFluidSlotsAmount(aTier)];
         mCapacityPer = getCapacityPerTank(aTier);
@@ -436,11 +441,6 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
             default -> 0;
         };
     }
-
-    // @Override
-    // public boolean useModularUI() {
-    // return true;
-    // }
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {

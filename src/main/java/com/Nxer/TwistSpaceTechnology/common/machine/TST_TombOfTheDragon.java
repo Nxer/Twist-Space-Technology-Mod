@@ -12,7 +12,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -40,25 +41,14 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_TombOfTheDragon(this.mName);
     }
-
     // endregion
 
     // region Structure
-    // spotless:off
     private static final int horizontalOffSet = 1;
     private static final int verticalOffSet = 1;
     private static final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static IStructureDefinition<TST_TombOfTheDragon> STRUCTURE_DEFINITION = null;
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
 
     @Override
     public IStructureDefinition<TST_TombOfTheDragon> getStructureDefinition() {
@@ -69,28 +59,41 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
     }
 
     @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
-
-    // spotless:on
     // endregion
 
     // region Processing Logic
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.TombOfTheDragonRecipe;
+        return GTCMRecipe.TombOfTheDragonRecipeMap;
     }
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     @Override
@@ -99,36 +102,18 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
     }
 
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
     }
 
     // endregion
 
-    // region General
-
-    private static MultiblockTooltipBuilder tooltip;
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            tooltip.addMachineType("test")
-                .addInfo("testing")
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .beginStructureBlock(3, 3, 3, false)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 2)
-                .addOutputBus(TextLocalization.textUseBlueprint, 2)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
-                .toolTipFinisher(TextLocalization.ModName);
-
-        }
-        return tooltip;
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -155,4 +140,30 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
 
         return new ITexture[] { casingTexturePages[0][12] };
     }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            tooltip.addMachineType("test")
+                .addInfo("testing")
+                .beginStructureBlock(3, 3, 3, false)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .toolTipFinisher(TSTSharedLocalization.General.ModName);
+
+        }
+        return tooltip;
+    }
+
+    // endregion
+
 }

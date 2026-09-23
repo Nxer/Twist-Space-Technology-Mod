@@ -23,7 +23,7 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasTooltips;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,11 +35,18 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
 
     protected Map<Integer, IIcon> iconMap = new HashMap<>();
 
+    private final String localizationName;
+
     public AbstractTstMetaItem(String unlocalizedName) {
+        this(unlocalizedName, "common." + unlocalizedName);
+    }
+
+    protected AbstractTstMetaItem(String unlocalizedName, String localizationName) {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setCreativeTab(TstCreativeTabs.TabMetaItems);
         this.setUnlocalizedName(unlocalizedName);
+        this.localizationName = localizationName;
     }
 
     @Override
@@ -50,18 +57,18 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     /**
      * Returns the unlocalized name of this item.
      * <p>
-     * The item damage is used as a part of key. eg: {@code item.{ITEM_NAME}.{ITEM_DAMAGE}}.
+     * The item damage is used as a part of the display key, e.g. {@code item.tst.{ITEM_NAME}.{ITEM_DAMAGE}}.
      * <p>
      * NOTE: "final", because we don't want subclasses to modify this
      */
     @Override
     public final String getUnlocalizedName(ItemStack aItemStack) {
-        return super.getUnlocalizedName() + "." + aItemStack.getItemDamage();
+        return getUnlocalizedName() + "." + aItemStack.getItemDamage();
     }
 
     @Override
     public final String getUnlocalizedName() {
-        return super.getUnlocalizedName();
+        return "item.tst." + localizationName;
     }
 
     @Override
@@ -138,7 +145,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     protected static ItemStack checkAndGetVariant(Item self, int meta, Collection<Integer> allowMetaValues)
         throws IllegalArgumentException {
         if (allowMetaValues.contains(meta)) {
-            return TstUtils.newItemWithMeta(self, meta);
+            return TSTUtils.newItemWithMeta(self, meta);
         } else {
             throw new IllegalArgumentException("Invalid meta value: " + meta);
         }
@@ -169,7 +176,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
                     + ")");
         } else {
             allowMetaValues.add(meta);
-            return TstUtils.newItemWithMeta(self, meta);
+            return TSTUtils.newItemWithMeta(self, meta);
         }
     }
 
@@ -185,7 +192,7 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     @ApiStatus.Internal
     protected static ItemStack[] getAllVariants(Item self, Collection<Integer> allowMetaValues) {
         return allowMetaValues.stream()
-            .map(m -> TstUtils.newItemWithMeta(self, m))
+            .map(m -> TSTUtils.newItemWithMeta(self, m))
             .toArray(ItemStack[]::new);
     }
 

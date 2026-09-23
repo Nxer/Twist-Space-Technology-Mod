@@ -4,26 +4,10 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMira
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfMiracleDoorProcessingTimeEBFMode;
 import static com.Nxer.TwistSpaceTechnology.common.misc.MachineShutDownReasons.SimpleShutDownReasons.NoCriticalPhotonInput;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarForgeRecipePool.MoltenToIngot;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedEnergyHatch;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_07;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_08;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_2_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_Controller;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_MiracleDoor_MachineType;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedEnergyHatch;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -60,8 +44,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.Wireless
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -69,6 +54,7 @@ import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -89,11 +75,13 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
+@SkipGenerateDescription
 public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleDoor> {
 
     // region Class Constructor
     public TST_MiracleDoor(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_MiracleDoor(String aName) {
@@ -103,259 +91,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MiracleDoor(this.mName);
-    }
-
-    // endregion
-
-    // region Processing Logic
-
-    private int overclockParameter = 1;
-    private static ItemStack IngotMold;
-
-    public static void initStatics() {
-        IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
-    }
-
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Alloy Smelter
-         * 1 - Stellar Forge
-         */
-        return 2;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY);
-    // }
-
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("MiracleDoor.modeMsg." + machineMode);
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("isActive")) {
-            // #tr tst.miracleDoor.waila.currentOverclockParameter
-            // # {\AQUA}Current Overclock Parameter{\RESET}: {\GOLD}%s
-            // #zh_CN {\AQUA}当前额外超频系数{\RESET}: {\GOLD}%s
-            currentTip
-                .add(TstUtils.tr("tst.miracleDoor.waila.currentOverclockParameter", tag.getLong("overclockParameter")));
-        }
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
-        if (tileEntity != null) {
-            tag.setInteger("overclockParameter", overclockParameter);
-        }
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mode", (byte) machineMode);
-        aNBT.setInteger("overclockParameter", overclockParameter);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        machineMode = aNBT.getByte("mode");
-        overclockParameter = aNBT.getInteger("overclockParameter");
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 1) return GTCMRecipe.StellarForgeRecipes;
-        return GTCMRecipe.StellarForgeAlloySmelterRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.StellarForgeRecipes, GTCMRecipe.StellarForgeAlloySmelterRecipes);
-    }
-
-    @Override
-    public boolean getDefaultWirelessMode() {
-        return true;
-    }
-
-    @Override
-    protected void prepareProcessing() {
-        super.prepareProcessing();
-        flushOverclockParameter();
-    }
-
-    @Override
-    public int getExtraEUCostMultiplier() {
-        return overclockParameter * (machineMode == 1 ? Config.multiplierOfMiracleDoorEUCostEBFMode
-            : Config.multiplierOfMiracleDoorEUCostABSMode);
-    }
-
-    @Override
-    public int getWirelessModeProcessingTime() {
-        return Math.max(
-            1,
-            (machineMode == 1 ? ticksOfMiracleDoorProcessingTimeEBFMode : ticksOfMiracleDoorProcessingTimeABSMode)
-                / this.overclockParameter);
-    }
-
-    @Nonnull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        CheckRecipeResult r = super.checkProcessing();
-        if (!r.wasSuccessful()) return r;
-        if (!isRecipeProcessing) startRecipeProcessing();
-        if (!consumePhoton(overclockParameter)) {
-            stopMachine(NoCriticalPhotonInput);
-            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
-        }
-        return CheckRecipeResultRegistry.SUCCESSFUL;
-    }
-
-    private boolean consumePhoton(int amount) {
-        int needAmount = amount;
-        for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
-            if (items == null) continue;
-            if (GTUtility.areStacksEqual(items, MiscHelper.CRITICAL_PHOTON)) {
-                if (items.stackSize >= needAmount) {
-                    items.stackSize -= needAmount;
-                    return true;
-                } else {
-                    needAmount -= items.stackSize;
-                    items.stackSize = 0;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void flushOverclockParameter() {
-        ItemStack items = getControllerSlot();
-        if (items != null && items.getItem() instanceof ItemIntegratedCircuit
-            && items.getItemDamage() > 0
-            && items.stackSize > 0) {
-            this.overclockParameter = items.getItemDamage() * items.stackSize;
-        } else {
-            this.overclockParameter = 1;
-        }
-    }
-
-    protected static GTRecipe turnToIngotRecipe(GTRecipe recipe) {
-        GTRecipe r = recipe.copy();
-        List<FluidStack> outputFluidList = new ArrayList<>();
-        List<ItemStack> outputItemList = new ArrayList<>(Arrays.asList(r.mOutputs));
-        for (FluidStack fluidStack : r.mFluidOutputs) {
-            Fluid f = fluidStack.getFluid();
-            ItemStack ingot = MoltenToIngot.get(f);
-            if (ingot == null || fluidStack.amount < 144) {
-                outputFluidList.add(fluidStack);
-            } else {
-                int ingotAmount = fluidStack.amount / 144;
-                outputItemList.add(GTUtility.copyAmountUnsafe(ingotAmount, ingot));
-                int remainingFluidAmount = fluidStack.amount - 144 * ingotAmount;
-                if (remainingFluidAmount > 0) {
-                    TwistSpaceTechnology.LOG
-                        .info("Miracle Door : Terrible molten fluid amount in recipe output being " + f.getName());
-                    outputFluidList.add(new FluidStack(f, remainingFluidAmount));
-                }
-            }
-        }
-        r.mOutputs = outputItemList.toArray(new ItemStack[0]);
-        r.mFluidOutputs = outputFluidList.toArray(new FluidStack[0]);
-        return r;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-
-        return new GTCM_ProcessingLogic() {
-
-            private boolean hasIngotMold;
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                return OverclockCalculator.ofNoOverclock(recipe);
-            }
-
-            @Override
-            protected ItemStack[] prepareCatalyst(ItemStack[] inputs) {
-                hasIngotMold = false;
-                List<ItemStack> recipeInputs = new ArrayList<>(inputs.length);
-                for (ItemStack input : inputs) {
-                    if (input != null && input.isItemEqual(IngotMold)) {
-                        hasIngotMold = true;
-                    } else {
-                        recipeInputs.add(input);
-                    }
-                }
-                return hasIngotMold ? recipeInputs.toArray(new ItemStack[0]) : inputs;
-            }
-
-            @Nonnull
-            @Override
-            protected Stream<GTRecipe> findRecipeMatches(@Nullable RecipeMap<?> map) {
-                if (map == null) return Stream.empty();
-                this.lastRecipe = null;
-
-                // Get the right recipe
-                Stream<GTRecipe> base = super.findRecipeMatches(map);
-
-                // Only recipes processed by the bus containing the mold will be transformed
-                return hasIngotMold ? base.map(TST_MiracleDoor::turnToIngotRecipe) : base;
-            }
-
-            @NotNull
-            @Override
-            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return super.createParallelHelper(recipe);
-            }
-
-        }.setMaxParallel(Integer.MAX_VALUE);
-    }
-
-    @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        // The voltage is only used for recipe finding
-        logic.setAvailableVoltage(Long.MAX_VALUE);
-        logic.setAvailableAmperage(1);
-        logic.setAmperageOC(false);
-    }
-
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        return true;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // endregion
 
@@ -367,92 +102,7 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
     protected final int depthOffSet = 8;
     protected static IStructureDefinition<TST_MiracleDoor> STRUCTURE_DEFINITION = null;
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            realBudget,
-            env,
-            false,
-            true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_MiracleDoor> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = IStructureDefinition.<TST_MiracleDoor>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shapeMainErr))
-                .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 13))
-                .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
-                .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
-                .addElement('D', ofBlock(sBlockCasingsTT, 4))
-                .addElement('E', ofBlock(sBlockCasingsTT, 6))
-                .addElement('F', ofBlock(sBlockCasingsTT, 9))
-                .addElement('G', ofBlock(sBlockCasingsTT, 10))
-                .addElement('H', ofBlock(sBlockCasingsTT, 12))
-                .addElement('I', ofBlock(sBlockCasingsTT, 14))
-                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
-                .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                .addElement(
-                    'L',
-                    HatchElementBuilder.<TST_MiracleDoor>builder()
-                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                        .adder(TST_MiracleDoor::addToMachineList)
-                        .hint(1)
-                        .casingIndex(1024 + 12)
-                        .buildAndChain(sBlockCasingsTT, 12))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
     // spotless:off
-
-    /*
-        fix ver Blocks:
-            A -> ofBlock...(gt.blockcasings8, 13, ...);
-            B -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            C -> ofBlock...(gt.blockcasingsSE, 2, ...);
-            D -> ofBlock...(gt.blockcasingsTT, 4, ...);
-            E -> ofBlock...(gt.blockcasingsTT, 6, ...);
-            F -> ofBlock...(gt.blockcasingsTT, 9, ...);
-            G -> ofBlock...(gt.blockcasingsTT, 10, ...);
-            H -> ofBlock...(gt.blockcasingsTT, 12, ...);
-            I -> ofBlock...(gt.blockcasingsTT, 14, ...);
-            J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-            K -> ofBlock...(tile.quantumGlass, 0, ...);
-            L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
-     */
-
-
-    /*
-        no fix ver Blocks:
-            A -> ofBlock...(gt.blockcasings8, 13, ...);
-            B -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            C -> ofBlock...(gt.blockcasingsSE, 2, ...);
-            D -> ofBlock...(gt.blockcasingsTT, 4, ...);
-            E -> ofBlock...(gt.blockcasingsTT, 6, ...);
-            F -> ofBlock...(gt.blockcasingsTT, 9, ...);
-            G -> ofBlock...(gt.blockcasingsTT, 10, ...);
-            H -> ofBlock...(gt.blockcasingsTT, 12, ...);
-            I -> ofBlock...(gt.blockcasingsTT, 14, ...);
-            J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-            K -> ofBlock...(tile.quantumGlass, 0, ...);
-            L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
-    */
     protected static final String[][] shapeMain = new String[][]{
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","               A         A               ","             AA           AA             ","            AAA           AAA            ","           AAA             AAA           ","          AAA               AAA          ","          AA                 AA          ","         A                     A         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","         A                     A         ","          AA                 AA          ","          AAA               AAA          ","           AAA             AAA           ","            AAA           AAA            ","             AA           AA             ","               A         A               ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         "},
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                A       A                ","              AA         AA              ","            AAA           AAA            ","           AA               AA           ","          AA                 AA          ","         AA                   AA         ","         A                     A         ","        AA                     AA        ","        A                       A        ","       A                         A       ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","       A                         A       ","        A                       A        ","        AA                     AA        ","         A                     A         ","         AA                   AA         ","          AA                 AA          ","           AA               AA           ","            AAA           AAA            ","              AA         AA              ","                A       A                ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         "},
@@ -515,7 +165,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                 JJJJJJJ                 ","              JJJJJJJJJJJJJ              ","            JJJJJJJJJJJJJJJJJ            ","           JJJJJJJJJJJJJJJJJJJ           ","          JJJJJJJJJJJJJJJJJJJJJ          ","         JJJJJJJJJJJJJJJJJJJJJJJ         ","        JJJJJJJJJJJJJJJJJJJJJJJJJ        ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","        JJJJJJJJJJJJJJJJJJJJJJJJJ        ","         JJJJJJJJJJJJJJJJJJJJJJJ         ","          JJJJJJJJJJJJJJJJJJJJJ          ","           JJJJJJJJJJJJJJJJJJJ           ","            JJJJJJJJJJJJJJJJJ            ","              JJJJJJJJJJJJJ              ","                 JJJJJJJ                 ","                                         ","                                         ","                                         ","                                         ","                                         "}
     };
 
-
     protected static final String[][] shapeMainErr = new String[][]{
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","               A         A               ","             AA           AA             ","            AAA           AAA            ","           AAA             AAA           ","          AAA               AAA          ","          AA                 AA          ","         A                     A         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","         A                     A         ","          AA                 AA          ","          AAA               AAA          ","           AAA             AAA           ","            AAA           AAA            ","             AA           AA             ","               A         A               ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         "},
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                A       A                ","              AA         AA              ","            AAA           AAA            ","           AA               AA           ","          AA                 AA          ","         AA                   AA         ","         A                     A         ","        AA                     AA        ","        A                       A        ","       A                         A       ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","       A                         A       ","        A                       A        ","        AA                     AA        ","         A                     A         ","         AA                   AA         ","          AA                 AA          ","           AA               AA           ","            AAA           AAA            ","              AA         AA              ","                A       A                ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         ","                                         "},
@@ -577,40 +226,353 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                 JJJJJJJ                 ","              JJJJJJJJJJJJJ              ","            JJJJJJJJJJJJJJJJJ            ","           JJJJJJJJJJJJJJJJJJJ           ","          JJJJJJJJJJJJJJJJJJJJJ          ","         JJJJJJJJJJJJJJJJJJJJJJJ         ","        JJJJJJJJJJJJJJJJJJJJJJJJJ        ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","        JJJJJJJJJJJJJJJJJJJJJJJJJ        ","         JJJJJJJJJJJJJJJJJJJJJJJ         ","          JJJJJJJJJJJJJJJJJJJJJ          ","           JJJJJJJJJJJJJJJJJJJ           ","            JJJJJJJJJJJJJJJJJ            ","              JJJJJJJJJJJJJ              ","                 JJJJJJJ                 ","                                         ","                                         ","                                         ","                                         ","                                         "},
         {"                                         ","                                         ","                                         ","                                         ","                                         ","                 JJJJJJJ                 ","              JJJJJJJJJJJJJ              ","            JJJJJJJJJJJJJJJJJ            ","           JJJJJJJJJJJJJJJJJJJ           ","          JJJJJJJJJJJJJJJJJJJJJ          ","         JJJJJJJJJJJJJJJJJJJJJJJ         ","        JJJJJJJJJJJJJJJJJJJJJJJJJ        ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","     JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ     ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","      JJJJJJJJJJJJJJJJJJJJJJJJJJJJJ      ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","       JJJJJJJJJJJJJJJJJJJJJJJJJJJ       ","        JJJJJJJJJJJJJJJJJJJJJJJJJ        ","         JJJJJJJJJJJJJJJJJJJJJJJ         ","          JJJJJJJJJJJJJJJJJJJJJ          ","           JJJJJJJJJJJJJJJJJJJ           ","            JJJJJJJJJJJJJJJJJ            ","              JJJJJJJJJJJJJ              ","                 JJJJJJJ                 ","                                         ","                                         ","                                         ","                                         ","                                         "}
     };
-
     // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_MiracleDoor> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = IStructureDefinition.<TST_MiracleDoor>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addShape(STRUCTURE_PIECE_MAIN_ERR, transpose(shapeMainErr))
+                .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 13))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
+                .addElement('D', ofBlock(sBlockCasingsTT, 4))
+                .addElement('E', ofBlock(sBlockCasingsTT, 6))
+                .addElement('F', ofBlock(sBlockCasingsTT, 9))
+                .addElement('G', ofBlock(sBlockCasingsTT, 10))
+                .addElement('H', ofBlock(sBlockCasingsTT, 12))
+                .addElement('I', ofBlock(sBlockCasingsTT, 14))
+                .addElement('J', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
+                .addElement('K', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .addElement(
+                    'L',
+                    HatchElementBuilder.<TST_MiracleDoor>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .adder(TST_MiracleDoor::addToMachineList)
+                        .hint(1)
+                        .casingIndex(1024 + 12)
+                        .buildAndChain(sBlockCasingsTT, 12))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * fix ver Blocks:
+     * A -> ofBlock...(gt.blockcasings8, 13, ...);
+     * B -> ofBlock...(gt.blockcasingsSE, 1, ...);
+     * C -> ofBlock...(gt.blockcasingsSE, 2, ...);
+     * D -> ofBlock...(gt.blockcasingsTT, 4, ...);
+     * E -> ofBlock...(gt.blockcasingsTT, 6, ...);
+     * F -> ofBlock...(gt.blockcasingsTT, 9, ...);
+     * G -> ofBlock...(gt.blockcasingsTT, 10, ...);
+     * H -> ofBlock...(gt.blockcasingsTT, 12, ...);
+     * I -> ofBlock...(gt.blockcasingsTT, 14, ...);
+     * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+     * K -> ofBlock...(tile.quantumGlass, 0, ...);
+     * L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
+     */
+
+    /*
+     * no fix ver Blocks:
+     * A -> ofBlock...(gt.blockcasings8, 13, ...);
+     * B -> ofBlock...(gt.blockcasingsSE, 1, ...);
+     * C -> ofBlock...(gt.blockcasingsSE, 2, ...);
+     * D -> ofBlock...(gt.blockcasingsTT, 4, ...);
+     * E -> ofBlock...(gt.blockcasingsTT, 6, ...);
+     * F -> ofBlock...(gt.blockcasingsTT, 9, ...);
+     * G -> ofBlock...(gt.blockcasingsTT, 10, ...);
+     * H -> ofBlock...(gt.blockcasingsTT, 12, ...);
+     * I -> ofBlock...(gt.blockcasingsTT, 14, ...);
+     * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+     * K -> ofBlock...(tile.quantumGlass, 0, ...);
+     * L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
+     */
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            realBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
     // endregion
 
-    // region info
+    // region Processing Logic
+    private int overclockParameter = 1;
+    private static ItemStack IngotMold;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY };
+
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(Tooltip_MiracleDoor_MachineType)
-            .addInfo(Tooltip_MiracleDoor_Controller)
-            .addInfo(Tooltip_MiracleDoor_00)
-            .addInfo(Tooltip_MiracleDoor_01)
-            .addInfo(Tooltip_MiracleDoor_02)
-            .addInfo(Tooltip_MiracleDoor_03)
-            .addInfo(Tooltip_MiracleDoor_04)
-            .addInfo(Tooltip_MiracleDoor_05)
-            .addInfo(Tooltip_MiracleDoor_06)
-            .addInfo(Tooltip_MiracleDoor_07)
-            .addInfo(Tooltip_MiracleDoor_08)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addStructureInfo(Tooltip_Details)
-            .addStructureInfo(Tooltip_MiracleDoor_2_01)
-            .addStructureInfo(Tooltip_MiracleDoor_2_02)
-            .addStructureInfo(Tooltip_MiracleDoor_2_03)
-            .addStructureInfo(Tooltip_MiracleDoor_2_04)
-            .addStructureInfo(Tooltip_MiracleDoor_2_05)
-            .addStructureInfo(Text_SeparatingLine)
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    public RecipeMap<?> getRecipeMap() {
+        if (machineMode == 1) return GTCMRecipe.StellarForgeRecipeMap;
+        return GTCMRecipe.StellarForgeAlloySmelterRecipeMap;
     }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTCMRecipe.StellarForgeRecipeMap, GTCMRecipe.StellarForgeAlloySmelterRecipeMap);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Alloy Smelter
+         * 1 - Stellar Forge
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        // #tr tst.common.machine.MiracleDoor.mode.0
+        // # Mode: Stellar Forge : Alloy Smelter
+        // #zh_CN 恒星锻炉: 合金冶炼模式
+
+        // #tr tst.common.machine.MiracleDoor.mode.1
+        // # Mode: Stellar Forge
+        // #zh_CN 恒星锻炉模式
+        return StatCollector.translateToLocal("tst.common.machine.MiracleDoor.mode." + machineMode);
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+
+        return new GTCM_ProcessingLogic() {
+
+            private boolean hasIngotMold;
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return OverclockCalculator.ofNoOverclock(recipe);
+            }
+
+            @Override
+            protected ItemStack[] prepareCatalyst(ItemStack[] inputs) {
+                hasIngotMold = false;
+                List<ItemStack> recipeInputs = new ArrayList<>(inputs.length);
+                for (ItemStack input : inputs) {
+                    if (input != null && input.isItemEqual(IngotMold)) {
+                        hasIngotMold = true;
+                    } else {
+                        recipeInputs.add(input);
+                    }
+                }
+                return hasIngotMold ? recipeInputs.toArray(new ItemStack[0]) : inputs;
+            }
+
+            @Nonnull
+            @Override
+            protected Stream<GTRecipe> findRecipeMatches(@Nullable RecipeMap<?> map) {
+                if (map == null) return Stream.empty();
+                this.lastRecipe = null;
+
+                // Get the right recipe
+                Stream<GTRecipe> base = super.findRecipeMatches(map);
+
+                // Only recipes processed by the bus containing the mold will be transformed
+                return hasIngotMold ? base.map(TST_MiracleDoor::turnToIngotRecipe) : base;
+            }
+
+            @NotNull
+            @Override
+            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
+                return super.createParallelHelper(recipe);
+            }
+
+        }.setMaxParallel(Integer.MAX_VALUE);
+    }
+
+    @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
+        // The voltage is only used for recipe finding
+        logic.setAvailableVoltage(Long.MAX_VALUE);
+        logic.setAvailableAmperage(1);
+        logic.setAmperageOC(false);
+    }
+
+    @Nonnull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        CheckRecipeResult r = super.checkProcessing();
+        if (!r.wasSuccessful()) return r;
+        if (!isRecipeProcessing) startRecipeProcessing();
+        if (!consumePhoton(overclockParameter)) {
+            stopMachine(NoCriticalPhotonInput);
+            return CheckRecipeResultRegistry.NO_FUEL_FOUND;
+        }
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public static void initStatics() {
+        IngotMold = GTCMItemList.WhiteDwarfMold_Ingot.get(1);
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("isActive")) {
+            // #tr tst.common.machine.MiracleDoor.waila.current_overclock_parameter
+            // # {\AQUA}Current Overclock Parameter{\RESET}: {\GOLD}%s
+            // #zh_CN {\AQUA}当前额外超频系数{\RESET}: {\GOLD}%s
+            currentTip.add(
+                TSTUtils.tr(
+                    "tst.common.machine.MiracleDoor.waila.current_overclock_parameter",
+                    tag.getLong("overclockParameter")));
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            tag.setInteger("overclockParameter", overclockParameter);
+        }
+    }
+
+    @Override
+    public boolean getDefaultWirelessMode() {
+        return true;
+    }
+
+    @Override
+    protected void prepareProcessing() {
+        super.prepareProcessing();
+        flushOverclockParameter();
+    }
+
+    @Override
+    public int getExtraEUCostMultiplier() {
+        return overclockParameter * (machineMode == 1 ? Config.multiplierOfMiracleDoorEUCostEBFMode
+            : Config.multiplierOfMiracleDoorEUCostABSMode);
+    }
+
+    @Override
+    public int getWirelessModeProcessingTime() {
+        return Math.max(
+            1,
+            (machineMode == 1 ? ticksOfMiracleDoorProcessingTimeEBFMode : ticksOfMiracleDoorProcessingTimeABSMode)
+                / this.overclockParameter);
+    }
+
+    private boolean consumePhoton(int amount) {
+        int needAmount = amount;
+        for (ItemStack items : getStoredInputsWithoutDualInputHatch()) {
+            if (items == null) continue;
+            if (GTUtility.areStacksEqual(items, MiscHelper.CRITICAL_PHOTON)) {
+                if (items.stackSize >= needAmount) {
+                    items.stackSize -= needAmount;
+                    return true;
+                } else {
+                    needAmount -= items.stackSize;
+                    items.stackSize = 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void flushOverclockParameter() {
+        ItemStack items = getControllerSlot();
+        if (items != null && items.getItem() instanceof ItemIntegratedCircuit
+            && items.getItemDamage() > 0
+            && items.stackSize > 0) {
+            this.overclockParameter = items.getItemDamage() * items.stackSize;
+        } else {
+            this.overclockParameter = 1;
+        }
+    }
+
+    protected static GTRecipe turnToIngotRecipe(GTRecipe recipe) {
+        GTRecipe r = recipe.copy();
+        List<FluidStack> outputFluidList = new ArrayList<>();
+        List<ItemStack> outputItemList = new ArrayList<>(Arrays.asList(r.mOutputs));
+        for (FluidStack fluidStack : r.mFluidOutputs) {
+            Fluid f = fluidStack.getFluid();
+            ItemStack ingot = MoltenToIngot.get(f);
+            if (ingot == null || fluidStack.amount < 144) {
+                outputFluidList.add(fluidStack);
+            } else {
+                int ingotAmount = fluidStack.amount / 144;
+                outputItemList.add(GTUtility.copyAmountUnsafe(ingotAmount, ingot));
+                int remainingFluidAmount = fluidStack.amount - 144 * ingotAmount;
+                if (remainingFluidAmount > 0) {
+                    TwistSpaceTechnology.LOG
+                        .info("Miracle Door : Terrible molten fluid amount in recipe output being " + f.getName());
+                    outputFluidList.add(new FluidStack(f, remainingFluidAmount));
+                }
+            }
+        }
+        r.mOutputs = outputItemList.toArray(new ItemStack[0]);
+        r.mFluidOutputs = outputFluidList.toArray(new FluidStack[0]);
+        return r;
+    }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        return true;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", (byte) machineMode);
+        aNBT.setInteger("overclockParameter", overclockParameter);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        machineMode = aNBT.getByte("mode");
+        overclockParameter = aNBT.getInteger("overclockParameter");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -636,4 +598,88 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
 
         return new ITexture[] { casingTexturePages[0][12] };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.MiracleDoor.tooltip.machine_type
+        // # Stellar Forge | Stellar Forge : Alloy Smelter
+        // #zh_CN 恒星锻炉 | 恒星锻炉:合金冶炼
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.machine_type"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.controller
+            // # Controller block for the Miracle Door
+            // #zh_CN 奇迹之门的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.controller"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.01
+            // # {\GOLD}{\BOLD}Mere mortals can't even begin to understand the progress we've made.
+            // #zh_CN {\GOLD}{\BOLD}凡夫俗子根本无法理解我们的进步.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.01"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.02
+            // # Enslaving Stellaris to work for us.
+            // #zh_CN 奴役群星为我们工作.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.02"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.03
+            // # No matter how large the workload, it can be done in one time.
+            // #zh_CN 无论多大的工作量, 都能一次完成.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.03"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.04
+            // # No matter how large the workload, it need one Critical Photon to start.
+            // #zh_CN 无论多大的工作量, 都需要临界光子启动.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.04"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.05
+            // # Power consumption: Alloy Smelter {\RED}100%{\GRAY} | Stellar Forge {\RED}200%{\GRAY}
+            // #zh_CN 能量消耗: {\RESET}合金冶炼模式 {\RED}{\BOLD}100% {\GRAY}| {\RESET}恒星锻炉模式 {\RED}{\BOLD}200%
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.05"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.06
+            // # Directly get EU from the Wireless EU Net.
+            // #zh_CN 直接从无线EU网络获取能量.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.06"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.07
+            // # Warning! If trying to start machine when Wireless EU Net has not enough EU,
+            // #zh_CN 警告! 如果尝试在网络内能量不足时启动机器,
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.07"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.08
+            // # the materials will fade.
+            // #zh_CN 输入的原料将直接寂灭.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.08"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.info.09
+            // # Put Integrated Circuit into Controller block to decrease process time interval.
+            // #zh_CN 在控制器方块内放置编程电路以减少处理时间间隔.
+            .addInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.info.09"))
+            .addStructureInfo(Tooltip_Details)
+            // #tr tst.common.machine.MiracleDoor.tooltip.structure.01
+            // # Each run takes the same amount of time, (ABS) 25.6s | (EBF) 64s default.
+            // #zh_CN 每次运行消耗相同的时间, 默认 (恒星锻炉) 64s | (合金冶炼) 25.6s .
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.01"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.structure.02
+            // # If putting Integrated Circuit into Controller block slot,
+            // #zh_CN 如果在控制器方块输入槽放置编程电路,
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.02"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.structure.03
+            // # actual progress time = default / (Integrated Circuit Number * Stack Size)
+            // #zh_CN 实际处理时间 = 默认耗时 / (编号 * 物品数量)
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.03"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.structure.04
+            // # Actual cost EU = recipe value * 16 * (Integrated Circuit Number * Stack Size)
+            // #zh_CN 实际消耗 EU = 配方数值 * (编号 * 物品数量) * (恒星锻炉) 2 (合金冶炼) 1
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.04"))
+            // #tr tst.common.machine.MiracleDoor.tooltip.structure.05
+            // # Each run cost number of OverClock Times Critical Photon to start(Default 1).
+            // #zh_CN 每次运行需要消耗超频次数颗临界光子(默认为1).
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MiracleDoor.tooltip.structure.05"))
+            .addStructureInfo(Text_SeparatingLine)
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

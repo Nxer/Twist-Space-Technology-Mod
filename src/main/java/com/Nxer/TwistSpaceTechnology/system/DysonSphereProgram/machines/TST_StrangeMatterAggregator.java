@@ -47,9 +47,12 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularizedMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.api.widget.IWidget;
@@ -77,6 +80,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
@@ -98,11 +102,13 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
+@SkipGenerateDescription
 public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllModuleBase<TST_StrangeMatterAggregator> {
 
     // region Class Constructor
     public TST_StrangeMatterAggregator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_StrangeMatterAggregator(String aName) {
@@ -113,13 +119,504 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_StrangeMatterAggregator(this.mName);
     }
-
     // endregion
 
-    // region Logic
+    // region Structure
+    protected static final int horizontalOffSet_main = 8;
+    protected static final int verticalOffSet_main = 8;
+    protected static final int depthOffSet_main = 0;
+    protected static final int horizontalOffSet_ring = 17;
+    protected static final int verticalOffSet_ring = 17;
+    protected static final int depthOffSet_ring_first = -4;
+    protected static final int depthOffSet_ring_distance = 16;
+    protected static final String STRUCTURE_PIECE_MAIN = "main";
+    protected static final String STRUCTURE_PIECE_RING_O = "ringOscillator";
+    protected static final String STRUCTURE_PIECE_RING_C = "ringConstraintor";
+    protected static final String STRUCTURE_PIECE_RING_M = "ringMerger";
+    protected static final String STRUCTURE_PIECE_END = "end";
+    protected static IStructureDefinition<TST_StrangeMatterAggregator> STRUCTURE_DEFINITION = null;
 
-    // region Statics
+    protected String[] buildingRingPieceArray = new String[] { STRUCTURE_PIECE_RING_O, STRUCTURE_PIECE_RING_C,
+        STRUCTURE_PIECE_RING_M };
 
+    // spotless:off
+    /*
+        A -> ofBlock...(gt.blockcasingsBA0, 10, ...);
+        B -> ofBlock...(gt.blockcasingsBA0, 11, ...);
+        C -> ofBlock...(gt.blockcasingsBA0, 12, ...);
+        D -> ofBlock...(gt.blockcasingsTT, 9, ...);
+        E -> ofBlock...(gt.blockcasingsTT, 10, ...);
+        F -> ofBlock...(gt.blockcasingsTT, 14, ...);
+        G -> ofBlock...(tile.quantumGlass, 0, ...);
+        H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
+        I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time holding consumables
+        J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
+        K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to set machine processing tier.
+        Z -> ofBlock...(SpaceTimeConstraintor, 0, ...); // tier block
+     */
+    protected static final String[][] shapeMain = new String[][]{
+        {"                 ","                 ","       CCC       ","                 "},
+        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
+        {"                 ","     BBBFBBB     ","    CAACCCAAC    ","     BBGGGBB     "},
+        {"                 ","    BBBBBBBBB    ","   CACCCCCCCAC   ","    BGG   GGB    "},
+        {"       BBB       ","   BBBBBBBBBBB   ","  CACCCCFCCCCAC  ","   BG       GB   "},
+        {"       BJB       ","  BBBFBBBBBFBBB  "," CACCFCCCCCFCCAC ","  BG         GB  "},
+        {"      BBBBB      ","  BBBBBBBBBBBBB  "," CACCCCCCCCCCCAC ","  BG         GB  "},
+        {"    BBBHHHBBB    "," BBBBBBBBBBBBBBB ","CACCCCCCCCCCCCCAC"," BG    D D    GB "},
+        {"    BIBH~HBKB    "," BFBBBBBBBBBBBFB ","CACCFCCCCCCCFCCAC"," BG     E     GB "},
+        {"    BBBHHHBBB    "," BBBBBBBBBBBBBBB ","CACCCCCCCCCCCCCAC"," BG    D D    GB "},
+        {"      BBBBB      ","  BBBBBBBBBBBBB  "," CACCCCCCCCCCCAC ","  BG         GB  "},
+        {"       BJB       ","  BBBFBBBBBFBBB  "," CACCFCCCCCFCCAC ","  BG         GB  "},
+        {"       BBB       ","   BBBBBBBBBBB   ","  CACCCCFCCCCAC  ","   BG       GB   "},
+        {"                 ","    BBBBBBBBB    ","   CACCCCCCCAC   ","    BGG   GGB    "},
+        {"                 ","     BBBFBBB     ","    CAACCCAAC    ","     BBGGGBB     "},
+        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
+        {"                 ","                 ","       CCC       ","                 "}
+    };
+
+    protected static final String[][] shapeRing_SpaceTimeOscillator = new String[][]{
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           XXX           B    ","   AAC         XDEDX         CAA   ","   AAC         XEEEX         CAA   ","   AAC         XDEDX         CAA   ","    B           XXX           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
+        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
+        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC X G           G X CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC X G           G X CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
+        {"           G     E     G           ","           G     E     G           ","           G     E     G           ","        B  G     E     G  B        ","       B   G     E     G   B       ","       C   G     E     G   C       "," B    BC X G     E     G X CB    B ","AAC  AAAAE G     E     G EAAAA  CAA","AAC  DACCE G     E     G ECCAD  CAA","AAC  AAAAE G     E     G EAAAA  CAA"," B    BC X G     E     G X CB    B ","       C   G     E     G   C       ","       B   G     E     G   B       ","        B  G     E     G  B        ","           G     E     G           ","           G     E     G           "},
+        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC X G           G X CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC X G           G X CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
+        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
+        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           XXX           B    ","   AAC         XDEDX         CAA   ","   AAC         XEEEX         CAA   ","   AAC         XDEDX         CAA   ","    B           XXX           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "}
+    };
+
+    protected static final String[][] shapeRing_SpaceTimeConstraintor = new String[][]{
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           YYY           B    ","   AAC         YDEDY         CAA   ","   AAC         YEEEY         CAA   ","   AAC         YDEDY         CAA   ","    B           YYY           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
+        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
+        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Y G           G Y CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Y G           G Y CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
+        {"           G     E     G           ","           G     E     G           ","           G     E     G           ","        B  G     E     G  B        ","       B   G     E     G   B       ","       C   G     E     G   C       "," B    BC Y G     E     G Y CB    B ","AAC  AAAAE G     E     G EAAAA  CAA","AAC  DACCE G     E     G ECCAD  CAA","AAC  AAAAE G     E     G EAAAA  CAA"," B    BC Y G     E     G Y CB    B ","       C   G     E     G   C       ","       B   G     E     G   B       ","        B  G     E     G  B        ","           G     E     G           ","           G     E     G           "},
+        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Y G           G Y CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Y G           G Y CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
+        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
+        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           YYY           B    ","   AAC         YDEDY         CAA   ","   AAC         YEEEY         CAA   ","   AAC         YDEDY         CAA   ","    B           YYY           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "}
+    };
+
+    protected static final String[][] shapeRing_SpaceTimeMerger = new String[][]{
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           ZZZ           B    ","   AAC         ZDEDZ         CAA   ","   AAC         ZEEEZ         CAA   ","   AAC         ZDEDZ         CAA   ","    B           ZZZ           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
+        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
+        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Z G           G Z CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Z G           G Z CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
+        {"           G     E     G           ","           G     E     G           ","           G     E     G           ","        B  G     E     G  B        ","       B   G     E     G   B       ","       C   G     E     G   C       "," B    BC Z G     E     G Z CB    B ","AAC  AAAAE G     E     G EAAAA  CAA","AAC  DACCE G     E     G ECCAD  CAA","AAC  AAAAE G     E     G EAAAA  CAA"," B    BC Z G     E     G Z CB    B ","       C   G     E     G   C       ","       B   G     E     G   B       ","        B  G     E     G  B        ","           G     E     G           ","           G     E     G           "},
+        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Z G           G Z CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Z G           G Z CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
+        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
+        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
+        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           ZZZ           B    ","   AAC         ZDEDZ         CAA   ","   AAC         ZEEEZ         CAA   ","   AAC         ZDEDZ         CAA   ","    B           ZZZ           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
+        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "}
+    };
+
+    protected static final String[][] shapeEnd = new String[][]{
+        {"                 ","                 ","       CCC       ","                 "},
+        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
+        {"       GGG       ","     BBGGGBB     ","    CAACCCAAC    ","     BBBFBBB     "},
+        {"     GG   GG     ","    BGG   GGB    ","   CACCCCCCCAC   ","    BBBBBBBBB    "},
+        {"    G       G    ","   BG       GB   ","  CACCCCFCCCCAC  ","   BBBBBBBBBBB   "},
+        {"   G         G   ","  BG         GB  "," CACCFCCCCCFCCAC ","  BBBFBBBBBFBBB  "},
+        {"   G         G   ","  BG         GB  "," CACCCCCCCCCCCAC ","  BBBBBBBBBBBBB  "},
+        {"  G           G  "," BG    D D    GB ","CACCCCCCCCCCCCCAC"," BBBBBBBBBBBBBBB "},
+        {"  G     E     G  "," BG     E     GB ","CACCFCCCCCCCFCCAC"," BFBBBBBBBBBBBFB "},
+        {"  G           G  "," BG    D D    GB ","CACCCCCCCCCCCCCAC"," BBBBBBBBBBBBBBB "},
+        {"   G         G   ","  BG         GB  "," CACCCCCCCCCCCAC ","  BBBBBBBBBBBBB  "},
+        {"   G         G   ","  BG         GB  "," CACCFCCCCCFCCAC ","  BBBFBBBBBFBBB  "},
+        {"    G       G    ","   BG       GB   ","  CACCCCFCCCCAC  ","   BBBBBBBBBBB   "},
+        {"     GG   GG     ","    BGG   GGB    ","   CACCCCCCCAC   ","    BBBBBBBBB    "},
+        {"       GGG       ","     BBGGGBB     ","    CAACCCAAC    ","     BBBFBBB     "},
+        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
+        {"                 ","                 ","       CCC       ","                 "}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_StrangeMatterAggregator> getStructureDefinition() {
+        if (null == STRUCTURE_DEFINITION) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_StrangeMatterAggregator>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addShape(STRUCTURE_PIECE_RING_O, transpose(shapeRing_SpaceTimeOscillator))
+                .addShape(STRUCTURE_PIECE_RING_C, transpose(shapeRing_SpaceTimeConstraintor))
+                .addShape(STRUCTURE_PIECE_RING_M, transpose(shapeRing_SpaceTimeMerger))
+                .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
+                .addElement('A', ofBlock(sBlockCasingsBA0, 10))
+                .addElement('B', ofBlock(sBlockCasingsBA0, 11))
+                .addElement('C', ofBlock(sBlockCasingsBA0, 12))
+                .addElement('D', ofBlock(sBlockCasingsTT, 9))
+                .addElement('E', ofBlock(sBlockCasingsTT, 10))
+                .addElement('F', ofBlock(sBlockCasingsTT, 14))
+                .addElement('G', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .addElement(
+                    'H',
+                    // H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                        .atLeast(OutputBus, OutputHatch, SpeedController, PowerConsumptionController)
+                        .adder(TST_StrangeMatterAggregator::addToMachineList)
+                        .hint(1)
+                        .casingIndex(1024)
+                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
+                .addElement(
+                    'I',
+                    // I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time
+                    // holding consumables
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                        .atLeast(InputHatch)
+                        .adder(TST_StrangeMatterAggregator::addSpaceTimeMaintenanceConsumablesInputHatchToMachineList)
+                        .hint(3)
+                        .casingIndex(1024)
+                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
+                .addElement(
+                    'J',
+                    // J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                        .atLeast(InputBus, InputHatch)
+                        .adder(TST_StrangeMatterAggregator::addToMachineList)
+                        .hint(2)
+                        .casingIndex(1024)
+                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
+                .addElement(
+                    'K',
+                    // K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to
+                    // set machine processing tier.
+                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
+                        .atLeast(InputBus)
+                        .adder(TST_StrangeMatterAggregator::addCoreElementInputBusToMachineList)
+                        .hint(4)
+                        .casingIndex(1024)
+                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
+                .addElement(
+                    'X',
+                    withChannel(
+                        "oscillator",
+                        ofBlocksTiered(
+                            TST_StrangeMatterAggregator::getSpaceTimeOscillatorTier,
+                            ImmutableList.of(
+                                Pair.of(TstBlocks.SpaceTimeOscillator, 0),
+                                Pair.of(TstBlocks.SpaceTimeOscillator, 1),
+                                Pair.of(TstBlocks.SpaceTimeOscillator, 2)),
+                            -1,
+                            (m, t) -> m.oscillatorTier = t,
+                            m -> m.oscillatorTier)))
+                .addElement(
+                    'Y',
+                    withChannel(
+                        "constraintor",
+                        ofBlocksTiered(
+                            TST_StrangeMatterAggregator::getSpaceTimeConstraintorTier,
+                            ImmutableList.of(
+                                Pair.of(TstBlocks.SpaceTimeConstraintor, 0),
+                                Pair.of(TstBlocks.SpaceTimeConstraintor, 1),
+                                Pair.of(TstBlocks.SpaceTimeConstraintor, 2)),
+                            -1,
+                            (m, t) -> m.constraintorTier = t,
+                            m -> m.constraintorTier)))
+                .addElement(
+                    'Z',
+                    withChannel(
+                        "merger",
+                        ofBlocksTiered(
+                            TST_StrangeMatterAggregator::getSpaceTimeMergerTier,
+                            ImmutableList.of(
+                                Pair.of(TstBlocks.SpaceTimeMerger, 0),
+                                Pair.of(TstBlocks.SpaceTimeMerger, 1),
+                                Pair.of(TstBlocks.SpaceTimeMerger, 2)),
+                            -1,
+                            (m, t) -> m.mergerTier = t,
+                            m -> m.mergerTier)))
+                .build();
+
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hintsOnly,
+            horizontalOffSet_main,
+            verticalOffSet_main,
+            depthOffSet_main);
+
+        int limit = stackSize.stackSize;
+        if (buildingRingPieceArray.length > 3) limit = Config.StructureLoopBuildingLimit_StrangeMatterAggregator;
+
+        int offset = 0;
+        for (int i = 0; i < limit; i++) {
+            for (int j = 0; j < buildingRingPieceArray.length; j++) {
+                buildPiece(
+                    buildingRingPieceArray[j],
+                    stackSize,
+                    hintsOnly,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depthOffSet_ring_first - offset * depthOffSet_ring_distance);
+
+                offset++;
+            }
+        }
+
+        buildPiece(
+            STRUCTURE_PIECE_END,
+            stackSize,
+            hintsOnly,
+            horizontalOffSet_main,
+            verticalOffSet_main,
+            depthOffSet_ring_first - offset * depthOffSet_ring_distance);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+
+        int built = survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet_main,
+            verticalOffSet_main,
+            depthOffSet_main,
+            elementBudget,
+            env,
+            false,
+            true);
+
+        if (built >= 0) return built;
+
+        int limit = stackSize.stackSize;
+        if (buildingRingPieceArray.length > 3) limit = Config.StructureLoopBuildingLimit_StrangeMatterAggregator;
+
+        int offset = 0;
+
+        for (int i = 0; i < limit; i++) {
+            for (int j = 0; j < buildingRingPieceArray.length; j++) {
+                built = survivalBuildPiece(
+                    buildingRingPieceArray[j],
+                    stackSize,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depthOffSet_ring_first - offset * depthOffSet_ring_distance,
+                    elementBudget,
+                    env,
+                    false,
+                    true);
+                if (built >= 0) return built;
+                offset++;
+            }
+        }
+
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_END,
+            stackSize,
+            horizontalOffSet_main,
+            verticalOffSet_main,
+            depthOffSet_ring_first - depthOffSet_ring_distance * offset,
+            elementBudget,
+            env,
+            false,
+            true);
+
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
+        lastKnownMachineState = mMachine;
+        structureCheckPassed = mMachine;
+    }
+
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+
+        oscillatorTier = -1;
+        oscillatorPiece = 0;
+        constraintorTier = -1;
+        constraintorPiece = 0;
+        mergerTier = -1;
+        mergerPiece = 0;
+        rings = 0;
+
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_main, verticalOffSet_main, depthOffSet_main, errors)) {
+            return false;
+        }
+
+        while (true) {
+            int depth = depthOffSet_ring_first - rings * depthOffSet_ring_distance;
+
+            int tempOPieces = oscillatorPiece;
+            int tempCPieces = constraintorPiece;
+            int tempMPieces = mergerPiece;
+
+            // Use a temporary error list for ring type probing at this depth.
+            // Only the successful match's errors are kept; failed probe errors
+            // are discarded to avoid polluting the structure check result.
+            List<StructureError> probeErrors = new ArrayList<>();
+
+            boolean isOscillator = checkRingWithTierVerification(
+                STRUCTURE_PIECE_RING_O,
+                horizontalOffSet_ring,
+                verticalOffSet_ring,
+                depth,
+                RingType.OSCILLATOR,
+                probeErrors);
+
+            boolean isConstraintor = false;
+            if (!isOscillator) {
+                probeErrors.clear();
+                isConstraintor = checkRingWithTierVerification(
+                    STRUCTURE_PIECE_RING_C,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depth,
+                    RingType.CONSTRAINTOR,
+                    probeErrors);
+            }
+
+            boolean isMerger = false;
+            if (!isOscillator && !isConstraintor) {
+                probeErrors.clear();
+                isMerger = checkRingWithTierVerification(
+                    STRUCTURE_PIECE_RING_M,
+                    horizontalOffSet_ring,
+                    verticalOffSet_ring,
+                    depth,
+                    RingType.MERGER,
+                    probeErrors);
+            }
+
+            if (!isOscillator && !isConstraintor && !isMerger) {
+                break;
+            }
+
+            if (isOscillator) {
+                oscillatorPiece = tempOPieces + 1;
+            } else if (isConstraintor) {
+                constraintorPiece = tempCPieces + 1;
+            } else {
+                mergerPiece = tempMPieces + 1;
+            }
+
+            rings++;
+        }
+        // Print out all the missing ring information.
+        boolean hasMissingRing = false;
+
+        if (oscillatorPiece < 1 || oscillatorTier < 1) {
+            errors.add(SimpleStructureErrors.missing_oscillator_ring);
+            hasMissingRing = true;
+        }
+        if (constraintorPiece < 1 || constraintorTier < 1) {
+            errors.add(SimpleStructureErrors.missing_constraintor_ring);
+            hasMissingRing = true;
+        }
+        if (mergerPiece < 1 || mergerTier < 1) {
+            errors.add(SimpleStructureErrors.missing_merger_ring);
+            hasMissingRing = true;
+        }
+
+        if (hasMissingRing) {
+            return false;
+        }
+
+        if (!checkPiece(
+            STRUCTURE_PIECE_END,
+            horizontalOffSet_main,
+            verticalOffSet_main,
+            depthOffSet_ring_first - rings * depthOffSet_ring_distance,
+            errors)) {
+            return false;
+        }
+
+        calculateParametersWithStructure();
+        if (!wirelessMode && getMaxInputEu() < Config.PowerConsume_StrangeMatterAggregator) {
+            return false;
+        }
+
+        return true;
+    }
+    // endregion
+
+    // region Processing Logic
     /**
      * <p>
      * 0. Molten SpaceTime 576L
@@ -147,46 +644,10 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     protected static TST_ItemID Tesseract;
     protected static TST_ItemID StellarFrame;
     protected static Fluid HydrogenPlasma;
-
-    private enum RingType {
-        OSCILLATOR,
-        CONSTRAINTOR,
-        MERGER
-    }
-
-    public static void initStatics() {
-        // spotless:off
-        SpaceTimeMaintenanceConsumablesFluids = new Fluid[] {
-            Materials.SpaceTime.getMolten(576).getFluid(),
-            Materials.Universium.getMolten(96).getFluid(),
-            Materials.MHDCSM.getMolten(16) .getFluid()
-        };
-
-        ByproductFluids = new Fluid[][] {
-            new Fluid[] { Materials.Infinity.getMolten(1).getFluid(), HYPOGEN.getFluid() },
-            new Fluid[] { Materials.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
-            new Fluid[] { Materials.Universium.getMolten(1).getFluid() }
-        };
-
-        CoreElement = TST_ItemID.create(GTCMItemList.CoreElement.get(1));
-        AnnihilationConstrainer = TST_ItemID.create(GTCMItemList.AnnihilationConstrainer.get(1));
-        AntiMatter = TST_ItemID.create(GTCMItemList.Antimatter.get(1));
-        Tesseract = TST_ItemID.create(ItemList.Tesseract.get(1));
-        StellarFrame = TST_ItemID.create(GTCMItemList.StellarConstructionFrameMaterial.get(1));
-
-        HydrogenPlasma = Materials.Hydrogen.getPlasma(1).getFluid();
-        // spotless:on
-    }
-
-    // endregion
-
-    // region Owner
     protected UUID ownerUUID;
-    // endregion
-
-    // region Extra Hatches
     protected MTEHatchInput SpaceTimeMaintenanceConsumablesInputHatch;
     protected MTEHatchInputBus CoreElementInputBus;
+
     // Save the result of the last checkMachine operation, which will be used to restore the mMachine that was reset by
     // the framework in the onPostTick function.
     protected boolean lastKnownMachineState = false;
@@ -195,12 +656,9 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     // When false, onPostTick must NOT restore mMachine.
     protected boolean structureCheckPassed = false;
 
-    // endregion
-
-    // region UI settings
-
     // about structure
     protected int oscillatorPieceNeed = 1;
+
     protected int constraintorPieceNeed = 1;
     protected int mergerPieceNeed = 1;
 
@@ -225,9 +683,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
      */
     protected int byproductOutputBaseAmount = 0;
 
-    // endregion
-
-    // region Structure Parameters
     protected int oscillatorTier = -1;
     protected int oscillatorPiece = 0;
     protected int constraintorTier = -1;
@@ -268,10 +723,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
      */
     protected double inputFactor = Config.BaseInputValue_StrangeMatterAggregator;
 
-    // endregion
-
-    // region Parameters set by SpaceTime Maintenance fluid tier
-
     /**
      * How many parallels one tesseract can hold.
      */
@@ -288,17 +739,67 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
      */
     protected int fluidConsumptionFactor = Config.FluidInputMultiply_SpaceTimeMaintenance_StrangeMatterAggregator;
 
-    // endregion
-
-    // region Running Parameters
     /**
      * Current consecutive running point
      */
     protected int consecutivePoint = 0;
 
-    // endregion
+    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList
+        .of(ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER, ModularHatchTypes.SPEED_CONTROLLER);
 
-    // endregion
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.StrangeMatterAggregatorRecipeMap;
+    }
+
+    @Override
+    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
+        return new com.cleanroommc.modularui.drawable.UITexture[0];
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    public static void initStatics() {
+        // spotless:off
+        SpaceTimeMaintenanceConsumablesFluids = new Fluid[] {
+            Materials.SpaceTime.getMolten(576).getFluid(),
+            Materials.Universium.getMolten(96).getFluid(),
+            Materials.MHDCSM.getMolten(16) .getFluid()
+        };
+
+        ByproductFluids = new Fluid[][] {
+            new Fluid[] { Materials.Infinity.getMolten(1).getFluid(), HYPOGEN.getFluid() },
+            new Fluid[] { Materials.SpaceTime.getMolten(1).getFluid(), GGMaterial.shirabon.getMolten(1).getFluid() },
+            new Fluid[] { Materials.Universium.getMolten(1).getFluid() }
+        };
+
+        CoreElement = TST_ItemID.create(GTCMItemList.CoreElement.get(1));
+        AnnihilationConstrainer = TST_ItemID.create(GTCMItemList.AnnihilationConstrainer.get(1));
+        AntiMatter = TST_ItemID.create(GTCMItemList.Antimatter.get(1));
+        Tesseract = TST_ItemID.create(ItemList.Tesseract.get(1));
+        StellarFrame = TST_ItemID.create(GTCMItemList.StellarConstructionFrameMaterial.get(1));
+
+        HydrogenPlasma = Materials.Hydrogen.getPlasma(1).getFluid();
+        // spotless:on
+    }
 
     protected void calculateParametersWithStructure() {
 
@@ -755,11 +1256,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.StrangeMatterAggregatorRecipes;
-    }
-
-    @Override
     public void updateSlots() {
         super.updateSlots();
         if (null != SpaceTimeMaintenanceConsumablesInputHatch && SpaceTimeMaintenanceConsumablesInputHatch.isValid())
@@ -884,6 +1380,400 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
     }
 
     @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        if (tag.getBoolean("isActive")) {
+            currentTip.add(
+                "" + EnumChatFormatting.WHITE
+                    + EnumChatFormatting.BOLD
+                    + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.consecutive_point")
+                    + EnumChatFormatting.GRAY
+                    + " : "
+                    + EnumChatFormatting.YELLOW
+                    + tag.getInteger("consecutivePoint"));
+            currentTip.add(
+                "" + EnumChatFormatting.AQUA
+                    + TSTSharedLocalization.MachineInfo.CurrentPowerConsumption
+                    + EnumChatFormatting.GRAY
+                    + " : "
+                    + EnumChatFormatting.WHITE
+                    + formatNumber(tag.getLong("powerConsumption"))
+                    + " EU/t");
+        }
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
+        if (tileEntity != null) {
+            if (tileEntity.isActive()) {
+                tag.setInteger("consecutivePoint", consecutivePoint);
+                tag.setLong("powerConsumption", (long) (powerConsumption * getEuModifier()));
+            }
+        }
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 8];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = EnumChatFormatting.AQUA
+            // spotless:off
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.oscillator_tier
+            // # SpaceTime Oscillator {\RED}Tier
+            // #zh_CN 时空振荡器{\RED}等级
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.oscillator_tier")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + oscillatorTier;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.oscillator_piece
+            // # SpaceTime Oscillator {\BLUE}Rings
+            // #zh_CN 时空振荡器{\BLUE}环数
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.oscillator_piece")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + oscillatorPiece;
+        ret[origin.length + 2] = EnumChatFormatting.AQUA
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.constraintor_tier
+            // # SpaceTime Constraintor {\RED}Tier
+            // #zh_CN 时空约束器{\RED}等级
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.constraintor_tier")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + constraintorTier;
+        ret[origin.length + 3] = EnumChatFormatting.AQUA
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.constraintor_piece
+            // # SpaceTIme Constraintor {\BLUE}Rings
+            // #zh_CN 时空约束器{\BLUE}环数
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.constraintor_piece")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + constraintorPiece;
+        ret[origin.length + 4] = EnumChatFormatting.AQUA
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.merger_tier
+            // # SpaceTime Merger {\RED}Tier
+            // #zh_CN 时空归并器{\RED}等级
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.merger_tier")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + mergerTier;
+        ret[origin.length + 5] = EnumChatFormatting.AQUA
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.merger_piece
+            // # SpaceTime Merger {\BLUE}Rings
+            // #zh_CN 时空归并器{\BLUE}环数
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.merger_piece")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + mergerPiece;
+        ret[origin.length + 6] = EnumChatFormatting.AQUA
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.total_rings
+            // # {\BLUE}Total Rings
+            // #zh_CN {\BLUE}总环数
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.total_rings")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + rings;
+        ret[origin.length + 7] = "" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD
+        // #tr tst.dyson.machine.StrangeMatterAggregator.info.consecutive_point
+        // # Continuous Running Points
+        // #zh_CN 连续运行点数
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.consecutive_point")
+            + EnumChatFormatting.WHITE
+            + ": "
+            + EnumChatFormatting.GOLD
+            + consecutivePoint;
+            // spotless:on
+        return ret;
+    }
+
+    @Override
+    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
+        return supportedModularHatchTypes;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return false;
+    }
+
+    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type,
+        List<StructureError> errors) {
+        int savedOTier = oscillatorTier;
+        int savedCTier = constraintorTier;
+        int savedMTier = mergerTier;
+
+        boolean result = checkPiece(pieceName, x, y, z, errors);
+        if (!result) return false;
+
+        boolean tierValid;
+        switch (type) {
+            case OSCILLATOR:
+                tierValid = oscillatorTier >= 1 && oscillatorTier <= 3;
+                break;
+            case CONSTRAINTOR:
+                tierValid = constraintorTier >= 1 && constraintorTier <= 3;
+                break;
+            case MERGER:
+                tierValid = mergerTier >= 1 && mergerTier <= 3;
+                break;
+            default:
+                tierValid = false;
+        }
+
+        if (!tierValid) {
+            oscillatorTier = savedOTier;
+            constraintorTier = savedCTier;
+            mergerTier = savedMTier;
+            return false;
+        }
+
+        return true;
+    }
+
+    protected void flushBuildingRingPieceArray() {
+        buildingRingPieceArray = new String[oscillatorPieceNeed + constraintorPieceNeed + mergerPieceNeed];
+        int p = 0;
+        for (; p < oscillatorPieceNeed; p++) {
+            buildingRingPieceArray[p] = STRUCTURE_PIECE_RING_O;
+        }
+        int oc = oscillatorPieceNeed + constraintorPieceNeed;
+        for (; p < oc; p++) {
+            buildingRingPieceArray[p] = STRUCTURE_PIECE_RING_C;
+        }
+        int ocm = oc + mergerPieceNeed;
+        for (; p < ocm; p++) {
+            buildingRingPieceArray[p] = STRUCTURE_PIECE_RING_M;
+        }
+    }
+
+    public static Integer getSpaceTimeOscillatorTier(Block b, int m) {
+        if (b != TstBlocks.SpaceTimeOscillator) return null;
+        return m + 1;
+    }
+
+    public static Integer getSpaceTimeConstraintorTier(Block b, int m) {
+        if (b != TstBlocks.SpaceTimeConstraintor) return null;
+        return m + 1;
+    }
+
+    public static Integer getSpaceTimeMergerTier(Block b, int m) {
+        if (b != TstBlocks.SpaceTimeMerger) return null;
+        return m + 1;
+    }
+
+    @Override
+    protected MTEMultiBlockBaseGui<?> getGui() {
+        TST_StrangeMatterAggregator self = this;
+        return new TST_Gui<TST_StrangeMatterAggregator>(this) {
+
+            @Override
+            public Flow createLeftPanelGapRow(ModularPanel panel, PanelSyncManager syncManager) {
+                return super.createLeftPanelGapRow(panel, syncManager)
+                    .child(self.createStructureConfigButton(syncManager, panel))
+                    .child(self.createRunningConfigButton(syncManager, panel));
+            }
+        };
+    }
+
+    @Override
+    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        super.addUIWidgets(builder, buildContext);
+    }
+
+    private IWidget createStructureConfigButton(PanelSyncManager syncManager, ModularPanel parent) {
+        IPanelHandler panelHandler = syncManager.syncedPanel(
+            "structureConfigPanel",
+            true,
+            (p_syncManager, syncHandler) -> createStructureConfigPanel(p_syncManager, parent));
+        return new ButtonWidget<>().size(18, 18)
+            .marginLeft(4)
+            .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
+            .onMousePressed(d -> {
+                if (panelHandler.isPanelOpen()) {
+                    panelHandler.closePanel();
+                } else {
+                    panelHandler.openPanel();
+                }
+                return true;
+            })
+            // #tr tst.dyson.machine.StrangeMatterAggregator.gui.building_info_menu_button.name
+            // # Auto Building Configuration Menu
+            // #zh_CN 自动搭建配置菜单
+            .tooltipBuilder(
+                t -> t
+                    .addLine(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.building_info_menu_button.name")))
+            .tooltipShowUpTimer(TOOLTIP_DELAY);
+    }
+
+    private ModularPanel createStructureConfigPanel(PanelSyncManager syncManager, ModularPanel parent) {
+        IntSyncValue oscillatorSyncer = new IntSyncValue(() -> oscillatorPieceNeed, val -> {
+            oscillatorPieceNeed = val;
+            flushBuildingRingPieceArray();
+        }).allowC2S();
+        syncManager.syncValue("oscillatorPieceNeedSyncer", oscillatorSyncer);
+
+        IntSyncValue constraintorSyncer = new IntSyncValue(() -> constraintorPieceNeed, val -> {
+            constraintorPieceNeed = val;
+            flushBuildingRingPieceArray();
+        }).allowC2S();
+        syncManager.syncValue("constraintorPieceNeedSyncer", constraintorSyncer);
+
+        IntSyncValue mergerSyncer = new IntSyncValue(() -> mergerPieceNeed, val -> {
+            mergerPieceNeed = val;
+            flushBuildingRingPieceArray();
+        }).allowC2S();
+        syncManager.syncValue("mergerPieceNeedSyncer", mergerSyncer);
+
+        ModularPanel panel = new ModularPanel("structureConfigPanel").relative(parent)
+            .leftRel(1)
+            .topRel(0)
+            .size(240, 80);
+
+        // spotless:off
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.structure.configuration_description.text
+        // # The machine will build the oscillator ring, constraintor ring, and merger ring in a set number of cycles.
+        // #zh_CN 机器将按照设定数量的振荡器环, 约束器环, 归并器环依次循环搭建.
+        panel.child(
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.structure.configuration_description.text"))
+                .textAlign(Alignment.Center)
+                .left(20)
+                .top(10)
+                .size(200, 14));
+
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.oscillator_piece_need.text
+        // # Oscillator
+        // #zh_CN 时空振荡器
+        panel.child(
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.oscillator_piece_need.text"))
+                .textAlign(Alignment.Center)
+                .left(0)
+                .top(36)
+                .size(100, 14));
+        panel.child(
+            new TextFieldWidget().value(oscillatorSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 64)
+                .left(30)
+                .top(52)
+                .size(40, 18));
+
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.constraintor_piece_need.text
+        // # Constraintor
+        // #zh_CN 时空约束器
+        panel.child(
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.constraintor_piece_need.text"))
+                .textAlign(Alignment.Center)
+                .left(70)
+                .top(36)
+                .size(100, 14));
+        panel.child(
+            new TextFieldWidget().value(constraintorSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 64)
+                .left(100)
+                .top(52)
+                .size(40, 18));
+
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.merger_piece_need.text
+        // # Merger
+        // #zh_CN 时空归并器
+        panel.child(
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.merger_piece_need.text")).textAlign(Alignment.Center)
+                .left(140)
+                .top(36)
+                .size(100, 14));
+        // spotless:on
+        panel.child(
+            new TextFieldWidget().value(mergerSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 64)
+                .left(170)
+                .top(52)
+                .size(40, 18));
+
+        return panel;
+    }
+
+    private IWidget createRunningConfigButton(PanelSyncManager syncManager, ModularPanel parent) {
+        IPanelHandler panelHandler = syncManager.syncedPanel(
+            "runningConfigPanel",
+            true,
+            (p_syncManager, syncHandler) -> createRunningConfigPanel(p_syncManager, parent));
+        return new ButtonWidget<>().size(18, 18)
+            .marginLeft(4)
+            .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
+            .onMousePressed(d -> {
+                if (panelHandler.isPanelOpen()) {
+                    panelHandler.closePanel();
+                } else {
+                    panelHandler.openPanel();
+                }
+                return true;
+            })
+            // #tr tst.dyson.machine.StrangeMatterAggregator.gui.running_info_menu_button.name
+            // # Running Configuration Menu
+            // #zh_CN 运行配置菜单
+            .tooltipBuilder(
+                t -> t
+                    .addLine(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.running_info_menu_button.name")))
+            .tooltipShowUpTimer(TOOLTIP_DELAY);
+    }
+
+    private ModularPanel createRunningConfigPanel(PanelSyncManager syncManager, ModularPanel parent) {
+        IntSyncValue fluidTierSyncer = new IntSyncValue(() -> spaceTimeMaintenanceFluidTier, val -> {
+            spaceTimeMaintenanceFluidTier = val;
+            calculateParametersWithSettings();
+        }).allowC2S();
+        syncManager.syncValue("fluidTierSyncer", fluidTierSyncer);
+
+        ModularPanel panel = new ModularPanel("runningConfigPanel").relative(parent)
+            .leftRel(1)
+            .topRel(0)
+            .size(240, 80);
+
+        // spotless:off
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.running.configuration_description.text
+        // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium, 3-MagnetoConstrainedStarMatter
+        // #zh_CN 设置时空维护流体等级: 1-熔融时空, 2-熔融宇宙素, 3-磁流体约束恒星物质
+        // spotless:on
+        panel.child(
+            new TextWidget<>(
+                IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.running.configuration_description.text"))
+                    .textAlign(Alignment.Center)
+                    .left(20)
+                    .top(10)
+                    .size(200, 14));
+
+        // Fluid tier input
+        panel.child(
+            new TextFieldWidget().value(fluidTierSyncer)
+                .setTextAlignment(Alignment.Center)
+                .numbersInt(1, 3)
+                .left(100)
+                .top(36)
+                .size(40, 18));
+
+        return panel;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         super.saveNBTData(aNBT);
 
@@ -938,128 +1828,215 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         flushBuildingRingPieceArray();
     }
 
+    // endregion
+
+    // region Textures
+    protected static IIconContainer ActiveFace;
+    protected static IIconContainer InactiveFace;
+
     @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        if (tag.getBoolean("isActive")) {
-            currentTip.add(
-                "" + EnumChatFormatting.WHITE
-                    + EnumChatFormatting.BOLD
-                    + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.consecutivePoint")
-                    + EnumChatFormatting.GRAY
-                    + " : "
-                    + EnumChatFormatting.YELLOW
-                    + tag.getInteger("consecutivePoint"));
-            currentTip.add(
-                "" + EnumChatFormatting.AQUA
-                    + TextEnums.CurrentPowerConsumption
-                    + EnumChatFormatting.GRAY
-                    + " : "
-                    + EnumChatFormatting.WHITE
-                    + formatNumber(tag.getLong("powerConsumption"))
-                    + " EU/t");
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
+        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
+        super.registerIcons(aBlockIconRegister);
+    }
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstoneLevel) {
+        if (side == facing) {
+            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
+                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
         }
+        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
     }
 
-    @Override
-    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
-        return new com.cleanroommc.modularui.drawable.UITexture[0];
-    }
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-        final IGregTechTileEntity tileEntity = getBaseMetaTileEntity();
-        if (tileEntity != null) {
-            if (tileEntity.isActive()) {
-                tag.setInteger("consecutivePoint", consecutivePoint);
-                tag.setLong("powerConsumption", (long) (powerConsumption * getEuModifier()));
-            }
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
+            // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.machine_type
+            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Strange Matter Aggregator
+            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}奇异物质聚合器
+            tooltip
+                .addMachineType(
+                    TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.machine_type"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.01
+                // # {\ITALIC}{\DARK_BLUE}Life is like Ephemera in the world, a drop in the sea.
+                // #zh_CN {\ITALIC}{\DARK_BLUE}寄蜉蝣于天地，渺沧海之一粟。
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.01"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.02
+                // # Creation of specialized space-time, efficient manipulation of strange matter.
+                // #zh_CN 创建专用的时空, 高效地操作奇异物质.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.02"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.03
+                // # The machines are stacked, and each layer can be fitted with one type of Space-Time Operator Cube.
+                // #zh_CN 机器是叠层结构, 每层可以安装一种时空操作器方块.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.03"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.04
+                // # Higher tier, more rings, more benefits, but also costs.
+                // #zh_CN 更高等级, 更多层数, 更多收益, 同时也有代价.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.04"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.05
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Oscillator {\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空振荡器 {\BLUE}----------------
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.05"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.06
+                // # Base run time: the higher the tier the shorter the run time
+                // #zh_CN 基础运行耗时：等级越高, 耗时越短
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.06"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.07
+                // # Basic materials consumption: the higher the number of rings, the lower the amount consumed
+                // #zh_CN 基础原料消耗：层数越多, 消耗量越少
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.07"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.08
+                // # SpaceTime maintenance fluid consumption: more rings more consumed
+                // #zh_CN 时空维护流体消耗：层数越多, 消耗量越多
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.08"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.09
+                // # Core element and annihilation constrainer consumption: higher tier, more rings, lower consumption rate
+                // #zh_CN 核心素和湮灭约束器消耗：等级越高, 层数越多, 消耗率越低
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.09"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.10
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Constraintor {\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空约束器 {\BLUE}----------------
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.10"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.11
+                // # Consumption rate of auxiliary materials: the higher the level, the lower the consumption rate
+                // #zh_CN 辅助材料消耗率：等级越高, 消耗率越低
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.11"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.12
+                // # Actual running time: the higher the tier the longer the actual running time is
+                // #zh_CN 实际运行耗时：等级越高, 实际运行耗时越长
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.12"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.13
+                // # SpaceTime maintenance fluid consumption: the more rings you have the less you consume
+                // #zh_CN 时空维护流体消耗：层数越多, 消耗量越少
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.13"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.14
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Merger {\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空归并器 {\BLUE}----------------
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.14"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.15
+                // # Maximum Continuous Running Points: The higher the tier, the higher the Continuous Running Points limit!
+                // #zh_CN 最大连续运行点数：等级越高, 连续运行点数上限越高
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.15"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.16
+                // # Byproduct outputs: the more rings the more outputs
+                // #zh_CN 副产物产出：层数越多, 产量越大
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.16"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.17
+                // # Power Consumption: higher tier, more rings, the higher the power consumption
+                // #zh_CN 耗电：等级越高层数越多耗电越高
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.17"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.18
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}SpaceTime Maintenance Fluid {\RESET}{\BLUE}----------------
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}时空维护流体 {\RESET}{\BLUE}----------------
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.18"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.19
+                // # Setting the used SpaceTime maintenance fluid tier within the machine UI:
+                // #zh_CN 在主机UI内设置使用的时空维护流体:
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.19"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.20
+                // # {\SPACE}T1 = 576L Molten SpaceTime | T2 = 96L Molten Universium | T3 = 16L Molten Magnetohydrodynamically Constrained Star Matter
+                // #zh_CN {\SPACE}T1 = 576L 熔融时空 | T2 = 96L 熔融宇宙素 | T3 = 16L 熔融磁流体约束恒星物质
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.20"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.21
+                // # Using Advanced SpaceTime Maintenance Fluid increases num of fuel rods can be crafted per Annihilation Constrainer and Core Element,
+                // #zh_CN 使用高级时空维护流体可以提高每个湮灭约束器和核心素可以制作的燃料棒数量,
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.21"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.22
+                // # {\SPACE} and reduce the consumption of fluid materials and auxiliary materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
+                // #zh_CN {\SPACE}并降低辅助材料和流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.22"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.23
+                // # T1: Molten Infinity and Molten Hypogen; T2: Molten SpaceTime and Molten Shirabon; T3: Molten Universium;
+                // #zh_CN T1: 熔融无尽和熔融海珀珍; T2: 熔融时空和熔融调律源金; T3: 熔融宇宙素;
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.23"))
+                .addInfo(EnumChatFormatting.GOLD + TSTSharedLocalization.General.Text_SeparatingLine)
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.24
+                // # {\WHITE}{\BOLD}Continuous Operation{\RESET}{\WHITE} will produce by-products and more of the main product.
+                // #zh_CN {\WHITE}{\BOLD}连续运行{\RESET}{\WHITE}时将产出副产物和更多的主产物.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.24"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.25
+                // # For each successful run, {\WHITE}Continuous Running Points{\GRAY} is increased by one.
+                // #zh_CN 每次成功运行时, {\WHITE}连续运行点数{\GRAY}加一.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.25"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.26
+                // # Continuous provision of sufficient space-time maintenance fluid to maintain continuous operation. Otherwise, operation is interrupted.
+                // #zh_CN 持续提供充足的时空维护流体可保持连续运行状态. 否则中断运行.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.26"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.27
+                // # {\WHITE}Provide {\YELLOW}{\BOLD}Core Elements {\WHITE}to obtain t2 products
+                // #zh_CN {\WHITE}提供{\YELLOW}{\BOLD}核心素{\WHITE}获得二级产物
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.27"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.28
+                // # If input Core Element, machine will consume Core Element and output a portion of T2 product instead part primary product.
+                // #zh_CN 如果有核心素输入则会消耗核心素并将一部分主产物替换为二级产物.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.28"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.29
+                // # At the same time, byproduct yields are doubled.
+                // #zh_CN 同时副产物产量翻倍.
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.29"))
+                .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModuleAll)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.01
+                // # {\WHITE}{\BOLD}Setting up auto-build rules for multi-rings structures within the controller UI.
+                // #zh_CN {\WHITE}{\BOLD}在主机UI内设置多环结构的自动搭建规则.
+                .addStructureInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.01"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.02
+                // # Input Hatch of SpaceTime Maintenance Fluid
+                // #zh_CN 时空维护流体输入仓
+
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.03
+                // # Left area beside the controller block
+                // #zh_CN 主方块左侧区域
+                .addOtherStructurePart(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.02"), TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.03"), 3)
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.04
+                // # Input Bus of Core Element and Annihilation Constrainer
+                // #zh_CN 核心素和湮灭约束器输入总线
+
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.05
+                // # Right area beside the controller block
+                // #zh_CN 主方块右侧区域
+                .addOtherStructurePart(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.04"), TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.05"), 4)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addOtherStructurePart(TSTSharedLocalization.ModularizedMachine.ModularHatch, TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .toolTipFinisher();
+            // spotless:on
         }
+        return tooltip;
     }
 
     @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 8];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.oscillatorTier
-            // # SpaceTime Oscillator {\RED}Tier
-            // #zh_CN 时空振荡器{\RED}等级
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.oscillatorTier")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + oscillatorTier;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.oscillatorPiece
-            // # SpaceTime Oscillator {\BLUE}Rings
-            // #zh_CN 时空振荡器{\BLUE}环数
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.oscillatorPiece")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + oscillatorPiece;
-        ret[origin.length + 2] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.constraintorTier
-            // # SpaceTime Constraintor {\RED}Tier
-            // #zh_CN 时空约束器{\RED}等级
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.constraintorTier")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + constraintorTier;
-        ret[origin.length + 3] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.constraintorPiece
-            // # SpaceTIme Constraintor {\BLUE}Rings
-            // #zh_CN 时空约束器{\BLUE}环数
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.constraintorPiece")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + constraintorPiece;
-        ret[origin.length + 4] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.mergerTier
-            // # SpaceTime Merger {\RED}Tier
-            // #zh_CN 时空归并器{\RED}等级
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.mergerTier")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + mergerTier;
-        ret[origin.length + 5] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.mergerPiece
-            // # SpaceTime Merger {\BLUE}Rings
-            // #zh_CN 时空归并器{\BLUE}环数
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.mergerPiece")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + mergerPiece;
-        ret[origin.length + 6] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.totalRings
-            // # {\BLUE}Total Rings
-            // #zh_CN {\BLUE}总环数
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.totalRings")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + rings;
-        ret[origin.length + 7] = "" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD
-        // #tr StrangeMatterAggregator.MachineInfoData.consecutivePoint
-        // # Continuous Running Points
-        // #zh_CN 连续运行点数
-            + TextEnums.tr("StrangeMatterAggregator.MachineInfoData.consecutivePoint")
-            + EnumChatFormatting.WHITE
-            + ": "
-            + EnumChatFormatting.GOLD
-            + consecutivePoint;
-        return ret;
+    public Style getTooltipCreditStyle() {
+        return Style.DYSON_SPHERE;
     }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.DYSON_SPHERE, Tag.MODULARIZED };
+    }
+
+    // endregion
+
+    // region Hatch Registration
 
     public boolean addSpaceTimeMaintenanceConsumablesInputHatchToMachineList(IGregTechTileEntity aTileEntity,
         int aBaseCasingIndex) {
@@ -1091,994 +2068,16 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         return false;
     }
 
-    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList
-        .of(ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER, ModularHatchTypes.SPEED_CONTROLLER);
+    // endregion
 
-    @Override
-    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
-        return supportedModularHatchTypes;
-    }
+    // region Nested Classes
 
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return false;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
-        lastKnownMachineState = mMachine;
-        structureCheckPassed = mMachine;
-    }
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-
-        oscillatorTier = -1;
-        oscillatorPiece = 0;
-        constraintorTier = -1;
-        constraintorPiece = 0;
-        mergerTier = -1;
-        mergerPiece = 0;
-        rings = 0;
-
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet_main, verticalOffSet_main, depthOffSet_main, errors)) {
-            return false;
-        }
-
-        while (true) {
-            int depth = depthOffSet_ring_first - rings * depthOffSet_ring_distance;
-
-            int tempOPieces = oscillatorPiece;
-            int tempCPieces = constraintorPiece;
-            int tempMPieces = mergerPiece;
-
-            // Use a temporary error list for ring type probing at this depth.
-            // Only the successful match's errors are kept; failed probe errors
-            // are discarded to avoid polluting the structure check result.
-            List<StructureError> probeErrors = new ArrayList<>();
-
-            boolean isOscillator = checkRingWithTierVerification(
-                STRUCTURE_PIECE_RING_O,
-                horizontalOffSet_ring,
-                verticalOffSet_ring,
-                depth,
-                RingType.OSCILLATOR,
-                probeErrors);
-
-            boolean isConstraintor = false;
-            if (!isOscillator) {
-                probeErrors.clear();
-                isConstraintor = checkRingWithTierVerification(
-                    STRUCTURE_PIECE_RING_C,
-                    horizontalOffSet_ring,
-                    verticalOffSet_ring,
-                    depth,
-                    RingType.CONSTRAINTOR,
-                    probeErrors);
-            }
-
-            boolean isMerger = false;
-            if (!isOscillator && !isConstraintor) {
-                probeErrors.clear();
-                isMerger = checkRingWithTierVerification(
-                    STRUCTURE_PIECE_RING_M,
-                    horizontalOffSet_ring,
-                    verticalOffSet_ring,
-                    depth,
-                    RingType.MERGER,
-                    probeErrors);
-            }
-
-            if (!isOscillator && !isConstraintor && !isMerger) {
-                break;
-            }
-
-            if (isOscillator) {
-                oscillatorPiece = tempOPieces + 1;
-            } else if (isConstraintor) {
-                constraintorPiece = tempCPieces + 1;
-            } else {
-                mergerPiece = tempMPieces + 1;
-            }
-
-            rings++;
-        }
-        // Print out all the missing ring information.
-        boolean hasMissingRing = false;
-
-        if (oscillatorPiece < 1 || oscillatorTier < 1) {
-            errors.add(SimpleStructureErrors.missing_oscillator_ring);
-            hasMissingRing = true;
-        }
-        if (constraintorPiece < 1 || constraintorTier < 1) {
-            errors.add(SimpleStructureErrors.missing_constraintor_ring);
-            hasMissingRing = true;
-        }
-        if (mergerPiece < 1 || mergerTier < 1) {
-            errors.add(SimpleStructureErrors.missing_merger_ring);
-            hasMissingRing = true;
-        }
-
-        if (hasMissingRing) {
-            return false;
-        }
-
-        if (!checkPiece(
-            STRUCTURE_PIECE_END,
-            horizontalOffSet_main,
-            verticalOffSet_main,
-            depthOffSet_ring_first - rings * depthOffSet_ring_distance,
-            errors)) {
-            return false;
-        }
-
-        calculateParametersWithStructure();
-        if (!wirelessMode && getMaxInputEu() < Config.PowerConsume_StrangeMatterAggregator) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean checkRingWithTierVerification(String pieceName, int x, int y, int z, RingType type,
-        List<StructureError> errors) {
-        int savedOTier = oscillatorTier;
-        int savedCTier = constraintorTier;
-        int savedMTier = mergerTier;
-
-        boolean result = checkPiece(pieceName, x, y, z, errors);
-        if (!result) return false;
-
-        boolean tierValid;
-        switch (type) {
-            case OSCILLATOR:
-                tierValid = oscillatorTier >= 1 && oscillatorTier <= 3;
-                break;
-            case CONSTRAINTOR:
-                tierValid = constraintorTier >= 1 && constraintorTier <= 3;
-                break;
-            case MERGER:
-                tierValid = mergerTier >= 1 && mergerTier <= 3;
-                break;
-            default:
-                tierValid = false;
-        }
-
-        if (!tierValid) {
-            oscillatorTier = savedOTier;
-            constraintorTier = savedCTier;
-            mergerTier = savedMTier;
-            return false;
-        }
-
-        return true;
+    private enum RingType {
+        OSCILLATOR,
+        CONSTRAINTOR,
+        MERGER
     }
 
     // endregion
-
-    // region Structure
-
-    protected static final int horizontalOffSet_main = 8;
-    protected static final int verticalOffSet_main = 8;
-    protected static final int depthOffSet_main = 0;
-    protected static final int horizontalOffSet_ring = 17;
-    protected static final int verticalOffSet_ring = 17;
-    protected static final int depthOffSet_ring_first = -4;
-    protected static final int depthOffSet_ring_distance = 16;
-    protected static final String STRUCTURE_PIECE_MAIN = "main";
-    protected static final String STRUCTURE_PIECE_RING_O = "ringOscillator";
-    protected static final String STRUCTURE_PIECE_RING_C = "ringConstraintor";
-    protected static final String STRUCTURE_PIECE_RING_M = "ringMerger";
-    protected static final String STRUCTURE_PIECE_END = "end";
-
-    protected static IStructureDefinition<TST_StrangeMatterAggregator> STRUCTURE_DEFINITION = null;
-    protected String[] buildingRingPieceArray = new String[] { STRUCTURE_PIECE_RING_O, STRUCTURE_PIECE_RING_C,
-        STRUCTURE_PIECE_RING_M };
-
-    protected void flushBuildingRingPieceArray() {
-        buildingRingPieceArray = new String[oscillatorPieceNeed + constraintorPieceNeed + mergerPieceNeed];
-        int p = 0;
-        for (; p < oscillatorPieceNeed; p++) {
-            buildingRingPieceArray[p] = STRUCTURE_PIECE_RING_O;
-        }
-        int oc = oscillatorPieceNeed + constraintorPieceNeed;
-        for (; p < oc; p++) {
-            buildingRingPieceArray[p] = STRUCTURE_PIECE_RING_C;
-        }
-        int ocm = oc + mergerPieceNeed;
-        for (; p < ocm; p++) {
-            buildingRingPieceArray[p] = STRUCTURE_PIECE_RING_M;
-        }
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            hintsOnly,
-            horizontalOffSet_main,
-            verticalOffSet_main,
-            depthOffSet_main);
-
-        int limit = stackSize.stackSize;
-        if (buildingRingPieceArray.length > 3) limit = Config.StructureLoopBuildingLimit_StrangeMatterAggregator;
-
-        int offset = 0;
-        for (int i = 0; i < limit; i++) {
-            for (int j = 0; j < buildingRingPieceArray.length; j++) {
-                buildPiece(
-                    buildingRingPieceArray[j],
-                    stackSize,
-                    hintsOnly,
-                    horizontalOffSet_ring,
-                    verticalOffSet_ring,
-                    depthOffSet_ring_first - offset * depthOffSet_ring_distance);
-
-                offset++;
-            }
-        }
-
-        buildPiece(
-            STRUCTURE_PIECE_END,
-            stackSize,
-            hintsOnly,
-            horizontalOffSet_main,
-            verticalOffSet_main,
-            depthOffSet_ring_first - offset * depthOffSet_ring_distance);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-
-        int built = survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet_main,
-            verticalOffSet_main,
-            depthOffSet_main,
-            elementBudget,
-            env,
-            false,
-            true);
-
-        if (built >= 0) return built;
-
-        int limit = stackSize.stackSize;
-        if (buildingRingPieceArray.length > 3) limit = Config.StructureLoopBuildingLimit_StrangeMatterAggregator;
-
-        int offset = 0;
-
-        for (int i = 0; i < limit; i++) {
-            for (int j = 0; j < buildingRingPieceArray.length; j++) {
-                built = survivalBuildPiece(
-                    buildingRingPieceArray[j],
-                    stackSize,
-                    horizontalOffSet_ring,
-                    verticalOffSet_ring,
-                    depthOffSet_ring_first - offset * depthOffSet_ring_distance,
-                    elementBudget,
-                    env,
-                    false,
-                    true);
-                if (built >= 0) return built;
-                offset++;
-            }
-        }
-
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_END,
-            stackSize,
-            horizontalOffSet_main,
-            verticalOffSet_main,
-            depthOffSet_ring_first - depthOffSet_ring_distance * offset,
-            elementBudget,
-            env,
-            false,
-            true);
-
-    }
-
-    @Override
-    public IStructureDefinition<TST_StrangeMatterAggregator> getStructureDefinition() {
-        if (null == STRUCTURE_DEFINITION) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_StrangeMatterAggregator>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-                .addShape(STRUCTURE_PIECE_RING_O, transpose(shapeRing_SpaceTimeOscillator))
-                .addShape(STRUCTURE_PIECE_RING_C, transpose(shapeRing_SpaceTimeConstraintor))
-                .addShape(STRUCTURE_PIECE_RING_M, transpose(shapeRing_SpaceTimeMerger))
-                .addShape(STRUCTURE_PIECE_END, transpose(shapeEnd))
-                .addElement('A', ofBlock(sBlockCasingsBA0, 10))
-                .addElement('B', ofBlock(sBlockCasingsBA0, 11))
-                .addElement('C', ofBlock(sBlockCasingsBA0, 12))
-                .addElement('D', ofBlock(sBlockCasingsTT, 9))
-                .addElement('E', ofBlock(sBlockCasingsTT, 10))
-                .addElement('F', ofBlock(sBlockCasingsTT, 14))
-                .addElement('G', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                .addElement(
-                    'H',
-                    // H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
-                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
-                        .atLeast(OutputBus, OutputHatch, SpeedController, PowerConsumptionController)
-                        .adder(TST_StrangeMatterAggregator::addToMachineList)
-                        .hint(1)
-                        .casingIndex(1024)
-                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
-                .addElement(
-                    'I',
-                    // I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time
-                    // holding consumables
-                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
-                        .atLeast(InputHatch)
-                        .adder(TST_StrangeMatterAggregator::addSpaceTimeMaintenanceConsumablesInputHatchToMachineList)
-                        .hint(3)
-                        .casingIndex(1024)
-                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
-                .addElement(
-                    'J',
-                    // J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
-                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
-                        .atLeast(InputBus, InputHatch)
-                        .adder(TST_StrangeMatterAggregator::addToMachineList)
-                        .hint(2)
-                        .casingIndex(1024)
-                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
-                .addElement(
-                    'K',
-                    // K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to
-                    // set machine processing tier.
-                    HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
-                        .atLeast(InputBus)
-                        .adder(TST_StrangeMatterAggregator::addCoreElementInputBusToMachineList)
-                        .hint(4)
-                        .casingIndex(1024)
-                        .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
-                .addElement(
-                    'X',
-                    withChannel(
-                        "oscillator",
-                        ofBlocksTiered(
-                            TST_StrangeMatterAggregator::getSpaceTimeOscillatorTier,
-                            ImmutableList.of(
-                                Pair.of(TstBlocks.SpaceTimeOscillator, 0),
-                                Pair.of(TstBlocks.SpaceTimeOscillator, 1),
-                                Pair.of(TstBlocks.SpaceTimeOscillator, 2)),
-                            -1,
-                            (m, t) -> m.oscillatorTier = t,
-                            m -> m.oscillatorTier)))
-                .addElement(
-                    'Y',
-                    withChannel(
-                        "constraintor",
-                        ofBlocksTiered(
-                            TST_StrangeMatterAggregator::getSpaceTimeConstraintorTier,
-                            ImmutableList.of(
-                                Pair.of(TstBlocks.SpaceTimeConstraintor, 0),
-                                Pair.of(TstBlocks.SpaceTimeConstraintor, 1),
-                                Pair.of(TstBlocks.SpaceTimeConstraintor, 2)),
-                            -1,
-                            (m, t) -> m.constraintorTier = t,
-                            m -> m.constraintorTier)))
-                .addElement(
-                    'Z',
-                    withChannel(
-                        "merger",
-                        ofBlocksTiered(
-                            TST_StrangeMatterAggregator::getSpaceTimeMergerTier,
-                            ImmutableList.of(
-                                Pair.of(TstBlocks.SpaceTimeMerger, 0),
-                                Pair.of(TstBlocks.SpaceTimeMerger, 1),
-                                Pair.of(TstBlocks.SpaceTimeMerger, 2)),
-                            -1,
-                            (m, t) -> m.mergerTier = t,
-                            m -> m.mergerTier)))
-                .build();
-
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    public static Integer getSpaceTimeOscillatorTier(Block b, int m) {
-        if (b != TstBlocks.SpaceTimeOscillator) return null;
-        return m + 1;
-    }
-
-    public static Integer getSpaceTimeConstraintorTier(Block b, int m) {
-        if (b != TstBlocks.SpaceTimeConstraintor) return null;
-        return m + 1;
-    }
-
-    public static Integer getSpaceTimeMergerTier(Block b, int m) {
-        if (b != TstBlocks.SpaceTimeMerger) return null;
-        return m + 1;
-    }
-
-    // spotless:off
-
-    /*
-        A -> ofBlock...(gt.blockcasingsBA0, 10, ...);
-        B -> ofBlock...(gt.blockcasingsBA0, 11, ...);
-        C -> ofBlock...(gt.blockcasingsBA0, 12, ...);
-        D -> ofBlock...(gt.blockcasingsTT, 9, ...);
-        E -> ofBlock...(gt.blockcasingsTT, 10, ...);
-        F -> ofBlock...(gt.blockcasingsTT, 14, ...);
-        G -> ofBlock...(tile.quantumGlass, 0, ...);
-        H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
-        I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time holding consumables
-        J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
-        K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to set machine processing tier.
-        Z -> ofBlock...(SpaceTimeConstraintor, 0, ...); // tier block
-     */
-    protected static final String[][] shapeMain = new String[][]{
-        {"                 ","                 ","       CCC       ","                 "},
-        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
-        {"                 ","     BBBFBBB     ","    CAACCCAAC    ","     BBGGGBB     "},
-        {"                 ","    BBBBBBBBB    ","   CACCCCCCCAC   ","    BGG   GGB    "},
-        {"       BBB       ","   BBBBBBBBBBB   ","  CACCCCFCCCCAC  ","   BG       GB   "},
-        {"       BJB       ","  BBBFBBBBBFBBB  "," CACCFCCCCCFCCAC ","  BG         GB  "},
-        {"      BBBBB      ","  BBBBBBBBBBBBB  "," CACCCCCCCCCCCAC ","  BG         GB  "},
-        {"    BBBHHHBBB    "," BBBBBBBBBBBBBBB ","CACCCCCCCCCCCCCAC"," BG    D D    GB "},
-        {"    BIBH~HBKB    "," BFBBBBBBBBBBBFB ","CACCFCCCCCCCFCCAC"," BG     E     GB "},
-        {"    BBBHHHBBB    "," BBBBBBBBBBBBBBB ","CACCCCCCCCCCCCCAC"," BG    D D    GB "},
-        {"      BBBBB      ","  BBBBBBBBBBBBB  "," CACCCCCCCCCCCAC ","  BG         GB  "},
-        {"       BJB       ","  BBBFBBBBBFBBB  "," CACCFCCCCCFCCAC ","  BG         GB  "},
-        {"       BBB       ","   BBBBBBBBBBB   ","  CACCCCFCCCCAC  ","   BG       GB   "},
-        {"                 ","    BBBBBBBBB    ","   CACCCCCCCAC   ","    BGG   GGB    "},
-        {"                 ","     BBBFBBB     ","    CAACCCAAC    ","     BBGGGBB     "},
-        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
-        {"                 ","                 ","       CCC       ","                 "}
-    };
-
-    protected static final String[][] shapeRing_SpaceTimeOscillator = new String[][]{
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           XXX           B    ","   AAC         XDEDX         CAA   ","   AAC         XEEEX         CAA   ","   AAC         XDEDX         CAA   ","    B           XXX           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
-        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
-        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC X G           G X CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC X G           G X CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
-        {"           G     E     G           ","           G     E     G           ","           G     E     G           ","        B  G     E     G  B        ","       B   G     E     G   B       ","       C   G     E     G   C       "," B    BC X G     E     G X CB    B ","AAC  AAAAE G     E     G EAAAA  CAA","AAC  DACCE G     E     G ECCAD  CAA","AAC  AAAAE G     E     G EAAAA  CAA"," B    BC X G     E     G X CB    B ","       C   G     E     G   C       ","       B   G     E     G   B       ","        B  G     E     G  B        ","           G     E     G           ","           G     E     G           "},
-        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC X G           G X CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC X G           G X CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA","AAC   BC X  G         G  X CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
-        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
-        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           XXX           B    ","   AAC         XDEDX         CAA   ","   AAC         XEEEX         CAA   ","   AAC         XDEDX         CAA   ","    B           XXX           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "}
-    };
-
-    protected static final String[][] shapeRing_SpaceTimeConstraintor = new String[][]{
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           YYY           B    ","   AAC         YDEDY         CAA   ","   AAC         YEEEY         CAA   ","   AAC         YDEDY         CAA   ","    B           YYY           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
-        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
-        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Y G           G Y CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Y G           G Y CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
-        {"           G     E     G           ","           G     E     G           ","           G     E     G           ","        B  G     E     G  B        ","       B   G     E     G   B       ","       C   G     E     G   C       "," B    BC Y G     E     G Y CB    B ","AAC  AAAAE G     E     G EAAAA  CAA","AAC  DACCE G     E     G ECCAD  CAA","AAC  AAAAE G     E     G EAAAA  CAA"," B    BC Y G     E     G Y CB    B ","       C   G     E     G   C       ","       B   G     E     G   B       ","        B  G     E     G  B        ","           G     E     G           ","           G     E     G           "},
-        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Y G           G Y CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Y G           G Y CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA","AAC   BC Y  G         G  Y CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
-        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
-        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           YYY           B    ","   AAC         YDEDY         CAA   ","   AAC         YEEEY         CAA   ","   AAC         YDEDY         CAA   ","    B           YYY           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "}
-    };
-
-    protected static final String[][] shapeRing_SpaceTimeMerger = new String[][]{
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           ZZZ           B    ","   AAC         ZDEDZ         CAA   ","   AAC         ZEEEZ         CAA   ","   AAC         ZDEDZ         CAA   ","    B           ZZZ           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
-        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
-        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Z G           G Z CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Z G           G Z CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
-        {"           G     E     G           ","           G     E     G           ","           G     E     G           ","        B  G     E     G  B        ","       B   G     E     G   B       ","       C   G     E     G   C       "," B    BC Z G     E     G Z CB    B ","AAC  AAAAE G     E     G EAAAA  CAA","AAC  DACCE G     E     G ECCAD  CAA","AAC  AAAAE G     E     G EAAAA  CAA"," B    BC Z G     E     G Z CB    B ","       C   G     E     G   C       ","       B   G     E     G   B       ","        B  G     E     G  B        ","           G     E     G           ","           G     E     G           "},
-        {"           G           G           ","           G    D D    G           ","           G           G           ","        B  G    D D    G  B        ","       B   G           G   B       ","       C   G    D D    G   C       "," B    BC Z G           G Z CB    B ","AAC   FAAD G    D D    G DAAF   CAA","AAC  AAAAE G           G EAAAA  CAA","AAC   FAAD G    D D    G DAAF   CAA"," B    BC Z G           G Z CB    B ","       C   G    D D    G   C       ","       B   G           G   B       ","        B  G    D D    G  B        ","           G           G           ","           G    D D    G           "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       "," B     C    G         G    C     B ","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA","AAC   BC Z  G         G  Z CB   CAA"," B     C    G         G    C     B ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"            G         G            ","            G         G            ","            G         G            ","            G         G            ","        B   G         G   B        ","       B    G         G    B       ","  B    B    G         G    B    B  "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA "," AAC   C    G         G    C   CAA ","  B    B    G         G    B    B  ","       B    G         G    B       ","        B   G         G   B        ","            G         G            ","            G         G            ","            G         G            "},
-        {"             G       G             ","             G       G             ","             G       G             ","             G       G             ","             G       G             ","        B    G       G    B        ","  B     B    G       G    B     B  "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA "," AAC   B     G       G     B   CAA ","  B     B    G       G    B     B  ","        B    G       G    B        ","             G       G             ","             G       G             ","             G       G             ","             G       G             "},
-        {"              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","  B           GG   GG           B  "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA "," AAC    B     GG   GG     B    CAA ","  B           GG   GG           B  ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              ","              GG   GG              "},
-        {"                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","   B            GGG            B   ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","  AAC           GGG           CAA  ","   B            GGG            B   ","                GGG                ","                GGG                ","                GGG                ","                GGG                ","                GGG                "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","   B                           B   ","  AAC                         CAA  ","  AAC                         CAA  ","  AAC                         CAA  ","   B                           B   ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","    B           ZZZ           B    ","   AAC         ZDEDZ         CAA   ","   AAC         ZEEEZ         CAA   ","   AAC         ZDEDZ         CAA   ","    B           ZZZ           B    ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                BBB                ","              BB   BB              ","             B       B             ","    B        B       B        B    ","   AAC      B   AAA   B      CAA   ","   AAC      B   ACA   B      CAA   ","   AAC      B   AAA   B      CAA   ","    B        B       B        B    ","             B       B             ","              BB   BB              ","                BBB                ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                BBB                ","              BBCCCBB              ","     B        BCCCCCB        B     ","    AAC      BCCAAACCB      CAA    ","    AAC      BCCACACCB      CAA    ","    AAC      BCCAAACCB      CAA    ","     B        BCCCCCB        B     ","              BBCCCBB              ","                BBB                ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","      B         BBB         B      ","     AAC       BFAFB       CAA     ","     AAC       BAAAB       CAA     ","     AAC       BFAFB       CAA     ","      B         BBB         B      ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","       B                   B       ","      AACC       A       CCAA      ","      AACC      ADA      CCAA      ","      AACC       A       CCAA      ","       B                   B       ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","        BB               BB        ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","       AAACC           CCAAA       ","        BB               BB        ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","          BB           BB          ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","        AAAACCC     CCCAAAA        ","          BB           BB          ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","            BBB     BBB            ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","          AAAAACCCCCAAAAA          ","            BBB     BBB            ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               BBBBB               ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","            AAAAAAAAAAA            ","               BBBBB               ","                                   ","                                   ","                                   ","                                   ","                                   "},
-        {"                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   ","               AAAAA               ","               AAAAA               ","               AAAAA               ","                                   ","                                   ","                                   ","                                   ","                                   ","                                   "}
-    };
-
-    protected static final String[][] shapeEnd = new String[][]{
-        {"                 ","                 ","       CCC       ","                 "},
-        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
-        {"       GGG       ","     BBGGGBB     ","    CAACCCAAC    ","     BBBFBBB     "},
-        {"     GG   GG     ","    BGG   GGB    ","   CACCCCCCCAC   ","    BBBBBBBBB    "},
-        {"    G       G    ","   BG       GB   ","  CACCCCFCCCCAC  ","   BBBBBBBBBBB   "},
-        {"   G         G   ","  BG         GB  "," CACCFCCCCCFCCAC ","  BBBFBBBBBFBBB  "},
-        {"   G         G   ","  BG         GB  "," CACCCCCCCCCCCAC ","  BBBBBBBBBBBBB  "},
-        {"  G           G  "," BG    D D    GB ","CACCCCCCCCCCCCCAC"," BBBBBBBBBBBBBBB "},
-        {"  G     E     G  "," BG     E     GB ","CACCFCCCCCCCFCCAC"," BFBBBBBBBBBBBFB "},
-        {"  G           G  "," BG    D D    GB ","CACCCCCCCCCCCCCAC"," BBBBBBBBBBBBBBB "},
-        {"   G         G   ","  BG         GB  "," CACCCCCCCCCCCAC ","  BBBBBBBBBBBBB  "},
-        {"   G         G   ","  BG         GB  "," CACCFCCCCCFCCAC ","  BBBFBBBBBFBBB  "},
-        {"    G       G    ","   BG       GB   ","  CACCCCFCCCCAC  ","   BBBBBBBBBBB   "},
-        {"     GG   GG     ","    BGG   GGB    ","   CACCCCCCCAC   ","    BBBBBBBBB    "},
-        {"       GGG       ","     BBGGGBB     ","    CAACCCAAC    ","     BBBFBBB     "},
-        {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
-        {"                 ","                 ","       CCC       ","                 "}
-    };
-
-    // spotless:on
-
-    // endregion
-
-    // region General
-    private static MultiblockTooltipBuilder tooltip;
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            // #tr Tooltip_StrangeMatterAggregator_MachineType
-            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Strange Matter Aggregator
-            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}奇异物质聚合器
-            tooltip
-                .addMachineType(
-                    TextEnums.tr("Tooltip_StrangeMatterAggregator_MachineType"))
-                // #tr Tooltip_StrangeMatterAggregator_01
-                // # {\ITALIC}{\DARK_BLUE}Life is like Ephemera in the world, a drop in the sea.
-                // #zh_CN {\ITALIC}{\DARK_BLUE}寄蜉蝣于天地，渺沧海之一粟。
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_01"))
-                // #tr Tooltip_StrangeMatterAggregator_02
-                // # Creation of specialized space-time, efficient manipulation of strange matter.
-                // #zh_CN 创建专用的时空, 高效地操作奇异物质.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_02"))
-                // #tr Tooltip_StrangeMatterAggregator_03
-                // # The machines are stacked, and each layer can be fitted with one type of Space-Time Operator Cube.
-                // #zh_CN 机器是叠层结构, 每层可以安装一种时空操作器方块.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_03"))
-                // #tr Tooltip_StrangeMatterAggregator_04
-                // # Higher tier, more rings, more benefits, but also costs.
-                // #zh_CN 更高等级, 更多层数, 更多收益, 同时也有代价.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_04"))
-                // #tr Tooltip_StrangeMatterAggregator_05
-                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Oscillator {\BLUE}----------------
-                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空振荡器 {\BLUE}----------------
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_05"))
-                // #tr Tooltip_StrangeMatterAggregator_06
-                // # Base run time: the higher the tier the shorter the run time
-                // #zh_CN 基础运行耗时：等级越高, 耗时越短
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_06"))
-                // #tr Tooltip_StrangeMatterAggregator_07
-                // # Basic materials consumption: the higher the number of rings, the lower the amount consumed
-                // #zh_CN 基础原料消耗：层数越多, 消耗量越少
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_07"))
-                // #tr Tooltip_StrangeMatterAggregator_08
-                // # SpaceTime maintenance fluid consumption: more rings more consumed
-                // #zh_CN 时空维护流体消耗：层数越多, 消耗量越多
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_08"))
-                // #tr Tooltip_StrangeMatterAggregator_09
-                // # Core element and annihilation constrainer consumption: higher tier, more rings, lower consumption rate
-                // #zh_CN 核心素和湮灭约束器消耗：等级越高, 层数越多, 消耗率越低
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_09"))
-                // #tr Tooltip_StrangeMatterAggregator_10
-                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Constraintor {\BLUE}----------------
-                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空约束器 {\BLUE}----------------
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_10"))
-                // #tr Tooltip_StrangeMatterAggregator_11
-                // # Consumption rate of auxiliary materials: the higher the level, the lower the consumption rate
-                // #zh_CN 辅助材料消耗率：等级越高, 消耗率越低
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_11"))
-                // #tr Tooltip_StrangeMatterAggregator_12
-                // # Actual running time: the higher the tier the longer the actual running time is
-                // #zh_CN 实际运行耗时：等级越高, 实际运行耗时越长
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_12"))
-                // #tr Tooltip_StrangeMatterAggregator_13
-                // # SpaceTime maintenance fluid consumption: the more rings you have the less you consume
-                // #zh_CN 时空维护流体消耗：层数越多, 消耗量越少
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_13"))
-                // #tr Tooltip_StrangeMatterAggregator_14
-                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Merger {\BLUE}----------------
-                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空归并器 {\BLUE}----------------
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_14"))
-                // #tr Tooltip_StrangeMatterAggregator_15
-                // # Maximum Continuous Running Points: The higher the tier, the higher the Continuous Running Points limit!
-                // #zh_CN 最大连续运行点数：等级越高, 连续运行点数上限越高
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_15"))
-                // #tr Tooltip_StrangeMatterAggregator_16
-                // # Byproduct outputs: the more rings the more outputs
-                // #zh_CN 副产物产出：层数越多, 产量越大
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_16"))
-                // #tr Tooltip_StrangeMatterAggregator_17
-                // # Power Consumption: higher tier, more rings, the higher the power consumption
-                // #zh_CN 耗电：等级越高层数越多耗电越高
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_17"))
-                // #tr Tooltip_StrangeMatterAggregator_18
-                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}SpaceTime Maintenance Fluid {\RESET}{\BLUE}----------------
-                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}时空维护流体 {\RESET}{\BLUE}----------------
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_18"))
-                // #tr Tooltip_StrangeMatterAggregator_19
-                // # Setting the used SpaceTime maintenance fluid tier within the machine UI:
-                // #zh_CN 在主机UI内设置使用的时空维护流体:
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_19"))
-                // #tr Tooltip_StrangeMatterAggregator_20
-                // # {\SPACE}T1 = 576L Molten SpaceTime | T2 = 96L Molten Universium | T3 = 16L Molten Magnetohydrodynamically Constrained Star Matter
-                // #zh_CN {\SPACE}T1 = 576L 熔融时空 | T2 = 96L 熔融宇宙素 | T3 = 16L 熔融磁流体约束恒星物质
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_20"))
-                // #tr Tooltip_StrangeMatterAggregator_21
-                // # Using Advanced SpaceTime Maintenance Fluid increases num of fuel rods can be crafted per Annihilation Constrainer and Core Element,
-                // #zh_CN 使用高级时空维护流体可以提高每个湮灭约束器和核心素可以制作的燃料棒数量,
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_21"))
-                // #tr Tooltip_StrangeMatterAggregator_22
-                // # {\SPACE} and reduce the consumption of fluid materials and auxiliary materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
-                // #zh_CN {\SPACE}并降低辅助材料和流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_22"))
-                // #tr Tooltip_StrangeMatterAggregator_23
-                // # T1: Molten Infinity and Molten Hypogen; T2: Molten SpaceTime and Molten Shirabon; T3: Molten Universium;
-                // #zh_CN T1: 熔融无尽和熔融海珀珍; T2: 熔融时空和熔融调律源金; T3: 熔融宇宙素;
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_23"))
-                .addInfo(EnumChatFormatting.GOLD + TextLocalization.Text_SeparatingLine)
-                // #tr Tooltip_StrangeMatterAggregator_24
-                // # {\WHITE}{\BOLD}Continuous Operation{\RESET}{\WHITE} will produce by-products and more of the main product.
-                // #zh_CN {\WHITE}{\BOLD}连续运行{\RESET}{\WHITE}时将产出副产物和更多的主产物.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_24"))
-                // #tr Tooltip_StrangeMatterAggregator_25
-                // # For each successful run, {\WHITE}Continuous Running Points{\GRAY} is increased by one.
-                // #zh_CN 每次成功运行时, {\WHITE}连续运行点数{\GRAY}加一.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_25"))
-                // #tr Tooltip_StrangeMatterAggregator_26
-                // # Continuous provision of sufficient space-time maintenance fluid to maintain continuous operation. Otherwise, operation is interrupted.
-                // #zh_CN 持续提供充足的时空维护流体可保持连续运行状态. 否则中断运行.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_26"))
-                // #tr Tooltip_StrangeMatterAggregator_27
-                // # {\WHITE}Provide {\YELLOW}{\BOLD}Core Elements {\WHITE}to obtain t2 products
-                // #zh_CN {\WHITE}提供{\YELLOW}{\BOLD}核心素{\WHITE}获得二级产物
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_27"))
-                // #tr Tooltip_StrangeMatterAggregator_28
-                // # If input Core Element, machine will consume Core Element and output a portion of T2 product instead part primary product.
-                // #zh_CN 如果有核心素输入则会消耗核心素并将一部分主产物替换为二级产物.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_28"))
-                // #tr Tooltip_StrangeMatterAggregator_29
-                // # At the same time, byproduct yields are doubled.
-                // #zh_CN 同时副产物产量翻倍.
-                .addInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator_29"))
-                .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
-                .addStructureInfo(TextEnums.SpeedControllerDescription.getText())
-                .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModuleAll.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                // #tr Tooltip_StrangeMatterAggregator.structure.UI_Description.01
-                // # {\WHITE}{\BOLD}Setting up auto-build rules for multi-rings structures within the controller UI.
-                // #zh_CN {\WHITE}{\BOLD}在主机UI内设置多环结构的自动搭建规则.
-                .addStructureInfo(TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.UI_Description.01"))
-                // #tr Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch
-                // # Input Hatch of SpaceTime Maintenance Fluid
-                // #zh_CN 时空维护流体输入仓
-
-                // #tr Tooltip_StrangeMatterAggregator.structure.Left
-                // # Left area beside the controller block
-                // #zh_CN 主方块左侧区域
-                .addOtherStructurePart(TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch"), TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.Left"), 3)
-                // #tr Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus
-                // # Input Bus of Core Element and Annihilation Constrainer
-                // #zh_CN 核心素和湮灭约束器输入总线
-
-                // #tr Tooltip_StrangeMatterAggregator.structure.Right
-                // # Right area beside the controller block
-                // #zh_CN 主方块右侧区域
-                .addOtherStructurePart(TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus"), TextEnums.tr("Tooltip_StrangeMatterAggregator.structure.Right"), 4)
-                .addInputHatch(TextLocalization.textUseBlueprint, 2)
-                .addInputBus(TextLocalization.textUseBlueprint, 2)
-                .addOtherStructurePart(TextEnums.ModularHatch.getText(), TextLocalization.textUseBlueprint, 1)
-                .addOutputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .toolTipFinisher(TextLocalization.ModName);
-            // spotless:on
-        }
-        return tooltip;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    // region UI
-
-    @Override
-    protected MTEMultiBlockBaseGui<?> getGui() {
-        TST_StrangeMatterAggregator self = this;
-        return new TST_Gui<TST_StrangeMatterAggregator>(this) {
-
-            @Override
-            public Flow createLeftPanelGapRow(ModularPanel panel, PanelSyncManager syncManager) {
-                return super.createLeftPanelGapRow(panel, syncManager)
-                    .child(self.createStructureConfigButton(syncManager, panel))
-                    .child(self.createRunningConfigButton(syncManager, panel));
-            }
-        };
-    }
-
-    @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-    }
-
-    // region Structure Config Button & Panel
-
-    private IWidget createStructureConfigButton(PanelSyncManager syncManager, ModularPanel parent) {
-        IPanelHandler panelHandler = syncManager.syncedPanel(
-            "structureConfigPanel",
-            true,
-            (p_syncManager, syncHandler) -> createStructureConfigPanel(p_syncManager, parent));
-        return new ButtonWidget<>().size(18, 18)
-            .marginLeft(4)
-            .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
-            .onMousePressed(d -> {
-                if (panelHandler.isPanelOpen()) {
-                    panelHandler.closePanel();
-                } else {
-                    panelHandler.openPanel();
-                }
-                return true;
-            })
-            // #tr StrangeMatterAggregator.UI.BuildingInfoMenuButton.name
-            // # Auto Building Configuration Menu
-            // #zh_CN 自动搭建配置菜单
-            .tooltipBuilder(t -> t.addLine(IKey.lang("StrangeMatterAggregator.UI.BuildingInfoMenuButton.name")))
-            .tooltipShowUpTimer(TOOLTIP_DELAY);
-    }
-
-    private ModularPanel createStructureConfigPanel(PanelSyncManager syncManager, ModularPanel parent) {
-        IntSyncValue oscillatorSyncer = new IntSyncValue(() -> oscillatorPieceNeed, val -> {
-            oscillatorPieceNeed = val;
-            flushBuildingRingPieceArray();
-        }).allowC2S();
-        syncManager.syncValue("oscillatorPieceNeedSyncer", oscillatorSyncer);
-
-        IntSyncValue constraintorSyncer = new IntSyncValue(() -> constraintorPieceNeed, val -> {
-            constraintorPieceNeed = val;
-            flushBuildingRingPieceArray();
-        }).allowC2S();
-        syncManager.syncValue("constraintorPieceNeedSyncer", constraintorSyncer);
-
-        IntSyncValue mergerSyncer = new IntSyncValue(() -> mergerPieceNeed, val -> {
-            mergerPieceNeed = val;
-            flushBuildingRingPieceArray();
-        }).allowC2S();
-        syncManager.syncValue("mergerPieceNeedSyncer", mergerSyncer);
-
-        ModularPanel panel = new ModularPanel("structureConfigPanel").relative(parent)
-            .leftRel(1)
-            .topRel(0)
-            .size(240, 80);
-
-        // #tr StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text
-        // # The machine will build the oscillator ring, constraintor ring, and merger ring in a set number of cycles.
-        // #zh_CN 机器将按照设定数量的振荡器环, 约束器环, 归并器环依次循环搭建.
-        panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text"))
-                .textAlign(Alignment.Center)
-                .left(20)
-                .top(10)
-                .size(200, 14));
-
-        // #tr StrangeMatterAggregator.UI.OscillatorPieceNeed.text
-        // # Oscillator
-        // #zh_CN 时空振荡器
-        panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.OscillatorPieceNeed.text"))
-                .textAlign(Alignment.Center)
-                .left(0)
-                .top(36)
-                .size(100, 14));
-        panel.child(
-            new TextFieldWidget().value(oscillatorSyncer)
-                .setTextAlignment(Alignment.Center)
-                .numbersInt(1, 64)
-                .left(30)
-                .top(52)
-                .size(40, 18));
-
-        // #tr StrangeMatterAggregator.UI.ConstraintorPieceNeed.text
-        // # Constraintor
-        // #zh_CN 时空约束器
-        panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.ConstraintorPieceNeed.text"))
-                .textAlign(Alignment.Center)
-                .left(70)
-                .top(36)
-                .size(100, 14));
-        panel.child(
-            new TextFieldWidget().value(constraintorSyncer)
-                .setTextAlignment(Alignment.Center)
-                .numbersInt(1, 64)
-                .left(100)
-                .top(52)
-                .size(40, 18));
-
-        // #tr StrangeMatterAggregator.UI.MergerPieceNeed.text
-        // # Merger
-        // #zh_CN 时空归并器
-        panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.MergerPieceNeed.text")).textAlign(Alignment.Center)
-                .left(140)
-                .top(36)
-                .size(100, 14));
-        panel.child(
-            new TextFieldWidget().value(mergerSyncer)
-                .setTextAlignment(Alignment.Center)
-                .numbersInt(1, 64)
-                .left(170)
-                .top(52)
-                .size(40, 18));
-
-        return panel;
-    }
-
-    // endregion
-
-    // region Running Config Button & Panel
-
-    private IWidget createRunningConfigButton(PanelSyncManager syncManager, ModularPanel parent) {
-        IPanelHandler panelHandler = syncManager.syncedPanel(
-            "runningConfigPanel",
-            true,
-            (p_syncManager, syncHandler) -> createRunningConfigPanel(p_syncManager, parent));
-        return new ButtonWidget<>().size(18, 18)
-            .marginLeft(4)
-            .overlay(GTGuiTextures.OVERLAY_BUTTON_CYCLIC)
-            .onMousePressed(d -> {
-                if (panelHandler.isPanelOpen()) {
-                    panelHandler.closePanel();
-                } else {
-                    panelHandler.openPanel();
-                }
-                return true;
-            })
-            // #tr StrangeMatterAggregator.UI.RunningInfoMenuButton.name
-            // # Running Configuration Menu
-            // #zh_CN 运行配置菜单
-            .tooltipBuilder(t -> t.addLine(IKey.lang("StrangeMatterAggregator.UI.RunningInfoMenuButton.name")))
-            .tooltipShowUpTimer(TOOLTIP_DELAY);
-    }
-
-    private ModularPanel createRunningConfigPanel(PanelSyncManager syncManager, ModularPanel parent) {
-        IntSyncValue fluidTierSyncer = new IntSyncValue(() -> spaceTimeMaintenanceFluidTier, val -> {
-            spaceTimeMaintenanceFluidTier = val;
-            calculateParametersWithSettings();
-        }).allowC2S();
-        syncManager.syncValue("fluidTierSyncer", fluidTierSyncer);
-
-        ModularPanel panel = new ModularPanel("runningConfigPanel").relative(parent)
-            .leftRel(1)
-            .topRel(0)
-            .size(240, 80);
-
-        // #tr StrangeMatterAggregator.UI.Running.ConfigurationDescription.text
-        // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium,
-        // 3-MagnetoConstrainedStarMatter
-        // #zh_CN 设置时空维护流体等级: 1-熔融时空, 2-熔融宇宙素, 3-磁流体约束恒星物质
-        panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Running.ConfigurationDescription.text"))
-                .textAlign(Alignment.Center)
-                .left(20)
-                .top(10)
-                .size(200, 14));
-
-        // Fluid tier input
-        panel.child(
-            new TextFieldWidget().value(fluidTierSyncer)
-                .setTextAlignment(Alignment.Center)
-                .numbersInt(1, 3)
-                .left(100)
-                .top(36)
-                .size(40, 18));
-
-        return panel;
-    }
-
-    protected static IIconContainer ActiveFace;
-    protected static IIconContainer InactiveFace;
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister aBlockIconRegister) {
-        ActiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_on");
-        InactiveFace = Textures.BlockIcons.custom("gtnhcommunitymod:ModularHatchOverlay/OVERLAY_ControlCore_Per_off");
-        super.registerIcons(aBlockIconRegister);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstoneLevel) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12],
-                new TTRenderedExtendedFacingTexture(active ? ActiveFace : InactiveFace) };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][12] };
-    }
 
 }

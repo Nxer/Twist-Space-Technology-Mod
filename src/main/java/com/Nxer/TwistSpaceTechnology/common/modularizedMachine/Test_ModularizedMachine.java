@@ -28,7 +28,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.IModularHatch;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -66,130 +67,20 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new Test_ModularizedMachine(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    // TODO delete this method
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.wiremillRecipes;
-    }
-
     // endregion
 
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "main";
+
+    // spotless:off
     private final String[][] shape = new String[][] { { "AAA", "AAA", "AAA" }, { "A~A", "AAA", "AAA" },
         { "AAA", "AAA", "AAA" } };
+    // spotless:on
+
     private static final int horizontalOffSet = 1;
     private static final int verticalOffSet = 1;
     private static final int depthOffSet = 0;
     private static IStructureDefinition<Test_ModularizedMachine> STRUCTURE_DEFINITION;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    /**
-     * Tier of this machine, setting from the casing block.
-     */
-    public int tierMachine = 0;
-
-    /**
-     * Save and load NBT data.
-     */
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("tierMachine", tierMachine);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        tierMachine = aNBT.getInteger("tierMachine");
-    }
-
-    /**
-     * Show custom information when player use scanner right-click this machine.
-     */
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = "tierMachine = " + tierMachine;
-
-        return ret;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    /**
-     * To update hatches' texture after checkMachine.
-     */
-    protected void updateHatchTexture() {
-        for (IDualInputHatch h : mDualInputHatches) h.updateTexture(getCasingTextureID());
-        for (MTEHatch h : mInputBusses) h.updateTexture(getCasingTextureID());
-        for (MTEHatch h : mMaintenanceHatches) h.updateTexture(getCasingTextureID());
-        for (MTEHatch h : mEnergyHatches) h.updateTexture(getCasingTextureID());
-        for (MTEHatch h : mOutputBusses) h.updateTexture(getCasingTextureID());
-        for (MTEHatch h : mInputHatches) h.updateTexture(getCasingTextureID());
-        for (MTEHatch h : mOutputHatches) h.updateTexture(getCasingTextureID());
-        for (IModularHatch h : allModularHatches) ((MTEHatch) h).updateTexture(getCasingTextureID());
-    }
-
-    /**
-     * Package a method to get Texture ID for hatches from machine tier.
-     */
-    private int getCasingTextureID() {
-        if (tierMachine > 1) return ((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(10);
-        return ((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0);
-    }
-
-    /**
-     * The method checkMachine in this custom base class. Same as the origin checkMachine.
-     */
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        tierMachine = 0;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
-            return false;
-        }
-        if (tierMachine == 0) {
-            errors.add(tiered_structure_issue);
-            return false;
-        }
-        updateHatchTexture();
-        return true;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return true;
-    }
 
     @Override
     public IStructureDefinition<Test_ModularizedMachine> getStructureDefinition() {
@@ -257,32 +148,117 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
 
         return STRUCTURE_DEFINITION;
     }
-    // endregion
-
-    // region General
-
-    private static MultiblockTooltipBuilder tooltip;
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            tooltip.addMachineType("test")
-                .addInfo("testing")
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .beginStructureBlock(3, 3, 3, false)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 2)
-                .addOutputBus(TextLocalization.textUseBlueprint, 2)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 3)
-                .toolTipFinisher(TextLocalization.ModName);
-
-        }
-        return tooltip;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    /**
+     * The method checkMachine in this custom base class. Same as the origin checkMachine.
+     */
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        tierMachine = 0;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return false;
+        }
+        if (tierMachine == 0) {
+            errors.add(tiered_structure_issue);
+            return false;
+        }
+        updateHatchTexture();
+        return true;
+    }
+    // endregion
+
+    // region Processing Logic
+    /**
+     * Tier of this machine, setting from the casing block.
+     */
+    public int tierMachine = 0;
+
+    // TODO delete this method
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.wiremillRecipes;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    /**
+     * Show custom information when player use scanner right-click this machine.
+     */
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = "tierMachine = " + tierMachine;
+
+        return ret;
+    }
+
+    /**
+     * To update hatches' texture after checkMachine.
+     */
+    protected void updateHatchTexture() {
+        for (IDualInputHatch h : mDualInputHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mInputBusses) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mMaintenanceHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mEnergyHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mOutputBusses) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mInputHatches) h.updateTexture(getCasingTextureID());
+        for (MTEHatch h : mOutputHatches) h.updateTexture(getCasingTextureID());
+        for (IModularHatch h : allModularHatches) ((MTEHatch) h).updateTexture(getCasingTextureID());
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return true;
+    }
+
+    // endregion
+
+    // region NBT
+
+    /**
+     * Save and load NBT data.
+     */
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("tierMachine", tierMachine);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        tierMachine = aNBT.getInteger("tierMachine");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -309,5 +285,38 @@ public class Test_ModularizedMachine extends MultiExecutionCoreMachineSupportAll
         }
         return new ITexture[] { casingTexturePages[1][48] };
     }
+
+    /**
+     * Package a method to get Texture ID for hatches from machine tier.
+     */
+    private int getCasingTextureID() {
+        if (tierMachine > 1) return ((BlockCasings4) GregTechAPI.sBlockCasings4).getTextureIndex(10);
+        return ((BlockCasings2) GregTechAPI.sBlockCasings2).getTextureIndex(0);
+    }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            tooltip.addMachineType("test")
+                .addInfo("testing")
+                .beginStructureBlock(3, 3, 3, false)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .toolTipFinisher(TSTSharedLocalization.General.ModName);
+
+        }
+        return tooltip;
+    }
+
+    // endregion
 
 }

@@ -40,8 +40,9 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmen
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -76,7 +77,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
-    extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable {
+    extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable, TSTTooltipCredit {
 
     // region Class Constructor
     public GTCM_MultiMachineBase(int aID, String aName, String aNameRegional) {
@@ -306,7 +307,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return The voltage tier should be in of this machine total EU/t, allow over MAX calculation.
      */
     public int getTotalPowerTier() {
-        return TstUtils.getMachineTotalPowerTier(this);
+        return TSTUtils.getMachineTotalPowerTier(this);
     }
 
     /**
@@ -914,32 +915,19 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 4];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr MachineInfoData.Parallels
-        // # Parallels
-        // #zh_CN 并行
-        ret[origin.length] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.Parallels")
+        ret[origin.length] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.Parallels
             + ": "
             + EnumChatFormatting.GOLD
             + this.getTrueParallel();
-        // #tr MachineInfoData.SpeedMultiplier
-        // # Speed multiplier
-        // #zh_CN 耗时倍率
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.SpeedMultiplier")
+        ret[origin.length + 1] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.SpeedMultiplier
             + ": "
             + EnumChatFormatting.GOLD
             + dSpeed;
-        // #tr MachineInfoData.EuModifier
-        // # EU Modifier
-        // #zh_CN 耗电倍率
-        ret[origin.length + 2] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.EuModifier")
+        ret[origin.length + 2] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.EuModifier
             + ": "
             + EnumChatFormatting.GOLD
             + dEUMod;
-        // #tr MachineInfoData.HighCapacityOutput
-        // # High-Capacity Output
-        // #zh_CN 超大容量输出
-
-        ret[origin.length + 3] = EnumChatFormatting.AQUA + TextEnums.tr("MachineInfoData.HighCapacityOutput")
+        ret[origin.length + 3] = EnumChatFormatting.AQUA + TSTSharedLocalization.MachineInfo.HighCapacityOutput
             + ": "
             + EnumChatFormatting.GOLD
             + (isMEOutputEnabled() ? "On" : "Off");
@@ -1176,6 +1164,8 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
 
     // endregion
 
+    // region Machine Mode
+
     @Override
     public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
         ItemStack tool) {
@@ -1284,10 +1274,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
         if (tag.hasKey("modeTST")) {
             currentTip.add(EnumChatFormatting.YELLOW +
-            // #tr TST.machines.running_mode
+            // #tr tst.common.shared.machine_info.running_mode
             // # Running Mode :
             // #zh_CN 运行模式 :
-                StatCollector.translateToLocal("TST.machines.running_mode")
+                StatCollector.translateToLocal("tst.common.shared.machine_info.running_mode")
                 + " "
                 + EnumChatFormatting.WHITE
                 + getMachineModeName()

@@ -13,7 +13,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.google.common.collect.ImmutableList;
 
 import appeng.api.config.AccessRestriction;
@@ -39,37 +41,38 @@ import gregtech.api.enums.Textures;
 import gregtech.api.enums.Textures.BlockIcons;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
+@SkipGenerateDescription
 public class TST_PatternAccessHatch extends MTEHatch
-    implements IGridProxyable, ICellContainer, IMEInventoryHandler<AEItemStack>, IPowerChannelState {
+    implements IGridProxyable, ICellContainer, IMEInventoryHandler<AEItemStack>, IPowerChannelState, TSTTooltipCredit {
 
     private TST_MegaCraftingCenter controller;
     private AENetworkProxy gridProxy;
     private static final String[] DESC = new String[] {
-        // #tr Tooltip_PatternAccessHatch_1
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.01
         // # Access Hatch for Extreme Crafting Center
         // #zh_CN 梦魇工业合成中心的访问仓
-        TextEnums.tr("Tooltip_PatternAccessHatch_1"),
-        // #tr Tooltip_PatternAccessHatch_2
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.01"),
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.02
         // # Connect to ME net to access patterns stored in Extreme Crafting Center.
         // #zh_CN 连接ME网络以访问梦魇工业合成中心存储的样板
-        TextEnums.tr("Tooltip_PatternAccessHatch_2"),
-        // #tr Tooltip_PatternAccessHatch_3
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.02"),
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.03
         // # Extreme Crafting Center can only accept 1 Pattern Access Hatch at maximum.
         // #zh_CN 梦魇工业合成中心最多接受一个样板访问仓
-        TextEnums.tr("Tooltip_PatternAccessHatch_3"),
-        // #tr Tooltip_PatternAccessHatch_4
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.03"),
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.04
         // # Invalid items or duplicated patterns will be rejected.
         // #zh_CN 错误或重复的样板不会由此输入
-        TextEnums.tr("Tooltip_PatternAccessHatch_4"),
-
-        TextEnums.Mod_TwistSpaceTechnology.getText() };
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.04") };
 
     public TST_PatternAccessHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 0, "");
+        registerTooltipCredits(ID.REOBF);
     }
 
     public TST_PatternAccessHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {

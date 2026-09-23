@@ -17,7 +17,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TST_SteamMultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -31,6 +34,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -38,6 +42,7 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
+@SkipGenerateDescription
 public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_LargeSteamAlloySmelter>
     implements ISurvivalConstructable {
 
@@ -48,54 +53,17 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
 
     public TST_LargeSteamAlloySmelter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_LargeSteamAlloySmelter(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 48;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.alloySmelterRecipes;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    protected SoundResource getActivitySoundLoop() {
-        return SoundResource.IC2_MACHINES_INDUCTION_LOOP;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(mName, 2, 1, 0, errors);
-    }
-
     // endregion
 
     // region Structure
-
     private static IStructureDefinition<TST_LargeSteamAlloySmelter> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(mName, stackSize, hintsOnly, 2, 1, 0);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(mName, stackSize, 2, 1, 0, elementBudget, env, false, true);
-    }
 
     @Override
     public IStructureDefinition<TST_LargeSteamAlloySmelter> getStructureDefinition() {
@@ -123,9 +91,63 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
         }
         return STRUCTURE_DEFINITION;
     }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(mName, stackSize, hintsOnly, 2, 1, 0);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(mName, stackSize, 2, 1, 0, elementBudget, env, false, true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(mName, 2, 1, 0, errors);
+    }
     // endregion
 
-    // region General
+    // region Processing Logic
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.alloySmelterRecipes;
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return 48;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public boolean getDefaultHasMaintenanceChecks() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public final boolean shouldCheckMaintenance() {
+        return false;
+    }
+
+    /**
+     * No more machine error
+     */
+    @Override
+    public void checkMaintenance() {}
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected SoundResource getActivitySoundLoop() {
+        return SoundResource.IC2_MACHINES_INDUCTION_LOOP;
+    }
 
     @Override
     public int getTierRecipes() {
@@ -139,36 +161,21 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
     }
 
     @Override
-    protected IIconContainer getActiveOverlay() {
-        return OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE;
-    }
-
-    @Override
-    protected IIconContainer getInactiveOverlay() {
-        return OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI;
-    }
-
-    @Override
     public String getMachineType() {
         return "Alloy Smelter";
     }
 
+    /**
+     * No more machine error
+     */
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_LargeSteamAlloySmelter_MachineType)
-            .addInfo(TextLocalization.Tooltip_LargeSteamAlloySmelter_Controller)
-            .addInfo(TextLocalization.Tooltip_LargeSteamAlloySmelter_01)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
-            .beginStructureBlock(5, 3, 3, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    public boolean doRandomMaintenanceDamage() {
+        return true;
     }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
@@ -196,34 +203,45 @@ public class TST_LargeSteamAlloySmelter extends TST_SteamMultiMachineBase<TST_La
         return new ITexture[] { Textures.BlockIcons.casingTexturePages[8][66] };
     }
 
-    /**
-     * No more machine error
-     */
     @Override
-    public boolean doRandomMaintenanceDamage() {
-        return true;
+    protected IIconContainer getActiveOverlay() {
+        return OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI_ACTIVE;
     }
 
-    /**
-     * No more machine error
-     */
     @Override
-    public void checkMaintenance() {}
-
-    /**
-     * No more machine error
-     */
-    @Override
-    public boolean getDefaultHasMaintenanceChecks() {
-        return false;
+    protected IIconContainer getInactiveOverlay() {
+        return OVERLAY_FRONT_STEAM_ALLOY_SMELTER_MULTI;
     }
 
-    /**
-     * No more machine error
-     */
+    // endregion
+
+    // region Tooltip
+
     @Override
-    public final boolean shouldCheckMaintenance() {
-        return false;
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.machine_type
+        // # Alloy Smelter
+        // #zh_CN 合金炉
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.machine_type"))
+            // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.controller
+            // # Controller block for the Large Steam Alloy Smelter
+            // #zh_CN 大型蒸汽合金炉的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.controller"))
+            // #tr tst.common.machine.LargeSteamAlloySmelter.tooltip.info.01
+            // # Steam Tech Operational
+            // #zh_CN 蒸汽科技，启动！
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.tooltip.info.01"))
+            .beginStructureBlock(5, 3, 3, false)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
     }
+
+    // endregion
 
 }

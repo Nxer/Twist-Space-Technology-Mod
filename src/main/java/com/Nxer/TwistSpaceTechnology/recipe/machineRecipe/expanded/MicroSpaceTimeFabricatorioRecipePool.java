@@ -37,7 +37,7 @@ public class MicroSpaceTimeFabricatorioRecipePool {
             .fluidOutputs(Materials.DTR.getFluid(3000))
             .eut(RECIPE_UXV)
             .duration(20 * 60)
-            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipeMap);
 
         // endregion
 
@@ -53,7 +53,7 @@ public class MicroSpaceTimeFabricatorioRecipePool {
             .fluidOutputs(Materials.DTR.getFluid(500))
             .eut(RECIPE_UIV)
             .duration(20 * 60)
-            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipeMap);
 
         // endregion
 

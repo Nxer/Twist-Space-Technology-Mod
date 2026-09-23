@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
 import static com.Nxer.TwistSpaceTechnology.util.RecipeMathUtils.roundUpToMultiple;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
 
 import net.minecraftforge.fluids.FluidStack;
 
@@ -62,13 +62,13 @@ public class RapidHeatExchangeRecipePool {
                 .fluidInputs(HotFluid, Water)
                 .fluidOutputs(Steam, ColdFluid)
                 .duration(20)
-                .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
+                .addTo(GTCMRecipe.RapidHeatExchangeRecipeMap);
 
             TST_RecipeBuilder.builder()
                 .fluidInputs(HotFluid)
                 .fluidOutputs(ColdFluid)
                 .duration(20)
-                .addTo(GTCMRecipe.RapidCoolingDownRecipes);
+                .addTo(GTCMRecipe.RapidCoolingDownRecipeMap);
         }
 
         // extra recipe
@@ -79,13 +79,13 @@ public class RapidHeatExchangeRecipePool {
                     .fluidInputs(WerkstoffMaterialPool.HotSuperCoolant.getFluidOrGas(1), Materials.Water.getFluid(25))
                     .fluidOutputs(copyAmount(DenseSupercriticalSteam, 4), Materials.SuperCoolant.getFluid(1))
                     .duration(20)
-                    .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
+                    .addTo(GTCMRecipe.RapidHeatExchangeRecipeMap);
 
                 TST_RecipeBuilder.builder()
                     .fluidInputs(WerkstoffMaterialPool.HotSuperCoolant.getFluidOrGas(1))
                     .fluidOutputs(Materials.SuperCoolant.getFluid(1))
                     .duration(20)
-                    .addTo(GTCMRecipe.RapidCoolingDownRecipes);
+                    .addTo(GTCMRecipe.RapidCoolingDownRecipeMap);
             }
 
             // Creon plasma
@@ -94,13 +94,13 @@ public class RapidHeatExchangeRecipePool {
                     .fluidInputs(Materials.Creon.getPlasma(1), Materials.Water.getFluid(2000))
                     .fluidOutputs(copyAmount(DenseSupercriticalSteam, 320), Materials.Creon.getMolten(1))
                     .duration(20)
-                    .addTo(GTCMRecipe.RapidHeatExchangeRecipes);
+                    .addTo(GTCMRecipe.RapidHeatExchangeRecipeMap);
 
                 TST_RecipeBuilder.builder()
                     .fluidInputs(Materials.Creon.getPlasma(1))
                     .fluidOutputs(Materials.Creon.getMolten(1))
                     .duration(20)
-                    .addTo(GTCMRecipe.RapidCoolingDownRecipes);
+                    .addTo(GTCMRecipe.RapidCoolingDownRecipeMap);
             }
 
         }

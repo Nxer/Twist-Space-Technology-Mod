@@ -3,7 +3,7 @@ package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRe
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.clearMTRecipeCache;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.flushMTRecipeCache;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_MAX;
 import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
@@ -31,7 +31,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
 public class MiracleTopRecipePool {
 
-    private static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
+    private static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipeMap;
 
     public static void loadRecipes() {
         TwistSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");

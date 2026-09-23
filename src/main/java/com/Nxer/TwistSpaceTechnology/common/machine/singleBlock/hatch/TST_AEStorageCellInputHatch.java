@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
@@ -30,9 +29,11 @@ import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -72,7 +73,8 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @IMetaTileEntity.SkipGenerateDescription
-public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITSTSegmentedFluidInput, ISaveProvider {
+public class TST_AEStorageCellInputHatch extends MTEHatchInputME
+    implements ITSTSegmentedFluidInput, ISaveProvider, TSTTooltipCredit {
 
     private static final int CELL_SLOT = 0;
     private static final BaseActionSource CELL_ACTION_SOURCE = new BaseActionSource();
@@ -96,6 +98,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
     public TST_AEStorageCellInputHatch(int id, String name, String nameRegional, int tier) {
         super(id, true, name, nameRegional);
         configuredTier = tier;
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_AEStorageCellInputHatch(String name, int tier, String[] description, ITexture[][][] textures) {
@@ -104,27 +107,30 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME implements ITST
     }
 
     private static String[] createDescription() {
-        return new String[] { TextLocalization.HatchTier + " " + TstSharedFormat.getTierName(VoltageIndex.UIV),
-            // #tr Tooltip_AEStorageCellInputHatch.0
+        return new String[] {
+            TSTSharedLocalization.General.HatchTier + " " + TSTSharedFormat.getTierName(VoltageIndex.UIV),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.01
             // # Advanced stocking input hatch upgrade for multiblock fluid input
             // #zh_CN 进阶存储输入仓的升级版，为多方块机器输入流体
-            TextEnums.tr("Tooltip_AEStorageCellInputHatch.0"),
-            // #tr Tooltip_AEStorageCellInputHatch.1
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.01"),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.02
             // # Retrieves up to 16 marked fluid types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记流体
-            TextEnums.tr("Tooltip_AEStorageCellInputHatch.1"),
-            // #tr Tooltip_AEStorageCellInputHatch.2
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.02"),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.03
             // # An inserted ME fluid storage cell supplies fluids instead and disconnects the ME network
             // #zh_CN 放入ME流体存储元件后改从元件中拉取，且无法连接ME网络
-            TextEnums.tr("Tooltip_AEStorageCellInputHatch.2"),
-            // #tr Tooltip_AEStorageCellInputHatch.3
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.03"),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.04
             // # Per recipe, TST machines handle %s x 2147483647 L in total
             // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647 L流体
-            TextEnums.tr("Tooltip_AEStorageCellInputHatch.3", Config.MaxTotalIntSegments_AEStorageCellInput),
-            // #tr Tooltip_AEStorageCellInputHatch.4
+            TSTUtils.tr(
+                "tst.common.machine.AEStorageCellInputHatch.tooltip.info.04",
+                Config.MaxTotalIntSegments_AEStorageCellInput),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.05
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TextEnums.tr("Tooltip_AEStorageCellInputHatch.4"), TextEnums.Author_Goderium.getText(), ModNameDesc };
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.05") };
     }
 
     @Override

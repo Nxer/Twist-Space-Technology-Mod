@@ -47,7 +47,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return translateToLocal("EcoSphereSimulator.modeMsg.2");
+        return translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.mode.2");
     }
 
     @Override
@@ -81,7 +81,7 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
             for (CropSelection selection : crops) seedNames.add(
                 selection.seed()
                     .getDisplayName());
-            // #tr EcoSphereSimulator.gui.runningSeeds
+            // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.running_seeds
             // # Seeds
             // #zh_CN 种子
             return EcoSphereModeResult.standard(
@@ -90,8 +90,9 @@ public final class ArtificialGreenHouseMode implements IEcoSphereMode {
                 // #zh_CN {\GREEN}作物生长中
                 SimpleResultWithText.ofSuccessText(
                     translateToLocal("GT5U.gui.text.recipe_result.tst_ess_growing_crops") + "\n"
-                        + EcoSphereModeSupport
-                            .formatRunningInputs(translateToLocal("EcoSphereSimulator.gui.runningSeeds"), seedNames)),
+                        + EcoSphereModeSupport.formatRunningInputs(
+                            translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.gui.running_seeds"),
+                            seedNames)),
                 outputs,
                 parallelResult.tier());
         };

@@ -42,7 +42,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -54,6 +57,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
@@ -71,252 +75,33 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings8;
 
+@SkipGenerateDescription
 public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_CrystallineInfinitier> {
 
     // region Class Constructor
     public GTCM_CrystallineInfinitier(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GTCM_CrystallineInfinitier(String aName) {
         super(aName);
     }
 
-    // endregion
-
-    // region Processing Logic
-    public int glassTier = -1;
-    private int fieldGeneratorTier = -1;
-
     @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Autoclave
-         * 1 - Crystalline Infinitier
-         * 2 - Chemical Bath
-         */
-        return 3;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID, };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + machineMode);
-    }
-
-    @Override
-    public void setMachineMode(int index) {
-        super.setMachineMode(index);
-        this.speedBonus = switch (machineMode) {
-            case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
-            case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
-            default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
-        };
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
-        aNBT.setInteger("glassTier", glassTier);
-        aNBT.setByte("mode", (byte) machineMode);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
-        glassTier = aNBT.getInteger("glassTier");
-        machineMode = aNBT.getByte("mode");
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-                if (recipe.mSpecialValue > fieldGeneratorTier) {
-                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
-                }
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                setOverclockType(
-                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
-                return super.process();
-            }
-
-        }.setMaxParallelSupplier(this::getTrueParallel);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return switch (machineMode) {
-            case 1 -> GTCMRecipe.CrystallineInfinitierRecipes;
-            case 2 -> RecipeMaps.chemicalBathRecipes;
-            default -> RecipeMaps.autoclaveRecipes;
-        };
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(
-            RecipeMaps.autoclaveRecipes,
-            RecipeMaps.chemicalBathRecipes,
-            GTCMRecipe.CrystallineInfinitierRecipes);
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.fieldGeneratorTier = -1;
-        this.glassTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (this.fieldGeneratorTier == 0 || this.glassTier <= 0) {
-            errors.add(internal_structure_issue);
-            return;
-        }
-
-        if (glassTier < 12) {
-            for (MTEHatch hatch : this.mExoticEnergyHatches) {
-                if (this.glassTier < hatch.mTier) {
-                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
-                    return;
-                }
-            }
-        }
-
-        euModifier = 1.0F / Math.max(fieldGeneratorTier, 1);
-        maxParallel = (int) Math.min(
-            Integer.MAX_VALUE,
-            (long) glassTier * fieldGeneratorTier * getTotalPowerTier() * ParallelMultiplier_CrystallineInfinitier);
-        enablePerfectOverclock = fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
-
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GTCM_CrystallineInfinitier(this.mName);
     }
     // endregion
 
     // region Structure
-    // spotless:off
-	@Override
-	public void construct(ItemStack stackSize, boolean hintsOnly) {
-		this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-	}
-
-	@Override
-	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-		if (this.mMachine) return -1;
-		return this.survivalBuildPiece(
-			STRUCTURE_PIECE_MAIN,
-			stackSize,
-			horizontalOffSet,
-			verticalOffSet,
-			depthOffSet,
-            elementBudget,
-			env,
-			false,
-			true);
-	}
-
-	public static Integer getBlockFieldGeneratorTier(Block block, int meta){
-		if (block == sBlockCasingsTT){
-			return switch (meta) {
-				case 6 -> 1;
-				case 14 -> 2;
-				default -> null;
-			};
-		}
-		if (block == StabilisationFieldGenerators){
-			return meta + 3;
-		}
-		return null;
-	}
-	private static final String STRUCTURE_PIECE_MAIN = "mainCrystallineInfinitier";
-	private final int horizontalOffSet = 15;
-	private final int verticalOffSet = 34;
-	private final int depthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "mainCrystallineInfinitier";
+    private final int horizontalOffSet = 15;
+    private final int verticalOffSet = 34;
+    private final int depthOffSet = 0;
     private static IStructureDefinition<GTCM_CrystallineInfinitier> STRUCTURE_DEFINITION = null;
-	@Override
-	public IStructureDefinition<GTCM_CrystallineInfinitier> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<GTCM_CrystallineInfinitier>builder()
-                                                      .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                                                      .addElement(
-                                                          'A',
-                                                          chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
-                                                      .addElement(
-                                                          'B',
-                                                          HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
-                                                                                .atLeast(Energy.or(ExoticEnergy))
-                                                                                .adder(GTCM_CrystallineInfinitier::addToMachineList)
-                                                                                .hint(1)
-                                                                                .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
-                                                                                .buildAndChain(GregTechAPI.sBlockCasings8, 10))
-                                                      .addElement(
-                                                          'C',
-                                                          HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
-                                                                                .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                                                                                .adder(GTCM_CrystallineInfinitier::addToMachineList)
-                                                                                .hint(2)
-                                                                                .casingIndex(1028)
-                                                                                .buildAndChain(sBlockCasingsTT, 4))
-                                                      .addElement(
-                                                          'D',
-                                                          withChannel("fieldgeneratortier",
-                                                                      ofBlocksTiered(
-                                                                          GTCM_CrystallineInfinitier::getBlockFieldGeneratorTier,
-                                                                          ImmutableList.of(
-                                                                              Pair.of(sBlockCasingsTT, 6),
-                                                                              Pair.of(sBlockCasingsTT, 14),
-                                                                              Pair.of(StabilisationFieldGenerators, 0),
-                                                                              Pair.of(StabilisationFieldGenerators, 1),
-                                                                              Pair.of(StabilisationFieldGenerators, 2),
-                                                                              Pair.of(StabilisationFieldGenerators, 3),
-                                                                              Pair.of(StabilisationFieldGenerators, 4),
-                                                                              Pair.of(StabilisationFieldGenerators, 5),
-                                                                              Pair.of(StabilisationFieldGenerators, 6),
-                                                                              Pair.of(StabilisationFieldGenerators, 7),
-                                                                              Pair.of(StabilisationFieldGenerators, 8)
-                                                                          ),
-                                                                          -1,
-                                                                          (m, t) -> m.fieldGeneratorTier = t,
-                                                                          m -> m.fieldGeneratorTier))
-                                                      )
-                                                      .addElement('E',ofBlock(sBlockCasingsTT, 8))
-                                                      .addElement('F',ofBlock(sBlockCasingsTT, 9))
-                                                      .addElement('G',ofFrame(Materials.NaquadahAlloy))
-                                                      .build();
-        }
-		return STRUCTURE_DEFINITION;
-	}
-	/*
-	Blocks:
-A -> ofBlock...(BW_GlasBlocks, 0, ...); // glass
-B -> ofBlock...(gt.blockcasings8, 10, ...); // energy maintenance
-C -> ofBlock...(gt.blockcasingsTT, 4, ...); // hatches
-D -> ofBlock...(gt.blockcasingsTT, 6, ...); // tier generator
-E -> ofBlock...(gt.blockcasingsTT, 8, ...);
-F -> ofBlock...(gt.blockcasingsTT, 9, ...);
-G -> ofFrame;
-	 */
+
+    // spotless:off
 	public static final String[][] shape = new String[][]{
 		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","              BBB              ","            BBBBBBB            ","           BBBBBBBBB           ","          BBBBBBBBBBB          ","          BBBBBBBBBBB          ","         BBBBBBBBBBBBB         ","         BBBBBBBBBBBBB         ","         BBBBBBBBBBBBB         ","          BBBBBBBBBBB          ","          BBBBBBBBBBB          ","           BBBBBBBBB           ","            BBBBBBB            ","              BBB              ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
 		{"                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","              GBG              ","                               ","                               ","                               ","          G   CDC   G          ","          B   DED   B          ","          G   CDC   G          ","                               ","                               ","                               ","              GBG              ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               ","                               "},
@@ -355,42 +140,252 @@ G -> ofFrame;
 		{"              B~B              ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","           BBBBBBBBB           ","           BBBBBBBBB           ","          BBBBBBBBBBB          ","         BBBBBBBBBBBBB         ","       BBBBBBBBBBBBBBBBB       ","    BBBBBBBBBBBBBBBBBBBBBBB    ","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","    BBBBBBBBBBBBBBBBBBBBBBB    ","       BBBBBBBBBBBBBBBBB       ","         BBBBBBBBBBBBB         ","          BBBBBBBBBBB          ","           BBBBBBBBB           ","           BBBBBBBBB           ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             "},
 		{"              BBB              ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","           BBBBBBBBB           ","           BBBBBBBBB           ","          BBBBBBBBBBB          ","         BBBBBBBBBBBBB         ","       BBBBBBBBBBBBBBBBB       ","    BBBBBBBBBBBBBBBBBBBBBBB    ","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB","    BBBBBBBBBBBBBBBBBBBBBBB    ","       BBBBBBBBBBBBBBBBB       ","         BBBBBBBBBBBBB         ","          BBBBBBBBBBB          ","           BBBBBBBBB           ","           BBBBBBBBB           ","            BBBBBBB            ","            BBBBBBB            ","            BBBBBBB            ","             BBBBB             ","             BBBBB             ","             BBBBB             ","             BBBBB             "}
 	};
+    // spotless:on
 
-	// spotless:on
+    @Override
+    public IStructureDefinition<GTCM_CrystallineInfinitier> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<GTCM_CrystallineInfinitier>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement('A', chainAllGlasses(-1, (te, t) -> te.glassTier = t, te -> te.glassTier))
+                .addElement(
+                    'B',
+                    HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
+                        .atLeast(Energy.or(ExoticEnergy))
+                        .adder(GTCM_CrystallineInfinitier::addToMachineList)
+                        .hint(1)
+                        .casingIndex(((BlockCasings8) GregTechAPI.sBlockCasings8).getTextureIndex(10))
+                        .buildAndChain(GregTechAPI.sBlockCasings8, 10))
+                .addElement(
+                    'C',
+                    HatchElementBuilder.<GTCM_CrystallineInfinitier>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .adder(GTCM_CrystallineInfinitier::addToMachineList)
+                        .hint(2)
+                        .casingIndex(1028)
+                        .buildAndChain(sBlockCasingsTT, 4))
+                .addElement(
+                    'D',
+                    withChannel(
+                        "fieldgeneratortier",
+                        ofBlocksTiered(
+                            GTCM_CrystallineInfinitier::getBlockFieldGeneratorTier,
+                            ImmutableList.of(
+                                Pair.of(sBlockCasingsTT, 6),
+                                Pair.of(sBlockCasingsTT, 14),
+                                Pair.of(StabilisationFieldGenerators, 0),
+                                Pair.of(StabilisationFieldGenerators, 1),
+                                Pair.of(StabilisationFieldGenerators, 2),
+                                Pair.of(StabilisationFieldGenerators, 3),
+                                Pair.of(StabilisationFieldGenerators, 4),
+                                Pair.of(StabilisationFieldGenerators, 5),
+                                Pair.of(StabilisationFieldGenerators, 6),
+                                Pair.of(StabilisationFieldGenerators, 7),
+                                Pair.of(StabilisationFieldGenerators, 8)),
+                            -1,
+                            (m, t) -> m.fieldGeneratorTier = t,
+                            m -> m.fieldGeneratorTier)))
+                .addElement('E', ofBlock(sBlockCasingsTT, 8))
+                .addElement('F', ofBlock(sBlockCasingsTT, 9))
+                .addElement('G', ofFrame(Materials.NaquadahAlloy))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(BW_GlasBlocks, 0, ...); // glass
+     * B -> ofBlock...(gt.blockcasings8, 10, ...); // energy maintenance
+     * C -> ofBlock...(gt.blockcasingsTT, 4, ...); // hatches
+     * D -> ofBlock...(gt.blockcasingsTT, 6, ...); // tier generator
+     * E -> ofBlock...(gt.blockcasingsTT, 8, ...);
+     * F -> ofBlock...(gt.blockcasingsTT, 9, ...);
+     * G -> ofFrame;
+     */
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.fieldGeneratorTier = -1;
+        this.glassTier = -1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (this.fieldGeneratorTier == 0 || this.glassTier <= 0) {
+            errors.add(internal_structure_issue);
+            return;
+        }
+
+        if (glassTier < 12) {
+            for (MTEHatch hatch : this.mExoticEnergyHatches) {
+                if (this.glassTier < hatch.mTier) {
+                    errors.add(StructureErrorRegistry.ENERGY_TIER_EXCEED_GLASS);
+                    return;
+                }
+            }
+        }
+
+        euModifier = 1.0F / Math.max(fieldGeneratorTier, 1);
+        maxParallel = (int) Math.min(
+            Integer.MAX_VALUE,
+            (long) glassTier * fieldGeneratorTier * getTotalPowerTier() * ParallelMultiplier_CrystallineInfinitier);
+        enablePerfectOverclock = fieldGeneratorTier >= FieldTier_EnablePerfectOverclock_CrystallineInfinitier;
+
+    }
     // endregion
 
-    // region Overrides
+    // region Processing Logic
+    public int glassTier = -1;
+    private int fieldGeneratorTier = -1;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_FLUID, };
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_CrystallineInfinitier_MachineType)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_00)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_01)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_02)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_03)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_04)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_05)
-            .addInfo(TextLocalization.Tooltip_CrystallineInfinitier_06)
-            .addInfo(TextLocalization.Tooltip_GlassTierLimitEnergyHatchTier)
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .beginStructureBlock(31, 36, 32, false)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addInputBus(TextLocalization.textUseBlueprint, 2)
-            .addOutputBus(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    public RecipeMap<?> getRecipeMap() {
+        return switch (machineMode) {
+            case 1 -> GTCMRecipe.CrystallineInfinitierRecipeMap;
+            case 2 -> RecipeMaps.chemicalBathRecipes;
+            default -> RecipeMaps.autoclaveRecipes;
+        };
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            RecipeMaps.autoclaveRecipes,
+            RecipeMaps.chemicalBathRecipes,
+            GTCMRecipe.CrystallineInfinitierRecipeMap);
     }
 
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GTCM_CrystallineInfinitier(this.mName);
+    public int totalMachineMode() {
+        /*
+         * 0 - Autoclave
+         * 1 - Crystalline Infinitier
+         * 2 - Chemical Bath
+         */
+        return 3;
     }
+
+    @Override
+    public void setMachineMode(int index) {
+        super.setMachineMode(index);
+        this.speedBonus = switch (machineMode) {
+            case 0 -> 1F / SpeedMultiplier_AutoclaveMode_CrystallineInfinitier;
+            case 2 -> 1F / SpeedMultiplier_ChemicalBath_CrystallineInfinitier;
+            default -> 1F / SpeedMultiplier_CrystallineInfinitierMode_CrystallineInfinitier;
+        };
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        // #tr tst.common.machine.CrystallineInfinitier.mode.0
+        // # Mode: Autoclave
+        // #zh_CN 高压釜模式
+
+        // #tr tst.common.machine.CrystallineInfinitier.mode.1
+        // # Mode: Crystalline Forge
+        // #zh_CN 晶胞铸造器模式
+
+        // #tr tst.common.machine.CrystallineInfinitier.mode.2
+        // # Mode: Chemical Bath
+        // #zh_CN 化学浸洗机模式
+        return StatCollector.translateToLocal("tst.common.machine.CrystallineInfinitier.mode." + machineMode);
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+                if (recipe.mSpecialValue > fieldGeneratorTier) {
+                    return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
+                }
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclockType(
+                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
+                return super.process();
+            }
+
+        }.setMaxParallelSupplier(this::getTrueParallel);
+    }
+
+    public static Integer getBlockFieldGeneratorTier(Block block, int meta) {
+        if (block == sBlockCasingsTT) {
+            return switch (meta) {
+                case 6 -> 1;
+                case 14 -> 2;
+                default -> null;
+            };
+        }
+        if (block == StabilisationFieldGenerators) {
+            return meta + 3;
+        }
+        return null;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setInteger("fieldGeneratorTier", fieldGeneratorTier);
+        aNBT.setInteger("glassTier", glassTier);
+        aNBT.setByte("mode", (byte) machineMode);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        fieldGeneratorTier = aNBT.getInteger("fieldGeneratorTier");
+        glassTier = aNBT.getInteger("glassTier");
+        machineMode = aNBT.getByte("mode");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
@@ -424,5 +419,60 @@ G -> ofFrame;
         return new ITexture[] { Textures.BlockIcons
             .getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 10)) };
     }
+
     // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.CrystallineInfinitier.tooltip.machine_type
+        // # Autoclave | Crystalline Infinitier | Chemical Bath
+        // #zh_CN 高压釜 | 晶胞铸造器 | 化学浸洗机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.machine_type"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.01
+            // # Controller block for the Crystalline Infinitier
+            // #zh_CN 无限晶胞的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.01"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.02
+            // # {\GREEN}They're here. Grow and multiply without end.
+            // #zh_CN {\GREEN}它在这里. 生生不息.
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.02"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.03
+            // # With Gravitation Tech as a medium, we can control growth of crystalline cells more conveniently.
+            // #zh_CN 有了引力科技作为媒介, 我们可以更方便的控制晶胞的生长.
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.03"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.04
+            // # Higher glass tier, higher field generator tier, higher voltage tier means higher value of parallel.
+            // #zh_CN 更高的玻璃等级, 力场发生器等级, 电压等级意味着更多的并行数.
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.04"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.05
+            // # And higher field generator tier means lower Energy cost.
+            // #zh_CN 同时更高的力场发生器等级让耗电变得更低.
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.05"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.06
+            // # Crude Stabilisation Field Generator enable Perfect Overclock.
+            // #zh_CN 粗制稳定力场发生器等级+启用无损超频.
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.06"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.07
+            // # Extra {\RED}+300%{\GRAY} speed in Autoclave mode. Extra {\RED}+1500%{\GRAY} speed in Chemical Bath mode.
+            // #zh_CN 高压釜模式额外加速{\RED}300%{\GRAY}. 化学浸洗机模式额外加速{\RED}1500%{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.07"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
+            .beginStructureBlock(31, 36, 32, false)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

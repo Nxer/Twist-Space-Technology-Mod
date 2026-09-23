@@ -46,9 +46,10 @@ import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachin
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -60,6 +61,7 @@ import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -76,12 +78,14 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import tectech.thing.block.BlockQuantumGlass;
 
+@SkipGenerateDescription
 public class MM_IndistinctTentaclePrototypeMK2
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_IndistinctTentaclePrototypeMK2> {
 
     // region Class Constructor
     public MM_IndistinctTentaclePrototypeMK2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_IndistinctTentaclePrototypeMK2(String aName) {
@@ -92,191 +96,6 @@ public class MM_IndistinctTentaclePrototypeMK2
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MM_IndistinctTentaclePrototypeMK2(this.mName);
     }
-
-    // endregion
-
-    // region Logic as a module
-    protected String costEU = "";
-
-    @Override
-    public boolean done() {
-        BigInteger costEU = BigInteger.valueOf(eEut)
-            .multiply(BigInteger.valueOf(eMaxProgressingTime));
-        // check wireless EU at this moment
-        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(TstUtils.NEGATIVE_ONE))) {
-            shutDown();
-            IGregTechTileEntity mte = getBaseMetaTileEntity();
-            TwistSpaceTechnology.LOG.info(
-                "Advanced Execution Core shut down because of power at x" + mte
-                    .getXCoord() + " y" + mte.getYCoord() + " z" + mte.getZCoord());
-
-            return false;
-        }
-
-        this.costEU = formatNumber(costEU);
-        eMaxProgressingTime = 20;
-
-        return true;
-    }
-
-    @Override
-    public boolean useMainMachinePower() {
-        return false;
-    }
-
-    // endregion
-
-    // region Logic
-    private UUID ownerUUID;
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
-    }
-
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Assembly Line
-         * 1 - Component
-         * 2 - Assembler
-         * 3 - Precise
-         */
-        return 4;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_BENDING);
-    // }
-
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("IndistinctTentacle.modeMsg." + machineMode);
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mode", (byte) machineMode);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        machineMode = aNBT.getByte("mode");
-    }
-
-    @Override
-    public Collection<IExecutionCore> getIdlePerfectExecutionCores() {
-        Collection<IExecutionCore> cores = super.getIdlePerfectExecutionCores();
-        if (this.isIdle()) cores.add(this);
-        return cores;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new MultiExecutionProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                setOverclock(2, 2);
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                return OverclockCalculator.ofNoOverclock(recipe);
-            }
-
-        };
-    }
-
-    @Override
-    public void doCheckRecipeForExecutionCores() {
-        needToCheckRecipe = false;
-        if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
-            disableWorking();
-            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
-        }
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return switch (machineMode) {
-            case 1 -> GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
-            case 2 -> RecipeMaps.assemblerRecipes;
-            case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
-            default -> GTCMRecipe.AssemblyLineWithoutResearchRecipe;
-        };
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(
-            GoodGeneratorRecipeMaps.componentAssemblyLineRecipes,
-            RecipeMaps.assemblerRecipes,
-            GoodGeneratorRecipeMaps.preciseAssemblerRecipes,
-            GTCMRecipe.AssemblyLineWithoutResearchRecipe);
-    }
-
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        // do nothing
-        return true;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return false;
-    }
-
-    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList.of(
-        ModularHatchTypes.EXECUTION_CORE,
-        ModularHatchTypes.PARALLEL_CONTROLLER,
-        ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER);
-
-    @Override
-    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
-        return supportedModularHatchTypes;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
-        if (!errors.isEmpty()) return;
-
-        // only allow using perfect execution cores
-        if (!executionCores.isEmpty() || !advExecutionCores.isEmpty()) {
-            errors.add(hatch_tier_incompatible);
-        }
-    }
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
     // endregion
 
     // region Structure
@@ -285,26 +104,6 @@ public class MM_IndistinctTentaclePrototypeMK2
     private static final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainIndistinctTentaclePrototypeMK2";
     private static IStructureDefinition<MM_IndistinctTentaclePrototypeMK2> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<MM_IndistinctTentaclePrototypeMK2> getStructureDefinition() {
@@ -395,10 +194,184 @@ public class MM_IndistinctTentaclePrototypeMK2
         return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        super.checkMachine(aBaseMetaTileEntity, aStack, errors);
+        if (!errors.isEmpty()) return;
+
+        // only allow using perfect execution cores
+        if (!executionCores.isEmpty() || !advExecutionCores.isEmpty()) {
+            errors.add(hatch_tier_incompatible);
+        }
+    }
+
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
     // endregion
 
-    // region General
-    // region waila
+    // region Processing Logic
+    protected String costEU = "";
+    private UUID ownerUUID;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_COMPRESSING, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SEPARATOR,
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_PACKAGER, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_BENDING };
+
+    private static final Collection<ModularHatchTypes> supportedModularHatchTypes = ImmutableList.of(
+        ModularHatchTypes.EXECUTION_CORE,
+        ModularHatchTypes.PARALLEL_CONTROLLER,
+        ModularHatchTypes.POWER_CONSUMPTION_CONTROLLER);
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return switch (machineMode) {
+            case 1 -> GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
+            case 2 -> RecipeMaps.assemblerRecipes;
+            case 3 -> GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
+            default -> GTCMRecipe.AssemblyLineWithoutResearchRecipeMap;
+        };
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(
+            GoodGeneratorRecipeMaps.componentAssemblyLineRecipes,
+            RecipeMaps.assemblerRecipes,
+            GoodGeneratorRecipeMaps.preciseAssemblerRecipes,
+            GTCMRecipe.AssemblyLineWithoutResearchRecipeMap);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Assembly Line
+         * 1 - Component
+         * 2 - Assembler
+         * 3 - Precise
+         */
+        return 4;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("tst.common.machine.IndistinctTentacle.mode." + machineMode);
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new MultiExecutionProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(2, 2);
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                return OverclockCalculator.ofNoOverclock(recipe);
+            }
+
+        };
+    }
+
+    @Override
+    public boolean done() {
+        BigInteger costEU = BigInteger.valueOf(eEut)
+            .multiply(BigInteger.valueOf(eMaxProgressingTime));
+        // check wireless EU at this moment
+        if (!addEUToGlobalEnergyMap(ownerUUID, costEU.multiply(TSTUtils.NEGATIVE_ONE))) {
+            shutDown();
+            IGregTechTileEntity mte = getBaseMetaTileEntity();
+            TwistSpaceTechnology.LOG.info(
+                "Advanced Execution Core shut down because of power at x" + mte
+                    .getXCoord() + " y" + mte.getYCoord() + " z" + mte.getZCoord());
+
+            return false;
+        }
+
+        this.costEU = formatNumber(costEU);
+        eMaxProgressingTime = 20;
+
+        return true;
+    }
+
+    @Override
+    public boolean useMainMachinePower() {
+        return false;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
+    }
+
+    @Override
+    public Collection<IExecutionCore> getIdlePerfectExecutionCores() {
+        Collection<IExecutionCore> cores = super.getIdlePerfectExecutionCores();
+        if (this.isIdle()) cores.add(this);
+        return cores;
+    }
+
+    @Override
+    public void doCheckRecipeForExecutionCores() {
+        needToCheckRecipe = false;
+        if (checkProcessingForPerfectExecutionCore() == CheckRecipeResults.SetProcessingFailed) {
+            disableWorking();
+            this.setResultIfFailure(CheckRecipeResults.SetProcessingFailed);
+        }
+    }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        // do nothing
+        return true;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return false;
+    }
+
+    @Override
+    public Collection<ModularHatchTypes> getSupportedModularHatchTypes() {
+        return supportedModularHatchTypes;
+    }
 
     @Override
     public void processWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
@@ -409,7 +382,7 @@ public class MM_IndistinctTentaclePrototypeMK2
         if (maxProgressingTime > 0) {
             currentTip.add(
                 // #zh_CN 总耗时
-                TextEnums.tr("Waila.PerfectExecutionCore.1") + " : "
+                TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.waila.perfect_execution_core.1") + " : "
                     + maxProgressingTime
                     + " tick ("
                     + (maxProgressingTime / 20)
@@ -417,27 +390,32 @@ public class MM_IndistinctTentaclePrototypeMK2
             int progressedTime = tag.getInteger("progressedTime");
             currentTip.add(
                 // #zh_CN 已执行时间
-                TextEnums.tr(
-                    "Waila.ExecutionCore.2") + " : " + progressedTime + " tick (" + (progressedTime / 20) + "s)");
+                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.2") + " : "
+                    + progressedTime
+                    + " tick ("
+                    + (progressedTime / 20)
+                    + "s)");
             String costEU = tag.getString("costEU");
             if (costEU != null && !costEU.isEmpty()) {
-                // #tr Waila.PerfectExecutionCore.ThisExecutionCore
+                // spotless:off
+                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.waila.perfect_execution_core.this_execution_core
                 // # This Execution Core
                 // #zh_CN 此执行核心
                 currentTip.add(
-                    EnumChatFormatting.AQUA + TextEnums.tr("Waila.PerfectExecutionCore.ThisExecutionCore")
-                        + TextEnums.tr("Waila.TST_MiracleDoor.1")
+                    EnumChatFormatting.AQUA + TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.waila.perfect_execution_core.this_execution_core")
+                        + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_miracle_door.1")
                         + EnumChatFormatting.RESET
                         + ": "
                         + EnumChatFormatting.GOLD
                         + costEU
                         + EnumChatFormatting.RESET
                         + " EU");
+                // spotless:on
             }
 
         } else {
             // 空闲
-            currentTip.add(TextEnums.tr("Waila.ExecutionCore.IsIdle"));
+            currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.is_idle"));
         }
 
     }
@@ -453,63 +431,24 @@ public class MM_IndistinctTentaclePrototypeMK2
     }
 
     // endregion
-    private static MultiblockTooltipBuilder tooltip;
+
+    // region NBT
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            // #tr Tooltip_IndistinctTentaclePrototypeMK2_MachineType
-            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Assembly Line | Component Assembly Line | Assembler | Precise Assembler
-            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}巨型装配线 | 部件装配线 | 组装机 | 精密组装机
-            tooltip
-                .addMachineType(
-                    TextEnums.tr("Tooltip_IndistinctTentaclePrototypeMK2_MachineType"))
-                // #tr Tooltip_IndistinctTentaclePrototypeMK2_01
-                // # {\GOLD}{\BOLD}{\ITALIC}There is no evil, only ignorance.
-                // #zh_CN {\GOLD}{\BOLD}{\ITALIC}只有无知， 没有不满。
-                .addInfo(TextEnums.tr("Tooltip_IndistinctTentaclePrototypeMK2_01"))
-
-                // #tr Tooltip_IndistinctTentaclePrototypeMK2_02
-                // # The advanced version of {\DARK_GRAY}{\BOLD}Indistinct Tentacle{\RESET}{\GRAY}.
-                // #zh_CN {\DARK_GRAY}{\BOLD}不可视之触{\RESET}{\GRAY}的升级版.
-                .addInfo(TextEnums.tr("Tooltip_IndistinctTentaclePrototypeMK2_02"))
-
-                // #tr Tooltip_IndistinctTentaclePrototypeMK2_03
-                // # Directly use the energy from the wireless EU network, no energy hatch required.
-                // #zh_CN 直接使用无线EU网络中的能量, 无需能源仓.
-                .addInfo(TextEnums.tr("Tooltip_IndistinctTentaclePrototypeMK2_03"))
-                .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
-                .addStructureInfo(TextEnums.ExecutionCoreDescription.getText())
-
-                // #tr Tooltip_IndistinctTentaclePrototypeMK2_02_01
-                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Only {\RED}Perfect Execution Core Module {\GRAY}can be installed.
-                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}只可安装 {\RED}完美执行核心模块.
-                .addStructureInfo(TextEnums.tr("Tooltip_IndistinctTentaclePrototypeMK2_02_01"))
-                .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModule.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                .beginStructureBlock(35, 35, 131, false)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputBus(TextLocalization.textUseBlueprint, 1)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 2)
-                .toolTipFinisher(TextLocalization.ModName);
-            // spotless:on
-        }
-        return tooltip;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", (byte) machineMode);
     }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        machineMode = aNBT.getByte("mode");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -535,4 +474,63 @@ public class MM_IndistinctTentaclePrototypeMK2
 
         return new ITexture[] { casingTexturePages[0][12] };
     }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
+            // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.machine_type
+            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Assembly Line | Component Assembly Line | Assembler | Precise Assembler
+            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}巨型装配线 | 部件装配线 | 组装机 | 精密组装机
+            tooltip
+                .addMachineType(
+                    TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.machine_type"))
+                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.01
+                // # {\GOLD}{\BOLD}{\ITALIC}There is no evil, only ignorance.
+                // #zh_CN {\GOLD}{\BOLD}{\ITALIC}只有无知， 没有不满。
+                .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.01"))
+
+                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.02
+                // # The advanced version of {\DARK_GRAY}{\BOLD}Indistinct Tentacle{\RESET}{\GRAY}.
+                // #zh_CN {\DARK_GRAY}{\BOLD}不可视之触{\RESET}{\GRAY}的升级版.
+                .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.02"))
+
+                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03
+                // # Directly use the energy from the wireless EU network, no energy hatch required.
+                // #zh_CN 直接使用无线EU网络中的能量, 无需能源仓.
+                .addInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.info.03"))
+                .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
+
+                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}Only {\RED}Perfect Execution Core Module {\GRAY}can be installed.
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}只可安装 {\RED}完美执行核心模块.
+                .addStructureInfo(TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.tooltip.structure.01"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                .beginStructureBlock(35, 35, 131, false)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 2)
+                .toolTipFinisher();
+            // spotless:on
+        }
+        return tooltip;
+    }
+
+    // endregion
+
 }

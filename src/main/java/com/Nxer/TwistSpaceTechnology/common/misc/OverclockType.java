@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.misc;
 
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 public enum OverclockType {
 
@@ -49,14 +49,14 @@ public enum OverclockType {
     // spotless:off
     public String getDescription() {
         // 每次超频耗时除以A, 耗电乘以B
-        // #tr OverclockType.Description.01
+        // #tr tst.common.shared.overclock.description.01
         // # Every overclock, Time divide by
         // #zh_CN 每次超频时, 耗时除以
 
-        // #tr OverclockType.Description.02
+        // #tr tst.common.shared.overclock.description.02
         // # Power Consumption multiply by
         // #zh_CN 耗电乘以
-        return TextEnums.tr("OverclockType.Description.01") + " " + EnumChatFormatting.AQUA + timeReduction + EnumChatFormatting.GRAY + " , " + TextEnums.tr("OverclockType.Description.02") + " " + EnumChatFormatting.RED + powerIncrease + EnumChatFormatting.GRAY + " .";
+        return TSTUtils.tr("tst.common.shared.overclock.description.01") + " " + EnumChatFormatting.AQUA + timeReduction + EnumChatFormatting.GRAY + " , " + TSTUtils.tr("tst.common.shared.overclock.description.02") + " " + EnumChatFormatting.RED + powerIncrease + EnumChatFormatting.GRAY + " .";
     }
     // spotless:on
 

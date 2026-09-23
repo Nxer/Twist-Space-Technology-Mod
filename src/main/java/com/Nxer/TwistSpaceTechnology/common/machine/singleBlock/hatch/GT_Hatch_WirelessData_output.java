@@ -1,21 +1,26 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Mark_TwistSpaceTechnology_TecTech;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataOutput;
 
-public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput {
+@SkipGenerateDescription
+public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput implements TSTTooltipCredit {
 
     public GT_Hatch_WirelessData_output(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.SHORDINGER);
 
     }
 
@@ -64,10 +69,10 @@ public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput {
     public String[] getDescription() {
         if (tooltips == null) {
             tooltips = new String[] { Mark_TwistSpaceTechnology_TecTech,
-                // #tr WirelessDataOutput.tooltips.01
+                // #tr tst.common.machine.WirelessDataOutputHatch.tooltip.info.01
                 // # Wireless Quantum Data Output for Multiblocks
                 // #zh_CN 多方块机器无线数据输出
-                TextEnums.tr("WirelessDataOutput.tooltips.01") };
+                TSTUtils.tr("tst.common.machine.WirelessDataOutputHatch.tooltip.info.01") };
         }
         return tooltips;
     }

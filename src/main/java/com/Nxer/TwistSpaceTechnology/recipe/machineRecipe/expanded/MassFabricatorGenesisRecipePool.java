@@ -15,13 +15,13 @@ public class MassFabricatorGenesisRecipePool {
             .fluidOutputs(Materials.UUMatter.getFluid(1000))
             .eut(200000)
             .duration(1000)
-            .addTo(GTCMRecipe.MassFabricatorGenesis);
+            .addTo(GTCMRecipe.MassFabricatorGenesisRecipeMap);
 
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(2))
             .fluidOutputs(MaterialPool.ConcentratedUUMatter.getFluidOrGas(1))
             .eut(2000000000)
             .duration(1000)
-            .addTo(GTCMRecipe.MassFabricatorGenesis);
+            .addTo(GTCMRecipe.MassFabricatorGenesisRecipeMap);
     }
 }

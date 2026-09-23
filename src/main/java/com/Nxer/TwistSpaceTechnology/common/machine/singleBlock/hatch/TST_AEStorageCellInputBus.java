@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static net.minecraft.util.StatCollector.translateToLocalFormatted;
 
@@ -27,9 +26,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedFormat;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -70,7 +71,8 @@ import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
 @IMetaTileEntity.SkipGenerateDescription
-public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITSTSegmentedItemInput, ISaveProvider {
+public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
+    implements ITSTSegmentedItemInput, ISaveProvider, TSTTooltipCredit {
 
     public static final int CELL_SLOT = 1;
     private static final String SPECIAL_INPUT_NBT = "tstSpecialInput";
@@ -103,6 +105,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
     public TST_AEStorageCellInputBus(int id, String name, String nameRegional, int tier) {
         super(id, true, name, nameRegional);
         configuredTier = tier;
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_AEStorageCellInputBus(String name, int tier, String[] description, ITexture[][][] textures) {
@@ -111,27 +114,30 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME implements ITS
     }
 
     private static String[] createDescription() {
-        return new String[] { TextLocalization.HatchTier + " " + TstSharedFormat.getTierName(VoltageIndex.UIV),
-            // #tr Tooltip_AEStorageCellInputBus.0
+        return new String[] {
+            TSTSharedLocalization.General.HatchTier + " " + TSTSharedFormat.getTierName(VoltageIndex.UIV),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.01
             // # Advanced stocking input bus upgrade for multiblock item input
             // #zh_CN 进阶存储输入总线的升级版，为多方块机器输入物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.0"),
-            // #tr Tooltip_AEStorageCellInputBus.1
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.01"),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.02
             // # Retrieves up to 16 marked item types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.1"),
-            // #tr Tooltip_AEStorageCellInputBus.2
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.02"),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.03
             // # An inserted ME storage cell supplies items instead and disconnects the ME network
             // #zh_CN 放入ME存储元件后改从元件中拉取，且无法连接ME网络
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.2"),
-            // #tr Tooltip_AEStorageCellInputBus.3
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.03"),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.04
             // # Per recipe, TST machines handle %s x 2147483647 items in total
             // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647件物品
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.3", Config.MaxTotalIntSegments_AEStorageCellInput),
-            // #tr Tooltip_AEStorageCellInputBus.4
+            TSTUtils.tr(
+                "tst.common.machine.AEStorageCellInputBus.tooltip.info.04",
+                Config.MaxTotalIntSegments_AEStorageCellInput),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.05
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TextEnums.tr("Tooltip_AEStorageCellInputBus.4"), TextEnums.Author_Goderium.getText(), ModNameDesc };
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.05") };
     }
 
     @Override

@@ -23,7 +23,7 @@ import gregtech.api.util.GTUtility;
 
 public class MegaSolarPanelFactoryRecipePool {
 
-    static final IRecipeMap MSPF = GTCMRecipe.MegaSolarPanelFactoryRecpies;
+    static final IRecipeMap MSPF = GTCMRecipe.MegaSolarPanelFactoryRecipeMap;
 
     // spotless:off
     public static void loadRecipes() {

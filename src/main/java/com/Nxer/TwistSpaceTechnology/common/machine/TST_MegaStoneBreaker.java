@@ -1,14 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipes;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.calculateVoltageTier;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipeMap;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.calculateVoltageTier;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -32,7 +29,9 @@ import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -45,6 +44,7 @@ import gregtech.api.enums.TAE;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEHatch;
@@ -61,11 +61,13 @@ import gregtech.api.util.ParallelHelper;
 import gtPlusPlus.core.block.ModBlocks;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
+@SkipGenerateDescription
 public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBreaker> {
 
     // region Class Constructor
     public TST_MegaStoneBreaker(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.GODERIUM);
     }
 
     public TST_MegaStoneBreaker(String aName) {
@@ -76,154 +78,27 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaStoneBreaker(this.mName);
     }
-
     // endregion
 
-    // region Processing Logic
-    private MTEHatchInput mLavaHatch;
-    private MTEHatchInput mWaterHatch;
-    boolean isOutputMultiply = false;
-
-    @Override
-    protected float getEuModifier() {
-        return 1;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        int EuTier = (int) calculateVoltageTier(getMaxInputEu());
-        return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return MegaStoneBreakerRecipes;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @Nonnull
-            @Override
-            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
-                isOutputMultiply = drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), false)
-                    && drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), false);
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-
-            @NotNull
-            @Override
-            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
-                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
-                    ArrayList<ItemStack> outputItemList = new ArrayList<>();
-                    int OutputBonus = isOutputMultiply ? 1024 : 4;
-
-                    for (ItemStack recipeItemStack : recipe.mOutputs) {
-                        if (recipeItemStack != null) addItemsLong(
-                            outputItemList,
-                            recipeItemStack,
-                            (long) parallel * recipeItemStack.stackSize * OutputBonus);
-                    }
-                    return outputItemList.toArray(new ItemStack[0]);
-                });
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-
-    }
-
-    private byte runningTick = 0;
-
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        if (runningTick % 20 == 0) {
-            if (isOutputMultiply) {
-                if (!drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), true)
-                    || !drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), true)) {
-                    isOutputMultiply = false;
-                    return false;
-                }
-            }
-            runningTick = 1;
-        } else {
-            runningTick++;
-        }
-        return super.onRunningTick(aStack);
-    }
-
-    public boolean addWaterHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
-            mWaterHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean addLavaHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
-        if (aTileEntity == null) return false;
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof MTEHatchInput) {
-            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
-            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
-            mLavaHatch = (MTEHatchInput) aMetaTileEntity;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
     // region Structure
-
     private final int horizontalOffSet = 10;
     private final int verticalOffSet = 7;
     private final int depthOffSet = 2;
     private static final String STRUCTURE_PIECE_MAIN = "mainMegaStoneBreaker";
     private static IStructureDefinition<TST_MegaStoneBreaker> STRUCTURE_DEFINITION = null;
 
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"                     ","  GGGGG       GGGGG  "," GGDCDGG     GGDCDGG "," GDDCDDGGGGGGGDDCDDG "," GCCCCCCCCCCCCCCCCCG "," GDDCDDGGGGGGGDDCDDG "," GGDCDGG     GGDCDGG ","  GGGGG       GGGGG  ","                     "},
+        {"  FFFFF       FFFFF  "," FGEEEGF     FGEEEGF ","FGBBBBBGFFFFFGBBBBBGF","FEBIIIBEGEEEGEBIIIBEF","FEBIBIBEGEEEGEBIBIBEF","FEBIIIBEGEEEGEBIIIBEF","FGBBBBBGFFFFFGBBBBBGF"," FGEEEGF     FGEEEGF ","  FFFFF       FFFFF  "},
+        {"  GGGGG       GGGGG  "," GEEEEEG     GEEEEEG ","GEBBBBBEGGGGGEBBBBBEG","GEBIIIBEGIIIGEBIIIBEG","GEBIBIBEGGGGGEBIBIBEG","GEBIIIBEGIIIGEBIIIBEG","GEBBBBBEGGGGGEBBBBBEG"," GEEEEEG     GEEEEEG ","  GGGGG       GGGGG  "},
+        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
+        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFFFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
+        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
+        {"  GGGGG       GGGGG  "," GEEGEEG     GEEGEEG ","GEEEGEEEGGGGGEEEGEEEG","GEEIIIEEGIIIGEEIIIEEG","GGGIBIGGGGGGGGGIBIGGG","GEEIIIEEGIIIGEEIIIEEG","GEEEGEEEGGGGGEEEGEEEG"," GEEGEEG     GEEGEEG ","  GGGGG       GGGGG  "},
+        {"  FFLFF       FFWFF  "," FGGGGGF     FGGGGGF ","FGGGGGGGJJ~JJGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGFFFFFGGGGGGGF"," FGGGGGF     FGGGGGF ","  FFFFF       FFFFF  "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_MegaStoneBreaker> getStructureDefinition() {
@@ -266,8 +141,6 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
         return STRUCTURE_DEFINITION;
     }
 
-    // spotless:off
-
     /*
      * Blocks:
      * A -> ofBlock...(gt.blockcasings11, 7, ...);
@@ -281,66 +154,122 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
      * I -> ofBlock...(pressureResistantWalls, 0, ...);
      */
 
-    private final String[][] shapeMain = new String[][]{
-        {"                     ","  GGGGG       GGGGG  "," GGDCDGG     GGDCDGG "," GDDCDDGGGGGGGDDCDDG "," GCCCCCCCCCCCCCCCCCG "," GDDCDDGGGGGGGDDCDDG "," GGDCDGG     GGDCDGG ","  GGGGG       GGGGG  ","                     "},
-        {"  FFFFF       FFFFF  "," FGEEEGF     FGEEEGF ","FGBBBBBGFFFFFGBBBBBGF","FEBIIIBEGEEEGEBIIIBEF","FEBIBIBEGEEEGEBIBIBEF","FEBIIIBEGEEEGEBIIIBEF","FGBBBBBGFFFFFGBBBBBGF"," FGEEEGF     FGEEEGF ","  FFFFF       FFFFF  "},
-        {"  GGGGG       GGGGG  "," GEEEEEG     GEEEEEG ","GEBBBBBEGGGGGEBBBBBEG","GEBIIIBEGIIIGEBIIIBEG","GEBIBIBEGGGGGEBIBIBEG","GEBIIIBEGIIIGEBIIIBEG","GEBBBBBEGGGGGEBBBBBEG"," GEEEEEG     GEEEEEG ","  GGGGG       GGGGG  "},
-        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
-        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFFFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
-        {"  GHHHG       GHHHG  "," GIIIIIG     GIIIIIG ","GIBBBBBIGFGFGIBBBBBIG","HIBIIIBIIIIIIIBIIIBIH","HIBIBIBIAAAAAIBIBIBIH","HIBIIIBIIIIIIIBIIIBIH","GIBBBBBIGGGGGIBBBBBIG"," GIIIIIG     GIIIIIG ","  GHHHG       GHHHG  "},
-        {"  GGGGG       GGGGG  "," GEEGEEG     GEEGEEG ","GEEEGEEEGGGGGEEEGEEEG","GEEIIIEEGIIIGEEIIIEEG","GGGIBIGGGGGGGGGIBIGGG","GEEIIIEEGIIIGEEIIIEEG","GEEEGEEEGGGGGEEEGEEEG"," GEEGEEG     GEEGEEG ","  GGGGG       GGGGG  "},
-        {"  FFLFF       FFWFF  "," FGGGGGF     FGGGGGF ","FGGGGGGGJJ~JJGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGGGGGGGGGGGGGF","FGGGGGGGFFFFFGGGGGGGF"," FGGGGGF     FGGGGGF ","  FFFFF       FFFFF  "}
-    };
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+    private MTEHatchInput mLavaHatch;
+    private MTEHatchInput mWaterHatch;
+    boolean isOutputMultiply = false;
+    private byte runningTick = 0;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return MegaStoneBreakerRecipeMap;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        int EuTier = (int) calculateVoltageTier(getMaxInputEu());
+        return EuTier < 29 ? (int) (Math.pow(2, EuTier) * 4) : Integer.MAX_VALUE;
+    }
+
+    @Override
+    protected float getEuModifier() {
+        return 1;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Nonnull
+            @Override
+            protected CheckRecipeResult onRecipeStart(@Nonnull GTRecipe recipe) {
+                isOutputMultiply = drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), false)
+                    && drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), false);
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+
+            @NotNull
+            @Override
+            protected ParallelHelper createParallelHelper(@Nonnull GTRecipe recipe) {
+                return super.createParallelHelper(recipe).setCustomItemOutputCalculation(parallel -> {
+                    ArrayList<ItemStack> outputItemList = new ArrayList<>();
+                    int OutputBonus = isOutputMultiply ? 1024 : 4;
+
+                    for (ItemStack recipeItemStack : recipe.mOutputs) {
+                        if (recipeItemStack != null) addItemsLong(
+                            outputItemList,
+                            recipeItemStack,
+                            (long) parallel * recipeItemStack.stackSize * OutputBonus);
+                    }
+                    return outputItemList.toArray(new ItemStack[0]);
+                });
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+
+    }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        if (runningTick % 20 == 0) {
+            if (isOutputMultiply) {
+                if (!drain(mWaterHatch, new FluidStack(Materials.Water.mFluid, 1000), true)
+                    || !drain(mLavaHatch, new FluidStack(Materials.Lava.mFluid, 1000), true)) {
+                    isOutputMultiply = false;
+                    return false;
+                }
+            }
+            runningTick = 1;
+        } else {
+            runningTick++;
+        }
+        return super.onRunningTick(aStack);
+    }
 
     // endregion
 
-    // region General
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // #tr Tooltip_MegaStoneBreaker_MachineType
-        // # Stone Breaker
-        // #zh_CN 碎石机
-        tt.addMachineType(TextEnums.tr("Tooltip_MegaStoneBreaker_MachineType"))
-            // #tr Tooltip_MegaStoneBreaker_Controller
-            // # Controller block for the Silicon Rock Synthesizer
-            // #zh_CN 硅岩制造机的控制方块
-            .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker_Controller"))
-            // #tr Tooltip_MegaStoneBreaker.1
-            // # {\WHITE}Hey, I heard you come from a sky island?
-            // #zh_CN {\WHITE}嘿,听说你来自一片空岛?
-            .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker.1"))
-            // #tr Tooltip_MegaStoneBreaker.2
-            // # Basic parallel is 4, and the multiplier is equivalent to imperfect overclock
-            // #zh_CN 基础并行为4, 拥有等同于有损超频的并行加成
-            .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker.2"))
-            // #tr Tooltip_MegaStoneBreaker.3
-            // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
-            // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
-            .addInfo(TextEnums.tr("Tooltip_MegaStoneBreaker.3"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .addController(textFrontBottom)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 1)
-            .addEnergyHatch(textUseBlueprint, 1)
-            // #tr Tooltip_MegaStoneBreaker_Hatch_0
-            // # {\WHITE}Lava Hatch:{GREEN\} Left{\GRAY} side of Structure
-            // #zh_CN {\WHITE}岩浆输入仓:{\GRAY}结构的{\GREEN}左{\GRAY}侧
-            .addStructureInfo(TextEnums.tr("Tooltip_MegaStoneBreaker_Hatch_0"))
-            // #tr Tooltip_MegaStoneBreaker_Hatch_1
-            // # {\WHITE}Water Hatch:{GREEN\} Right{\GRAY} side of Structure
-            // #zh_CN {\WHITE}水输入仓:{\GRAY}结构的{\GREEN}右{\GRAY}侧
-            .addStructureInfo(TextEnums.tr("Tooltip_MegaStoneBreaker_Hatch_1"))
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .addStructureInfo(Text_SeparatingLine)
-            .toolTipFinisher(ModName);
-        return tt;
-    }
-
-    // spotless:on
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -368,4 +297,84 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
 
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(TAE.GTPP_INDEX(16)) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.MegaStoneBreaker.tooltip.machine_type
+        // # Stone Breaker
+        // #zh_CN 碎石机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.machine_type"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.controller
+            // # Controller block for the Silicon Rock Synthesizer
+            // #zh_CN 硅岩制造机的控制方块
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.controller"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.01
+            // # {\WHITE}Hey, I heard you come from a sky island?
+            // #zh_CN {\WHITE}嘿,听说你来自一片空岛?
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.01"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.02
+            // # Basic parallel is 4, and the multiplier is equivalent to imperfect overclock
+            // #zh_CN 基础并行为4, 拥有等同于有损超频的并行加成
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.02"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.03
+            // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
+            // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.03"))
+            .addController(textFrontBottom)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 1)
+            .addEnergyHatch(textUseBlueprint, 1)
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.01
+            // # {\WHITE}Lava Hatch:{GREEN\} Left{\GRAY} side of Structure
+            // #zh_CN {\WHITE}岩浆输入仓:{\GRAY}结构的{\GREEN}左{\GRAY}侧
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.01"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.02
+            // # {\WHITE}Water Hatch:{GREEN\} Right{\GRAY} side of Structure
+            // #zh_CN {\WHITE}水输入仓:{\GRAY}结构的{\GREEN}右{\GRAY}侧
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.02"))
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addStructureInfo(Text_SeparatingLine)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    public boolean addWaterHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
+            mWaterHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addLavaHatch(IGregTechTileEntity aTileEntity, short aBaseCasingIndex) {
+        if (aTileEntity == null) return false;
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof MTEHatchInput) {
+            ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
+            ((MTEHatchInput) aMetaTileEntity).mRecipeMap = null;
+            mLavaHatch = (MTEHatchInput) aMetaTileEntity;
+            return true;
+        }
+        return false;
+    }
+
+    // endregion
+
 }

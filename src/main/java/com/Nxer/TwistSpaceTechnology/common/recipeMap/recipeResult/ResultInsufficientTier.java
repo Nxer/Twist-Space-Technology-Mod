@@ -23,17 +23,17 @@ public class ResultInsufficientTier implements CheckRecipeResult {
     private int typeRequired;
     private int tierRequired;
 
-    // #tr tst.gui.text.insufficient_tier.1
+    // #tr tst.common.shared.result.insufficient_tier.1
     // # Blood Altar Tier
     // #zh_CN 血魔法祭坛
     private static final int TYPE_BLOOD_ALTAR = 1;
 
-    // #tr tst.gui.text.insufficient_tier.2
+    // #tr tst.common.shared.result.insufficient_tier.2
     // # Blood Orb
     // #zh_CN 血气宝珠
     private static final int TYPE_BLOOD_ORB = 2;
 
-    // #tr tst.gui.text.insufficient_tier.3
+    // #tr tst.common.shared.result.insufficient_tier.3
     // # Activation Crystal
     // #zh_CN 激活水晶
     private static final int TYPE_ACTIVATION_CRYSTAL = 3;
@@ -87,12 +87,12 @@ public class ResultInsufficientTier implements CheckRecipeResult {
     @NotNull
     @Override
     public String getDisplayString() {
-        // #tr tst.gui.text.insufficient_tier
+        // #tr tst.common.shared.result.insufficient_tier
         // # §7Recipe needs higher %s tier. Required: %s
         // #zh_CN §7配方需要更高的%s等级。需要：%s
         return StatCollector.translateToLocalFormatted(
-            "tst.gui.text.insufficient_tier",
-            StatCollector.translateToLocalFormatted("tst.gui.text.insufficient_tier." + typeRequired),
+            "tst.common.shared.result.insufficient_tier",
+            StatCollector.translateToLocalFormatted("tst.common.shared.result.insufficient_tier." + typeRequired),
             formatNumber(tierRequired));
     }
 

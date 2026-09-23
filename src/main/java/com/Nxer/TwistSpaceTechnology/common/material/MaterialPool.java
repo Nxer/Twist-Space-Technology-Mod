@@ -176,6 +176,9 @@ public class MaterialPool implements Runnable {
 
     static {
         if (Config.activateMegaSpaceStation) {
+            // #tr Material.eventhorizondiffusers
+            // # Event Horizon Diffusers
+            // #zh_CN Event Horizon Diffusers
             eventHorizonDiffusers = new Werkstoff(
                 new short[] { 255, 255, 255 },
                 "Event Horizon Diffusers",
@@ -185,6 +188,9 @@ public class MaterialPool implements Runnable {
                 gf,
                 offsetID_01 + 2,
                 TextureSet.SET_SHINY);
+            // #tr Material.entropyreductionprocess
+            // # Entropy Reduction Process
+            // #zh_CN Entropy Reduction Process
             entropyReductionProcess = new Werkstoff(
                 new short[] { 0, 0, 0 },
                 "Entropy Reduction Process",
@@ -194,6 +200,9 @@ public class MaterialPool implements Runnable {
                 gf,
                 offsetID_01 + 3,
                 TextureSet.SET_SHINY);
+            // #tr Material.realsingularity
+            // # Real Singularity
+            // #zh_CN Real Singularity
             realSingularity = new Werkstoff(
                 new short[] { 127, 127, 127 },
                 "Real Singularity",

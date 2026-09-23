@@ -48,9 +48,11 @@ public class TST_Gui_MegaCraftingCenter extends TST_Gui<TST_MegaCraftingCenter> 
                 }
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(IKey.lang("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name")))
+            .tooltipBuilder(
+                t -> t.addLine(
+                    IKey.lang("tst.common.machine.ExtremeCraftCenter.gui.magnification_info_menu_button.name")))
             .tooltipShowUpTimer(TOOLTIP_DELAY);
-        // #tr MegaCraftingCenter.UI.MagnificationInfoMenuButton.name
+        // #tr tst.common.machine.ExtremeCraftCenter.gui.magnification_info_menu_button.name
         // # Pattern Magnification Configuration Menu
         // #zh_CN 样板倍率配置菜单
     }
@@ -67,19 +69,20 @@ public class TST_Gui_MegaCraftingCenter extends TST_Gui<TST_MegaCraftingCenter> 
                     .padding(3)
                     .child(
                         new TextWidget<>(
-                            EnumChatFormatting.UNDERLINE + StatCollector
-                                .translateToLocal("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name"))
+                            EnumChatFormatting.UNDERLINE + StatCollector.translateToLocal(
+                                "tst.common.machine.ExtremeCraftCenter.gui.magnification_info_menu_button.name"))
                                     .textAlign(Alignment.Center)
                                     .size(120, 18)
                                     .marginBottom(4))
                     .childIf(
                         // spotless:off
-                                                         // #tr MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text
+                                                         // #tr tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text
                                                          // # Set actual pattern magnification, actual input/output numbers of patterns will be multiplied by this number.
                                                          // #zh_CN 设置样板实际运行倍率, 实际合成输入输出等于样板数值乘以此参数.
                                                          // spotless:on
                         showMaxParallelRow(),
-                        () -> IKey.lang("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
+                        () -> IKey.lang(
+                            "tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text")
                             .asWidget()
                             .marginBottom(4))
                     .child(makeParallelSetter(syncManager)));

@@ -9,7 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
 import codechicken.nei.NEIClientUtils;
@@ -76,12 +76,16 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
             if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
             if (positionedStack.isFluid()) {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.greenhouse.medium"));
-                // #tr EcoSphereSimulator.nei.greenhouse.medium
+                currentTip.add(
+                    EnumChatFormatting.YELLOW
+                        + TSTUtils.tr("tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.medium"));
+                // #tr tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.medium
                 // # Operating medium for greenhouse cultivation
                 // #zh_CN 温室培育所需运行介质
             } else {
-                currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.inputInterface"));
+                currentTip.add(
+                    EnumChatFormatting.YELLOW
+                        + TSTUtils.tr("tst.ecosphere.shared.recipe.EcoSphereSimulator.input_interface"));
             }
             return currentTip;
         }
@@ -89,8 +93,9 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
         for (var output : neiCachedRecipe.mOutputs) {
             if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
                 || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
-            currentTip.add(EnumChatFormatting.YELLOW + TextEnums.tr("EcoSphereSimulator.nei.greenhouse.yield"));
-            // #tr EcoSphereSimulator.nei.greenhouse.yield
+            currentTip.add(
+                EnumChatFormatting.YELLOW + TSTUtils.tr("tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.yield"));
+            // #tr tst.ecosphere.recipe.ArtificialGreenHouseFakeRecipes.yield
             // # Displayed stack size and chance represent base yield
             // #zh_CN 显示堆叠数与概率代表基础产量
             return currentTip;
@@ -104,7 +109,7 @@ public final class TST_ArtificialGreenHouseFrontend extends RecipeMapFrontend {
 
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
-            return Arrays.asList(TextEnums.tr("EcoSphereSimulator.nei.parallel"));
+            return Arrays.asList(TSTUtils.tr("tst.ecosphere.shared.recipe.EcoSphereSimulator.parallel"));
         }
     }
 }

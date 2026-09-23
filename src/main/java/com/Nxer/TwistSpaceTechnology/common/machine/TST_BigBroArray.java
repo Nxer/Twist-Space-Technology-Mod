@@ -54,8 +54,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.network.TST_Network;
 import com.Nxer.TwistSpaceTechnology.util.MathUtils;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.dreammaster.item.NHItemList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -95,6 +97,7 @@ import gregtech.api.enums.TierEU;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.BaseMetaTileEntity;
@@ -130,16 +133,381 @@ import tectech.thing.casing.TTCasingsContainer;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDynamoTunnel;
 import tectech.thing.metaTileEntity.hatch.MTEHatchEnergyTunnel;
 
+@SkipGenerateDescription
 public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> implements ISurvivalConstructable {
 
+    // region Class Constructor
+    public TST_BigBroArray(int aID, String aName, String aNameRegional) {
+        super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.KO_TORI_MINAMI);
+    }
+
+    public TST_BigBroArray(String aName) {
+        super(aName);
+    }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_BigBroArray(mName);
+    }
+    // endregion
+
+    // region Structure
+    // spotless:off
+    public static final String[][] PROCESSING_MACHINE_LIST = new String[][]{
+        // OP
+        {"Macerator", "Macerator"}, {"OreWasher", "OreWashingPlant"}, {"ChemicalBath", "ChemicalBath"},
+        {"ThermalCentrifuge", "ThermalCentrifuge"},
+        // Processing
+        {"E_Furnace", "ElectricFurnace"}, {"ArcFurnace", "ArcFurnace"}, {"Bender", "BendingMachine"},
+        {"Wiremill", "Wiremill"}, {"Lathe", "Lathe"}, {"Hammer", "ForgeHammer"}, {"Extruder", "Extruder"},
+        {"FluidExtractor", "FluidExtractor"}, {"Compressor", "Compressor"}, {"Press", "FormingPress"},
+        {"FluidSolidifier", "FluidSolidifier"}, {"Extractor", "Extractor"},
+        {"LaserEngraver", "PrecisionLaserEngraver"}, {"Autoclave", "Autoclave"}, {"Mixer", "Mixer"},
+        {"AlloySmelter", "AlloySmelter"}, {"Electrolyzer", "Electrolyzer"}, {"Sifter", "SiftingMachine"},
+        {"ChemicalReactor", "ChemicalReactor"}, {"ElectromagneticSeparator", "ElectromagneticSeparator"},
+        {"Recycler", "Recycler"}, {"Massfab", "MassFabricator"}, {"Centrifuge", "Centrifuge"},
+        {"Cutter", "CuttingMachine"}, {"Assembler", "AssemblingMachine"}, {"CircuitAssembler", "CircuitAssembler"}
+        // TODO: bartworks bio lab
+    };
+
+    private static final String[][] PATTERN_CORE = new String[][]{
+        {"   AAAAA   ","  AAAAAAA  "," AAAAAAAAA ","AAAAAAAAAAA","AAAAAAAAAAA","AAAAAAAAAAA","AAAAAAAAAAA","AAAAAAAAAAA"," AAAAAAAAA ","  AAAAAAA  ","   AAAAA   "},
+        {"   CCCCC   ","  CCCCCCC  "," CCCCCCCCC ","CCCCCCCCCCC","CCCCCCCCCCC","CCCCCCCCCCC","CCCCCCCCCCC","CCCCCCCCCCC"," CCCCCCCCC ","  CCCCCCC  ","   CCCCC   "},
+        {"           ","           ","   B   B   ","  B     B  ","           ","           ","           ","  B     B  ","   B   B   ","           ","           "},
+        {"           ","           ","   B   B   ","  B     B  ","           ","           ","           ","  B     B  ","   B   B   ","           ","           "},
+        {"           ","           ","   B   B   ","  B     B  ","    DDD    ","    DDD    ","    DDD    ","  B     B  ","   B   B   ","           ","           "},
+        {"           ","           ","   B   B   ","  B     B  ","    D~D    ","    D D    ","    DDD    ","  B     B  ","   B   B   ","           ","           "},
+        {"           ","           ","   B   B   ","  B     B  ","    DDD    ","    DDD    ","    DDD    ","  B     B  ","   B   B   ","           ","           "},
+        {"     F     ","    EEE    ","   EEEEE   ","  EEEEEEE  "," EEEEEEEEE ","FEEEEEEEEEF"," EEEEEEEEE ","  EEEEEEE  ","   EEEEE   ","    EEE    ","     F     "}
+    };
+
+    private static final String[][] PATTERN_ADDON = new String[][]{
+        {"                 ","                 ","                 ","                 ","                 ","        EEE      ","       EEEEE     ","       EEEEE     ","       EEEEE     ","        EEE      ","                 ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","       EEEEE     ","      EEEEEEE    ","     EEE A EEE   ","     EE  A  EE   ","     EEAAAAAEE   ","     EE  A  EE   ","     EEE A EEE   ","      EEEEEEE    ","       EEEEE     ","                 ","                 ","                 "},
+        {"                 ","                 ","       EEEEE     ","      E  A  E    ","     E   A   E   ","    E         E  ","    E         E  ","    EAA     AAE  ","    E         E  ","    E         E  ","     E   A   E   ","      E  A  E    ","       EEEEE     ","                 ","                 "},
+        {"                 ","       EEEEE     ","      E  A  E    ","     E       E   ","    E         E  ","   E           E ","   E           E ","   EA         AE ","   E           E ","   E           E ","    E         E  ","     E       E   ","      E  A  E    ","       EEEEE     ","                 "},
+        {"                 ","      EEEEEEE    ","     E   A   E   ","    E         E  ","   E           E ","   E           E ","   E           E ","   EA         AE ","   E           E ","   E           E ","   E           E ","    E         E  ","     E   A   E   ","      EEEEEEE    ","                 "},
+        {"        EEE      ","     EEEAAAEEE   ","    E         E  ","   E           E ","   E           E ","   E           E ","  EA           AE","  EA           AE","  EA           AE","   E           E ","   E           E ","   E           E ","    E         E  ","     EEEAAAEEE   ","        EEE      "},
+        {"       EEEEE     ","     EEA A AEE   ","    E         E  ","   E           E ","   E           E ","  EA           AE","  E             E","  EA           AE","  E             E","  EA           AE","   E           E ","   E           E ","    E         E  ","     EEA A AEE   ","       EEEEE     "},
+        {"       EEEEE     ","     EEAAAAAEE   ","    EAA     AAE  ","   EA         AE ","   EA         AE ","  EA           AE","  EA           AE","  EA           AE","  EA           AE","  EA           AE","   EA         AE ","   EA         AE ","    EAA     AAE  ","     EEAAAAAEE   ","       EEEEE     "},
+        {"       EEEEE     ","     EEA A AEE   ","    E         E  ","   E           E ","   E           E ","  EA           AE","  E             E","  EA           AE","  E             E","  EA           AE","   E           E ","   E           E ","    E         E  ","     EEA A AEE   ","       EEEEE     "},
+        {"        EEE      ","     EEEAAAEEE   ","    E         E  ","   E           E ","   E           E ","   E           E ","  EA           AE","  EA           AE","  EA           AE","   E           E ","   E           E ","   E           E ","    E         E  ","     EEEAAAEEE   ","        EEE      "},
+        {"                 ","      EEEEEEE    ","     E   A   E   ","    E         E  ","   E           E ","   E           E ","   E           E ","   EA         AE ","   E           E ","   E           E ","   E           E ","    E         E  ","     E   A   E   ","      EEEEEEE    ","                 "},
+        {"                 ","       EEEEE     ","      E  A  E    ","     E       E   ","    E         E  ","   E           E ","   E           E ","   EA         AE ","   E           E ","   E           E ","    E         E  ","     E       E   ","      E  A  E    ","       EEEEE     ","                 "},
+        {"                 ","                 ","       EEEEE     ","      E  A  E    ","     E   A   E   ","    E         E  ","    E         E  ","    EAA     AAE  ","    E         E  ","    E         E  ","     E   A   E   ","      E  A  E    ","       EEEEE     ","                 ","                 "},
+        {"                 ","                 ","                 ","       EEEEE     ","      EEEEEEE    ","     EEE A EEE   ","     EE  A  EE   ","     EEAAAAAEE   ","     EE  A  EE   ","     EEE A EEE   ","      EEEEEEE    ","       EEEEE     ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","         BB      ","                 ","        EEE      ","       EEEEE     ","       EEEEE     ","       EEEEE     ","        EEE      ","                 ","        BB       ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","           B     ","            B    ","                 ","        DDD      ","        DCD      ","        DDD      ","                 ","      B          ","       B         ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","                 ","                 ","             B   ","        DDD  B   ","        DCD      ","     B  DDD      ","     B           ","                 ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","                 ","                 ","                 ","     B  DDD      ","     B  DCD  B   ","        DDD  B   ","                 ","                 ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","                 ","      B          ","     B           ","        DDD      ","        DCD      ","        DDD      ","             B   ","            B    ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","       BB        ","                 ","                 ","        DDD      ","        DCD      ","        DDD      ","                 ","                 ","          BB     ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","         BB      ","                 ","                 ","        DDD      ","        DCD      ","        DDD      ","                 ","                 ","        BB       ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","           B     ","            B    ","                 ","        DDD      ","        DCD      ","        DDD      ","                 ","      B          ","       B         ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","                 ","                 ","             B   ","        DDD  B   ","        DCD      ","     B  DDD      ","     B           ","                 ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","                 ","                 ","                 ","     B  CCC      ","     B  CCC  B   ","        CCC  B   ","                 ","                 ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","                 ","      B          ","     B CCCCC     ","       CCCCC     ","       CCCCC     ","       CCCCC     ","       CCCCC B   ","            B    ","                 ","                 ","                 ","                 "},
+        {"                 ","                 ","                 ","     FFFFFFFFF   ","     FFFFFFFFF   ","     FFFFFFFFF   ","     FFFFFFFFF   ","FFFFFFFFFFFFFF   ","     FFFFFFFFF   ","     FFFFFFFFF   ","     FFFFFFFFF   ","     FFFFFFFFF   ","                 ","                 ","                 "}
+    };
+
+    private static final String[][] PATTERN_ADDON_90_CW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
+        .length()];
+
+    private static final String[][] PATTERN_ADDON_90_CCW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
+        .length()];
+
+    private static final String[][] PATTERN_ADDON_180 = new String[PATTERN_ADDON.length][PATTERN_ADDON[0].length];
+    // spotless:on
+
+    private static IStructureDefinition<TST_BigBroArray> STRUCTURE_DEFINITION;
+
+    @Override
+    public IStructureDefinition<TST_BigBroArray> getStructureDefinition() {
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public String[] getStructureDescription(ItemStack stackSize) {
+        return super.getStructureDescription(stackSize);
+    }
+
+    public static void initializeStructure() {
+
+        for (int i = 0; i < PATTERN_ADDON.length; i++) {
+            for (int j = 0; j < PATTERN_ADDON[i].length; j++) {
+                PATTERN_ADDON[i][j] = PATTERN_ADDON[i][j].replace('A', 'G')
+                    .replace('B', 'H')
+                    .replace('C', 'I')
+                    .replace('D', 'J')
+                    .replace('E', 'K')
+                    .replace('F', 'L');
+            }
+        }
+
+        for (int i = 0; i < PATTERN_ADDON.length; i++) {
+            for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
+                // cw 180 addon
+                PATTERN_ADDON_180[i][j] = StringUtils.reverse(PATTERN_ADDON[i][j]);
+            }
+        }
+        for (int i = 0; i < PATTERN_ADDON.length; i++) {
+            for (int k = 0; k < PATTERN_ADDON[0][0].length(); k++) {
+                String rotated = "";
+                for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
+                    // cw 90 addon
+                    rotated += PATTERN_ADDON[i][j].charAt(k);
+                }
+                PATTERN_ADDON_90_CW[i][k] = rotated;
+            }
+        }
+
+        for (int i = 0; i < PATTERN_ADDON_90_CW.length; i++) {
+            for (int j = 0; j <= PATTERN_ADDON_90_CW.length / 2; j++) {
+                PATTERN_ADDON_90_CCW[i][j] = PATTERN_ADDON_90_CW[i][PATTERN_ADDON_90_CW[0].length - 1 - j];
+                PATTERN_ADDON_90_CCW[i][PATTERN_ADDON_90_CW[0].length - 1 - j] = PATTERN_ADDON_90_CW[i][j];
+            }
+        }
+
+        StructureDefinition.Builder<TST_BigBroArray> builder = StructureDefinition.<TST_BigBroArray>builder()
+            .addShape("core", StructureUtility.transpose(PATTERN_CORE))
+            .addElement(
+                'D',
+                HatchElementBuilder.<TST_BigBroArray>builder()
+                    .atLeast(
+                        gregtech.api.enums.HatchElement.Maintenance,
+                        gregtech.api.enums.HatchElement.InputBus.or(gregtech.api.enums.HatchElement.InputHatch),
+                        gregtech.api.enums.HatchElement.OutputBus.or(gregtech.api.enums.HatchElement.OutputHatch),
+                        gregtech.api.enums.HatchElement.Muffler)
+                    .adder(TST_BigBroArray::addToMachineList)
+                    .hint(1)
+                    .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(0))
+                    .buildAndChain(GregTechAPI.sBlockCasings4, 0))
+            .addElement(
+                'A',
+                StructureUtility.withChannel(
+                    "glass",
+                    BorosilicateGlass.ofBoroGlass(
+                        (byte) -2,
+                        (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
+                        (te) -> (byte) te.glassTier)))
+            .addElement(
+                'B',
+                StructureUtility.withChannel(
+                    "frame",
+                    StructureUtility.ofBlocksTiered(
+                        TST_BigBroArray::getFrameTier,
+                        FRAMES,
+                        -1,
+                        (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
+                        (te) -> te.frameTier)))
+            .addElement('E', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
+            .addElement(
+                'F',
+                HatchElementBuilder.<TST_BigBroArray>builder()
+                    .atLeast(
+                        HatchElement.ExoticDynamo.or(gregtech.api.enums.HatchElement.ExoticEnergy)
+                            .or(gregtech.api.enums.HatchElement.Dynamo))
+                    .adder(TST_BigBroArray::addToMachineList)
+                    .hint(2)
+                    .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(1))
+                    .buildAndChain(GregTechAPI.sBlockCasings4, 1))
+            .addElement(
+                'C',
+                StructureUtility.withChannel(
+                    "casing",
+                    StructureUtility.ofBlocksTiered(
+                        (block, meta) -> meta,
+                        MACHINE_CASINGS,
+                        -1,
+                        TST_BigBroArray::setCasingTier,
+                        TST_BigBroArray::getCasingTier)));
+        List<String[][]> strings = Arrays
+            .asList(PATTERN_ADDON, PATTERN_ADDON_90_CW, PATTERN_ADDON_180, PATTERN_ADDON_90_CCW);
+        for (int i = 0; i < strings.size(); i++) {
+            String[][] pattern = strings.get(i);
+            builder = builder.addShape("addon" + i, StructureUtility.transpose(pattern))
+                .addElement(
+                    'I',
+                    StructureUtility.withChannel(
+                        "coil",
+                        GTStructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
+                .addElement(
+                    'H',
+                    StructureUtility.withChannel(
+                        "frame",
+                        StructureUtility.ofBlocksTiered(
+                            TST_BigBroArray::getFrameTier,
+                            FRAMES,
+                            -1,
+                            (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
+                            (te) -> te.frameTier)))
+                .addElement(
+                    'K',
+                    StructureUtility.withChannel(
+                        "glass",
+                        BorosilicateGlass.ofBoroGlass(
+                            (byte) -1,
+                            (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
+                            (te) -> (byte) te.glassTier)))
+                .addElement(
+                    'G',
+                    StructureUtility.withChannel(
+                        "parallelism",
+                        StructureUtility.ofBlocksTiered(
+                            TST_BigBroArray::getParallelismCasingTier,
+                            PARALLELISM_CASINGS,
+                            0,
+                            (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
+                            (te) -> te.parallelismTier)))
+                .addElement('L', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
+                .addElement('J', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5));
+        }
+        STRUCTURE_DEFINITION = builder.build();
+    }
+
+    @Override
+    public void construct(ItemStack itemStack, boolean hintsOnly) {
+        buildPiece("core", itemStack, hintsOnly, 5, 5, 4);
+        int addonCount = Math.min(itemStack.stackSize - 1, 4);
+        if (addonCount == 4) {
+            buildPiece("addon3", itemStack, hintsOnly, 7, 23, 21);
+            addonCount--;
+        }
+        if (addonCount == 3) {
+            buildPiece("addon2", itemStack, hintsOnly, 22, 23, 6);
+            addonCount--;
+        }
+        if (addonCount == 2) {
+            buildPiece("addon1", itemStack, hintsOnly, 7, 23, -7);
+            addonCount--;
+        }
+        if (addonCount == 1) {
+            buildPiece("addon0", itemStack, hintsOnly, -6, 23, 6);
+        }
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        int blockPlacedCount = 0;
+        if (!mMachine) {
+            blockPlacedCount += survivalBuildPiece("core", stackSize, 5, 5, 4, elementBudget, env, true);
+        } else {
+            switch (this.addonCount) {
+                case 0:
+                    blockPlacedCount += survivalBuildPiece("addon0", stackSize, -6, 23, 6, elementBudget, env, true);
+                    break;
+                case 1:
+                    blockPlacedCount += survivalBuildPiece("addon1", stackSize, 7, 23, -7, elementBudget, env, true);
+                    break;
+                case 2:
+                    blockPlacedCount += survivalBuildPiece("addon2", stackSize, 22, 23, 6, elementBudget, env, true);
+                    break;
+                case 3:
+                    blockPlacedCount += survivalBuildPiece("addon2", stackSize, 7, 23, 21, elementBudget, env, true);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return blockPlacedCount;
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+
+        this.casingTier = -1;
+        this.glassTier = -2;
+        this.coilTier = HeatingCoilLevel.None;
+        this.frameTier = -1;
+        if (!checkPiece("core", 5, 5, 4, errors)) return;
+        // dynamo hatch level follows casing level
+        if (mDynamoHatches.isEmpty() && mExoticDynamoHatches.isEmpty() && casingTier >= 12) {
+            isWirelessMode = true;
+        } else {
+            if (casingTier < 12) {
+                for (MTEHatchDynamo mDynamoHatch : mDynamoHatches) {
+                    if (mDynamoHatch.mTier > casingTier) {
+                        // #tr tst.common.machine.BigBroArray.structure_error.hatch_tier_too_large
+                        // # Hatch tier too high.
+                        // #zh_CN 仓室等级过高
+                        errors.add(
+                            StructureErrors.of("tst.common.machine.BigBroArray.structure_error.hatch_tier_too_large"));
+                        return;
+                    }
+                }
+                for (MTEHatch gt_metaTileEntity_hatch_dynamoMulti : mExoticDynamoHatches) {
+                    if (gt_metaTileEntity_hatch_dynamoMulti.mTier > casingTier
+                        || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
+                        return;
+                    }
+                }
+            }
+
+        }
+
+        // energy hatch level follows glass level
+
+        for (MTEHatchEnergy mEnergyHatch : mEnergyHatches) {
+            if (mEnergyHatch.mTier > glassTier) {
+                errors.add(ENERGY_TIER_EXCEED_GLASS);
+                return;
+            }
+        }
+        for (MTEHatch gt_metaTileEntity_hatch_energyMulti : mExoticEnergyHatches) {
+            if (Math.min(gt_metaTileEntity_hatch_energyMulti.mTier, 12) > glassTier
+                || (gt_metaTileEntity_hatch_energyMulti instanceof MTEHatchEnergyTunnel && glassTier < 6)) {
+                errors.add(ENERGY_TIER_EXCEED_GLASS);
+
+                return;
+            }
+        }
+
+        this.addonCount = 0;
+        int p = 5;
+        this.parallelismTier = 0;
+        if (checkPiece("addon0", -6, 23, 6, errors)) {
+            this.addonCount += 1;
+            p = Math.min(this.parallelismTier, p);
+        }
+        this.parallelismTier = 0;
+        if (checkPiece("addon1", 7, 23, -7, errors)) {
+            this.addonCount += 1;
+            p = Math.min(this.parallelismTier, p);
+        }
+        this.parallelismTier = 0;
+        if (checkPiece("addon2", 22, 23, 6, errors)) {
+            this.addonCount += 1;
+            p = Math.min(this.parallelismTier, p);
+        }
+        this.parallelismTier = 0;
+        if (checkPiece("addon3", 7, 23, 21, errors)) {
+            this.addonCount += 1;
+            p = Math.min(this.parallelismTier, p);
+        }
+        checkOneMufflerHatch(errors);
+        if (this.addonCount > 0) {
+            this.parallelismTier = p;
+        } else {
+            this.parallelismTier = 0;
+        }
+        // 5 is place holder, max tier is 4
+        this.maxParallelism = calculateMaxParallelismByAddonTier();
+        this.casingMultiplier = parallelismTier > 3 ? (parallelismTier + 6) : parallelismTier;
+        this.machineCountForMaxParallelism = (int) (this.maxParallelism >> casingMultiplier);
+        this.actualParallelism = calculateParallelismByAddonTier();
+        processingLogic.setSpeedBonus((float) Math.pow(0.66, parallelismTier));
+        processingLogic.setEuModifier((float) Math.pow(0.9, Math.max(0, coilTier.getTier())));
+    }
+    // endregion
+
+    // region Processing Logic
     private ItemStack machines;
-
     private long maxParallelism = 256;
-
     private long actualParallelism = 256;
     private int machineCountForMaxParallelism = 256;
     private String machineType = null;
-
     private int machineTier = -1;
 
     // affects energy hatch
@@ -159,21 +527,15 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
 
     // affects max parallelism
     private int addonCount = 0;
+
     private String mode;
-
     private static final String MODE_GENERATOR = "generator";
-
     private static final String MODE_PROCESSOR = "processor";
-
     private TileEntity generatorTE;
-
     private UUID ownerUUID;
-
     private boolean isWirelessMode = false;
-
     private BigInteger output = BigInteger.valueOf(0);
     private BigInteger outEUt = BigInteger.valueOf(0);
-
     private int casingMultiplier;
 
     private static String[] tierNames = new String[] { "LV", "MV", "HV", "EV", "IV", "LuV", "ZPM", "UV", "UHV", "UEV",
@@ -183,563 +545,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
     private static String[] tierNamesCasing = new String[] { "LV", "MV", "HV", "EV", "IV", "LuV", "ZPM", "UV", "MAX",
         "UEV", "UIV", "UMV", "UXV" };
 
-    @SideOnly(Side.CLIENT)
-    public static ITexture[] DEFAULT_FRONT_ACTIVE;
-
-    @SideOnly(Side.CLIENT)
-    public static ITexture[] DEFAULT_FRONT_IDLE;
-
-    @SideOnly(Side.CLIENT)
-    private static ITexture[] DEFAULT_CASING_TEXTURE;
-
-    // spotless:off
-    public static final String[][] PROCESSING_MACHINE_LIST = new String[][]{
-        // OP
-        {"Macerator", "Macerator"}, {"OreWasher", "OreWashingPlant"}, {"ChemicalBath", "ChemicalBath"},
-        {"ThermalCentrifuge", "ThermalCentrifuge"},
-        // Processing
-        {"E_Furnace", "ElectricFurnace"}, {"ArcFurnace", "ArcFurnace"}, {"Bender", "BendingMachine"},
-        {"Wiremill", "Wiremill"}, {"Lathe", "Lathe"}, {"Hammer", "ForgeHammer"}, {"Extruder", "Extruder"},
-        {"FluidExtractor", "FluidExtractor"}, {"Compressor", "Compressor"}, {"Press", "FormingPress"},
-        {"FluidSolidifier", "FluidSolidifier"}, {"Extractor", "Extractor"},
-        {"LaserEngraver", "PrecisionLaserEngraver"}, {"Autoclave", "Autoclave"}, {"Mixer", "Mixer"},
-        {"AlloySmelter", "AlloySmelter"}, {"Electrolyzer", "Electrolyzer"}, {"Sifter", "SiftingMachine"},
-        {"ChemicalReactor", "ChemicalReactor"}, {"ElectromagneticSeparator", "ElectromagneticSeparator"},
-        {"Recycler", "Recycler"}, {"Massfab", "MassFabricator"}, {"Centrifuge", "Centrifuge"},
-        {"Cutter", "CuttingMachine"}, {"Assembler", "AssemblingMachine"}, {"CircuitAssembler", "CircuitAssembler"}
-        // TODO: bartworks bio lab
-    };
-
     private static final DecimalFormat Out_Format = new DecimalFormat("#,###");
-
-    // spotless:off
-    private static final String[][] PATTERN_CORE = new String[][]{
-        {
-            "   AAAAA   ",
-            "  AAAAAAA  ",
-            " AAAAAAAAA ",
-            "AAAAAAAAAAA",
-            "AAAAAAAAAAA",
-            "AAAAAAAAAAA",
-            "AAAAAAAAAAA",
-            "AAAAAAAAAAA",
-            " AAAAAAAAA ",
-            "  AAAAAAA  ",
-            "   AAAAA   "
-        }, {
-        "   CCCCC   ",
-        "  CCCCCCC  ",
-        " CCCCCCCCC ",
-        "CCCCCCCCCCC",
-        "CCCCCCCCCCC",
-        "CCCCCCCCCCC",
-        "CCCCCCCCCCC",
-        "CCCCCCCCCCC",
-        " CCCCCCCCC ",
-        "  CCCCCCC  ",
-        "   CCCCC   "
-    }, {
-        "           ",
-        "           ",
-        "   B   B   ",
-        "  B     B  ",
-        "           ",
-        "           ",
-        "           ",
-        "  B     B  ",
-        "   B   B   ",
-        "           ",
-        "           "
-    }, {
-        "           ",
-        "           ",
-        "   B   B   ",
-        "  B     B  ",
-        "           ",
-        "           ",
-        "           ",
-        "  B     B  ",
-        "   B   B   ",
-        "           ",
-        "           "
-    }, {
-        "           ",
-        "           ",
-        "   B   B   ",
-        "  B     B  ",
-        "    DDD    ",
-        "    DDD    ",
-        "    DDD    ",
-        "  B     B  ",
-        "   B   B   ",
-        "           ",
-        "           "
-    }, {
-        "           ",
-        "           ",
-        "   B   B   ",
-        "  B     B  ",
-        "    D~D    ",
-        "    D D    ",
-        "    DDD    ",
-        "  B     B  ",
-        "   B   B   ",
-        "           ",
-        "           "
-    }, {
-        "           ",
-        "           ",
-        "   B   B   ",
-        "  B     B  ",
-        "    DDD    ",
-        "    DDD    ",
-        "    DDD    ",
-        "  B     B  ",
-        "   B   B   ",
-        "           ",
-        "           "
-    }, {
-        "     F     ",
-        "    EEE    ",
-        "   EEEEE   ",
-        "  EEEEEEE  ",
-        " EEEEEEEEE ",
-        "FEEEEEEEEEF",
-        " EEEEEEEEE ",
-        "  EEEEEEE  ",
-        "   EEEEE   ",
-        "    EEE    ",
-        "     F     "
-    }};
-
-    private static final String[][] PATTERN_ADDON = new String[][]{{
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "        EEE      ",
-        "       EEEEE     ",
-        "       EEEEE     ",
-        "       EEEEE     ",
-        "        EEE      ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "       EEEEE     ",
-        "      EEEEEEE    ",
-        "     EEE A EEE   ",
-        "     EE  A  EE   ",
-        "     EEAAAAAEE   ",
-        "     EE  A  EE   ",
-        "     EEE A EEE   ",
-        "      EEEEEEE    ",
-        "       EEEEE     ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "       EEEEE     ",
-        "      E  A  E    ",
-        "     E   A   E   ",
-        "    E         E  ",
-        "    E         E  ",
-        "    EAA     AAE  ",
-        "    E         E  ",
-        "    E         E  ",
-        "     E   A   E   ",
-        "      E  A  E    ",
-        "       EEEEE     ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "       EEEEE     ",
-        "      E  A  E    ",
-        "     E       E   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "   EA         AE ",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     E       E   ",
-        "      E  A  E    ",
-        "       EEEEE     ",
-        "                 "
-    }, {
-        "                 ",
-        "      EEEEEEE    ",
-        "     E   A   E   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "   EA         AE ",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     E   A   E   ",
-        "      EEEEEEE    ",
-        "                 "
-    }, {
-        "        EEE      ",
-        "     EEEAAAEEE   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "  EA           AE",
-        "  EA           AE",
-        "  EA           AE",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     EEEAAAEEE   ",
-        "        EEE      "
-    }, {
-        "       EEEEE     ",
-        "     EEA A AEE   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "  EA           AE",
-        "  E             E",
-        "  EA           AE",
-        "  E             E",
-        "  EA           AE",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     EEA A AEE   ",
-        "       EEEEE     "
-    }, {
-        "       EEEEE     ",
-        "     EEAAAAAEE   ",
-        "    EAA     AAE  ",
-        "   EA         AE ",
-        "   EA         AE ",
-        "  EA           AE",
-        "  EA           AE",
-        "  EA           AE",
-        "  EA           AE",
-        "  EA           AE",
-        "   EA         AE ",
-        "   EA         AE ",
-        "    EAA     AAE  ",
-        "     EEAAAAAEE   ",
-        "       EEEEE     "
-    }, {
-        "       EEEEE     ",
-        "     EEA A AEE   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "  EA           AE",
-        "  E             E",
-        "  EA           AE",
-        "  E             E",
-        "  EA           AE",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     EEA A AEE   ",
-        "       EEEEE     "
-    }, {
-        "        EEE      ",
-        "     EEEAAAEEE   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "  EA           AE",
-        "  EA           AE",
-        "  EA           AE",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     EEEAAAEEE   ",
-        "        EEE      "
-    }, {
-        "                 ",
-        "      EEEEEEE    ",
-        "     E   A   E   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "   EA         AE ",
-        "   E           E ",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     E   A   E   ",
-        "      EEEEEEE    ",
-        "                 "
-    }, {
-        "                 ",
-        "       EEEEE     ",
-        "      E  A  E    ",
-        "     E       E   ",
-        "    E         E  ",
-        "   E           E ",
-        "   E           E ",
-        "   EA         AE ",
-        "   E           E ",
-        "   E           E ",
-        "    E         E  ",
-        "     E       E   ",
-        "      E  A  E    ",
-        "       EEEEE     ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "       EEEEE     ",
-        "      E  A  E    ",
-        "     E   A   E   ",
-        "    E         E  ",
-        "    E         E  ",
-        "    EAA     AAE  ",
-        "    E         E  ",
-        "    E         E  ",
-        "     E   A   E   ",
-        "      E  A  E    ",
-        "       EEEEE     ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "       EEEEE     ",
-        "      EEEEEEE    ",
-        "     EEE A EEE   ",
-        "     EE  A  EE   ",
-        "     EEAAAAAEE   ",
-        "     EE  A  EE   ",
-        "     EEE A EEE   ",
-        "      EEEEEEE    ",
-        "       EEEEE     ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "         BB      ",
-        "                 ",
-        "        EEE      ",
-        "       EEEEE     ",
-        "       EEEEE     ",
-        "       EEEEE     ",
-        "        EEE      ",
-        "                 ",
-        "        BB       ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "           B     ",
-        "            B    ",
-        "                 ",
-        "        DDD      ",
-        "        DCD      ",
-        "        DDD      ",
-        "                 ",
-        "      B          ",
-        "       B         ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "             B   ",
-        "        DDD  B   ",
-        "        DCD      ",
-        "     B  DDD      ",
-        "     B           ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "     B  DDD      ",
-        "     B  DCD  B   ",
-        "        DDD  B   ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "      B          ",
-        "     B           ",
-        "        DDD      ",
-        "        DCD      ",
-        "        DDD      ",
-        "             B   ",
-        "            B    ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "       BB        ",
-        "                 ",
-        "                 ",
-        "        DDD      ",
-        "        DCD      ",
-        "        DDD      ",
-        "                 ",
-        "                 ",
-        "          BB     ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "         BB      ",
-        "                 ",
-        "                 ",
-        "        DDD      ",
-        "        DCD      ",
-        "        DDD      ",
-        "                 ",
-        "                 ",
-        "        BB       ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "           B     ",
-        "            B    ",
-        "                 ",
-        "        DDD      ",
-        "        DCD      ",
-        "        DDD      ",
-        "                 ",
-        "      B          ",
-        "       B         ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "             B   ",
-        "        DDD  B   ",
-        "        DCD      ",
-        "     B  DDD      ",
-        "     B           ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "     B  CCC      ",
-        "     B  CCC  B   ",
-        "        CCC  B   ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "      B          ",
-        "     B CCCCC     ",
-        "       CCCCC     ",
-        "       CCCCC     ",
-        "       CCCCC     ",
-        "       CCCCC B   ",
-        "            B    ",
-        "                 ",
-        "                 ",
-        "                 ",
-        "                 "
-    }, {
-        "                 ",
-        "                 ",
-        "                 ",
-        "     FFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "FFFFFFFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "     FFFFFFFFF   ",
-        "                 ",
-        "                 ",
-        "                 "
-    }};
-
-
-    // spotless:on
-
-    private static final String[][] PATTERN_ADDON_90_CW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
-        .length()];
-
-    private static final String[][] PATTERN_ADDON_90_CCW = new String[PATTERN_ADDON.length][PATTERN_ADDON[0][0]
-        .length()];
-
-    private static final String[][] PATTERN_ADDON_180 = new String[PATTERN_ADDON.length][PATTERN_ADDON[0].length];
 
     public static final Map<String, String> overlayMapping = new HashMap<>() {
 
@@ -841,10 +647,10 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
     };
 
     private static List<Pair<Block, Integer>> FRAMES;
-
     private static List<Pair<Block, Integer>> PARALLELISM_CASINGS;
 
     private static List<Pair<Block, Integer>> MACHINE_CASINGS;
+
     /*
      * core Structure:
      * Blocks:
@@ -869,13 +675,168 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
      * it to something else
      */
 
-    private static IStructureDefinition<TST_BigBroArray> STRUCTURE_DEFINITION;
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        if (machines != null) {
+            try {
+                String key = "Naquadah".equals(machineType) ? machineType + "_" + (machineTier - 3) : machineType;
+                Field field = recipeBackendRefMapping.get(key);
+                if (field == null) {
+                    return null;
+                }
+                RecipeMap<?> o = (RecipeMap<?>) field.get(null);
+                return o;
+            } catch (IllegalAccessException e) {
+                return null;
+            }
+        }
+        return null;
+    }
 
-    @SideOnly(Side.CLIENT)
-    private ITexture[] activeTextures;
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
 
-    @SideOnly(Side.CLIENT)
-    private ITexture[] idleTextures;
+    @Override
+    public int getPollutionPerTick(ItemStack aStack) {
+        return (int) Math.min(actualParallelism, 10000);
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        GTCM_ProcessingLogic gtcm_processingLogic = new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
+                return recipe.mEUt <= 8 * Math.pow(4, machineTier) ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientMachineTier((int) (Math.log(recipe.mEUt) / Math.log(4)));
+            }
+        };
+        gtcm_processingLogic.setMaxParallelSupplier(
+            () -> machines != null ? (int) Math.min(machines.stackSize * Math.pow(2, parallelismTier), maxParallelism)
+                : 1);
+        return gtcm_processingLogic;
+    }
+
+    @NotNull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        startRecipeProcessing();
+        CheckRecipeResult result;
+        if (MODE_PROCESSOR.equals(mode)) {
+            result = super.checkProcessing();
+        } else if (MODE_GENERATOR.equals(mode)) {
+            mMaxProgresstime = 20;
+            if ("ASP_Solar".equals(machineType) || "EMT_Solar".equals(machineType)) {
+                int xCoord = getBaseMetaTileEntity().getXCoord();
+                int yCoord = getBaseMetaTileEntity().getYCoord() + 4;
+                int zCoord = getBaseMetaTileEntity().getZCoord();
+                generatorTE.xCoord = xCoord;
+                generatorTE.yCoord = yCoord;
+                generatorTE.zCoord = zCoord;
+                if (!generatorTE.hasWorldObj()) {
+                    generatorTE.setWorldObj(getBaseMetaTileEntity().getWorld());
+                }
+                double parallelismBlockBoost = Math.pow(1.5, parallelismTier);
+                double coilBoost = Math.pow(1.1, coilTier.getTier());
+                BigDecimal eut;
+                if (generatorTE instanceof TileEntitySolarPanel te) {
+                    te.updateEntity();
+                    eut = BigDecimal.valueOf(te.storage);
+                    te.storage = 0;
+                } else if (generatorTE instanceof TileEntitySolarBase te) {
+                    te.checkConditions();
+                    te.updateEntity();
+                    eut = BigDecimal.valueOf(te.generating);
+                    te.energySource.drawEnergy(te.energySource.getEnergyStored());
+                } else {
+                    endRecipeProcessing();
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+                output = eut.multiply(BigDecimal.valueOf(parallelismBlockBoost))
+                    .multiply(BigDecimal.valueOf(coilBoost))
+                    .multiply(BigDecimal.valueOf(actualParallelism))
+                    .multiply(BigDecimal.valueOf(20))
+                    .toBigInteger();
+                result = CheckRecipeResultRegistry.SUCCESSFUL;
+            } else if ("Diesel".equals(machineType) || "Semi_Fluid".equals(machineType)
+                || "Gas_Turbine".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    for (FluidStack storedFluid : getStoredFluids()) {
+                        long liquidFuelValue = getDieselFuelValue(storedFluid);
+                        if (liquidFuelValue > 0) {
+                            consumeFuel(machineType, storedFluid, liquidFuelValue);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
+                    }
+                } else if ("Steam_Turbine".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    for (FluidStack storedFluid : getStoredFluids()) {
+                        if (GTModHandler.isAnySteam(storedFluid)) {
+                            long liquidFuelValue = 3;
+                            consumeFuel(machineType, storedFluid, liquidFuelValue);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
+                    }
+                } else if ("Naquadah".equals(machineType)) {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                    List<ItemStack> outputItems = new ArrayList<>();
+                    for (ItemStack storedInput : getStoredInputs()) {
+                        GTRecipe recipe = getNaquadahFuelRecipe(storedInput);
+                        if (recipe != null) {
+                            long fuelValue = recipe.mSpecialValue * 1000;
+                            for (ItemStack out : recipe.mOutputs) {
+                                if (out != null) {
+                                    ItemStack stack = ItemStack.copyItemStack(out);
+                                    // 暂时不知道怎么处理，捏妈的
+                                    // 如果是Long.MAX个2333
+                                    // 谁知道什么时候会有人丢那么多个螺栓呢
+                                    stack.stackSize = (int) Math
+                                        .min(Math.min(storedInput.stackSize, actualParallelism), 2147483647L);
+                                    outputItems.add(stack);
+                                }
+                            }
+                            float effiency = GENERATOR_EFFICIENCY.get("Naquadah")[machineTier - 4];
+                            long machineEUt = (8L << (machineTier * 2L)) * actualParallelism;
+                            long expectedGeneration = (long) (fuelValue * effiency * actualParallelism);
+                            long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
+                            long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
+                            output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
+                            mMaxProgresstime = MathUtils.bigToInt(output.divide(BigInteger.valueOf(machineEUt)));
+                            storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
+                            result = CheckRecipeResultRegistry.SUCCESSFUL;
+                            break;
+                        }
+                    }
+                    mOutputItems = outputItems.toArray(new ItemStack[0]);
+                } else {
+                    result = CheckRecipeResultRegistry.NO_RECIPE;
+                }
+            if (result == CheckRecipeResultRegistry.SUCCESSFUL) {
+                outEUt = output.divide(BigInteger.valueOf(mMaxProgresstime));
+                if (isWirelessMode) {
+                    if (ownerUUID == null) {
+                        result = CheckRecipeResultRegistry.INTERNAL_ERROR;
+                    } else {
+                        lEUt = MathUtils.bigToLong(outEUt);
+                        addEUToGlobalEnergyMap(ownerUUID, output);
+                    }
+                } else {
+                    long out = MathUtils.bigToLong(output);
+                    lEUt = out / mMaxProgresstime;
+                    fillAllDynamos(out);
+                }
+            }
+        } else {
+            result = CheckRecipeResultRegistry.NO_RECIPE;
+        }
+        endRecipeProcessing();
+        return result;
+    }
 
     public static void initializeMaterials() {
         MACHINE_CASINGS = IntStream.range(0, tierNamesCasing.length)
@@ -1071,320 +1032,10 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         return casingTier;
     }
 
-    public static void initializeStructure() {
-
-        for (int i = 0; i < PATTERN_ADDON.length; i++) {
-            for (int j = 0; j < PATTERN_ADDON[i].length; j++) {
-                PATTERN_ADDON[i][j] = PATTERN_ADDON[i][j].replace('A', 'G')
-                    .replace('B', 'H')
-                    .replace('C', 'I')
-                    .replace('D', 'J')
-                    .replace('E', 'K')
-                    .replace('F', 'L');
-            }
-        }
-
-        for (int i = 0; i < PATTERN_ADDON.length; i++) {
-            for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
-                // cw 180 addon
-                PATTERN_ADDON_180[i][j] = StringUtils.reverse(PATTERN_ADDON[i][j]);
-            }
-        }
-        for (int i = 0; i < PATTERN_ADDON.length; i++) {
-            for (int k = 0; k < PATTERN_ADDON[0][0].length(); k++) {
-                String rotated = "";
-                for (int j = 0; j < PATTERN_ADDON[0].length; j++) {
-                    // cw 90 addon
-                    rotated += PATTERN_ADDON[i][j].charAt(k);
-                }
-                PATTERN_ADDON_90_CW[i][k] = rotated;
-            }
-        }
-
-        for (int i = 0; i < PATTERN_ADDON_90_CW.length; i++) {
-            for (int j = 0; j <= PATTERN_ADDON_90_CW.length / 2; j++) {
-                PATTERN_ADDON_90_CCW[i][j] = PATTERN_ADDON_90_CW[i][PATTERN_ADDON_90_CW[0].length - 1 - j];
-                PATTERN_ADDON_90_CCW[i][PATTERN_ADDON_90_CW[0].length - 1 - j] = PATTERN_ADDON_90_CW[i][j];
-            }
-        }
-
-        StructureDefinition.Builder<TST_BigBroArray> builder = StructureDefinition.<TST_BigBroArray>builder()
-            .addShape("core", StructureUtility.transpose(PATTERN_CORE))
-            .addElement(
-                'D',
-                HatchElementBuilder.<TST_BigBroArray>builder()
-                    .atLeast(
-                        gregtech.api.enums.HatchElement.Maintenance,
-                        gregtech.api.enums.HatchElement.InputBus.or(gregtech.api.enums.HatchElement.InputHatch),
-                        gregtech.api.enums.HatchElement.OutputBus.or(gregtech.api.enums.HatchElement.OutputHatch),
-                        gregtech.api.enums.HatchElement.Muffler)
-                    .adder(TST_BigBroArray::addToMachineList)
-                    .hint(1)
-                    .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(0))
-                    .buildAndChain(GregTechAPI.sBlockCasings4, 0))
-            .addElement(
-                'A',
-                StructureUtility.withChannel(
-                    "glass",
-                    BorosilicateGlass.ofBoroGlass(
-                        (byte) -2,
-                        (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
-                        (te) -> (byte) te.glassTier)))
-            .addElement(
-                'B',
-                StructureUtility.withChannel(
-                    "frame",
-                    StructureUtility.ofBlocksTiered(
-                        TST_BigBroArray::getFrameTier,
-                        FRAMES,
-                        -1,
-                        (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
-                        (te) -> te.frameTier)))
-            .addElement('E', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
-            .addElement(
-                'F',
-                HatchElementBuilder.<TST_BigBroArray>builder()
-                    .atLeast(
-                        HatchElement.ExoticDynamo.or(gregtech.api.enums.HatchElement.ExoticEnergy)
-                            .or(gregtech.api.enums.HatchElement.Dynamo))
-                    .adder(TST_BigBroArray::addToMachineList)
-                    .hint(2)
-                    .casingIndex(((BlockCasingsAbstract) GregTechAPI.sBlockCasings4).getTextureIndex(1))
-                    .buildAndChain(GregTechAPI.sBlockCasings4, 1))
-            .addElement(
-                'C',
-                StructureUtility.withChannel(
-                    "casing",
-                    StructureUtility.ofBlocksTiered(
-                        (block, meta) -> meta,
-                        MACHINE_CASINGS,
-                        -1,
-                        TST_BigBroArray::setCasingTier,
-                        TST_BigBroArray::getCasingTier)));
-        List<String[][]> strings = Arrays
-            .asList(PATTERN_ADDON, PATTERN_ADDON_90_CW, PATTERN_ADDON_180, PATTERN_ADDON_90_CCW);
-        for (int i = 0; i < strings.size(); i++) {
-            String[][] pattern = strings.get(i);
-            builder = builder.addShape("addon" + i, StructureUtility.transpose(pattern))
-                .addElement(
-                    'I',
-                    StructureUtility.withChannel(
-                        "coil",
-                        GTStructureUtility.ofCoil(TST_BigBroArray::setCoilTier, TST_BigBroArray::getCoilTier)))
-                .addElement(
-                    'H',
-                    StructureUtility.withChannel(
-                        "frame",
-                        StructureUtility.ofBlocksTiered(
-                            TST_BigBroArray::getFrameTier,
-                            FRAMES,
-                            -1,
-                            (te, tier) -> te.frameTier = te.frameTier >= 0 ? Math.min(tier, te.frameTier) : tier,
-                            (te) -> te.frameTier)))
-                .addElement(
-                    'K',
-                    StructureUtility.withChannel(
-                        "glass",
-                        BorosilicateGlass.ofBoroGlass(
-                            (byte) -1,
-                            (te, tier) -> te.glassTier = te.glassTier >= 0 ? Math.min(tier, te.glassTier) : tier,
-                            (te) -> (byte) te.glassTier)))
-                .addElement(
-                    'G',
-                    StructureUtility.withChannel(
-                        "parallelism",
-                        StructureUtility.ofBlocksTiered(
-                            TST_BigBroArray::getParallelismCasingTier,
-                            PARALLELISM_CASINGS,
-                            0,
-                            (te, tier) -> { te.parallelismTier = Math.max(tier, te.parallelismTier); },
-                            (te) -> te.parallelismTier)))
-                .addElement('L', StructureUtility.ofBlock(GregTechAPI.sBlockCasings4, 1))
-                .addElement('J', StructureUtility.ofBlock(GregTechAPI.sBlockCasings2, 5));
-        }
-        STRUCTURE_DEFINITION = builder.build();
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void initializeDefaultTextures() {
-        DEFAULT_FRONT_ACTIVE = new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)),
-            TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
-                .extFacing()
-                .build(),
-            TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
-                .extFacing()
-                .glow()
-                .build(), };
-
-        DEFAULT_FRONT_IDLE = new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)),
-            TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
-                .extFacing()
-                .build(),
-            TextureFactory.builder()
-                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
-                .extFacing()
-                .glow()
-                .build(), };
-
-        DEFAULT_CASING_TEXTURE = new ITexture[] {
-            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)) };
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    private ITexture[] getActiveTextures(String machineType) {
-        if (StringUtils.isEmpty(machineType)) {
-            return DEFAULT_FRONT_ACTIVE;
-        }
-        String overlay = overlayMapping.get(machineType);
-        if (overlay == null) {
-            return DEFAULT_FRONT_ACTIVE;
-        }
-        String front = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE", overlay);
-        String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE_GLOW", overlay);
-        IIconContainer frontIcon = Textures.BlockIcons.custom(front);
-        IIconContainer frontGlowIcon = Textures.BlockIcons.custom(frontGlow);
-        return new ITexture[] { TextureFactory.builder()
-            .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
-            .build(),
-            TextureFactory.builder()
-                .addIcon(frontIcon)
-                .build(),
-            TextureFactory.builder()
-                .addIcon(frontGlowIcon)
-                .glow()
-                .build() };
-    }
-
     @Override
     public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
         super.onFirstTick(aBaseMetaTileEntity);
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
-    }
-
-    @SideOnly(Side.CLIENT)
-    private ITexture[] getIdleTextures(String machineType) {
-        if (StringUtils.isEmpty(machineType)) {
-            return DEFAULT_FRONT_IDLE;
-        }
-        String overlay = overlayMapping.get(machineType);
-        if (overlay == null) {
-            return DEFAULT_FRONT_IDLE;
-        }
-        String front = String.format("basicmachines/%s/OVERLAY_FRONT", overlay);
-        String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_GLOW", overlay);
-        IIconContainer frontIcon = Textures.BlockIcons.custom(front);
-        IIconContainer frontGlowIcon = Textures.BlockIcons.custom(frontGlow);
-        return new ITexture[] { TextureFactory.builder()
-            .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
-            .build(),
-            TextureFactory.builder()
-                .addIcon(frontIcon)
-                .build(),
-            TextureFactory.builder()
-                .addIcon(frontGlowIcon)
-                .glow()
-                .build() };
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        if (machineType != null) {
-            aNBT.setString("machineType", machineType);
-        }
-        aNBT.setInteger("tier", machineTier);
-        aNBT.setLong("maxParallelism", maxParallelism);
-        aNBT.setLong("actualParallelism", actualParallelism);
-        if (mode != null) aNBT.setString("mode", mode);
-
-        if (generatorTE != null) {
-            NBTTagCompound compound = new NBTTagCompound();
-            generatorTE.writeToNBT(compound);
-            aNBT.setTag("solarTE", compound);
-        }
-        NBTTagCompound nbtTagCompound = new NBTTagCompound();
-        if (machines != null) {
-            nbtTagCompound.setShort("id", (short) Item.getIdFromItem(machines.getItem()));
-            nbtTagCompound.setInteger("Count", machines.stackSize);
-            nbtTagCompound.setShort("Damage", (short) machines.getItemDamage());
-
-            if (machines.getTagCompound() != null) {
-                nbtTagCompound.setTag("tag", machines.getTagCompound());
-            }
-            /*
-             * machines.writeToNBT(nbtTagCompound);
-             */
-        }
-        if (ownerUUID != null) {
-            aNBT.setString("owner", ownerUUID.toString());
-        }
-        aNBT.setTag("machines", nbtTagCompound);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        machineType = aNBT.getString("machineType");
-        mode = aNBT.getString("mode");
-        machineTier = aNBT.getInteger("tier");
-        maxParallelism = aNBT.getLong("maxParallelism");
-        actualParallelism = aNBT.getLong("actualParallelism");
-        if (aNBT.hasKey("machines")) {
-            // ItemStack.loadItemStackFromNBT()
-            NBTTagCompound compound = aNBT.getCompoundTag("machines");
-            ItemStack itemStack = new ItemStack(Item.getItemById(compound.getShort("id")));
-            itemStack.stackSize = compound.getInteger("Count");
-            itemStack.setItemDamage(compound.getShort("Damage"));
-            if (compound.hasKey("tag")) {
-                itemStack.setTagCompound(compound.getCompoundTag("tag"));
-            }
-            machines = itemStack;
-        }
-        if (aNBT.hasKey("solarTE")) {
-            NBTTagCompound compound = aNBT.getCompoundTag("solarTE");
-            generatorTE = Block.getBlockFromItem(machines.getItem())
-                .createTileEntity(null, machines.getItemDamage());
-            generatorTE.readFromNBT(compound);
-        }
-        if (aNBT.hasKey("owner")) {
-            ownerUUID = UUID.fromString(aNBT.getString("owner"));
-        }
-    }
-
-    public TST_BigBroArray(int aID, String aName, String aNameRegional) {
-        super(aID, aName, aNameRegional);
-    }
-
-    public TST_BigBroArray(String aName) {
-        super(aName);
-    }
-
-    @Override
-    public IStructureDefinition<TST_BigBroArray> getStructureDefinition() {
-        return STRUCTURE_DEFINITION;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        GTCM_ProcessingLogic gtcm_processingLogic = new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            protected CheckRecipeResult validateRecipe(@NotNull GTRecipe recipe) {
-                return recipe.mEUt <= 8 * Math.pow(4, machineTier) ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientMachineTier((int) (Math.log(recipe.mEUt) / Math.log(4)));
-            }
-        };
-        gtcm_processingLogic.setMaxParallelSupplier(
-            () -> machines != null ? (int) Math.min(machines.stackSize * Math.pow(2, parallelismTier), maxParallelism)
-                : 1);
-        return gtcm_processingLogic;
     }
 
     private long getDieselFuelValue(FluidStack stack) {
@@ -1416,124 +1067,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         long fuelConsumption = (long) (expectedGeneration / liquidFuelValue / effiency);
         output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
         storedFluid.amount = (int) Math.max(0, storedFluid.amount - fuelConsumption);
-    }
-
-    @NotNull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        startRecipeProcessing();
-        CheckRecipeResult result;
-        if (MODE_PROCESSOR.equals(mode)) {
-            result = super.checkProcessing();
-        } else if (MODE_GENERATOR.equals(mode)) {
-            mMaxProgresstime = 20;
-            if ("ASP_Solar".equals(machineType) || "EMT_Solar".equals(machineType)) {
-                int xCoord = getBaseMetaTileEntity().getXCoord();
-                int yCoord = getBaseMetaTileEntity().getYCoord() + 4;
-                int zCoord = getBaseMetaTileEntity().getZCoord();
-                generatorTE.xCoord = xCoord;
-                generatorTE.yCoord = yCoord;
-                generatorTE.zCoord = zCoord;
-                if (!generatorTE.hasWorldObj()) {
-                    generatorTE.setWorldObj(getBaseMetaTileEntity().getWorld());
-                }
-                double parallelismBlockBoost = Math.pow(1.5, parallelismTier);
-                double coilBoost = Math.pow(1.1, coilTier.getTier());
-                BigDecimal eut;
-                if (generatorTE instanceof TileEntitySolarPanel te) {
-                    te.updateEntity();
-                    eut = BigDecimal.valueOf(te.storage);
-                    te.storage = 0;
-                } else if (generatorTE instanceof TileEntitySolarBase te) {
-                    te.checkConditions();
-                    te.updateEntity();
-                    eut = BigDecimal.valueOf(te.generating);
-                    te.energySource.drawEnergy(te.energySource.getEnergyStored());
-                } else {
-                    endRecipeProcessing();
-                    return CheckRecipeResultRegistry.NO_RECIPE;
-                }
-                output = eut.multiply(BigDecimal.valueOf(parallelismBlockBoost))
-                    .multiply(BigDecimal.valueOf(coilBoost))
-                    .multiply(BigDecimal.valueOf(actualParallelism))
-                    .multiply(BigDecimal.valueOf(20))
-                    .toBigInteger();
-                result = CheckRecipeResultRegistry.SUCCESSFUL;
-            } else if ("Diesel".equals(machineType) || "Semi_Fluid".equals(machineType)
-                || "Gas_Turbine".equals(machineType)) {
-                    result = CheckRecipeResultRegistry.NO_RECIPE;
-                    for (FluidStack storedFluid : getStoredFluids()) {
-                        long liquidFuelValue = getDieselFuelValue(storedFluid);
-                        if (liquidFuelValue > 0) {
-                            consumeFuel(machineType, storedFluid, liquidFuelValue);
-                            result = CheckRecipeResultRegistry.SUCCESSFUL;
-                            break;
-                        }
-                    }
-                } else if ("Steam_Turbine".equals(machineType)) {
-                    result = CheckRecipeResultRegistry.NO_RECIPE;
-                    for (FluidStack storedFluid : getStoredFluids()) {
-                        if (GTModHandler.isAnySteam(storedFluid)) {
-                            long liquidFuelValue = 3;
-                            consumeFuel(machineType, storedFluid, liquidFuelValue);
-                            result = CheckRecipeResultRegistry.SUCCESSFUL;
-                            break;
-                        }
-                    }
-                } else if ("Naquadah".equals(machineType)) {
-                    result = CheckRecipeResultRegistry.NO_RECIPE;
-                    List<ItemStack> outputItems = new ArrayList<>();
-                    for (ItemStack storedInput : getStoredInputs()) {
-                        GTRecipe recipe = getNaquadahFuelRecipe(storedInput);
-                        if (recipe != null) {
-                            long fuelValue = recipe.mSpecialValue * 1000;
-                            for (ItemStack out : recipe.mOutputs) {
-                                if (out != null) {
-                                    ItemStack stack = ItemStack.copyItemStack(out);
-                                    // 暂时不知道怎么处理，捏妈的
-                                    // 如果是Long.MAX个2333
-                                    // 谁知道什么时候会有人丢那么多个螺栓呢
-                                    stack.stackSize = (int) Math
-                                        .min(Math.min(storedInput.stackSize, actualParallelism), 2147483647L);
-                                    outputItems.add(stack);
-                                }
-                            }
-                            float effiency = GENERATOR_EFFICIENCY.get("Naquadah")[machineTier - 4];
-                            long machineEUt = (8L << (machineTier * 2L)) * actualParallelism;
-                            long expectedGeneration = (long) (fuelValue * effiency * actualParallelism);
-                            long energyInFuel = (long) (storedInput.stackSize * fuelValue * effiency);
-                            long fuelConsumption = (long) (expectedGeneration / fuelValue / effiency);
-                            output = BigInteger.valueOf(Math.min(energyInFuel, expectedGeneration));
-                            mMaxProgresstime = MathUtils.bigToInt(output.divide(BigInteger.valueOf(machineEUt)));
-                            storedInput.stackSize = (int) Math.max(0, storedInput.stackSize - fuelConsumption);
-                            result = CheckRecipeResultRegistry.SUCCESSFUL;
-                            break;
-                        }
-                    }
-                    mOutputItems = outputItems.toArray(new ItemStack[0]);
-                } else {
-                    result = CheckRecipeResultRegistry.NO_RECIPE;
-                }
-            if (result == CheckRecipeResultRegistry.SUCCESSFUL) {
-                outEUt = output.divide(BigInteger.valueOf(mMaxProgresstime));
-                if (isWirelessMode) {
-                    if (ownerUUID == null) {
-                        result = CheckRecipeResultRegistry.INTERNAL_ERROR;
-                    } else {
-                        lEUt = MathUtils.bigToLong(outEUt);
-                        addEUToGlobalEnergyMap(ownerUUID, output);
-                    }
-                } else {
-                    long out = MathUtils.bigToLong(output);
-                    lEUt = out / mMaxProgresstime;
-                    fillAllDynamos(out);
-                }
-            }
-        } else {
-            result = CheckRecipeResultRegistry.NO_RECIPE;
-        }
-        endRecipeProcessing();
-        return result;
     }
 
     @Override
@@ -1594,186 +1127,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         return energy;
     }
 
-    @Override
-    public String[] getStructureDescription(ItemStack stackSize) {
-        return super.getStructureDescription(stackSize);
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new MultiblockTooltipBuilder()
-            .addMachineType(TextEnums.BigBroArrayType.toString())
-            .addInfo(TextEnums.OutOfMaintenance.toString())
-            .addInfo(TextEnums.BigBroArrayDesc1.toString())
-            .addInfo(TextEnums.BigBroArrayDesc2.toString())
-            .addInfo(TextEnums.BigBroArrayDesc3.toString())
-            .addInfo(TextEnums.BigBroArrayDesc4.toString())
-            .addInfo(TextEnums.BigBroArrayDesc5.toString())
-            .addInfo(TextEnums.BigBroArrayDesc6.toString())
-            .addInfo(TextEnums.BigBroArrayDesc7.toString())
-            .addInfo(TextEnums.BigBroArrayDesc8.toString())
-            .addInfo(TextEnums.BigBroArrayDesc9.toString())
-            .addInfo(TextEnums.BigBroArrayDesc10.toString())
-            .addInfo(TextEnums.BigBroArrayDesc11.toString())
-            .addInfo(TextEnums.BigBroArrayDesc12.toString())
-            .addInfo(TextEnums.StructureTooComplex.toString())
-            .addInfo(TextLocalization.BLUE_PRINT_INFO);
-        gt_multiblock_tooltip_builder.toolTipFinisher(TextLocalization.ModName);
-        return gt_multiblock_tooltip_builder;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machines != null) {
-            try {
-                String key = "Naquadah".equals(machineType) ? machineType + "_" + (machineTier - 3) : machineType;
-                Field field = recipeBackendRefMapping.get(key);
-                if (field == null) {
-                    return null;
-                }
-                RecipeMap<?> o = (RecipeMap<?>) field.get(null);
-                return o;
-            } catch (IllegalAccessException e) {
-                return null;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void construct(ItemStack itemStack, boolean hintsOnly) {
-        buildPiece("core", itemStack, hintsOnly, 5, 5, 4);
-        int addonCount = Math.min(itemStack.stackSize - 1, 4);
-        if (addonCount == 4) {
-            buildPiece("addon3", itemStack, hintsOnly, 7, 23, 21);
-            addonCount--;
-        }
-        if (addonCount == 3) {
-            buildPiece("addon2", itemStack, hintsOnly, 22, 23, 6);
-            addonCount--;
-        }
-        if (addonCount == 2) {
-            buildPiece("addon1", itemStack, hintsOnly, 7, 23, -7);
-            addonCount--;
-        }
-        if (addonCount == 1) {
-            buildPiece("addon0", itemStack, hintsOnly, -6, 23, 6);
-        }
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        int blockPlacedCount = 0;
-        if (!mMachine) {
-            blockPlacedCount += survivalBuildPiece("core", stackSize, 5, 5, 4, elementBudget, env, true);
-        } else {
-            switch (this.addonCount) {
-                case 0:
-                    blockPlacedCount += survivalBuildPiece("addon0", stackSize, -6, 23, 6, elementBudget, env, true);
-                    break;
-                case 1:
-                    blockPlacedCount += survivalBuildPiece("addon1", stackSize, 7, 23, -7, elementBudget, env, true);
-                    break;
-                case 2:
-                    blockPlacedCount += survivalBuildPiece("addon2", stackSize, 22, 23, 6, elementBudget, env, true);
-                    break;
-                case 3:
-                    blockPlacedCount += survivalBuildPiece("addon2", stackSize, 7, 23, 21, elementBudget, env, true);
-                    break;
-                default:
-                    break;
-            }
-        }
-        return blockPlacedCount;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-
-        this.casingTier = -1;
-        this.glassTier = -2;
-        this.coilTier = HeatingCoilLevel.None;
-        this.frameTier = -1;
-        if (!checkPiece("core", 5, 5, 4, errors)) return;
-        // dynamo hatch level follows casing level
-        if (mDynamoHatches.isEmpty() && mExoticDynamoHatches.isEmpty() && casingTier >= 12) {
-            isWirelessMode = true;
-        } else {
-            if (casingTier < 12) {
-                for (MTEHatchDynamo mDynamoHatch : mDynamoHatches) {
-                    if (mDynamoHatch.mTier > casingTier) {
-                        // #tr TST_BigbroArray.hatch_tier_too_large
-                        // # Hatch tier too high.
-                        // #zh_CN 仓室等级过高
-                        errors.add(StructureErrors.of("TST_BigbroArray.hatch_tier_too_large"));
-                        return;
-                    }
-                }
-                for (MTEHatch gt_metaTileEntity_hatch_dynamoMulti : mExoticDynamoHatches) {
-                    if (gt_metaTileEntity_hatch_dynamoMulti.mTier > casingTier
-                        || (gt_metaTileEntity_hatch_dynamoMulti instanceof MTEHatchDynamoTunnel && casingTier < 8)) {
-                        return;
-                    }
-                }
-            }
-
-        }
-
-        // energy hatch level follows glass level
-
-        for (MTEHatchEnergy mEnergyHatch : mEnergyHatches) {
-            if (mEnergyHatch.mTier > glassTier) {
-                errors.add(ENERGY_TIER_EXCEED_GLASS);
-                return;
-            }
-        }
-        for (MTEHatch gt_metaTileEntity_hatch_energyMulti : mExoticEnergyHatches) {
-            if (Math.min(gt_metaTileEntity_hatch_energyMulti.mTier, 12) > glassTier
-                || (gt_metaTileEntity_hatch_energyMulti instanceof MTEHatchEnergyTunnel && glassTier < 6)) {
-                errors.add(ENERGY_TIER_EXCEED_GLASS);
-
-                return;
-            }
-        }
-
-        this.addonCount = 0;
-        int p = 5;
-        this.parallelismTier = 0;
-        if (checkPiece("addon0", -6, 23, 6, errors)) {
-            this.addonCount += 1;
-            p = Math.min(this.parallelismTier, p);
-        }
-        this.parallelismTier = 0;
-        if (checkPiece("addon1", 7, 23, -7, errors)) {
-            this.addonCount += 1;
-            p = Math.min(this.parallelismTier, p);
-        }
-        this.parallelismTier = 0;
-        if (checkPiece("addon2", 22, 23, 6, errors)) {
-            this.addonCount += 1;
-            p = Math.min(this.parallelismTier, p);
-        }
-        this.parallelismTier = 0;
-        if (checkPiece("addon3", 7, 23, 21, errors)) {
-            this.addonCount += 1;
-            p = Math.min(this.parallelismTier, p);
-        }
-        checkOneMufflerHatch(errors);
-        if (this.addonCount > 0) {
-            this.parallelismTier = p;
-        } else {
-            this.parallelismTier = 0;
-        }
-        // 5 is place holder, max tier is 4
-        this.maxParallelism = calculateMaxParallelismByAddonTier();
-        this.casingMultiplier = parallelismTier > 3 ? (parallelismTier + 6) : parallelismTier;
-        this.machineCountForMaxParallelism = (int) (this.maxParallelism >> casingMultiplier);
-        this.actualParallelism = calculateParallelismByAddonTier();
-        processingLogic.setSpeedBonus((float) Math.pow(0.66, parallelismTier));
-        processingLogic.setEuModifier((float) Math.pow(0.9, Math.max(0, coilTier.getTier())));
-    }
-
     private long calculateMaxParallelismByAddonTier() {
         if (addonCount > 0) {
             long infinity = 2147483647L << casingMultiplier;
@@ -1790,16 +1143,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         long p = stackSize << casingMultiplier;
         long m = calculateMaxParallelismByAddonTier();
         return Math.min(p, m);
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_BigBroArray(mName);
-    }
-
-    @Override
-    public int getPollutionPerTick(ItemStack aStack) {
-        return (int) Math.min(actualParallelism, 10000);
     }
 
     @Override
@@ -1952,11 +1295,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
     }
 
     @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
     public ArrayList<ItemStack> getStoredInputs() {
         ArrayList<ItemStack> rList = new ArrayList<>();
         Map<GTUtility.ItemId, ItemStack> inputsFromME = new HashMap<>();
@@ -2105,6 +1443,124 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
             503316480);
     }
 
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        if (machineType != null) {
+            aNBT.setString("machineType", machineType);
+        }
+        aNBT.setInteger("tier", machineTier);
+        aNBT.setLong("maxParallelism", maxParallelism);
+        aNBT.setLong("actualParallelism", actualParallelism);
+        if (mode != null) aNBT.setString("mode", mode);
+
+        if (generatorTE != null) {
+            NBTTagCompound compound = new NBTTagCompound();
+            generatorTE.writeToNBT(compound);
+            aNBT.setTag("solarTE", compound);
+        }
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        if (machines != null) {
+            nbtTagCompound.setShort("id", (short) Item.getIdFromItem(machines.getItem()));
+            nbtTagCompound.setInteger("Count", machines.stackSize);
+            nbtTagCompound.setShort("Damage", (short) machines.getItemDamage());
+
+            if (machines.getTagCompound() != null) {
+                nbtTagCompound.setTag("tag", machines.getTagCompound());
+            }
+            /*
+             * machines.writeToNBT(nbtTagCompound);
+             */
+        }
+        if (ownerUUID != null) {
+            aNBT.setString("owner", ownerUUID.toString());
+        }
+        aNBT.setTag("machines", nbtTagCompound);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        machineType = aNBT.getString("machineType");
+        mode = aNBT.getString("mode");
+        machineTier = aNBT.getInteger("tier");
+        maxParallelism = aNBT.getLong("maxParallelism");
+        actualParallelism = aNBT.getLong("actualParallelism");
+        if (aNBT.hasKey("machines")) {
+            // ItemStack.loadItemStackFromNBT()
+            NBTTagCompound compound = aNBT.getCompoundTag("machines");
+            ItemStack itemStack = new ItemStack(Item.getItemById(compound.getShort("id")));
+            itemStack.stackSize = compound.getInteger("Count");
+            itemStack.setItemDamage(compound.getShort("Damage"));
+            if (compound.hasKey("tag")) {
+                itemStack.setTagCompound(compound.getCompoundTag("tag"));
+            }
+            machines = itemStack;
+        }
+        if (aNBT.hasKey("solarTE")) {
+            NBTTagCompound compound = aNBT.getCompoundTag("solarTE");
+            generatorTE = Block.getBlockFromItem(machines.getItem())
+                .createTileEntity(null, machines.getItemDamage());
+            generatorTE.readFromNBT(compound);
+        }
+        if (aNBT.hasKey("owner")) {
+            ownerUUID = UUID.fromString(aNBT.getString("owner"));
+        }
+    }
+
+    // endregion
+
+    // region Textures
+    @SideOnly(Side.CLIENT)
+    public static ITexture[] DEFAULT_FRONT_ACTIVE;
+
+    @SideOnly(Side.CLIENT)
+    public static ITexture[] DEFAULT_FRONT_IDLE;
+
+    @SideOnly(Side.CLIENT)
+    private static ITexture[] DEFAULT_CASING_TEXTURE;
+
+    @SideOnly(Side.CLIENT)
+    private ITexture[] activeTextures;
+
+    @SideOnly(Side.CLIENT)
+    private ITexture[] idleTextures;
+
+    @SideOnly(Side.CLIENT)
+    public static void initializeDefaultTextures() {
+        DEFAULT_FRONT_ACTIVE = new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)),
+            TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE)
+                .extFacing()
+                .build(),
+            TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_ACTIVE_GLOW)
+                .extFacing()
+                .glow()
+                .build(), };
+
+        DEFAULT_FRONT_IDLE = new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)),
+            TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE)
+                .extFacing()
+                .build(),
+            TextureFactory.builder()
+                .addIcon(OVERLAY_FRONT_ASSEMBLY_LINE_GLOW)
+                .extFacing()
+                .glow()
+                .build(), };
+
+        DEFAULT_CASING_TEXTURE = new ITexture[] {
+            Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings4, 0)) };
+
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -2132,6 +1588,126 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
         }
         return DEFAULT_CASING_TEXTURE;
     }
+
+    @SideOnly(Side.CLIENT)
+    private ITexture[] getActiveTextures(String machineType) {
+        if (StringUtils.isEmpty(machineType)) {
+            return DEFAULT_FRONT_ACTIVE;
+        }
+        String overlay = overlayMapping.get(machineType);
+        if (overlay == null) {
+            return DEFAULT_FRONT_ACTIVE;
+        }
+        String front = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE", overlay);
+        String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_ACTIVE_GLOW", overlay);
+        IIconContainer frontIcon = Textures.BlockIcons.custom(front);
+        IIconContainer frontGlowIcon = Textures.BlockIcons.custom(frontGlow);
+        return new ITexture[] { TextureFactory.builder()
+            .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
+            .build(),
+            TextureFactory.builder()
+                .addIcon(frontIcon)
+                .build(),
+            TextureFactory.builder()
+                .addIcon(frontGlowIcon)
+                .glow()
+                .build() };
+    }
+
+    @SideOnly(Side.CLIENT)
+    private ITexture[] getIdleTextures(String machineType) {
+        if (StringUtils.isEmpty(machineType)) {
+            return DEFAULT_FRONT_IDLE;
+        }
+        String overlay = overlayMapping.get(machineType);
+        if (overlay == null) {
+            return DEFAULT_FRONT_IDLE;
+        }
+        String front = String.format("basicmachines/%s/OVERLAY_FRONT", overlay);
+        String frontGlow = String.format("basicmachines/%s/OVERLAY_FRONT_GLOW", overlay);
+        IIconContainer frontIcon = Textures.BlockIcons.custom(front);
+        IIconContainer frontGlowIcon = Textures.BlockIcons.custom(frontGlow);
+        return new ITexture[] { TextureFactory.builder()
+            .addIcon(MACHINE_CASING_ROBUST_TUNGSTENSTEEL)
+            .build(),
+            TextureFactory.builder()
+                .addIcon(frontIcon)
+                .build(),
+            TextureFactory.builder()
+                .addIcon(frontGlowIcon)
+                .glow()
+                .build() };
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        MultiblockTooltipBuilder gt_multiblock_tooltip_builder = new TSTMultiblockTooltipBuilder()
+            // spotless:off
+            // #tr tst.common.machine.BigBroArray.tooltip.info.01
+            // # Processing Array | Generator Array
+            // #zh_CN 处理阵列 | 能源处理阵列
+            .addMachineType(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.01"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.OutOfMaintenance)
+            // #tr tst.common.machine.BigBroArray.tooltip.info.02
+            // # This is MEGA!
+            // #zh_CN 牢大哥在看着你
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.02"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.03
+            // # A perfect toy for those who hates GT++.
+            // #zh_CN 给痛恨九合一的人准备的完美工具。使用蓝图堆叠以预览附加结构。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.03"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.04
+            // # Put machines in input bus and right click controller with screw driver to setup. Machines will get consumed.
+            // #zh_CN 在输入总线放入机器并使用螺丝刀右击控制器以设定机器，输入的机器会消耗
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.04"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.05
+            // # Right clicking the controller again with screw driver will get them back in output bus.
+            // #zh_CN 再次右键控制器会返还机器到输出总线
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.05"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.06
+            // # Max parallelism of the machine is 320/1280/5120/20480/5242880/>2147483647, Base parallelism is 64. You can get extra parallelism through building addon structures and upgrading parallelism casings.
+            // #zh_CN 机器最大并行为64(无附加结构)/1280/5120/20480/5242880/MAX+, 基础为64. 建造附加结构和升级并行处理机械方块可以提升并行度。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.06"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.07
+            // # Supports almost all processing single block machine in GT. Supports GT single-block generator and ASP Solar panels, EMT solars.
+            // #zh_CN 支持几乎所有GT机器, GT单方块发电机 高级太阳能, 8压水.
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.07"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.08
+            // # Will overclock recipes to energy level of energy hatch, but can't process recipes with energy level higher than that of machines in controller.
+            // #zh_CN 机器会根据能源仓等级超频加工的配方,但是不能执行超过内部机器电压等级的配方。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.08"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.09
+            // # Produces 20 points of pollution per parallelism（200000/s max), you may need up to 20 mufflers. Dynamo/Energy hatches should only be put at 4 corners of bottom, other hatches replace any tungstensteel casing.
+            // #zh_CN 每个并行度产生20点污染每秒(最大污染为200000),你可能需要安装最多20个消声仓排放污染！不安装消声仓会导致机器无法运行。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.09"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.10
+            // # Energy hatch tier follows glass, dynamo hatch tier follows machine casing, UV level glass/casing unlocks laser hatches. Tier of machines that can put in the array is restricted by frames, UMV casings will unlock all dynamo hatches and unlocks global wireless mode. Enable it without a dynamo hatch.
+            // #zh_CN 能源仓等级跟随玻璃，动力仓等级跟随机器外壳，UV等级玻璃解锁激光。可放入的机器等级被框架等级限制。UMV外壳解锁无线，不安装能源仓即可进入，出现内部错误时尝试重新放置。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.10"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.11
+            // # The tier of machines is not limited when there's no addon structures. Level of parallelism casing in addon structures limits the parallelism.
+            // #zh_CN 动力和能源仓只能放底层4个角，其他舱室替换任意钨钢机械方块。没有附加结构时，框架不会限制放入机器的等级。附加结构的并行处理机械方块等级限制了最大并行。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.11"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.12
+            // # Energy consumption will decrease 10%% for each coil upgrade, processing speed will increase 50%% for each parallelism upgrade. Each machine provides 2^(tier of parallelism block) parallelisms，with casing MK4/5 each machine can provide 512/1024 parallelism.
+            // #zh_CN 附加结构的线圈每升级一级，能量消耗减少10%%(乘法叠加),并行处理机械方块每升级一级，处理速度增加50%%(乘法叠加)，每台机器提供2^(并行机械方块等级)个并行, 4级和5级并行方块可以让每台机器提供512/1024并行。
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.12"))
+            // #tr tst.common.machine.BigBroArray.tooltip.info.13
+            // # The upgrade in energy/consumption/processing speed/parallelism will also take effect in energy generation. Structure of addon: parallelism casing*134, glassx530, framex64, coilx42，stainless steel casing*86, Assembly line casing*64
+            // #zh_CN 能量消耗减少,并行度和处理速度提升对发电有效(其中能量消耗减少体现为发电量提升)。附加结构的方块为:并行机械方块*134, 玻璃x530, 框架x42, 线圈x42，洁净不锈钢方块*86,装配线机械方块*64
+            .addInfo(TSTUtils.tr("tst.common.machine.BigBroArray.tooltip.info.13"));
+        gt_multiblock_tooltip_builder.toolTipFinisher();
+            // spotless:on
+        return gt_multiblock_tooltip_builder;
+    }
+
+    // endregion
+
+    // region Nested Classes
 
     enum MachineHintMessages {
 
@@ -2253,4 +1829,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
             buf.writeBytes(bytes);
         }
     }
+
+    // endregion
+
 }

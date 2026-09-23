@@ -37,7 +37,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_WorldSa
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCResearchEventHandler;
 import com.Nxer.TwistSpaceTechnology.util.PatternConversionWorldSavedData;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import WayofTime.alchemicalWizardry.ModBlocks;
 import bartworks.API.SideReference;
@@ -105,7 +105,7 @@ public class CommonProxy {
 
         CheckRecipeResultRegistry.register(new ResultInsufficientTier(0, 0));
 
-        TstUtils.registerTexture(
+        TSTUtils.registerTexture(
             31,
             0,
             new GTBlockTextureBuilder().setFromBlock(ModBlocks.bloodRune, 0)

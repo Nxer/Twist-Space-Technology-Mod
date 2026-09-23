@@ -6,11 +6,25 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Tag;
+
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 
-public abstract class ModularHatchBase extends MTEHatch implements IModularHatch {
+public abstract class ModularHatchBase extends MTEHatch implements IModularHatch, TSTTooltipCredit {
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.MODULARIZED;
+    }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.MODULARIZED };
+    }
 
     public ModularHatchBase(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
         String[] aDescription, ITexture... aTextures) {

@@ -1,9 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.magicCasing;
@@ -36,8 +33,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.recipes.ResultInsufficientPedestals;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -47,6 +47,7 @@ import com.mojang.authlib.GameProfile;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -65,57 +66,107 @@ import thaumcraft.common.lib.research.ResearchManager;
 import thaumcraft.common.tiles.TileInfusionMatrix;
 import thaumcraft.common.tiles.TilePedestal;
 
+@SkipGenerateDescription
 public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_InfusionMaterialDispenser> {
 
+    // region Class Constructor
     public TST_InfusionMaterialDispenser(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.AEFHMV);
     }
 
     public TST_InfusionMaterialDispenser(String aName) {
         super(aName);
     }
 
-    private TileInfusionMatrix targetMatrix;
-    private TilePedestal mainPedestal; //
-    private ArrayList<TilePedestal> subPedestals = new ArrayList<>();
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_InfusionMaterialDispenser(this.mName);
+    }
+    // endregion
 
-    public FakePlayer fakePlayer = null;
-    public FakePlayer fakePlayer1 = null;
-    public String playerName = null;
-    // The names of the items inside the controller should be named after the real players' names.
-
-    private final Set<String> cachedResearches = new HashSet<>();
-    private String cachedPlayerName = null;
-
-    public static final int STATE_IDLE = 0;
-    public static final int STATE_INFUSING = 1;
+    // region Structure
     private static IStructureDefinition<TST_InfusionMaterialDispenser> multiDefinition = null;
-    public int infusionState = STATE_IDLE;
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private final int horizontalOffSet = 4;
+    private final int verticalOffSet = 0;
+    private final int depthOffSet = 4;
+
+    // spotless:off
+    private static final String[][] shape = new String[][]{
+        {"         ","         ","         ","         ","    ~    ","         ","         ","         ","         "},
+        {"         ","         ","         ","         ","         ","         ","         ","         ","         "},
+        {"         ","         ","         ","         ","         ","         ","         ","         ","         "},
+        {"    A    ","         ","         ","         ","A       A","         ","         ","         ","    A    "}
+    };
+    // spotless:on
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("infusionState", this.infusionState);
-        aNBT.setString("cachedPlayerName", this.cachedPlayerName != null ? this.cachedPlayerName : "");
-        NBTTagCompound researchNBT = new NBTTagCompound();
-        int i = 0;
-        for (String key : cachedResearches) {
-            researchNBT.setString("research_" + i++, key);
+    public IStructureDefinition<TST_InfusionMaterialDispenser> getStructureDefinition() {
+        if (multiDefinition == null) {
+            this.multiDefinition = StructureDefinition.<TST_InfusionMaterialDispenser>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
+                .addElement(
+                    'A',
+                    ofChain(
+                        buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
+                            .adder(TST_InfusionMaterialDispenser::addToMachineList)
+                            .casingIndex(1536)
+                            .hint(1)
+                            .buildAndChain(magicCasing, 0)))
+                .build();
         }
-        aNBT.setTag("cachedResearches", researchNBT);
+        return multiDefinition;
+    }
+
+    // logic region end
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.subPedestals.clear();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        this.infusionState = aNBT.getInteger("infusionState");
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
         this.subPedestals.clear();
-        this.cachedPlayerName = aNBT.getString("cachedPlayerName");
-        this.cachedResearches.clear();
-        NBTTagCompound researchNBT = aNBT.getCompoundTag("cachedResearches");
-        for (String key : researchNBT.func_150296_c()) {
-            cachedResearches.add(researchNBT.getString(key));
-        }
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        this.subPedestals.clear();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+    private TileInfusionMatrix targetMatrix;
+    private TilePedestal mainPedestal;
+    private ArrayList<TilePedestal> subPedestals = new ArrayList<>();
+    public FakePlayer fakePlayer = null;
+    public FakePlayer fakePlayer1 = null;
+    public String playerName = null;
+
+    // The names of the items inside the controller should be named after the real players' names.
+    private final Set<String> cachedResearches = new HashSet<>();
+
+    private String cachedPlayerName = null;
+    public static final int STATE_IDLE = 0;
+    public static final int STATE_INFUSING = 1;
+    public int infusionState = STATE_IDLE;
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
     }
 
     // logic region
@@ -139,6 +190,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         TileEntity tempTile = null;
         tempTile = world.getTileEntity(x, y - 1, z);
         if (!(tempTile instanceof TileInfusionMatrix)) {
+            // spotless:off
             // #tr GT5U.gui.text.recipe_result.no_infusion_matrix
             // # {\RED}Can't find infusion matrix
             // #zh_CN {\RED}未找到注魔矩阵
@@ -244,6 +296,7 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         // # {\RED}Unknown problem
         // #zh_CN {\RED}未知问题
         return SimpleCheckRecipeResult.ofFailure("unknown_problem");
+            // spotless:on
     }
 
     public void updateCachedResearches(EntityPlayer player) {
@@ -272,11 +325,6 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         ItemStack tool) {
         this.fakePlayer = null;
         this.subPedestals.clear();
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
     }
 
     @Override
@@ -420,127 +468,40 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
             }
         }
     }
-    // logic region end
+
+    // endregion
+
+    // region NBT
 
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.subPedestals.clear();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        this.subPedestals.clear();
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private final int horizontalOffSet = 4;
-    private final int verticalOffSet = 0;
-    private final int depthOffSet = 4;
-
-    private static final String[][] shape = new String[][] {
-        { "         ", "         ", "         ", "         ", "    ~    ", "         ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "         ", "         ", "         ", "         ", "         ",
-            "         " },
-        { "    A    ", "         ", "         ", "         ", "A       A", "         ", "         ", "         ",
-            "    A    " }, };
-
-    @Override
-    public IStructureDefinition<TST_InfusionMaterialDispenser> getStructureDefinition() {
-        if (multiDefinition == null) {
-            this.multiDefinition = StructureDefinition.<TST_InfusionMaterialDispenser>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                .addElement(
-                    'A',
-                    ofChain(
-                        buildHatchAdder(TST_InfusionMaterialDispenser.class).atLeast(InputBus, OutputBus)
-                            .adder(TST_InfusionMaterialDispenser::addToMachineList)
-                            .casingIndex(1536)
-                            .hint(1)
-                            .buildAndChain(magicCasing, 0)))
-                .build();
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("infusionState", this.infusionState);
+        aNBT.setString("cachedPlayerName", this.cachedPlayerName != null ? this.cachedPlayerName : "");
+        NBTTagCompound researchNBT = new NBTTagCompound();
+        int i = 0;
+        for (String key : cachedResearches) {
+            researchNBT.setString("research_" + i++, key);
         }
-        return multiDefinition;
+        aNBT.setTag("cachedResearches", researchNBT);
     }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // spotless:off
-        // #tr Tooltip_InfusionMaterialDispenser_MachineType
-        // # Infusion Material Dispenser
-        // #zh_CN 注魔原料分配器
-        tt.addMachineType(TextEnums.tr("Tooltip_InfusionMaterialDispenser_MachineType"))
-            // #tr Tooltip_InfusionMaterialDispenser_00
-            // # automatically dispense? What? This is impossible!
-            // #zh_CN 自动分配?什么?这不可能!
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_00"))
-            // #tr Tooltip_InfusionMaterialDispenser_01
-            // # A paper with player's name should be in controller to enable the fakeplayer to obtain research. Otherwise, the machine will crash.
-            // #zh_CN 需要在控制器内放入一张写有玩家名称的纸,使得假人获取研究进度,否则机器会崩溃.
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_01"))
-            // #tr Tooltip_InfusionMaterialDispenser_02
-            // # By right-clicking controller with a screwdriver, refresh the research progress and check the number of pedestals again.
-            // #zh_CN 螺丝刀右键主机可以主动刷新研究进度并重新检查基座数量.
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_02"))
-            // #tr Tooltip_InfusionMaterialDispenser_03
-            // # For research, no management. If materials are directly recycled, it indicates that the research has not been unlocked and the infusion cannot be activated.
-            // #zh_CN 对于研究不做管理,若材料被直接回收说明研究未解锁,无法开启注魔.
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_03"))
-            // #tr Tooltip_InfusionMaterialDispenser_04
-            // # For essence, no management. If essences are insufficient, and the world accelerator is used...
-            // #zh_CN 对于源质不做管理,若源质不足,并使用世界加速器的话...
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_04"))
-            // #tr Tooltip_InfusionMaterialDispenser_05
-            // # The controller is located in the upper square of the infusion matrix. Also,remember to open InterfaceBlockingMode for the input bus.
-            // #zh_CN 控制器在注魔矩阵的上面,另外输入总线记得开阻挡模式.
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_05"))
-            // #tr Tooltip_InfusionMaterialDispenser_06
-            // # You can use it together with the Essentia Terminal for more precise automation. The specific method is left to the reader as a challenge to their understanding of AE.
-            // #zh_CN 可以搭配源质终端进行更加精细的自动化,具体的方法作为对AE理解的一种挑战留给读者.
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_06"))
-            // #tr Tooltip_InfusionMaterialDispenser_07
-            // # Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
-            // #zh_CN 当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
-            .addInfo(TextEnums.tr("Tooltip_InfusionMaterialDispenser_07"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .beginStructureBlock(11, 10, 23, true)
-            .addController(textFrontCenter)
-            // #tr Tooltip_InfusionMaterialDispenser_HatchBusInfo
-            // # Replace Magic mechanical blocks in any cabin
-            // #zh_CN 任何舱室替换魔法机械方块
-            .addInputBus(TextEnums.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
-            .addOutputBus(TextEnums.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
-            .toolTipFinisher(ModName);
-        return tt;
-        // spotless:on
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        this.infusionState = aNBT.getInteger("infusionState");
         this.subPedestals.clear();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+        this.cachedPlayerName = aNBT.getString("cachedPlayerName");
+        this.cachedResearches.clear();
+        NBTTagCompound researchNBT = aNBT.getCompoundTag("cachedResearches");
+        for (String key : researchNBT.func_150296_c()) {
+            cachedResearches.add(researchNBT.getString(key));
+        }
     }
 
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_InfusionMaterialDispenser(this.mName);
-    }
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -559,5 +520,68 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(1536) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.machine_type
+        // # Infusion Material Dispenser
+        // #zh_CN 注魔原料分配器
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.machine_type"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.01
+            // # automatically dispense? What? This is impossible!
+            // #zh_CN 自动分配?什么?这不可能!
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.01"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.02
+            // # A paper with player's name should be in controller to enable the fakeplayer to obtain research. Otherwise, the machine will crash.
+            // #zh_CN 需要在控制器内放入一张写有玩家名称的纸,使得假人获取研究进度,否则机器会崩溃.
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.02"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.03
+            // # By right-clicking controller with a screwdriver, refresh the research progress and check the number of pedestals again.
+            // #zh_CN 螺丝刀右键主机可以主动刷新研究进度并重新检查基座数量.
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.03"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.04
+            // # For research, no management. If materials are directly recycled, it indicates that the research has not been unlocked and the infusion cannot be activated.
+            // #zh_CN 对于研究不做管理,若材料被直接回收说明研究未解锁,无法开启注魔.
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.04"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.05
+            // # For essence, no management. If essences are insufficient, and the world accelerator is used...
+            // #zh_CN 对于源质不做管理,若源质不足,并使用世界加速器的话...
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.05"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.06
+            // # The controller is located in the upper square of the infusion matrix. Also,remember to open InterfaceBlockingMode for the input bus.
+            // #zh_CN 控制器在注魔矩阵的上面,另外输入总线记得开阻挡模式.
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.06"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.07
+            // # You can use it together with the Essentia Terminal for more precise automation. The specific method is left to the reader as a challenge to their understanding of AE.
+            // #zh_CN 可以搭配源质终端进行更加精细的自动化,具体的方法作为对AE理解的一种挑战留给读者.
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.07"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.08
+            // # Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
+            // #zh_CN 当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.08"))
+            .beginStructureBlock(11, 10, 23, true)
+            .addController(textFrontCenter)
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.09
+            // # Replace Magic mechanical blocks in any cabin
+            // #zh_CN 任何舱室替换魔法机械方块
+            .addInputBus(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.09"))
+            .addOutputBus(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.09"))
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
+    }
+
+    // endregion
 
 }

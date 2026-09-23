@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.Thaumcraft.TCRecipeTools;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.enums.GTValues;
 import gregtech.api.interfaces.IRecipeMap;
@@ -22,14 +22,18 @@ public class IndustrialAlchemyTowerRecipePool {
 
     public static void loadRecipes() {
         TCRecipeTools.getCrucibleCraftingRecipe();
-        final IRecipeMap IIA = GTCMRecipe.IndustrialAlchemyTowerRecipes;
+        final IRecipeMap IIA = GTCMRecipe.IndustrialAlchemyTowerRecipeMap;
         for (Map.Entry<String, ArrayList<TCRecipeTools.CrucibleCraftingRecipe>> entry : TCRecipeTools.CCR.entrySet()) {
             ArrayList<TCRecipeTools.CrucibleCraftingRecipe> value = entry.getValue();
             for (int i = 0; i < value.size(); i++) {
                 TCRecipeTools.CrucibleCraftingRecipe recipe = value.get(i);
                 ItemStack Essence = new ItemStack(itemEssence);
                 Essence.setItemDamage(1);
-                Essence.setStackDisplayName(TextEnums.tr("IndustrialAlchemyTowerRecipeInputAspects"));
+                // #tr tst.common.recipe.IndustrialAlchemyTowerRecipeMap.input_aspects
+                // # Recipe required Essentia
+                // #zh_CN 配方所需要素
+                Essence.setStackDisplayName(
+                    TSTUtils.tr("tst.common.recipe.IndustrialAlchemyTowerRecipeMap.input_aspects"));
                 new ItemEssence().setAspects(Essence, recipe.getInputAspects());
                 Object inputItem = recipe.getInputItem();
                 Object[] combined = new Object[] { inputItem, GTUtility.getIntegratedCircuit(i + 1) };

@@ -7,7 +7,7 @@ import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.Miracl
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.hasCircuitOreDict;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.packageCircuitRecipe;
 import static com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.MiracleTopRecipe.MiracleTopRecipeCommon.reduplicateRecipe;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.removeIntegratedCircuitFromStacks;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.removeIntegratedCircuitFromStacks;
 import static gregtech.api.recipe.RecipeMaps.circuitAssemblerRecipes;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.cleanroommc.modularui.api.widget.IWidget;
 import com.cleanroommc.modularui.drawable.DynamicDrawable;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -39,10 +39,11 @@ public class TST_Gui_EcoSphereSimulator extends TST_Gui<TST_EcoSphereSimulator> 
             })
             .playClickSound(true)
             .tooltip(
-                // #tr EcoSphereSimulator.gui.clearFluidArea
+                // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.clear_fluid_area
                 // # Clear and reset the fluid area
                 // #zh_CN 清除并重置水域
-                tooltip -> tooltip.addLine(TextEnums.tr("EcoSphereSimulator.gui.clearFluidArea")));
+                tooltip -> tooltip
+                    .addLine(TSTUtils.tr("tst.ecosphere.machine.EcoSphereSimulator.gui.clear_fluid_area")));
     }
 
     @Override

@@ -11,7 +11,7 @@ public class ItemNamedCircuit extends AbstractTstMetaItem {
      *      Shit
      */
     public ItemNamedCircuit() {
-        // #tr item.MetaItemNamedCircuit.name
+        // #tr item.tst.common.MetaItemNamedCircuit.name
         // # Test Item
         // #zh_CN 测试物品
         super("MetaItemNamedCircuit");

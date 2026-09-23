@@ -9,7 +9,7 @@ public class ItemAdder01 extends AbstractTstMetaItem {
      * Create the basic item MetaItem01.
      */
     public ItemAdder01() {
-        // #tr item.MetaItem01.name
+        // #tr item.tst.common.MetaItem01.name
         // # Test Item
         // #zh_CN 测试物品
         super("MetaItem01");

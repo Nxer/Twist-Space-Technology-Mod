@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.common.internal.network.NetworkUtils;
 
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -78,7 +78,7 @@ public class SimpleResultWithText implements CheckRecipeResult {
     @Override
     @Nonnull
     public String getDisplayString() {
-        return rawText ? Objects.requireNonNull(key) : Objects.requireNonNull(TextEnums.tr(key));
+        return rawText ? Objects.requireNonNull(key) : Objects.requireNonNull(TSTUtils.tr(key));
     }
 
     @Override

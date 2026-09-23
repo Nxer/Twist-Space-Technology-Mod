@@ -43,7 +43,7 @@ public final class MiracleTopRecipeCommon {
 
     private MiracleTopRecipeCommon() {}
 
-    private static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
+    private static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipeMap;
     private static final Map<RecipeOutputKey, List<GTRecipe>> MT_RECIPE_CACHE = new LinkedHashMap<>();
 
     // Groups recipes by output item types without using output amounts.

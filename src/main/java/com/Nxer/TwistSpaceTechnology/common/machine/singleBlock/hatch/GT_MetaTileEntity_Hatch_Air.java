@@ -5,20 +5,25 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ticksOfInfi
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.render.TextureFactory;
 import gtPlusPlus.xmod.gregtech.api.metatileentity.implementations.MTEHatchFluidGenerator;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 
-public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
+@SkipGenerateDescription
+public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator implements TSTTooltipCredit {
 
     public GT_MetaTileEntity_Hatch_Air(final int aID, final String aName, final String aNameRegional, final int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.SHORDINGER);
     }
 
     public GT_MetaTileEntity_Hatch_Air(final String aName, final int aTier, final String[] aDescription,
@@ -52,14 +57,14 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator {
     @Override
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[3];
-        // #tr GT_MetaTileEntity_Hatch_Air.Tooltip0
+        // #tr tst.common.machine.AirHatch.tooltip.info.01
         // # Infinite air supply hatch
         // #zh_CN 无限进气仓
-        aTooltip[0] = TextEnums.tr("GT_MetaTileEntity_Hatch_Air.Tooltip0");
-        // #tr GT_MetaTileEntity_Hatch_Air.Tooltip1
+        aTooltip[0] = TSTUtils.tr("tst.common.machine.AirHatch.tooltip.info.01");
+        // #tr tst.common.machine.AirHatch.tooltip.info.02
         // # Fills to max capacity every second
         // #zh_CN 每5秒填满内部空间
-        aTooltip[1] = TextEnums.tr("GT_MetaTileEntity_Hatch_Air.Tooltip1");
+        aTooltip[1] = TSTUtils.tr("tst.common.machine.AirHatch.tooltip.info.02");
         return aTooltip;
     }
 

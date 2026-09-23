@@ -1,5 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static forestry.api.apiculture.BeeManager.beeRoot;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -20,7 +22,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -36,6 +41,7 @@ import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -44,10 +50,13 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
+@SkipGenerateDescription
 public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
 
+    // region Class Constructor
     public TST_BeeEngineer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.RH_NU, MAINTAINER, ID.NXER);
     }
 
     public TST_BeeEngineer(String aName) {
@@ -58,8 +67,75 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_BeeEngineer(mName);
     }
+    // endregion
 
-    // region Process
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_BE";
+    private final int hOffset = 1, vOffset = 1, dOffset = 0;
+    private static final int CASING_INDEX = 10;
+    private static IStructureDefinition<TST_BeeEngineer> STRUCTURE_DEF = null;
+
+    // spotless:off
+    protected final String[][] STRUCTURE = new String[][]{
+        {"CCC", "CCC", "CCC"},
+        {"C~C", "C C", "CCC"},
+        {"CCC", "CCC", "CCC"}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_BeeEngineer> getStructureDefinition() {
+        if (STRUCTURE_DEF == null) {
+            STRUCTURE_DEF = StructureDefinition.<TST_BeeEngineer>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(STRUCTURE))
+                .addElement(
+                    'C',
+                    HatchElementBuilder.<TST_BeeEngineer>builder()
+                        .atLeast(InputBus, InputHatch, OutputBus)
+                        .adder(TST_BeeEngineer::addToMachineList)
+                        .hint(1)
+                        .casingIndex(CASING_INDEX)
+                        .buildAndChain(GregTechAPI.sBlockCasings1, 10))
+                .build();
+        }
+        return STRUCTURE_DEF;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            hOffset,
+            vOffset,
+            dOffset,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+    private static FluidStack HONEY;
+    private static FluidStack UUM;
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
 
     @Override
     public boolean supportsInputSeparation() {
@@ -74,25 +150,6 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
     @Override
     public boolean supportsSingleRecipeLocking() {
         return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    private static FluidStack HONEY;
-    private static FluidStack UUM;
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (HONEY == null) {
-            HONEY = Materials.Honey.getFluid(1);
-        }
-        if (UUM == null) {
-            UUM = Materials.UUMatter.getFluid(1);
-        }
     }
 
     @Override
@@ -201,88 +258,26 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return CheckRecipeResultRegistry.NO_RECIPE;
     }
 
-    // endregion
-
-    // region Structure
-    private static final String STRUCTURE_PIECE_MAIN = "STRUCTURE_PIECE_MAIN_BE";
-    private final int hOffset = 1, vOffset = 1, dOffset = 0;
-    private static final int CASING_INDEX = 10;
-    private static IStructureDefinition<TST_BeeEngineer> STRUCTURE_DEF = null;
-
-    // spotless:off
-    protected final String[][] STRUCTURE = new String[][]{
-        {"CCC", "CCC", "CCC"},
-        {"C~C", "C C", "CCC"},
-        {"CCC", "CCC", "CCC"}
-    };
-    // spotless:on
-
     @Override
-    public IStructureDefinition<TST_BeeEngineer> getStructureDefinition() {
-        if (STRUCTURE_DEF == null) {
-            STRUCTURE_DEF = StructureDefinition.<TST_BeeEngineer>builder()
-                .addShape(STRUCTURE_PIECE_MAIN, transpose(STRUCTURE))
-                .addElement(
-                    'C',
-                    HatchElementBuilder.<TST_BeeEngineer>builder()
-                        .atLeast(InputBus, InputHatch, OutputBus)
-                        .adder(TST_BeeEngineer::addToMachineList)
-                        .hint(1)
-                        .casingIndex(CASING_INDEX)
-                        .buildAndChain(GregTechAPI.sBlockCasings1, 10))
-                .build();
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (HONEY == null) {
+            HONEY = Materials.Honey.getFluid(1);
         }
-        return STRUCTURE_DEF;
+        if (UUM == null) {
+            UUM = Materials.UUMatter.getFluid(1);
+        }
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, hOffset, vOffset, dOffset);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            hOffset,
-            vOffset,
-            dOffset,
-            elementBudget,
-            env,
-            false,
-            true);
+    protected SoundResource getActivitySoundLoop() {
+        return SoundResource.GT_MACHINES_MEGA_INDUSTRIAL_APIARY_LOOP;
     }
 
     // endregion
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_BeeEngineer_Type)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_Controller)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_01)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_02)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_03)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_04)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_05)
-            .addInfo(TextLocalization.Tooltip_BeeEngineer_06)
-            // .addInfo(TextLocalization.Tooltip_BeeEngineer_07)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addInputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addInputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputBus(TextLocalization.BLUE_PRINT_INFO)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
-    }
 
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, hOffset, vOffset, dOffset, errors);
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -311,9 +306,58 @@ public class TST_BeeEngineer extends GTCM_MultiMachineBase<TST_BeeEngineer> {
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(CASING_INDEX) };
     }
 
-    @SideOnly(Side.CLIENT)
+    // endregion
+
+    // region Tooltip
+
     @Override
-    protected SoundResource getActivitySoundLoop() {
-        return SoundResource.GT_MACHINES_MEGA_INDUSTRIAL_APIARY_LOOP;
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.BeeEngineer.tooltip.machine_type
+        // # Bee Engineer
+        // #zh_CN 蜜蜂操纵者
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.machine_type"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.controller
+            // # Controller of the Bee Engineer
+            // #zh_CN 蜜蜂操纵者的控制器
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.controller"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.01
+            // # Still in test.
+            // #zh_CN 其实还在测试中.
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.01"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.02
+            // # Transforming drones into princesses.
+            // #zh_CN 将雄蜂转化为公主蜂.
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.02"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.03
+            // # Who knows how many drones became stepping stones for the Last Queen?
+            // #zh_CN 谁知道有多少雄蜂成为了蜂后的垫脚石？
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.03"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.04
+            // # Cost {\GOLD}128kL{\GRAY} Honey to transform a drone into princess, but with {\RED}40%{\GRAY} failing chance.
+            // #zh_CN 消耗{\GOLD}128k{\GRAY}L蜂蜜, 将雄蜂转化为公主蜂，但失败几率为{\RED}40%{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.04"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.05
+            // # Will try to consume {\GOLD}32kL{\GRAY} UUM (if exists) to increase success rate to {\RED}80%{\GRAY}.
+            // #zh_CN 将尝试消耗{\GOLD}32kL{\GRAY}的UU物质(如果存在)以将成功率提高到{\RED}80%{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.05"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.06
+            // # In case of failure, all consumed ingredients will not be returned.
+            // #zh_CN 在失败的情况下, 所有投入的原料都不会返还.
+            .addInfo(TSTUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.06"))
+            // #tr tst.common.machine.BeeEngineer.tooltip.info.07
+            // # Don't put too many drones in at once, that will result in a long run time!
+            // #zh_CN 不要一次性放入太多雄蜂, 那会导致运行时间过长!
+            // .addInfo(TstUtils.tr("tst.common.machine.BeeEngineer.tooltip.info.07"))
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
     }
+
+    // endregion
+
 }

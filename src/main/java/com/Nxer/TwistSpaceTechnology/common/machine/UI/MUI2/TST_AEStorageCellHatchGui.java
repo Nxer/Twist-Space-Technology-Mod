@@ -72,10 +72,10 @@ public final class TST_AEStorageCellHatchGui {
     }
 
     private static IKey getCellSlotName() {
-        // #tr AEStorageCellInput.CellSlot
+        // #tr tst.common.shared.ae_storage_cell_gui.cell_slot
         // # ME storage cell
         // #zh_CN ME存储元件
-        return IKey.lang("AEStorageCellInput.CellSlot");
+        return IKey.lang("tst.common.shared.ae_storage_cell_gui.cell_slot");
     }
 
     private static ItemSlot createCellSlot(MTEHatch machine, int slotIndex, Predicate<ItemStack> cellFilter) {
@@ -188,10 +188,12 @@ public final class TST_AEStorageCellHatchGui {
                         public void buildTooltip(ItemStack stack, RichTooltip tooltip) {
                             super.buildTooltip(stack, tooltip);
                             tooltip.addLine(
-                                // #tr AEStorageCellInput.AvailableAmount
+                                // #tr tst.common.shared.ae_storage_cell_gui.available_amount
                                 // # Available: %s
                                 // #zh_CN 可用数量：%s
-                                IKey.lang("AEStorageCellInput.AvailableAmount", formatNumber(amount.getLongValue())));
+                                IKey.lang(
+                                    "tst.common.shared.ae_storage_cell_gui.available_amount",
+                                    formatNumber(amount.getLongValue())));
                         }
                     }.slot(
                         new ModularSlot(stock, index).slotGroup("stock_inv")

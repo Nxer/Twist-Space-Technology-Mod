@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Mark_TwistSpaceTechnology_TecTech;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Mark_TwistSpaceTechnology_TecTech;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,7 +10,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -22,6 +24,7 @@ import com.gtnewhorizons.modularui.common.widget.textfield.TextFieldWidget;
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.modularui.IAddGregtechLogo;
 import gregtech.api.interfaces.modularui.IAddUIWidgets;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -29,7 +32,9 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import tectech.thing.gui.TecTechUITextures;
 import tectech.thing.metaTileEntity.hatch.MTEHatchDataInput;
 
-public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IAddGregtechLogo, IAddUIWidgets {
+@SkipGenerateDescription
+public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
+    implements IAddGregtechLogo, IAddUIWidgets, TSTTooltipCredit {
 
     public long requiredComputation = 1000000;
 
@@ -39,6 +44,7 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IA
 
     public GT_Hatch_WirelessData_input(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.SHORDINGER);
     }
 
     public GT_Hatch_WirelessData_input(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -88,11 +94,6 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IA
         super.onFirstTick(aBaseMetaTileEntity);
     }
 
-    // @Override
-    // public boolean useModularUI() {
-    // return true;
-    // }
-
     @Override
     public void addGregTechLogo(ModularWindow.Builder builder) {
         builder.widget(
@@ -115,8 +116,11 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IA
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        // #tr tst.common.machine.WirelessDataInputHatch.gui.config_weight
+        // # configure the weight of your slave
+        // #zh_CN 设置光学输入的权重
         builder.widget(
-            TextWidget.localised("tst.wirelessInputData.config.text")
+            TextWidget.localised("tst.common.machine.WirelessDataInputHatch.gui.config_weight")
                 .setPos(49, 18)
                 .setSize(81, 14))
             .widget(
@@ -137,10 +141,10 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput implements IA
     public String[] getDescription() {
         if (tooltips == null) {
             tooltips = new String[] { Mark_TwistSpaceTechnology_TecTech,
-                // #tr WirelessDataInput.tooltips.01
+                // #tr tst.common.machine.WirelessDataInputHatch.tooltip.info.01
                 // # Wireless Quantum Data Input for Multiblocks
                 // #zh_CN 多方块机器无线数据输入
-                TextEnums.tr("WirelessDataInput.tooltips.01") };
+                TSTUtils.tr("tst.common.machine.WirelessDataInputHatch.tooltip.info.01") };
         }
         return tooltips;
     }

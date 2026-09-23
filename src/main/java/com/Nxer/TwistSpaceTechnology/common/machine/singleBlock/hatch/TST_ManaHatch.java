@@ -1,8 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.FluidCapacity;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.HatchTier;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.FluidCapacity;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.HatchTier;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +17,13 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
 import com.Nxer.TwistSpaceTechnology.common.material.MaterialPool;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
@@ -28,7 +32,8 @@ import gregtech.api.util.GTUtility;
 import gtPlusPlus.xmod.gregtech.common.blocks.textures.TexturesGtBlock;
 import vazkii.botania.common.block.tile.mana.TilePool;
 
-public class TST_ManaHatch extends MTEHatchInput {
+@SkipGenerateDescription
+public class TST_ManaHatch extends MTEHatchInput implements TSTTooltipCredit {
 
     private boolean isLiquidizerMode;
     private static FluidStack fluidMana;
@@ -37,6 +42,7 @@ public class TST_ManaHatch extends MTEHatchInput {
 
     public TST_ManaHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(AUTHOR, ID.THE__FLAMES, MAINTAINER, ID.KERIILS);
     }
 
     public TST_ManaHatch(String aName, int aTier, String[] aDescription, ITexture[][][] aTextures) {
@@ -111,8 +117,16 @@ public class TST_ManaHatch extends MTEHatchInput {
         ItemStack aTool) {
         super.onScrewdriverRightClick(side, aPlayer, aX, aY, aZ, aTool);
         isLiquidizerMode = !isLiquidizerMode;
-        GTUtility
-            .sendChatTrans(aPlayer, StatCollector.translateToLocal("Mana_Hatch.modeMsg." + (isLiquidizerMode ? 0 : 1)));
+        // #tr tst.common.machine.ManaHatch.mode.0
+        // # Mode: Liquidizer
+        // #zh_CN Liquidizer Mode
+
+        // #tr tst.common.machine.ManaHatch.mode.1
+        // # Mode: Magicalizer
+        // #zh_CN Magicalizer Mode
+        GTUtility.sendChatTrans(
+            aPlayer,
+            StatCollector.translateToLocal("tst.common.machine.ManaHatch.mode." + (isLiquidizerMode ? 0 : 1)));
     }
 
     @Override
@@ -121,34 +135,32 @@ public class TST_ManaHatch extends MTEHatchInput {
         final String[] hatchTierString = new String[] { HatchTier + GTUtility.getColoredTierNameFromTier(mTier) };
 
         String[] aCustomTips = getCustomTooltip();
-        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 2];
+        final String[] desc = new String[mDescriptionArray.length + aCustomTips.length + 1];
         System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
         System.arraycopy(hatchTierString, 0, desc, mDescriptionArray.length, 1);
         System.arraycopy(aCustomTips, 0, desc, mDescriptionArray.length + 1, aCustomTips.length);
-        desc[mDescriptionArray.length + aCustomTips.length] = ModNameDesc;
-
         return desc;
     }
 
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[5];
 
-        // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip0
+        // #tr tst.common.machine.ManaHatch.tooltip.info.01
         // # Mana transform hatch
         // #zh_CN 魔力转换阀
-        aTooltip[0] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip0");
+        aTooltip[0] = TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.01");
 
-        // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip1
+        // #tr tst.common.machine.ManaHatch.tooltip.info.02
         // # Transform mana up to 10000 mana or 1000L every second
         // #zh_CN 每秒至多转换1000L液态魔力/10000mana.
-        aTooltip[1] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip1");
+        aTooltip[1] = TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.02");
 
-        // #tr GT_MetaTileEntity_Hatch_Mana.Tooltip2
+        // #tr tst.common.machine.ManaHatch.tooltip.info.03
         // # Need to facing at a mana pool to work.
         // #zh_CN 需要正面朝向魔力池来工作.
-        aTooltip[2] = TextEnums.tr("GT_MetaTileEntity_Hatch_Mana.Tooltip2");
+        aTooltip[2] = TSTUtils.tr("tst.common.machine.ManaHatch.tooltip.info.03");
 
-        aTooltip[3] = TextLocalization.textScrewdriverChangeMode;
+        aTooltip[3] = TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode;
 
         return aTooltip;
     }

@@ -38,7 +38,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -48,6 +51,7 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -66,101 +70,24 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 // Why ?
 //
 // GT_TileEntity_IntensifyChemicalDistorter
+@SkipGenerateDescription
 public class GT_TileEntity_IntensifyChemicalDistorter
     extends GTCM_MultiMachineBase<GT_TileEntity_IntensifyChemicalDistorter> {
 
     // region Class Constructor
-
     public GT_TileEntity_IntensifyChemicalDistorter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_TileEntity_IntensifyChemicalDistorter(String aName) {
         super(aName);
     }
 
-    // endregion
-
-    // region Processing Logic
-    private HeatingCoilLevel coilLevel;
-
     @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Intense Chemical Distorter
-         * 1 - Chemical Reactor
-         */
-        return 2;
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new GT_TileEntity_IntensifyChemicalDistorter(this.mName);
     }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
-        return RecipeMaps.multiblockChemicalReactorRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.IntensifyChemicalDistorterRecipes, RecipeMaps.multiblockChemicalReactorRecipes);
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                setOverclockType(
-                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
-                return super.process();
-            }
-
-            @Override
-            protected @NotNull CheckRecipeResult validateRecipe(GTRecipe recipe) {
-                return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
-            }
-
-        }.enablePerfectOverclock()
-            .setMaxParallelSupplier(this::getMaxParallelRecipes);
-
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return machineMode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
-            : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return machineMode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
-            : Parallel_LCRMode_IntensifyChemicalDistorter;
-    }
-
     // endregion
 
     // region Structure
@@ -170,11 +97,13 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      * other instances, even for those of the same class.
      */
     private static final String STRUCTURE_PIECE_MAIN = "main";
+
     private final int horizontalOffSet = 5;
     private final int verticalOffSet = 12;
     private final int depthOffSet = 0;
     private static IStructureDefinition<GT_TileEntity_IntensifyChemicalDistorter> STRUCTURE_DEFINITION = null;
 
+    // spotless:off
     /**
      * <li>'s' = Stainless casing ;
      * <li>'v' = Chemically inert casing ;
@@ -185,33 +114,22 @@ public class GT_TileEntity_IntensifyChemicalDistorter
      * <li>'~' = machine ;
      * <li>'e' = Energy hatch ;
      */
-    private final String[][] shape = new String[][] {
-        { "    sss    ", "  ssvvvss  ", " svvvvvvvs ", " svvvvvvvs ", "svvvvvvvvvs", "svvvvevvvvs", "svvvvvvvvvs",
-            " svvvvvvvs ", " svvvvvvvs ", "  ssvvvss  ", "    sss    " },
-        { "           ", "     h     ", "     p     ", "     p     ", "     p     ", " hpppcppph ", "     p     ",
-            "     p     ", "     p     ", "     h     ", "           " },
-        { "           ", "    h      ", "           ", "           ", "     p   h ", "    pcp    ", " h   p     ",
-            "           ", "           ", "      h    ", "           " },
-        { "           ", "           ", "   h       ", "        h  ", "     p     ", "    pcp    ", "     p     ",
-            "  h        ", "       h   ", "           ", "           " },
-        { "           ", "           ", "       h   ", "  h        ", "     p     ", "    pcp    ", "     p     ",
-            "        h  ", "   h       ", "           ", "           " },
-        { "           ", "      h    ", "           ", "           ", " h   p     ", "    pcp    ", "     p   h ",
-            "           ", "           ", "    h      ", "           " },
-        { "           ", "     h     ", "           ", "           ", "     p     ", " h  pcp  h ", "     p     ",
-            "           ", "           ", "     h     ", "           " },
-        { "           ", "    h      ", "           ", "           ", "     p   h ", "    pcp    ", " h   p     ",
-            "           ", "           ", "      h    ", "           " },
-        { "           ", "           ", "   h       ", "        h  ", "     p     ", "    pcp    ", "     p     ",
-            "  h        ", "       h   ", "           ", "           " },
-        { "           ", "           ", "       h   ", "  h        ", "     p     ", "    pcp    ", "     p     ",
-            "        h  ", "   h       ", "           ", "           " },
-        { "           ", "      h    ", "           ", "           ", " h   p     ", "    pcp    ", "     p   h ",
-            "           ", "           ", "    h      ", "           " },
-        { "           ", "     h     ", "     p     ", "     p     ", "     p     ", " hpppcppph ", "     p     ",
-            "     p     ", "     p     ", "     h     ", "           " },
-        { "    b~b    ", "  ssvvvss  ", " svvvvvvvs ", " svvvvvvvs ", "bvvvvvvvvvb", "bvvvvevvvvb", "bvvvvvvvvvb",
-            " svvvvvvvs ", " svvvvvvvs ", "  ssvvvss  ", "    bbb    " } };
+    private final String[][] shape = new String[][]{
+        {"    sss    ","  ssvvvss  "," svvvvvvvs "," svvvvvvvs ","svvvvvvvvvs","svvvvevvvvs","svvvvvvvvvs"," svvvvvvvs "," svvvvvvvs ","  ssvvvss  ","    sss    "},
+        {"           ","     h     ","     p     ","     p     ","     p     "," hpppcppph ","     p     ","     p     ","     p     ","     h     ","           "},
+        {"           ","    h      ","           ","           ","     p   h ","    pcp    "," h   p     ","           ","           ","      h    ","           "},
+        {"           ","           ","   h       ","        h  ","     p     ","    pcp    ","     p     ","  h        ","       h   ","           ","           "},
+        {"           ","           ","       h   ","  h        ","     p     ","    pcp    ","     p     ","        h  ","   h       ","           ","           "},
+        {"           ","      h    ","           ","           "," h   p     ","    pcp    ","     p   h ","           ","           ","    h      ","           "},
+        {"           ","     h     ","           ","           ","     p     "," h  pcp  h ","     p     ","           ","           ","     h     ","           "},
+        {"           ","    h      ","           ","           ","     p   h ","    pcp    "," h   p     ","           ","           ","      h    ","           "},
+        {"           ","           ","   h       ","        h  ","     p     ","    pcp    ","     p     ","  h        ","       h   ","           ","           "},
+        {"           ","           ","       h   ","  h        ","     p     ","    pcp    ","     p     ","        h  ","   h       ","           ","           "},
+        {"           ","      h    ","           ","           "," h   p     ","    pcp    ","     p   h ","           ","           ","    h      ","           "},
+        {"           ","     h     ","     p     ","     p     ","     p     "," hpppcppph ","     p     ","     p     ","     p     ","     h     ","           "},
+        {"    b~b    ","  ssvvvss  "," svvvvvvvs "," svvvvvvvs ","bvvvvvvvvvb","bvvvvevvvvb","bvvvvvvvvvb"," svvvvvvvs "," svvvvvvvs ","  ssvvvss  ","    bbb    "}
+    };
+    // spotless:on
 
     /**
      * <li>√ 's' = Stainless casing ;
@@ -268,20 +186,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return STRUCTURE_DEFINITION;
     }
 
-    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
-        this.coilLevel = aCoilLevel;
-    }
-
-    public HeatingCoilLevel getCoilLevel() {
-        return this.coilLevel;
-    }
-
-    @Override
-    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
-            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -303,15 +207,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     }
 
     /**
-     * Checks if this is a Correct Machine Part for this kind of Machine (Turbine Rotor for example)
-     *
-     */
-    @Override
-    public boolean isCorrectMachinePart(ItemStack aStack) {
-        return true;
-    }
-
-    /**
      * Checks the Machine. You have to assign the MetaTileEntities for the Hatches here.
      *
      * @param aBaseMetaTileEntity
@@ -324,6 +219,116 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         // this.casingAmountActual = 0; // re-init counter
         checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
+    // endregion
+
+    // region Processing Logic
+    private HeatingCoilLevel coilLevel;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_SINGULARITY, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_CHEMBATH };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipeMap;
+        return RecipeMaps.multiblockChemicalReactorRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays
+            .asList(GTCMRecipe.IntensifyChemicalDistorterRecipeMap, RecipeMaps.multiblockChemicalReactorRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Intense Chemical Distorter
+         * 1 - Chemical Reactor
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        // #tr tst.common.machine.IntensifyChemicalDistorter.mode.0
+        // # Mode: Intense Chemical Distorter
+        // #zh_CN 深度化学扭曲模式
+
+        // #tr tst.common.machine.IntensifyChemicalDistorter.mode.1
+        // # Mode: Chemical Reactor
+        // #zh_CN 化学反应釜模式
+        return StatCollector.translateToLocal("tst.common.machine.IntensifyChemicalDistorter.mode." + machineMode);
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return machineMode == 0 ? Parallel_ICDMode_IntensifyChemicalDistorter
+            : Parallel_LCRMode_IntensifyChemicalDistorter;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return machineMode == 0 ? 1F / SpeedUpMultiplier_ICDMode_IntensifyChemicalDistorter
+            : 1F / SpeedUpMultiplier_LCRMode_IntensifyChemicalDistorter;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return true;
+    }
+
+    /**
+     * Checks if this is a Correct Machine Part for this kind of Machine (Turbine Rotor for example)
+     *
+     */
+    @Override
+    public boolean isCorrectMachinePart(ItemStack aStack) {
+        return true;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclockType(
+                    isEnablePerfectOverclock() ? OverclockType.PerfectOverclock : OverclockType.NormalOverclock);
+                return super.process();
+            }
+
+            @Override
+            protected @NotNull CheckRecipeResult validateRecipe(GTRecipe recipe) {
+                return recipe.mSpecialValue <= coilLevel.getHeat() ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
+        }.enablePerfectOverclock()
+            .setMaxParallelSupplier(this::getMaxParallelRecipes);
+
+    }
+
+    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
+        this.coilLevel = aCoilLevel;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return this.coilLevel;
+    }
+
+    // endregion
+
+    // region NBT
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -339,14 +344,9 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         machineMode = aNBT.getInteger("mode");
     }
 
-    /**
-     * @param aTileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
-     * @return a newly created and ready MetaTileEntity
-     */
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new GT_TileEntity_IntensifyChemicalDistorter(this.mName);
-    }
+    // endregion
+
+    // region Textures
 
     /**
      * Icon of the Texture. If this returns null then it falls back to getTextureIndex.
@@ -388,32 +388,74 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         return new ITexture[] { casingTexturePages[1][48] };
     }
 
+    // endregion
+
+    // region Tooltip
+
     // Tooltips
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_ICD_MachineType)
-            .addInfo(TextLocalization.Tooltip_ICD_00)
-            .addInfo(TextLocalization.Tooltip_ICD_01)
-            .addInfo(TextLocalization.Tooltip_ICD_02)
-            .addInfo(TextLocalization.Tooltip_ICD_03)
-            .addInfo(TextLocalization.Tooltip_ICD_04)
-            .addInfo(TextLocalization.Tooltip_ICD_05)
-            .addInfo(TextLocalization.Tooltip_ICD_06)
-            .addInfo(TextLocalization.Tooltip_ICD_07)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type
+        // # Intensify Chemical Distorter/Chemical Reactor
+        // #zh_CN 深度化学扭曲仪/化学反应釜
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.01
+            // # Controller block for the Intensify Chemical Distorter
+            // #zh_CN 深度化学扭曲仪的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.01"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.02
+            // # {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
+            // #zh_CN {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.02"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.03
+            // # The most advanced base chemical reactor.
+            // #zh_CN 最先进的基础化学反应设备
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.03"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.04
+            // # Use screwdriver to change mode.
+            // #zh_CN 使用螺丝刀切换模式.
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.04"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.05
+            // # {\GOLD}Intensify Chemical Distorter mode:
+            // #zh_CN {\GOLD}深度化学扭曲模式:
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.05"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.06
+            // # Focus on processing the most complex chemical reaction - {\AQUA}16x {\GRAY}Parallel.
+            // #zh_CN 专注于处理更复杂的化学反应 - {\AQUA}16x {\GRAY}并行
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.06"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.07
+            // # {\GOLD}Chemical Reactor mode:
+            // #zh_CN {\GOLD}化学反应釜模式:
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.07"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08
+            // # {\AQUA}1024x {\GRAY}Parallel and {\RED}900% {\GRAY}faster than using LCR of the same voltage.
+            // #zh_CN 拥有 {\AQUA}1024x{\GRAY} 并行并且比相同电压的大型化学反应釜快 {\RED}900%{\GRAY}
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08"))
             .beginStructureBlock(11, 13, 11, false)
-            .addController(TextLocalization.textFrontBottom)
-            .addCasingInfoRange(TextLocalization.textCasing, 8, 26, false)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 2)
-            .addOutputBus(TextLocalization.textAnyCasing, 2)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 3)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addController(TSTSharedLocalization.Structure.textFrontBottom)
+            .addCasingInfoRange(TSTSharedLocalization.Structure.textCasing, 8, 26, false)
+            .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 3)
+            .toolTipFinisher();
+        // spotless:on
         return tt;
     }
+
+    // endregion
+
+    // region Hatch Registration
+
+    @Override
+    public boolean addToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex)
+            || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    // endregion
 
 }

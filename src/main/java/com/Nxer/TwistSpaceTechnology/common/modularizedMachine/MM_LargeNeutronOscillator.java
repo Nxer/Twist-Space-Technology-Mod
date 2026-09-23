@@ -23,8 +23,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -36,6 +38,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.render.TextureFactory;
@@ -45,12 +48,14 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
 import gregtech.common.blocks.BlockCasings8;
 
+@SkipGenerateDescription
 public class MM_LargeNeutronOscillator
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_LargeNeutronOscillator> {
 
     // region Class Constructor
     public MM_LargeNeutronOscillator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_LargeNeutronOscillator(String aName) {
@@ -61,65 +66,14 @@ public class MM_LargeNeutronOscillator
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MM_LargeNeutronOscillator(this.mName);
     }
-
-    // endregion
-
-    // region Logic
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return true;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.NeutronActivatorRecipesWithEU;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return false;
-    }
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
     // endregion
 
     // region Structure
-
     private static final int horizontalOffSet = 3;
     private static final int verticalOffSet = 36;
     private static final int depthOffSet = 1;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static IStructureDefinition<MM_LargeNeutronOscillator> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<MM_LargeNeutronOscillator> getStructureDefinition() {
@@ -213,63 +167,58 @@ public class MM_LargeNeutronOscillator
         return STRUCTURE_DEFINITION;
     }
 
-    // endregion
-
-    // region General
-    private static MultiblockTooltipBuilder tooltip;
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            // #tr Tooltip_LargeNeutronOscillator_MachineType
-            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
-            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}中子活化器
-            tooltip
-                .addMachineType(
-                    TextEnums.tr("Tooltip_LargeNeutronOscillator_MachineType"))
-                // #tr Tooltip_LargeNeutronOscillator_01
-                // # {\AQUA}{\UNDERLINE}The more physics you know the less engineering you need.
-                // #zh_CN {\AQUA}{\UNDERLINE}掌握的物理学越多， 需要的工程学越少。
-                .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_01"))
-
-                // #tr Tooltip_LargeNeutronOscillator_02
-                // # It consumes a lot of electricity to produce large quantities quickly.
-                // #zh_CN 通过消耗大量电力来进行快速大批量生产.
-                .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_02"))
-
-                // #tr Tooltip_LargeNeutronOscillator_03
-                // # Installing module hatches near the controller block can significantly improve machine performance.
-                // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
-                .addInfo(TextEnums.tr("Tooltip_LargeNeutronOscillator_03"))
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.OverclockControllerDescription.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
-                .addStructureInfo(TextEnums.SpeedControllerDescription.getText())
-                .addStructureInfo(TextEnums.ExecutionCoreDescription.getText())
-                .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModule.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                .beginStructureBlock(23, 40, 13, false)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 2)
-                .addInputHatch(TextLocalization.textUseBlueprint, 3)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 3)
-                .addInputBus(TextLocalization.textUseBlueprint, 3)
-                .addOutputBus(TextLocalization.textUseBlueprint, 3)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 1)
-                .toolTipFinisher(TextLocalization.ModName);
-            // spotless:on
-        }
-        return tooltip;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
     }
+
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        return checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.NeutronActivatorWithEURecipeMap;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return true;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return false;
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
@@ -291,4 +240,60 @@ public class MM_LargeNeutronOscillator
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(49) };
     }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
+            // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.machine_type
+            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
+            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}中子活化器
+            tooltip
+                .addMachineType(
+                    TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.machine_type"))
+                // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.info.01
+                // # {\AQUA}{\UNDERLINE}The more physics you know the less engineering you need.
+                // #zh_CN {\AQUA}{\UNDERLINE}掌握的物理学越多， 需要的工程学越少。
+                .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.01"))
+
+                // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.info.02
+                // # It consumes a lot of electricity to produce large quantities quickly.
+                // #zh_CN 通过消耗大量电力来进行快速大批量生产.
+                .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.02"))
+
+                // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.info.03
+                // # Installing module hatches near the controller block can significantly improve machine performance.
+                // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
+                .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.03"))
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                .beginStructureBlock(23, 40, 13, false)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 1)
+                .toolTipFinisher();
+            // spotless:on
+        }
+        return tooltip;
+    }
+
+    // endregion
+
 }

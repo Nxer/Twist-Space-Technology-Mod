@@ -3,7 +3,9 @@ package com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.P
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.gtnewhorizons.modularui.api.math.Alignment;
 import com.gtnewhorizons.modularui.api.math.Color;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
@@ -15,13 +17,16 @@ import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 
+@SkipGenerateDescription
 public class DynamicParallelController extends DynamicParallelControllerBase {
 
     // region Class Constructor
     public DynamicParallelController(int aID, String aName, String aNameRegional, int aTier, int maxParallel) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
         this.maxParallel = maxParallel;
         this.description = new String[] {
 
@@ -79,10 +84,10 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         builder.widget(
-            // #tr tst.DynamicParallelController.UI.text.01
+            // #tr tst.modular.machine.DynamicParallelController.gui.text.01
             // # Parallel
             // #zh_CN 并行
-            TextWidget.localised("tst.DynamicParallelController.UI.text.01")
+            TextWidget.localised("tst.modular.machine.DynamicParallelController.gui.text.01")
                 .setPos(49, 18)
                 .setSize(81, 14))
             .widget(
@@ -109,16 +114,14 @@ public class DynamicParallelController extends DynamicParallelControllerBase {
         if (description == null || description.length == 0) {
             description =
                 new String[] {
-                      // #tr Tooltips.DynamicParallelController.01
+                      // #tr tst.modular.machine.DynamicParallelController.tooltip.info.01
                       // # Parallel controller module with adjustable parameters.
                       // #zh_CN 可调参数的并行控制器模块.
-                      TextEnums.tr("Tooltips.DynamicParallelController.01"),
-                      // #tr Tooltips.DynamicParallelController.02
+                      TSTUtils.tr("tst.modular.machine.DynamicParallelController.tooltip.info.01"),
+                      // #tr tst.modular.machine.DynamicParallelController.tooltip.info.02
                       // # Provides up to
                       // #zh_CN 最多提供
-                      TextEnums.tr("Tooltips.DynamicParallelController.02") + " " + getMaxParallel() + " " + TextEnums.Word_Parallel + ".",
-                      TextEnums.AddByTwistSpaceTechnology.getText(),
-                      TextEnums.ModularizedMachineSystem.getText(),
+                      TSTUtils.tr("tst.modular.machine.DynamicParallelController.tooltip.info.02") + " " + getMaxParallel() + " " + TSTSharedLocalization.General.Word_Parallel + ".",
                 };
         }
         return description;

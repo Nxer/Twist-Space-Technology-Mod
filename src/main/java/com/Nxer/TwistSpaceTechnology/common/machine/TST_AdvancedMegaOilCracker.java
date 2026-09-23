@@ -27,8 +27,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -43,6 +45,7 @@ import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -51,11 +54,13 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
+@SkipGenerateDescription
 public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_AdvancedMegaOilCracker> {
 
     // region Class Constructor
     public TST_AdvancedMegaOilCracker(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_AdvancedMegaOilCracker(String aName) {
@@ -66,78 +71,6 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_AdvancedMegaOilCracker(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-    public int glassTier = -1;
-    private HeatingCoilLevel coilLevel;
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("glassTier", glassTier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        glassTier = aNBT.getInteger("glassTier");
-    }
-
-    public void setCoilLevel(HeatingCoilLevel coilLevel) {
-        this.coilLevel = coilLevel;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.crackingRecipes;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    protected SoundResource getActivitySoundLoop() {
-        return SoundResource.GTCEU_LOOP_FIRE;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return EnablePerfectOverclock_AdvancedMegaOilCracker || enablePerfectOverclock;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return SpeedBonus_AdvancedMegaOilCracker;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Parallel_AdvancedMegaOilCracker;
-    }
-
-    @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr MachineInfoData.GlassTier
-        // # {\AQUA}Glass Tier
-        // #zh_CN {\AQUA}玻璃等级
-        ret[origin.length] = TextEnums.tr("MachineInfoData.GlassTier") + ": "
-            + EnumChatFormatting.GOLD
-            + this.glassTier;
-        return ret;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
     // endregion
 
     // region Structure
@@ -156,6 +89,7 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         { " D         D ", "DAAAAAAAAAAAD", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ", " A C C C C A ", "DAAAAAAAAAAAD", " D         D " },
         { "DDDDDD~DDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD", "DDDDDDDDDDDDD" } };
     // spotless:on
+
     private static IStructureDefinition<TST_AdvancedMegaOilCracker> STRUCTURE_DEFINITION = null;
 
     /*
@@ -167,41 +101,6 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
      * E -> ofBlock...(tile.stonebrick, 0, ...); // hatch
      * F -> ofFrame...(Materials.Vanadium);
      */
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.coilLevel = HeatingCoilLevel.None;
-        this.glassTier = -1;
-        this.enablePerfectOverclock = false;
-        clearHatches();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (this.glassTier <= 0 || coilLevel == HeatingCoilLevel.None) {
-
-            return;
-        }
-        this.euModifier = 1F / (coilLevel.getTier() + 1);
-        this.enablePerfectOverclock = coilLevel.getTier() >= HeatingCoilLevel.UXV.getTier();
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<TST_AdvancedMegaOilCracker> getStructureDefinition() {
@@ -228,32 +127,116 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         return STRUCTURE_DEFINITION;
     }
 
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.coilLevel = HeatingCoilLevel.None;
+        this.glassTier = -1;
+        this.enablePerfectOverclock = false;
+        clearHatches();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (this.glassTier <= 0 || coilLevel == HeatingCoilLevel.None) {
+
+            return;
+        }
+        this.euModifier = 1F / (coilLevel.getTier() + 1);
+        this.enablePerfectOverclock = coilLevel.getTier() >= HeatingCoilLevel.UXV.getTier();
+    }
     // endregion
 
-    // region General
+    // region Processing Logic
+    public int glassTier = -1;
+    private HeatingCoilLevel coilLevel;
+
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltips_AdvancedMegaOilCracker_MachineType)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_Controller)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_01)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_02)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_03)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_04)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_05)
-            .addInfo(TextLocalization.Tooltips_AdvancedMegaOilCracker_06)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addInputBus(TextLocalization.textUseBlueprint, 1)
-            .addOutputBus(TextLocalization.textUseBlueprint, 1)
-            .addInputHatch(TextLocalization.textUseBlueprint, 2)
-            .addOutputHatch(TextLocalization.textUseBlueprint, 2)
-            .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.crackingRecipes;
     }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public int getMaxParallelRecipes() {
+        return Parallel_AdvancedMegaOilCracker;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return SpeedBonus_AdvancedMegaOilCracker;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return EnablePerfectOverclock_AdvancedMegaOilCracker || enablePerfectOverclock;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    protected SoundResource getActivitySoundLoop() {
+        return SoundResource.GTCEU_LOOP_FIRE;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        ret[origin.length] = TSTSharedLocalization.MachineInfo.GlassTier + ": "
+            + EnumChatFormatting.GOLD
+            + this.glassTier;
+        return ret;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("glassTier", glassTier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        glassTier = aNBT.getInteger("glassTier");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -280,4 +263,58 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(49) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.machine_type
+        // # Cracker
+        // #zh_CN 石油裂化机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.machine_type"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.controller
+            // # Controller block for the Advanced Mega Oil Cracker
+            // #zh_CN 进阶巨型石油裂化机的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.controller"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.01
+            // # {\ITALIC}Freedom as a basis for self-government.
+            // #zh_CN {\ITALIC}自由是自治之基础.
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.01"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.02
+            // # As the Mega Oil Cracker do.
+            // #zh_CN 就像巨型石油裂化机那样.
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.02"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.03
+            // # Chamber placement no longer has restrictions.
+            // #zh_CN 仓室位置不再受限.
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.03"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.04
+            // # Operates {\AQUA}100%{\GRAY} faster than the Mega Oil Cracker.
+            // #zh_CN 运行速度比巨型石油裂化机快{\AQUA}100%.
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.04"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.05
+            // # Power Loss Reduction = {\AQUA}100%{\GRAY} / {\WHITE}Coil Tier{\GRAY}.
+            // #zh_CN 能耗减免 = {\AQUA}100%{\GRAY} / {\WHITE}线圈等级{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.05"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.06
+            // # Hypogen coil (or better) enable {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
+            // #zh_CN 海珀珍及以上等级线圈解锁{\LIGHT_PURPLE}无损超频{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.06"))
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

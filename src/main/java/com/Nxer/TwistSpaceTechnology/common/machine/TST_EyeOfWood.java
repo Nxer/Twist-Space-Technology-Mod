@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.sendMessageKeyToPlayer;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.sendMessageKeyToPlayer;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.ART;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -34,8 +35,10 @@ import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -48,6 +51,7 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.ItemData;
 import gregtech.api.objects.XSTR;
@@ -61,11 +65,13 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.shutdown.ShutDownReason;
 
+@SkipGenerateDescription
 public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
 
     // region Class Constructor
     public TST_EyeOfWood(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER, ART, ID.HUAN_F);
     }
 
     public TST_EyeOfWood(String aName) {
@@ -75,6 +81,635 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_EyeOfWood(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainEyeOfWood";
+    private final int horizontalOffSet = 16;
+    private final int verticalOffSet = 16;
+    private final int depthOffSet = 0;
+    private static IStructureDefinition<TST_EyeOfWood> STRUCTURE_DEFINITION = null;
+
+    /*
+     * A -> ofBlock...(gt.blockcasings, 10, ...); // hatches
+     * B -> ofBlock...(tile.blockLapis, 0, ...);
+     * C -> ofBlock...(tile.bookshelf, 0, ...);
+     * D -> ofBlock...(tile.brick, 0, ...);
+     * E -> ofBlock...(tile.stonebricksmooth, 3, ...);
+     * F -> ofBlock...(tile.wood, 0, ...);
+     */
+    @Override
+    public IStructureDefinition<TST_EyeOfWood> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = IStructureDefinition.<TST_EyeOfWood>builder()
+                .addShape(
+                    STRUCTURE_PIECE_MAIN,
+                    transpose(
+                        new String[][] {
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "            DDDDDDDDD            ",
+                                "               D D               ", "            DDDDDDDDD            ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "              FFFFF              ",
+                                "             FFDFDFF             ", "         DDDDFDDFDDFDDDD         ",
+                                "             FFFFFFF             ", "         DDDDFDDFDDFDDDD         ",
+                                "             FFDFDFF             ", "              FFFFF              ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "                F                ",
+                                "             FFFFFFF             ", "            FF     FF            ",
+                                "            F  BBB  F            ", "       DDD  F BCCCB F  DDD       ",
+                                "          FFF BCCCB FFF          ", "       DDD  F BCCCB F  DDD       ",
+                                "            F  BBB  F            ", "            FF     FF            ",
+                                "             FFFFFFF             ", "                F                ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "                F                ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "      DD                 DD      ",
+                                "        FF             FF        ", "      DD                 DD      ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                F                ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "              DDDDD              ", "                F                ",
+                                "                C                ", "                C                ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "      D                   D      ", "     DD                   DD     ",
+                                "      DFCC             CCFD      ", "     DD                   DD     ",
+                                "      D                   D      ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                C                ",
+                                "                C                ", "                F                ",
+                                "              DDDDD              ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "             EBBCBBE             ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "       E                 E       ",
+                                "       B                 B       ", "    DD B                 B DD    ",
+                                "      FC                 CF      ", "    DD B                 B DD    ",
+                                "       B                 B       ", "       E                 E       ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "             EBBCBBE             ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "              DDDDD              ", "                F                ",
+                                "                C                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "    D                       D    ", "   DD                       DD   ",
+                                "    DFC                   CFD    ", "   DD                       DD   ",
+                                "    D                       D    ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                C                ", "                F                ",
+                                "              DDDDD              ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "             EBBCBBE             ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "     E                     E     ",
+                                "     B                     B     ", "  DD B                     B DD  ",
+                                "    FC                     CF    ", "  DD B                     B DD  ",
+                                "     B                     B     ", "     E                     E     ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "             EBBCBBE             ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "               D D               ", "                F                ",
+                                "                C                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "  D                           D  ",
+                                "   FC                       CF   ", "  D                           D  ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                C                ", "                F                ",
+                                "               D D               ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "               D D               ",
+                                "               D D               ", "                F                ",
+                                "                C                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", " DD                           DD ",
+                                "   FC                       CF   ", " DD                           DD ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                C                ", "                F                ",
+                                "               D D               ", "               D D               ",
+                                "                                 " },
+                            { "                                 ", "               D D               ",
+                                "                F                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", " D                             D ",
+                                "  F                           F  ", " D                             D ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                F                ", "               D D               ",
+                                "                                 " },
+                            { "                                 ", "               D D               ",
+                                "                F                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", " D                             D ",
+                                "  F                           F  ", " D                             D ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                F                ", "               D D               ",
+                                "                                 " },
+                            { "             DDDDDDD             ", "               D D               ",
+                                "             FFFFFFF             ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "  F                           F  ",
+                                "  F                           F  ", "DDF                           FDD",
+                                "  F                           F  ", "DDF                           FDD",
+                                "  F                           F  ", "  F                           F  ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "             FFFFFFF             ", "               D D               ",
+                                "               D D               " },
+                            { "            DDAAAAADD            ", "              FFFFF              ",
+                                "            FF     FF            ", "                                 ",
+                                "                                 ", "       E                 E       ",
+                                "                                 ", "     E                     E     ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "  F                           F  ", "  F                           F  ",
+                                " F                             F ", "DF                             FD",
+                                " F                             F ", "DF                             FD",
+                                " F                             F ", "  F                           F  ",
+                                "  F                           F  ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "     E                     E     ",
+                                "                                 ", "       E                 E       ",
+                                "                                 ", "                                 ",
+                                "            FF     FF            ", "              FFFFF              ",
+                                "               D D               " },
+                            { "            DAAAAAAAD            ", "             FFDFDFF             ",
+                                "            F  BBB  F            ", "                                 ",
+                                "      D                   D      ", "       B                 B       ",
+                                "    D                       D    ", "     B                     B     ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "  F                           F  ", " F                             F ",
+                                " F                             F ", "DDB                           BDD",
+                                " FB                           BF ", "DDB                           BDD",
+                                " F                             F ", " F                             F ",
+                                "  F                           F  ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "     B                     B     ",
+                                "    D                       D    ", "       B                 B       ",
+                                "      D                   D      ", "                                 ",
+                                "            F  BBB  F            ", "             FFDFDFF             ",
+                                "               D D               " },
+                            { "            DAADDDAAD            ", "         DDDDFDDFDDFDDDD         ",
+                                "       DDD  F BCCCB F  DDD       ", "      DD                 DD      ",
+                                "     DD                   DD     ", "    DD B                 B DD    ",
+                                "   DD                       DD   ", "  DD B                     B DD  ",
+                                "  D                           D  ", " DD                           DD ",
+                                " D                             D ", " D                             D ",
+                                "DDF                           FDD", "DF                             FD",
+                                "DDB                           BDD", "DDC                           CDD",
+                                "DFC                           CFD", "DDC                           CDD",
+                                "DDB                           BDD", "DF                             FD",
+                                "DDF                           FDD", " D                             D ",
+                                " D                             D ", " DD                           DD ",
+                                "  D                           D  ", "  DD B                     B DD  ",
+                                "   DD                       DD   ", "    DD B                 B DD    ",
+                                "     DD                   DD     ", "      DD                 DD      ",
+                                "       DDD  F BCCCB F  DDD       ", "         DDDDFDDFDDFDDDD         ",
+                                "            DDDDDDDDD            " },
+                            { "            DAAD~DAAD            ", "             FFFFFFF             ",
+                                "          FFF BCCCB FFF          ", "        FF             FF        ",
+                                "      DFCC             CCFD      ", "      FC                 CF      ",
+                                "    DFC                   CFD    ", "    FC                     CF    ",
+                                "   FC                       CF   ", "   FC                       CF   ",
+                                "  F                           F  ", "  F                           F  ",
+                                "  F                           F  ", " F                             F ",
+                                " FB                           BF ", "DFC                           CFD",
+                                " FC                           CF ", "DFC                           CFD",
+                                " FB                           BF ", " F                             F ",
+                                "  F                           F  ", "  F                           F  ",
+                                "  F                           F  ", "   FC                       CF   ",
+                                "   FC                       CF   ", "    FC                     CF    ",
+                                "    DFC                   CFD    ", "      FC                 CF      ",
+                                "      DFCC             CCFD      ", "        FF             FF        ",
+                                "          FFF BCCCB FFF          ", "             FFFFFFF             ",
+                                "               D D               " },
+                            { "            DAADDDAAD            ", "         DDDDFDDFDDFDDDD         ",
+                                "       DDD  F BCCCB F  DDD       ", "      DD                 DD      ",
+                                "     DD                   DD     ", "    DD B                 B DD    ",
+                                "   DD                       DD   ", "  DD B                     B DD  ",
+                                "  D                           D  ", " DD                           DD ",
+                                " D                             D ", " D                             D ",
+                                "DDF                           FDD", "DF                             FD",
+                                "DDB                           BDD", "DDC                           CDD",
+                                "DFC                           CFD", "DDC                           CDD",
+                                "DDB                           BDD", "DF                             FD",
+                                "DDF                           FDD", " D                             D ",
+                                " D                             D ", " DD                           DD ",
+                                "  D                           D  ", "  DD B                     B DD  ",
+                                "   DD                       DD   ", "    DD B                 B DD    ",
+                                "     DD                   DD     ", "      DD                 DD      ",
+                                "       DDD  F BCCCB F  DDD       ", "         DDDDFDDFDDFDDDD         ",
+                                "            DDDDDDDDD            " },
+                            { "            DAAAAAAAD            ", "             FFDFDFF             ",
+                                "            F  BBB  F            ", "                                 ",
+                                "      D                   D      ", "       B                 B       ",
+                                "    D                       D    ", "     B                     B     ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "  F                           F  ", " F                             F ",
+                                " F                             F ", "DDB                           BDD",
+                                " FB                           BF ", "DDB                           BDD",
+                                " F                             F ", " F                             F ",
+                                "  F                           F  ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "     B                     B     ",
+                                "    D                       D    ", "       B                 B       ",
+                                "      D                   D      ", "                                 ",
+                                "            F  BBB  F            ", "             FFDFDFF             ",
+                                "               D D               " },
+                            { "            DDAAAAADD            ", "              FFFFF              ",
+                                "            FF     FF            ", "                                 ",
+                                "                                 ", "       E                 E       ",
+                                "                                 ", "     E                     E     ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "  F                           F  ", "  F                           F  ",
+                                " F                             F ", "DF                             FD",
+                                " F                             F ", "DF                             FD",
+                                " F                             F ", "  F                           F  ",
+                                "  F                           F  ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "     E                     E     ",
+                                "                                 ", "       E                 E       ",
+                                "                                 ", "                                 ",
+                                "            FF     FF            ", "              FFFFF              ",
+                                "               D D               " },
+                            { "             DDDDDDD             ", "               D D               ",
+                                "             FFFFFFF             ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "  F                           F  ",
+                                "  F                           F  ", "DDF                           FDD",
+                                "  F                           F  ", "DDF                           FDD",
+                                "  F                           F  ", "  F                           F  ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "             FFFFFFF             ", "               D D               ",
+                                "               D D               " },
+                            { "                                 ", "               D D               ",
+                                "                F                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", " D                             D ",
+                                "  F                           F  ", " D                             D ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                F                ", "               D D               ",
+                                "                                 " },
+                            { "                                 ", "               D D               ",
+                                "                F                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", " D                             D ",
+                                "  F                           F  ", " D                             D ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                F                ", "               D D               ",
+                                "                                 " },
+                            { "                                 ", "               D D               ",
+                                "               D D               ", "                F                ",
+                                "                C                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", " DD                           DD ",
+                                "   FC                       CF   ", " DD                           DD ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                C                ", "                F                ",
+                                "               D D               ", "               D D               ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "               D D               ", "                F                ",
+                                "                C                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "  D                           D  ",
+                                "   FC                       CF   ", "  D                           D  ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                C                ", "                F                ",
+                                "               D D               ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "             EBBCBBE             ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "     E                     E     ",
+                                "     B                     B     ", "  DD B                     B DD  ",
+                                "    FC                     CF    ", "  DD B                     B DD  ",
+                                "     B                     B     ", "     E                     E     ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "             EBBCBBE             ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "              DDDDD              ", "                F                ",
+                                "                C                ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "    D                       D    ", "   DD                       DD   ",
+                                "    DFC                   CFD    ", "   DD                       DD   ",
+                                "    D                       D    ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                C                ", "                F                ",
+                                "              DDDDD              ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "             EBBCBBE             ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "       E                 E       ",
+                                "       B                 B       ", "    DD B                 B DD    ",
+                                "      FC                 CF      ", "    DD B                 B DD    ",
+                                "       B                 B       ", "       E                 E       ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "             EBBCBBE             ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "              DDDDD              ", "                F                ",
+                                "                C                ", "                C                ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "      D                   D      ", "     DD                   DD     ",
+                                "      DFCC             CCFD      ", "     DD                   DD     ",
+                                "      D                   D      ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                C                ",
+                                "                C                ", "                F                ",
+                                "              DDDDD              ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "                F                ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "      DD                 DD      ",
+                                "        FF             FF        ", "      DD                 DD      ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                F                ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "                F                ", "                F                ",
+                                "             FFFFFFF             ", "            FF     FF            ",
+                                "            F  BBB  F            ", "       DDD  F BCCCB F  DDD       ",
+                                "          FFF BCCCB FFF          ", "       DDD  F BCCCB F  DDD       ",
+                                "            F  BBB  F            ", "            FF     FF            ",
+                                "             FFFFFFF             ", "                F                ",
+                                "                F                ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "              FFFFF              ",
+                                "             FFDFDFF             ", "         DDDDFDDFDDFDDDD         ",
+                                "             FFFFFFF             ", "         DDDDFDDFDDFDDDD         ",
+                                "             FFDFDFF             ", "              FFFFF              ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "               D D               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "            DDDDDDDDD            ",
+                                "               D D               ", "            DDDDDDDDD            ",
+                                "               D D               ", "               D D               ",
+                                "               D D               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " } }))
+                .addElement(
+                    'A',
+                    HatchElementBuilder.<TST_EyeOfWood>builder()
+                        .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
+                        .adder(TST_EyeOfWood::addToMachineList)
+                        .hint(1)
+                        .casingIndex(10)
+                        .buildAndChain(GregTechAPI.sBlockCasings1, 10))
+                .addElement('B', ofBlock(Blocks.lapis_block, 0))
+                .addElement('C', ofBlock(Blocks.bookshelf, 0))
+                .addElement('D', ofBlock(Blocks.brick_block, 0))
+                .addElement('E', ofBlock(Blocks.stonebrick, 3))
+                .addElement('F', ofBlockAnyMeta(Blocks.planks))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
     }
     // endregion
 
@@ -91,122 +726,58 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     private static final int STANDARD_LAVA_AMOUNT = STANDARD_LAVA_BUCKET * 1000;
     private static final int STANDARD_DIMENSION_ID = ValueEnum.StandardDimensionID_EyeOfWood;
     private static final boolean ALLOW_PERSONAL_SPACE = Config.AllowPersonalSpace_EyeOfWood;
+
     private static final double STANDARD_SUBSTRATE = Math
         .pow(2_000_000_000d, 1d / Math.max(STANDARD_WATER_BUCKET, STANDARD_LAVA_BUCKET));
+
     private int storedWater = 0;
     private int storedLava = 0;
     private boolean enableRender = Config.EnableRenderDefault_EyeOfWood;
     public boolean isRendering = false;
 
     @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 3];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr getInfoData.StoredWater
-        // # Stored Water
-        // #zh_CN 已存储水
-        ret[origin.length] = TextEnums.tr("getInfoData.StoredWater") + " : "
-            + EnumChatFormatting.BLUE
-            + storedWater
-            + EnumChatFormatting.RESET
-            + "L / "
-            + STANDARD_WATER_AMOUNT
-            + "L";
-        // #tr getInfoData.StoredLava
-        // # Stored Lava
-        // #zh_CN 已存储岩浆
-        ret[origin.length + 1] = TextEnums.tr("getInfoData.StoredLava") + " : "
-            + EnumChatFormatting.RED
-            + storedLava
-            + EnumChatFormatting.RESET
-            + "L / "
-            + STANDARD_LAVA_AMOUNT
-            + "L";
-        // #tr getInfoData.SuccessChance
-        // # Success Chance
-        // #zh_CN 成功几率
-        ret[origin.length + 2] = TextEnums.tr("getInfoData.SuccessChance") + " : "
-            + EnumChatFormatting.GOLD
-            + getSuccessChance()
-            + " / 10000";
-        return ret;
-    }
-
-    private void resetStored() {
-        storedWater = 0;
-        storedLava = 0;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("storedWater", storedWater);
-        aNBT.setInteger("storedLava", storedLava);
-        aNBT.setBoolean("isRendering", isRendering);
-        aNBT.setBoolean("enableRender", enableRender);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        storedWater = aNBT.getInteger("storedWater");
-        storedLava = aNBT.getInteger("storedLava");
-        isRendering = aNBT.getBoolean("isRendering");
-        enableRender = aNBT.getBoolean("enableRender");
-    }
-
-    @Override
-    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            this.enableRender = !enableRender;
-            sendMessageKeyToPlayer(aPlayer, "EyeOfWood.enableRender." + this.enableRender);
-            if ((!enableRender) && isRendering) {
-                destroyRenderBlock();
-                isRendering = false;
-            }
-        }
-    }
-
-    @Override
     public UITexture[] getMachineModeIcons() {
         return new UITexture[0];
     }
 
-    public void createRenderBlock() {
-        int x = getBaseMetaTileEntity().getXCoord();
-        int y = getBaseMetaTileEntity().getYCoord();
-        int z = getBaseMetaTileEntity().getZCoord();
-
-        double xOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetX;
-        double zOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
-        double yOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetY;
-
-        this.getBaseMetaTileEntity()
-            .getWorld()
-            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
-        this.getBaseMetaTileEntity()
-            .getWorld()
-            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), TstBlocks.BlockEyeOfWoodRender);
+    @Override
+    public int getMaxParallelRecipes() {
+        return 1;
     }
 
-    private void destroyRenderBlock() {
-        IGregTechTileEntity gregTechTileEntity = this.getBaseMetaTileEntity();
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
 
-        int x = gregTechTileEntity.getXCoord();
-        int y = gregTechTileEntity.getYCoord();
-        int z = gregTechTileEntity.getZCoord();
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
 
-        double xOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetX;
-        double zOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
-        double yOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
 
-        this.getBaseMetaTileEntity()
-            .getWorld()
-            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
 
-        isRendering = false;
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
     }
 
     @NotNull
@@ -250,6 +821,103 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
             isRendering = true;
         }
         return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 3];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        // spotless:off
+        // #tr tst.common.machine.EyeOfWood.info.stored_water
+        // # Stored Water
+        // #zh_CN 已存储水
+        ret[origin.length] = TSTUtils.tr("tst.common.machine.EyeOfWood.info.stored_water") + " : "
+            + EnumChatFormatting.BLUE
+            + storedWater
+            + EnumChatFormatting.RESET
+            + "L / "
+            + STANDARD_WATER_AMOUNT
+            + "L";
+        // #tr tst.common.machine.EyeOfWood.info.stored_lava
+        // # Stored Lava
+        // #zh_CN 已存储岩浆
+        ret[origin.length + 1] = TSTUtils.tr("tst.common.machine.EyeOfWood.info.stored_lava") + " : "
+            + EnumChatFormatting.RED
+            + storedLava
+            + EnumChatFormatting.RESET
+            + "L / "
+            + STANDARD_LAVA_AMOUNT
+            + "L";
+        // #tr tst.common.machine.EyeOfWood.info.success_chance
+        // # Success Chance
+        // #zh_CN 成功几率
+        ret[origin.length + 2] = TSTUtils.tr("tst.common.machine.EyeOfWood.info.success_chance") + " : "
+            + EnumChatFormatting.GOLD
+            + getSuccessChance()
+            + " / 10000";
+        // spotless:on
+        return ret;
+    }
+
+    private void resetStored() {
+        storedWater = 0;
+        storedLava = 0;
+    }
+
+    @Override
+    public final void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            this.enableRender = !enableRender;
+            // #tr tst.common.machine.EyeOfWood.message.enable_render.false
+            // # Disable Render
+            // #zh_CN 关闭特效渲染
+
+            // #tr tst.common.machine.EyeOfWood.message.enable_render.true
+            // # Enable Render
+            // #zh_CN 开启特效渲染
+            sendMessageKeyToPlayer(aPlayer, "tst.common.machine.EyeOfWood.message.enable_render." + this.enableRender);
+            if ((!enableRender) && isRendering) {
+                destroyRenderBlock();
+                isRendering = false;
+            }
+        }
+    }
+
+    public void createRenderBlock() {
+        int x = getBaseMetaTileEntity().getXCoord();
+        int y = getBaseMetaTileEntity().getYCoord();
+        int z = getBaseMetaTileEntity().getZCoord();
+
+        double xOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetX;
+        double zOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
+        double yOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), TstBlocks.BlockEyeOfWoodRender);
+    }
+
+    private void destroyRenderBlock() {
+        IGregTechTileEntity gregTechTileEntity = this.getBaseMetaTileEntity();
+
+        int x = gregTechTileEntity.getXCoord();
+        int y = gregTechTileEntity.getYCoord();
+        int z = gregTechTileEntity.getZCoord();
+
+        double xOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetX;
+        double zOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
+        double yOffset = 16 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+
+        this.getBaseMetaTileEntity()
+            .getWorld()
+            .setBlock((int) (x + xOffset), (int) (y + yOffset), (int) (z + zOffset), Blocks.air);
+
+        isRendering = false;
     }
 
     private ItemStack[] getItemOutputs() {
@@ -461,227 +1129,31 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
         }
     }
 
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 1;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
     // endregion
 
-    // region Structure
-    // spotless:off
-    private static final String STRUCTURE_PIECE_MAIN = "mainEyeOfWood";
-    private final int horizontalOffSet = 16;
-    private final int verticalOffSet = 16;
-    private final int depthOffSet = 0;
-    private static IStructureDefinition<TST_EyeOfWood> STRUCTURE_DEFINITION = null;
+    // region NBT
+
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("storedWater", storedWater);
+        aNBT.setInteger("storedLava", storedLava);
+        aNBT.setBoolean("isRendering", isRendering);
+        aNBT.setBoolean("enableRender", enableRender);
     }
+
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        storedWater = aNBT.getInteger("storedWater");
+        storedLava = aNBT.getInteger("storedLava");
+        isRendering = aNBT.getBoolean("isRendering");
+        enableRender = aNBT.getBoolean("enableRender");
     }
-/*
-A -> ofBlock...(gt.blockcasings, 10, ...); // hatches
-B -> ofBlock...(tile.blockLapis, 0, ...);
-C -> ofBlock...(tile.bookshelf, 0, ...);
-D -> ofBlock...(tile.brick, 0, ...);
-E -> ofBlock...(tile.stonebricksmooth, 3, ...);
-F -> ofBlock...(tile.wood, 0, ...);
- */
-    @Override
-    public IStructureDefinition<TST_EyeOfWood> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION =
-                IStructureDefinition
-                    .<TST_EyeOfWood>builder()
-                    .addShape(
-                        STRUCTURE_PIECE_MAIN,
-                        transpose(new String[][]{
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","               D D               ","            DDDDDDDDD            ","               D D               ","            DDDDDDDDD            ","               D D               ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","               D D               ","               D D               ","              FFFFF              ","             FFDFDFF             ","         DDDDFDDFDDFDDDD         ","             FFFFFFF             ","         DDDDFDDFDDFDDDD         ","             FFDFDFF             ","              FFFFF              ","               D D               ","               D D               ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","               D D               ","                F                ","                F                ","             FFFFFFF             ","            FF     FF            ","            F  BBB  F            ","       DDD  F BCCCB F  DDD       ","          FFF BCCCB FFF          ","       DDD  F BCCCB F  DDD       ","            F  BBB  F            ","            FF     FF            ","             FFFFFFF             ","                F                ","                F                ","               D D               ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","                F                ","                F                ","                                 ","                                 ","                                 ","                                 ","                                 ","      DD                 DD      ","        FF             FF        ","      DD                 DD      ","                                 ","                                 ","                                 ","                                 ","                                 ","                F                ","                F                ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","              DDDDD              ","                F                ","                C                ","                C                ","                                 ","                                 ","                                 ","                                 ","      D                   D      ","     DD                   DD     ","      DFCC             CCFD      ","     DD                   DD     ","      D                   D      ","                                 ","                                 ","                                 ","                                 ","                C                ","                C                ","                F                ","              DDDDD              ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","                F                ","             EBBCBBE             ","                                 ","                                 ","                                 ","                                 ","                                 ","       E                 E       ","       B                 B       ","    DD B                 B DD    ","      FC                 CF      ","    DD B                 B DD    ","       B                 B       ","       E                 E       ","                                 ","                                 ","                                 ","                                 ","                                 ","             EBBCBBE             ","                F                ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","               D D               ","              DDDDD              ","                F                ","                C                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","    D                       D    ","   DD                       DD   ","    DFC                   CFD    ","   DD                       DD   ","    D                       D    ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                C                ","                F                ","              DDDDD              ","               D D               ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","               D D               ","               D D               ","                F                ","             EBBCBBE             ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","     E                     E     ","     B                     B     ","  DD B                     B DD  ","    FC                     CF    ","  DD B                     B DD  ","     B                     B     ","     E                     E     ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","             EBBCBBE             ","                F                ","               D D               ","               D D               ","                                 ","                                 "},
-                            {"                                 ","                                 ","               D D               ","                F                ","                C                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  D                           D  ","   FC                       CF   ","  D                           D  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                C                ","                F                ","               D D               ","                                 ","                                 "},
-                            {"                                 ","               D D               ","               D D               ","                F                ","                C                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," DD                           DD ","   FC                       CF   "," DD                           DD ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                C                ","                F                ","               D D               ","               D D               ","                                 "},
-                            {"                                 ","               D D               ","                F                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," D                             D ","  F                           F  "," D                             D ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                F                ","               D D               ","                                 "},
-                            {"                                 ","               D D               ","                F                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," D                             D ","  F                           F  "," D                             D ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                F                ","               D D               ","                                 "},
-                            {"             DDDDDDD             ","               D D               ","             FFFFFFF             ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  F                           F  ","  F                           F  ","DDF                           FDD","  F                           F  ","DDF                           FDD","  F                           F  ","  F                           F  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","             FFFFFFF             ","               D D               ","               D D               "},
-                            {"            DDAAAAADD            ","              FFFFF              ","            FF     FF            ","                                 ","                                 ","       E                 E       ","                                 ","     E                     E     ","                                 ","                                 ","                                 ","                                 ","  F                           F  ","  F                           F  "," F                             F ","DF                             FD"," F                             F ","DF                             FD"," F                             F ","  F                           F  ","  F                           F  ","                                 ","                                 ","                                 ","                                 ","     E                     E     ","                                 ","       E                 E       ","                                 ","                                 ","            FF     FF            ","              FFFFF              ","               D D               "},
-                            {"            DAAAAAAAD            ","             FFDFDFF             ","            F  BBB  F            ","                                 ","      D                   D      ","       B                 B       ","    D                       D    ","     B                     B     ","                                 ","                                 ","                                 ","                                 ","  F                           F  "," F                             F "," F                             F ","DDB                           BDD"," FB                           BF ","DDB                           BDD"," F                             F "," F                             F ","  F                           F  ","                                 ","                                 ","                                 ","                                 ","     B                     B     ","    D                       D    ","       B                 B       ","      D                   D      ","                                 ","            F  BBB  F            ","             FFDFDFF             ","               D D               "},
-                            {"            DAADDDAAD            ","         DDDDFDDFDDFDDDD         ","       DDD  F BCCCB F  DDD       ","      DD                 DD      ","     DD                   DD     ","    DD B                 B DD    ","   DD                       DD   ","  DD B                     B DD  ","  D                           D  "," DD                           DD "," D                             D "," D                             D ","DDF                           FDD","DF                             FD","DDB                           BDD","DDC                           CDD","DFC                           CFD","DDC                           CDD","DDB                           BDD","DF                             FD","DDF                           FDD"," D                             D "," D                             D "," DD                           DD ","  D                           D  ","  DD B                     B DD  ","   DD                       DD   ","    DD B                 B DD    ","     DD                   DD     ","      DD                 DD      ","       DDD  F BCCCB F  DDD       ","         DDDDFDDFDDFDDDD         ","            DDDDDDDDD            "},
-                            {"            DAAD~DAAD            ","             FFFFFFF             ","          FFF BCCCB FFF          ","        FF             FF        ","      DFCC             CCFD      ","      FC                 CF      ","    DFC                   CFD    ","    FC                     CF    ","   FC                       CF   ","   FC                       CF   ","  F                           F  ","  F                           F  ","  F                           F  "," F                             F "," FB                           BF ","DFC                           CFD"," FC                           CF ","DFC                           CFD"," FB                           BF "," F                             F ","  F                           F  ","  F                           F  ","  F                           F  ","   FC                       CF   ","   FC                       CF   ","    FC                     CF    ","    DFC                   CFD    ","      FC                 CF      ","      DFCC             CCFD      ","        FF             FF        ","          FFF BCCCB FFF          ","             FFFFFFF             ","               D D               "},
-                            {"            DAADDDAAD            ","         DDDDFDDFDDFDDDD         ","       DDD  F BCCCB F  DDD       ","      DD                 DD      ","     DD                   DD     ","    DD B                 B DD    ","   DD                       DD   ","  DD B                     B DD  ","  D                           D  "," DD                           DD "," D                             D "," D                             D ","DDF                           FDD","DF                             FD","DDB                           BDD","DDC                           CDD","DFC                           CFD","DDC                           CDD","DDB                           BDD","DF                             FD","DDF                           FDD"," D                             D "," D                             D "," DD                           DD ","  D                           D  ","  DD B                     B DD  ","   DD                       DD   ","    DD B                 B DD    ","     DD                   DD     ","      DD                 DD      ","       DDD  F BCCCB F  DDD       ","         DDDDFDDFDDFDDDD         ","            DDDDDDDDD            "},
-                            {"            DAAAAAAAD            ","             FFDFDFF             ","            F  BBB  F            ","                                 ","      D                   D      ","       B                 B       ","    D                       D    ","     B                     B     ","                                 ","                                 ","                                 ","                                 ","  F                           F  "," F                             F "," F                             F ","DDB                           BDD"," FB                           BF ","DDB                           BDD"," F                             F "," F                             F ","  F                           F  ","                                 ","                                 ","                                 ","                                 ","     B                     B     ","    D                       D    ","       B                 B       ","      D                   D      ","                                 ","            F  BBB  F            ","             FFDFDFF             ","               D D               "},
-                            {"            DDAAAAADD            ","              FFFFF              ","            FF     FF            ","                                 ","                                 ","       E                 E       ","                                 ","     E                     E     ","                                 ","                                 ","                                 ","                                 ","  F                           F  ","  F                           F  "," F                             F ","DF                             FD"," F                             F ","DF                             FD"," F                             F ","  F                           F  ","  F                           F  ","                                 ","                                 ","                                 ","                                 ","     E                     E     ","                                 ","       E                 E       ","                                 ","                                 ","            FF     FF            ","              FFFFF              ","               D D               "},
-                            {"             DDDDDDD             ","               D D               ","             FFFFFFF             ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  F                           F  ","  F                           F  ","DDF                           FDD","  F                           F  ","DDF                           FDD","  F                           F  ","  F                           F  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","             FFFFFFF             ","               D D               ","               D D               "},
-                            {"                                 ","               D D               ","                F                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," D                             D ","  F                           F  "," D                             D ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                F                ","               D D               ","                                 "},
-                            {"                                 ","               D D               ","                F                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," D                             D ","  F                           F  "," D                             D ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                F                ","               D D               ","                                 "},
-                            {"                                 ","               D D               ","               D D               ","                F                ","                C                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "," DD                           DD ","   FC                       CF   "," DD                           DD ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                C                ","                F                ","               D D               ","               D D               ","                                 "},
-                            {"                                 ","                                 ","               D D               ","                F                ","                C                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","  D                           D  ","   FC                       CF   ","  D                           D  ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                C                ","                F                ","               D D               ","                                 ","                                 "},
-                            {"                                 ","                                 ","               D D               ","               D D               ","                F                ","             EBBCBBE             ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","     E                     E     ","     B                     B     ","  DD B                     B DD  ","    FC                     CF    ","  DD B                     B DD  ","     B                     B     ","     E                     E     ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","             EBBCBBE             ","                F                ","               D D               ","               D D               ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","               D D               ","              DDDDD              ","                F                ","                C                ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","    D                       D    ","   DD                       DD   ","    DFC                   CFD    ","   DD                       DD   ","    D                       D    ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                C                ","                F                ","              DDDDD              ","               D D               ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","                F                ","             EBBCBBE             ","                                 ","                                 ","                                 ","                                 ","                                 ","       E                 E       ","       B                 B       ","    DD B                 B DD    ","      FC                 CF      ","    DD B                 B DD    ","       B                 B       ","       E                 E       ","                                 ","                                 ","                                 ","                                 ","                                 ","             EBBCBBE             ","                F                ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","              DDDDD              ","                F                ","                C                ","                C                ","                                 ","                                 ","                                 ","                                 ","      D                   D      ","     DD                   DD     ","      DFCC             CCFD      ","     DD                   DD     ","      D                   D      ","                                 ","                                 ","                                 ","                                 ","                C                ","                C                ","                F                ","              DDDDD              ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","                F                ","                F                ","                                 ","                                 ","                                 ","                                 ","                                 ","      DD                 DD      ","        FF             FF        ","      DD                 DD      ","                                 ","                                 ","                                 ","                                 ","                                 ","                F                ","                F                ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","               D D               ","                F                ","                F                ","             FFFFFFF             ","            FF     FF            ","            F  BBB  F            ","       DDD  F BCCCB F  DDD       ","          FFF BCCCB FFF          ","       DDD  F BCCCB F  DDD       ","            F  BBB  F            ","            FF     FF            ","             FFFFFFF             ","                F                ","                F                ","               D D               ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","               D D               ","               D D               ","              FFFFF              ","             FFDFDFF             ","         DDDDFDDFDDFDDDD         ","             FFFFFFF             ","         DDDDFDDFDDFDDDD         ","             FFDFDFF             ","              FFFFF              ","               D D               ","               D D               ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                            {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               D D               ","               D D               ","               D D               ","            DDDDDDDDD            ","               D D               ","            DDDDDDDDD            ","               D D               ","               D D               ","               D D               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "}
-                        })
-                    )
-                    .addElement(
-                        'A',
-                        HatchElementBuilder
-                            .<TST_EyeOfWood>builder()
-                            .atLeast(InputBus, OutputBus, InputHatch, OutputHatch)
-                            .adder(TST_EyeOfWood::addToMachineList)
-                            .hint(1)
-                            .casingIndex(10)
-                            .buildAndChain(GregTechAPI.sBlockCasings1, 10))
-                    .addElement('B', ofBlock(Blocks.lapis_block, 0))
-                    .addElement('C', ofBlock(Blocks.bookshelf, 0))
-                    .addElement('D', ofBlock(Blocks.brick_block, 0))
-                    .addElement('E', ofBlock(Blocks.stonebrick, 3))
-                    .addElement('F', ofBlockAnyMeta(Blocks.planks))
-                    .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-    // spotless:on
+
     // endregion
 
-    // region General
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    protected boolean supportsCraftingMEBuffer() {
-        return false;
-    }
-
-    private static MultiblockTooltipBuilder tt = null;
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        if (tt == null) {
-            tt = new MultiblockTooltipBuilder();
-            tt.addMachineType(TextLocalization.Tooltip_EyeOfWood_MachineType)
-                .addInfo(TextLocalization.Tooltip_EyeOfWood_Controller)
-                .addInfo(TextLocalization.Tooltip_EyeOfWood_01)
-                // #tr Tooltip_EyeOfWood_02
-                // # Can only be deployed in the Overworld, otherwise it will have a festive effect.
-                // #zh_CN 仅可部署在主世界, 否则将产生节庆效果.
-                .addInfo(TextEnums.tr("Tooltip_EyeOfWood_02"))
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addSeparator()
-                // #tr Tooltip_EyeOfWood_2_01
-                // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY}in Input Hatches and store it inside the machine, like the Eye of Harmony.
-                // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_01"))
-                // #tr Tooltip_EyeOfWood_2_02
-                // # The success rate of processing depends on the amount of water and magma that has been stored inside machine.
-                // #zh_CN 机器运行的成功率取决于已存储的水和岩浆的数量.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_02"))
-                // #tr Tooltip_EyeOfWood_2_03
-                // # Maximum success rate : 75%% when the amount of stored water and lava are both equal to 256,000L.
-                // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_03"))
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                // #tr Tooltip_EyeOfWood_2_04
-                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}Success Rate{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
-                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}成功率{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_04"))
-                // #tr Tooltip_EyeOfWood_2_05
-                // # Of Which :
-                // #zh_CN 其中 :
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_05"))
-                // #tr Tooltip_EyeOfWood_2_06
-                // # Value-specific base {\GOLD}S{\WHITE} ≈ 1.087
-                // #zh_CN 特定值底数 {\GOLD}S{\WHITE} ≈ 1.087
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_06"))
-                // #tr Tooltip_EyeOfWood_2_07
-                // # {\BLUE}dW{\GRAY} is the difference between stored water and demand (256,000L) divided by 1000, rounded down, unit L : {\BLUE}dW{\WHITE} = floor( |Stored Water - Demand | / 1000 )
-                // #zh_CN {\BLUE}dW{\GRAY} 为已存储水量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\BLUE}dW{\WHITE} = floor( |已存储水量 - 需求量| / 1000 )
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_07"))
-                // #tr Tooltip_EyeOfWood_2_08
-                // # {\RED}dL{\GRAY} is the difference between stored lava and demand (256,000L) divided by 1000, rounded down, unit L : {\RED}dL{\WHITE} = floor( |Stored Lava - Demand | / 1000 )
-                // #zh_CN {\RED}dL{\GRAY} 为已存储岩浆量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\RED}dL{\WHITE} = floor( |已存储岩浆量 - 需求量| / 1000 )
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_08"))
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                // #tr Tooltip_EyeOfWood_2_09
-                // # The machine takes a constant 60 seconds per run.
-                // #zh_CN 机器每次运行耗时恒定为60秒.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_09"))
-                // #tr Tooltip_EyeOfWood_2_10
-                // # If processing succeed, machine will output lots of ore resource of Overworld.
-                // #zh_CN 如果机器运行成功, 将产出大量主世界矿资源.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_10"))
-                // #tr Tooltip_EyeOfWood_2_11
-                // # If processing fail, machine will output lots of Steam.
-                // #zh_CN 如果机器运行失败, 则产出大量蒸汽.
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_11"))
-                // #tr Tooltip_EyeOfWood_2_12
-                // # Amount of steam produced (in L) = Success Rate * 360,000,000L (max. 270,000,000L)
-                // #zh_CN 产出蒸汽数量(单位L) = 成功几率 * 360,000,000L (最多270,000,000L)
-                .addStructureInfo(TextEnums.tr("Tooltip_EyeOfWood_2_12"))
-                /*
-                 * 成功率 = {7500 - 7499 * [1 - 1/(S^dW * S^dL)]} / 10000
-                 * <P>S ≈ 1.087</P>
-                 * <P>dW, dL 分别为已存储的水量与需求量(256,000L)的差值除以1000和已存储的岩浆量和需求量的差值除以1000, 并向下取整.</P>
-                 */
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                .beginStructureBlock(33, 33, 33, false)
-                .addController(TextLocalization.textFrontCenter)
-                .addInputBus(TextLocalization.textAnyCasing, 2)
-                .addOutputBus(TextLocalization.textAnyCasing, 2)
-                .toolTipFinisher(TextLocalization.ModName);
-        }
-        // spotless:on
-
-        return tt;
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -707,4 +1179,100 @@ F -> ofBlock...(tile.wood, 0, ...);
 
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(10) };
     }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tt = null;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tt == null) {
+            tt = new TSTMultiblockTooltipBuilder();
+            // spotless:off
+            // #tr tst.common.machine.EyeOfWood.tooltip.machine_type
+            // # Happiness Master
+            // #zh_CN Happiness Master
+            tt.addMachineType(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.machine_type"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.controller
+                // # Controller block for the Eye of Wood
+                // #zh_CN 武德之眼的控制器方块
+                .addInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.controller"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.info.01
+                // # You'd better to do a sanity check, if you are looking at this.
+                // #zh_CN 如果你在看这个东西的话, 你最好去检查一下你的san值.
+                .addInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.info.01"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.info.02
+                // # Can only be deployed in the Overworld, otherwise it will have a festive effect.
+                // #zh_CN 仅可部署在主世界, 否则将产生节庆效果.
+                .addInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.info.02"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.01
+                // # This machine will constantly consume {\BLUE}Water {\GRAY}and {\RED}Lava {\GRAY}in Input Hatches and store it inside the machine, like the Eye of Harmony.
+                // #zh_CN 机器会将输入仓中输入的{\BLUE}水{\GRAY}和{\RED}岩浆{\GRAY}存储于机器内部, 就像鸿蒙之眼一样.
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.01"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.02
+                // # The success rate of processing depends on the amount of water and magma that has been stored inside machine.
+                // #zh_CN 机器运行的成功率取决于已存储的水和岩浆的数量.
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.02"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.03
+                // # Maximum success rate : 75%% when the amount of stored water and lava are both equal to 256,000L.
+                // #zh_CN 当已存储的水和岩浆数量都等于256,000L时达到最高成功率: 75%%
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.03"))
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.04
+                // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}Success Rate{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
+                // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\AQUA}成功率{\GRAY} = {\WHITE}{7500 - 7499 * [1 - 1/({\GOLD}S{\WHITE}^{\BLUE}dW{\WHITE} * {\GOLD}S{\WHITE}^{\RED}dL{\WHITE}) ] } / 10000
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.04"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.05
+                // # Of Which :
+                // #zh_CN 其中 :
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.05"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.06
+                // # Value-specific base {\GOLD}S{\WHITE} ≈ 1.087
+                // #zh_CN 特定值底数 {\GOLD}S{\WHITE} ≈ 1.087
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.06"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.07
+                // # {\BLUE}dW{\GRAY} is the difference between stored water and demand (256,000L) divided by 1000, rounded down, unit L : {\BLUE}dW{\WHITE} = floor( |Stored Water - Demand | / 1000 )
+                // #zh_CN {\BLUE}dW{\GRAY} 为已存储水量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\BLUE}dW{\WHITE} = floor( |已存储水量 - 需求量| / 1000 )
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.07"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.08
+                // # {\RED}dL{\GRAY} is the difference between stored lava and demand (256,000L) divided by 1000, rounded down, unit L : {\RED}dL{\WHITE} = floor( |Stored Lava - Demand | / 1000 )
+                // #zh_CN {\RED}dL{\GRAY} 为已存储岩浆量和需求量(256,000L)的差值再除以1000向下取整, 单位L : {\RED}dL{\WHITE} = floor( |已存储岩浆量 - 需求量| / 1000 )
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.08"))
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.09
+                // # The machine takes a constant 60 seconds per run.
+                // #zh_CN 机器每次运行耗时恒定为60秒.
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.09"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.10
+                // # If processing succeed, machine will output lots of ore resource of Overworld.
+                // #zh_CN 如果机器运行成功, 将产出大量主世界矿资源.
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.10"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.11
+                // # If processing fail, machine will output lots of Steam.
+                // #zh_CN 如果机器运行失败, 则产出大量蒸汽.
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.11"))
+                // #tr tst.common.machine.EyeOfWood.tooltip.structure.12
+                // # Amount of steam produced (in L) = Success Rate * 360,000,000L (max. 270,000,000L)
+                // #zh_CN 产出蒸汽数量(单位L) = 成功几率 * 360,000,000L (最多270,000,000L)
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.EyeOfWood.tooltip.structure.12"))
+                /*
+                 * 成功率 = {7500 - 7499 * [1 - 1/(S^dW * S^dL)]} / 10000
+                 * <P>S ≈ 1.087</P>
+                 * <P>dW, dL 分别为已存储的水量与需求量(256,000L)的差值除以1000和已存储的岩浆量和需求量的差值除以1000, 并向下取整.</P>
+                 */
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                .beginStructureBlock(33, 33, 33, false)
+                .addController(TSTSharedLocalization.Structure.textFrontCenter)
+                .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+                .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)
+                .toolTipFinisher();
+            // spotless:on
+        }
+
+        return tt;
+    }
+
+    // endregion
+
 }

@@ -15,7 +15,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,6 +26,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTETieredMachineBlock;
@@ -37,8 +40,9 @@ import tectech.thing.metaTileEntity.pipe.MTEPipeLaser;
 import tectech.thing.metaTileEntity.pipe.MTEPipeLaserMirror;
 import tectech.util.CommonValues;
 
+@SkipGenerateDescription
 public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachineBlock
-    implements IConnectsToEnergyTunnel {
+    implements IConnectsToEnergyTunnel, TSTTooltipCredit {
 
     public long Voltage = 0;
     public long Amperes = 0;
@@ -52,6 +56,7 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
 
     public GT_MetaTileEntity_Pipe_EnergySmart_Focusing(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional, 10, 0, (String) null);
+        registerTooltipCredits(ID.AEFHMV);
     }
 
     public GT_MetaTileEntity_Pipe_EnergySmart_Focusing(String aName, int aTier, String[] aDescription,
@@ -89,27 +94,26 @@ public class GT_MetaTileEntity_Pipe_EnergySmart_Focusing extends MTETieredMachin
     public String[] getDescription() {
         // spotless:off
         return new String[] { CommonValues.TEC_MARK_EM,
-            // #tr LaserFocusedSmartNode.description.01
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.01
             // # Precise calculation, then, focus!
             // #zh_CN 精密计算, 然后, 聚焦！
-            TextEnums.tr("LaserFocusedSmartNode.description.01"),
-            // #tr LaserFocusedSmartNode.description.02
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.01"),
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.02
             // # {\AQUA}Connects devices in different directions.
             // #zh_CN {\AQUA}连接不同方向的设备.
-            TextEnums.tr("LaserFocusedSmartNode.description.02"),
-            // #tr LaserFocusedSmartNode.description.03
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.02"),
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.03
             // # {\AQUA}Output energy from the front and input from other sides.
             // #zh_CN {\AQUA}从正面输出能量, 从其他面输入.
-            TextEnums.tr("LaserFocusedSmartNode.description.03"),
-            // #tr LaserFocusedSmartNode.description.04
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.03"),
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.04
             // # {\AQUA}Please note that if the source voltage is greater than the receiving voltage, it will explode; if it is less, it will not work. Please ensure that the voltages are consistent.
             // #zh_CN {\AQUA}请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
-            TextEnums.tr("LaserFocusedSmartNode.description.04"),
-            // #tr LaserFocusedSmartNode.description.05
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.04"),
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.05
             // # {\AQUA}Try not to mix the two types of intelligent nodes. In general, it is allowed, but if a loop occurs in the laser network (that is, the output passes through several nodes and then becomes the input), there may be unpredictable consequences.
             // #zh_CN {\AQUA}尽量不要将两种智能节点混用,在一般情况下是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.
-            TextEnums.tr("LaserFocusedSmartNode.description.05"),
-            TextEnums.AddByTwistSpaceTechnology.getText() };
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.05") };
         // spotless:on
     }
 

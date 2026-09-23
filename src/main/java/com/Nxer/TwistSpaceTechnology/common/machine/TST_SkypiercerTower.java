@@ -12,10 +12,9 @@ import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateT
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileAdder;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofAccurateTileExt;
 import static com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility.ofVariableBlock;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlockAnyMeta;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -59,8 +58,10 @@ import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui_SkypiercerTo
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.util.TSTStructureUtility;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
@@ -81,6 +82,7 @@ import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -102,148 +104,80 @@ import thaumicenergistics.common.blocks.BlockEnum;
 import thaumicenergistics.common.tiles.TileInfusionProvider;
 import vazkii.botania.common.block.ModBlocks;
 
+@SkipGenerateDescription
 public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTower>
     implements IConstructable, ISurvivalConstructable {
 
+    // region Class Constructor
     public TST_SkypiercerTower(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.AEFHMV, MAINTAINER, ID.ABLAZING);
     }
-
-    private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
-    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
-    protected ArrayList<TileNitor> mTileNitors = new ArrayList<>();
-    protected ArrayList<TileElectricCloud> mTileElectricCloud = new ArrayList<>();
-    protected AspectList mOutputAspects = new AspectList();
-    protected String[] mOutputAspectNames = null;
-    protected Integer[] mOutputAspectAmounts = null;
-    protected double mParallel = 0;
-
-    private int ringCount = 0;
-
-    /**
-     * Bitmask of selected aspects for Passive Mode GUI (bit n = aspect at index n in
-     * {@link #getAllCompoundAspectsSorted()}).
-     */
-    private long mAspectSelectionBits = 0L;
-
-    private int RECIPE_DURATION = 32;
-    private static final int RECIPE_EUT = 1920;
-    private static final int SECOND_IN_TICKS = 20;
-
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    private static final String STRUCTURE_PIECE_RINGS = "rings";
-    private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
-
-    private boolean mStopAfterCycle = false;
-
-    // ========================================================
-    // Aspect Selection (for Passive Mode GUI)
-    // ========================================================
-
-    public long getAspectSelectionBits() {
-        return mAspectSelectionBits;
-    }
-
-    public void setAspectSelectionBits(long bits) {
-        mAspectSelectionBits = bits;
-    }
-
-    @Override
-    public void clearHatches() {
-        super.clearHatches();
-        mEssentiaOutputHatches.clear();
-    }
-
-    private final int Main_horizontalOffSet = 7;
-    private final int Main_verticalOffSet = 17;
-    private final int Main_depthOffSet = 1;
-
-    private static final String[][] shapeMain = new String[][] {
-        { "    JJJGJJJ    ", "  JJ       JJ  ", " JJ         JJ ", " J           J ", "J             J",
-            "J             J", "J      C      J", "G     C C     G", "J      C      J", "J             J",
-            "J             J", " J           J ", " JJ         JJ ", "  JJ       JJ  ", "    JJJGJJJ    " },
-        { "               ", "    JJJGJJJ    ", "   J       J   ", "  J         J  ", " J           J ",
-            " J           J ", " J     C     J ", " G    C C    G ", " J     C     J ", " J           J ",
-            " J           J ", "  J         J  ", "   J       J   ", "    JJJGJJJ    ", "               " },
-        { "               ", "               ", "    JJJGJJJ    ", "   JJGGGGGJJ   ", "  JJGG G GGJJ  ",
-            "  JGG     GGJ  ", "  JG   C   GJ  ", "  GGG C C GGG  ", "  JG   C   GJ  ", "  JGG     GGJ  ",
-            "  JJGG G GGJJ  ", "   JJGGGGGJJ   ", "    JJJGJJJ    ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "      G G      ",
-            "     G G G     ", "    G  C  G    ", "     GC CG     ", "    G  C  G    ", "     G G G     ",
-            "      G G      ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "      AAA      ",
-            "     AFFFA     ", "    AFHBHFA    ", "    AFB BFA    ", "    AFHBHFA    ", "     AFFFA     ",
-            "      AAA      ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "       A       ",
-            "               ", "       C       ", "    A C C A    ", "       C       ", "               ",
-            "       A       ", "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "               ",
-            "               ", "       C       ", "   A  C C  A   ", "       C       ", "               ",
-            "               ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "       B       ",
-            "       H       ", "       B       ", "   ABHB BHBA   ", "       B       ", "       H       ",
-            "       B       ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "       A       ",
-            "       B       ", "               ", "   AAB   BAA   ", "               ", "       B       ",
-            "       A       ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "       A       ", "               ",
-            "               ", "       B       ", "   A  B B  A   ", "       B       ", "               ",
-            "               ", "       A       ", "               ", "               ", "               " },
-        { "               ", "               ", "       A       ", "               ", "               ",
-            "               ", "               ", "  A         A  ", "               ", "               ",
-            "               ", "               ", "       A       ", "               ", "               " },
-        { "               ", "               ", "       A       ", "               ", "               ",
-            "               ", "               ", "  A         A  ", "               ", "               ",
-            "               ", "               ", "       A       ", "               ", "               " },
-        { "               ", "               ", "       A       ", "               ", "       L       ",
-            "               ", "               ", "  A L     L A  ", "               ", "               ",
-            "       L       ", "               ", "       A       ", "               ", "               " },
-        { "               ", "      NAN      ", "               ", "               ", "               ",
-            "               ", " N           N ", " A     M     A ", " N           N ", "               ",
-            "               ", "               ", "               ", "      NAN      ", "               " },
-        { "               ", "      B~B      ", "               ", "               ", "       I       ",
-            "               ", " B    DDD    B ", " A  I DDD I  A ", " B    DDD    B ", "               ",
-            "       I       ", "               ", "               ", "      BAB      ", "               " },
-        { "   AAAAAAAAA   ", "  AACCGGGCCAA  ", " AACGGGGGGGCAA ", "AACGGGGGGGGGCAA", "ACGGGGEGEGGGGCA",
-            "ACGGGEGGGEGGGCA", "AGGGEGGGGGEGGGA", "AGGGGGGGGGGGGGA", "AGGGEGGGGGEGGGA", "ACGGGEGGGEGGGCA",
-            "ACGGGGEGEGGGGCA", "AACGGGGGGGGGCAA", " AACGGGGGGGCAA ", "  AACCGGGCCAA  ", "   AAAAAAAAA   " } };
-    private final int Rings_horizontalOffSet = 4;
-    private final int Rings_verticalOffSet = 5;
-    private final int Rings_depthOffSet = -2;
-
-    private static final String[][] shapeRings = new String[][] {
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " },
-        { "  PEOEP  ", " P     P ", "P       P", "E   C   E", "O  C C  O", "E   C   E", "P       P", " P     P ",
-            "  PEOEP  " },
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " },
-        { "         ", "         ", "         ", "    C    ", "   C C   ", "    C    ", "         ", "         ",
-            "         " } };
 
     public TST_SkypiercerTower(String mName) {
         super(mName);
     }
 
     @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_SkypiercerTower(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+    private static final String STRUCTURE_PIECE_RINGS = "rings";
+    private IStructureDefinition<TST_SkypiercerTower> multiDefinition = null;
+    private final int Main_horizontalOffSet = 7;
+    private final int Main_verticalOffSet = 17;
+    private final int Main_depthOffSet = 1;
+
+    // spotless:off
+    private static final String[][] shapeMain = new String[][]{
+        {"    JJJGJJJ    ","  JJ       JJ  "," JJ         JJ "," J           J ","J             J","J             J","J      C      J","G     C C     G","J      C      J","J             J","J             J"," J           J "," JJ         JJ ","  JJ       JJ  ","    JJJGJJJ    "},
+        {"               ","    JJJGJJJ    ","   J       J   ","  J         J  "," J           J "," J           J "," J     C     J "," G    C C    G "," J     C     J "," J           J "," J           J ","  J         J  ","   J       J   ","    JJJGJJJ    ","               "},
+        {"               ","               ","    JJJGJJJ    ","   JJGGGGGJJ   ","  JJGG G GGJJ  ","  JGG     GGJ  ","  JG   C   GJ  ","  GGG C C GGG  ","  JG   C   GJ  ","  JGG     GGJ  ","  JJGG G GGJJ  ","   JJGGGGGJJ   ","    JJJGJJJ    ","               ","               "},
+        {"               ","               ","               ","               ","      G G      ","     G G G     ","    G  C  G    ","     GC CG     ","    G  C  G    ","     G G G     ","      G G      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      AAA      ","     AFFFA     ","    AFHBHFA    ","    AFB BFA    ","    AFHBHFA    ","     AFFFA     ","      AAA      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","       A       ","               ","       C       ","    A C C A    ","       C       ","               ","       A       ","               ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","               ","               ","       C       ","   A  C C  A   ","       C       ","               ","               ","       A       ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","       B       ","       H       ","       B       ","   ABHB BHBA   ","       B       ","       H       ","       B       ","       A       ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","       A       ","       B       ","               ","   AAB   BAA   ","               ","       B       ","       A       ","       A       ","               ","               ","               "},
+        {"               ","               ","               ","       A       ","               ","               ","       B       ","   A  B B  A   ","       B       ","               ","               ","       A       ","               ","               ","               "},
+        {"               ","               ","       A       ","               ","               ","               ","               ","  A         A  ","               ","               ","               ","               ","       A       ","               ","               "},
+        {"               ","               ","       A       ","               ","               ","               ","               ","  A         A  ","               ","               ","               ","               ","       A       ","               ","               "},
+        {"               ","               ","       A       ","               ","       L       ","               ","               ","  A L     L A  ","               ","               ","       L       ","               ","       A       ","               ","               "},
+        {"               ","      NAN      ","               ","               ","               ","               "," N           N "," A     M     A "," N           N ","               ","               ","               ","               ","      NAN      ","               "},
+        {"               ","      B~B      ","               ","               ","       I       ","               "," B    DDD    B "," A  I DDD I  A "," B    DDD    B ","               ","       I       ","               ","               ","      BAB      ","               "},
+        {"   AAAAAAAAA   ","  AACCGGGCCAA  "," AACGGGGGGGCAA ","AACGGGGGGGGGCAA","ACGGGGEGEGGGGCA","ACGGGEGGGEGGGCA","AGGGEGGGGGEGGGA","AGGGGGGGGGGGGGA","AGGGEGGGGGEGGGA","ACGGGEGGGEGGGCA","ACGGGGEGEGGGGCA","AACGGGGGGGGGCAA"," AACGGGGGGGCAA ","  AACCGGGCCAA  ","   AAAAAAAAA   "}
+    };
+    // spotless:on
+
+    private final int Rings_horizontalOffSet = 4;
+    private final int Rings_verticalOffSet = 5;
+    private final int Rings_depthOffSet = -2;
+
+    // spotless:off
+    private static final String[][] shapeRings = new String[][]{
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
+        {"  PEOEP  "," P     P ","P       P","E   C   E","O  C C  O","E   C   E","P       P"," P     P ","  PEOEP  "},
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "},
+        {"         ","         ","         ","    C    ","   C C   ","    C    ","         ","         ","         "}
+    };
+    // spotless:on
+
+    @Override
     public IStructureDefinition<TST_SkypiercerTower> getStructureDefinition() {
         if (multiDefinition == null) {
             var channel = "chisel";
             var list = ImmutableList.of(
-                TstUtils.newItemWithMeta(blockCosmeticSolid, 6),
-                TstUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
-                TstUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
+                TSTUtils.newItemWithMeta(blockCosmeticSolid, 6),
+                TSTUtils.newItemWithMeta(BlockArcane_1.getLeft(), BlockArcane_1.getRight()),
+                TSTUtils.newItemWithMeta(BlockArcane_4.getLeft(), BlockArcane_4.getRight()));
             this.multiDefinition = StructureDefinition.<TST_SkypiercerTower>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
                 .addShape(STRUCTURE_PIECE_RINGS, transpose(shapeRings))
@@ -296,78 +230,6 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         return multiDefinition;
     }
 
-    public boolean addInfusionProvider(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileInfusionProvider) {
-            TileInfusionProvider provider = (TileInfusionProvider) aTileEntity;
-            if (!this.mTileInfusionProvider.contains(provider)) {
-                return this.mTileInfusionProvider.add(provider);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean addNitor(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileNitor) {
-            TileNitor nitor = (TileNitor) aTileEntity;
-            if (!this.mTileNitors.contains(nitor)) {
-                return this.mTileNitors.add(nitor);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean addTileElectricCloud(TileEntity aTileEntity) {
-        if (aTileEntity instanceof TileElectricCloud) {
-            TileElectricCloud cloud = (TileElectricCloud) aTileEntity;
-            if (!this.mTileElectricCloud.contains(cloud)) {
-                return this.mTileElectricCloud.add(cloud);
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setDouble("mParallel", this.mParallel);
-        aNBT.setInteger("ringCount", this.ringCount);
-        aNBT.setLong("aspectSelection", this.mAspectSelectionBits);
-        aNBT.setBoolean("stopAfterCycle", this.mStopAfterCycle);
-        Aspect[] aspectA = this.mOutputAspects.getAspects();
-        NBTTagList nbtTagList = new NBTTagList();
-        for (Aspect aspect : aspectA) {
-            if (aspect != null) {
-                NBTTagCompound f = new NBTTagCompound();
-                f.setString("key", aspect.getTag());
-                f.setInteger("amount", this.mOutputAspects.getAmount(aspect));
-                nbtTagList.appendTag(f);
-            }
-        }
-        aNBT.setTag("Aspects", nbtTagList);
-        super.saveNBTData(aNBT);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        this.mParallel = aNBT.getDouble("mParallel");
-        this.ringCount = aNBT.getInteger("ringCount");
-        this.mAspectSelectionBits = aNBT.getLong("aspectSelection");
-        this.mStopAfterCycle = aNBT.getBoolean("stopAfterCycle");
-        this.mOutputAspects.aspects.clear();
-        NBTTagList tlist = aNBT.getTagList("Aspects", 10);
-        for (int j = 0; j < tlist.tagCount(); ++j) {
-            NBTTagCompound rs = tlist.getCompoundTagAt(j);
-            if (rs.hasKey("key"))
-                this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
-        }
-        super.loadNBTData(aNBT);
-    }
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int rings = stackSize.stackSize;
@@ -418,7 +280,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
                 false,
                 true);
         }
-        return TstUtils.multiBuildPiece(built);
+        return TSTUtils.multiBuildPiece(built);
     }
 
     @Override
@@ -440,17 +302,64 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         errors.clear();
         this.mParallel = (int) Math.min((long) this.ringCount * Parallel_PerRing_SkypiercerTower, Integer.MAX_VALUE);
     }
+    // endregion
 
-    private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
-        if (aTileEntity != null) {
-            return this.mEssentiaOutputHatches.add(aTileEntity);
-        }
-        return false;
-    }
+    // region Processing Logic
+    private final ArrayList<MTEEssentiaOutputHatch> mEssentiaOutputHatches = new ArrayList<>();
+    protected ArrayList<TileInfusionProvider> mTileInfusionProvider = new ArrayList<>();
+    protected ArrayList<TileNitor> mTileNitors = new ArrayList<>();
+    protected ArrayList<TileElectricCloud> mTileElectricCloud = new ArrayList<>();
+    protected AspectList mOutputAspects = new AspectList();
+    protected String[] mOutputAspectNames = null;
+    protected Integer[] mOutputAspectAmounts = null;
+    protected double mParallel = 0;
+    private int ringCount = 0;
+
+    /**
+     * Bitmask of selected aspects for Passive Mode GUI (bit n = aspect at index n in
+     * {@link #getAllCompoundAspectsSorted()}).
+     */
+    private long mAspectSelectionBits = 0L;
+
+    private int RECIPE_DURATION = 32;
+    private static final int RECIPE_EUT = 1920;
+    private static final int SECOND_IN_TICKS = 20;
+    private boolean mStopAfterCycle = false;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SKYPIERCER_MODE_PASSIVE,
+        UITextures.SKYPIERCER_MODE_CRYSTAL, UITextures.SKYPIERCER_MODE_ESSENTIA };
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.SkypiercerTower;
+        return GTCMRecipe.SkypiercerTowerRecipeMap;
+    }
+
+    @Override
+    public int totalMachineMode() {
+        return 3;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        return TSTUtils.tr("tst.common.machine.SkypiercerTower.mode." + machineMode);
+        // spotless:off
+        // #tr tst.common.machine.SkypiercerTower.mode.0
+        // #en_US Passive Mode
+        // #zh_CN 被动模式
+
+        // #tr tst.common.machine.SkypiercerTower.mode.1
+        // #en_US Crystal Essence Mode
+        // #zh_CN 晶化源质模式
+
+        // #tr tst.common.machine.SkypiercerTower.mode.2
+        // #en_US Essentia Mode
+        // #zh_CN 源质模式
+        // spotless:on
     }
 
     @Override
@@ -479,33 +388,33 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         }
     }
 
-    @Override
-    public int totalMachineMode() {
-        return 3;
+    // ========================================================
+    // Aspect Selection (for Passive Mode GUI)
+    // ========================================================
+    public long getAspectSelectionBits() {
+        return mAspectSelectionBits;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[] { UITextures.SKYPIERCER_MODE_PASSIVE,
-        UITextures.SKYPIERCER_MODE_CRYSTAL, UITextures.SKYPIERCER_MODE_ESSENTIA };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
+    public void setAspectSelectionBits(long bits) {
+        mAspectSelectionBits = bits;
     }
 
     @Override
-    public String getMachineModeName() {
-        return TextEnums.tr("SkypiercerTower.mode." + machineMode);
-        // spotless:off
-        // #tr SkypiercerTower.mode.0
-        // #en_US Passive Mode
-        // #zh_CN 被动模式
-        // #tr SkypiercerTower.mode.1
-        // #en_US Crystal Essence Mode
-        // #zh_CN 晶化源质模式
-        // #tr SkypiercerTower.mode.2
-        // #en_US Essentia Mode
-        // #zh_CN 源质模式
-        // spotless:on
+    public void clearHatches() {
+        super.clearHatches();
+        mEssentiaOutputHatches.clear();
+    }
+
+    public boolean addInfusionProvider(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileInfusionProvider) {
+            TileInfusionProvider provider = (TileInfusionProvider) aTileEntity;
+            if (!this.mTileInfusionProvider.contains(provider)) {
+                return this.mTileInfusionProvider.add(provider);
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -923,88 +832,64 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             .widget(new FakeSyncWidget.IntegerSyncer(() -> mMaxProgresstime, val -> mMaxProgresstime = val));
     }
 
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // spotless:off
-        // #tr Tooltip_SkypiercerTwoer_MachineType
-        // #en_US Essentia Synthesizer
-        // #zh_CN 源质合成者
-        tt.addMachineType(TextEnums.tr("Tooltip_SkypiercerTwoer_MachineType"))
-            // #tr Tooltip_SkypiercerTower_00
-            // #en_US Controller block for the SkypiercerTower
-            // #zh_CN 穿云尖塔的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_00"))
-            // #tr Tooltip_SkypiercerTower_01
-            // #en_US §9Wir müssen wissen. Wir werden wissen.
-            // #zh_CN §9我们必须知道，我们必将知道.
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_01"))
-            // #tr Tooltip_SkypiercerTower_02
-            // # Thaumaturgical research confirms: Essentia degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
-            // #zh_CN 神秘学研究表明:源质天然倾向于分解,而重组需要人为干预以克服内阻.
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_02"))
-            // #tr Tooltip_SkypiercerTower_03
-            // #en_US Synthesizes compound aspects. Requires at least 1A EV. Processing time depends on aspect tier: primal aspects are tier 0; a compound aspect's tier is the max tier of its components plus 1.
-            // #zh_CN 合成复合要素,至少1A EV ,其时间取决于要素的等级有关,初等要素为0级,父要素等级为子要素等级较大者+1
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_03"))
-            // #tr Tooltip_SkypiercerTower_05
-            // #en_US A tier 1 aspect takes 2 seconds. Each additional tier multiplies the time by 3/2, rounded down.
-            // #zh_CN 初等要素合成的要素需要2s,每增加一级时间变为原先的3/2倍,向下取整.
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_05"))
-            // #tr Tooltip_SkypiercerTower_06
-            // #en_US Essentia Mode: Supply essentia via Infusion Provider. Automatically matches two combinable aspects from the network, outputs through Essentia Output Hatch. Each ring adds 16 parallels and enables perfect overclocking.
-            // #zh_CN 源质模式:由注魔供应器提供源质,自动匹配可合成的两种源质,源质输出仓输出,每个环部将增加16并行,并开启无损超频.
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_06"))
-            // #tr Tooltip_SkypiercerTower_07
-            // #en_US Passive Mode: Select aspects manually for continuous synthesis. Each ring adds 6 parallels and divides time by 1.2^rings (≈1/10 time at 13 rings).
-            // #zh_CN 被动模式:自行选择要素,将一直合成,每个环部增加6并行,且时间÷环数^1.2(约13环即可将时间降为原先的1/10).
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_07"))
-            // #tr Tooltip_SkypiercerTower_08
-            // #en_US Crystal Essence Mode: Input crystals via Input Bus, output through Output Bus. Bonuses same as Passive Mode.
-            // #zh_CN 晶化源质模式:由输入总线输入,输出总线输出,各加成等与被动模式一致,此模式已不太推荐使用.
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_08"))
-            // #tr Tooltip_SkypiercerTower_09
-            // #en_US Note: Non‑passive modes require blocking to ensure only one type of aspect is synthesized at a time; otherwise it may interfere or even jam (also does not support color input).
-            // #zh_CN 注意,非被动模式下均需要阻挡,保证一次只合成一种要素,否则会相互干扰,甚至会卡住(另外不支持染色仓).
-            .addInfo(TextEnums.tr("Tooltip_SkypiercerTower_09"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .beginStructureBlock(11, 10, 23, true)
-            .addController(textFrontCenter)
-
-            // #tr Tooltip_SkypiercerTower_InputBusInfo
-            // #en_US Replace any chemically inert machine casing
-            // #zh_CN 任何舱室替换化学惰性方块
-            .addInputBus(TextEnums.tr("Tooltip_SkypiercerTower_InputBusInfo"))
-            // #tr Tooltip_SkypiercerTower_EnergyHatch
-            // #en_US Replace any chemically inert machine casing
-            // #zh_CN 任何舱室替换化学惰性方块
-            .addOutputBus(TextEnums.tr("Tooltip_SkypiercerTower_InputBusInfo"))
-            // #tr Tooltip_SkypiercerTower_EnergyHatch
-            // #en_US Replace any chemically inert machine casing
-            // #zh_CN 任何舱室替换化学惰性方块
-            .addEnergyHatch(TextEnums.tr("Tooltip_SkypiercerTower_EnergyHatch"))
-            // #tr Tooltip_SkypiercerTower_InfusionProvider
-            // #en_US Replace any chemically inert machine casing.Only one is allowed.
-            // #zh_CN 任何舱室替换化学惰性方块,只允许有一个.
-
-            // #tr Tooltip.InfusionProvider
-            // # Infusion Provider
-            // #zh_CN 注魔供应器
-            .addOtherStructurePart(TextEnums.tr("Tooltip.InfusionProvider"), TextEnums.tr("Tooltip_SkypiercerTower_InfusionProvider"))
-            // #tr Tooltip_SkypiercerTower_EssentiaOutputHatch
-            // #en_US Replace any chemically inert machine casing
-            // #zh_CN 任何舱室替换化学惰性方块
-
-            // #tr Tooltip.EssentiaOutputHatch
-            // # Essentia Output Hatch
-            // #zh_CN 源质输出仓
-            .addOtherStructurePart(TextEnums.tr("Tooltip.EssentiaOutputHatch"), TextEnums.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
-            .toolTipFinisher(ModName);
-        // spotless:on
-        return tt;
+    public static List<Aspect> getAllCompoundAspectsSorted() {
+        List<Aspect> aspects = new ArrayList<>(Aspect.aspects.values());
+        aspects.removeIf(Aspect::isPrimal);
+        aspects.sort(Comparator.comparingInt(TST_SkypiercerTower::computeAspectLevelSafe));
+        return aspects;
     }
+
+    private static int computeAspectLevelSafe(Aspect a) {
+        try {
+            return computeAspectLevel(a);
+        } catch (Exception e) {
+            return 999;
+        }
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        aNBT.setDouble("mParallel", this.mParallel);
+        aNBT.setInteger("ringCount", this.ringCount);
+        aNBT.setLong("aspectSelection", this.mAspectSelectionBits);
+        aNBT.setBoolean("stopAfterCycle", this.mStopAfterCycle);
+        Aspect[] aspectA = this.mOutputAspects.getAspects();
+        NBTTagList nbtTagList = new NBTTagList();
+        for (Aspect aspect : aspectA) {
+            if (aspect != null) {
+                NBTTagCompound f = new NBTTagCompound();
+                f.setString("key", aspect.getTag());
+                f.setInteger("amount", this.mOutputAspects.getAmount(aspect));
+                nbtTagList.appendTag(f);
+            }
+        }
+        aNBT.setTag("Aspects", nbtTagList);
+        super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        this.mParallel = aNBT.getDouble("mParallel");
+        this.ringCount = aNBT.getInteger("ringCount");
+        this.mAspectSelectionBits = aNBT.getLong("aspectSelection");
+        this.mStopAfterCycle = aNBT.getBoolean("stopAfterCycle");
+        this.mOutputAspects.aspects.clear();
+        NBTTagList tlist = aNBT.getTagList("Aspects", 10);
+        for (int j = 0; j < tlist.tagCount(); ++j) {
+            NBTTagCompound rs = tlist.getCompoundTagAt(j);
+            if (rs.hasKey("key"))
+                this.mOutputAspects.add(Aspect.getAspect(rs.getString("key")), rs.getInteger("amount"));
+        }
+        super.loadNBTData(aNBT);
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -1032,23 +917,127 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
         return new ITexture[] { casingTexturePages[1][48] };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_SkypiercerTower(this.mName);
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.SkypiercerTower.tooltip.machine_type
+        // #en_US Essentia Synthesizer
+        // #zh_CN 源质合成者
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.machine_type"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.01
+            // #en_US Controller block for the SkypiercerTower
+            // #zh_CN 穿云尖塔的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.01"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.02
+            // #en_US §9Wir müssen wissen. Wir werden wissen.
+            // #zh_CN §9我们必须知道，我们必将知道.
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.02"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.03
+            // # Thaumaturgical research confirms: Essentia degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
+            // #zh_CN 神秘学研究表明:源质天然倾向于分解,而重组需要人为干预以克服内阻.
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.03"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.04
+            // #en_US Synthesizes compound aspects. Requires at least 1A EV. Processing time depends on aspect tier: primal aspects are tier 0; a compound aspect's tier is the max tier of its components plus 1.
+            // #zh_CN 合成复合要素,至少1A EV ,其时间取决于要素的等级有关,初等要素为0级,父要素等级为子要素等级较大者+1
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.04"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.05
+            // #en_US A tier 1 aspect takes 2 seconds. Each additional tier multiplies the time by 3/2, rounded down.
+            // #zh_CN 初等要素合成的要素需要2s,每增加一级时间变为原先的3/2倍,向下取整.
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.05"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.06
+            // #en_US Essentia Mode: Supply essentia via Infusion Provider. Automatically matches two combinable aspects from the network, outputs through Essentia Output Hatch. Each ring adds 16 parallels and enables perfect overclocking.
+            // #zh_CN 源质模式:由注魔供应器提供源质,自动匹配可合成的两种源质,源质输出仓输出,每个环部将增加16并行,并开启无损超频.
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.06"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.07
+            // #en_US Passive Mode: Select aspects manually for continuous synthesis. Each ring adds 6 parallels and divides time by 1.2^rings (≈1/10 time at 13 rings).
+            // #zh_CN 被动模式:自行选择要素,将一直合成,每个环部增加6并行,且时间÷环数^1.2(约13环即可将时间降为原先的1/10).
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.07"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.08
+            // #en_US Crystal Essence Mode: Input crystals via Input Bus, output through Output Bus. Bonuses same as Passive Mode.
+            // #zh_CN 晶化源质模式:由输入总线输入,输出总线输出,各加成等与被动模式一致,此模式已不太推荐使用.
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.08"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.09
+            // #en_US Note: Non‑passive modes require blocking to ensure only one type of aspect is synthesized at a time; otherwise it may interfere or even jam (also does not support color input).
+            // #zh_CN 注意,非被动模式下均需要阻挡,保证一次只合成一种要素,否则会相互干扰,甚至会卡住(另外不支持染色仓).
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.09"))
+            .beginStructureBlock(11, 10, 23, true)
+            .addController(textFrontCenter)
+
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.10
+            // #en_US Replace any chemically inert machine casing
+            // #zh_CN 任何舱室替换化学惰性方块
+            .addInputBus(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.10"))
+            .addOutputBus(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.10"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.11
+            // #en_US Replace any chemically inert machine casing
+            // #zh_CN 任何舱室替换化学惰性方块
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.11"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.12
+            // #en_US Replace any chemically inert machine casing.Only one is allowed.
+            // #zh_CN 任何舱室替换化学惰性方块,只允许有一个.
+
+            // #tr tst.common.machine.SkypiercerTower.tooltip.structure.01
+            // # Infusion Provider
+            // #zh_CN 注魔供应器
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.structure.01"), TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.12"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.13
+            // #en_US Replace any chemically inert machine casing
+            // #zh_CN 任何舱室替换化学惰性方块
+
+            // #tr tst.common.machine.SkypiercerTower.tooltip.structure.02
+            // # Essentia Output Hatch
+            // #zh_CN 源质输出仓
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.structure.02"), TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.13"))
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
     }
 
-    public static List<Aspect> getAllCompoundAspectsSorted() {
-        List<Aspect> aspects = new ArrayList<>(Aspect.aspects.values());
-        aspects.removeIf(Aspect::isPrimal);
-        aspects.sort(Comparator.comparingInt(TST_SkypiercerTower::computeAspectLevelSafe));
-        return aspects;
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.INFUSION;
     }
 
-    private static int computeAspectLevelSafe(Aspect a) {
-        try {
-            return computeAspectLevel(a);
-        } catch (Exception e) {
-            return 999;
+    // endregion
+
+    // region Hatch Registration
+
+    public boolean addNitor(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileNitor) {
+            TileNitor nitor = (TileNitor) aTileEntity;
+            if (!this.mTileNitors.contains(nitor)) {
+                return this.mTileNitors.add(nitor);
+            } else {
+                return true;
+            }
         }
+        return false;
     }
+
+    public boolean addTileElectricCloud(TileEntity aTileEntity) {
+        if (aTileEntity instanceof TileElectricCloud) {
+            TileElectricCloud cloud = (TileElectricCloud) aTileEntity;
+            if (!this.mTileElectricCloud.contains(cloud)) {
+                return this.mTileElectricCloud.add(cloud);
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean addEssentiaOutputHatchToMachineList(MTEEssentiaOutputHatch aTileEntity) {
+        if (aTileEntity != null) {
+            return this.mEssentiaOutputHatches.add(aTileEntity);
+        }
+        return false;
+    }
+
+    // endregion
+
 }

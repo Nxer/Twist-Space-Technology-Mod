@@ -1,10 +1,11 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.VisualExtremeCraftRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.extremeCraftRecipesMap;
-import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.visualExtremeCraftRecipes;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.InputBus;
@@ -50,9 +51,11 @@ import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_Mul
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipe;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -86,6 +89,7 @@ import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -99,19 +103,19 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.tileentities.machines.IDualInputHatch;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
-import scala.actors.migration.pattern;
 import scala.collection.mutable.StringBuilder;
 import scala.tools.nsc.doc.model.Object;
 import tectech.thing.block.BlockQuantumGlass;
 import tectech.thing.casing.TTCasingsContainer;
 
+@SkipGenerateDescription
 public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCraftingCenter>
     implements ICraftingProvider, IActionHost, IGridProxyable, ISurvivalConstructable {
 
     // region Class Constructor
-
     public TST_MegaCraftingCenter(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(AUTHOR, ID.SHORDINGER, MAINTAINER, ID.NXER);
     }
 
     protected TST_MegaCraftingCenter(String aName) {
@@ -122,10 +126,916 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_MegaCraftingCenter(mName);
     }
+    // endregion
+
+    // region Structure
+    protected Collection<ICraftingPatternDetails> patternDetails = new HashSet<>();
+    protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
+
+    @Override
+    public IStructureDefinition<TST_MegaCraftingCenter> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaCraftingCenter>builder()
+                .addShape(
+                    "MAIN",
+                    transpose(
+                        // spotless:off
+                        new String[][]{
+                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
+                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"}}))
+                // spotless:on
+                .addElement(
+                    'B',
+                    HatchElementBuilder.<TST_MegaCraftingCenter>builder()
+                        .atLeast(InputBus, OutputBus, AccessHatchElement)
+                        .adder(TST_MegaCraftingCenter::superAddToMachineList)
+                        .casingIndex(textureOffset + 12)
+                        .hint(1)
+                        .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 4)))
+                .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    // Blocks:
+    // A -> ofBlock...(gt.blockcasings, 14, ...);
+    // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
+    // C -> ofBlock...(gt.blockcasingsTT, 10, ...);
+    // D -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
+    // E -> ofBlock...(tile.quantumGlass, 0, ...);
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece("MAIN", stackSize, hintsOnly, 3, 3, 0);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece("MAIN", stackSize, 3, 3, 0, elementBudget, env, true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        mPatternAccessHatch.clear();
+        maintenance_EM();
+        if (!checkPiece("MAIN", 3, 3, 0, errors)) return;
+
+        if (mPatternAccessHatch.size() > 1) {
+            mPatternAccessHatch.clear();
+            errors.add(special_hatch_amount_wrong);
+            return;
+        }
+
+        checkHasOutputBus(errors);
+
+    }
+    // endregion
+
+    // region Processing Logic
+    /**
+     * An internal inventory to hold valid patterns' item stacks.
+     */
+    protected Collection<ItemStack> internalPatterns = new ArrayList<>();
+
+    protected Collection<ICraftingPatternDetails> actualPatternDetails = new HashSet<>();
+    private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
+
+    /**
+     * Finally the pattern actual IO numbers will be multiplied by this number, also include the crafting table recipe
+     * patterns.
+     */
+    protected int magnification = maxParallel;
+
+    @Nullable
+    private AENetworkProxy gridProxy;
+
+    protected boolean toReturnPatterns = false;
+
+    private static IHatchElement<TST_MegaCraftingCenter> AccessHatchElement = new IHatchElement<TST_MegaCraftingCenter>() {
+
+        @Override
+        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
+
+            return ImmutableList.of(TST_PatternAccessHatch.class);
+        }
+
+        @Override
+        public IGTHatchAdder<? super TST_MegaCraftingCenter> adder() {
+
+            return TST_MegaCraftingCenter::addAccessHatchToMachineList;
+        }
+
+        @Override
+        public String name() {
+
+            return "PatternAccessHatch";
+        }
+
+        @Override
+        public long count(TST_MegaCraftingCenter t) {
+
+            return t.mPatternAccessHatch.size();
+        }
+    };
+
+    public ArrayList<TST_PatternAccessHatch> mPatternAccessHatch = new ArrayList<TST_PatternAccessHatch>();
+    protected static final int SYNC_WINDOW_MAGNIFICATION_ID = 10_114;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return VisualExtremeCraftRecipeMap;
+    }
+
+    @Override
+    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
+        return new com.cleanroommc.modularui.drawable.UITexture[0];
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    protected boolean supportsCraftingMEBuffer() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsPowerPanel() {
+        return false;
+    }
+
+    @Override
+    public @NotNull CheckRecipeResult checkProcessing() {
+
+        if (toReturnPatterns) {
+            toReturnPatterns = false;
+            mOutputItems = internalPatterns.toArray(new ItemStack[0]);
+            internalPatterns.clear();
+            patternDetails.clear();
+            flush();
+            mMaxProgresstime = Config.TickEveryProcess_MegaCraftingCenter;
+
+            return CheckRecipeResultRegistry.SUCCESSFUL;
+        }
+
+        ArrayList<ItemStack> additionalOutput = checkPatternInput();
+
+        for (Map.Entry<ICraftingPatternDetails, Long> pair : cachedOutput.entrySet()) {
+            ICraftingPatternDetails pattern = pair.getKey();
+            ItemStack outputStack = pattern.getOutputs()[0].getItemStack()
+                .copy();
+            long scale = pair.getValue();
+            TSTUtils.addStacksToList(additionalOutput, outputStack, outputStack.stackSize * scale);
+
+            // add container items (not consumed items, or items that will transform into others)
+            // e.g.: consuming the containing Lava and return the bucket.
+            Arrays.stream(pattern.getInputs())
+                .map(IAEItemStack::getItemStack)
+                // check and get the container item
+                .filter(
+                    stack -> stack.getItem() != null && stack.getItem()
+                        .hasContainerItem(stack))
+                .map(
+                    stack -> stack.getItem()
+                        .getContainerItem(stack))
+                .filter(Objects::nonNull)
+                // put them to output list
+                .forEach(stack -> TSTUtils.addStacksToList(additionalOutput, stack, stack.stackSize * scale));
+        }
+        if (additionalOutput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
+        mOutputItems = additionalOutput.toArray(new ItemStack[0]);
+        mMaxProgresstime = Config.TickEveryProcess_MegaCraftingCenter;
+        mProgresstime = 0;
+        cachedOutput.clear();
+        return CheckRecipeResultRegistry.SUCCESSFUL;
+    }
+
+    public static ItemStack[] convertAEToMC(IAEItemStack... STACK) {
+        // TODO use normal code style instead `Stream`
+        return Arrays.stream(STACK)
+            .filter(Objects::nonNull)
+            .map(IAEItemStack::getItemStack)
+            .toArray(ItemStack[]::new);
+    }
+
+    /**
+     * @param r   A recipe of this machine.
+     * @param in  The pattern input items.
+     * @param out The pattern output item.
+     * @return If this pattern is valid, of this recipe.
+     */
+    protected static boolean checkPatternRecipe(ExtremeCraftRecipe r, ItemStack[] in, ItemStack out) {
+        // first check the output item is same
+        if (!r.outputItem.isItemEqual(out)) {
+            return false;
+        }
+
+        // then check the input item is in a same amount of type
+        // though OreDict Compatible Mode should be more flexible
+        // for example
+        // allow users use different items in pattern for one type of input in recipe
+        /*
+         * if (in.length != r.getInputTypeAmount()) {
+         * return false;
+         * }
+         */
+        // maybe it is possible to be more flexible
+
+        // now if the situation is normal, there is a high probability that it will match
+        // this machine allow quantity of pattern to be doubled
+        // we should check the precise quantitative relationship of I/O of patten and recipe
+
+        // the pattern Magnification can be determined by the quantity relationship of Output Item
+        int magnification = out.stackSize / r.outputItem.stackSize;
+
+        // and it must be divisible
+        if (magnification * r.outputItem.stackSize != out.stackSize) {
+            return false;
+        }
+
+        // separate calculation method by whether the recipe using OreDict
+        if (r.useAlternativeItem()) {
+            // this recipe is using OreDict
+
+            // one map to collecting general item input
+            // and one map to collecting OreDict input
+            Map<TST_ItemID, Long> itemCollecting = new HashMap<>();
+            Map<IAlternativeItem, Long> oreDictCollecting = new HashMap<>();
+
+            baseLoop: for (ItemStack itemStack : in) {
+                // first step to collect general items
+                for (TST_ItemID id : r.inputItemsGeneral.keySet()) {
+                    if (id.equalItemStack(itemStack)) {
+                        itemCollecting.merge(id, (long) itemStack.stackSize, Long::sum);
+                        continue baseLoop;
+                    }
+                }
+
+                // then collect the ore dict if this input doesn't fill in general item checking
+                for (IAlternativeItem od : r.inputItemsAlts.keySet()) {
+                    if (od.containsItem(itemStack)) {
+                        oreDictCollecting.merge(od, (long) itemStack.stackSize, Long::sum);
+                        continue baseLoop;
+                    }
+                }
+
+                // Unexpected item in pattern appears, an item in pattern doesn't belong to any item type in recipe
+                return false;
+            }
+
+            // finish input stack re-collecting
+            // check the magnification
+
+            // general item part
+            for (Map.Entry<TST_ItemID, Integer> rInputEntry : r.inputItemsGeneral.entrySet()) {
+                if (magnification != (itemCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
+                    return false;
+                }
+            }
+
+            // ore dict part
+            for (Map.Entry<IAlternativeItem, Integer> rInputEntry : r.inputItemsAlts.entrySet()) {
+                if (magnification != (oreDictCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
+                    return false;
+                }
+            }
+
+        } else {
+            // this recipe is pure general item stack inputting
+            // but we still should check the Wildcard
+            // though Wildcard checking step has been all delegated to Item ID
+            // we still need to pay attention to the order
+            Map<TST_ItemID, Long> patternCollecting = new HashMap<>();
+            baseLoop: for (ItemStack itemStack : in) {
+
+                for (TST_ItemID id : r.inputItemsGeneral.keySet()) {
+                    if (id.equalItemStack(itemStack)) {
+                        patternCollecting.merge(id, (long) itemStack.stackSize, Long::sum);
+                        continue baseLoop;
+                    }
+                }
+
+                // Unexpected item in pattern appears, an item in pattern doesn't belong to any item type in recipe
+                return false;
+            }
+
+            // finish input stack re-collecting
+            // check the magnification
+            for (Map.Entry<TST_ItemID, Integer> rInputEntry : r.inputItemsGeneral.entrySet()) {
+                if (magnification != (patternCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
+                    return false;
+                }
+            }
+
+        }
+
+        // finally this pattern passes all checks
+        return true;
+    }
+
+    /**
+     * Check input item stack whether is a valid crafting pattern for crafting table recipe or Extreme Crafting table
+     * recipe.
+     *
+     * @param pattern The item stack inputting.
+     * @return If pattern is valid, return its ICraftingPatternDetails. Return null if it is invalid.
+     */
+    public static @Nullable ICraftingPatternDetails checkPattern(ItemStack pattern) {
+        if (pattern == null || pattern.stackSize < 1) return null;
+        if (pattern.getItem() instanceof ICraftingPatternItem patternItem) {
+            ICraftingPatternDetails d = patternItem.getPatternForItem(pattern, null);
+            if (d == null) return null;
+            if (d.isCraftable()) {
+                // vanilla crafting table recipe will be checked directly
+                return d;
+            } else {
+                // to check extreme crafting table recipe
+
+                // first, the extreme crafting table recipe only allow ONE stack of output item
+                IAEItemStack[] dOutputs = d.getOutputs();
+                if (dOutputs == null || dOutputs.length != 1 || dOutputs[0] == null) return null;
+
+                // now use the output item to find the true recipe in extreme crafting center
+                Collection<ExtremeCraftRecipe> possibleRecipes = extremeCraftRecipesMap
+                    .get(TST_ItemID.create(dOutputs[0]));
+                if (possibleRecipes == null || possibleRecipes.isEmpty()) {
+                    // no recipe is of this pattern
+                    return null;
+                }
+
+                ItemStack[] dInputs = convertAEToMC(d.getInputs());
+                if (!TSTUtils.areItemsValid(dInputs)) return null;
+
+                ItemStack oItems = dOutputs[0].getItemStack();
+                if (oItems == null || oItems.getItem() == null || oItems.stackSize < 1) return null;
+
+                // now check what recipe is this pattern of
+                for (ExtremeCraftRecipe r : possibleRecipes) {
+                    if (checkPatternRecipe(r, dInputs, oItems)) {
+                        // find
+                        return d;
+                    }
+                }
+
+                // it is a pity, this pattern hasn't been through the check
+                return null;
+
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Re-calculate the patterns, flush the actual pattern pool.
+     */
+    public void recalculatePatterns() {
+        actualPatternDetails.clear();
+        for (ICraftingPatternDetails origin : patternDetails) {
+            actualPatternDetails.add(new ActualPattern(origin, magnification));
+        }
+    }
+
+    /**
+     * Return a read-only pattern list.
+     */
+    public Collection<ItemStack> getInternalPatterns() {
+        return ImmutableList.copyOf(internalPatterns);
+    }
+
+    public ItemStack extractPattern(@Nonnull AEItemStack request) {
+        if (mMaxProgresstime > 0) return null;
+        if (request.getStackSize() > 1) return null;
+        if (internalPatterns.removeIf(request::isSameType)) {
+            ItemStack stack = request.getItemStack();
+            if (stack.getItem() instanceof ICraftingPatternItem pattern) {
+                patternDetails.remove(
+                    pattern.getPatternForItem(
+                        stack,
+                        this.getBaseMetaTileEntity()
+                            .getWorld()));
+            }
+            flush();
+            return request.getItemStack();
+        }
+
+        return null;
+    }
+
+    @Override
+    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
+        int z) {
+        super.getWailaNBTData(player, tile, tag, world, x, y, z);
+
+        tag.setInteger("magnification", magnification);
+        tag.setInteger("patternAmount", patternDetails.size());
+    }
+
+    @Override
+    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
+        IWailaConfigHandler config) {
+        super.getWailaBody(itemStack, currentTip, accessor, config);
+        final NBTTagCompound tag = accessor.getNBTData();
+        // #tr tst.common.machine.ExtremeCraftCenter.waila.force_running_magnification
+        // # Force running magnification
+        // #zh_CN 强制运行倍率
+        currentTip.add(
+            TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.waila.force_running_magnification") + " : "
+                + tag.getInteger("magnification"));
+
+        // #tr tst.common.machine.ExtremeCraftCenter.waila.pattern_amount
+        // # Internal Pattern Amount
+        // #zh_CN 已载入样板数量
+        currentTip.add(
+            TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.waila.pattern_amount") + " : "
+                + tag.getInteger("patternAmount"));
+    }
+
+    @Override
+    public String[] getInfoData() {
+        if (patternDetails.isEmpty()) {
+            return super.getInfoData();
+        }
+
+        ArrayList<String> items = new ArrayList<>();
+        for (ICraftingPatternDetails d : patternDetails) {
+            items.add(
+                d.getOutputs()[0].getItemStack()
+                    .getDisplayName());
+        }
+
+        // every 4 item in a row
+        int rows = (int) Math.ceil((double) items.size() / 4);
+
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + rows + 1];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+
+        // #tr tst.common.machine.ExtremeCraftCenter.info.internal_patterns
+        // # Internal patterns
+        // #zh_CN 已载入样板
+        ret[origin.length] = TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.info.internal_patterns");
+        StringBuilder t = new StringBuilder();
+        int signal = 0;
+        int row = origin.length + 1;
+        for (String s : items) {
+            t.append(s)
+                .append("; ");
+            signal++;
+            if (signal == 4) {
+                signal = 0;
+                ret[row] = t.toString();
+                t = new StringBuilder();
+                row++;
+            }
+        }
+        if (signal != 0) {
+            ret[row] = t.toString();
+        }
+
+        return ret;
+    }
+
+    /**
+     * Check input items, move valid patterns to internal inventory.
+     *
+     * @return A list of invalid patterns and items.
+     */
+    protected ArrayList<ItemStack> checkPatternInput() {
+        ArrayList<ItemStack> l = new ArrayList<>();
+        ArrayList<ItemStack> inputs = getStoredInputs();
+        if (inputs.isEmpty()) return l;
+        for (ItemStack in : inputs) {
+            ItemStack refund = tryInjectPattern(in);
+            if (refund != null) l.add(refund);
+        }
+        updateSlots();
+        return l;
+    }
+
+    /**
+     * Try to add pattern to internal inventory.
+     *
+     * @return Return null if all accepted, or unwanted item otherwise.
+     */
+    @Nullable
+    public ItemStack tryInjectPattern(ItemStack in) {
+        ItemStack refund = null;
+        ICraftingPatternDetails d = checkPattern(in);
+        if (d != null && !patternDetails.contains(d)) {
+            patternDetails.add(d);
+
+            if (in.stackSize > 1) {
+                refund = GTUtility.copyAmountUnsafe(in.stackSize - 1, in);
+                in.stackSize = 1;
+            }
+            internalPatterns.add(in.copy());
+            flush();
+            in.stackSize = 0;
+            return refund;
+        } else {
+            refund = (in.copy());
+            in.stackSize = 0;
+            return refund;
+        }
+    }
+
+    /**
+     * Call ME net flush itself. Always call this when there is new things inputted.
+     */
+    protected void flush() {
+        recalculatePatterns();
+        if (getProxy().isActive()) {
+            try {
+                getProxy().getGrid()
+                    .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
+            } catch (GridAccessException ignored) {}
+        }
+        notifyAccessHatch();
+    }
+
+    @Override
+    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
+        ItemStack tool) {
+        if (getBaseMetaTileEntity().isServerSide()) {
+            if (mMaxProgresstime > 0) {
+                // #tr tst.common.machine.ExtremeCraftCenter.message.return_patterns.failed
+                // # The encoded patterns can only be returned when there is no recipe running.
+                // #zh_CN 仅可在未运行配方状态下退回样板.
+                GTUtility.sendChatTrans(
+                    aPlayer,
+                    StatCollector
+                        .translateToLocal("tst.common.machine.ExtremeCraftCenter.message.return_patterns.failed"));
+                return;
+            }
+
+            // return encoded patterns
+            toReturnPatterns = true;
+
+            // #tr tst.common.machine.ExtremeCraftCenter.message.return_patterns.success
+            // # Preparing to returning encoded patterns.
+            // #zh_CN 正在准备退回样板.
+            GTUtility.sendChatTrans(
+                aPlayer,
+                StatCollector
+                    .translateToLocal("tst.common.machine.ExtremeCraftCenter.message.return_patterns.success"));
+
+        }
+    }
+
+    /**
+     * Commit all patterns this machine handled to ME net.
+     *
+     * @param craftingTracker crafting helper
+     */
+    @Override
+    public void provideCrafting(@NotNull ICraftingProviderHelper craftingTracker) {
+        AENetworkProxy proxy = this.getProxy();
+        if (proxy != null && proxy.isReady()) {
+            for (var details : actualPatternDetails) {
+                craftingTracker.addCraftingOption(this, details);
+            }
+        }
+    }
+
+    /**
+     * Receive pattern task from ME net, in this machine we just collect these task and turn to sign the output items.
+     */
+    @Override
+    public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
+        return cachedOutput.merge(patternDetails, 1L, Long::sum) >= 1;
+    }
+
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        getProxy().onReady();
+    }
+
+    @Override
+    public AENetworkProxy getProxy() {
+        if (gridProxy == null) {
+            IGregTechTileEntity mte = getBaseMetaTileEntity();
+            if (mte instanceof IGridProxyable) {
+                gridProxy = new AENetworkProxy(this, "proxy", GTCMItemList.ExtremeCraftCenter.get(1), true);
+                gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
+                // updateValidGridProxySides();
+                if (mte.getWorld() != null) {
+                    gridProxy.setOwner(
+                        mte.getWorld()
+                            .getPlayerEntityByName(getBaseMetaTileEntity().getOwnerName()));
+                }
+            }
+            // MTEHatchCraftingInputME
+        }
+        return this.gridProxy;
+    }
+
+    @Nullable
+    public IGridNode getGridNode(@Nullable ForgeDirection dir) {
+        // MTEHatchInput_ME
+        AENetworkProxy proxy = this.getProxy();
+        return proxy != null ? proxy.getNode() : null;
+    }
+
+    public void securityBreak() {
+        this.getBaseMetaTileEntity()
+            .disableWorking();
+    }
+
+    protected void maintenance_EM() {
+        mWrench = true;
+        mScrewdriver = true;
+        mSoftMallet = true;
+        mHardHammer = true;
+        mSolderingTool = true;
+        mCrowbar = true;
+    }
+
+    @NotNull
+    public DimensionalCoord getLocation() {
+        return new DimensionalCoord(
+            this.getBaseMetaTileEntity()
+                .getWorld(),
+            this.getBaseMetaTileEntity()
+                .getXCoord(),
+            this.getBaseMetaTileEntity()
+                .getYCoord(),
+            this.getBaseMetaTileEntity()
+                .getZCoord());
+    }
+
+    @Nullable
+    public IGridNode getActionableNode() {
+        AENetworkProxy proxy = this.getProxy();
+        return proxy != null ? proxy.getNode() : null;
+    }
+
+    @Override
+    public boolean isBusy() {
+        return false;
+    }
+
+    public final boolean refuseCrib(IGregTechTileEntity aTileEntity) {
+        if (aTileEntity == null) {
+            return true;
+        }
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) {
+            return true;
+        }
+
+        return aMetaTileEntity instanceof IDualInputHatch;
+    }
+
+    @Override
+    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
+        super.addUIWidgets(builder, buildContext);
+        buildContext.addSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID, this::createMagnificationConfigurationWindow);
+        builder.widget(
+            new ButtonWidget().setOnClick(
+                (clickData, widget) -> {
+                    if (!widget.isClient()) widget.getContext()
+                        .openSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID);
+                })
+                .setSize(16, 16)
+                .setBackground(() -> {
+                    List<UITexture> ret = new ArrayList<>();
+                    ret.add(GTUITextures.BUTTON_STANDARD);
+                    ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
+                    return ret.toArray(new IDrawable[0]);
+                })
+
+                .addTooltip(
+                    TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.gui.magnification_info_menu_button.name"))
+                .setPos(174, 97));
+    }
+
+    protected ModularWindow createMagnificationConfigurationWindow(final EntityPlayer player) {
+        ModularWindow.Builder builder = ModularWindow.builder(240, 80);
+        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
+        builder.setGuiTint(getGUIColorization());
+
+        builder.widget(
+
+            TextWidget
+                .localised("tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text")
+                .setPos(20, 10)
+                .setSize(200, 14))
+            .widget(new TextFieldWidget().setSetterInt(val -> {
+                magnification = val;
+                flush();
+            })
+                .setGetterInt(() -> magnification)
+                .setNumbers(1, Config.MaxMagnification_MegaCraftingCenter)
+                .setOnScrollNumbers(1, 64, 2048)
+                .setTextAlignment(Alignment.Center)
+                .setTextColor(Color.WHITE.normal)
+                .setSize(60, 18)
+                .setPos(100, 36)
+                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
+
+        return builder.build();
+    }
+
+    public void notifyAccessHatch() {
+        mPatternAccessHatch.forEach(TST_PatternAccessHatch::onChange);
+
+    }
 
     // endregion
 
-    // region Statics
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setBoolean("toReturnPatterns", toReturnPatterns);
+        aNBT.setInteger("magnification", magnification);
+
+        // save internal patterns
+        if (!internalPatterns.isEmpty()) {
+            NBTTagList l = new NBTTagList();
+            for (ItemStack i : internalPatterns) {
+                l.appendTag(i.writeToNBT(new NBTTagCompound()));
+            }
+            aNBT.setTag("internalPatterns", l);
+        }
+
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        toReturnPatterns = aNBT.getBoolean("toReturnPatterns");
+        magnification = aNBT.getInteger("magnification");
+        if (magnification < 1) magnification = 1;
+
+        // load internal patterns
+        NBTTagList l = aNBT.getTagList("internalPatterns", TAG_COMPOUND);
+        if (l != null && l.tagCount() > 0) {
+            internalPatterns.clear();
+            patternDetails.clear();
+
+            for (int i = 0; i < l.tagCount(); i++) {
+                ItemStack pattern = ItemStack.loadItemStackFromNBT(l.getCompoundTagAt(i));
+                ICraftingPatternDetails d = checkPattern(pattern);
+                if (d != null) {
+                    if (!patternDetails.contains(d)) {
+                        patternDetails.add(d);
+                        internalPatterns.add(pattern);
+                    }
+                }
+            }
+        }
+
+        flush();
+    }
+
+    // endregion
+
+    // region Textures
+
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            if (aActive) {
+                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+                    .addIcon(OVERLAY_DTPF_ON)
+                    .extFacing()
+                    .build(),
+                    TextureFactory.builder()
+                        .addIcon(OVERLAY_FUSION1_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build() };
+            }
+
+            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
+                .addIcon(OVERLAY_DTPF_OFF)
+                .extFacing()
+                .build() };
+        }
+
+        return new ITexture[] { casingTexturePages[0][12] };
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.01
+        // # molecularAssembler | extremeCraftTable
+        // #zh_CN 工作台 | 梦魇合成台
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.01"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.02
+            // # {\AQUA}{\ITALIC}{\BOLD}Goodbye, all crafting lags.{\RESET}{\GRAY}
+            // #zh_CN {\AQUA}{\ITALIC}{\BOLD}再见了, 所有的合成卡顿.{\RESET}{\GRAY}
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.02"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.03
+            // # Do not use power. Need to connect the controller to ME net.
+            // #zh_CN 不需要耗电. 需要将主机连接至ME网络.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.03"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.04
+            // # Time consumption is fixed at 1 second, output items in output buses.
+            // #zh_CN 固定耗时 1 秒, 在输出总线产出产物.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.04"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.05
+            // # Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
+            // #zh_CN 在输入总线内放入编码样板, 正确的样板将被转移到内部, 错误的样板将被转移到输出总线.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.05"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.06
+            // # Support crafting table pattern and Dire Crafting process pattern.
+            // #zh_CN 支持工作台样板和梦魇工作台处理样板.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.06"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.07
+            // # Allow to double the pattern.
+            // #zh_CN 允许倍增样板.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.07"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.08
+            // # Set the pattern Magnification parameters in the controller GUI.
+            // #zh_CN 在主方块GUI内设置样板倍率参数.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.08"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.09
+            // # The internal pattern input and output quantity will be multiplied by the magnification parameter as the actual pattern information in running.
+            // #zh_CN 内部样板输入输出数量将乘以倍率参数作为运行时的实际样板信息.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.09"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.10
+            // # Include crafting pattern (crafting table recipes).
+            // #zh_CN 包括合成样板 (工作台配方).
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.10"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.11
+            // # Use a screwdriver right click controller to move internal patterns to output bus.
+            // #zh_CN 使用螺丝刀右键主机将内部样板转移至输出总线.
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.11"))
+            .addInfo(Text_SeparatingLine)
+            .addInfo(TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
+
+    public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (refuseCrib(aTileEntity)) return false;
+        if (addAccessHatchToMachineList(aTileEntity, aBaseCasingIndex)) return true;
+        return super.addToMachineList(aTileEntity, aBaseCasingIndex);
+    }
+
+    public final boolean addAccessHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
+        if (aTileEntity == null) {
+            return false;
+        }
+        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
+        if (aMetaTileEntity == null) {
+            return false;
+        }
+        if (aMetaTileEntity instanceof TST_PatternAccessHatch pa) {
+            mPatternAccessHatch.add(pa);
+            pa.bind(this);
+
+            pa.updateTexture(aBaseCasingIndex);
+            return true;
+        }
+        return false;
+    }
+
+    // endregion
+
+    // region Nested Classes
 
     /**
      * Generating visual pattern to handle actual crafting.
@@ -310,892 +1220,6 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         // endregion
     }
 
-    public static ItemStack[] convertAEToMC(IAEItemStack... STACK) {
-        // TODO use normal code style instead `Stream`
-        return Arrays.stream(STACK)
-            .filter(Objects::nonNull)
-            .map(IAEItemStack::getItemStack)
-            .toArray(ItemStack[]::new);
-    }
-
-    /**
-     * @param r   A recipe of this machine.
-     * @param in  The pattern input items.
-     * @param out The pattern output item.
-     * @return If this pattern is valid, of this recipe.
-     */
-    protected static boolean checkPatternRecipe(ExtremeCraftRecipe r, ItemStack[] in, ItemStack out) {
-        // first check the output item is same
-        if (!r.outputItem.isItemEqual(out)) {
-            return false;
-        }
-
-        // then check the input item is in a same amount of type
-        // though OreDict Compatible Mode should be more flexible
-        // for example
-        // allow users use different items in pattern for one type of input in recipe
-        /*
-         * if (in.length != r.getInputTypeAmount()) {
-         * return false;
-         * }
-         */
-        // maybe it is possible to be more flexible
-
-        // now if the situation is normal, there is a high probability that it will match
-        // this machine allow quantity of pattern to be doubled
-        // we should check the precise quantitative relationship of I/O of patten and recipe
-
-        // the pattern Magnification can be determined by the quantity relationship of Output Item
-        int magnification = out.stackSize / r.outputItem.stackSize;
-
-        // and it must be divisible
-        if (magnification * r.outputItem.stackSize != out.stackSize) {
-            return false;
-        }
-
-        // separate calculation method by whether the recipe using OreDict
-        if (r.useAlternativeItem()) {
-            // this recipe is using OreDict
-
-            // one map to collecting general item input
-            // and one map to collecting OreDict input
-            Map<TST_ItemID, Long> itemCollecting = new HashMap<>();
-            Map<IAlternativeItem, Long> oreDictCollecting = new HashMap<>();
-
-            baseLoop: for (ItemStack itemStack : in) {
-                // first step to collect general items
-                for (TST_ItemID id : r.inputItemsGeneral.keySet()) {
-                    if (id.equalItemStack(itemStack)) {
-                        itemCollecting.merge(id, (long) itemStack.stackSize, Long::sum);
-                        continue baseLoop;
-                    }
-                }
-
-                // then collect the ore dict if this input doesn't fill in general item checking
-                for (IAlternativeItem od : r.inputItemsAlts.keySet()) {
-                    if (od.containsItem(itemStack)) {
-                        oreDictCollecting.merge(od, (long) itemStack.stackSize, Long::sum);
-                        continue baseLoop;
-                    }
-                }
-
-                // Unexpected item in pattern appears, an item in pattern doesn't belong to any item type in recipe
-                return false;
-            }
-
-            // finish input stack re-collecting
-            // check the magnification
-
-            // general item part
-            for (Map.Entry<TST_ItemID, Integer> rInputEntry : r.inputItemsGeneral.entrySet()) {
-                if (magnification != (itemCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
-                    return false;
-                }
-            }
-
-            // ore dict part
-            for (Map.Entry<IAlternativeItem, Integer> rInputEntry : r.inputItemsAlts.entrySet()) {
-                if (magnification != (oreDictCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
-                    return false;
-                }
-            }
-
-        } else {
-            // this recipe is pure general item stack inputting
-            // but we still should check the Wildcard
-            // though Wildcard checking step has been all delegated to Item ID
-            // we still need to pay attention to the order
-            Map<TST_ItemID, Long> patternCollecting = new HashMap<>();
-            baseLoop: for (ItemStack itemStack : in) {
-
-                for (TST_ItemID id : r.inputItemsGeneral.keySet()) {
-                    if (id.equalItemStack(itemStack)) {
-                        patternCollecting.merge(id, (long) itemStack.stackSize, Long::sum);
-                        continue baseLoop;
-                    }
-                }
-
-                // Unexpected item in pattern appears, an item in pattern doesn't belong to any item type in recipe
-                return false;
-            }
-
-            // finish input stack re-collecting
-            // check the magnification
-            for (Map.Entry<TST_ItemID, Integer> rInputEntry : r.inputItemsGeneral.entrySet()) {
-                if (magnification != (patternCollecting.get(rInputEntry.getKey()) / rInputEntry.getValue())) {
-                    return false;
-                }
-            }
-
-        }
-
-        // finally this pattern passes all checks
-        return true;
-    }
-
-    /**
-     * Check input item stack whether is a valid crafting pattern for crafting table recipe or Extreme Crafting table
-     * recipe.
-     *
-     * @param pattern The item stack inputting.
-     * @return If pattern is valid, return its ICraftingPatternDetails. Return null if it is invalid.
-     */
-    public static @Nullable ICraftingPatternDetails checkPattern(ItemStack pattern) {
-        if (pattern == null || pattern.stackSize < 1) return null;
-        if (pattern.getItem() instanceof ICraftingPatternItem patternItem) {
-            ICraftingPatternDetails d = patternItem.getPatternForItem(pattern, null);
-            if (d == null) return null;
-            if (d.isCraftable()) {
-                // vanilla crafting table recipe will be checked directly
-                return d;
-            } else {
-                // to check extreme crafting table recipe
-
-                // first, the extreme crafting table recipe only allow ONE stack of output item
-                IAEItemStack[] dOutputs = d.getOutputs();
-                if (dOutputs == null || dOutputs.length != 1 || dOutputs[0] == null) return null;
-
-                // now use the output item to find the true recipe in extreme crafting center
-                Collection<ExtremeCraftRecipe> possibleRecipes = extremeCraftRecipesMap
-                    .get(TST_ItemID.create(dOutputs[0]));
-                if (possibleRecipes == null || possibleRecipes.isEmpty()) {
-                    // no recipe is of this pattern
-                    return null;
-                }
-
-                ItemStack[] dInputs = convertAEToMC(d.getInputs());
-                if (!TstUtils.areItemsValid(dInputs)) return null;
-
-                ItemStack oItems = dOutputs[0].getItemStack();
-                if (oItems == null || oItems.getItem() == null || oItems.stackSize < 1) return null;
-
-                // now check what recipe is this pattern of
-                for (ExtremeCraftRecipe r : possibleRecipes) {
-                    if (checkPatternRecipe(r, dInputs, oItems)) {
-                        // find
-                        return d;
-                    }
-                }
-
-                // it is a pity, this pattern hasn't been through the check
-                return null;
-
-            }
-        }
-
-        return null;
-    }
-
     // endregion
 
-    // region Logic
-
-    /**
-     * An internal inventory to hold valid patterns' item stacks.
-     */
-    protected Collection<ItemStack> internalPatterns = new ArrayList<>();
-
-    protected Collection<ICraftingPatternDetails> patternDetails = new HashSet<>();
-    protected Collection<ICraftingPatternDetails> actualPatternDetails = new HashSet<>();
-    private final HashMap<ICraftingPatternDetails, Long> cachedOutput = new HashMap<>();
-
-    /**
-     * Finally the pattern actual IO numbers will be multiplied by this number, also include the crafting table recipe
-     * patterns.
-     */
-    protected int magnification = maxParallel;
-
-    @Nullable
-    private AENetworkProxy gridProxy;
-
-    protected boolean toReturnPatterns = false;
-
-    /**
-     * Re-calculate the patterns, flush the actual pattern pool.
-     */
-    public void recalculatePatterns() {
-        actualPatternDetails.clear();
-        for (ICraftingPatternDetails origin : patternDetails) {
-            actualPatternDetails.add(new ActualPattern(origin, magnification));
-        }
-    }
-
-    /**
-     * Return a read-only pattern list.
-     */
-    public Collection<ItemStack> getInternalPatterns() {
-        return ImmutableList.copyOf(internalPatterns);
-    }
-
-    public ItemStack extractPattern(@Nonnull AEItemStack request) {
-        if (mMaxProgresstime > 0) return null;
-        if (request.getStackSize() > 1) return null;
-        if (internalPatterns.removeIf(request::isSameType)) {
-            ItemStack stack = request.getItemStack();
-            if (stack.getItem() instanceof ICraftingPatternItem pattern) {
-                patternDetails.remove(
-                    pattern.getPatternForItem(
-                        stack,
-                        this.getBaseMetaTileEntity()
-                            .getWorld()));
-            }
-            flush();
-            return request.getItemStack();
-        }
-
-        return null;
-    }
-
-    @Override
-    public void getWailaNBTData(EntityPlayerMP player, TileEntity tile, NBTTagCompound tag, World world, int x, int y,
-        int z) {
-        super.getWailaNBTData(player, tile, tag, world, x, y, z);
-
-        tag.setInteger("magnification", magnification);
-        tag.setInteger("patternAmount", patternDetails.size());
-    }
-
-    @Override
-    public void getWailaBody(ItemStack itemStack, List<String> currentTip, IWailaDataAccessor accessor,
-        IWailaConfigHandler config) {
-        super.getWailaBody(itemStack, currentTip, accessor, config);
-        final NBTTagCompound tag = accessor.getNBTData();
-        // #tr MegaCraftingCenter.waila.ForceRunningMagnification
-        // # Force running magnification
-        // #zh_CN 强制运行倍率
-        currentTip.add(
-            TextEnums.tr("MegaCraftingCenter.waila.ForceRunningMagnification") + " : "
-                + tag.getInteger("magnification"));
-
-        // #tr MegaCraftingCenter.waila.PatternAmount
-        // # Internal Pattern Amount
-        // #zh_CN 已载入样板数量
-        currentTip
-            .add(TextEnums.tr("MegaCraftingCenter.waila.PatternAmount") + " : " + tag.getInteger("patternAmount"));
-    }
-
-    @Override
-    public com.cleanroommc.modularui.drawable.UITexture[] getMachineModeIcons() {
-        return new com.cleanroommc.modularui.drawable.UITexture[0];
-    }
-
-    @Override
-    public String[] getInfoData() {
-        if (patternDetails.isEmpty()) {
-            return super.getInfoData();
-        }
-
-        ArrayList<String> items = new ArrayList<>();
-        for (ICraftingPatternDetails d : patternDetails) {
-            items.add(
-                d.getOutputs()[0].getItemStack()
-                    .getDisplayName());
-        }
-
-        // every 4 item in a row
-        int rows = (int) Math.ceil((double) items.size() / 4);
-
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + rows + 1];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-
-        // #tr MegaCraftingCenter.info.InternalPatterns
-        // # Internal patterns
-        // #zh_CN 已载入样板
-        ret[origin.length] = TextEnums.tr("MegaCraftingCenter.info.InternalPatterns");
-        StringBuilder t = new StringBuilder();
-        int signal = 0;
-        int row = origin.length + 1;
-        for (String s : items) {
-            t.append(s)
-                .append("; ");
-            signal++;
-            if (signal == 4) {
-                signal = 0;
-                ret[row] = t.toString();
-                t = new StringBuilder();
-                row++;
-            }
-        }
-        if (signal != 0) {
-            ret[row] = t.toString();
-        }
-
-        return ret;
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setBoolean("toReturnPatterns", toReturnPatterns);
-        aNBT.setInteger("magnification", magnification);
-
-        // save internal patterns
-        if (!internalPatterns.isEmpty()) {
-            NBTTagList l = new NBTTagList();
-            for (ItemStack i : internalPatterns) {
-                l.appendTag(i.writeToNBT(new NBTTagCompound()));
-            }
-            aNBT.setTag("internalPatterns", l);
-        }
-
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        toReturnPatterns = aNBT.getBoolean("toReturnPatterns");
-        magnification = aNBT.getInteger("magnification");
-        if (magnification < 1) magnification = 1;
-
-        // load internal patterns
-        NBTTagList l = aNBT.getTagList("internalPatterns", TAG_COMPOUND);
-        if (l != null && l.tagCount() > 0) {
-            internalPatterns.clear();
-            patternDetails.clear();
-
-            for (int i = 0; i < l.tagCount(); i++) {
-                ItemStack pattern = ItemStack.loadItemStackFromNBT(l.getCompoundTagAt(i));
-                ICraftingPatternDetails d = checkPattern(pattern);
-                if (d != null) {
-                    if (!patternDetails.contains(d)) {
-                        patternDetails.add(d);
-                        internalPatterns.add(pattern);
-                    }
-                }
-            }
-        }
-
-        flush();
-    }
-
-    /**
-     * Check input items, move valid patterns to internal inventory.
-     *
-     * @return A list of invalid patterns and items.
-     */
-    protected ArrayList<ItemStack> checkPatternInput() {
-        ArrayList<ItemStack> l = new ArrayList<>();
-        ArrayList<ItemStack> inputs = getStoredInputs();
-        if (inputs.isEmpty()) return l;
-        for (ItemStack in : inputs) {
-            ItemStack refund = tryInjectPattern(in);
-            if (refund != null) l.add(refund);
-        }
-        updateSlots();
-        return l;
-    }
-
-    /**
-     * Try to add pattern to internal inventory.
-     *
-     * @return Return null if all accepted, or unwanted item otherwise.
-     */
-    @Nullable
-    public ItemStack tryInjectPattern(ItemStack in) {
-        ItemStack refund = null;
-        ICraftingPatternDetails d = checkPattern(in);
-        if (d != null && !patternDetails.contains(d)) {
-            patternDetails.add(d);
-
-            if (in.stackSize > 1) {
-                refund = GTUtility.copyAmountUnsafe(in.stackSize - 1, in);
-                in.stackSize = 1;
-            }
-            internalPatterns.add(in.copy());
-            flush();
-            in.stackSize = 0;
-            return refund;
-        } else {
-            refund = (in.copy());
-            in.stackSize = 0;
-            return refund;
-        }
-    }
-
-    /**
-     * Call ME net flush itself. Always call this when there is new things inputted.
-     */
-    protected void flush() {
-        recalculatePatterns();
-        if (getProxy().isActive()) {
-            try {
-                getProxy().getGrid()
-                    .postEvent(new MENetworkCraftingPatternChange(this, getProxy().getNode()));
-            } catch (GridAccessException ignored) {}
-        }
-        notifyAccessHatch();
-    }
-
-    @Override
-    public @NotNull CheckRecipeResult checkProcessing() {
-
-        if (toReturnPatterns) {
-            toReturnPatterns = false;
-            mOutputItems = internalPatterns.toArray(new ItemStack[0]);
-            internalPatterns.clear();
-            patternDetails.clear();
-            flush();
-            mMaxProgresstime = Config.TickEveryProcess_MegaCraftingCenter;
-
-            return CheckRecipeResultRegistry.SUCCESSFUL;
-        }
-
-        ArrayList<ItemStack> additionalOutput = checkPatternInput();
-
-        for (Map.Entry<ICraftingPatternDetails, Long> pair : cachedOutput.entrySet()) {
-            ICraftingPatternDetails pattern = pair.getKey();
-            ItemStack outputStack = pattern.getOutputs()[0].getItemStack()
-                .copy();
-            long scale = pair.getValue();
-            TstUtils.addStacksToList(additionalOutput, outputStack, outputStack.stackSize * scale);
-
-            // add container items (not consumed items, or items that will transform into others)
-            // e.g.: consuming the containing Lava and return the bucket.
-            Arrays.stream(pattern.getInputs())
-                .map(IAEItemStack::getItemStack)
-                // check and get the container item
-                .filter(
-                    stack -> stack.getItem() != null && stack.getItem()
-                        .hasContainerItem(stack))
-                .map(
-                    stack -> stack.getItem()
-                        .getContainerItem(stack))
-                .filter(Objects::nonNull)
-                // put them to output list
-                .forEach(stack -> TstUtils.addStacksToList(additionalOutput, stack, stack.stackSize * scale));
-        }
-        if (additionalOutput.isEmpty()) return CheckRecipeResultRegistry.NO_RECIPE;
-        mOutputItems = additionalOutput.toArray(new ItemStack[0]);
-        mMaxProgresstime = Config.TickEveryProcess_MegaCraftingCenter;
-        mProgresstime = 0;
-        cachedOutput.clear();
-        return CheckRecipeResultRegistry.SUCCESSFUL;
-    }
-
-    @Override
-    public void onScrewdriverRightClick(ForgeDirection side, EntityPlayer aPlayer, float aX, float aY, float aZ,
-        ItemStack tool) {
-        if (getBaseMetaTileEntity().isServerSide()) {
-            if (mMaxProgresstime > 0) {
-                // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
-                // # The encoded patterns can only be returned when there is no recipe running.
-                // #zh_CN 仅可在未运行配方状态下退回样板.
-                GTUtility.sendChatTrans(
-                    aPlayer,
-                    StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.failed"));
-                return;
-            }
-
-            // return encoded patterns
-            toReturnPatterns = true;
-
-            // #tr MegaCraftingCenter.onScrewdriverRightClick.success
-            // # Preparing to returning encoded patterns.
-            // #zh_CN 正在准备退回样板.
-            GTUtility.sendChatTrans(
-                aPlayer,
-                StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.success"));
-
-        }
-    }
-
-    /**
-     * Commit all patterns this machine handled to ME net.
-     *
-     * @param craftingTracker crafting helper
-     */
-    @Override
-    public void provideCrafting(@NotNull ICraftingProviderHelper craftingTracker) {
-        AENetworkProxy proxy = this.getProxy();
-        if (proxy != null && proxy.isReady()) {
-            for (var details : actualPatternDetails) {
-                craftingTracker.addCraftingOption(this, details);
-            }
-        }
-    }
-
-    /**
-     * Receive pattern task from ME net, in this machine we just collect these task and turn to sign the output items.
-     */
-    @Override
-    public boolean pushPattern(ICraftingPatternDetails patternDetails, InventoryCrafting table) {
-        return cachedOutput.merge(patternDetails, 1L, Long::sum) >= 1;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return visualExtremeCraftRecipes;
-    }
-
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        getProxy().onReady();
-    }
-
-    @Override
-    public AENetworkProxy getProxy() {
-        if (gridProxy == null) {
-            IGregTechTileEntity mte = getBaseMetaTileEntity();
-            if (mte instanceof IGridProxyable) {
-                gridProxy = new AENetworkProxy(this, "proxy", GTCMItemList.ExtremeCraftCenter.get(1), true);
-                gridProxy.setFlags(GridFlags.REQUIRE_CHANNEL);
-                // updateValidGridProxySides();
-                if (mte.getWorld() != null) {
-                    gridProxy.setOwner(
-                        mte.getWorld()
-                            .getPlayerEntityByName(getBaseMetaTileEntity().getOwnerName()));
-                }
-            }
-            // MTEHatchCraftingInputME
-        }
-        return this.gridProxy;
-    }
-
-    @Nullable
-    public IGridNode getGridNode(@Nullable ForgeDirection dir) {
-        // MTEHatchInput_ME
-        AENetworkProxy proxy = this.getProxy();
-        return proxy != null ? proxy.getNode() : null;
-    }
-
-    public void securityBreak() {
-        this.getBaseMetaTileEntity()
-            .disableWorking();
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        mPatternAccessHatch.clear();
-        maintenance_EM();
-        if (!checkPiece("MAIN", 3, 3, 0, errors)) return;
-
-        if (mPatternAccessHatch.size() > 1) {
-            mPatternAccessHatch.clear();
-            errors.add(special_hatch_amount_wrong);
-            return;
-        }
-
-        checkHasOutputBus(errors);
-
-    }
-
-    protected void maintenance_EM() {
-        mWrench = true;
-        mScrewdriver = true;
-        mSoftMallet = true;
-        mHardHammer = true;
-        mSolderingTool = true;
-        mCrowbar = true;
-    }
-
-    @NotNull
-    public DimensionalCoord getLocation() {
-        return new DimensionalCoord(
-            this.getBaseMetaTileEntity()
-                .getWorld(),
-            this.getBaseMetaTileEntity()
-                .getXCoord(),
-            this.getBaseMetaTileEntity()
-                .getYCoord(),
-            this.getBaseMetaTileEntity()
-                .getZCoord());
-    }
-
-    @Nullable
-    public IGridNode getActionableNode() {
-        AENetworkProxy proxy = this.getProxy();
-        return proxy != null ? proxy.getNode() : null;
-    }
-
-    @Override
-    public boolean isBusy() {
-        return false;
-    }
-
-    // endregion
-
-    // region Structure
-    protected static IStructureDefinition<TST_MegaCraftingCenter> STRUCTURE_DEFINITION;
-
-    @Override
-    public IStructureDefinition<TST_MegaCraftingCenter> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaCraftingCenter>builder()
-                .addShape(
-                    "MAIN",
-                    transpose(
-                        // spotless:off
-                        new String[][]{
-                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEE~EEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BEEEEEB", "E     E", "E     E", "E     E", "E     E", "E     E", "BEEEEEB"},
-                            {"BBBBBBB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BEEEEEB", "BBBBBBB"}}))
-                // spotless:on
-                .addElement(
-                    'B',
-                    HatchElementBuilder.<TST_MegaCraftingCenter>builder()
-                        .atLeast(InputBus, OutputBus, AccessHatchElement)
-                        .adder(TST_MegaCraftingCenter::superAddToMachineList)
-                        .casingIndex(textureOffset + 12)
-                        .hint(1)
-                        .buildAndChain(ofBlock(TTCasingsContainer.sBlockCasingsTT, 4)))
-                .addElement('E', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-    // Blocks:
-    // A -> ofBlock...(gt.blockcasings, 14, ...);
-    // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-    // C -> ofBlock...(gt.blockcasingsTT, 10, ...);
-    // D -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-    // E -> ofBlock...(tile.quantumGlass, 0, ...);
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece("MAIN", stackSize, hintsOnly, 3, 3, 0);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece("MAIN", stackSize, 3, 3, 0, elementBudget, env, true);
-    }
-
-    @Override
-    protected boolean supportsCraftingMEBuffer() {
-        return false;
-    }
-
-    private static IHatchElement<TST_MegaCraftingCenter> AccessHatchElement = new IHatchElement<TST_MegaCraftingCenter>() {
-
-        @Override
-        public List<? extends Class<? extends IMetaTileEntity>> mteClasses() {
-
-            return ImmutableList.of(TST_PatternAccessHatch.class);
-        }
-
-        @Override
-        public IGTHatchAdder<? super TST_MegaCraftingCenter> adder() {
-
-            return TST_MegaCraftingCenter::addAccessHatchToMachineList;
-        }
-
-        @Override
-        public String name() {
-
-            return "PatternAccessHatch";
-        }
-
-        @Override
-        public long count(TST_MegaCraftingCenter t) {
-
-            return t.mPatternAccessHatch.size();
-        }
-    };
-    public ArrayList<TST_PatternAccessHatch> mPatternAccessHatch = new ArrayList<TST_PatternAccessHatch>();
-
-    public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (refuseCrib(aTileEntity)) return false;
-        if (addAccessHatchToMachineList(aTileEntity, aBaseCasingIndex)) return true;
-        return super.addToMachineList(aTileEntity, aBaseCasingIndex);
-    }
-
-    public final boolean refuseCrib(IGregTechTileEntity aTileEntity) {
-        if (aTileEntity == null) {
-            return true;
-        }
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) {
-            return true;
-        }
-
-        return aMetaTileEntity instanceof IDualInputHatch;
-    }
-
-    public final boolean addAccessHatchToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
-        if (aTileEntity == null) {
-            return false;
-        }
-        IMetaTileEntity aMetaTileEntity = aTileEntity.getMetaTileEntity();
-        if (aMetaTileEntity == null) {
-            return false;
-        }
-        if (aMetaTileEntity instanceof TST_PatternAccessHatch pa) {
-            mPatternAccessHatch.add(pa);
-            pa.bind(this);
-
-            pa.updateTexture(aBaseCasingIndex);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    // endregion
-
-    // region General
-
-    protected static final int SYNC_WINDOW_MAGNIFICATION_ID = 10_114;
-
-    @Override
-    public boolean supportsPowerPanel() {
-        return false;
-    }
-
-    @Override
-    public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        super.addUIWidgets(builder, buildContext);
-        buildContext.addSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID, this::createMagnificationConfigurationWindow);
-        builder.widget(
-            new ButtonWidget().setOnClick(
-                (clickData, widget) -> {
-                    if (!widget.isClient()) widget.getContext()
-                        .openSyncedWindow(SYNC_WINDOW_MAGNIFICATION_ID);
-                })
-                .setSize(16, 16)
-                .setBackground(() -> {
-                    List<UITexture> ret = new ArrayList<>();
-                    ret.add(GTUITextures.BUTTON_STANDARD);
-                    ret.add(GTUITextures.OVERLAY_BUTTON_CYCLIC);
-                    return ret.toArray(new IDrawable[0]);
-                })
-
-                .addTooltip(TextEnums.tr("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name"))
-                .setPos(174, 97));
-    }
-
-    protected ModularWindow createMagnificationConfigurationWindow(final EntityPlayer player) {
-        ModularWindow.Builder builder = ModularWindow.builder(240, 80);
-        builder.setBackground(GTUITextures.BACKGROUND_SINGLEBLOCK_DEFAULT);
-        builder.setGuiTint(getGUIColorization());
-
-        builder.widget(
-
-            TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
-                .setPos(20, 10)
-                .setSize(200, 14))
-            .widget(new TextFieldWidget().setSetterInt(val -> {
-                magnification = val;
-                flush();
-            })
-                .setGetterInt(() -> magnification)
-                .setNumbers(1, Config.MaxMagnification_MegaCraftingCenter)
-                .setOnScrollNumbers(1, 64, 2048)
-                .setTextAlignment(Alignment.Center)
-                .setTextColor(Color.WHITE.normal)
-                .setSize(60, 18)
-                .setPos(100, 36)
-                .setBackground(GTUITextures.BACKGROUND_TEXT_FIELD));
-
-        return builder.build();
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            if (aActive) {
-                return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                    .addIcon(OVERLAY_DTPF_ON)
-                    .extFacing()
-                    .build(),
-                    TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build() };
-            }
-
-            return new ITexture[] { casingTexturePages[0][12], TextureFactory.builder()
-                .addIcon(OVERLAY_DTPF_OFF)
-                .extFacing()
-                .build() };
-        }
-
-        return new ITexture[] { casingTexturePages[0][12] };
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // spotless:off
-        tt.addMachineType(TextEnums.tr("tst.megacraftingcenter.machinetype"))
-            // #tr tst.megacraftingcenter.desc.firstWords
-            // # {\AQUA}{\ITALIC}{\BOLD}Goodbye, all crafting lags.{\RESET}{\GRAY}
-            // #zh_CN {\AQUA}{\ITALIC}{\BOLD}再见了, 所有的合成卡顿.{\RESET}{\GRAY}
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.firstWords"))
-            // #tr tst.megacraftingcenter.desc.0
-            // # Do not use power. Need to connect the controller to ME net.
-            // #zh_CN 不需要耗电. 需要将主机连接至ME网络.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.0"))
-            // #tr tst.megacraftingcenter.desc.1
-            // # Time consumption is fixed at 1 second, output items in output buses.
-            // #zh_CN 固定耗时 1 秒, 在输出总线产出产物.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.1"))
-            // #tr tst.megacraftingcenter.desc.2
-            // # Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
-            // #zh_CN 在输入总线内放入编码样板, 正确的样板将被转移到内部, 错误的样板将被转移到输出总线.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.2"))
-            // #tr tst.megacraftingcenter.desc.3
-            // # Support crafting table pattern and Dire Crafting process pattern.
-            // #zh_CN 支持工作台样板和梦魇工作台处理样板.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.3"))
-            // #tr tst.megacraftingcenter.desc.4
-            // # Allow to double the pattern.
-            // #zh_CN 允许倍增样板.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.4"))
-            // #tr tst.megacraftingcenter.desc.5
-            // # Set the pattern Magnification parameters in the controller GUI.
-            // #zh_CN 在主方块GUI内设置样板倍率参数.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.5"))
-            // #tr tst.megacraftingcenter.desc.6
-            // # The internal pattern input and output quantity will be multiplied by the magnification parameter as the actual pattern information in running.
-            // #zh_CN 内部样板输入输出数量将乘以倍率参数作为运行时的实际样板信息.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.6"))
-            // #tr tst.megacraftingcenter.desc.7
-            // # Include crafting pattern (crafting table recipes).
-            // #zh_CN 包括合成样板 (工作台配方).
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.7"))
-            // #tr tst.megacraftingcenter.desc.onScrewDriverRightClick
-            // # Use a screwdriver right click controller to move internal patterns to output bus.
-            // #zh_CN 使用螺丝刀右键主机将内部样板转移至输出总线.
-            .addInfo(TextEnums.tr("tst.megacraftingcenter.desc.onScrewDriverRightClick"))
-            .addInfo(Text_SeparatingLine)
-            .addInfo(TextEnums.MoreInfoCheckingInScanner.getText())
-            .toolTipFinisher(ModName);
-        // spotless:on
-        return tt;
-    }
-
-    public void notifyAccessHatch() {
-        mPatternAccessHatch.forEach(TST_PatternAccessHatch::onChange);
-
-    }
 }

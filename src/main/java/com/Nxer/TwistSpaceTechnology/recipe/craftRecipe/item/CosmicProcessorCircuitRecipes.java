@@ -125,7 +125,7 @@ public class CosmicProcessorCircuitRecipes {
             .specialValue(2)
             .eut(RECIPE_UMV)
             .duration(20 * 30)
-            .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+            .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -145,7 +145,7 @@ public class CosmicProcessorCircuitRecipes {
             .specialValue(11)
             .eut(RECIPE_UMV)
             .duration(20 * 30)
-            .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+            .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
         // PacketInformationTranslationArray
         GTValues.RA.stdBuilder()
@@ -215,7 +215,7 @@ public class CosmicProcessorCircuitRecipes {
             .itemOutputs(GTCMItemList.InformationHorizonInterventionShell.get(128))
             .eut(RECIPE_UMV)
             .duration(20 * 120)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         // EnergyFluctuationSelfHarmonizer
         TST_RecipeBuilder.builder()
@@ -230,7 +230,7 @@ public class CosmicProcessorCircuitRecipes {
             .outputChances(9000)
             .eut(RECIPE_UMV)
             .duration(20 * 120)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -243,7 +243,7 @@ public class CosmicProcessorCircuitRecipes {
             .itemOutputs(GTCMItemList.EnergyFluctuationSelfHarmonizer.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 120)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -259,7 +259,7 @@ public class CosmicProcessorCircuitRecipes {
             .outputChances(10000, 2000)
             .eut(RECIPE_UMV)
             .duration(20 * 120)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         // Cosmic processor UEV
         TST_RecipeBuilder.builder()
@@ -283,7 +283,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidOutputs(Materials.DTR.getFluid(333))
             .eut(RECIPE_UEV)
             .duration(20 * 50)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         // Cosmic processor assembly UIV
         TST_RecipeBuilder.builder()
@@ -307,7 +307,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidOutputs(Materials.DTR.getFluid(333))
             .eut(RECIPE_UIV)
             .duration(20 * 100)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         // Cosmic processor super computer UMV
         TST_RecipeBuilder.builder()
@@ -333,7 +333,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidOutputs(Materials.DTR.getFluid(333))
             .eut(RECIPE_UIV)
             .duration(20 * 1000)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         // Cosmic processor mainframe UXV
         TST_RecipeBuilder.builder()
@@ -356,7 +356,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidOutputs(Materials.DTR.getFluid(666))
             .eut(RECIPE_UMV)
             .duration(20 * 1500)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -378,7 +378,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidOutputs(Materials.DTR.getFluid(666))
             .eut(RECIPE_UMV)
             .duration(20 * 2400)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         // Seed of Space and Time
         TST_RecipeBuilder.builder()
@@ -393,7 +393,7 @@ public class CosmicProcessorCircuitRecipes {
             .itemOutputs(SeedsSpaceTime.get(1))
             .eut(RECIPE_UMV)
             .duration(20 * 60)
-            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipeMap);
 
         // Encapsulated Micro SpaceTime Unit
         TST_RecipeBuilder.builder()
@@ -409,7 +409,7 @@ public class CosmicProcessorCircuitRecipes {
             .outputChances(10000, 4500)
             .eut(RECIPE_UMV)
             .duration(20 * 30)
-            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -423,7 +423,7 @@ public class CosmicProcessorCircuitRecipes {
             .itemOutputs(EncapsulatedMicroSpaceTimeUnit.get(4))
             .eut(RECIPE_UMV)
             .duration(20 * 90)
-            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipes);
+            .addTo(GTCMRecipe.MicroSpaceTimeFabricatorioRecipeMap);
 
         // MicroSpaceTimeFabricatorio
         GTValues.RA.stdBuilder()
@@ -481,7 +481,7 @@ public class CosmicProcessorCircuitRecipes {
             .fluidOutputs(Materials.DTR.getFluid(2500))
             .eut(TierEU.RECIPE_UMV)
             .duration(20 * 64)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
     }
 }

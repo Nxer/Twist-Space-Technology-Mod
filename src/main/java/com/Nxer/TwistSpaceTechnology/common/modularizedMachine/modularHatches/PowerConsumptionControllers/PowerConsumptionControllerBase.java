@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,10 +47,12 @@ public abstract class PowerConsumptionControllerBase extends ModularHatchBase {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            // #tr Waila.PowerConsumptionControllerBase.1
+            // #tr tst.modular.machine.PowerConsumptionControllerBase.waila.power_consumption_controller_base.1
             // # Power Consumption Multiplier
             // #zh_CN 耗能倍率
-            EnumChatFormatting.AQUA + TextEnums.tr("Waila.PowerConsumptionControllerBase.1")
+            EnumChatFormatting.AQUA
+                + TSTUtils
+                    .tr("tst.modular.machine.PowerConsumptionControllerBase.waila.power_consumption_controller_base.1")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD

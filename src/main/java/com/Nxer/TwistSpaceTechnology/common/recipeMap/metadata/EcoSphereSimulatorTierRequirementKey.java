@@ -18,9 +18,11 @@ public final class EcoSphereSimulatorTierRequirementKey extends RecipeMetadataKe
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
         int tier = cast(value, 1);
-        // #tr EcoSphereSimulator.nei.structureTier
+        // #tr tst.ecosphere.shared.recipe.EcoSphereSimulator.structure_tier
         // # Required Structure Tier: %s
         // #zh_CN 所需结构等级: %s
-        recipeInfo.drawText(StatCollector.translateToLocalFormatted("EcoSphereSimulator.nei.structureTier", tier));
+        recipeInfo.drawText(
+            StatCollector
+                .translateToLocalFormatted("tst.ecosphere.shared.recipe.EcoSphereSimulator.structure_tier", tier));
     }
 }

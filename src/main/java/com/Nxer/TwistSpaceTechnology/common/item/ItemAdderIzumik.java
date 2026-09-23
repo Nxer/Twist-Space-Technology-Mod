@@ -15,7 +15,7 @@ public class ItemAdderIzumik extends AbstractTstMetaItem implements IHasVariantA
     private final Map<Integer, String[]> MetaItemTooltipsMapIzumikShift = new HashMap<>();
 
     public ItemAdderIzumik() {
-        // #tr item.MetaItemIzumik.name
+        // #tr item.tst.common.MetaItemIzumik.name
         // # Meta Item Izumik
         // #zh_CN Meta Item Izumik
         super("MetaItemIzumik");

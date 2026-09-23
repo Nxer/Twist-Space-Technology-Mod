@@ -11,32 +11,18 @@ import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.EUTOfLaunchingSolarSail;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingNode;
 import static com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values.ticksOfLaunchingSolarSail;
-import static com.Nxer.TwistSpaceTechnology.util.TextEnums.tr;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.DSPName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPInfo_launch_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_00;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_05;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_06;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_01;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_02;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_03;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_2_04;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DSPLauncher_MachineType;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_Details;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.tr;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.DSPName;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_00;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_01;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_02;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_03;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_04;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_05;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.DysonSphere.Tooltip_DSPInfo_06;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_Details;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -68,9 +54,11 @@ import com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_DataCell;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.DSP_Values;
 import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.logic.IDSP_IO;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -82,6 +70,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.objects.XSTR;
 import gregtech.api.recipe.RecipeMap;
@@ -93,12 +82,14 @@ import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gtnhintergalactic.tile.multi.elevator.ElevatorUtil;
 
+@SkipGenerateDescription
 public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     implements IConstructable, ISurvivalConstructable, IDSP_IO {
 
     // region Class Constructor
     public TST_DSPLauncher(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_DSPLauncher(String aName) {
@@ -109,355 +100,15 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_DSPLauncher(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    // region Statics
-    public static TST_ItemID SPACE_WARPER;
-    public static TST_ItemID SOLAR_SAIL;
-    public static TST_ItemID LAUNCH_VEHICLE;
-
-    public static void initStatics() {
-        SPACE_WARPER = TST_ItemID.createNoNBT(SpaceWarper.get(1));
-        SOLAR_SAIL = TST_ItemID.createNoNBT(SolarSail.get(1));
-        LAUNCH_VEHICLE = TST_ItemID.createNoNBT(SmallLaunchVehicle.get(1));
-    }
-
-    // endregion
-    private String ownerName; // init when loading world
-    private UUID ownerUUID; // init when loading world
-    private int dimID; // init when loading world
-    private int motorTier = -1;
-    private long overloadTime = 0;
-    private boolean wirelessMode = true;
-    private DSP_DataCell dspDataCell; // init when loading world
-    private IGregTechTileEntity baseMetaTileEntity; // init when loading world
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("motorTier", motorTier);
-        aNBT.setLong("overloadTime", overloadTime);
-        aNBT.setBoolean("wirelessMode", wirelessMode);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        motorTier = aNBT.getInteger("motorTier");
-        overloadTime = aNBT.getLong("overloadTime");
-        wirelessMode = aNBT.getBoolean("wirelessMode");
-    }
-
-    private void setMotorTier(int tier) {
-        this.motorTier = tier;
-    }
-
-    public int getMotorTier() {
-        return this.motorTier;
-    }
-
-    @Override
-    public String[] getInfoData() {
-        long amountOfSailsBeforeVoid = (2048 + 256 * dspDataCell.getDSPNode()) - dspDataCell.getDSPSolarSail();
-        // spotless:off
-        List<String> ret = new ArrayList<>(Arrays.asList(super.getInfoData()));
-        String space = "    ";
-        ret.add(EnumChatFormatting.AQUA + "Owner Name: " + EnumChatFormatting.RESET + ownerName);
-        ret.add(EnumChatFormatting.AQUA + "UUID: " + EnumChatFormatting.RESET + ownerUUID);
-        //DSPDataCell
-        ret.add(EnumChatFormatting.AQUA
-            // #tr DSPDataCell.getInfoData
-            // # Dyson Sphere Data:
-            // #zh_CN 戴森球信息:
-            + tr("DSPDataCell.getInfoData")
-            + EnumChatFormatting.RESET);
-        ret.add(space
-            // #tr DSPDataCell.getDSPOwnerName
-            // # Owner Name:
-            // #zh_CN 拥有者名称:
-            + EnumChatFormatting.GOLD
-            + tr("DSPDataCell.getDSPOwnerName")
-            + EnumChatFormatting.RESET + " "
-            + dspDataCell.getOwnerName());
-        ret.add(space
-            // #tr DSPDataCell.getDSPGalaxy
-            // # Galaxy:
-            // #zh_CN 星系:
-            + EnumChatFormatting.GOLD
-            + tr("DSPDataCell.getDSPGalaxy")
-            + EnumChatFormatting.RESET + " "
-            + dspDataCell.getGalaxy());
-        ret.add(space
-            // #tr DSPDataCell.getDSPSolarSail
-            // # Solar Sail:
-            // #zh_CN 太阳帆:
-            + EnumChatFormatting.GOLD
-            + tr("DSPDataCell.getDSPSolarSail")
-            + EnumChatFormatting.RESET + " "
-            + dspDataCell.getDSPSolarSail());
-        ret.add(space
-            // #tr DSPDataCell.getDSPNode
-            // # Node:
-            // #zh_CN 戴森球节点:
-            + EnumChatFormatting.GOLD
-            + tr("DSPDataCell.getDSPNode")
-            + EnumChatFormatting.RESET + " "
-            + dspDataCell.getDSPNode());
-        if(amountOfSailsBeforeVoid >= 0) {
-            ret.add(space
-                // #tr DSPDataCell.amountOfSailsBeforeVoid
-                // # Amount of Sails Before Void:
-                // #zh_CN 可负载太阳帆的安全空间:
-                + EnumChatFormatting.GOLD
-                + tr("DSPDataCell.amountOfSailsBeforeVoid")
-                + EnumChatFormatting.RESET + " "
-                + amountOfSailsBeforeVoid);
-        } else {
-            ret.add(space
-                // #tr DSPDataCell.amountOfSailsToBeVoided
-                // # Amount of Sails To Be Destroyed:
-                // #zh_CN 可能会损毁的太阳帆数量:
-                + EnumChatFormatting.GOLD
-                + tr("DSPDataCell.amountOfSailsToBeVoided")
-                + EnumChatFormatting.RESET + " "
-                + (amountOfSailsBeforeVoid * -1));
-        }
-        ret.add(space
-            // #tr DSPDataCell.getInfoData.01
-            // # Overload time:
-            // #zh_CN 剩余过载时间:
-            + EnumChatFormatting.GOLD
-            + TextEnums.tr("TST_DSPLauncher.getInfoData.01")
-            + EnumChatFormatting.RESET + " "
-            + (overloadTime / 20)
-            + "s");
-        ret.add(space
-            // #tr DSPDataCell.getInfoData.02
-            // # Speed Up:
-            // #zh_CN 速度倍率:
-            + EnumChatFormatting.GOLD
-            + tr("TST_DSPLauncher.getInfoData.02")
-            + EnumChatFormatting.RESET + " "
-            + (calculateOverloadSpeedUp()));
-        return ret.toArray(new String[0]);
-        // spotless:on
-    }
-
-    /*
-     * protected ProcessingLogic createProcessingLogic() {
-     * return new GTCM_ProcessingLogic() {
-     * @NotNull
-     * @Override
-     * protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-     * // check motor tier
-     * if (recipe.mSpecialValue > motorTier) {
-     * return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
-     * }
-     * // normal energy hatch mode
-     * if (!wirelessMode) return super.validateRecipe(recipe);
-     * // check wireless EU net
-     * if (!addEUToGlobalEnergyMap(ownerUUID, -recipe.mEUt * recipe.mDuration)) {
-     * return CheckRecipeResultRegistry.insufficientPower((long) recipe.mEUt * recipe.mDuration);
-     * }
-     * return CheckRecipeResultRegistry.SUCCESSFUL;
-     * }
-     * @Nonnull
-     * @Override
-     * protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-     * // no generic overclock
-     * return GTCM_OverclockCalculator.ofNoOverclock(recipe);
-     * }
-     * @NotNull
-     * @Override
-     * public CheckRecipeResult process() {
-     * CheckRecipeResult result = super.process();
-     * // Power will be directly consumed through wireless if in mode
-     * if (wirelessMode) setCalculatedEut(0);
-     * return result;
-     * }
-     * };
-     * }
-     */
-
-    @Override
-    @Nonnull
-    public CheckRecipeResult checkProcessing() {
-        CheckRecipeResult result = CheckRecipeResultRegistry.NO_RECIPE;
-        for (ItemStack items : getStoredInputs()) {
-            // check input Space Warper
-            if (SPACE_WARPER.equalItemStack(items)) {
-                overloadTime += 20L * DSP_Values.secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
-                items.stackSize = 0;
-            }
-            // check and process recipe
-            if (!result.wasSuccessful()) {
-                if (SOLAR_SAIL.equalItemStack(items)) {
-                    // launch Solar Sail
-                    result = CheckRecipeResultRegistry.SUCCESSFUL;
-                    items.stackSize -= 1;
-                    mMaxProgresstime = ticksOfLaunchingSolarSail;
-                    lEUt = -EUTOfLaunchingSolarSail;
-                    dspDataCell.addDSPSolarSail(1);
-                } else if (LAUNCH_VEHICLE.equalItemStack(items)) {
-                    // launch DSP Node
-                    result = CheckRecipeResultRegistry.SUCCESSFUL;
-                    items.stackSize -= 1;
-                    mMaxProgresstime = ticksOfLaunchingNode;
-                    lEUt = -EUTOfLaunchingNode;
-                    dspDataCell.addDSPNode(1);
-                    if (1 != XSTR.XSTR_INSTANCE.nextInt(100)) {
-                        // 99% return EmptySmallLaunchVehicle
-                        mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(1) };
-                    }
-                }
-            }
-        }
-        // inputs are consumed at this point
-        updateSlots();
-        if (!result.wasSuccessful()) return result;
-
-        // wireless EU net process
-        if (wirelessMode) {
-            if (!addEUToGlobalEnergyMap(ownerUUID, lEUt * mMaxProgresstime)) {
-                return CheckRecipeResultRegistry.insufficientPower(lEUt * mMaxProgresstime);
-            }
-            lEUt = 0;
-        }
-
-        mEfficiency = 10000;
-        mEfficiencyIncrease = 10000;
-
-        // if in overload condition, reduced time
-        if (overloadTime > 0) {
-            double m = calculateOverloadSpeedUp();
-            mMaxProgresstime = (int) Math.max(1, mMaxProgresstime / m);
-        } else {
-            mMaxProgresstime /= motorTier;
-        }
-
-        return result;
-    }
-
-    protected double calculateOverloadSpeedUp() {
-        if (overloadTime < 1) return motorTier;
-        int s = (int) (overloadTime / 20);
-        if (s <= 1) return DSP_Values.overloadSpeedUpMultiplier;
-        double i = 1d / (5d + 900d * overloadSpecialCalculationParameter / s);
-        double m = 1 + Math.pow(s, i);
-        return m * DSP_Values.overloadSpeedUpMultiplier * motorTier;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.DSP_LauncherRecipes;
-    }
-
-    /**
-     * Init information.
-     *
-     * @param aBaseMetaTileEntity This machine tile entity.
-     */
-    @Override
-    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
-        super.onFirstTick(aBaseMetaTileEntity);
-        if (aBaseMetaTileEntity.isServerSide()) {
-            this.baseMetaTileEntity = aBaseMetaTileEntity;
-            this.dimID = getDimID(aBaseMetaTileEntity);
-            this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
-            this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
-            this.dspDataCell = getOrInitDSPData(ownerName, dimID);
-        }
-    }
-
-    @Override
-    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPreTick(aBaseMetaTileEntity, aTick);
-        if (overloadTime > 0) overloadTime--;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        this.motorTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (this.motorTier < 1) {
-            errors.add(tiered_structure_issue);
-        }
-        wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
-
-    }
     // endregion
 
     // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainDSPLauncher";
+    private final int horizontalOffSet = 20;
+    private final int verticalOffSet = 59;
+    private final int depthOffSet = 8;
+
     // spotless:off
-
-	@Override
-	public void construct(ItemStack stackSize, boolean hintsOnly) {
-		buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-	}
-
-	@Override
-	public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-		if (this.mMachine) return -1;
-		return this.survivalBuildPiece(
-			STRUCTURE_PIECE_MAIN,
-			stackSize,
-			horizontalOffSet,
-			verticalOffSet,
-			depthOffSet,
-			elementBudget,
-			env,
-			false,
-			true);
-	}
-	private static final String STRUCTURE_PIECE_MAIN = "mainDSPLauncher";
-	private final int horizontalOffSet = 20;
-	private final int verticalOffSet = 59;
-	private final int depthOffSet = 8;
-	@Override
-	public IStructureDefinition<TST_DSPLauncher> getStructureDefinition() {
-		return IStructureDefinition.<TST_DSPLauncher>builder()
-		                           .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-		                           .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))// A -> ofBlock...(gt.blockcasings8, 7, ...);
-		                           .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// B -> ofBlock...(gt.blockcasingsSE, 0, ...);
-		                           .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// C -> ofBlock...(gt.blockcasingsSE, 1, ...);
-		                           .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// D -> ofBlock...(gt.blockcasingsSE, 2, ...);
-		                           .addElement('E', // E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...) tiered
-		                                       ofBlocksTiered(
-                                                   ElevatorUtil.motorTierConverter(),
-                                                   ElevatorUtil.getMotorTiers(),
-                                                   -1,
-                                                   TST_DSPLauncher::setMotorTier,
-                                                   TST_DSPLauncher::getMotorTier))
-		                           .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-		                           .addElement('G', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-		                           .addElement(
-						                       'H',
-						                       HatchElementBuilder.<TST_DSPLauncher>builder()
-						                                             .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
-						                                             .adder(TST_DSPLauncher::addToMachineList)
-						                                             .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
-						                                             .hint(1)
-						                                             .buildAndChain(GregTechAPI.sBlockCasingsSE, 0))
-		                           .addElement('I', ofFrame(Materials.CosmicNeutronium))
-		                           .build();
-	}
-
-	/*
-	Blocks:
-A -> ofBlock...(gt.blockcasings8, 7, ...);
-B -> ofBlock...(gt.blockcasingsSE, 0, ...);
-C -> ofBlock...(gt.blockcasingsSE, 1, ...);
-D -> ofBlock...(gt.blockcasingsSE, 2, ...);
-E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...);
-F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-H -> ofBlock...(tile.wood, 0, ...); // hatches
-I -> ofFrame...(NaquadahAlloy);
-	 */
 	private final String[][] shapeMain = new String[][]{
 		{"                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                      DD             DD                  ","                      DD             DD                  ","                      DD             DD                  ","                      DD             DD                  ","                      DD             DD                  ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         "},
 		{"                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                      BB             BB                  ","                     BBBB           BBBB                 ","                     BBBB           BBBB                 ","                     BBBB           BBBB                 ","                     BBBB           BBBB                 ","                     BBBB           BBBB                 ","                      BB             BB                  ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         ","                                                         "},
@@ -526,30 +177,109 @@ I -> ofFrame...(NaquadahAlloy);
 		{"                        GGGGGGGGGGGG                     ","                    GGGGGGGGGGGGGGGGGGGG                 ","                 GGGGGGGGGGGGGGGGGGGGGGGGGG              ","              GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ","            GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           ","           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG         ","         GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        ","        GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG       ","       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG      ","      GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     ","     GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG    ","    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","     GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG    ","      GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     ","       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG      ","        GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG       ","         GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        ","           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG         ","            GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           ","              GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ","                 GGGGGGGGGGGGGGGGGGGGGGGGGG              ","                    GGGGGGGGGGGGGGGGGGGG                 ","                        GGGGGGGGGGGG                     "},
 		{"                        GGGGGGGGGGGG                     ","                    GGGGGGGGGGGGGGGGGGGG                 ","                 GGGGGGGGGGGGGGGGGGGGGGGGGG              ","              GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ","            GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           ","           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG         ","         GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        ","        GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG       ","       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG      ","      GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     ","     GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG    ","    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG "," GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG ","  GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG  ","   GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","    GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG   ","     GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG    ","      GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG     ","       GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG      ","        GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG       ","         GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG        ","           GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG         ","            GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG           ","              GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG            ","                 GGGGGGGGGGGGGGGGGGGGGGGGGG              ","                    GGGGGGGGGGGGGGGGGGGG                 ","                        GGGGGGGGGGGG                     "}
 	};
+    // spotless:on
 
-	// spotless:on
+    @Override
+    public IStructureDefinition<TST_DSPLauncher> getStructureDefinition() {
+        return IStructureDefinition.<TST_DSPLauncher>builder()
+            .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+            .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))// A -> ofBlock...(gt.blockcasings8, 7, ...);
+            .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// B -> ofBlock...(gt.blockcasingsSE, 0, ...);
+            .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// C -> ofBlock...(gt.blockcasingsSE, 1, ...);
+            .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// D -> ofBlock...(gt.blockcasingsSE, 2, ...);
+            .addElement(
+                'E', // E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...) tiered
+                ofBlocksTiered(
+                    ElevatorUtil.motorTierConverter(),
+                    ElevatorUtil.getMotorTiers(),
+                    -1,
+                    TST_DSPLauncher::setMotorTier,
+                    TST_DSPLauncher::getMotorTier))
+            .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
+            .addElement('G', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+            .addElement(
+                'H',
+                HatchElementBuilder.<TST_DSPLauncher>builder()
+                    .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                    .adder(TST_DSPLauncher::addToMachineList)
+                    .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
+                    .hint(1)
+                    .buildAndChain(GregTechAPI.sBlockCasingsSE, 0))
+            .addElement('I', ofFrame(Materials.CosmicNeutronium))
+            .build();
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasings8, 7, ...);
+     * B -> ofBlock...(gt.blockcasingsSE, 0, ...);
+     * C -> ofBlock...(gt.blockcasingsSE, 1, ...);
+     * D -> ofBlock...(gt.blockcasingsSE, 2, ...);
+     * E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...);
+     * F -> ofBlock...(gt.blockcasingsTT, 0, ...);
+     * G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+     * H -> ofBlock...(tile.wood, 0, ...); // hatches
+     * I -> ofFrame...(NaquadahAlloy);
+     */
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        this.motorTier = -1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (this.motorTier < 1) {
+            errors.add(tiered_structure_issue);
+        }
+        wirelessMode = this.mEnergyHatches.isEmpty() && this.mExoticEnergyHatches.isEmpty();
+
+    }
     // endregion
 
-    // region Overrides
+    // region Processing Logic
+    public static TST_ItemID SPACE_WARPER;
+    public static TST_ItemID SOLAR_SAIL;
+    public static TST_ItemID LAUNCH_VEHICLE;
+    private String ownerName;
+
+    // init when loading world
+    private UUID ownerUUID;
+
+    // init when loading world
+    private int dimID;
+
+    // init when loading world
+    private int motorTier = -1;
+
+    private long overloadTime = 0;
+    private boolean wirelessMode = true;
+    private DSP_DataCell dspDataCell;
+
+    // init when loading world
+    private IGregTechTileEntity baseMetaTileEntity;
 
     @Override
-    protected boolean isEnablePerfectOverclock() {
-        return false;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return 1;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
+    public RecipeMap<?> getRecipeMap() {
+        return GTCMRecipe.DSP_LauncherRecipeMap;
     }
 
     @Override
@@ -558,52 +288,282 @@ I -> ofFrame...(NaquadahAlloy);
     }
 
     @Override
+    public int getMaxParallelRecipes() {
+        return 1;
+    }
+
+    @Override
+    protected float getSpeedBonus() {
+        return 1;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return false;
+    }
+
+    @Override
     public boolean supportsVoidProtection() {
         return false;
     }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(Tooltip_DSPLauncher_MachineType)
-            .addInfo(Tooltip_DSPLauncher_00)
-            .addInfo(Tooltip_DSPLauncher_01)
-            .addInfo(Tooltip_DSPLauncher_02)
-            .addInfo(Tooltip_DSPLauncher_03)
-            .addInfo(Tooltip_DSPLauncher_04)
-            .addInfo(Tooltip_DSPLauncher_05)
-            .addInfo(Tooltip_DSPLauncher_06)
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addSeparator()
-            .addStructureInfo(Tooltip_Details)
-            .addStructureInfo(Tooltip_DSPLauncher_2_01)
-            // #tr Tooltip_DSPLauncher_2_01_OverloadParameterCalculation
-            // # Overload Parameter = t ^ [ 1 / (1000*900/t + 5) ] ; t = Overload Time (second)
-            // #zh_CN 过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)
-            .addStructureInfo(TextEnums.tr("Tooltip_DSPLauncher_2_01_OverloadParameterCalculation"))
-            .addStructureInfo(Tooltip_DSPLauncher_2_02)
-            .addStructureInfo(Tooltip_DSPLauncher_2_03)
-            .addStructureInfo(Tooltip_DSPLauncher_2_04)
-            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
-            .addStructureInfo(DSPName + ":")
-            .addStructureInfo(Tooltip_DSPInfo_launch_01)
-            .addStructureInfo(Tooltip_DSPInfo_launch_02)
-            .addStructureInfo(Tooltip_DSPInfo_00)
-            .addStructureInfo(Tooltip_DSPInfo_01)
-            .addStructureInfo(Tooltip_DSPInfo_02)
-            .addStructureInfo(Tooltip_DSPInfo_03)
-            .addStructureInfo(Tooltip_DSPInfo_04)
-            .addStructureInfo(Tooltip_DSPInfo_05)
-            .addStructureInfo(Tooltip_DSPInfo_06)
-            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 1)
-            .addEnergyHatch(textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
+    public boolean supportsInputSeparation() {
+        return false;
     }
+
+    /*
+     * protected ProcessingLogic createProcessingLogic() {
+     * return new GTCM_ProcessingLogic() {
+     * @NotNull
+     * @Override
+     * protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+     * // check motor tier
+     * if (recipe.mSpecialValue > motorTier) {
+     * return CheckRecipeResultRegistry.insufficientMachineTier(recipe.mSpecialValue);
+     * }
+     * // normal energy hatch mode
+     * if (!wirelessMode) return super.validateRecipe(recipe);
+     * // check wireless EU net
+     * if (!addEUToGlobalEnergyMap(ownerUUID, -recipe.mEUt * recipe.mDuration)) {
+     * return CheckRecipeResultRegistry.insufficientPower((long) recipe.mEUt * recipe.mDuration);
+     * }
+     * return CheckRecipeResultRegistry.SUCCESSFUL;
+     * }
+     * @Nonnull
+     * @Override
+     * protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+     * // no generic overclock
+     * return GTCM_OverclockCalculator.ofNoOverclock(recipe);
+     * }
+     * @NotNull
+     * @Override
+     * public CheckRecipeResult process() {
+     * CheckRecipeResult result = super.process();
+     * // Power will be directly consumed through wireless if in mode
+     * if (wirelessMode) setCalculatedEut(0);
+     * return result;
+     * }
+     * };
+     * }
+     */
+    @Override
+    @Nonnull
+    public CheckRecipeResult checkProcessing() {
+        CheckRecipeResult result = CheckRecipeResultRegistry.NO_RECIPE;
+        for (ItemStack items : getStoredInputs()) {
+            // check input Space Warper
+            if (SPACE_WARPER.equalItemStack(items)) {
+                overloadTime += 20L * DSP_Values.secondsOfEverySpaceWarperProvideToOverloadTime * items.stackSize;
+                items.stackSize = 0;
+            }
+            // check and process recipe
+            if (!result.wasSuccessful()) {
+                if (SOLAR_SAIL.equalItemStack(items)) {
+                    // launch Solar Sail
+                    result = CheckRecipeResultRegistry.SUCCESSFUL;
+                    items.stackSize -= 1;
+                    mMaxProgresstime = ticksOfLaunchingSolarSail;
+                    lEUt = -EUTOfLaunchingSolarSail;
+                    dspDataCell.addDSPSolarSail(1);
+                } else if (LAUNCH_VEHICLE.equalItemStack(items)) {
+                    // launch DSP Node
+                    result = CheckRecipeResultRegistry.SUCCESSFUL;
+                    items.stackSize -= 1;
+                    mMaxProgresstime = ticksOfLaunchingNode;
+                    lEUt = -EUTOfLaunchingNode;
+                    dspDataCell.addDSPNode(1);
+                    if (1 != XSTR.XSTR_INSTANCE.nextInt(100)) {
+                        // 99% return EmptySmallLaunchVehicle
+                        mOutputItems = new ItemStack[] { EmptySmallLaunchVehicle.get(1) };
+                    }
+                }
+            }
+        }
+        // inputs are consumed at this point
+        updateSlots();
+        if (!result.wasSuccessful()) return result;
+
+        // wireless EU net process
+        if (wirelessMode) {
+            if (!addEUToGlobalEnergyMap(ownerUUID, lEUt * mMaxProgresstime)) {
+                return CheckRecipeResultRegistry.insufficientPower(lEUt * mMaxProgresstime);
+            }
+            lEUt = 0;
+        }
+
+        mEfficiency = 10000;
+        mEfficiencyIncrease = 10000;
+
+        // if in overload condition, reduced time
+        if (overloadTime > 0) {
+            double m = calculateOverloadSpeedUp();
+            mMaxProgresstime = (int) Math.max(1, mMaxProgresstime / m);
+        } else {
+            mMaxProgresstime /= motorTier;
+        }
+
+        return result;
+    }
+
+    public static void initStatics() {
+        SPACE_WARPER = TST_ItemID.createNoNBT(SpaceWarper.get(1));
+        SOLAR_SAIL = TST_ItemID.createNoNBT(SolarSail.get(1));
+        LAUNCH_VEHICLE = TST_ItemID.createNoNBT(SmallLaunchVehicle.get(1));
+    }
+
+    private void setMotorTier(int tier) {
+        this.motorTier = tier;
+    }
+
+    public int getMotorTier() {
+        return this.motorTier;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        long amountOfSailsBeforeVoid = (2048 + 256 * dspDataCell.getDSPNode()) - dspDataCell.getDSPSolarSail();
+        List<String> ret = new ArrayList<>(Arrays.asList(super.getInfoData()));
+        String space = "    ";
+        ret.add(EnumChatFormatting.AQUA + "Owner Name: " + EnumChatFormatting.RESET + ownerName);
+        ret.add(EnumChatFormatting.AQUA + "UUID: " + EnumChatFormatting.RESET + ownerUUID);
+        // DSPDataCell
+        ret.add(
+            EnumChatFormatting.AQUA
+                // spotless:off
+            // #tr tst.dyson.shared.data_cell.get_info_data
+            // # Dyson Sphere Data:
+            // #zh_CN 戴森球信息:
+            + tr("tst.dyson.shared.data_cell.get_info_data")
+            + EnumChatFormatting.RESET);
+        ret.add(space
+            // #tr tst.dyson.shared.data_cell.get_dsp_owner_name
+            // # Owner Name:
+            // #zh_CN 拥有者名称:
+            + EnumChatFormatting.GOLD
+            + tr("tst.dyson.shared.data_cell.get_dsp_owner_name")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getOwnerName());
+        ret.add(space
+            // #tr tst.dyson.shared.data_cell.get_dsp_galaxy
+            // # Galaxy:
+            // #zh_CN 星系:
+            + EnumChatFormatting.GOLD
+            + tr("tst.dyson.shared.data_cell.get_dsp_galaxy")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getGalaxy());
+        ret.add(space
+            // #tr tst.dyson.shared.data_cell.get_dsp_solar_sail
+            // # Solar Sail:
+            // #zh_CN 太阳帆:
+            + EnumChatFormatting.GOLD
+            + tr("tst.dyson.shared.data_cell.get_dsp_solar_sail")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getDSPSolarSail());
+        ret.add(space
+            // #tr tst.dyson.shared.data_cell.get_dsp_node
+            // # Node:
+            // #zh_CN 戴森球节点:
+            + EnumChatFormatting.GOLD
+            + tr("tst.dyson.shared.data_cell.get_dsp_node")
+            + EnumChatFormatting.RESET + " "
+            + dspDataCell.getDSPNode());
+        if(amountOfSailsBeforeVoid >= 0) {
+            ret.add(space
+                // #tr tst.dyson.shared.data_cell.amount_of_sails_before_void
+                // # Amount of Sails Before Void:
+                // #zh_CN 可负载太阳帆的安全空间:
+                + EnumChatFormatting.GOLD
+                + tr("tst.dyson.shared.data_cell.amount_of_sails_before_void")
+                + EnumChatFormatting.RESET + " "
+                + amountOfSailsBeforeVoid);
+        } else {
+            ret.add(space
+                // #tr tst.dyson.shared.data_cell.amount_of_sails_to_be_voided
+                // # Amount of Sails To Be Destroyed:
+                // #zh_CN 可能会损毁的太阳帆数量:
+                + EnumChatFormatting.GOLD
+                + tr("tst.dyson.shared.data_cell.amount_of_sails_to_be_voided")
+                + EnumChatFormatting.RESET + " "
+                + (amountOfSailsBeforeVoid * -1));
+        }
+        ret.add(space
+            // #tr tst.dyson.machine.DSPLauncher.info.01
+            // # Overload time:
+            // #zh_CN 剩余过载时间:
+            + EnumChatFormatting.GOLD
+            + TSTUtils.tr("tst.dyson.machine.DSPLauncher.info.01")
+            + EnumChatFormatting.RESET + " "
+            + (overloadTime / 20)
+            + "s");
+        ret.add(space
+            // #tr tst.dyson.machine.DSPLauncher.info.02
+            // # Speed Up:
+            // #zh_CN 速度倍率:
+            + EnumChatFormatting.GOLD
+            + tr("tst.dyson.machine.DSPLauncher.info.02")
+            + EnumChatFormatting.RESET + " "
+            + (calculateOverloadSpeedUp()));
+            // spotless:on
+        return ret.toArray(new String[0]);
+    }
+
+    protected double calculateOverloadSpeedUp() {
+        if (overloadTime < 1) return motorTier;
+        int s = (int) (overloadTime / 20);
+        if (s <= 1) return DSP_Values.overloadSpeedUpMultiplier;
+        double i = 1d / (5d + 900d * overloadSpecialCalculationParameter / s);
+        double m = 1 + Math.pow(s, i);
+        return m * DSP_Values.overloadSpeedUpMultiplier * motorTier;
+    }
+
+    /**
+     * Init information.
+     *
+     * @param aBaseMetaTileEntity This machine tile entity.
+     */
+    @Override
+    public void onFirstTick(IGregTechTileEntity aBaseMetaTileEntity) {
+        super.onFirstTick(aBaseMetaTileEntity);
+        if (aBaseMetaTileEntity.isServerSide()) {
+            this.baseMetaTileEntity = aBaseMetaTileEntity;
+            this.dimID = getDimID(aBaseMetaTileEntity);
+            this.ownerName = getOwnerNameAndInitMachine(aBaseMetaTileEntity);
+            this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
+            this.dspDataCell = getOrInitDSPData(ownerName, dimID);
+        }
+    }
+
+    @Override
+    public void onPreTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPreTick(aBaseMetaTileEntity, aTick);
+        if (overloadTime > 0) overloadTime--;
+    }
+
+    // endregion
+
+    // region NBT
+
+    // init when loading world
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("motorTier", motorTier);
+        aNBT.setLong("overloadTime", overloadTime);
+        aNBT.setBoolean("wirelessMode", wirelessMode);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        motorTier = aNBT.getInteger("motorTier");
+        overloadTime = aNBT.getLong("overloadTime");
+        wirelessMode = aNBT.getBoolean("wirelessMode");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -634,4 +594,103 @@ I -> ofFrame...(NaquadahAlloy);
     }
 
     // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.dyson.machine.DSPLauncher.tooltip.machine_type
+        // # Dyson Sphere Program: Launch Site
+        // #zh_CN 戴森球计划: 垂直发射井
+        tt.addMachineType(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.machine_type"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.01
+            // # Controller block for the Dyson Sphere Module Launch Site
+            // #zh_CN 戴森球模块发射场的控制器方块
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.01"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.02
+            // # {\BLUE}"Low altitude flight..."
+            // #zh_CN {\BLUE}"低空飞行 ..."
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.02"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.03
+            // # Launching Dyson Sphere components into Dyson Sphere orbit to form a Dyson Sphere.
+            // #zh_CN 发射装载有戴森球组件的小型运载火箭到戴森球轨道上组建戴森球.
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.03"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.04
+            // # No overclock and no extra parallel.
+            // #zh_CN 不会超频且没有额外并行.
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.04"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.05
+            // # Higher tier of Elevator motor Module means faster launching.
+            // #zh_CN 更高级的加速轨道可以减少发射耗时.
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.05"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.06
+            // # Inputting Space Warper will enable overlord mode. Reduce launch intervals.
+            // #zh_CN 输入空间翘曲器可以进入过载模式. 减少发射时间间隔.
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.06"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.info.07
+            // # Joining the wireless EU network when without installing an energy hatch.
+            // #zh_CN 未安装能源仓时自动进入无线电力网络模式.
+            .addInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.info.07"))
+            .addStructureInfo(Tooltip_Details)
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.01
+            // # Final progress time = recipe time / ( module tier * overload mode parameter )
+            // #zh_CN 最终处理时间 = 配方时间 /( 加速轨道等级 * 过载模式参数 )
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.01"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.02
+            // # Overload Parameter = t ^ [ 1 / (1000*900/t + 5) ] ; t = Overload Time (second)
+            // #zh_CN 过载模式参数 = t ^ [ 1 / (1000*900/t + 5) ] ; t = 过载模式时间 (秒)
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.02"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.03
+            // # Every Space Warper will provide (default) 15 minutes of overload mode.
+            // #zh_CN 每个空间翘曲器提供(默认)15分钟的过载模式.
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.03"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.04
+            // # Input Space Warper will be consumed immediately.
+            // #zh_CN 输入的空间翘曲器会立刻被消耗.
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.04"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.structure.05
+            // # Converted to remaining time of overload mode.
+            // #zh_CN 转换成剩余的过载模式时间.
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.structure.05"))
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(DSPName + ":")
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.launch.01
+            // # Launching Solar Sail increase Solar Sail amount of current Galaxy's Dyson Sphere.
+            // #zh_CN 发射太阳帆增加当前星系戴森球的太阳帆数量.
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.01"))
+            // #tr tst.dyson.machine.DSPLauncher.tooltip.launch.02
+            // # Launching Small Launch Vehicle increase Node amount of current Galaxy's Dyson Sphere.
+            // #zh_CN 发射小型运载火箭增加当前星系戴森球的节点数量.
+            .addStructureInfo(TSTUtils.tr("tst.dyson.machine.DSPLauncher.tooltip.launch.02"))
+            .addStructureInfo(Tooltip_DSPInfo_00)
+            .addStructureInfo(Tooltip_DSPInfo_01)
+            .addStructureInfo(Tooltip_DSPInfo_02)
+            .addStructureInfo(Tooltip_DSPInfo_03)
+            .addStructureInfo(Tooltip_DSPInfo_04)
+            .addStructureInfo(Tooltip_DSPInfo_05)
+            .addStructureInfo(Tooltip_DSPInfo_06)
+            .addStructureInfo(EnumChatFormatting.GOLD + "-----------------------------------------")
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 1)
+            .addEnergyHatch(textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    @Override
+    public Style getTooltipCreditStyle() {
+        return Style.DYSON_SPHERE;
+    }
+
+    @Override
+    public Tag[] getTooltipCreditTags() {
+        return new Tag[] { Tag.DYSON_SPHERE };
+    }
+
+    // endregion
+
 }

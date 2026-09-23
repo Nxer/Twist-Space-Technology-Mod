@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.craftRecipe.item;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.copyAmount;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.copyAmount;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
 
 import net.minecraft.item.ItemStack;
@@ -70,7 +70,7 @@ public class LapotronChipRecipes {
             .outputChances(999)
             .eut(TierEU.RECIPE_UHV)
             .duration(20 * 3000)
-            .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+            .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
         // Growth
         if (Config.PerfectCrystalRecipeNonCyclized) {
@@ -81,7 +81,7 @@ public class LapotronChipRecipes {
                 .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(16))
                 .eut(TierEU.RECIPE_ZPM)
                 .duration(20 * 30)
-                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -94,7 +94,7 @@ public class LapotronChipRecipes {
                 .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(1))
                 .eut(TierEU.RECIPE_ZPM)
                 .duration(20 * 300)
-                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
             // Lapotron
             GTValues.RA.stdBuilder()
@@ -103,7 +103,7 @@ public class LapotronChipRecipes {
                 .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(16))
                 .eut(TierEU.RECIPE_UHV)
                 .duration(20 * 30)
-                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -116,7 +116,7 @@ public class LapotronChipRecipes {
                 .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(1))
                 .eut(TierEU.RECIPE_UHV)
                 .duration(20 * 300)
-                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
         } else {
             // Energy Crystal
             GTValues.RA.stdBuilder()
@@ -125,7 +125,7 @@ public class LapotronChipRecipes {
                 .itemOutputs(GTCMItemList.PerfectEnergyCrystal.get(4))
                 .eut(TierEU.RECIPE_ZPM)
                 .duration(20 * 30)
-                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
 
             // Lapotron
             GTValues.RA.stdBuilder()
@@ -134,7 +134,7 @@ public class LapotronChipRecipes {
                 .itemOutputs(GTCMItemList.PerfectLapotronCrystal.get(4))
                 .eut(TierEU.RECIPE_UHV)
                 .duration(20 * 30)
-                .addTo(GTCMRecipe.CrystallineInfinitierRecipes);
+                .addTo(GTCMRecipe.CrystallineInfinitierRecipeMap);
         }
 
         // Chip

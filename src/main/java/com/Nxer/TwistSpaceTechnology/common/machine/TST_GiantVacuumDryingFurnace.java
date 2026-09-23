@@ -3,10 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.config.Config.Parallel_PerPiece_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedBonus_MultiplyPerVoltageTier_GiantVacuumDryingFurnace;
 import static com.Nxer.TwistSpaceTechnology.config.Config.SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontCenter;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontCenter;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.withChannel;
@@ -34,8 +31,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -46,6 +44,7 @@ import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
@@ -58,83 +57,29 @@ import gregtech.common.blocks.BlockCasings8;
 import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.block.ModBlocks;
 
+@SkipGenerateDescription
 public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_GiantVacuumDryingFurnace> {
 
-    private static final int MACHINEMODE_VACUUMFURNACE = 0;
-    private static final int MACHINEMODE_DEHYDRATOR = 1;
-    private int piece = 1;
-    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
-
-    // region constructor
+    // region Class Constructor
     public TST_GiantVacuumDryingFurnace(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.AEFHMV);
     }
 
     public TST_GiantVacuumDryingFurnace(String aName) {
         super(aName);
     }
+
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_GiantVacuumDryingFurnace(this.mName);
+    }
     // endregion
 
-    @Override
-    public int totalMachineMode() {
-        /*
-         * 0 - Vacuum Furnace
-         * 1 - Dehydrator
-         */
-        return 2;
-    }
-
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return tMachineModeIcons;
-    }
-
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    // }
-    //
-    @Override
-    public String getMachineModeName() {
-        return StatCollector.translateToLocal("GT5U.GTPP_MULTI_INDUSTRIAL_DEHYDRATOR.mode." + machineMode);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return (machineMode == MACHINEMODE_VACUUMFURNACE) ? GTPPRecipeMaps.vacuumFurnaceRecipes
-            : GTPPRecipeMaps.chemicalDehydratorNonCellRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTPPRecipeMaps.chemicalDehydratorNonCellRecipes, GTPPRecipeMaps.vacuumFurnaceRecipes);
-    }
-
-    // region Processing Logic
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-
-        aNBT.setInteger("piece", piece);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-
-        piece = aNBT.getInteger("piece");
-    }
-
+    // region Structure
     private static IStructureDefinition<TST_GiantVacuumDryingFurnace> STRUCTURE_DEFINITION = null;
 
-    // region Structure
-
+    // spotless:off
     // 'S' = Stainless casing
     // 'A' = Glasses
     // 'C' = Coil
@@ -147,23 +92,16 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
     // 'H' = Invar Frame
 
     // VacuumPump height = 8 , length = width = 9 , and x-OffSet = 10 , y-OffSet = 4 ;
-    private static final String[][] shapeVacuumPump = new String[][] {
-        { "         ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SAAAAAS ", " S     S ", " S     S ", " S     S ", " S     S ", " S     S ", " SAAAAAS ",
-            "         " },
-        { "         ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ", " SSSSSSS ",
-            "         " },
-        { "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV", "VVVVVVVVV",
-            "VVVVVVVVV" } };
+    private static final String[][] shapeVacuumPump = new String[][]{
+        {"         "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SAAAAAS "," S     S "," S     S "," S     S "," S     S "," S     S "," SAAAAAS ","         "},
+        {"         "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS "," SSSSSSS ","         "},
+        {"VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV","VVVVVVVVV"}
+    };
 
     // mainFrame height = 7 , length = 9 , width = 3 ,and x-OffSet = 1 , y-OffSet = 3 ;
     private static final String[][] shapeMainFrame = new String[][] {
@@ -176,41 +114,32 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         { "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE", "EEE" } };
 
     // dryingTowerBase height = 5 , length = width = 11 , x-os = -2 , y-os = 1;
-    private static final String[][] shapeDryingTowerBase = new String[][] {
-        { "           ", " IIIIIIIII ", " IJJJAJJJI ", " IJJJAJJJI ", " IJJJAJJJI ", " AAAAGAAAA ", " IJJJAJJJI ",
-            " IJJJAJJJI ", " IJJJAJJJI ", " IIIIIIIII ", "           " },
-        { "           ", " H       H ", "           ", "  FFFFFFF  ", "     V     ", "    VGV    ", "     V     ",
-            "  FFFFFFF  ", "           ", " H       H ", "           " },
-        { "           ", " H       H ", "  FFFFFFF  ", " FGGGGGGGF ", "  FFFFFFF  ", "           ", "  FFFFFFF  ",
-            " FGGGGGGGF ", "  FFFFFFF  ", " H       H ", "           " },
-        { "  HHHHHHH  ", " H       H ", "H         H", "H FFFFFFF H", "H         H", "H         H", "H         H",
-            "H FFFFFFF H", " H       H ", " H       H ", "  HHHHHHH  " },
-        { " VVVVVVVVV ", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV",
-            "VVVVVVVVVVV", "VVVVVVVVVVV", "VVVVVVVVVVV", " VVVVVVVVV " } };
+    private static final String[][] shapeDryingTowerBase = new String[][]{
+        {"           "," IIIIIIIII "," IJJJAJJJI "," IJJJAJJJI "," IJJJAJJJI "," AAAAGAAAA "," IJJJAJJJI "," IJJJAJJJI "," IJJJAJJJI "," IIIIIIIII ","           "},
+        {"           "," H       H ","           ","  FFFFFFF  ","     V     ","    VGV    ","     V     ","  FFFFFFF  ","           "," H       H ","           "},
+        {"           "," H       H ","  FFFFFFF  "," FGGGGGGGF ","  FFFFFFF  ","           ","  FFFFFFF  "," FGGGGGGGF ","  FFFFFFF  "," H       H ","           "},
+        {"  HHHHHHH  "," H       H ","H         H","H FFFFFFF H","H         H","H         H","H         H","H FFFFFFF H"," H       H "," H       H ","  HHHHHHH  "},
+        {" VVVVVVVVV ","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV","VVVVVVVVVVV"," VVVVVVVVV "}
+    };
+
     // dryingTowerMiddle height = 7 , length = width = 11 , x-os = -2 , y-os = 1+7n ; n is the number of this part
-    private static final String[][] shapeDryingTowerMiddle = new String[][] {
-        { "           ", "   I   I   ", "  JJJAJJJ  ", " IJJJAJJJI ", "  JJJAJJJ  ", " AAAAGAAAA ", "  JJJAJJJ  ",
-            " IJJJAJJJI ", "  JJJAJJJ  ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "           ", " I C   C I ", "           ", "     G     ", "           ",
-            " I C   C I ", "           ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "   C   C   ", " IC C C CI ", "   C   C   ", "     G     ", "   C   C   ",
-            " IC C C CI ", "   C   C   ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "  CCC CCC  ", " IC C C CI ", "  CCC CCC  ", "     G     ", "  CCC CCC  ",
-            " IC C C CI ", "  CCC CCC  ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "  CCC CCC  ", " IC C C CI ", "  CCC CCC  ", "     G     ", "  CCC CCC  ",
-            " IC C C CI ", "  CCC CCC  ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "   C   C   ", " IC C C CI ", "   C   C   ", "     G     ", "   C   C   ",
-            " IC C C CI ", "   C   C   ", "   I   I   ", "           " },
-        { "           ", "   I   I   ", "           ", " I C   C I ", "           ", "     G     ", "           ",
-            " I C   C I ", "           ", "   I   I   ", "           " } };
+    private static final String[][] shapeDryingTowerMiddle = new String[][]{
+        {"           ","   I   I   ","  JJJAJJJ  "," IJJJAJJJI ","  JJJAJJJ  "," AAAAGAAAA ","  JJJAJJJ  "," IJJJAJJJI ","  JJJAJJJ  ","   I   I   ","           "},
+        {"           ","   I   I   ","           "," I C   C I ","           ","     G     ","           "," I C   C I ","           ","   I   I   ","           "},
+        {"           ","   I   I   ","   C   C   "," IC C C CI ","   C   C   ","     G     ","   C   C   "," IC C C CI ","   C   C   ","   I   I   ","           "},
+        {"           ","   I   I   ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","     G     ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","   I   I   ","           "},
+        {"           ","   I   I   ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","     G     ","  CCC CCC  "," IC C C CI ","  CCC CCC  ","   I   I   ","           "},
+        {"           ","   I   I   ","   C   C   "," IC C C CI ","   C   C   ","     G     ","   C   C   "," IC C C CI ","   C   C   ","   I   I   ","           "},
+        {"           ","   I   I   ","           "," I C   C I ","           ","     G     ","           "," I C   C I ","           ","   I   I   ","           "}
+    };
+
     // dryingTowerMiddle height = 3 , length = width = 11 , x-os = -2 , y-os = 4+7n;
-    private static final String[][] shapeDryingTowerHat = new String[][] {
-        { "           ", "           ", "           ", "    VVV    ", "   VGGGV   ", "   VGGGV   ", "   VGGGV   ",
-            "    VVV    ", "           ", "           ", "           " },
-        { "           ", "           ", "   I   I   ", "  IV   VI  ", "     V     ", "    VGV    ", "     V     ",
-            "  IV   VI  ", "   I   I   ", "           ", "           " },
-        { "           ", "           ", "   I   I   ", "  I     I  ", "           ", "     G     ", "           ",
-            "  I     I  ", "   I   I   ", "           ", "           " } };
+    private static final String[][] shapeDryingTowerHat = new String[][]{
+        {"           ","           ","           ","    VVV    ","   VGGGV   ","   VGGGV   ","   VGGGV   ","    VVV    ","           ","           ","           "},
+        {"           ","           ","   I   I   ","  IV   VI  ","     V     ","    VGV    ","     V     ","  IV   VI  ","   I   I   ","           ","           "},
+        {"           ","           ","   I   I   ","  I     I  ","           ","     G     ","           ","  I     I  ","   I   I   ","           ","           "}
+    };
+    // spotless:on
 
     private final int VP_horizontalOffSet = 10;
     private final int VP_verticalOffSet = 4;
@@ -218,14 +147,15 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
 
     // MF
     private final int MF_horizontalOffSet = 1;
+
     private final int MF_verticalOffSet = 3;
     private final int MF_depthOffSet = 0;
 
     // DT
     private final int DT_horizontalOffSet = -2;
+
     private final int DT_verticalOffSet = 1;
     private final int DT_depthOffSet = 0;
-
     private static final String STRUCTURE_PIECE_VP = "VacuumPump";
     private static final String STRUCTURE_PIECE_MF = "MainFrame";
     private static final String STRUCTURE_PIECE_DTB = "DryingTowerBase";
@@ -391,83 +321,7 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             false,
             true);
 
-        return TstUtils.multiBuildPiece(built);
-    }
-
-    // endregion
-
-    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
-        this.coilLevel = aCoilLevel;
-    }
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    public int getCoilTier() {
-        return TstUtils.getVoltageForCoil(coilLevel);
-    }
-
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // #tr Tooltip_GVDF_MachineType
-        // # Vacuum Furnace | Dehydrator
-        // #zh_CN 真空干燥炉 | 化学脱水机
-        tt.addMachineType(TextEnums.tr("Tooltip_GVDF_MachineType"))
-            // #tr Tooltip_GVDF_00
-            // # Controller block for the Giant Vacuum Drying Furnace
-            // #zh_CN 巨型真空干燥炉的控制器方块
-            .addInfo(TextEnums.tr("Tooltip_GVDF_00"))
-            // #tr Tooltip_GVDF_01
-            // # §9Harness the power of vacuum technology for industrial drying!!!
-            // #zh_CN §9利用真空技术的力量进行工业干燥!!!
-            .addInfo(TextEnums.tr("Tooltip_GVDF_01"))
-            // #tr Tooltip_GVDF_02
-            // # This machine consists of vacuum pump, main structure, drying tower three parts.
-            // #zh_CN 该设备由真空泵、主体结构和干燥塔三部分组成
-            .addInfo(TextEnums.tr("Tooltip_GVDF_02"))
-            // #tr Tooltip_GVDF_03
-            // # parallel = coil * piece * 32
-            // #zh_CN 并行 = 线圈等级 * 层数 * 32
-            .addInfo(TextEnums.tr("Tooltip_GVDF_03"))
-            // #tr Tooltip_GVDF_04
-            // # Every additional voltage step reduces the time to 80%% of the original and The processing speed
-            // increases by 50%% for each step of the coil
-            // #zh_CN 每超出一级电压,所需时间为原来的80%%,线圈每升高一级处理速度增加50%%
-            .addInfo(TextEnums.tr("Tooltip_GVDF_04"))
-            // #tr Tooltip_GVDF_05
-            // # Switch modes using a screwdriver
-            // #zh_CN 由螺丝刀切换模式
-            .addInfo(TextEnums.tr("Tooltip_GVDF_05"))
-            // #tr Tooltip_GVDF_06
-            // # Every additional voltage step reduces the time to 80%% of the original
-            // #zh_CN 注意你的电量小伙子,巨型真空干燥塔耗能200%%
-            .addInfo(TextEnums.tr("Tooltip_GVDF_06"))
-            // #tr Tooltip_GVDF_07
-            // # Would anyone really need this machine to handle space ice cream?
-            // #zh_CN 真的会有人需要这台机器来处理太空冰淇淋吗？
-            .addInfo(TextEnums.tr("Tooltip_GVDF_07"))
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .beginStructureBlock(11, 10, 23, true)
-            .addController(textFrontCenter)
-
-            // #tr Tooltip_GVDF_HatchBusInfo
-            // # The input and output hatches/buses must be placed in the main frame.
-            // #zh_CN 输入和输出舱口必须放置在主框架内
-            .addInputHatch(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            .addOutputHatch(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            .addInputBus(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            .addOutputBus(TextEnums.tr("Tooltip_GVDF_HatchBusInfo"))
-            // #tr Tooltip_GVDF_HatchBusInfo
-            // # The input and output hatches/buses must be placed in the main frame.
-            // #zh_CN 能量舱口必须放置在主框架内
-            .addEnergyHatch(TextEnums.tr("Tooltip_GVDF_EnergyHatch"))
-
-            .toolTipFinisher(ModName);
-        return tt;
+        return TSTUtils.multiBuildPiece(built);
     }
 
     @Override
@@ -518,11 +372,81 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
             / (getCoilTier() * SpeedMultiplier_CoilTier_GiantVacuumDryingFurnace);
 
     }
+    // endregion
+
+    // region Processing Logic
+    private static final int MACHINEMODE_VACUUMFURNACE = 0;
+    private static final int MACHINEMODE_DEHYDRATOR = 1;
+    private int piece = 1;
+    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
 
     @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_GiantVacuumDryingFurnace(this.mName);
+    public RecipeMap<?> getRecipeMap() {
+        return (machineMode == MACHINEMODE_VACUUMFURNACE) ? GTPPRecipeMaps.vacuumFurnaceRecipes
+            : GTPPRecipeMaps.chemicalDehydratorNonCellRecipes;
     }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(GTPPRecipeMaps.chemicalDehydratorNonCellRecipes, GTPPRecipeMaps.vacuumFurnaceRecipes);
+    }
+
+    @Override
+    public int totalMachineMode() {
+        /*
+         * 0 - Vacuum Furnace
+         * 1 - Dehydrator
+         */
+        return 2;
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return tMachineModeIcons;
+    }
+
+    @Override
+    public String getMachineModeName() {
+        return StatCollector.translateToLocal("GT5U.GTPP_MULTI_INDUSTRIAL_DEHYDRATOR.mode." + machineMode);
+    }
+
+    public void setCoilLevel(HeatingCoilLevel aCoilLevel) {
+        this.coilLevel = aCoilLevel;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    public int getCoilTier() {
+        return TSTUtils.getVoltageForCoil(coilLevel);
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+
+        aNBT.setInteger("piece", piece);
+    }
+
+    @Override
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+
+        piece = aNBT.getInteger("piece");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection sideDirection,
@@ -557,5 +481,71 @@ public class TST_GiantVacuumDryingFurnace extends GTCM_MultiMachineBase<TST_Gian
         return new ITexture[] {
             Textures.BlockIcons.getCasingTextureForId(GTUtility.getCasingTextureIndex(GregTechAPI.sBlockCasings8, 2)) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.machine_type
+        // # Vacuum Furnace | Dehydrator
+        // #zh_CN 真空干燥炉 | 化学脱水机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.machine_type"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.01
+            // # Controller block for the Giant Vacuum Drying Furnace
+            // #zh_CN 巨型真空干燥炉的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.01"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.02
+            // # §9Harness the power of vacuum technology for industrial drying!!!
+            // #zh_CN §9利用真空技术的力量进行工业干燥!!!
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.02"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.03
+            // # This machine consists of vacuum pump, main structure, drying tower three parts.
+            // #zh_CN 该设备由真空泵、主体结构和干燥塔三部分组成
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.03"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.04
+            // # parallel = coil * piece * 32
+            // #zh_CN 并行 = 线圈等级 * 层数 * 32
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.04"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.05
+            // # Every additional voltage step reduces the time to 80%% of the original and The processing speed increases by 50%% for each step of the coil
+            // #zh_CN 每超出一级电压, 所需时间为原来的§c80%§7, 线圈每升高一级处理速度增加§c50%§7
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.05"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.06
+            // # Switch modes using a screwdriver
+            // #zh_CN 由螺丝刀切换模式
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.06"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.07
+            // # Every additional voltage step reduces the time to 80%% of the original
+            // #zh_CN 注意你的电量小伙子,巨型真空干燥塔耗能200%%
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.07"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.08
+            // # Would anyone really need this machine to handle space ice cream?
+            // #zh_CN 真的会有人需要这台机器来处理太空冰淇淋吗？
+            .addInfo(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.08"))
+            .beginStructureBlock(11, 10, 23, true)
+            .addController(textFrontCenter)
+
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01
+            // # The input and output hatches/buses must be placed in the main frame.
+            // #zh_CN 输入和输出舱口必须放置在主框架内
+            .addInputHatch(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            .addOutputHatch(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            .addInputBus(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            .addOutputBus(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.structure.01"))
+            // #tr tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.09
+            // # Energy Hatch must be placed in the main frame.
+            // #zh_CN 能量舱口必须放置在主框架内
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.tooltip.info.09"))
+
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
 
 }

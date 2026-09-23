@@ -169,7 +169,7 @@ public class TSTStructureUtility {
     @NotNull
     public static <T> IStructureElement<T> ofBlockStrictExt(Block block, int meta, Block specialBlock,
         int specialItemMeta) {
-        return ofBlockStrictExt(block, meta, TstUtils.newItemWithMeta(specialBlock, specialItemMeta), block, meta);
+        return ofBlockStrictExt(block, meta, TSTUtils.newItemWithMeta(specialBlock, specialItemMeta), block, meta);
     }
 
     /**
@@ -186,7 +186,7 @@ public class TSTStructureUtility {
 
         return new IStructureElement<>() {
 
-            private final ItemStack blockStack = TstUtils.newItemWithMeta(block, meta);
+            private final ItemStack blockStack = TSTUtils.newItemWithMeta(block, meta);
             private final BlocksToPlace cached = BlocksToPlace.create(block, meta);
 
             @Override
@@ -308,7 +308,7 @@ public class TSTStructureUtility {
             if (channel.isEmpty() || !channel.toLowerCase(Locale.ROOT)
                 .equals(channel)) throw new IllegalArgumentException();
         }
-        final ItemStack blockStack = TstUtils.newItemWithMeta(specificBlock, specificMeta);
+        final ItemStack blockStack = TSTUtils.newItemWithMeta(specificBlock, specificMeta);
         return new IStructureElement<>() {
 
             private final BlocksToPlace cached = BlocksToPlace.create(variableStacks.toArray(new ItemStack[0]));
@@ -497,7 +497,7 @@ public class TSTStructureUtility {
             tileClass,
             tileBlock,
             tileBlockMeta,
-            TstUtils.newItemWithMeta(specialItem, specialItemMeta));
+            TSTUtils.newItemWithMeta(specialItem, specialItemMeta));
     }
 
     /**

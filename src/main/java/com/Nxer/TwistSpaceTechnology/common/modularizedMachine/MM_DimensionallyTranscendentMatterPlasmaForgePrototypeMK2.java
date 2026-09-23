@@ -33,8 +33,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionCoreMachineSupportAllModuleBase;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.MultiExecutionProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ExecutionCores.IExecutionCore;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -44,6 +46,7 @@ import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.recipe.RecipeMap;
@@ -60,12 +63,14 @@ import gregtech.api.util.ParallelHelper;
 import gregtech.api.util.shutdown.ShutDownReason;
 import tectech.thing.block.BlockQuantumGlass;
 
+@SkipGenerateDescription
 public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     extends MultiExecutionCoreMachineSupportAllModuleBase<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> {
 
     // region Class Constructor
     public MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(String aName) {
@@ -76,195 +81,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(this.mName);
     }
-
-    // endregion
-
-    // region Statics
-    // 3600 seconds in an hour, 24 hours, 20 ticks in a second.
-    protected static final double max_efficiency_time_in_ticks = 3600d * 24d * 20d;
-    protected static final double maximum_discount = MaxFuelDiscount_DTMPFP;
-    protected static final double maximum_decrease = 1d - MaxFuelDiscount_DTMPFP;
-    protected static final long tick_decrease_per_tick = 24;
-
-    // Valid fuels which the discount will get applied to.
-    protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
-        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L), Materials.ExcitedDTCC.getFluid(1L),
-        Materials.ExcitedDTSC.getFluid(1L) };
-
-    // endregion
-
-    // region Logic
-
-    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
-    protected int coilHeat;
-    private long runningTime = 0;
-    protected double fuelCostMultiplier = 1;
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("coilHeat", coilHeat);
-        aNBT.setLong("runningTime", runningTime);
-        aNBT.setDouble("fuelCostMultiplier", fuelCostMultiplier);
-    }
-
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        coilHeat = aNBT.getInteger("coilHeat");
-        runningTime = aNBT.getLong("runningTime");
-        fuelCostMultiplier = aNBT.getDouble("fuelCostMultiplier");
-    }
-
-    public void resetDiscount(int tickDecrease) {
-        if (runningTime == 0) return;
-        if (runningTime < 0) {
-            runningTime = 0;
-            return;
-        }
-
-        if (runningTime > max_efficiency_time_in_ticks) {
-            runningTime = (long) max_efficiency_time_in_ticks;
-            return;
-        }
-
-        long tickToDecrease = tickDecrease * tick_decrease_per_tick;
-
-        if (runningTime > tickToDecrease) {
-            runningTime -= tickToDecrease;
-        } else {
-            runningTime = 0;
-        }
-
-    }
-
-    @Override
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-        if (aBaseMetaTileEntity.isServerSide() && aTick % 512 == 0 && !aBaseMetaTileEntity.isAllowedToWork()) {
-            resetDiscount(512);
-        }
-    }
-
-    @Override
-    public boolean onRunningTick(ItemStack aStack) {
-        boolean r = super.onRunningTick(aStack);
-        if (!r) {
-            resetDiscount(1);
-            return false;
-        }
-        if (isWorkingThisTick()) {
-            runningTime++;
-        } else {
-            resetDiscount(1);
-        }
-        return true;
-    }
-
-    @Override
-    public void stopMachine(@NotNull ShutDownReason reason) {
-        runningTime = 0;
-        fuelCostMultiplier = 1;
-        super.stopMachine(reason);
-    }
-
-    public void setCoilLevel(HeatingCoilLevel coilLevel) {
-        this.coilLevel = coilLevel;
-    }
-
-    public HeatingCoilLevel getCoilLevel() {
-        return coilLevel;
-    }
-
-    @Override
-    protected boolean canMultiplyModularHatchType() {
-        return false;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.plasmaForgeRecipes;
-    }
-
-    protected boolean isWorkingThisTick() {
-        if (this.isWorking()) return true;
-        for (IExecutionCore c : executionCores) {
-            if (c.isWorking()) return true;
-        }
-        for (IExecutionCore c : advExecutionCores) {
-            if (c.isWorking()) return true;
-        }
-        for (IExecutionCore c : perfectExecutionCores) {
-            if (c.isWorking()) return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new MultiExecutionProcessingLogic() {
-
-            // save fuel
-            @NotNull
-            @Override
-            protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
-                return super.createParallelHelper(recipeAfterDiscount(recipe));
-            }
-
-            // validate
-            @Override
-            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                return recipe.mSpecialValue <= coilHeat ? CheckRecipeResultRegistry.SUCCESSFUL
-                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
-            }
-
-            // do not change these because of modularized machine
-            @NotNull
-            @Override
-            public CheckRecipeResult process() {
-
-                setEuModifier(getEuModifier());
-                setSpeedBonus(getSpeedBonus());
-                setOverclock(getOverclockType().timeReduction, getOverclockType().powerIncrease);
-                return super.process();
-            }
-
-            @Nonnull
-            @Override
-            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
-                if (isNoOverclockCalculator) {
-                    return OverclockCalculator.ofNoOverclock(recipe);
-                } else {
-                    return super.createOverclockCalculator(recipe);
-                }
-            }
-
-        };
-    }
-
-    @Nonnull
-    protected GTRecipe recipeAfterDiscount(@Nonnull GTRecipe recipe) {
-        GTRecipe tRecipe = recipe.copy();
-        for (int i = 0; i < recipe.mFluidInputs.length; i++) {
-            for (FluidStack fuel : valid_fuels) {
-                if (tRecipe.mFluidInputs[i].isFluidEqual(fuel)) {
-                    if (runningTime > max_efficiency_time_in_ticks) {
-                        fuelCostMultiplier = maximum_discount;
-                    } else {
-                        // If running for max_efficiency_time_in_ticks then discount is at maximum.
-                        double time_percentage = Math.min(runningTime / max_efficiency_time_in_ticks, 1.0d);
-                        // Multiplied by 0.5 because that is the maximum achievable discount
-                        fuelCostMultiplier = Math.max(maximum_discount, 1 - time_percentage * maximum_decrease);
-                    }
-                    tRecipe.mFluidInputs[i].amount = (int) Math
-                        .round(tRecipe.mFluidInputs[i].amount * fuelCostMultiplier);
-                    return tRecipe;
-                }
-            }
-        }
-        return tRecipe;
-    }
-
     // endregion
 
     // region Structure
@@ -273,35 +89,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
     private static final int depthOffSet = 30;
     private static final String STRUCTURE_PIECE_MAIN = "main";
     private static IStructureDefinition<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
-        List<StructureError> errors) {
-        coilLevel = HeatingCoilLevel.None;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return false;
-        coilHeat = (int) coilLevel.getHeat();
-        return true;
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
 
     @Override
     public IStructureDefinition<MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2> getStructureDefinition() {
@@ -395,26 +182,57 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         return STRUCTURE_DEFINITION;
     }
 
-    // endregion
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
 
     @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret = new String[origin.length + 2];
-        System.arraycopy(origin, 0, ret, 0, origin.length);
-        // spotless:off
-        // #tr DTMPFP.getInfoData.01
-        // # Running time (tick)
-        // #zh_CN 已运行时间(tick)
-        ret[origin.length] = TextEnums.tr("DTMPFP.getInfoData.01") + ": " + EnumChatFormatting.YELLOW + runningTime;
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
 
-        // #tr DTMPFP.getInfoData.02
-        // # Fuel discount
-        // #zh_CN 维度催化剂消耗率
-        ret[origin.length + 1] = TextEnums.tr("DTMPFP.getInfoData.02") + ": " + EnumChatFormatting.YELLOW + fuelCostMultiplier;
+    @Override
+    public boolean checkMachineMM(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack,
+        List<StructureError> errors) {
+        coilLevel = HeatingCoilLevel.None;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return false;
+        coilHeat = (int) coilLevel.getHeat();
+        return true;
+    }
+    // endregion
 
-        // spotless:on
-        return ret;
+    // region Processing Logic
+    // 3600 seconds in an hour, 24 hours, 20 ticks in a second.
+    protected static final double max_efficiency_time_in_ticks = 3600d * 24d * 20d;
+
+    protected static final double maximum_discount = MaxFuelDiscount_DTMPFP;
+    protected static final double maximum_decrease = 1d - MaxFuelDiscount_DTMPFP;
+    protected static final long tick_decrease_per_tick = 24;
+
+    // Valid fuels which the discount will get applied to.
+    protected static final FluidStack[] valid_fuels = { Materials.ExcitedDTEC.getFluid(1L),
+        Materials.ExcitedDTRC.getFluid(1L), Materials.ExcitedDTPC.getFluid(1L), Materials.ExcitedDTCC.getFluid(1L),
+        Materials.ExcitedDTSC.getFluid(1L) };
+
+    private HeatingCoilLevel coilLevel = HeatingCoilLevel.None;
+    protected int coilHeat;
+    private long runningTime = 0;
+    protected double fuelCostMultiplier = 1;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.plasmaForgeRecipes;
     }
 
     @Override
@@ -422,71 +240,193 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         return new UITexture[0];
     }
 
-    private static MultiblockTooltipBuilder tooltip;
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new MultiExecutionProcessingLogic() {
+
+            // save fuel
+            @NotNull
+            @Override
+            protected ParallelHelper createParallelHelper(@NotNull GTRecipe recipe) {
+                return super.createParallelHelper(recipeAfterDiscount(recipe));
+            }
+
+            // validate
+            @Override
+            protected @Nonnull CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                return recipe.mSpecialValue <= coilHeat ? CheckRecipeResultRegistry.SUCCESSFUL
+                    : CheckRecipeResultRegistry.insufficientHeat(recipe.mSpecialValue);
+            }
+
+            // do not change these because of modularized machine
+            @NotNull
+            @Override
+            public CheckRecipeResult process() {
+
+                setEuModifier(getEuModifier());
+                setSpeedBonus(getSpeedBonus());
+                setOverclock(getOverclockType().timeReduction, getOverclockType().powerIncrease);
+                return super.process();
+            }
+
+            @Nonnull
+            @Override
+            protected OverclockCalculator createOverclockCalculator(@Nonnull GTRecipe recipe) {
+                if (isNoOverclockCalculator) {
+                    return OverclockCalculator.ofNoOverclock(recipe);
+                } else {
+                    return super.createOverclockCalculator(recipe);
+                }
+            }
+
+        };
+    }
+
+    public void resetDiscount(int tickDecrease) {
+        if (runningTime == 0) return;
+        if (runningTime < 0) {
+            runningTime = 0;
+            return;
+        }
+
+        if (runningTime > max_efficiency_time_in_ticks) {
+            runningTime = (long) max_efficiency_time_in_ticks;
+            return;
+        }
+
+        long tickToDecrease = tickDecrease * tick_decrease_per_tick;
+
+        if (runningTime > tickToDecrease) {
+            runningTime -= tickToDecrease;
+        } else {
+            runningTime = 0;
+        }
+
+    }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        // spotless:off
-        if (tooltip == null) {
-            tooltip = new MultiblockTooltipBuilder();
-            // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType
-            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Plasma Forge
-            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉
-            tooltip
-                .addMachineType(
-                    TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01
-                // # {\BLUE}{\ITALIC}If the facts don't fit the theory, change the facts.
-                // #zh_CN {\BLUE}{\ITALIC}如果事实与理论不符， 那就修改事实。
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02
-                // # The Prototype of Dimensionally Transcendent Plasma Forge
-                // #zh_CN 超维度等离子锻炉的原型机.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03
-                // # Better at continuous long-term operation and mass production.
-                // #zh_CN 更擅长连续长时间运行和大批量生产.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04
-                // # But it is not good enough in miniaturization.
-                // #zh_CN 但在小型化方面不够好.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05
-                // # Reach the best operating state after {\RED}24 {\GRAY} hours of continuous operation, reducing {\AQUA}75%%{\GRAY} fuel consumption.
-                // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%%{\GRAY} 燃料消耗.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06
-                // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%%{\GRAY} within {\RED}1{\GRAY} hours.
-                // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
-                .addInfo(TextEnums.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06"))
-                .addInfo(TextEnums.InstallingModuleNearControllerImproveMachine.getText())
-                .addInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addSeparator()
-                .addInfo(TextLocalization.StructureTooComplex)
-                .addInfo(TextLocalization.BLUE_PRINT_INFO)
-                .addStructureInfo(TextEnums.ModularizedMachineSystem.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription01.getText())
-                .addStructureInfo(TextEnums.ModularizedMachineSystemDescription02.getText())
-                .addStructureInfo(TextEnums.OverclockControllerDescription.getText())
-                .addStructureInfo(TextEnums.ParallelControllerDescription.getText())
-                .addStructureInfo(TextEnums.PowerConsumptionControllerDescription.getText())
-                .addStructureInfo(TextEnums.SpeedControllerDescription.getText())
-                .addStructureInfo(TextEnums.ExecutionCoreDescription.getText())
-                .addStructureInfo(TextEnums.NotMultiplyInstallSameTypeModule.getText())
-                .addStructureInfo(TextLocalization.Text_SeparatingLine)
-                .beginStructureBlock(65, 43, 65, false)
-                .addInputHatch(TextLocalization.textUseBlueprint, 1)
-                .addOutputHatch(TextLocalization.textUseBlueprint, 1)
-                .addInputBus(TextLocalization.textUseBlueprint, 1)
-                .addOutputBus(TextLocalization.textUseBlueprint, 1)
-                .addEnergyHatch(TextLocalization.textUseBlueprint, 1)
-                .addStructureInfo("  " + TextEnums.ModularHatch + ": " + TextLocalization.textUseBlueprint)
-                .addStructureHint(TextEnums.ModularHatch.getKey(), 2)
-                .toolTipFinisher(TextLocalization.ModName);
-            // spotless:on
+    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
+        super.onPostTick(aBaseMetaTileEntity, aTick);
+        if (aBaseMetaTileEntity.isServerSide() && aTick % 512 == 0 && !aBaseMetaTileEntity.isAllowedToWork()) {
+            resetDiscount(512);
         }
-        return tooltip;
     }
+
+    @Override
+    public boolean onRunningTick(ItemStack aStack) {
+        boolean r = super.onRunningTick(aStack);
+        if (!r) {
+            resetDiscount(1);
+            return false;
+        }
+        if (isWorkingThisTick()) {
+            runningTime++;
+        } else {
+            resetDiscount(1);
+        }
+        return true;
+    }
+
+    @Override
+    public void stopMachine(@NotNull ShutDownReason reason) {
+        runningTime = 0;
+        fuelCostMultiplier = 1;
+        super.stopMachine(reason);
+    }
+
+    public void setCoilLevel(HeatingCoilLevel coilLevel) {
+        this.coilLevel = coilLevel;
+    }
+
+    public HeatingCoilLevel getCoilLevel() {
+        return coilLevel;
+    }
+
+    @Override
+    protected boolean canMultiplyModularHatchType() {
+        return false;
+    }
+
+    protected boolean isWorkingThisTick() {
+        if (this.isWorking()) return true;
+        for (IExecutionCore c : executionCores) {
+            if (c.isWorking()) return true;
+        }
+        for (IExecutionCore c : advExecutionCores) {
+            if (c.isWorking()) return true;
+        }
+        for (IExecutionCore c : perfectExecutionCores) {
+            if (c.isWorking()) return true;
+        }
+        return false;
+    }
+
+    @Nonnull
+    protected GTRecipe recipeAfterDiscount(@Nonnull GTRecipe recipe) {
+        GTRecipe tRecipe = recipe.copy();
+        for (int i = 0; i < recipe.mFluidInputs.length; i++) {
+            for (FluidStack fuel : valid_fuels) {
+                if (tRecipe.mFluidInputs[i].isFluidEqual(fuel)) {
+                    if (runningTime > max_efficiency_time_in_ticks) {
+                        fuelCostMultiplier = maximum_discount;
+                    } else {
+                        // If running for max_efficiency_time_in_ticks then discount is at maximum.
+                        double time_percentage = Math.min(runningTime / max_efficiency_time_in_ticks, 1.0d);
+                        // Multiplied by 0.5 because that is the maximum achievable discount
+                        fuelCostMultiplier = Math.max(maximum_discount, 1 - time_percentage * maximum_decrease);
+                    }
+                    tRecipe.mFluidInputs[i].amount = (int) Math
+                        .round(tRecipe.mFluidInputs[i].amount * fuelCostMultiplier);
+                    return tRecipe;
+                }
+            }
+        }
+        return tRecipe;
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret = new String[origin.length + 2];
+        System.arraycopy(origin, 0, ret, 0, origin.length);
+        // spotless:off
+        // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.01
+        // # Running time (tick)
+        // #zh_CN 已运行时间(tick)
+        ret[origin.length] = TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.01") + ": " + EnumChatFormatting.YELLOW + runningTime;
+
+        // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.02
+        // # Fuel discount
+        // #zh_CN 维度催化剂消耗率
+        ret[origin.length + 1] = TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.02") + ": " + EnumChatFormatting.YELLOW + fuelCostMultiplier;
+
+        // spotless:on
+        return ret;
+    }
+
+    // endregion
+
+    // region NBT
+
+    @Override
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("coilHeat", coilHeat);
+        aNBT.setLong("runningTime", runningTime);
+        aNBT.setDouble("fuelCostMultiplier", fuelCostMultiplier);
+    }
+
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        coilHeat = aNBT.getInteger("coilHeat");
+        runningTime = aNBT.getLong("runningTime");
+        fuelCostMultiplier = aNBT.getDouble("fuelCostMultiplier");
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -508,5 +448,71 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         }
         return new ITexture[] { casingTexturePages[0][14] };
     }
+
+    // endregion
+
+    // region Tooltip
+    private static MultiblockTooltipBuilder tooltip;
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        if (tooltip == null) {
+            tooltip = new TSTMultiblockTooltipBuilder();
+            // spotless:off
+            // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.machine_type
+            // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Plasma Forge
+            // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉
+            tooltip
+                .addMachineType(
+                    TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.machine_type"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.01
+                // # {\BLUE}{\ITALIC}If the facts don't fit the theory, change the facts.
+                // #zh_CN {\BLUE}{\ITALIC}如果事实与理论不符， 那就修改事实。
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.01"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.02
+                // # The Prototype of Dimensionally Transcendent Plasma Forge
+                // #zh_CN 超维度等离子锻炉的原型机.
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.02"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.03
+                // # Better at continuous long-term operation and mass production.
+                // #zh_CN 更擅长连续长时间运行和大批量生产.
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.03"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04
+                // # But it is not good enough in miniaturization.
+                // #zh_CN 但在小型化方面不够好.
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05
+                // # Reach the best operating state after {\RED}24 {\GRAY} hours of continuous operation, reducing {\AQUA}75%%{\GRAY} fuel consumption.
+                // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%%{\GRAY} 燃料消耗.
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06
+                // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%%{\GRAY} within {\RED}1{\GRAY} hours.
+                // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06"))
+                .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ParallelControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.PowerConsumptionControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ExecutionCoreDescription)
+                .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModule)
+                .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
+                .beginStructureBlock(65, 43, 65, false)
+                .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+                .addStructureInfo("  " + TSTSharedLocalization.ModularizedMachine.ModularHatch + ": " + TSTSharedLocalization.Structure.textUseBlueprint)
+                .addStructureHint(TSTSharedLocalization.ModularizedMachine.ModularHatchKey, 2)
+                .toolTipFinisher();
+            // spotless:on
+        }
+        return tooltip;
+    }
+
+    // endregion
 
 }

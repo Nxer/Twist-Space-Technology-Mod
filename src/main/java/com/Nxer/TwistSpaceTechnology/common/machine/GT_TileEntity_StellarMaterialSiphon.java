@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationAn
 import static com.Nxer.TwistSpaceTechnology.common.init.TstBlocks.SpaceStationStructureBlock;
 import static com.gtnewhorizon.gtnhlib.util.numberformatting.NumberFormatUtil.formatNumber;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static net.minecraft.util.EnumChatFormatting.BLUE;
 import static net.minecraft.util.EnumChatFormatting.DARK_PURPLE;
 import static net.minecraft.util.EnumChatFormatting.GREEN;
@@ -27,6 +28,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded.StellarMaterialSiphonRecipePool;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
@@ -37,6 +39,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IChunkLoader;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEExtendedPowerMultiBlockBase;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
@@ -54,137 +57,11 @@ import gtnhintergalactic.client.IGTextures;
 import micdoodle8.mods.galacticraft.core.util.GCCoreUtil;
 import tectech.thing.casing.TTCasingsContainer;
 
+@SkipGenerateDescription
 public class GT_TileEntity_StellarMaterialSiphon
     extends MTEExtendedPowerMultiBlockBase<GT_TileEntity_StellarMaterialSiphon> implements IChunkLoader {
 
-    /**
-     * Lore string, which will be randomly picked from a selection each time the resources are reloaded
-     */
-    @SuppressWarnings("unused")
-    private static String loreTooltip;
-    /**
-     * Main structure of the machine
-     */
-    private static final String STRUCTURE_PIECE_MAIN = "main";
-    /**
-     * Cached value of log10(4)
-     */
-    private static final double LOG4 = Math.log10(4);
-    // region shape
-    private static final String[][] shape = new String[][] {
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "      LLL      ", "      L~L      ", "KKKKKKKKKKKKKKK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "      FFF      ", "KDDDDDDCDDDDDDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "      FFF      ", "     FEEEF     ", "KDGGGGDCDGGGGDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "      AAA      ", "      AAA      ", "      AAA      ",
-            "     FEEEF     ", "    FE   EF    ", "KDGGGGDCDGGGGDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "      HCH      ", "      HCH      ",
-            "      HCH      ", "      HCH      ", "     ABBBA     ", "     ABBBA     ", "     ABBBA     ",
-            "    FEBBBEF    ", "   FE     EF   ", "KDGGGGDCDGGGGDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "       C       ", "       C       ",
-            "       C       ", "       C       ", "      HCH      ", "     IEEEI     ", "     IEEEI     ",
-            "     IEEEI     ", "     IEEEI     ", "    AB   BA    ", "    AB   BA    ", "    AB   BA    ",
-            "   FEB   BEF   ", "  FE       EF  ", "KDGGGGDCDGGGGDK", "       M       ", "       M       ",
-            "       M       ", "       M       ", "       M       ", "       M       ", "       M       ",
-            "       M       ", "       M       ", "       M       ", "       M       " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "       H       ", "       H       ", "       H       ", "      HJH      ", "      HJH      ",
-            "      HJH      ", "      HJH      ", "     HHJHH     ", "    HEEJEEH    ", "    HE J EH    ",
-            "    HE J EH    ", "    HE J EH    ", "   AB  J  BA   ", "   AB  J  BA   ", "   AB  J  BA   ",
-            "  FEB  J  BEF  ", " FE    J    EF ", "KDDDDDDCDDDDDDK", "      MJM      ", "      MJM      ",
-            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ",
-            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      " },
-        { "       I       ", "       I       ", "       I       ", "       I       ", "       I       ",
-            "      HIH      ", "      HIH      ", "      HIH      ", "     CJJJC     ", "     CJ JC     ",
-            "     CJ JC     ", "     CJ JC     ", "     CJ JC     ", "    CEJ JEC    ", "    CEJ JEC    ",
-            "    CEJ JEC    ", "    CEJ JEC    ", "   AB J J BA   ", "   AB J J BA   ", "   AB J J BA   ",
-            "  FEB J J BEF  ", " FE   J J   EF ", "KCCCCCC CCCCCCK", "     MJ JM     ", "     MJ JM     ",
-            "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     ",
-            "     MJ JM     ", "     MJ JM     ", "     MJ JM     ", "     MJ JM     " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "       H       ", "       H       ", "       H       ", "      HJH      ", "      HJH      ",
-            "      HJH      ", "      HJH      ", "     HHJMH     ", "    HEEJEEH    ", "    HE J EH    ",
-            "    HE J EH    ", "    HE J EH    ", "   AB  J  BA   ", "   AB  J  BA   ", "   AB  J  BA   ",
-            "  FEB  J  BEF  ", " FE    J    EF ", "KDDDDDDCDDDDDDK", "      MJM      ", "      MJM      ",
-            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      ",
-            "      MJM      ", "      MJM      ", "      MJM      ", "      MJM      " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "       C       ", "       C       ",
-            "       C       ", "       C       ", "      HCH      ", "     IEEEI     ", "     IEEEI     ",
-            "     IEEEI     ", "     IEEEI     ", "    AB   BA    ", "    AB   BA    ", "    AB   BA    ",
-            "   FEB   BEF   ", "  FE       EF  ", "KDGGGGDCDGGGGDK", "       M       ", "       M       ",
-            "       M       ", "       M       ", "       M       ", "       M       ", "       M       ",
-            "       M       ", "       M       ", "       M       ", "       M       " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "      HCH      ", "      HCH      ",
-            "      HCH      ", "      HCH      ", "     ABBBA     ", "     ABBBA     ", "     ABBBA     ",
-            "    FEBBBEF    ", "   FE     EF   ", "KDGGGGDCDGGGGDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "      AAA      ", "      AAA      ", "      AAA      ",
-            "     FEEEF     ", "    FE   EF    ", "KDGGGGDCDGGGGDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "      FFF      ", "     FEEEF     ", "KDGGGGDCDGGGGDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "      FFF      ", "KDDDDDDCDDDDDDK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " },
-        { "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "KKKKKKKKKKKKKKK", "               ", "               ",
-            "               ", "               ", "               ", "               ", "               ",
-            "               ", "               ", "               ", "               " } };
-    // endregion
-    private static final String shapeName = "main";
-
-    /**
-     * Structure definition of the machine
-     */
-    private static IStructureDefinition<GT_TileEntity_StellarMaterialSiphon> STRUCTURE_DEFINITION;
-
+    // region Class Constructor
     /**
      * Create a new planetary gas siphon
      *
@@ -206,43 +83,6 @@ public class GT_TileEntity_StellarMaterialSiphon
     }
 
     /**
-     * Current pumping depth
-     */
-    private int depth;
-    /**
-     * Cached fluid stack using for displaying the pumped fluid
-     */
-    private FluidStack fluid = new FluidStack(FluidRegistry.WATER, 0) {
-
-        public String getLocalizedName() {
-            return "None";
-        }
-    };
-    /**
-     * Flag if chunk loading is enabled
-     */
-    private boolean mChunkLoadingEnabled = true;
-    /**
-     * Chunk in which the multi is build
-     */
-    private ChunkCoordIntPair mCurrentChunk = null;
-    /**
-     * Flag if the chunk of the multi needs to be reloaded
-     */
-    private boolean mWorkChunkNeedsReload = true;
-
-    /**
-     * Construct this machine using the blueprint in creative
-     *
-     * @param stackSize Blueprint stack
-     * @param hintsOnly Whether only hints should be displayed, or it should be build
-     */
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 7, 21, 0);
-    }
-
-    /**
      * Get a new meta entity for this controller
      *
      * @param tileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
@@ -252,39 +92,59 @@ public class GT_TileEntity_StellarMaterialSiphon
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity tileEntity) {
         return new GT_TileEntity_StellarMaterialSiphon(this.mName);
     }
+    // endregion
+
+    // region Structure
+    /**
+     * Main structure of the machine
+     */
+    private static final String STRUCTURE_PIECE_MAIN = "main";
+
+    // spotless:off
+    private static final String[][] shape = new String[][]{
+        {"               ","               ","               ","               ","               ","               ","               ","       I       ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","               ","       I       ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","               ","       I       ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","               ","       I       ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","               ","       I       ","               ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","       H       ","      HIH      ","       H       ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","       H       ","      HIH      ","       H       ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","               ","       H       ","      HIH      ","       H       ","               ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       C       ","      HJH      ","     CJJJC     ","      HJH      ","       C       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       C       ","      HJH      ","     CJ JC     ","      HJH      ","       C       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       C       ","      HJH      ","     CJ JC     ","      HJH      ","       C       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       C       ","      HJH      ","     CJ JC     ","      HJH      ","       C       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","      HCH      ","     HHJHH     ","     CJ JC     ","     HHJMH     ","      HCH      ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      HCH      ","     IEEEI     ","    HEEJEEH    ","    CEJ JEC    ","    HEEJEEH    ","     IEEEI     ","      HCH      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      HCH      ","     IEEEI     ","    HE J EH    ","    CEJ JEC    ","    HE J EH    ","     IEEEI     ","      HCH      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      HCH      ","     IEEEI     ","    HE J EH    ","    CEJ JEC    ","    HE J EH    ","     IEEEI     ","      HCH      ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","      HCH      ","     IEEEI     ","    HE J EH    ","    CEJ JEC    ","    HE J EH    ","     IEEEI     ","      HCH      ","               ","               ","               ","               "},
+        {"               ","               ","               ","      AAA      ","     ABBBA     ","    AB   BA    ","   AB  J  BA   ","   AB J J BA   ","   AB  J  BA   ","    AB   BA    ","     ABBBA     ","      AAA      ","               ","               ","               "},
+        {"               ","               ","               ","      AAA      ","     ABBBA     ","    AB   BA    ","   AB  J  BA   ","   AB J J BA   ","   AB  J  BA   ","    AB   BA    ","     ABBBA     ","      AAA      ","               ","               ","               "},
+        {"               ","               ","               ","      AAA      ","     ABBBA     ","    AB   BA    ","   AB  J  BA   ","   AB J J BA   ","   AB  J  BA   ","    AB   BA    ","     ABBBA     ","      AAA      ","               ","               ","               "},
+        {"      LLL      ","               ","      FFF      ","     FEEEF     ","    FEBBBEF    ","   FEB   BEF   ","  FEB  J  BEF  ","  FEB J J BEF  ","  FEB  J  BEF  ","   FEB   BEF   ","    FEBBBEF    ","     FEEEF     ","      FFF      ","               ","               "},
+        {"      L~L      ","      FFF      ","     FEEEF     ","    FE   EF    ","   FE     EF   ","  FE       EF  "," FE    J    EF "," FE   J J   EF "," FE    J    EF ","  FE       EF  ","   FE     EF   ","    FE   EF    ","     FEEEF     ","      FFF      ","               "},
+        {"KKKKKKKKKKKKKKK","KDDDDDDCDDDDDDK","KDGGGGDCDGGGGDK","KDGGGGDCDGGGGDK","KDGGGGDCDGGGGDK","KDGGGGDCDGGGGDK","KDDDDDDCDDDDDDK","KCCCCCC CCCCCCK","KDDDDDDCDDDDDDK","KDGGGGDCDGGGGDK","KDGGGGDCDGGGGDK","KDGGGGDCDGGGGDK","KDGGGGDCDGGGGDK","KDDDDDDCDDDDDDK","KKKKKKKKKKKKKKK"},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "},
+        {"               ","               ","               ","               ","               ","       M       ","      MJM      ","     MJ JM     ","      MJM      ","       M       ","               ","               ","               ","               ","               "}
+    };
+    // spotless:on
+
+    private static final String shapeName = "main";
 
     /**
-     * @return Tooltip builder for this machine
+     * Structure definition of the machine
      */
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.type"))
-            .addInfo(loreTooltip != null ? ITALIC + loreTooltip : "")
-            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc1"))
-            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc2"))
-            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc3"))
-            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc4"))
-            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc5"))
-            .addSeparator()
-            .beginStructureBlock(3, 7, 3, false)
-            .addController(GCCoreUtil.translate("ig.siphon.structure.ControllerPos"))
-            .addOtherStructurePart(
-                GCCoreUtil.translate("ig.siphon.structure.AdvMachineFrame"),
-                GCCoreUtil.translate("ig.siphon.structure.Base"))
-            .addOtherStructurePart(
-                GCCoreUtil.translate("ig.siphon.structure.ReboltedRhodiumPalladiumCasing"),
-                GCCoreUtil.translate("ig.siphon.structure.PillarMiddle"))
-            .addOtherStructurePart(
-                GCCoreUtil.translate("ig.siphon.structure.FrameTungstensteel"),
-                GCCoreUtil.translate("ig.siphon.structure.Sides"))
-            .addEnergyHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
-            .addMaintenanceHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
-            .addInputBus(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
-            .addOutputHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
-            .toolTipFinisher(DARK_PURPLE + GTNHIntergalactic.MODNAME);
-        return tt;
-    }
+    private static IStructureDefinition<GT_TileEntity_StellarMaterialSiphon> STRUCTURE_DEFINITION;
 
     /**
      * @return Structure definition for this machine
@@ -293,7 +153,7 @@ public class GT_TileEntity_StellarMaterialSiphon
     public IStructureDefinition<GT_TileEntity_StellarMaterialSiphon> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_StellarMaterialSiphon>builder()
-                .addShape(shapeName, shape)
+                .addShape(shapeName, transpose(shape))
                 .addElement('A', ofBlock(SpaceStationStructureBlock, 12)) // A ->
                 // ofBlock...(BW_GlasBlocks2, 0,
                 // ...);
@@ -345,44 +205,92 @@ public class GT_TileEntity_StellarMaterialSiphon
     }
 
     /**
-     * @return Chunk of this machine
+     * Construct this machine using the blueprint in creative
+     *
+     * @param stackSize Blueprint stack
+     * @param hintsOnly Whether only hints should be displayed, or it should be build
      */
     @Override
-    public ChunkCoordIntPair getActiveChunk() {
-        return mCurrentChunk;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, 7, 21, 0);
     }
 
     /**
-     * Get the texture for this controller
+     * Check if the machine has a valid structure
      *
-     * @param baseMetaTileEntity MTE of this controller
-     * @param side               is the Side of the Block
-     * @param facing             is the direction the Block is facing (or a Bitmask of all Connections in case of Pipes)
-     * @param colorIndex         The Minecraft Color the Block is having
-     * @param active             if the Machine is currently active (use this instead of calling
-     *                           mBaseMetaTileEntity.mActive!!!). Note: In case of Pipes this means if this Side is
-     *                           connected to something or not.
-     * @param redstone           if the Machine is currently outputting a RedstoneSignal (use this instead of calling
-     *                           mBaseMetaTileEntity.mRedstone!!!)
-     * @return Texture of this controller for the input conditions
+     * @param aBaseMetaTileEntity MTE of this controller
+     * @param stack               Item in the controller
+     * @return True if machine is valid, else false
      */
     @Override
-    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean active, boolean redstone) {
-        if (side == facing) {
-            if (active)
-                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
-                    TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
-                        .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
-                        .glow()
-                        .build() };
-            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
-                TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
-                    .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
-                    .glow()
-                    .build() };
+    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack stack) {
+        repairMachine();
+        return checkPiece(STRUCTURE_PIECE_MAIN, 7, 21, 0);
+    }
+    // endregion
+
+    // region Processing Logic
+    /**
+     * Lore string, which will be randomly picked from a selection each time the resources are reloaded
+     */
+    @SuppressWarnings("unused")
+    private static String loreTooltip;
+
+    /**
+     * Cached value of log10(4)
+     */
+    private static final double LOG4 = Math.log10(4);
+
+    /**
+     * Current pumping depth
+     */
+    private int depth;
+
+    /**
+     * Cached fluid stack using for displaying the pumped fluid
+     */
+    private FluidStack fluid = new FluidStack(FluidRegistry.WATER, 0) {
+
+        public String getLocalizedName() {
+            return "None";
         }
-        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON) };
+    };
+
+    /**
+     * Flag if chunk loading is enabled
+     */
+    private boolean mChunkLoadingEnabled = true;
+
+    /**
+     * Chunk in which the multi is build
+     */
+    private ChunkCoordIntPair mCurrentChunk = null;
+
+    /**
+     * Flag if the chunk of the multi needs to be reloaded
+     */
+    private boolean mWorkChunkNeedsReload = true;
+
+    /**
+     * Get the maximum efficiency of this machine
+     *
+     * @param stack Item in the controller
+     * @return Maximum efficiency
+     */
+    @Override
+    public int getMaxEfficiency(ItemStack stack) {
+        return 10000;
+    }
+
+    /**
+     * Get the damage that will be dealt to the item in the controller
+     *
+     * @param stack Item in the controller
+     * @return Damage that is applied to the item in the controller
+     */
+    @Override
+    public int getDamageToComponent(ItemStack stack) {
+        return 0;
     }
 
     /**
@@ -393,6 +301,11 @@ public class GT_TileEntity_StellarMaterialSiphon
      */
     @Override
     public boolean isCorrectMachinePart(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
         return true;
     }
 
@@ -445,6 +358,14 @@ public class GT_TileEntity_StellarMaterialSiphon
         return SimpleCheckRecipeResult.ofSuccess("drilling");
     }
 
+    /**
+     * @return Chunk of this machine
+     */
+    @Override
+    public ChunkCoordIntPair getActiveChunk() {
+        return mCurrentChunk;
+    }
+
     public void repairMachine() {
         mHardHammer = true;
         mSoftMallet = true;
@@ -460,73 +381,6 @@ public class GT_TileEntity_StellarMaterialSiphon
     @Override
     public boolean doRandomMaintenanceDamage() {
         return true;
-    }
-
-    /**
-     * Check if the machine has a valid structure
-     *
-     * @param aBaseMetaTileEntity MTE of this controller
-     * @param stack               Item in the controller
-     * @return True if machine is valid, else false
-     */
-    @Override
-    public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack stack) {
-        repairMachine();
-        return checkPiece(STRUCTURE_PIECE_MAIN, 7, 21, 0);
-    }
-
-    /**
-     * Get the maximum efficiency of this machine
-     *
-     * @param stack Item in the controller
-     * @return Maximum efficiency
-     */
-    @Override
-    public int getMaxEfficiency(ItemStack stack) {
-        return 10000;
-    }
-
-    /**
-     * Get the damage that will be dealt to the item in the controller
-     *
-     * @param stack Item in the controller
-     * @return Damage that is applied to the item in the controller
-     */
-    @Override
-    public int getDamageToComponent(ItemStack stack) {
-        return 0;
-    }
-
-    /**
-     * Save additional nbt data to this controller
-     *
-     * @param aNBT Tag to which will be saved
-     */
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setBoolean("chunkLoadingEnabled", mChunkLoadingEnabled);
-        aNBT.setBoolean("isChunkloading", mCurrentChunk != null);
-        if (mCurrentChunk != null) {
-            aNBT.setInteger("loadedChunkXPos", mCurrentChunk.chunkXPos);
-            aNBT.setInteger("loadedChunkZPos", mCurrentChunk.chunkZPos);
-        }
-    }
-
-    /**
-     * Read additional nbt data from this controller
-     *
-     * @param aNBT Tag which will be read
-     */
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        if (aNBT.hasKey("chunkLoadingEnabled")) mChunkLoadingEnabled = aNBT.getBoolean("chunkLoadingEnabled");
-        if (aNBT.getBoolean("isChunkloading")) {
-            mCurrentChunk = new ChunkCoordIntPair(
-                aNBT.getInteger("loadedChunkXPos"),
-                aNBT.getInteger("loadedChunkZPos"));
-        }
     }
 
     @Override
@@ -596,10 +450,116 @@ public class GT_TileEntity_StellarMaterialSiphon
             "---------------------------------------------" };
     }
 
+    // endregion
+
+    // region NBT
+
+    /**
+     * Save additional nbt data to this controller
+     *
+     * @param aNBT Tag to which will be saved
+     */
     @Override
-    public boolean supportsVoidProtection() {
-        return true;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setBoolean("chunkLoadingEnabled", mChunkLoadingEnabled);
+        aNBT.setBoolean("isChunkloading", mCurrentChunk != null);
+        if (mCurrentChunk != null) {
+            aNBT.setInteger("loadedChunkXPos", mCurrentChunk.chunkXPos);
+            aNBT.setInteger("loadedChunkZPos", mCurrentChunk.chunkZPos);
+        }
     }
+
+    /**
+     * Read additional nbt data from this controller
+     *
+     * @param aNBT Tag which will be read
+     */
+    @Override
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        if (aNBT.hasKey("chunkLoadingEnabled")) mChunkLoadingEnabled = aNBT.getBoolean("chunkLoadingEnabled");
+        if (aNBT.getBoolean("isChunkloading")) {
+            mCurrentChunk = new ChunkCoordIntPair(
+                aNBT.getInteger("loadedChunkXPos"),
+                aNBT.getInteger("loadedChunkZPos"));
+        }
+    }
+
+    // endregion
+
+    // region Textures
+
+    /**
+     * Get the texture for this controller
+     *
+     * @param baseMetaTileEntity MTE of this controller
+     * @param side               is the Side of the Block
+     * @param facing             is the direction the Block is facing (or a Bitmask of all Connections in case of Pipes)
+     * @param colorIndex         The Minecraft Color the Block is having
+     * @param active             if the Machine is currently active (use this instead of calling
+     *                           mBaseMetaTileEntity.mActive!!!). Note: In case of Pipes this means if this Side is
+     *                           connected to something or not.
+     * @param redstone           if the Machine is currently outputting a RedstoneSignal (use this instead of calling
+     *                           mBaseMetaTileEntity.mRedstone!!!)
+     * @return Texture of this controller for the input conditions
+     */
+    @Override
+    public ITexture[] getTexture(IGregTechTileEntity baseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean active, boolean redstone) {
+        if (side == facing) {
+            if (active)
+                return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
+                    TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
+                        .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_ACTIVE_GLOW)
+                        .glow()
+                        .build() };
+            return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON),
+                TextureFactory.of(IGTextures.SIPHON_OVERLAY_FRONT), TextureFactory.builder()
+                    .addIcon(IGTextures.SIPHON_OVERLAY_FRONT_GLOW)
+                    .glow()
+                    .build() };
+        }
+        return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(IGTextures.CASING_INDEX_SIPHON) };
+    }
+
+    // endregion
+
+    // region Tooltip
+
+    /**
+     * @return Tooltip builder for this machine
+     */
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        tt.addMachineType(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.type"))
+            .addInfo(loreTooltip != null ? ITALIC + loreTooltip : "")
+            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc1"))
+            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc2"))
+            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc3"))
+            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc4"))
+            .addInfo(GCCoreUtil.translate("gt.blockmachines.multimachine.ig.siphon.desc5"))
+            .beginStructureBlock(3, 7, 3, false)
+            .addController(GCCoreUtil.translate("ig.siphon.structure.ControllerPos"))
+            .addOtherStructurePart(
+                GCCoreUtil.translate("ig.siphon.structure.AdvMachineFrame"),
+                GCCoreUtil.translate("ig.siphon.structure.Base"))
+            .addOtherStructurePart(
+                GCCoreUtil.translate("ig.siphon.structure.ReboltedRhodiumPalladiumCasing"),
+                GCCoreUtil.translate("ig.siphon.structure.PillarMiddle"))
+            .addOtherStructurePart(
+                GCCoreUtil.translate("ig.siphon.structure.FrameTungstensteel"),
+                GCCoreUtil.translate("ig.siphon.structure.Sides"))
+            .addEnergyHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
+            .addMaintenanceHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
+            .addInputBus(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
+            .addOutputHatch(GCCoreUtil.translate("ig.siphon.structure.AnyAdvMachineFrame"), 1)
+            .toolTipFinisher(DARK_PURPLE + GTNHIntergalactic.MODNAME);
+        return tt;
+    }
+
+    // endregion
 
 }
 //

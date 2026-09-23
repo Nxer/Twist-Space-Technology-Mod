@@ -4,8 +4,6 @@ import net.minecraft.item.ItemStack;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstItems;
 
-import lombok.Getter;
-
 public enum EcoSphereUpgradeType {
 
     FLUID_REDUCTION(0, 0b1111, null),
@@ -16,17 +14,23 @@ public enum EcoSphereUpgradeType {
     PERFECT_GENETICS(5, 0b0101, EcoSphereSpecialUpgrade.PERFECT_GENETICS),
     OUTPUT_PULVERIZATION(6, 0b1000, EcoSphereSpecialUpgrade.OUTPUT_PULVERIZATION);
 
-    @Getter
     private final int metadata;
     // Bit n authorizes this upgrade's mode-specific effect in machine mode n.
     private final int allowedModes;
-    @Getter
     private final EcoSphereSpecialUpgrade specialUpgrade;
 
     EcoSphereUpgradeType(int metadata, int allowedModes, EcoSphereSpecialUpgrade specialUpgrade) {
         this.metadata = metadata;
         this.allowedModes = allowedModes;
         this.specialUpgrade = specialUpgrade;
+    }
+
+    public int getMetadata() {
+        return metadata;
+    }
+
+    public EcoSphereSpecialUpgrade getSpecialUpgrade() {
+        return specialUpgrade;
     }
 
     public boolean isAllowedForMode(int mode) {

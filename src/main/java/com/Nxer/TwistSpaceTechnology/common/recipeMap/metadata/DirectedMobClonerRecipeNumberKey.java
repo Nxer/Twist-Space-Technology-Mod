@@ -17,10 +17,12 @@ public final class DirectedMobClonerRecipeNumberKey extends RecipeMetadataKey<In
 
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
-        // #tr EcoSphereSimulator.nei.biologicalAddress
+        // #tr tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.biological_address
         // # Biological Address: %s
         // #zh_CN 生物地址: %s
         recipeInfo.drawText(
-            StatCollector.translateToLocalFormatted("EcoSphereSimulator.nei.biologicalAddress", cast(value, 0)));
+            StatCollector.translateToLocalFormatted(
+                "tst.ecosphere.recipe.DirectedMobClonerFakeRecipes.biological_address",
+                cast(value, 0)));
     }
 }

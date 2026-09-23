@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiStructureMachine.MultiStructureManager;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,10 +24,15 @@ public class ItemMultiStructuresLinkTool extends Item {
     public ItemMultiStructuresLinkTool(CreativeTabs aCreativeTabs) {
         super();
         this.setCreativeTab(aCreativeTabs);
-        // #tr item.MultiStructuresLinkTool.name
+        // #tr item.tst.common.multi_structures_link_tool.name
         // # Multi-Structures Link Tool
         // #zh_CN Multi-Structures Link Tool
         this.setUnlocalizedName("MultiStructuresLinkTool");
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return "item.tst.common.multi_structures_link_tool";
     }
 
     @Override
@@ -40,12 +45,14 @@ public class ItemMultiStructuresLinkTool extends Item {
     @SideOnly(Side.CLIENT)
     public void addInformation(final ItemStack itemStack, final EntityPlayer player, final List<String> toolTip,
         final boolean advancedToolTips) {
-        // #tr tooltips.MultiStructuresLinkTool.line1
+        // #tr item.tst.common.multi_structures_link_tool.tooltip.01
         // # {\LIGHT_PURPLE}left Click to set Main machine
-        toolTip.add(TextEnums.tr("tooltips.MultiStructuresLinkTool.line1"));
-        // #tr tooltips.MultiStructuresLinkTool.line2
+        // #zh_CN {\LIGHT_PURPLE}left Click to set Main machine
+        toolTip.add(TSTUtils.tr("item.tst.common.multi_structures_link_tool.tooltip.01"));
+        // #tr item.tst.common.multi_structures_link_tool.tooltip.02
         // # {\LIGHT_PURPLE}right Click to set Sub machine
-        toolTip.add(TextEnums.tr("tooltips.MultiStructuresLinkTool.line2"));
+        // #zh_CN {\LIGHT_PURPLE}right Click to set Sub machine
+        toolTip.add(TSTUtils.tr("item.tst.common.multi_structures_link_tool.tooltip.02"));
     }
 
     public void link(EntityPlayer aPlayer) {

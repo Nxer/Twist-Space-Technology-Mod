@@ -26,7 +26,7 @@ public class ElvenWorkshopRecipePool  {
 
     public static void loadRecipes() {
 
-        final IRecipeMap EW = GTCMRecipe.ElvenWorkshopRecipes;
+        final IRecipeMap EW = GTCMRecipe.ElvenWorkshopRecipeMap;
         //terrastrial recipe
         GTValues.RA.stdBuilder()
             .itemInputs(GTUtility.getIntegratedCircuit(1), Materials.Manasteel.getIngots(1), Materials.ManaDiamond.getGems(1), new ItemStack(ModItems.manaResource, 1, 1))

@@ -21,7 +21,7 @@ import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.client.audio.Sound;
 import com.Nxer.TwistSpaceTechnology.common.entity.EntityMountableBlock;
 import com.Nxer.TwistSpaceTechnology.common.tile.TilePowerChair;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -47,7 +47,7 @@ public class BlockPowerChair extends Block {
 
     @Override
     public String getUnlocalizedName() {
-        return "BlockPowerChair";
+        return "tile.tst.common.block_power_chair";
     }
 
     @Override
@@ -158,6 +158,9 @@ public class BlockPowerChair extends Block {
 
         @Override
         public String getUnlocalizedName(ItemStack aStack) {
+            // #tr tile.tst.common.block_power_chair.0.name
+            // # PowerChair
+            // #zh_CN 抛瓦椅
             return this.field_150939_a.getUnlocalizedName() + "." + this.getDamage(aStack);
         }
 
@@ -171,15 +174,15 @@ public class BlockPowerChair extends Block {
         public void addInformation(final ItemStack itemStack, final EntityPlayer player, final List<String> toolTip,
             final boolean advancedToolTips) {
             if (isShiftKeyDown()) {
-                // #tr tooltips.PowerChair.page2.line1
+                // #tr tile.tst.common.block_power_chair.0.tooltip.02
                 // # {\LIGHT_PURPLE}If you want it, then you'll have to take it.
                 // #zh_CN {\LIGHT_PURPLE}If you want it, then you'll have to take it.
-                toolTip.add(TextEnums.tr("tooltips.PowerChair.page2.line1"));
+                toolTip.add(TSTUtils.tr("tile.tst.common.block_power_chair.0.tooltip.02"));
             } else {
-                // #tr tooltips.PowerChair.page1.line1
+                // #tr tile.tst.common.block_power_chair.0.tooltip.01
                 // # Your portal opening day's over.
                 // #zh_CN Your portal opening day's over.
-                toolTip.add(TextEnums.tr("tooltips.PowerChair.page1.line1"));
+                toolTip.add(TSTUtils.tr("tile.tst.common.block_power_chair.0.tooltip.01"));
             }
 
         }

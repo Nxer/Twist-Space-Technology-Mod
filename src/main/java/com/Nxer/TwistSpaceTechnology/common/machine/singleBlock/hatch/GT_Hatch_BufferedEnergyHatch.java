@@ -15,8 +15,9 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.internal.wrapper.BaseSlot;
@@ -24,6 +25,7 @@ import com.gtnewhorizons.modularui.common.widget.SlotGroup;
 
 import gregtech.api.gui.modularui.GTUIInfos;
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.items.MetaBaseItem;
 import gregtech.api.metatileentity.MetaTileEntity;
@@ -34,7 +36,8 @@ import ic2.api.item.IElectricItem;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 
-public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
+@SkipGenerateDescription
+public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTTooltipCredit {
 
     public boolean mCharge = false, mDecharge = false;
     public int mBatteryCount = 0, mChargeableCount = 0;
@@ -44,14 +47,22 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
 
     public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
         String[] aDescription) {
+        // #tr tst.common.machine.BufferedEnergyHatch.tooltip.info.01
+        // # Buffered Energy Injector for Multiblocks
+        // #zh_CN 为多方块机器提供更高缓存的能源输入
+
+        // #tr tst.common.machine.BufferedEnergyHatch.tooltip.info.02
+        // # Accepts up to 2 Amps
+        // #zh_CN 最大输入2安
         super(
             aID,
             aName,
             aNameRegional,
             aTier,
             aInvSlotCount,
-            new String[] { TstUtils.tr("BufferedEnergyHatch.Tooltips.01"),
-                TstUtils.tr("BufferedEnergyHatch.Tooltips.02"), TextLocalization.ModNameDesc });
+            new String[] { TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tooltip.info.01"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tooltip.info.02") });
+        registerTooltipCredits(ID.SHORDINGER);
     }
 
     public GT_Hatch_BufferedEnergyHatch(String aName, int aTier, int aslot, String[] aDescription,
@@ -63,10 +74,11 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy {
     public String[] getDescription() {
         String[] desc = new String[mDescriptionArray.length + 1];
         System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-        // #tr Slots
+        // #tr tst.common.shared.machine_tooltip.slots
         // #en_US Slots
         // #zh_CN 格
-        desc[mDescriptionArray.length] = mInventory.length + " " + TstUtils.tr("Slots");
+        desc[mDescriptionArray.length] = mInventory.length + " "
+            + TSTUtils.tr("tst.common.shared.machine_tooltip.slots");
         return desc;
     }
 

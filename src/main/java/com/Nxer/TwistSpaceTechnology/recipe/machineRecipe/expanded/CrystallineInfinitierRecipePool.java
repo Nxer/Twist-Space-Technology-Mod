@@ -35,7 +35,7 @@ public class CrystallineInfinitierRecipePool {
         final IRecipeMap AC = RecipeMaps.autoclaveRecipes;
         final IRecipeMap LE = RecipeMaps.laserEngraverRecipes;
         final IRecipeMap HM = RecipeMaps.hammerRecipes;
-        final IRecipeMap CI = GTCMRecipe.CrystallineInfinitierRecipes;
+        final IRecipeMap CI = GTCMRecipe.CrystallineInfinitierRecipeMap;
 
         // region Adv Nether Stars
         GTValues.RA.stdBuilder()

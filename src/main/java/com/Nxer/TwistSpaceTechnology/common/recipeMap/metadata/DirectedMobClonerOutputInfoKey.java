@@ -2,7 +2,7 @@ package com.Nxer.TwistSpaceTechnology.common.recipeMap.metadata;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import gregtech.api.recipe.RecipeMetadataKey;
 import gregtech.nei.RecipeDisplayInfo;
@@ -17,15 +17,16 @@ public final class DirectedMobClonerOutputInfoKey extends RecipeMetadataKey<Bool
 
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
-        // #tr EcoSphereSimulator.nei.parallel
+        // #tr tst.ecosphere.shared.recipe.EcoSphereSimulator.parallel
         // # Boosted by higher voltage
         // #zh_CN 并行随电压提高
 
-        // #tr EcoSphereSimulator.nei.losslessOverclock
+        // #tr tst.ecosphere.shared.recipe.EcoSphereSimulator.lossless_overclock
         // # Runs with perfect overclock
         // #zh_CN 执行无损超频
         recipeInfo.drawText(
-            TextEnums.tr(
-                cast(value, false) ? "EcoSphereSimulator.nei.losslessOverclock" : "EcoSphereSimulator.nei.parallel"));
+            TSTUtils.tr(
+                cast(value, false) ? "tst.ecosphere.shared.recipe.EcoSphereSimulator.lossless_overclock"
+                    : "tst.ecosphere.shared.recipe.EcoSphereSimulator.parallel"));
     }
 }

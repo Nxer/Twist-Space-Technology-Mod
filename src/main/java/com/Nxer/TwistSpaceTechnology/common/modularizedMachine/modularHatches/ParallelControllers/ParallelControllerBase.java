@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -53,10 +53,11 @@ public abstract class ParallelControllerBase extends ModularHatchBase {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            // #tr Waila.ParallelControllerBase.1
+            // #tr tst.modular.machine.ParallelControllerBase.waila.parallel_controller_base.1
             // # Parallel
             // #zh_CN 并行
-            EnumChatFormatting.AQUA + TextEnums.tr("Waila.ParallelControllerBase.1")
+            EnumChatFormatting.AQUA
+                + TSTUtils.tr("tst.modular.machine.ParallelControllerBase.waila.parallel_controller_base.1")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD

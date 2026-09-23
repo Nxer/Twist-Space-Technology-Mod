@@ -11,7 +11,7 @@ public final class ItemEcoSphereUpgrade extends AbstractTstMetaItem {
     private IIcon frameIcon;
 
     public ItemEcoSphereUpgrade() {
-        super("EcoSphereUpgrade");
+        super("EcoSphereUpgrade", "ecosphere.upgrade");
     }
 
     @Override

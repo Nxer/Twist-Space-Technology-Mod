@@ -32,8 +32,10 @@ import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -48,6 +50,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -60,22 +63,180 @@ import gregtech.api.util.GTRecipe;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings1;
 
+@SkipGenerateDescription
 public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalGenerator> {
 
     // region Class Constructor
     public TST_UniversalGenerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.EVGEN_WAR_GOLD);
     }
 
     public TST_UniversalGenerator(String aName) {
         super(aName);
     }
 
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_UniversalGenerator(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final String STRUCTURE_PIECE_GAS = "mainGas";
+    private static final String STRUCTURE_PIECE_FUEL = "mainFuel";
+    private final int horizontalOffSetGas = 4;
+    private final int verticalOffSetGas = 3;
+    private final int depthOffSetGas = 0;
+    private final int horizontalOffSetFuel = 2;
+    private final int verticalOffSetFuel = 5;
+    private final int depthOffSetFuel = 0;
+    private final int mainTextureID = ((BlockCasings1) sBlockCasings1).getTextureIndex(11);
+    private static IStructureDefinition<TST_UniversalGenerator> STRUCTURE_DEFINITION = null;
+
+    // spotless:off
+    private final String[][] shapeGas = new String[][]{
+        {"         ","         ","         ","         ","         ","D   A   D","DAAAAAAAD","DAAAAAAAD","DAAAAAAAD","D   A   D"},
+        {"         ","    D    ","         ","         ","         ","DAFFAFFAD","A       A","AE   E  A","A       A","DAFFAFFAD"},
+        {"    D    ","   DAD   ","    D    ","         ","         ","DAFFAFFAD","A   E   A","ACCCCCCCA","A E   E A","DAFFAFFAD"},
+        {"   D~D   ","   ABA   ","   DAD   ","         ","         ","DAFFAFFAD","A       A","A  E   EA","A       A","DAFFAFFAD"},
+        {"   DAD   ","   AAA   ","   DAD   ","         ","         ","D   A   D"," AAAAAAA "," AAAAAAA "," AAAAAAA ","D   A   D"}
+    };
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasings, 11, ...);
+     * B -> ofBlock...(gt.blockcasings2, 3, ...);
+     * С -> ofBlock...(miscutils.blockcasings, 2, ...);
+     * D -> ofBlock...(gt.blockmetal1, 12, ...);
+     * E -> ofBlock...(gt.blocktintedglass, 0, ...);
+     * F -> ofBlock...(gt.blockframes, 305, ...);
+     */
+
+    private final String[][] shapeFuel = new String[][]{
+        {"     ","     ","     ","     ","     ","  D  "," AAA ","DAAAD"," AAA ","  D  "},
+        {"     ","     ","     ","     ","     ","DAAAD","A   A","A CEA","A   A","DAAAD"},
+        {"     ","     ","     ","     ","     ","DFFFD","F   F","F C F","F E F","DFFFD"},
+        {"     ","  D  ","     ","     ","     ","DFFFD","F   F","FEC F","F   F","DFFFD"},
+        {"  D  "," DAD ","  D  ","     ","     ","DFFFD","F E F","F C F","F   F","DFFFD"},
+        {" D~D "," ABA "," DAD ","     ","     ","DFFFD","F   F","F CEF","F   F","DFFFD"},
+        {" DAD "," AAA "," DAD ","     ","     ","DAAAD","AAAAA","AAAAA","AAAAA","DAAAD"}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_UniversalGenerator> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_UniversalGenerator>builder()
+                .addShape(STRUCTURE_PIECE_GAS, transpose(shapeGas))
+                .addShape(STRUCTURE_PIECE_FUEL, transpose(shapeFuel))
+                .addElement(
+                    'A',
+                    ofChain(
+                        buildHatchAdder(TST_UniversalGenerator.class).atLeast(Dynamo)
+                            .casingIndex(mainTextureID)
+                            .hint(1)
+                            .build(),
+                        buildHatchAdder(TST_UniversalGenerator.class).atLeast(InputHatch)
+                            .casingIndex(mainTextureID)
+                            .hint(1)
+                            .build(),
+                        onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings1, 11))))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 3))
+                .addElement('C', ofBlock(GregTechAPI.sBlockCasings3, 13))
+                .addElement('D', ofFrame(Materials.Steel))
+                .addElement('E', ofBlock(GregTechAPI.sBlockMetal6, 13))
+                .addElement('F', ofBlock(GregTechAPI.sBlockTintedGlass, 0))
+
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasings, 11, ...);
+     * B -> ofBlock...(gt.blockcasings2, 3, ...);
+     * С -> ofBlock...(miscutils.blockcasings, 2, ...);
+     * D -> ofBlock...(gt.blockframes, 305, ...);
+     * E -> ofBlock...(gt.blockmetal1, 12, ...);
+     * F -> ofBlock...(gt.blocktintedglass, 0, ...);
+     */
+
+    @Override
+    public void construct(ItemStack itemStack, boolean b) {
+        if (itemStack.stackSize == 1) {
+            buildPiece(STRUCTURE_PIECE_GAS, itemStack, b, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas);
+        } else {
+            buildPiece(STRUCTURE_PIECE_FUEL, itemStack, b, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel);
+        }
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        int built = 0;
+        if (stackSize.stackSize == 1) {
+            mSetTier = 1;
+            built += this.survivalBuildPiece(
+                STRUCTURE_PIECE_GAS,
+                stackSize,
+                horizontalOffSetGas,
+                verticalOffSetGas,
+                depthOffSetGas,
+                elementBudget,
+                env,
+                false,
+                true);
+        } else {
+            mSetTier = 2;
+            built += this.survivalBuildPiece(
+                STRUCTURE_PIECE_FUEL,
+                stackSize,
+                horizontalOffSetFuel,
+                verticalOffSetFuel,
+                depthOffSetFuel,
+                elementBudget,
+                env,
+                false,
+                true);
+        }
+        return built;
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        clearHatches();
+        mSetTier = 0;
+
+        if (checkPiece(STRUCTURE_PIECE_GAS, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, errors)) {
+            mSetTier = 1;
+        } else {
+            clearHatches();
+            if (errors != null) errors.clear();
+            if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
+                mSetTier = 2;
+            }
+        }
+
+        if (mSetTier == 0) return;
+
+        DYNAMO_AMP = getDynamoAmperage();
+        DYNAMO_TIER = getTierDynamo();
+
+        checkHasInputHatch(errors);
+        checkCasingMin(errors, mCasing, 45);
+        checkHatchMin(errors, Dynamo, 1);
+        checkHatchMax(errors, Dynamo, 2);
+        if (checkMixedDynamo() || (!setDynamoTier(3, false))) {
+            errors.add(hatch_tier_incompatible);
+        }
+
+    }
     // endregion
 
     // region Processing Logic
     private int mCasing = 0;
-
     private int mSetTier = 1;
     private double fuelBurning;
     private long DYNAMO_AMP;
@@ -98,15 +259,28 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     }
 
     @Override
-    protected boolean filtersFluid() {
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
         return false;
     }
 
     @Override
-    public void clearHatches() {
-        super.clearHatches();
-        this.mSetTier = 0;
-        this.mCasing = 0;
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
     }
 
     @Nonnull
@@ -147,194 +321,114 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        clearHatches();
-        mSetTier = 0;
+    protected boolean filtersFluid() {
+        return false;
+    }
 
-        if (checkPiece(STRUCTURE_PIECE_GAS, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, errors)) {
-            mSetTier = 1;
-        } else {
-            clearHatches();
-            if (errors != null) errors.clear();
-            if (checkPiece(STRUCTURE_PIECE_FUEL, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, errors)) {
-                mSetTier = 2;
-            }
-        }
+    @Override
+    public void clearHatches() {
+        super.clearHatches();
+        this.mSetTier = 0;
+        this.mCasing = 0;
+    }
 
-        if (mSetTier == 0) return;
+    @Override
+    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+        super.drawTexts(screenElements, inventorySlot);
+        screenElements.widget(
+            new TextWidget().setStringSupplier(
+                () -> EnumChatFormatting.WHITE
+                    // spotless:off
+                    // #tr tst.common.machine.UniversalGenerator.gui.01
+                    // # Mode:
+                    // #zh_CN 模式 :
+                    + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.01")
+                    + " "
+                    + EnumChatFormatting.GOLD
+                    // #tr tst.common.machine.UniversalGenerator.gui.02
+                    // # Gas:
+                    // #zh_CN 燃气 :
 
-        DYNAMO_AMP = getDynamoAmperage();
-        DYNAMO_TIER = getTierDynamo();
-
-        checkHasInputHatch(errors);
-        checkCasingMin(errors, mCasing, 45);
-        checkHatchMin(errors, Dynamo, 1);
-        checkHatchMax(errors, Dynamo, 2);
-        if (checkMixedDynamo() || (!setDynamoTier(3, false))) {
-            errors.add(hatch_tier_incompatible);
-        }
-
+                    // #tr tst.common.machine.UniversalGenerator.gui.03
+                    // # Fuel:
+                    // #zh_CN 燃油 :
+                    + (mSetTier == 2 ? TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.03")
+                        : TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.02"))
+                    + EnumChatFormatting.RESET)
+                .setEnabled(mSetTier != 0))
+            .widget(
+                new TextWidget().setStringSupplier(
+                    () -> EnumChatFormatting.WHITE
+                        // #tr tst.common.machine.UniversalGenerator.gui.04
+                        // # Current fluid:
+                        // #zh_CN 当前使用:
+                        + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.04")
+                        + " "
+                        + EnumChatFormatting.GOLD
+                        + fuelName
+                        + EnumChatFormatting.RESET)
+                    .setEnabled(!Objects.equals(fuelName, "")))
+            .widget(
+                new TextWidget().setStringSupplier(
+                    () -> EnumChatFormatting.WHITE
+                        // #tr tst.common.machine.UniversalGenerator.gui.05
+                        // # Eu per tick:
+                        // #zh_CN 发电量 EU/t :
+                        + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.05")
+                        + " "
+                        + EnumChatFormatting.GOLD
+                        + numberFormat.format(euPerTick)
+                        + EnumChatFormatting.RESET)
+                    .setEnabled(euPerTick != 0))
+            .widget(
+                new TextWidget().setStringSupplier(
+                    () -> EnumChatFormatting.WHITE
+                        // #tr tst.common.machine.UniversalGenerator.gui.06
+                        // # Fuel burning:
+                        // #zh_CN 燃料消耗速度 :
+                        + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.06")
+                        + " "
+                        + EnumChatFormatting.GOLD
+                        + numberFormat.format(1000.0 / fuelBurning)
+                        + EnumChatFormatting.WHITE
+                        // #tr tst.common.machine.SteamBasicGenerator.gui.02
+                        // # /s
+                        // #zh_CN /s
+                        + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.02")
+                        + EnumChatFormatting.RESET)
+                    .setEnabled(fuelBurning != 0))
+            .widget(new FakeSyncWidget.LongSyncer(() -> euPerTick, val -> euPerTick = val))
+            .widget(new FakeSyncWidget.DoubleSyncer(() -> fuelBurning, val -> fuelBurning = val))
+            .widget(new FakeSyncWidget.StringSyncer(() -> fuelName, val -> fuelName = val))
+            .widget(new FakeSyncWidget.IntegerSyncer(() -> mSetTier, val -> mSetTier = val));
+                    // spotless:on
     }
 
     // endregion
 
-    // region Structure
-    // spotless:off
+    // region NBT
+
     @Override
-    public void construct(ItemStack itemStack, boolean b) {
-        if (itemStack.stackSize == 1) {
-            buildPiece(STRUCTURE_PIECE_GAS, itemStack, b, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas);
-        } else {
-            buildPiece(STRUCTURE_PIECE_FUEL, itemStack, b, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel);
-        }
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setInteger("mSetTier", mSetTier);
+        aNBT.setLong("euPerTick", euPerTick);
+        aNBT.setDouble("fuelBurning", fuelBurning);
+        aNBT.setString("fuelName", fuelName);
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        int built = 0;
-        if (stackSize.stackSize == 1) {
-            mSetTier = 1;
-            built += this.survivalBuildPiece(STRUCTURE_PIECE_GAS, stackSize, horizontalOffSetGas, verticalOffSetGas, depthOffSetGas, elementBudget, env, false, true);
-        } else {
-            mSetTier = 2;
-            built += this.survivalBuildPiece(STRUCTURE_PIECE_FUEL, stackSize, horizontalOffSetFuel, verticalOffSetFuel, depthOffSetFuel, elementBudget, env, false, true);
-        }
-        return built;
+    public void loadNBTData(final NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        mSetTier = aNBT.getInteger("mSetTier");
+        euPerTick = aNBT.getLong("euPerTick");
+        fuelBurning = aNBT.getDouble("fuelBurning");
+        fuelName = aNBT.getString("fuelName");
     }
 
-    private static final String STRUCTURE_PIECE_GAS = "mainGas";
-    private static final String STRUCTURE_PIECE_FUEL = "mainFuel";
-    private final int horizontalOffSetGas = 4;
-    private final int verticalOffSetGas = 3;
-    private final int depthOffSetGas = 0;
-
-    private final int horizontalOffSetFuel = 2;
-    private final int verticalOffSetFuel = 5;
-    private final int depthOffSetFuel = 0;
-
-    private final int mainTextureID = ((BlockCasings1) sBlockCasings1).getTextureIndex(11);
-    private static IStructureDefinition<TST_UniversalGenerator> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public IStructureDefinition<TST_UniversalGenerator> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_UniversalGenerator>builder()
-                .addShape(STRUCTURE_PIECE_GAS,
-                    transpose(shapeGas))
-                .addShape(STRUCTURE_PIECE_FUEL,
-                    transpose(shapeFuel))
-                .addElement(
-                    'A',
-                    ofChain(
-                        buildHatchAdder(TST_UniversalGenerator.class)
-                            .atLeast(Dynamo)
-                            .casingIndex(mainTextureID)
-                            .hint(1)
-                            .build(),
-                        buildHatchAdder(TST_UniversalGenerator.class)
-                            .atLeast(InputHatch)
-                            .casingIndex(mainTextureID)
-                            .hint(1)
-                            .build(),
-                        onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings1, 11))))
-                .addElement('B',ofBlock(GregTechAPI.sBlockCasings2, 3))
-                .addElement('C',ofBlock(GregTechAPI.sBlockCasings3,13))
-                .addElement('D', ofFrame(Materials.Steel))
-                .addElement('E', ofBlock(GregTechAPI.sBlockMetal6, 13))
-                .addElement('F',ofBlock(GregTechAPI.sBlockTintedGlass, 0))
-
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-	/*
-	Blocks:
-A -> ofBlock...(gt.blockcasings, 11, ...);
-B -> ofBlock...(gt.blockcasings2, 3, ...);
-С -> ofBlock...(miscutils.blockcasings, 2, ...);
-D -> ofBlock...(gt.blockframes, 305, ...);
-E -> ofBlock...(gt.blockmetal1, 12, ...);
-F -> ofBlock...(gt.blocktintedglass, 0, ...);
-	 */
-
-    private final String[][] shapeGas = new String[][]{
-        {"         ","         ","         ","         ","         ","D   A   D","DAAAAAAAD","DAAAAAAAD","DAAAAAAAD","D   A   D"},
-        {"         ","    D    ","         ","         ","         ","DAFFAFFAD","A       A","AE   E  A","A       A","DAFFAFFAD"},
-        {"    D    ","   DAD   ","    D    ","         ","         ","DAFFAFFAD","A   E   A","ACCCCCCCA","A E   E A","DAFFAFFAD"},
-        {"   D~D   ","   ABA   ","   DAD   ","         ","         ","DAFFAFFAD","A       A","A  E   EA","A       A","DAFFAFFAD"},
-        {"   DAD   ","   AAA   ","   DAD   ","         ","         ","D   A   D"," AAAAAAA "," AAAAAAA "," AAAAAAA ","D   A   D"}
-    };
-
-    	/*
-	Blocks:
-A -> ofBlock...(gt.blockcasings, 11, ...);
-B -> ofBlock...(gt.blockcasings2, 3, ...);
-С -> ofBlock...(miscutils.blockcasings, 2, ...);
-D -> ofBlock...(gt.blockmetal1, 12, ...);
-E -> ofBlock...(gt.blocktintedglass, 0, ...);
-F -> ofBlock...(gt.blockframes, 305, ...);
-
-	 */
-
-    private final String[][] shapeFuel = new String[][]{
-        {"     ","     ","     ","     ","     ","  D  "," AAA ","DAAAD"," AAA ","  D  "},
-        {"     ","     ","     ","     ","     ","DAAAD","A   A","A CEA","A   A","DAAAD"},
-        {"     ","     ","     ","     ","     ","DFFFD","F   F","F C F","F E F","DFFFD"},
-        {"     ","  D  ","     ","     ","     ","DFFFD","F   F","FEC F","F   F","DFFFD"},
-        {"  D  "," DAD ","  D  ","     ","     ","DFFFD","F E F","F C F","F   F","DFFFD"},
-        {" D~D "," ABA "," DAD ","     ","     ","DFFFD","F   F","F CEF","F   F","DFFFD"},
-        {" DAD "," AAA "," DAD ","     ","     ","DAAAD","AAAAA","AAAAA","AAAAA","DAAAD"}
-    };
-    // spotless:on
     // endregion
 
-    // region Overrides
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_UniversalGenerator_MachineType)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_00)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_01)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_02)
-            .addInfo(TextLocalization.Tooltip_UniversalGenerator_03)
-            .addInfo(TextEnums.Author_EvgenWarGold.getText())
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_UniversalGenerator(this.mName);
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -363,91 +457,41 @@ F -> ofBlock...(gt.blockframes, 305, ...);
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID) };
     }
 
-    @Override
-    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-        super.drawTexts(screenElements, inventorySlot);
-        screenElements.widget(
-            new TextWidget().setStringSupplier(
-                () -> EnumChatFormatting.WHITE
-                    // #tr TST_UniversalGenerator.gui.01
-                    // # Mode:
-                    // #zh_CN 模式 :
-                    + TextEnums.tr("TST_UniversalGenerator.gui.01")
-                    + " "
-                    + EnumChatFormatting.GOLD
-                    // #tr TST_UniversalGenerator.gui.02
-                    // # Gas:
-                    // #zh_CN 燃气 :
-
-                    // #tr TST_UniversalGenerator.gui.03
-                    // # Fuel:
-                    // #zh_CN 燃油 :
-                    + (mSetTier == 2 ? TextEnums.tr("TST_UniversalGenerator.gui.03")
-                        : TextEnums.tr("TST_UniversalGenerator.gui.02"))
-                    + EnumChatFormatting.RESET)
-                .setEnabled(mSetTier != 0))
-            .widget(
-                new TextWidget().setStringSupplier(
-                    () -> EnumChatFormatting.WHITE
-                        // #tr TST_UniversalGenerator.gui.04
-                        // # Current fluid:
-                        // #zh_CN 当前使用:
-                        + TextEnums.tr("TST_UniversalGenerator.gui.04")
-                        + " "
-                        + EnumChatFormatting.GOLD
-                        + fuelName
-                        + EnumChatFormatting.RESET)
-                    .setEnabled(!Objects.equals(fuelName, "")))
-            .widget(
-                new TextWidget().setStringSupplier(
-                    () -> EnumChatFormatting.WHITE
-                        // #tr TST_UniversalGenerator.gui.05
-                        // # Eu per tick:
-                        // #zh_CN 发电量 EU/t :
-                        + TextEnums.tr("TST_UniversalGenerator.gui.05")
-                        + " "
-                        + EnumChatFormatting.GOLD
-                        + numberFormat.format(euPerTick)
-                        + EnumChatFormatting.RESET)
-                    .setEnabled(euPerTick != 0))
-            .widget(
-                new TextWidget().setStringSupplier(
-                    () -> EnumChatFormatting.WHITE
-                        // #tr TST_UniversalGenerator.gui.06
-                        // # Fuel burning:
-                        // #zh_CN 燃料消耗速度 :
-                        + TextEnums.tr("TST_UniversalGenerator.gui.06")
-                        + " "
-                        + EnumChatFormatting.GOLD
-                        + numberFormat.format(1000.0 / fuelBurning)
-                        + EnumChatFormatting.WHITE
-                        // #tr TST_SteamBasicGenerator.gui.02
-                        // # /s
-                        + TextEnums.tr("TST_SteamBasicGenerator.gui.02")
-                        + EnumChatFormatting.RESET)
-                    .setEnabled(fuelBurning != 0))
-            .widget(new FakeSyncWidget.LongSyncer(() -> euPerTick, val -> euPerTick = val))
-            .widget(new FakeSyncWidget.DoubleSyncer(() -> fuelBurning, val -> fuelBurning = val))
-            .widget(new FakeSyncWidget.StringSyncer(() -> fuelName, val -> fuelName = val))
-            .widget(new FakeSyncWidget.IntegerSyncer(() -> mSetTier, val -> mSetTier = val));
-    }
-
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setInteger("mSetTier", mSetTier);
-        aNBT.setLong("euPerTick", euPerTick);
-        aNBT.setDouble("fuelBurning", fuelBurning);
-        aNBT.setString("fuelName", fuelName);
-    }
-
-    @Override
-    public void loadNBTData(final NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        mSetTier = aNBT.getInteger("mSetTier");
-        euPerTick = aNBT.getLong("euPerTick");
-        fuelBurning = aNBT.getDouble("fuelBurning");
-        fuelName = aNBT.getString("fuelName");
-    }
     // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.UniversalGenerator.tooltip.machine_type
+        // # Universal Generator
+        // #zh_CN 通用发电机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.machine_type"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.01
+            // # Has 2 modes: Gas | Fuel
+            // #zh_CN 拥有两种模式: 燃气 | 燃油
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.01"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.02
+            // # Maximum 2 dynamo hatches
+            // #zh_CN 最多2个动力仓
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.02"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.03
+            // # Dynamo hatches Lv-Hv tier
+            // #zh_CN 动力仓等级 LV-HV
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.03"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.04
+            // # Fuel Efficiency: 100%
+            // #zh_CN 燃料效率: 100%
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.04"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

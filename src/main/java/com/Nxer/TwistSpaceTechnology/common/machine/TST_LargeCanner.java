@@ -21,8 +21,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -33,6 +35,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -41,11 +44,13 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
+@SkipGenerateDescription
 public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
 
-    // region Constructor
+    // region Class Constructor
     public TST_LargeCanner(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(new ID[] { ID.SNOW_DREAM, ID.NXER });
     }
 
     public TST_LargeCanner(String aName) {
@@ -56,7 +61,7 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_LargeCanner(this.mName);
     }
-    // region end
+    // endregion
 
     // region Structure
     private static final String STRUCTURE_PIECE_MAIN = "LargeCanner_main";
@@ -110,12 +115,6 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
-    }
-
-    @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
@@ -135,18 +134,20 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
             false,
             true);
     }
-    // region end
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors);
+    }
+    // endregion
+
+    // region Processing Logic
 
     // process
-
     @Override
     public RecipeMap<?> getRecipeMap() {
         return RecipeMaps.cannerRecipes;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -155,9 +156,18 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     }
 
     @Override
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     protected boolean isEnablePerfectOverclock() {
         return true;
     }
+
+    // endregion
+
+    // region NBT
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
@@ -170,6 +180,10 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
         super.loadNBTData(aNBT);
         machineMode = aNBT.getBoolean("fluidMode") ? 1 : 0;
     }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -197,40 +211,45 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(48) };
     }
 
+    // endregion
+
+    // region Tooltip
+
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        // #tr Tooltip_LargeCanner_MachineType
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.LargeCanner.tooltip.machine_type
         // # Fluid/Solid Canner
         // #zh_CN 流体/固体装罐机
-        tt.addMachineType(TextEnums.tr("Tooltip_LargeCanner_MachineType"))
-            // #tr Tooltip_LargeCanner_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.machine_type"))
+            // #tr tst.common.machine.LargeCanner.tooltip.controller
             // # Controller block for the Large Canner
             // #zh_CN 大型灌装机的控制方块
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_Controller"))
-            // #tr Tooltip_LargeCanner_01
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.controller"))
+            // #tr tst.common.machine.LargeCanner.tooltip.info.01
             // # "Use unimaginable force to press items into containers!"
             // #zh_CN "使用超乎想象的力量把物品压入容器中！”
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_01"))
-            // #tr Tooltip_LargeCanner_02
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.01"))
+            // #tr tst.common.machine.LargeCanner.tooltip.info.02
             // # Having almost infinite parallelism!
             // #zh_CN 拥有近乎无限的并行！
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_02"))
-            // #tr Tooltip_LargeCanner_03
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.02"))
+            // #tr tst.common.machine.LargeCanner.tooltip.info.03
             // # Please use a screwdriver to switch modes.
             // #zh_CN 请使用螺丝刀来切换模式。
-            .addInfo(TextEnums.tr("Tooltip_LargeCanner_03"))
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addSeparator()
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.03"))
             .beginStructureBlock(13, 17, 13, false)
-            .addInputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputBus(TextLocalization.BLUE_PRINT_INFO)
-            .addInputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addOutputHatch(TextLocalization.BLUE_PRINT_INFO)
-            .addEnergyHatch(TextLocalization.BLUE_PRINT_INFO)
-            .toolTipFinisher(TextLocalization.ModName);
+            .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint)
+            .toolTipFinisher();
+        // spotless:on
         return tt;
     }
-    //
+
+    // endregion
 
 }

@@ -1,6 +1,5 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.isAir;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofChain;
@@ -17,7 +16,7 @@ import static gregtech.api.util.GTStructureUtility.ofCoil;
 import static gregtech.api.util.GTStructureUtility.ofFrame;
 
 import com.Nxer.TwistSpaceTechnology.common.init.TstBlocks;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
@@ -164,8 +163,8 @@ public class TST_SwelegfyrBlastFurnaceLegacy extends TST_SwelegfyrBlastFurnace {
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         return new MultiblockTooltipBuilder()
-            .addDeprecatedLine(TstSharedLocalization.MachineTooltip.temporaryController())
-            .addInfo(TstSharedLocalization.MachineTooltip.replacementController())
-            .toolTipFinisher(ModName);
+            .addDeprecatedLine(TSTSharedLocalization.MachineTooltip.temporaryController())
+            .addInfo(TSTSharedLocalization.MachineTooltip.replacementController())
+            .toolTipFinisher();
     }
 }

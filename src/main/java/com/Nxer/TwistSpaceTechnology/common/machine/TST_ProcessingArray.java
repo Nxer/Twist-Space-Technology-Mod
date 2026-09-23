@@ -31,9 +31,11 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.system.ProcessingArrayBackend.PAHelper;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -44,6 +46,7 @@ import gregtech.api.enums.SoundResource;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.metatileentity.implementations.MTEBasicMachineWithRecipe;
@@ -66,11 +69,13 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 /**
  * Recode the Processing Array.
  */
+@SkipGenerateDescription
 public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArray> {
 
-    // region Class Constructors
+    // region Class Constructor
     public TST_ProcessingArray(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_ProcessingArray(String aName) {
@@ -81,7 +86,63 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_ProcessingArray(mName);
     }
+    // endregion
 
+    // region Structure
+    protected static final int horizontalOffSet = 1;
+    protected static final int verticalOffSet = 1;
+    protected static final int depthOffSet = 0;
+    protected static final String STRUCTURE_PIECE_MAIN = "main";
+    protected static IStructureDefinition<TST_ProcessingArray> STRUCTURE_DEFINITION = null;
+
+    @Override
+    public IStructureDefinition<TST_ProcessingArray> getStructureDefinition() {
+        if (null == STRUCTURE_DEFINITION) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_ProcessingArray>builder()
+                .addShape(
+                    STRUCTURE_PIECE_MAIN,
+                    transpose(
+                        new String[][] { { "hhh", "hhh", "hhh" }, { "h~h", "h h", "hhh" }, { "hhh", "hhh", "hhh" } }))
+                .addElement(
+                    'h',
+                    HatchElementBuilder.<TST_ProcessingArray>builder()
+                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_ProcessingArray::addToMachineList)
+                        .hint(1)
+                        .casingIndex(48)
+                        .buildAndChain(GregTechAPI.sBlockCasings4, 0))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack aStack, boolean aHintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, aStack, aHintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
+            return;
+        }
+        checkInternalMachine();
+    }
     // endregion
 
     // region Processing Logic
@@ -89,6 +150,64 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
     public RecipeMap<?> recipeMap;
     public long voltage;
     public SoundResource sound = SoundResource.NONE;
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return recipeMap;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
+
+    @Override
+    protected ProcessingLogic createProcessingLogic() {
+        return new GTCM_ProcessingLogic() {
+
+            @Nonnull
+            @Override
+            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
+                if (recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0) > 0) {
+                    return CheckRecipeResultRegistry.NO_RECIPE;
+                }
+                if (recipe.mEUt > availableVoltage) return CheckRecipeResultRegistry.insufficientPower(recipe.mEUt);
+                return CheckRecipeResultRegistry.SUCCESSFUL;
+            }
+        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
+    }
+
+    @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
+        logic.setAvailableVoltage(voltage);
+        logic.setAvailableAmperage(getMaxParallelRecipes());
+        logic.setAmperageOC(false);
+    }
+
+    @NotNull
+    @Override
+    public CheckRecipeResult checkProcessing() {
+        checkInternalMachine();
+        if (internalMachine == null) {
+            // #tr GT5U.gui.text.recipe_result.no_machine
+            // # No machine!
+            // #zh_CN 没有机器
+            return SimpleCheckRecipeResult.ofFailure("no_machine");
+        }
+
+        return super.checkProcessing();
+    }
 
     public void checkInternalMachine() {
         ItemStack controllerStack = getControllerSlot();
@@ -160,61 +279,8 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
         }
     }
 
-    @NotNull
-    @Override
-    public CheckRecipeResult checkProcessing() {
-        checkInternalMachine();
-        if (internalMachine == null) {
-            // #tr GT5U.gui.text.recipe_result.no_machine
-            // # No machine!
-            // #zh_CN 没有机器
-            return SimpleCheckRecipeResult.ofFailure("no_machine");
-        }
-
-        return super.checkProcessing();
-    }
-
-    @Override
-    protected ProcessingLogic createProcessingLogic() {
-        return new GTCM_ProcessingLogic() {
-
-            @Nonnull
-            @Override
-            protected CheckRecipeResult validateRecipe(@Nonnull GTRecipe recipe) {
-                if (recipe.getMetadataOrDefault(CompressionTierKey.INSTANCE, 0) > 0) {
-                    return CheckRecipeResultRegistry.NO_RECIPE;
-                }
-                if (recipe.mEUt > availableVoltage) return CheckRecipeResultRegistry.insufficientPower(recipe.mEUt);
-                return CheckRecipeResultRegistry.SUCCESSFUL;
-            }
-        }.setMaxParallelSupplier(this::getMaxParallelRecipes);
-    }
-
-    @Override
-    protected void setProcessingLogicPower(ProcessingLogic logic) {
-        logic.setAvailableVoltage(voltage);
-        logic.setAvailableAmperage(getMaxParallelRecipes());
-        logic.setAmperageOC(false);
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return recipeMap;
-    }
-
     @Override
     protected boolean canUseControllerSlotForRecipe() {
-        return false;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
         return false;
     }
 
@@ -233,77 +299,14 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.hasKey("recipeMap")) {
-            // #tr TST_ProcessingArray.Waila.Machine
+            // #tr tst.common.machine.ProcessingArray.waila.machine
             // # Machine
             // #zh_CN 机器类型
             currentTip.add(
-                TextEnums.tr("TST_ProcessingArray.Waila.Machine") + " : "
+                TSTUtils.tr("tst.common.machine.ProcessingArray.waila.machine") + " : "
                     + EnumChatFormatting.YELLOW
-                    + TextEnums.tr(tag.getString("recipeMap")));
+                    + TSTUtils.tr(tag.getString("recipeMap")));
         }
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) {
-            return;
-        }
-        checkInternalMachine();
-    }
-    // endregion
-
-    // region Structure
-
-    protected static final int horizontalOffSet = 1;
-    protected static final int verticalOffSet = 1;
-    protected static final int depthOffSet = 0;
-    protected static final String STRUCTURE_PIECE_MAIN = "main";
-    protected static IStructureDefinition<TST_ProcessingArray> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public void construct(ItemStack aStack, boolean aHintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, aStack, aHintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_ProcessingArray> getStructureDefinition() {
-        if (null == STRUCTURE_DEFINITION) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_ProcessingArray>builder()
-                .addShape(
-                    STRUCTURE_PIECE_MAIN,
-                    transpose(
-                        new String[][] { { "hhh", "hhh", "hhh" }, { "h~h", "h h", "hhh" }, { "hhh", "hhh", "hhh" } }))
-                .addElement(
-                    'h',
-                    HatchElementBuilder.<TST_ProcessingArray>builder()
-                        .atLeast(InputBus, InputHatch, OutputBus, OutputHatch, Energy.or(ExoticEnergy))
-                        .adder(TST_ProcessingArray::addToMachineList)
-                        .hint(1)
-                        .casingIndex(48)
-                        .buildAndChain(GregTechAPI.sBlockCasings4, 0))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
     }
 
     // endregion
@@ -338,47 +341,49 @@ public class TST_ProcessingArray extends GTCM_MultiMachineBase<TST_ProcessingArr
 
     // endregion
 
-    // region Generals
+    // region Tooltip
 
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
-        MultiblockTooltipBuilder tooltips = new MultiblockTooltipBuilder();
+        MultiblockTooltipBuilder tooltips = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr TST_ProcessingArray.tooltips.MachineType
+        // #tr tst.common.machine.ProcessingArray.tooltip.machine_type
         // # Processing Array
         // #zh_CN 处理阵列
-        tooltips.addMachineType(TextEnums.tr("TST_ProcessingArray.tooltips.MachineType"))
-            .addInfo(TextEnums.Machine_of_TwistSpaceTechnology.getText())
-            // #tr TST_ProcessingArray.tooltips.01
+        tooltips.addMachineType(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.machine_type"))
+            .addInfo(TSTSharedLocalization.General.Machine_of_TwistSpaceTechnology)
+            // #tr tst.common.machine.ProcessingArray.tooltip.info.01
             // # Runs supplied machines as if placed in the world
             // #zh_CN 让其中的机器如同放置在世界中一样运行
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.01"))
-            // #tr TST_ProcessingArray.tooltips.02
+            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.01"))
+            // #tr tst.common.machine.ProcessingArray.tooltip.info.02
             // # Place up to 64 singleblock GT machines into the controller
             // #zh_CN 在控制器GUI中放置至多64个GT单方块机器
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.02"))
-            // #tr TST_ProcessingArray.tooltips.03
+            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.02"))
+            // #tr tst.common.machine.ProcessingArray.tooltip.info.03
             // # Note that you still need to supply power to them all
             // #zh_CN 请保证电力充足
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.03"))
-            // #tr TST_ProcessingArray.tooltips.04
+            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.03"))
+            // #tr tst.common.machine.ProcessingArray.tooltip.info.04
             // # Do general overclock
             // #zh_CN 执行有损超频
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.04"))
-            // #tr TST_ProcessingArray.tooltips.05
+            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.04"))
+            // #tr tst.common.machine.ProcessingArray.tooltip.info.05
             // # Centrifuge, Electrolyzer, Mixer do their multiblock machine recipe
             // #zh_CN 离心机,电解机,搅拌机执行其对应多方块机器配方
-            .addInfo(TextEnums.tr("TST_ProcessingArray.tooltips.05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.ProcessingArray.tooltip.info.05"))
             .beginStructureBlock(3, 3, 3, true)
-            .addController(TextLocalization.textFrontCenter)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 1)
-            .addInputBus(TextLocalization.textAnyCasing, 1)
-            .addInputHatch(TextLocalization.textAnyCasing, 1)
-            .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addOutputHatch(TextLocalization.textAnyCasing, 1)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .toolTipFinisher();
         // spotless:on
         return tooltips;
     }
+
+    // endregion
 
 }

@@ -16,6 +16,11 @@ public class ItemInfinityDistilledWaterStorageCell extends ItemInfinityWaterStor
     }
 
     @Override
+    public String getUnlocalizedName() {
+        return "item.tst.common.infinity_distilled_water_storage_cell";
+    }
+
+    @Override
     public IAEStackInventory getConfigAEInventory(ItemStack stack) {
         IAEStackInventory config = new IAEStackInventory(null, 1);
         config.putAEStackInSlot(0, AEFluidStack.create(FluidRegistry.getFluidStack("ic2distilledwater", 1_000)));

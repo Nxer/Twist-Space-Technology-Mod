@@ -3,13 +3,10 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EnablePerfectOverclock_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.EuModifier_Scavenger;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.SpeedBonus_MultiplyPerTier_Scavenger;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.BLUE_PRINT_INFO;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModName;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.StructureTooComplex;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Text_SeparatingLine;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.Tooltip_DoNotNeedMaintenance;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textFrontBottom;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.textUseBlueprint;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textFrontBottom;
+import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.Structure.textUseBlueprint;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static gregtech.api.enums.HatchElement.Energy;
@@ -31,7 +28,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -42,6 +41,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
@@ -52,11 +52,13 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings4;
 import gregtech.common.blocks.BlockCasings8;
 
+@SkipGenerateDescription
 public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
 
     // region Class Constructor
     public TST_Scavenger(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_Scavenger(String aName) {
@@ -67,68 +69,28 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_Scavenger(this.mName);
     }
-
-    // endregion
-
-    // region Processing Logic
-
-    @Override
-    protected float getEuModifier() {
-        return EuModifier_Scavenger;
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return EnablePerfectOverclock_Scavenger;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return RecipeMaps.sifterRecipes;
-    }
-
     // endregion
 
     // region Structure
-
     private final int horizontalOffSet = 7;
     private final int verticalOffSet = 8;
     private final int depthOffSet = 0;
     private static final String STRUCTURE_PIECE_MAIN = "mainScavenger";
     private static IStructureDefinition<TST_Scavenger> STRUCTURE_DEFINITION = null;
 
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        this.speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_Scavenger, getTotalPowerTier());
-    }
-
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        repairMachine();
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (this.mMachine) return -1;
-        return this.survivalBuildPiece(
-            STRUCTURE_PIECE_MAIN,
-            stackSize,
-            horizontalOffSet,
-            verticalOffSet,
-            depthOffSet,
-            elementBudget,
-            env,
-            false,
-            true);
-    }
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"               ","     DDDDD     ","   DDDCCCDDD   ","  DDCCCCCCCDD  ","  DCCCCCCCCCD  "," DDCCCCCCCCCDD "," DCCCCCCCCCCCD "," DCCCCCCCCCCCD "," DCCCCCCCCCCCD "," DDCCCCCCCCCDD ","  DCCCCCCCCCD  ","  DDCCCCCCCDD  ","   DDDCCCDDD   ","     DDDDD     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"               ","     AAAAA     ","   AAEEEEEAA   ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA "," AEEEEEEEEEEEA ","  AEEEEEEEEEA  ","  AEEEEEEEEEA  ","   AAEEEEEAA   ","     AAAAA     ","               "},
+        {"     BB~BB     ","   BBBBBBBBB   ","  BBBBBBBBBBB  "," BBBBBBBBBBBBB "," BBBBBBBBBBBBB ","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB"," BBBBBBBBBBBBB "," BBBBBBBBBBBBB ","  BBBBBBBBBBB  ","   BBBBBBBBB   ","     BBBBB     "}
+    };
+    // spotless:on
 
     @Override
     public IStructureDefinition<TST_Scavenger> getStructureDefinition() {
@@ -174,42 +136,41 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
      * D -> ofBlock...(gt.blockcasings4, 14, ...); // in , glass
      * E -> ofFrame...(Materials.Osmiridium);
      */
-    private final String[][] shapeMain = new String[][] {
-        { "               ", "     DDDDD     ", "   DDDCCCDDD   ", "  DDCCCCCCCDD  ", "  DCCCCCCCCCD  ",
-            " DDCCCCCCCCCDD ", " DCCCCCCCCCCCD ", " DCCCCCCCCCCCD ", " DCCCCCCCCCCCD ", " DDCCCCCCCCCDD ",
-            "  DCCCCCCCCCD  ", "  DDCCCCCCCDD  ", "   DDDCCCDDD   ", "     DDDDD     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "               ", "     AAAAA     ", "   AAEEEEEAA   ", "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ",
-            " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ", " AEEEEEEEEEEEA ",
-            "  AEEEEEEEEEA  ", "  AEEEEEEEEEA  ", "   AAEEEEEAA   ", "     AAAAA     ", "               " },
-        { "     BB~BB     ", "   BBBBBBBBB   ", "  BBBBBBBBBBB  ", " BBBBBBBBBBBBB ", " BBBBBBBBBBBBB ",
-            "BBBBBBBBBBBBBBB", "BBBBBBBBBBBBBBB", "BBBBBBBBBBBBBBB", "BBBBBBBBBBBBBBB", "BBBBBBBBBBBBBBB",
-            " BBBBBBBBBBBBB ", " BBBBBBBBBBBBB ", "  BBBBBBBBBBB  ", "   BBBBBBBBB   ", "     BBBBB     " } };
-
-    // endregion
-
-    // region General
 
     @Override
-    public boolean supportsInputSeparation() {
-        return false;
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        repairMachine();
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (this.mMachine) return -1;
+        return this.survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        this.speedBonus = (float) Math.pow(SpeedBonus_MultiplyPerTier_Scavenger, getTotalPowerTier());
+    }
+    // endregion
+
+    // region Processing Logic
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return RecipeMaps.sifterRecipes;
     }
 
     @Override
@@ -218,28 +179,28 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     }
 
     @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_Scavenger_MachineType)
-            .addInfo(TextLocalization.Tooltip_Scavenger_Controller)
-            .addInfo(TextLocalization.Tooltip_Scavenger_01)
-            .addInfo(TextLocalization.Tooltip_Scavenger_02)
-            .addInfo(TextLocalization.Tooltip_Scavenger_03)
-            .addInfo(TextLocalization.Tooltip_Scavenger_04)
-            .addSeparator()
-            .addInfo(StructureTooComplex)
-            .addInfo(BLUE_PRINT_INFO)
-            .addController(textFrontBottom)
-            .addInputHatch(textUseBlueprint, 1)
-            .addOutputHatch(textUseBlueprint, 2)
-            .addInputBus(textUseBlueprint, 1)
-            .addOutputBus(textUseBlueprint, 2)
-            .addEnergyHatch(textUseBlueprint, 2)
-            .addStructureInfo(Text_SeparatingLine)
-            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
-            .toolTipFinisher(ModName);
-        return tt;
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
     }
+
+    @Override
+    protected float getEuModifier() {
+        return EuModifier_Scavenger;
+    }
+
+    @Override
+    protected boolean isEnablePerfectOverclock() {
+        return EnablePerfectOverclock_Scavenger;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    // endregion
+
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -267,4 +228,52 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(183) };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.Scavenger.tooltip.machine_type
+        // # Sifter
+        // #zh_CN 筛选机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.machine_type"))
+            // #tr tst.common.machine.Scavenger.tooltip.controller
+            // # Controller block for the Scavenger
+            // #zh_CN 拾荒者的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.controller"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.01
+            // # {\BOLD}I like pigs. Dogs look up to us. Cats look down on us. Pigs treat us as equals.
+            // #zh_CN {\BOLD}我喜欢猪. 狗崇拜人类. 猫鄙视人类. 猪对我们一视同仁.
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.01"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.02
+            // # Has parallel equivalent to Perfect Overclock.
+            // #zh_CN 拥有与无损超频等效的并行(但有损超频).
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.02"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.03
+            // # Only uses {\RED}60%{\GRAY} of the EU/t normally required.
+            // #zh_CN 只需要使用配方要求功率的{\RED}60%{\GRAY} .
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.03"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.04
+            // # Additional {\RED}20%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
+            // #zh_CN 电压每提高1级, 额外降低{\RED}20%{\GRAY}配方耗时, 叠乘计算.
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.04"))
+            .addController(textFrontBottom)
+            .addInputHatch(textUseBlueprint, 1)
+            .addOutputHatch(textUseBlueprint, 2)
+            .addInputBus(textUseBlueprint, 1)
+            .addOutputBus(textUseBlueprint, 2)
+            .addEnergyHatch(textUseBlueprint, 2)
+            .addStructureInfo(Text_SeparatingLine)
+            .addStructureInfo(Tooltip_DoNotNeedMaintenance)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

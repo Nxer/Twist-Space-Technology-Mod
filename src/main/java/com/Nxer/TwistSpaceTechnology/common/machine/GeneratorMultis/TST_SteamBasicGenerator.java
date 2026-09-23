@@ -28,8 +28,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -44,6 +46,7 @@ import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -52,26 +55,140 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.common.blocks.BlockCasings2;
 
+@SkipGenerateDescription
 public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasicGenerator> {
 
     // region Class Constructor
     public TST_SteamBasicGenerator(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.EVGEN_WAR_GOLD);
     }
 
     public TST_SteamBasicGenerator(String aName) {
         super(aName);
     }
 
+    @Override
+    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
+        return new TST_SteamBasicGenerator(this.mName);
+    }
+    // endregion
+
+    // region Structure
+    private static final String STRUCTURE_PIECE_MAIN = "mainSteamBasicGenerator";
+    private final int horizontalOffSet = 2;
+    private final int verticalOffSet = 2;
+    private final int depthOffSet = 1;
+    private final int mainTextureID = ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
+    private static IStructureDefinition<TST_SteamBasicGenerator> STRUCTURE_DEFINITION = null;
+
+    // spotless:off
+    private final String[][] shapeMain = new String[][]{
+        {"     ", " C C ", "  A  ", " C C ", "     "},
+        {"C   C", "  A  ", " ABA ", "  A  ", "C   C"},
+        {"C   C", "  ~  ", " ABA ", "  A  ", "C   C"},
+        {"C   C", " AAA ", " AAA ", " AAA ", "C   C"}
+    };
+    // spotless:on
+
+    @Override
+    public IStructureDefinition<TST_SteamBasicGenerator> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_SteamBasicGenerator>builder()
+                .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
+                .addElement(
+                    'A',
+                    ofChain(
+                        buildHatchAdder(TST_SteamBasicGenerator.class).atLeast(Dynamo)
+                            .hatchItemFilterAnd(t -> filterByMTETier(1, 1))
+                            .casingIndex(mainTextureID)
+                            .hint(1)
+                            .build(),
+                        buildHatchAdder(TST_SteamBasicGenerator.class).atLeast(InputHatch)
+                            .casingIndex(mainTextureID)
+                            .hint(1)
+                            .build(),
+                        onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings2, 0))))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 14))
+                .addElement('C', ofFrame(Materials.Bronze))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    /*
+     * Blocks:
+     * A -> ofBlock...(gt.blockcasings2, 0, ...);
+     * B -> ofBlock...(gt.blockcasings3, 14, ...);
+     * C -> ofBlock...(gt.blockframes, 300, ...);
+     */
+
+    @Override
+    public void construct(ItemStack itemStack, boolean b) {
+        buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        this.mCasing = 0;
+
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        DYNAMO_AMP = getDynamoAmperage();
+        checkHasInputHatch(errors);
+        checkCasingMin(errors, mCasing, 10);
+        checkHatchMin(errors, Dynamo, 1);
+        checkHatchMax(errors, Dynamo, 2);
+        if (setDynamoTier(1, true)) {
+            errors.add(hatch_tier_incompatible);
+        }
+    }
     // endregion
 
     // region Processing Logic
-
     private static final int STEAM_PER_SEC = 915;
     private static final int EU_PER_TICK = 32;
     private long DYNAMO_AMP = 0;
     private int mCasing = 0;
     public FluidStack steamFluid = steam;
+
+    @Override
+    public UITexture[] getMachineModeIcons() {
+        return new UITexture[0];
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsInputSeparation() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
+    }
 
     @Nonnull
     @Override
@@ -97,130 +214,50 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
     }
 
     @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        this.mCasing = 0;
-
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        DYNAMO_AMP = getDynamoAmperage();
-        checkHasInputHatch(errors);
-        checkCasingMin(errors, mCasing, 10);
-        checkHatchMin(errors, Dynamo, 1);
-        checkHatchMax(errors, Dynamo, 2);
-        if (setDynamoTier(1, true)) {
-            errors.add(hatch_tier_incompatible);
-        }
+    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
+        super.drawTexts(screenElements, inventorySlot);
+        screenElements.widget(
+            new TextWidget().setStringSupplier(
+                () -> EnumChatFormatting.WHITE
+                    // spotless:off
+                    // #tr tst.common.machine.SteamBasicGenerator.gui.01
+                    // # Steam consumption:
+                    // #zh_CN 蒸汽消耗 :
+                    + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.01")
+                    + " "
+                    + EnumChatFormatting.GOLD
+                    + numberFormat.format(STEAM_PER_SEC * DYNAMO_AMP)
+                    + EnumChatFormatting.WHITE
+                    // #tr tst.common.machine.SteamBasicGenerator.gui.02
+                    // # /s
+                    // #zh_CN /s
+                    + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.02")
+                    + EnumChatFormatting.RESET)
+                .setEnabled((STEAM_PER_SEC * DYNAMO_AMP) != 0))
+            .widget(
+                new TextWidget().setStringSupplier(
+                    () -> EnumChatFormatting.WHITE
+                        // #tr tst.common.machine.SteamBasicGenerator.gui.03
+                        // # Currently generates:
+                        // #zh_CN 当前发电 :
+                        + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.03")
+                        + " "
+                        + EnumChatFormatting.GOLD
+                        + numberFormat.format(EU_PER_TICK * DYNAMO_AMP)
+                        + EnumChatFormatting.WHITE
+                        // #tr tst.common.machine.SteamBasicGenerator.gui.04
+                        // # eu/t
+                        // #zh_CN eu/t
+                        + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.04")
+                        + EnumChatFormatting.RESET)
+                    .setEnabled(widget -> getBaseMetaTileEntity().isActive()))
+            .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_AMP, val -> DYNAMO_AMP = val));
+                    // spotless:on
     }
 
     // endregion
 
-    // region Structure
-    // spotless:off
-    @Override
-    public void construct(ItemStack itemStack, boolean b) {
-        buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
-
-    private static final String STRUCTURE_PIECE_MAIN = "mainSteamBasicGenerator";
-    private final int horizontalOffSet = 2;
-    private final int verticalOffSet = 2;
-    private final int depthOffSet = 1;
-    private final int mainTextureID = ((BlockCasings2) sBlockCasings2).getTextureIndex(0);
-    private static IStructureDefinition<TST_SteamBasicGenerator> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public IStructureDefinition<TST_SteamBasicGenerator> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = StructureDefinition.<TST_SteamBasicGenerator>builder()
-                .addShape(STRUCTURE_PIECE_MAIN,
-                    transpose(shapeMain))
-                .addElement(
-                    'A',
-                    ofChain(
-                        buildHatchAdder(TST_SteamBasicGenerator.class)
-                            .atLeast(Dynamo)
-                            .hatchItemFilterAnd(t -> filterByMTETier(1, 1))
-                            .casingIndex(mainTextureID)
-                            .hint(1)
-                            .build(),
-                        buildHatchAdder(TST_SteamBasicGenerator.class)
-                            .atLeast(InputHatch)
-                            .casingIndex(mainTextureID)
-                            .hint(1)
-                            .build(),
-                        onElementPass(x -> ++x.mCasing, ofBlock(sBlockCasings2, 0))))
-                .addElement('B', ofBlock(GregTechAPI.sBlockCasings3, 14))
-                .addElement('C', ofFrame(Materials.Bronze))
-                .build();
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
-	/*
-	Blocks:
-A -> ofBlock...(gt.blockcasings2, 0, ...);
-B -> ofBlock...(gt.blockcasings3, 14, ...);
-C -> ofBlock...(gt.blockframes, 300, ...);
-	 */
-
-    private final String[][] shapeMain = new String[][]{
-        {"     ", " C C ", "  A  ", " C C ", "     "},
-        {"C   C", "  A  ", " ABA ", "  A  ", "C   C"},
-        {"C   C", "  ~  ", " ABA ", "  A  ", "C   C"},
-        {"C   C", " AAA ", " AAA ", " AAA ", "C   C"}
-    };
-    // spotless:on
-    // endregion
-
-    // region Overrides
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_SteamBasicGenerator_MachineType)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_00)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_01)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_02)
-            .addInfo(TextLocalization.Tooltip_SteamBasicGenerator_03)
-            .addInfo(TextEnums.Author_EvgenWarGold.getText())
-            .addInputHatch(TextLocalization.textUseBlueprint, 1)
-            .addDynamoHatch(TextLocalization.textUseBlueprint, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
-    }
-
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsInputSeparation() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsBatchMode() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
-    }
-
-    @Override
-    public UITexture[] getMachineModeIcons() {
-        return new UITexture[0];
-    }
-
-    @Override
-    public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
-        return new TST_SteamBasicGenerator(this.mName);
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
@@ -249,42 +286,41 @@ C -> ofBlock...(gt.blockframes, 300, ...);
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(mainTextureID) };
     }
 
-    @Override
-    protected void drawTexts(DynamicPositionedColumn screenElements, SlotWidget inventorySlot) {
-        super.drawTexts(screenElements, inventorySlot);
-        screenElements.widget(
-            new TextWidget().setStringSupplier(
-                () -> EnumChatFormatting.WHITE
-                    // #tr TST_SteamBasicGenerator.gui.01
-                    // # Steam consumption:
-                    // #zh_CN 蒸汽消耗 :
-                    + TextEnums.tr("TST_SteamBasicGenerator.gui.01")
-                    + " "
-                    + EnumChatFormatting.GOLD
-                    + numberFormat.format(STEAM_PER_SEC * DYNAMO_AMP)
-                    + EnumChatFormatting.WHITE
-                    // #tr TST_SteamBasicGenerator.gui.02
-                    // # /s
-                    + TextEnums.tr("TST_SteamBasicGenerator.gui.02")
-                    + EnumChatFormatting.RESET)
-                .setEnabled((STEAM_PER_SEC * DYNAMO_AMP) != 0))
-            .widget(
-                new TextWidget().setStringSupplier(
-                    () -> EnumChatFormatting.WHITE
-                        // #tr TST_SteamBasicGenerator.gui.03
-                        // # Currently generates:
-                        // #zh_CN 当前发电 :
-                        + TextEnums.tr("TST_SteamBasicGenerator.gui.03")
-                        + " "
-                        + EnumChatFormatting.GOLD
-                        + numberFormat.format(EU_PER_TICK * DYNAMO_AMP)
-                        + EnumChatFormatting.WHITE
-                        // #tr TST_SteamBasicGenerator.gui.04
-                        // # eu/t
-                        + TextEnums.tr("TST_SteamBasicGenerator.gui.04")
-                        + EnumChatFormatting.RESET)
-                    .setEnabled(widget -> getBaseMetaTileEntity().isActive()))
-            .widget(new FakeSyncWidget.LongSyncer(() -> DYNAMO_AMP, val -> DYNAMO_AMP = val));
-    }
     // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.SteamBasicGenerator.tooltip.machine_type
+        // # Steam generator
+        // #zh_CN 蒸汽发电机
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.machine_type"))
+            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.01
+            // # Converts steam into EU
+            // #zh_CN 将蒸汽转换成EU
+            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.01"))
+            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.02
+            // # Base rate:§6 1L of Steam -> 0.7 EU§7
+            // #zh_CN 基础比率:§6 1L 蒸汽 -> 0.7 EU§7
+            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.02"))
+            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.03
+            // # Fuel Efficiency:§c 140%§7
+            // #zh_CN 燃料效率:§c 140%§7
+            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.03"))
+            // #tr tst.common.machine.SteamBasicGenerator.tooltip.info.04
+            // # Accepts simple or buffered LV dynamo hatch
+            // #zh_CN 兼容普通LV仓和缓冲LV动力仓
+            .addInfo(TSTUtils.tr("tst.common.machine.SteamBasicGenerator.tooltip.info.04"))
+            .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.setStackSize;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.setStackSize;
 import static gregtech.api.enums.TierEU.RECIPE_EV;
 import static gregtech.api.enums.TierEU.RECIPE_HV;
 import static gregtech.api.enums.TierEU.RECIPE_IV;
@@ -35,7 +35,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
 public class IntensifyChemicalDistorterRecipePool {
 
-    private static final RecipeMap<?> ICD = GTCMRecipe.IntensifyChemicalDistorterRecipes;
+    private static final RecipeMap<?> ICD = GTCMRecipe.IntensifyChemicalDistorterRecipeMap;
 
     // spotless:off
     public static void loadRecipes() {

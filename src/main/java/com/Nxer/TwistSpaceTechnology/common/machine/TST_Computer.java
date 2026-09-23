@@ -4,6 +4,7 @@ import static com.Nxer.TwistSpaceTechnology.common.GTCMItemList.WirelessUpdateIt
 import static com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer.ComputerHatches.ComputationMonitor;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
 import static goodgenerator.loader.Loaders.FRF_Coil_1;
 import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static goodgenerator.loader.Loaders.radiationProtectionSteelFrame;
@@ -40,8 +41,9 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.TT_MultiMachineBase_EM;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_RackComputationMonitor;
 import com.Nxer.TwistSpaceTechnology.system.WirelessDataNetWork.WirelessDataPacket;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
@@ -56,6 +58,7 @@ import gregtech.api.interfaces.IHatchElement;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
@@ -74,925 +77,13 @@ import tectech.thing.metaTileEntity.multi.base.LedStatus;
 import tectech.thing.metaTileEntity.multi.base.Parameters;
 import tectech.thing.metaTileEntity.multi.base.render.TTRenderedExtendedFacingTexture;
 
-public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable {
+@SkipGenerateDescription
+public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalConstructable, TSTTooltipCredit {
 
-    private GT_Hatch_RackComputationMonitor realMonitor;
-    private double multiplier = 1;
-    // GT_MetaTileEntity_AssemblyLine
-    // GT_MetaTileEntity_EM_computer
-    private static boolean localWirelessTag = false;
-    private static IIconContainer ScreenOFF;
-    private static IIconContainer ScreenON;
-    // endregion
-    private static final String[] description = new String[] {
-        EnumChatFormatting.AQUA + translateToLocal("tt.keyphrase.Hint_Details") + ":",
-        translateToLocal("tst.computer.hint.0"), // 1 - Classic/Data Hatches or
-        // Computer casing
-        translateToLocal("tst.computer.hint.1"), // 2 - Rack Hatches or Advanced
-        // computer casing
-    };
-
-    private static Vec3Impl controllerPosition;
-
-    public static final int offsetX = 23, offsetY = 34, offsetZ = 0;
-    // region structure
-    public static final String[][] shape = new String[][] {
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "EEEEEEEEEEEEEEEEEEEEEEE~EEEEEEEEEEEEEEEEEEEEEEE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                       M                       ",
-            "                       M                       ", "                      MMM                      ",
-            "                     MMMMM                     ", "                      MMM                      ",
-            "                       M                       ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                     CCCCC                     ",
-            "EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                     MM MM                     ", "                    MM   MM                    ",
-            "                    M     M                    ", "                    MM   MM                    ",
-            "                     MM MM                     ", "                      MMM                      ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                      CCC                      ", "    PPEEEPPPPPPPPPPPCCCCCCCPPPPPPPPPPPEEEPP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "      JJJ                             JJJ      ", "      JJJ                             JJJ      ",
-            "      JJJ                             JJJ      ", "                                               ",
-            "                    M     M                    ", "      JJJ           M     M           JJJ      ",
-            "                   M       M                   ", "      JJJ           M     M           JJJ      ",
-            "                    M     M                    ", "      JJJ            MM MM            JJJ      ",
-            "                       M                       ", "      JJJ                             JJJ      ",
-            "                                               ", "                      CCC                      ",
-            "      BBB            C   C            BBB      ", "    PEEEEE         CCCCCCCCC         EEEEEP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "     JJJJJ                           JJJJJ     ", "     JJJJJ                           JJJJJ     ",
-            "     JJJJJ                           JJJJJ     ", "      JJJ                             JJJ      ",
-            "                                               ", "     J L J         M       M         J L J     ",
-            "                   M       M                   ", "     J L J         M       M         J L J     ",
-            "                    M     M                    ", "     J L J          MM   MM          J L J     ",
-            "                      MMM                      ", "     J L J                           J L J     ",
-            "                      CCC                      ", "                     C   C                     ",
-            "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPPPPCCCCCCCCCPPPPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "     JJJJJ                           JJJJJ     ", "     JJJJJ                           JJJJJ     ",
-            "     JJJJJ                           JJJJJ     ", "      JJJ                             JJJ      ",
-            "       A                               A       ", "     JLALJ                           JLALJ     ",
-            "       A           M       M           A       ", "     JLALJ         M   O   M         JLALJ     ",
-            "       A           M       M           A       ", "     JLALJ          M     M          JLALJ     ",
-            "       A             MMMMM             A       ", "     JLALJ             C             JLALJ     ",
-            "       A              CCC              A       ", "       A             C C C             A       ",
-            "     B A B          C  C  C          B A B     ", "    EEBABEE       PCCCCCCCCCP       EEBABEE    ",
-            "EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "     JJJJJ                           JJJJJ     ", "     JJJJJ                           JJJJJ     ",
-            "     JJJJJ                           JJJJJ     ", "      JJJ                             JJJ      ",
-            "                                               ", "     J L J                           J L J     ",
-            "                                               ", "     J L J         M       M         J L J     ",
-            "                    M     M                    ", "     J L J          MM   MM          J L J     ",
-            "                      MMM                      ", "     J L J                           J L J     ",
-            "                      CCC                      ", "                     C   C                     ",
-            "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPP PCCCCCCCCCP PPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "      JJJ                             JJJ      ", "      JJJ                             JJJ      ",
-            "      JJJ                             JJJ      ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "                    M     M                    ", "      JJJ            MM MM            JJJ      ",
-            "                       M                       ", "      JJJ                             JJJ      ",
-            "                                               ", "                      CCC                      ",
-            "      BBB            C   C            BBB      ", "    PEEEEE      P PCCCCCCCCCP P      EEEEEP    ",
-            "EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                      MMM                      ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                      CCC                      ", "    P EEE       P P CCCCCCC P P       EEE P    ",
-            "EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P PCCCCCP P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                KKKKKKKKKKKKKKK                ",
-            "                KKKKKKKKKKKKKKK                ", "    P P PPPPPPPPPKPKPKPKPKPKPKPPPPPPPPP P P    ",
-            "EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                     MMMMM                     ", "                KKKKKKKKKKKKKKK                ",
-            "                KIHHHHHHHHHHHIK                ", "    P P         KHQQQQQQQQQQQHK         P P    ",
-            "EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                     MMMMM                     ",
-            "                     MMMMM                     ", "                      MMM                      ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                     MMMMM                     ",
-            "                   MM     MM                   ", "                KKKKKKKKKKKKKKK                ",
-            "                KHIHHHHHHHHHIHK                ", "    P PPPPPPPPPPPQHQQQQQQQQQHQPPPPPPPPPPP P    ",
-            "EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                    M     M                    ",
-            "                    M     M                    ", "                    MM   MM                    ",
-            "                     MMMMM                     ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      M                                 M      ",
-            "     MMM                               MMM     ", "      MMM                             MMM      ",
-            "       M                               M       ", "                     MMMMM                     ",
-            "                     MMMMM                     ", "                    M     M                    ",
-            "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
-            "                KHHIHHHHHHHIHHK                ", "    PCCCCC      KQQHQQQQQQQHQQK      CCCCCP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                      III                      ", "                   M  III  M                   ",
-            "                   M  III  M                   ", "                   M       M                   ",
-            "                    M     M                    ", "                     MMMMM                     ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "     M                                   M     ", "    MM                                   MM    ",
-            "    M                 MMM                 M    ", "    MM                MMM                MM    ",
-            "     MM MM            MMM            MM MM     ", "      MMM           M     M           MMM      ",
-            "                    M     M                    ", "                   M       M                   ",
-            "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
-            "      CCC       KHHHIHHHHHIHHHK       CCC      ", "    CCCCCCCPPPPPPQQQHQQQQQHQQQPPPPPPCCCCCCC    ",
-            "EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE" },
-        { "                                               ", "                     IIIII                     ",
-            "                     IIIII                     ", "                  M  IIIII  M                  ",
-            "                  M  IIIII  M                  ", "                   M IIIII M                   ",
-            "                   M       M                   ", "                    MM   MM                    ",
-            "                      MMM                      ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                      MMM                      ",
-            "                      MMM                      ", "                      MMM                      ",
-            "    M                 MMM                 M    ", "    M                 MMM                 M    ",
-            "   M                 M   M                 M   ", "    M                M   M                M    ",
-            "    M                M   M                M    ", "     MM MM         M       M         MM MM     ",
-            "       M           M       M           M       ", "                  M         M                  ",
-            "                 M           M                 ", "      CCC       KKKKKKKKKKKKKKK       CCC      ",
-            "     C   C      KHHHHIHHHIHHHHK      C   C     ", "   CCCCCCCCC    KQQQQHQQQHQQQQK    CCCCCCCCC   ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                      III                      ", "                     IIIII                     ",
-            "                    IIIIIII                    ", "                  M IIIIIII M                  ",
-            "                  M IIIIIII M                  ", "                  M  IIIII  M                  ",
-            "                   M  III  M                   ", "                    M     M                    ",
-            "                     MMMMM                     ", "                       M                       ",
-            "                       M                       ", "                       M                       ",
-            "                       M                       ", "                       M                       ",
-            "                       M                       ", "                       M                       ",
-            "                      MMM                      ", "                      MMM                      ",
-            "                      MMM                      ", "                     M   M                     ",
-            "                     M   M                     ", "                     M   M                     ",
-            "    M                M   M                M    ", "   M                 M   M                 M   ",
-            "   M                M     M                M   ", "   M                M     M                M   ",
-            "    M               M     M               M    ", "    MM   MM        M       M        MM   MM    ",
-            "      MMM          M       M          MMM      ", "                  M         M                  ",
-            "      CCC        M           M        CCC      ", "     C   C      KKKKKKKKKKKKKKK      C   C     ",
-            "    C     C     KHHHHHIHIHHHHHK     C     C    ", "   CCCCCCCCCPPPPPQQQQQHQHQQQQQPPPPPCCCCCCCCC   ",
-            "EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE" },
-        { "                      III                      ", "                     IIIII                     ",
-            "                    IIIIIII                    ", "                  M IIIIIII M                  ",
-            "                  M IIIIIII M                  ", "                  M  IIIII  M                  ",
-            "                   M  III  M                   ", "                    M     M                    ",
-            "                     MMMMM                     ", "                      MDM                      ",
-            "                      MDM                      ", "                      MDM                      ",
-            "                      MDM                      ", "                      MDM                      ",
-            "                      MDM                      ", "                      MDM                      ",
-            "                      MDM                      ", "                      MDM                      ",
-            "                      MDM                      ", "                     M D M                     ",
-            "                     M D M                     ", "   M                 M D M                 M   ",
-            "   M                 M D M                 M   ", "   M                 M D M                 M   ",
-            "   M                M  D  M                M   ", "   M   O            M  D  M            O   M   ",
-            "   M                M  D  M                M   ", "    M     M        M   D   M        M     M    ",
-            "     MMMMM         M   D   M         MMMMM     ", "       C          M    D    M          C       ",
-            "      CCC        M     D     M        CCC      ", "     C C C      KKKKKKKDKKKKKKK      C C C     ",
-            "    C  C  C     KHHHHHHDHHHHHHK     C  C  C    ", "   CCCCCCCCC    KQQQQQQDQQQQQQK    CCCCCCCCC   ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                      III                      ", "                     IIIII                     ",
-            "                    IIIIIII                    ", "                  M IIIIIII M                  ",
-            "                  M IIIIIII M                  ", "                  M  IIIII  M                  ",
-            "                   M  III  M                   ", "                    M     M                    ",
-            "                     MMMMM                     ", "                       M                       ",
-            "                       M                       ", "                       M                       ",
-            "                       M                       ", "                       M                       ",
-            "                       M                       ", "                       M                       ",
-            "                      MMM                      ", "                      MMM                      ",
-            "                      MMM                      ", "                     M   M                     ",
-            "                     M   M                     ", "                     M   M                     ",
-            "    M                M   M                M    ", "   M                 M   M                 M   ",
-            "   M                M     M                M   ", "   M                M     M                M   ",
-            "    M               M     M               M    ", "    MM   MM        M       M        MM   MM    ",
-            "      MMM          M       M          MMM      ", "                  M         M                  ",
-            "      CCC        M           M        CCC      ", "     C   C      KKKKKKKKKKKKKKK      C   C     ",
-            "    C     C     KHHHHHIHIHHHHHK     C     C    ", "   CCCCCCCCCPPPPPQQQQQHQHQQQQQPPPPPCCCCCCCCC   ",
-            "EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE" },
-        { "                                               ", "                     IIIII                     ",
-            "                     IIIII                     ", "                  M  IIIII  M                  ",
-            "                  M  IIIII  M                  ", "                   M IIIII M                   ",
-            "                   M       M                   ", "                    MM   MM                    ",
-            "                      MMM                      ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                      MMM                      ",
-            "                      MMM                      ", "                      MMM                      ",
-            "    M                 MMM                 M    ", "    M                 MMM                 M    ",
-            "   M                 M   M                 M   ", "    M                M   M                M    ",
-            "    M                M   M                M    ", "     MM MM         M       M         MM MM     ",
-            "       M           M       M           M       ", "                  M         M                  ",
-            "                 M           M                 ", "      CCC       KKKKKKKKKKKKKKK       CCC      ",
-            "     C   C      KHHHHIHHHIHHHHK      C   C     ", "   CCCCCCCCC    KQQQQHQQQHQQQQK    CCCCCCCCC   ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                      III                      ", "                   M  III  M                   ",
-            "                   M  III  M                   ", "                   M       M                   ",
-            "                    M     M                    ", "                     MMMMM                     ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "     M                                   M     ", "    MM                                   MM    ",
-            "    M                 MMM                 M    ", "    MM                MMM                MM    ",
-            "     MM MM            MMM            MM MM     ", "      MMM           M     M           MMM      ",
-            "                    M     M                    ", "                   M       M                   ",
-            "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
-            "      CCC       KHHHIHHHHHIHHHK       CCC      ", "    CCCCCCCPPPPPPQQQHQQQQQHQQQPPPPPPCCCCCCC    ",
-            "EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                    M     M                    ",
-            "                    M     M                    ", "                    MM   MM                    ",
-            "                     MMMMM                     ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      M                                 M      ",
-            "     MMM                               MMM     ", "      MMM                             MMM      ",
-            "       M                               M       ", "                     MMMMM                     ",
-            "                     MMMMM                     ", "                    M     M                    ",
-            "                  M         M                  ", "                KKKKKKKKKKKKKKK                ",
-            "                KHHIHHHHHHHIHHK                ", "    PCCCCC      KQQHQQQQQQQHQQK      CCCCCP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                     MMMMM                     ",
-            "                     MMMMM                     ", "                      MMM                      ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                     MMMMM                     ",
-            "                   MM     MM                   ", "                KKKKKKKKKKKKKKK                ",
-            "                KHIHHHHHHHHHIHK                ", "    P PPPPPPPPPPPQHQQQQQQQQQHQPPPPPPPPPPP P    ",
-            "EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                     MMMMM                     ", "                KKKKKKKKKKKKKKK                ",
-            "                KIHHHHHHHHHHHIK                ", "    P P         KHQQQQQQQQQQQHK         P P    ",
-            "EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                KKKKKKKKKKKKKKK                ",
-            "                KKKKKKKKKKKKKKK                ", "    P P PPPPPPPPPKPKPKPKPKPKPKPPPPPPPPP P P    ",
-            "EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P P P P P P P       P P P    ",
-            "EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "    P P P       P P PCCCCCP P P       P P P    ",
-            "EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                      MMM                      ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                      CCC                      ", "    P EEE       P P CCCCCCC P P       EEE P    ",
-            "EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "      JJJ                             JJJ      ", "      JJJ                             JJJ      ",
-            "      JJJ                             JJJ      ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "                    M     M                    ", "      JJJ            MM MM            JJJ      ",
-            "                       M                       ", "      JJJ                             JJJ      ",
-            "                                               ", "                      CCC                      ",
-            "      BBB            C   C            BBB      ", "    PEEEEE      P PCCCCCCCCCP P      EEEEEP    ",
-            "EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "     JJJJJ                           JJJJJ     ", "     JJJJJ                           JJJJJ     ",
-            "     JJJJJ                           JJJJJ     ", "      JJJ                             JJJ      ",
-            "                                               ", "     J L J                           J L J     ",
-            "                                               ", "     J L J         M       M         J L J     ",
-            "                    M     M                    ", "     J L J          MM   MM          J L J     ",
-            "                      MMM                      ", "     J L J                           J L J     ",
-            "                      CCC                      ", "                     C   C                     ",
-            "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPP PCCCCCCCCCP PPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "     JJJJJ                           JJJJJ     ", "     JJJJJ                           JJJJJ     ",
-            "     JJJJJ                           JJJJJ     ", "      JJJ                             JJJ      ",
-            "       A                               A       ", "     JLALJ                           JLALJ     ",
-            "       A           M       M           A       ", "     JLALJ         M   O   M         JLALJ     ",
-            "       A           M       M           A       ", "     JLALJ          M     M          JLALJ     ",
-            "       A             MMMMM             A       ", "     JLALJ             C             JLALJ     ",
-            "       A              CCC              A       ", "       A             C C C             A       ",
-            "     B A B          C  C  C          B A B     ", "    EEBABEE       PCCCCCCCCCP       EEBABEE    ",
-            "EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "      JJJ                             JJJ      ",
-            "     JJJJJ                           JJJJJ     ", "     JJJJJ                           JJJJJ     ",
-            "     JJJJJ                           JJJJJ     ", "      JJJ                             JJJ      ",
-            "                                               ", "     J L J         M       M         J L J     ",
-            "                   M       M                   ", "     J L J         M       M         J L J     ",
-            "                    M     M                    ", "     J L J          MM   MM          J L J     ",
-            "                      MMM                      ", "     J L J                           J L J     ",
-            "                      CCC                      ", "                     C   C                     ",
-            "     B   B          C     C          B   B     ", "    EEBBBEEPPPPPPPPCCCCCCCCCPPPPPPPPEEBBBEE    ",
-            "EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "      JJJ                             JJJ      ", "      JJJ                             JJJ      ",
-            "      JJJ                             JJJ      ", "                                               ",
-            "                    M     M                    ", "      JJJ           M     M           JJJ      ",
-            "                   M       M                   ", "      JJJ           M     M           JJJ      ",
-            "                    M     M                    ", "      JJJ            MM MM            JJJ      ",
-            "                       M                       ", "      JJJ                             JJJ      ",
-            "                                               ", "                      CCC                      ",
-            "      BBB            C   C            BBB      ", "    PEEEEE         CCCCCCCCC         EEEEEP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                     MM MM                     ", "                    MM   MM                    ",
-            "                    M     M                    ", "                    MM   MM                    ",
-            "                     MM MM                     ", "                      MMM                      ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                      CCC                      ", "    PPEEEPPPPPPPPPPPCCCCCCCPPPPPPPPPPPEEEPP    ",
-            "EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                       M                       ",
-            "                       M                       ", "                      MMM                      ",
-            "                     MMMMM                     ", "                      MMM                      ",
-            "                       M                       ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                     CCCCC                     ",
-            "EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE" },
-        { "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "                                               ", "                                               ",
-            "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE" } };
-    // Structure:
-    //
-    // Blocks:
-
-    //
-    // Tiles:
-    //
-    // Special Tiles:
-    // N -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNode, ...); // You will probably want to change it to
-    // something else
-    // O -> ofSpecialTileAdder(vazkii.botania.common.block.tile.TilePylon, ...); // You will probably want to change it
-    // to something else
-    // P -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); // You will probably want to change
-    // it to something else
-    // Q -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want to change
-    // it to something else
-    private static final String MAIN = "main";
-    // endregion
-
-    // region parameters
-    protected Parameters.Group.ParameterIn overclock, overvolt;
-    protected Parameters.Group.ParameterOut maxCurrentTemp, availableData;
-
-    private static final INameFunction<TST_Computer> OC_NAME = (base,
-        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.0"); // Overclock ratio
-    private static final INameFunction<TST_Computer> OV_NAME = (base,
-        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.1"); // Overvoltage ratio
-    private static final INameFunction<TST_Computer> MAX_TEMP_NAME = (base,
-        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.0"); // Current max. heat
-    private static final INameFunction<TST_Computer> COMPUTE_NAME = (base,
-        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.1"); // Produced computation
-    private static final IStatusFunction<TST_Computer> OC_STATUS = (base, p) -> LedStatus
-        .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 1, 3);
-    private static final IStatusFunction<TST_Computer> OV_STATUS = (base, p) -> LedStatus
-        .fromLimitsInclusiveOuterBoundary(p.get(), .7, .8, 1.2, 2);
-    private static final IStatusFunction<TST_Computer> MAX_TEMP_STATUS = (base, p) -> LedStatus
-        .fromLimitsInclusiveOuterBoundary(p.get(), -10000, 0, 0, 5000);
-    private static final IStatusFunction<TST_Computer> COMPUTE_STATUS = (base, p) -> {
-        if (base.eAvailableData < 0) {
-            return STATUS_TOO_LOW;
-        }
-        if (base.eAvailableData == 0) {
-            return STATUS_NEUTRAL;
-        }
-        return STATUS_OK;
-    };
-    // endregion
-
+    // region Class Constructor
     public TST_Computer(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.SHORDINGER);
         eCertainMode = 0;
         useLongPower = true;
     }
@@ -1007,14 +98,117 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_Computer(mName);
     }
+    // endregion
+
+    // region Structure
+    // spotless:off
+    public static final String[][] shape = new String[][]{
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      III                      ","                      III                      ","                      III                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     IIIII                     ","                     IIIII                     ","                     IIIII                     ","                     IIIII                     ","                     IIIII                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      III                      ","                     IIIII                     ","                    IIIIIII                    ","                    IIIIIII                    ","                    IIIIIII                    ","                     IIIII                     ","                      III                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                    M     M                    ","                   M  III  M                   ","                  M  IIIII  M                  ","                  M IIIIIII M                  ","                  M IIIIIII M                  ","                  M IIIIIII M                  ","                  M  IIIII  M                  ","                   M  III  M                   ","                    M     M                    ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                    M     M                    ","                   M  III  M                   ","                  M  IIIII  M                  ","                  M IIIIIII M                  ","                  M IIIIIII M                  ","                  M IIIIIII M                  ","                  M  IIIII  M                  ","                   M  III  M                   ","                    M     M                    ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                    MM   MM                    ","                   M       M                   ","                   M IIIII M                   ","                  M  IIIII  M                  ","                  M  IIIII  M                  ","                  M  IIIII  M                  ","                   M IIIII M                   ","                   M       M                   ","                    MM   MM                    ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                    M     M                    ","                   M       M                   ","                   M  III  M                   ","                   M  III  M                   ","                   M  III  M                   ","                   M       M                   ","                    M     M                    ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                    MM   MM                    ","                    M     M                    ","                    M     M                    ","                    M     M                    ","                    MM   MM                    ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                     MMMMM                     ","                     MMMMM                     ","                     MMMMM                     ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MDM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                      MDM                      ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                      MDM                      ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                      MDM                      ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                     M   M                     ","                     M D M                     ","                     M   M                     ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                     M   M                     ","                     M D M                     ","                     M   M                     ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","     JJJJJ                           JJJJJ     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                       M                       ","                                               ","                                               ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","                     M   M                     ","   M                 M D M                 M   ","                     M   M                     ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","      JJJ                             JJJ      ","                                               ","                                               ","                       M                       ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                       M                       ","                     MM MM                     ","                    M     M                    ","                                               ","       A                               A       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","     M                                   M     ","    M                 MMM                 M    ","    M                M   M                M    ","   M                 M D M                 M   ","    M                M   M                M    ","    M                 MMM                 M    ","     M                                   M     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","       A                               A       ","                                               ","                    M     M                    ","                     MM MM                     ","                       M                       ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                      MMM                      ","                    MM   MM                    ","      JJJ           M     M           JJJ      ","     J L J         M       M         J L J     ","     JLALJ                           JLALJ     ","     J L J                           J L J     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      M                                 M      ","    MM                                   MM    ","    M                 MMM                 M    ","   M                 M   M                 M   ","   M                 M D M                 M   ","   M                 M   M                 M   ","    M                 MMM                 M    ","    MM                                   MM    ","      M                                 M      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     J L J                           J L J     ","     JLALJ                           JLALJ     ","     J L J         M       M         J L J     ","      JJJ           M     M           JJJ      ","                    MM   MM                    ","                      MMM                      ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                     MMMMM                     ","                    M     M                    ","                   M       M                   ","                   M       M                   ","       A           M       M           A       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","     MMM                               MMM     ","    M                 MMM                 M    ","   M                 M   M                 M   ","   M                M     M                M   ","   M                M  D  M                M   ","   M                M     M                M   ","   M                 M   M                 M   ","    M                 MMM                 M    ","     MMM                               MMM     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","       A           M       M           A       ","                   M       M                   ","                   M       M                   ","                    M     M                    ","                     MMMMM                     ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                      MMM                      ","                    MM   MM                    ","      JJJ           M     M           JJJ      ","     J L J         M       M         J L J     ","     JLALJ         M   O   M         JLALJ     ","     J L J         M       M         J L J     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      MMM                             MMM      ","    MM                MMM                MM    ","    M                M   M                M    ","   M                M     M                M   ","   M   O            M  D  M            O   M   ","   M                M     M                M   ","    M                M   M                M    ","    MM                MMM                MM    ","      MMM                             MMM      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     J L J         M       M         J L J     ","     JLALJ         M   O   M         JLALJ     ","     J L J         M       M         J L J     ","      JJJ           M     M           JJJ      ","                    MM   MM                    ","                      MMM                      ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                       M                       ","                     MM MM                     ","                    M     M                    ","                    M     M                    ","       A           M       M           A       ","                    M     M                    ","                    M     M                    ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","       M                               M       ","     MM MM            MMM            MM MM     ","    M                M   M                M    ","    M               M     M               M    ","   M                M  D  M                M   ","    M               M     M               M    ","    M                M   M                M    ","     MM MM            MMM            MM MM     ","       M                               M       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                    M     M                    ","                    M     M                    ","       A           M       M           A       ","                    M     M                    ","                    M     M                    ","                     MM MM                     ","                       M                       ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                      MMM                      ","      JJJ            MM MM            JJJ      ","     J L J          MM   MM          J L J     ","     JLALJ          M     M          JLALJ     ","     J L J          MM   MM          J L J     ","      JJJ            MM MM            JJJ      ","                      MMM                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","      MMM           M     M           MMM      ","     MM MM         M       M         MM MM     ","    MM   MM        M       M        MM   MM    ","    M     M        M   D   M        M     M    ","    MM   MM        M       M        MM   MM    ","     MM MM         M       M         MM MM     ","      MMM           M     M           MMM      ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      MMM                      ","      JJJ            MM MM            JJJ      ","     J L J          MM   MM          J L J     ","     JLALJ          M     M          JLALJ     ","     J L J          MM   MM          J L J     ","      JJJ            MM MM            JJJ      ","                      MMM                      ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MMM                      ","       A             MMMMM             A       ","                      MMM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                    M     M                    ","       M           M       M           M       ","      MMM          M       M          MMM      ","     MMMMM         M   D   M         MMMMM     ","      MMM          M       M          MMM      ","       M           M       M           M       ","                    M     M                    ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                       M                       ","                      MMM                      ","       A             MMMMM             A       ","                      MMM                      ","                       M                       ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     J L J                           J L J     ","     JLALJ             C             JLALJ     ","     J L J                           J L J     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                    M     M                    ","                   M       M                   ","                  M         M                  ","                  M         M                  ","       C          M    D    M          C       ","                  M         M                  ","                  M         M                  ","                   M       M                   ","                    M     M                    ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","      JJJ                             JJJ      ","     J L J                           J L J     ","     JLALJ             C             JLALJ     ","     J L J                           J L J     ","      JJJ                             JJJ      ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      CCC                      ","       A              CCC              A       ","                      CCC                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                     MMMMM                     ","                   MM     MM                   ","                  M         M                  ","                  M         M                  ","                 M           M                 ","      CCC        M           M        CCC      ","      CCC        M     D     M        CCC      ","      CCC        M           M        CCC      ","                 M           M                 ","                  M         M                  ","                  M         M                  ","                   MM     MM                   ","                     MMMMM                     ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      CCC                      ","       A              CCC              A       ","                      CCC                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                                               ","                      CCC                      ","                     C   C                     ","       A             C C C             A       ","                     C   C                     ","                      CCC                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","      CCC       KKKKKKKKKKKKKKK       CCC      ","     C   C      KKKKKKKKKKKKKKK      C   C     ","     C C C      KKKKKKKDKKKKKKK      C C C     ","     C   C      KKKKKKKKKKKKKKK      C   C     ","      CCC       KKKKKKKKKKKKKKK       CCC      ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                KKKKKKKKKKKKKKK                ","                                               ","                                               ","                                               ","                                               ","                                               ","                                               ","                      CCC                      ","                     C   C                     ","       A             C C C             A       ","                     C   C                     ","                      CCC                      ","                                               ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                                               ","                      CCC                      ","      BBB            C   C            BBB      ","     B   B          C     C          B   B     ","     B A B          C  C  C          B A B     ","     B   B          C     C          B   B     ","      BBB            C   C            BBB      ","                      CCC                      ","                                               ","                                               ","                                               ","                                               ","                                               ","                KKKKKKKKKKKKKKK                ","                KIHHHHHHHHHHHIK                ","                KHIHHHHHHHHHIHK                ","                KHHIHHHHHHHIHHK                ","      CCC       KHHHIHHHHHIHHHK       CCC      ","     C   C      KHHHHIHHHIHHHHK      C   C     ","    C     C     KHHHHHIHIHHHHHK     C     C    ","    C  C  C     KHHHHHHDHHHHHHK     C  C  C    ","    C     C     KHHHHHIHIHHHHHK     C     C    ","     C   C      KHHHHIHHHIHHHHK      C   C     ","      CCC       KHHHIHHHHHIHHHK       CCC      ","                KHHIHHHHHHHIHHK                ","                KHIHHHHHHHHHIHK                ","                KIHHHHHHHHHHHIK                ","                KKKKKKKKKKKKKKK                ","                                               ","                                               ","                                               ","                                               ","                                               ","                      CCC                      ","      BBB            C   C            BBB      ","     B   B          C     C          B   B     ","     B A B          C  C  C          B A B     ","     B   B          C     C          B   B     ","      BBB            C   C            BBB      ","                      CCC                      ","                                               ","                                               ","                                               ","                                               "},
+        {"                                               ","                                               ","                                               ","                     CCCCC                     ","    PPEEEPPPPPPPPPPPCCCCCCCPPPPPPPPPPPEEEPP    ","    PEEEEE         CCCCCCCCC         EEEEEP    ","    EEBBBEEPPPPPPPPCCCCCCCCCPPPPPPPPEEBBBEE    ","    EEBABEE       PCCCCCCCCCP       EEBABEE    ","    EEBBBEEPPPPPP PCCCCCCCCCP PPPPPPEEBBBEE    ","    PEEEEE      P PCCCCCCCCCP P      EEEEEP    ","    P EEE       P P CCCCCCC P P       EEE P    ","    P P P       P P PCCCCCP P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P PPPPPPPPPKPKPKPKPKPKPKPPPPPPPPP P P    ","    P P         KHQQQQQQQQQQQHK         P P    ","    P PPPPPPPPPPPQHQQQQQQQQQHQPPPPPPPPPPP P    ","    PCCCCC      KQQHQQQQQQQHQQK      CCCCCP    ","    CCCCCCCPPPPPPQQQHQQQQQHQQQPPPPPPCCCCCCC    ","   CCCCCCCCC    KQQQQHQQQHQQQQK    CCCCCCCCC   ","   CCCCCCCCCPPPPPQQQQQHQHQQQQQPPPPPCCCCCCCCC   ","   CCCCCCCCC    KQQQQQQDQQQQQQK    CCCCCCCCC   ","   CCCCCCCCCPPPPPQQQQQHQHQQQQQPPPPPCCCCCCCCC   ","   CCCCCCCCC    KQQQQHQQQHQQQQK    CCCCCCCCC   ","    CCCCCCCPPPPPPQQQHQQQQQHQQQPPPPPPCCCCCCC    ","    PCCCCC      KQQHQQQQQQQHQQK      CCCCCP    ","    P PPPPPPPPPPPQHQQQQQQQQQHQPPPPPPPPPPP P    ","    P P         KHQQQQQQQQQQQHK         P P    ","    P P PPPPPPPPPKPKPKPKPKPKPKPPPPPPPPP P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P P P P P P P       P P P    ","    P P P       P P PCCCCCP P P       P P P    ","    P EEE       P P CCCCCCC P P       EEE P    ","    PEEEEE      P PCCCCCCCCCP P      EEEEEP    ","    EEBBBEEPPPPPP PCCCCCCCCCP PPPPPPEEBBBEE    ","    EEBABEE       PCCCCCCCCCP       EEBABEE    ","    EEBBBEEPPPPPPPPCCCCCCCCCPPPPPPPPEEBBBEE    ","    PEEEEE         CCCCCCCCC         EEEEEP    ","    PPEEEPPPPPPPPPPPCCCCCCCPPPPPPPPPPPEEEPP    ","                     CCCCC                     ","                                               ","                                               ","                                               "},
+        {"EEEEEEEEEEEEEEEEEEEEEEE~EEEEEEEEEEEEEEEEEEEEEEE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE","EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE","EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE","EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE","EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE","EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE","EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE","EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE","EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE","EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE","EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE","EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE","EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE","EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE","EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE","EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE","EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE","EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE","EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"}
+    };
+
+    // Structure:
+    // Blocks:
+
+    // Tiles:
+    // Special Tiles:
+    // N -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNode, ...); // You will probably want to change it to
+    // something else
+    // O -> ofSpecialTileAdder(vazkii.botania.common.block.tile.TilePylon, ...); // You will probably want to change it
+    // to something else
+    // P -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); // You will probably want to change
+    // it to something else
+    // Q -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want to change
+    // it to something else
+    // spotless:on
+
+    private static IStructureDefinition<TST_Computer> STRUCTURE_DEFINITION = null;
 
     @Override
-    protected void parametersInstantiation_EM() {
-        Parameters.Group hatch_0 = parametrization.getGroup(0);
-        overclock = hatch_0.makeInParameter(0, 1, OC_NAME, OC_STATUS);
-        overvolt = hatch_0.makeInParameter(1, 1, OV_NAME, OV_STATUS);
-        maxCurrentTemp = hatch_0.makeOutParameter(0, 0, MAX_TEMP_NAME, MAX_TEMP_STATUS);
-        availableData = hatch_0.makeOutParameter(1, 0, COMPUTE_NAME, COMPUTE_STATUS);
+    public IStructureDefinition<TST_Computer> getStructure_EM() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = IStructureDefinition.<TST_Computer>builder()
+                .addShape(MAIN, transpose(shape))// FRF_Coil_1
+                .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
+                .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
+                .addElement('C', ofBlock(sBlockCasingsSE, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
+                .addElement('D', ofBlock(sBlockCasingsSE, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
+                // .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
+                // ...);
+                .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
+                .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
+                .addElement('H', ofBlock(sBlockCasingsTT, 2))// H -> ofBlock...(gt.blockcasingsTT, 2, ...);
+                .addElement('I', ofBlock(sBlockCasingsTT, 3))// I -> ofBlock...(gt.blockcasingsTT, 3, ...);
+                .addElement('J', ofBlock(sBlockCasingsTT, 7))// J -> ofBlock...(gt.blockcasingsTT, 7, ...);
+                .addElement('L', ofBlock(radiationProtectionSteelFrame, 0)) // L ->
+                // ofBlock...(radiationProtectionSteelFrame, 0,
+                // ...);
+                .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
+                .addElement('M', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
+                .addElement('O', ofBlock(pylon, 1))
+                // .addElement('N', ofBlock(Block.getBlockById(1), 0))
+                .addElement('P', ofBlock(sBlockCasingsTT, 2))
+                .addElement(
+                    'E',
+                    HatchElementBuilder.<TST_Computer>builder()
+                        .atLeast(ComputationMonitor, OutputData, InputHatch, Energy.or(ExoticEnergy))
+                        .adder(TST_Computer::superAddToMachineList)
+                        .hint(1)
+                        .casingIndex(textureOffset + 2)
+                        .buildAndChain(ofBlock(sBlockCasingsSE, 2)))
+                .addElement('Q', ofBlock(sBlockCasingsTT, 3))
+                .build();
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public String[] getStructureDescription(ItemStack stackSize) {
+        return description;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(MAIN, stackSize, hintsOnly, offsetX, offsetY, offsetZ);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(MAIN, stackSize, offsetX, offsetY, offsetZ, elementBudget, env, false, true);
     }
 
     @Override
@@ -1031,22 +225,79 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         }
 
     }
+    // endregion
 
-    @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setDouble("computation", availableData.get());
-        aNBT.setBoolean("localWirelessTag", localWirelessTag);
-    }
+    // region Processing Logic
+    private GT_Hatch_RackComputationMonitor realMonitor;
+    private double multiplier = 1;
 
-    @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        if (availableData != null) {
-            availableData.set(aNBT.getDouble("computation"));
-            eAvailableData = (long) availableData.get();
+    // GT_MetaTileEntity_AssemblyLine
+    // GT_MetaTileEntity_EM_computer
+    private static boolean localWirelessTag = false;
+
+    // #tr tst.common.machine.Computer.hint.01
+    // # Hatches: input hatch, maintain hatch, data output hatch, rack controller hatch and any energy hatch.
+    // #zh_CN 仓室: 输入仓, 维护仓, 机箱控制器, 主光学接口, 能源仓
+
+    // #tr tst.common.machine.Computer.hint.02
+    // # Only one rack controller will be accepted. Multiple racks will only be accepted once.
+    // #zh_CN 仅有一个机箱控制器会被识别, 如果放多个, 会识别其中的任意一个.
+    private static final String[] description = new String[] {
+        EnumChatFormatting.AQUA + translateToLocal("tt.keyphrase.Hint_Details") + ":",
+        translateToLocal("tst.common.machine.Computer.hint.01"), // 1 - Classic/Data Hatches or
+        // Computer casing
+        translateToLocal("tst.common.machine.Computer.hint.02"), // 2 - Rack Hatches or Advanced
+        // computer casing
+    };
+
+    private static Vec3Impl controllerPosition;
+    public static final int offsetX = 23, offsetY = 34, offsetZ = 0;
+    private static final String MAIN = "main";
+    protected Parameters.Group.ParameterIn overclock, overvolt;
+    protected Parameters.Group.ParameterOut maxCurrentTemp, availableData;
+
+    private static final INameFunction<TST_Computer> OC_NAME = (base,
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.0");
+
+    // Overclock ratio
+    private static final INameFunction<TST_Computer> OV_NAME = (base,
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgi.1");
+
+    // Overvoltage ratio
+    private static final INameFunction<TST_Computer> MAX_TEMP_NAME = (base,
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.0");
+
+    // Current max. heat
+    private static final INameFunction<TST_Computer> COMPUTE_NAME = (base,
+        p) -> translateToLocal("gt.blockmachines.multimachine.em.computer.cfgo.1");
+
+    // Produced computation
+    private static final IStatusFunction<TST_Computer> OC_STATUS = (base, p) -> LedStatus
+        .fromLimitsInclusiveOuterBoundary(p.get(), 0, 1, 1, 3);
+
+    private static final IStatusFunction<TST_Computer> OV_STATUS = (base, p) -> LedStatus
+        .fromLimitsInclusiveOuterBoundary(p.get(), .7, .8, 1.2, 2);
+
+    private static final IStatusFunction<TST_Computer> MAX_TEMP_STATUS = (base, p) -> LedStatus
+        .fromLimitsInclusiveOuterBoundary(p.get(), -10000, 0, 0, 5000);
+
+    private static final IStatusFunction<TST_Computer> COMPUTE_STATUS = (base, p) -> {
+        if (base.eAvailableData < 0) {
+            return STATUS_TOO_LOW;
         }
-        localWirelessTag = aNBT.getBoolean("localWirelessTag");
+        if (base.eAvailableData == 0) {
+            return STATUS_NEUTRAL;
+        }
+        return STATUS_OK;
+    };
+
+    @Override
+    protected void parametersInstantiation_EM() {
+        Parameters.Group hatch_0 = parametrization.getGroup(0);
+        overclock = hatch_0.makeInParameter(0, 1, OC_NAME, OC_STATUS);
+        overvolt = hatch_0.makeInParameter(1, 1, OV_NAME, OV_STATUS);
+        maxCurrentTemp = hatch_0.makeOutParameter(0, 0, MAX_TEMP_NAME, MAX_TEMP_STATUS);
+        availableData = hatch_0.makeOutParameter(1, 0, COMPUTE_NAME, COMPUTE_STATUS);
     }
 
     @Override
@@ -1222,58 +473,6 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     }
 
     @Override
-    public MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(translateToLocal("gt.blockmachines.multimachine.em.computer.name")) // Machine Type: Quantum
-            // Computer
-            .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.0")) // Controller block of
-            // the Quantum Computer
-            .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.1")) // Used to generate
-            // computation (and heat)
-            .addInfo(TstSharedLocalization.MachineTooltip.tooComplex()) // The structure is too complex!
-            .addSeparator()
-            // .addInfo("what the fuck")
-            .addInfo(translateToLocal("tst.computer.desc.0"))
-            .addInfo(translateToLocal("tst.computer.desc.1"))
-            .addInfo(translateToLocal("tst.computer.desc.2"))
-            .addInfo(translateToLocal("tst.computer.desc.3"))
-            .addInfo(translateToLocal("tst.computer.desc.4"))
-            .addInfo(translateToLocal("tst.computer.desc.5"))
-            .addInfo(translateToLocal("tst.computer.desc.6"))
-            .addInfo(translateToLocal("tst.computer.desc.7"))
-            .addInfo(translateToLocal("tst.computer.desc.8"))
-            .addInfo(translateToLocal("tst.computer.desc.9"))
-            .addInfo(translateToLocal("tst.computer.desc.10"))
-            .addInfo(translateToLocal("tst.computer.desc.11"))
-            .addInfo(translateToLocal("tst.computer.desc.12"))
-            // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
-            .addOtherStructurePart(
-                translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),
-                "no need uncertain hatch!",
-                1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister aBlockIconRegister) {
-        ScreenOFF = Textures.BlockIcons.custom("iconsets/EM_COMPUTER");
-        ScreenON = Textures.BlockIcons.custom("iconsets/EM_COMPUTER_ACTIVE");
-        super.registerIcons(aBlockIconRegister);
-    }
-
-    @Override
-    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
-        int colorIndex, boolean aActive, boolean aRedstone) {
-        if (side == facing) {
-            return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3],
-                new TTRenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF) };
-        }
-        return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3] };
-    }
-
-    @Override
     public void onRemoval() {
         super.onRemoval();
         // for (GT_Hatch_RackComputationMonitor rack : filterValidMTEs(eRacks)) {
@@ -1323,61 +522,132 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             .setActive(false);
     }
 
+    // endregion
+
+    // region NBT
+
     @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(MAIN, stackSize, hintsOnly, offsetX, offsetY, offsetZ);
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setDouble("computation", availableData.get());
+        aNBT.setBoolean("localWirelessTag", localWirelessTag);
     }
 
     @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(MAIN, stackSize, offsetX, offsetY, offsetZ, elementBudget, env, false, true);
-    }
-
-    private static IStructureDefinition<TST_Computer> STRUCTURE_DEFINITION = null;
-
-    @Override
-    public IStructureDefinition<TST_Computer> getStructure_EM() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION = IStructureDefinition.<TST_Computer>builder()
-                .addShape(MAIN, shape)// FRF_Coil_1
-                .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
-                .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
-                .addElement('C', ofBlock(sBlockCasingsSE, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                .addElement('D', ofBlock(sBlockCasingsSE, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                // .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
-                // ...);
-                .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-                .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
-                .addElement('H', ofBlock(sBlockCasingsTT, 2))// H -> ofBlock...(gt.blockcasingsTT, 2, ...);
-                .addElement('I', ofBlock(sBlockCasingsTT, 3))// I -> ofBlock...(gt.blockcasingsTT, 3, ...);
-                .addElement('J', ofBlock(sBlockCasingsTT, 7))// J -> ofBlock...(gt.blockcasingsTT, 7, ...);
-                .addElement('L', ofBlock(radiationProtectionSteelFrame, 0)) // L ->
-                // ofBlock...(radiationProtectionSteelFrame, 0,
-                // ...);
-                .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-                .addElement('M', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
-                .addElement('O', ofBlock(pylon, 1))
-                // .addElement('N', ofBlock(Block.getBlockById(1), 0))
-                .addElement('P', ofBlock(sBlockCasingsTT, 2))
-                .addElement(
-                    'E',
-                    HatchElementBuilder.<TST_Computer>builder()
-                        .atLeast(ComputationMonitor, OutputData, InputHatch, Energy.or(ExoticEnergy))
-                        .adder(TST_Computer::superAddToMachineList)
-                        .hint(1)
-                        .casingIndex(textureOffset + 2)
-                        .buildAndChain(ofBlock(sBlockCasingsSE, 2)))
-                .addElement('Q', ofBlock(sBlockCasingsTT, 3))
-                .build();
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        if (availableData != null) {
+            availableData.set(aNBT.getDouble("computation"));
+            eAvailableData = (long) availableData.get();
         }
-        return STRUCTURE_DEFINITION;
+        localWirelessTag = aNBT.getBoolean("localWirelessTag");
+    }
+
+    // endregion
+
+    // region Textures
+    private static IIconContainer ScreenOFF;
+    private static IIconContainer ScreenON;
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister aBlockIconRegister) {
+        ScreenOFF = Textures.BlockIcons.custom("iconsets/EM_COMPUTER");
+        ScreenON = Textures.BlockIcons.custom("iconsets/EM_COMPUTER_ACTIVE");
+        super.registerIcons(aBlockIconRegister);
     }
 
     @Override
-    public String[] getStructureDescription(ItemStack stackSize) {
-        return description;
+    public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection facing,
+        int colorIndex, boolean aActive, boolean aRedstone) {
+        if (side == facing) {
+            return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3],
+                new TTRenderedExtendedFacingTexture(aActive ? ScreenON : ScreenOFF) };
+        }
+        return new ITexture[] { Textures.BlockIcons.casingTexturePages[texturePage][3] };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    public MultiblockTooltipBuilder createTooltip() {
+        // spotless:off
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        tt.addMachineType(translateToLocal("gt.blockmachines.multimachine.em.computer.name")) // Machine Type: Quantum
+            // Computer
+            .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.0")) // Controller block of
+            // the Quantum Computer
+            .addInfo(translateToLocal("gt.blockmachines.multimachine.em.computer.desc.1")) // Used to generate
+            // computation (and heat)
+            .addSeparator()
+            // .addInfo("what the fuck")
+            // #tr tst.common.machine.Computer.tooltip.info.01
+            // # Astral Computing Array, Let the star calculate the universe
+            // #zh_CN 星规阵列 籍星辰以规万物
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.01"))
+            // #tr tst.common.machine.Computer.tooltip.info.02
+            // # Conventional heat will be effectively cooled by super coolant/coolant/extremely cold ice, as follows:
+            // #zh_CN 常规热量将会得到超级冷却液/冷却液/极寒之凛冰的有效冷却, 具体如下:
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.02"))
+            // #tr tst.common.machine.Computer.tooltip.info.03
+            // # Coolant liquid: §60.001§7, super coolant liquid: §60.01§7
+            // #zh_CN 冷却液: §60.001§7, 超级冷却液: §60.01§7, 极寒之凛冰: §60.1§7
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.03"))
+            // #tr tst.common.machine.Computer.tooltip.info.04
+            // # if astralsocery activated, starlight liquid will support an extra §610§7 multiplier.
+            // #zh_CN 如果安装了星辉魔法, 则星能液提供额外的10倍率.
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.04"))
+            // #tr tst.common.machine.Computer.tooltip.info.05
+            // # Each operation will consume all the liquid input in the current input hatch. If multiple coolants are inputted, a random one will take effect.
+            // #zh_CN 每次运算将会消耗掉当前输入仓中所有输入的液体. 如果输入多种冷却液会生效随机一种.
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.05"))
+            // #tr tst.common.machine.Computer.tooltip.info.06
+            // # Overfrequency formula multiplier=§61+LOG (1.0+fluid quantity * multiplier * current heat)§7
+            // #zh_CN 超频公式 倍率=§61+LOG(1.0 + 流体数量*倍率*当前热量)§7
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.06"))
+            // #tr tst.common.machine.Computer.tooltip.info.07
+            // # Place a wireless quantum upgrade chip in the controller slot to enable wireless mode!
+            // #zh_CN 在控制器中摆放一个无线算力网络升级芯片来开启无线模式!
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.07"))
+            // #tr tst.common.machine.Computer.tooltip.info.08
+            // # Warning: Enabling wireless mode on multiple Astral Computing Array can cause quantum decoherence and disrupt wireless networks. Please don't do this
+            // #zh_CN 警告: 多个星规阵列同时开启无线模式会导致量子退相干使得无线网络紊乱. 请不要这么做
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.08"))
+            // #tr tst.common.machine.Computer.tooltip.info.09
+            // # no need to color the wireless optical master Connector and Wireless Optical Slave Connector
+            // #zh_CN 无需给无线光学主接口与副接口涂色
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.09"))
+            // #tr tst.common.machine.Computer.tooltip.info.10
+            // # If the computing power in the color channel is insufficient, it will be allocated in proportion to the set requirements in the network.
+            // #zh_CN 如果颜色频道内算力不足, 会按照设置的需求在网络中的比例进行分配.
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.10"))
+            // #tr tst.common.machine.Computer.tooltip.info.11
+            // # Four times power consumption!
+            // #zh_CN §o 四倍耗电!
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.11"))
+            // #tr tst.common.machine.Computer.tooltip.info.12
+            // # right-click to set the computing power requirements for the wireless optical secondary interface.
+            // #zh_CN 右键给无线光学副接口设置算力需求.
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.12"))
+            // #tr tst.common.machine.Computer.tooltip.info.13
+            // # join TST Dyson Sphere Team to share your computation in the same channel!
+            // #zh_CN 加入同一个tst戴森球团队以共享无线算力频道!
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.13"))
+            // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
+            .addOtherStructurePart(
+                translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),
+                "no need uncertain hatch!",
+                1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
+    // region Hatch Registration
 
     public final boolean superAddToMachineList(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
         return addRackComputationMonitorToMachine(aTileEntity, aBaseCasingIndex)
@@ -1402,6 +672,10 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         return false;
     }
 
+    // endregion
+
+    // region Nested Classes
+
     public enum ComputerHatches implements IHatchElement<TST_Computer> {
 
         ComputationMonitor;
@@ -1421,5 +695,7 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             return tstComputer.realMonitor != null ? 1 : 0;
         }
     }
+
+    // endregion
 
 }

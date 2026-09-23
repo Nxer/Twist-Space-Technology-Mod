@@ -1,19 +1,22 @@
 package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.ModNameDesc;
-import static com.Nxer.TwistSpaceTechnology.util.TextLocalization.authorName_Nxer;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAYS_ENERGY_ON_WIRELESS;
 
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 
 import gregtech.api.interfaces.ITexture;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
+import gregtech.api.metatileentity.implementations.MTEHatch;
 import tectech.thing.metaTileEntity.hatch.MTEHatchWirelessDynamoMulti;
 
-public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamoMulti {
+@SkipGenerateDescription
+public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamoMulti implements TSTTooltipCredit {
 
     // region Class Constructor
     public GT_Hatch_InfiniteWirelessDynamoHatch(String aName, byte aTier, String[] aDescription,
@@ -23,6 +26,7 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamo
 
     public GT_Hatch_InfiniteWirelessDynamoHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 65536);
+        registerTooltipCredits(ID.NXER);
     }
 
     @Override
@@ -61,13 +65,15 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamo
     // region General
     @Override
     public String[] getDescription() {
-        return new String[] { EnumChatFormatting.GRAY + "Stores energy globally in a network, up to 2^(2^31) EU.",
-            EnumChatFormatting.GRAY + "Does not connect to wires. This block accepts EU into the network.",
-            // #tr Description.InfiniteWirelessDynamoHatch.1
-            // # Infinite output voltage limit.
-            // #zh_CN 无限输出电压限制.
-            EnumChatFormatting.WHITE + TextEnums.tr("Description.InfiniteWirelessDynamoHatch.1"), ModNameDesc,
-            authorName_Nxer };
+        // #tr tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01
+        // # Infinite output voltage limit.
+        // #zh_CN 无限输出电压限制.
+        return MTEHatch.formatEnergyInfoDesc(
+            EnumChatFormatting.WHITE + TSTUtils.tr("tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01"),
+            true,
+            mTier,
+            maxAmperes,
+            "gt.blockmachines.dynamo_hatch.wireless");
     }
 
     @Override

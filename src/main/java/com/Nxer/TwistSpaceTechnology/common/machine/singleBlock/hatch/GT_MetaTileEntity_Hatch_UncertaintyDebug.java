@@ -3,21 +3,25 @@ package com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
 
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit;
 import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import tectech.thing.metaTileEntity.hatch.MTEHatchUncertainty;
 import tectech.util.CommonValues;
 
-public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty {
+@SkipGenerateDescription
+public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertainty implements TSTTooltipCredit {
 
     public GT_MetaTileEntity_Hatch_UncertaintyDebug(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier);
+        registerTooltipCredits(ID.NXER);
     }
 
     public GT_MetaTileEntity_Hatch_UncertaintyDebug(String aName, int aTier, String[] aDescription,
@@ -33,16 +37,15 @@ public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertaint
     @Override
     public String[] getDescription() {
         return new String[] { CommonValues.TEC_MARK_EM,
-            // #tr DebugUncertaintyHatch.getDescription.02
+            // #tr tst.common.machine.DebugUncertaintyHatch.tooltip.info.02
             // # Solve the impossible.
             // #zh_CN 解决不可能解决的问题.
-            TextEnums.tr("DebugUncertaintyHatch.getDescription.02"),
+            TSTUtils.tr("tst.common.machine.DebugUncertaintyHatch.tooltip.info.02"),
             "" + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD
-            // #tr DebugUncertaintyHatch.getDescription.01
+            // #tr tst.common.machine.DebugUncertaintyHatch.tooltip.info.01
             // # The quantum world collapses.
             // #zh_CN 量子世界坍塌.
-                + TextEnums.tr("DebugUncertaintyHatch.getDescription.01"),
-            TextLocalization.ModNameDesc };
+                + TSTUtils.tr("tst.common.machine.DebugUncertaintyHatch.tooltip.info.01") };
     }
 
     @Override

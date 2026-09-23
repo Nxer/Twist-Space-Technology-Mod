@@ -5,8 +5,8 @@ import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.ConsumeEutP
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T2Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.machine.ValueEnum.DurationPerProcessing_T3Coil_Wireless_HephaestusAtelier;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.tiered_structure_issue;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.NEGATIVE_ONE;
-import static com.Nxer.TwistSpaceTechnology.util.TstUtils.addStacksToList;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.NEGATIVE_ONE;
+import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.addStacksToList;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlock;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.ofBlocksTiered;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.transpose;
@@ -45,8 +45,10 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.config.Config;
-import com.Nxer.TwistSpaceTechnology.util.TextLocalization;
-import com.Nxer.TwistSpaceTechnology.util.TstSharedLocalization;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.ID;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
+import com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -56,6 +58,7 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import gregtech.api.GregTechAPI;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
 import gregtech.api.modularui2.GTGuiTextures;
@@ -72,11 +75,13 @@ import gregtech.api.util.MultiblockTooltipBuilder;
 import gregtech.api.util.OverclockCalculator;
 import tectech.thing.block.BlockQuantumGlass;
 
+@SkipGenerateDescription
 public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusAtelier> {
 
     // region Class Constructor
     public TST_HephaestusAtelier(int aID, String aName, String aNameRegional) {
         super(aID, aName, aNameRegional);
+        registerTooltipCredits(ID.NXER);
     }
 
     public TST_HephaestusAtelier(String aName) {
@@ -87,17 +92,307 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new TST_HephaestusAtelier(this.mName);
     }
+    // endregion
 
+    // region Structure
+    private final int horizontalOffSet = 16;
+    private final int verticalOffSet = 5;
+    private final int depthOffSet = 0;
+    private static final String STRUCTURE_PIECE_MAIN = "mainHephaestusAtelier";
+    private static IStructureDefinition<TST_HephaestusAtelier> STRUCTURE_DEFINITION = null;
+
+    @Override
+    public IStructureDefinition<TST_HephaestusAtelier> getStructureDefinition() {
+        if (STRUCTURE_DEFINITION == null) {
+            STRUCTURE_DEFINITION = StructureDefinition.<TST_HephaestusAtelier>builder()
+                .addShape(
+                    STRUCTURE_PIECE_MAIN,
+                    transpose(
+                        new String[][] {
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               DDD               ", "              DDDDD              ",
+                                "              DDDDD              ", "              DDDDD              ",
+                                "               DDD               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "              DDDDD              ",
+                                "             DD B DD             ", "             D BBB D             ",
+                                "             DBBBBBD             ", "             D BBB D             ",
+                                "             DD B DD             ", "              DDDDD              ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "              DDDDD              ", "             D BBB D             ",
+                                "            D BB BB D            ", "            DBBCCCBBD            ",
+                                "            DB CCC BD            ", "            DBBCCCBBD            ",
+                                "            D BB BB D            ", "             D BBB D             ",
+                                "              DDDDD              ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               DDD               ",
+                                "             DD B DD             ", "            D BB BB D            ",
+                                "            DBCCCCCBD            ", "           D BC   CB D           ",
+                                "           DB C   C BD           ", "           D BC   CB D           ",
+                                "            DBCCCCCBD            ", "            D BB BB D            ",
+                                "             DD B DD             ", "               DDD               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "             AAAAAAA             ",
+                                "          AAA       AAA          ", "        AA             AA        ",
+                                "       A                 A       ", "      A                   A      ",
+                                "     A                     A     ", "    A                       A    ",
+                                "   A                         A   ", "   A                         A   ",
+                                "  A                           A  ", "  A           DDDDD           A  ",
+                                "  A          D BBB D          A  ", " A          DBBCCCBBD          A ",
+                                " A         D BC   CB D         A ", " A         DBC     CBD         A ",
+                                " A         DBC     CBD         A ", " A         DBC     CBD         A ",
+                                " A         D BC   CB D         A ", " A          DBBCCCBBD          A ",
+                                "  A          D BBB D          A  ", "  A           DDDDD           A  ",
+                                "  A                           A  ", "   A                         A   ",
+                                "   A                         A   ", "    A                       A    ",
+                                "     A                     A     ", "      A                   A      ",
+                                "       A                 A       ", "        AA             AA        ",
+                                "          AAA       AAA          ", "             AAAAAAA             ",
+                                "                                 " },
+                            { "             AAA~AAA             ", "          AAAEEEEEEEAAA          ",
+                                "        AAEEE       EEEAA        ", "       AEE             EEA       ",
+                                "      AE                 EA      ", "     AE                   EA     ",
+                                "    AE                     EA    ", "   AE                       EA   ",
+                                "  AE                         EA  ", "  AE                         EA  ",
+                                " AE                           EA ", " AE           DDDDD           EA ",
+                                " AE          DBBBBBD          EA ", "AE          DB CCC BD          EA",
+                                "AE         DB C   C BD         EA", "AE         DBC     CBD         EA",
+                                "AE         DBC     CBD         EA", "AE         DBC     CBD         EA",
+                                "AE         DB C   C BD         EA", "AE          DB CCC BD          EA",
+                                " AE          DBBBBBD          EA ", " AE           DDDDD           EA ",
+                                " AE                           EA ", "  AE                         EA  ",
+                                "  AE                         EA  ", "   AE                       EA   ",
+                                "    AE                     EA    ", "     AE                   EA     ",
+                                "      AE                 EA      ", "       AEE             EEA       ",
+                                "        AAEEE       EEEAA        ", "          AAAEEEEEEEAAA          ",
+                                "             AAAAAAA             " },
+                            { "                                 ", "             AAAAAAA             ",
+                                "          AAA       AAA          ", "        AA             AA        ",
+                                "       A                 A       ", "      A                   A      ",
+                                "     A                     A     ", "    A                       A    ",
+                                "   A                         A   ", "   A                         A   ",
+                                "  A                           A  ", "  A           DDDDD           A  ",
+                                "  A          D BBB D          A  ", " A          DBBCCCBBD          A ",
+                                " A         D BC   CB D         A ", " A         DBC     CBD         A ",
+                                " A         DBC     CBD         A ", " A         DBC     CBD         A ",
+                                " A         D BC   CB D         A ", " A          DBBCCCBBD          A ",
+                                "  A          D BBB D          A  ", "  A           DDDDD           A  ",
+                                "  A                           A  ", "   A                         A   ",
+                                "   A                         A   ", "    A                       A    ",
+                                "     A                     A     ", "      A                   A      ",
+                                "       A                 A       ", "        AA             AA        ",
+                                "          AAA       AAA          ", "             AAAAAAA             ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "               DDD               ",
+                                "             DD B DD             ", "            D BB BB D            ",
+                                "            DBCCCCCBD            ", "           D BC   CB D           ",
+                                "           DB C   C BD           ", "           D BC   CB D           ",
+                                "            DBCCCCCBD            ", "            D BB BB D            ",
+                                "             DD B DD             ", "               DDD               ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "              DDDDD              ", "             D BBB D             ",
+                                "            D BB BB D            ", "            DBBCCCBBD            ",
+                                "            DB CCC BD            ", "            DBBCCCBBD            ",
+                                "            D BB BB D            ", "             D BBB D             ",
+                                "              DDDDD              ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "              DDDDD              ",
+                                "             DD B DD             ", "             D BBB D             ",
+                                "             DBBBBBD             ", "             D BBB D             ",
+                                "             DD B DD             ", "              DDDDD              ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " },
+                            { "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "               DDD               ", "              DDDDD              ",
+                                "              DDDDD              ", "              DDDDD              ",
+                                "               DDD               ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 ", "                                 ",
+                                "                                 " } }))
+                .addElement(
+                    'A',
+                    HatchElementBuilder.<TST_HephaestusAtelier>builder()
+                        .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy))
+                        .adder(TST_HephaestusAtelier::addToMachineList)
+                        .hint(1)
+                        .casingIndex(11)
+                        .buildAndChain(GregTechAPI.sBlockCasings1, 11))
+                .addElement('B', ofBlock(sBlockCasingsTT, 4))
+                .addElement('C', ofBlock(sBlockCasingsTT, 7))
+                .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
+                .addElement(
+                    'E',
+                    withChannel(
+                        "fieldcoil",
+                        ofBlocksTiered(
+                            TST_HephaestusAtelier::getBlockTier,
+                            ImmutableList.of(
+                                Pair.of(sBlockCasingsTT, 7),
+                                Pair.of(sBlockCasingsTT, 14),
+                                Pair.of(sBlockCasingsTT, 10)),
+                            -1,
+                            (m, t) -> m.coilTier = t,
+                            m -> m.coilTier)))
+                .build();
+            // Blocks:
+            // A -> ofBlock...(gt.blockcasings, 11, ...); // hatch
+            // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
+            // C -> ofBlock...(gt.blockcasingsTT, 7, ...);
+            // D -> ofBlock...(tile.quantumGlass, 0, ...);
+            // E -> ofBlock...(tile.stonebricksmooth, 0, ...); // tiered coils
+        }
+        return STRUCTURE_DEFINITION;
+    }
+
+    @Override
+    public void construct(ItemStack stackSize, boolean hintsOnly) {
+        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
+    }
+
+    @Override
+    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
+        if (mMachine) return -1;
+        return survivalBuildPiece(
+            STRUCTURE_PIECE_MAIN,
+            stackSize,
+            horizontalOffSet,
+            verticalOffSet,
+            depthOffSet,
+            elementBudget,
+            env,
+            false,
+            true);
+    }
+
+    @Override
+    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
+        repairMachine();
+        coilTier = -1;
+        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
+        if (coilTier < 1) {
+            errors.add(tiered_structure_issue);
+            return;
+        }
+        if (coilTier == 1) {
+            checkHasAnyEnergy(errors);
+            maxEut = (long) (15d / 16 * getMaxInputEu());
+            maxProcessNormalModeFurnace = (int) Math
+                .min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
+        }
+
+    }
     // endregion
 
     // region Processing Logic
     protected static final BigInteger CONSUME_EU_PER_SMELTING = BigInteger
         .valueOf(Config.ConsumeEuPerSmelting_HephaestusAtelier);
+
     protected int coilTier = -1;
     protected int maxProcessNormalModeFurnace = 0;
     protected long maxEut = 0;
     protected UUID ownerUUID;
     protected boolean startRecipeProcessing = false;
+
+    public static final UITexture[] tMachineModeIcons = new UITexture[] {
+        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return machineMode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
+    }
+
+    @NotNull
+    @Override
+    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
+        return Arrays.asList(RecipeMaps.alloySmelterRecipes, RecipeMaps.furnaceRecipes);
+    }
 
     @Override
     public int totalMachineMode() {
@@ -108,67 +403,51 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         return 2;
     }
 
-    public static final UITexture[] tMachineModeIcons = new UITexture[] {
-        GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL, GTGuiTextures.OVERLAY_BUTTON_MACHINEMODE_STEAM };
-
     @Override
     public UITexture[] getMachineModeIcons() {
         return tMachineModeIcons;
     }
 
-    // @Override
-    // public void setMachineModeIcons() {
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_LPF_METAL);
-    // machineModeIcons.add(GTUITextures.OVERLAY_BUTTON_MACHINEMODE_STEAM);
-    // }
-
     @Override
     public String getMachineModeName() {
-        return StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + machineMode);
+        // #tr tst.common.machine.HephaestusAtelier.mode.0
+        // # Mode : Furnace
+        // #zh_CN 模式: 熔炉
+
+        // #tr tst.common.machine.HephaestusAtelier.mode.1
+        // # Mode : Alloy Smelter
+        // #zh_CN 模式: 合金冶炼炉
+        return StatCollector.translateToLocal("tst.common.machine.HephaestusAtelier.mode." + machineMode);
     }
 
     @Override
-    public void saveNBTData(NBTTagCompound aNBT) {
-        super.saveNBTData(aNBT);
-        aNBT.setByte("mode", (byte) machineMode);
-        aNBT.setInteger("coilTier", coilTier);
-        aNBT.setInteger("maxProcessNormalModeFurnace", maxProcessNormalModeFurnace);
-        aNBT.setLong("maxEut", maxEut);
-        aNBT.setBoolean("startRecipeProcessing", startRecipeProcessing);
+    public int getMaxParallelRecipes() {
+        return Integer.MAX_VALUE;
     }
 
     @Override
-    public void loadNBTData(NBTTagCompound aNBT) {
-        super.loadNBTData(aNBT);
-        machineMode = aNBT.getByte("mode");
-        coilTier = aNBT.getInteger("coilTier");
-        maxProcessNormalModeFurnace = aNBT.getInteger("maxProcessNormalModeFurnace");
-        maxEut = aNBT.getLong("maxEut");
-        startRecipeProcessing = aNBT.getBoolean("startRecipeProcessing");
+    protected float getSpeedBonus() {
+        return 1;
     }
 
     @Override
-    public String[] getInfoData() {
-        String[] origin = super.getInfoData();
-        String[] ret;
-        if (coilTier > 1) {
-            ret = new String[origin.length + 2];
-            System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length - 1] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
-            ret[origin.length] = "" + EnumChatFormatting.RED
-                + EnumChatFormatting.BOLD
-                + TextLocalization.Info_Wireless_mode_enabled;
-        } else {
-            ret = new String[origin.length + 1];
-            System.arraycopy(origin, 0, ret, 0, origin.length);
-            ret[origin.length] = TstSharedLocalization.MachineInfo.coilTier(coilTier);
-        }
-
-        return ret;
+    protected boolean isEnablePerfectOverclock() {
+        return true;
     }
 
-    protected boolean isWirelessMode() {
-        return coilTier > 1;
+    @Override
+    public boolean supportsVoidProtection() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsBatchMode() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsSingleRecipeLocking() {
+        return false;
     }
 
     @Override
@@ -204,6 +483,30 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     public CheckRecipeResult checkProcessing() {
         lEUt = 0;
         return machineMode == 1 ? checkProcessingAlloySmelter() : checkProcessingFurnace();
+    }
+
+    @Override
+    public String[] getInfoData() {
+        String[] origin = super.getInfoData();
+        String[] ret;
+        if (coilTier > 1) {
+            ret = new String[origin.length + 2];
+            System.arraycopy(origin, 0, ret, 0, origin.length);
+            ret[origin.length - 1] = TSTSharedLocalization.MachineInfo.coilTier(coilTier);
+            ret[origin.length] = "" + EnumChatFormatting.RED
+                + EnumChatFormatting.BOLD
+                + TSTSharedLocalization.MachineInfo.Info_Wireless_mode_enabled;
+        } else {
+            ret = new String[origin.length + 1];
+            System.arraycopy(origin, 0, ret, 0, origin.length);
+            ret[origin.length] = TSTSharedLocalization.MachineInfo.coilTier(coilTier);
+        }
+
+        return ret;
+    }
+
+    protected boolean isWirelessMode() {
+        return coilTier > 1;
     }
 
     public CheckRecipeResult checkProcessingAlloySmelter() {
@@ -420,131 +723,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         this.ownerUUID = aBaseMetaTileEntity.getOwnerUuid();
     }
 
-    @Override
-    public RecipeMap<?> getRecipeMap() {
-        return machineMode == 1 ? RecipeMaps.alloySmelterRecipes : RecipeMaps.furnaceRecipes;
-    }
-
-    @NotNull
-    @Override
-    public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(RecipeMaps.alloySmelterRecipes, RecipeMaps.furnaceRecipes);
-    }
-
-    @Override
-    protected boolean isEnablePerfectOverclock() {
-        return true;
-    }
-
-    @Override
-    protected float getSpeedBonus() {
-        return 1;
-    }
-
-    @Override
-    public int getMaxParallelRecipes() {
-        return Integer.MAX_VALUE;
-    }
-
-    @Override
-    public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
-        repairMachine();
-        coilTier = -1;
-        if (!checkPiece(STRUCTURE_PIECE_MAIN, horizontalOffSet, verticalOffSet, depthOffSet, errors)) return;
-        if (coilTier < 1) {
-            errors.add(tiered_structure_issue);
-            return;
-        }
-        if (coilTier == 1) {
-            checkHasAnyEnergy(errors);
-            maxEut = (long) (15d / 16 * getMaxInputEu());
-            maxProcessNormalModeFurnace = (int) Math
-                .min(Integer.MAX_VALUE, (maxEut / ConsumeEutPerParallel_HephaestusAtelier));
-        }
-
-    }
-    // endregion
-
-    // region Structure
-    // spotless:off
-    private final int horizontalOffSet = 16;
-    private final int verticalOffSet = 5;
-    private final int depthOffSet = 0;
-    private static final String STRUCTURE_PIECE_MAIN = "mainHephaestusAtelier";
-    private static IStructureDefinition<TST_HephaestusAtelier> STRUCTURE_DEFINITION = null;
-    @Override
-    public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);
-    }
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, ISurvivalBuildEnvironment env) {
-        if (mMachine) return -1;
-        return survivalBuildPiece(STRUCTURE_PIECE_MAIN, stackSize, horizontalOffSet, verticalOffSet, depthOffSet, elementBudget, env, false, true);
-    }
-
-    @Override
-    public IStructureDefinition<TST_HephaestusAtelier> getStructureDefinition() {
-        if (STRUCTURE_DEFINITION == null) {
-            STRUCTURE_DEFINITION =
-                StructureDefinition
-                    .<TST_HephaestusAtelier>builder()
-                    .addShape(
-                        STRUCTURE_PIECE_MAIN,
-                        transpose(
-                            new String[][]{
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","              DDDDD              ","              DDDDD              ","              DDDDD              ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             DD B DD             ","             D BBB D             ","             DBBBBBD             ","             D BBB D             ","             DD B DD             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             D BBB D             ","            D BB BB D            ","            DBBCCCBBD            ","            DB CCC BD            ","            DBBCCCBBD            ","            D BB BB D            ","             D BBB D             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","             DD B DD             ","            D BB BB D            ","            DBCCCCCBD            ","           D BC   CB D           ","           DB C   C BD           ","           D BC   CB D           ","            DBCCCCCBD            ","            D BB BB D            ","             DD B DD             ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","             AAAAAAA             ","          AAA       AAA          ","        AA             AA        ","       A                 A       ","      A                   A      ","     A                     A     ","    A                       A    ","   A                         A   ","   A                         A   ","  A                           A  ","  A           DDDDD           A  ","  A          D BBB D          A  "," A          DBBCCCBBD          A "," A         D BC   CB D         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         D BC   CB D         A "," A          DBBCCCBBD          A ","  A          D BBB D          A  ","  A           DDDDD           A  ","  A                           A  ","   A                         A   ","   A                         A   ","    A                       A    ","     A                     A     ","      A                   A      ","       A                 A       ","        AA             AA        ","          AAA       AAA          ","             AAAAAAA             ","                                 "},
-                                {"             AAA~AAA             ","          AAAEEEEEEEAAA          ","        AAEEE       EEEAA        ","       AEE             EEA       ","      AE                 EA      ","     AE                   EA     ","    AE                     EA    ","   AE                       EA   ","  AE                         EA  ","  AE                         EA  "," AE                           EA "," AE           DDDDD           EA "," AE          DBBBBBD          EA ","AE          DB CCC BD          EA","AE         DB C   C BD         EA","AE         DBC     CBD         EA","AE         DBC     CBD         EA","AE         DBC     CBD         EA","AE         DB C   C BD         EA","AE          DB CCC BD          EA"," AE          DBBBBBD          EA "," AE           DDDDD           EA "," AE                           EA ","  AE                         EA  ","  AE                         EA  ","   AE                       EA   ","    AE                     EA    ","     AE                   EA     ","      AE                 EA      ","       AEE             EEA       ","        AAEEE       EEEAA        ","          AAAEEEEEEEAAA          ","             AAAAAAA             "},
-                                {"                                 ","             AAAAAAA             ","          AAA       AAA          ","        AA             AA        ","       A                 A       ","      A                   A      ","     A                     A     ","    A                       A    ","   A                         A   ","   A                         A   ","  A                           A  ","  A           DDDDD           A  ","  A          D BBB D          A  "," A          DBBCCCBBD          A "," A         D BC   CB D         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         DBC     CBD         A "," A         D BC   CB D         A "," A          DBBCCCBBD          A ","  A          D BBB D          A  ","  A           DDDDD           A  ","  A                           A  ","   A                         A   ","   A                         A   ","    A                       A    ","     A                     A     ","      A                   A      ","       A                 A       ","        AA             AA        ","          AAA       AAA          ","             AAAAAAA             ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","             DD B DD             ","            D BB BB D            ","            DBCCCCCBD            ","           D BC   CB D           ","           DB C   C BD           ","           D BC   CB D           ","            DBCCCCCBD            ","            D BB BB D            ","             DD B DD             ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             D BBB D             ","            D BB BB D            ","            DBBCCCBBD            ","            DB CCC BD            ","            DBBCCCBBD            ","            D BB BB D            ","             D BBB D             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","              DDDDD              ","             DD B DD             ","             D BBB D             ","             DBBBBBD             ","             D BBB D             ","             DD B DD             ","              DDDDD              ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "},
-                                {"                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","               DDD               ","              DDDDD              ","              DDDDD              ","              DDDDD              ","               DDD               ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 ","                                 "}
-                            }
-                        )
-                    )
-                    .addElement(
-                        'A',
-                        HatchElementBuilder
-                            .<TST_HephaestusAtelier>builder()
-                            .atLeast(InputBus, OutputBus, Energy.or(ExoticEnergy) )
-                            .adder(TST_HephaestusAtelier::addToMachineList)
-                            .hint(1)
-                            .casingIndex(11)
-                            .buildAndChain(GregTechAPI.sBlockCasings1, 11))
-                    .addElement('B', ofBlock(sBlockCasingsTT, 4))
-                    .addElement('C', ofBlock(sBlockCasingsTT, 7))
-                    .addElement('D', ofBlock(BlockQuantumGlass.INSTANCE, 0))
-                    .addElement(
-                        'E',
-                        withChannel(
-                            "fieldcoil",
-                            ofBlocksTiered(
-                                TST_HephaestusAtelier::getBlockTier,
-                                ImmutableList.of(
-                                    Pair.of(sBlockCasingsTT, 7),
-                                    Pair.of(sBlockCasingsTT, 14),
-                                    Pair.of(sBlockCasingsTT, 10)
-                                ),
-                                -1,
-                                (m, t) -> m.coilTier = t,
-                                m -> m.coilTier
-                            )
-                        ))
-                    .build();
-//            Blocks:
-//            A -> ofBlock...(gt.blockcasings, 11, ...); // hatch
-//            B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-//            C -> ofBlock...(gt.blockcasingsTT, 7, ...);
-//            D -> ofBlock...(tile.quantumGlass, 0, ...);
-//            E -> ofBlock...(tile.stonebricksmooth, 0, ...); // tiered coils
-        }
-        return STRUCTURE_DEFINITION;
-    }
-
     private static Integer getBlockTier(Block block, int meta) {
         if (sBlockCasingsTT == block) {
             return switch (meta) {
@@ -558,60 +736,33 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         }
     }
 
-    // spotless:on
     // endregion
 
-    // region General
+    // region NBT
 
     @Override
-    public boolean supportsSingleRecipeLocking() {
-        return false;
+    public void saveNBTData(NBTTagCompound aNBT) {
+        super.saveNBTData(aNBT);
+        aNBT.setByte("mode", (byte) machineMode);
+        aNBT.setInteger("coilTier", coilTier);
+        aNBT.setInteger("maxProcessNormalModeFurnace", maxProcessNormalModeFurnace);
+        aNBT.setLong("maxEut", maxEut);
+        aNBT.setBoolean("startRecipeProcessing", startRecipeProcessing);
     }
 
     @Override
-    public boolean supportsBatchMode() {
-        return false;
+    public void loadNBTData(NBTTagCompound aNBT) {
+        super.loadNBTData(aNBT);
+        machineMode = aNBT.getByte("mode");
+        coilTier = aNBT.getInteger("coilTier");
+        maxProcessNormalModeFurnace = aNBT.getInteger("maxProcessNormalModeFurnace");
+        maxEut = aNBT.getLong("maxEut");
+        startRecipeProcessing = aNBT.getBoolean("startRecipeProcessing");
     }
 
-    @Override
-    public boolean supportsVoidProtection() {
-        return false;
-    }
+    // endregion
 
-    @Override
-    protected MultiblockTooltipBuilder createTooltip() {
-        final MultiblockTooltipBuilder tt = new MultiblockTooltipBuilder();
-        tt.addMachineType(TextLocalization.Tooltip_HephaestusAtelier_MachineType)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_Controller)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_01)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_02)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_03)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_04)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_05)
-            .addInfo(TextLocalization.textScrewdriverChangeMode)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_06)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_07)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_08)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_09)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_10)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_11)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_12)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_13)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_14)
-            .addInfo(TextLocalization.Tooltip_HephaestusAtelier_15)
-            .addSeparator()
-            .addInfo(TextLocalization.StructureTooComplex)
-            .addInfo(TextLocalization.BLUE_PRINT_INFO)
-            .addStructureInfo(TextLocalization.Tooltip_HephaestusAtelier_2_01)
-            .addStructureInfo(TextLocalization.Tooltip_DoNotNeedMaintenance)
-            .beginStructureBlock(33, 11, 33, false)
-            .addController(TextLocalization.textFrontCenter)
-            .addInputBus(TextLocalization.textAnyCasing, 1)
-            .addOutputBus(TextLocalization.textAnyCasing, 1)
-            .addEnergyHatch(TextLocalization.textAnyCasing, 1)
-            .toolTipFinisher(TextLocalization.ModName);
-        return tt;
-    }
+    // region Textures
 
     @Override
     public ITexture[] getTexture(IGregTechTileEntity aBaseMetaTileEntity, ForgeDirection side, ForgeDirection aFacing,
@@ -638,4 +789,99 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
         }
         return new ITexture[] { casingTexturePages[0][11] };
     }
+
+    // endregion
+
+    // region Tooltip
+
+    @Override
+    protected MultiblockTooltipBuilder createTooltip() {
+        final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr tst.common.machine.HephaestusAtelier.tooltip.machine_type
+        // # Furnace | Alloy Smelter
+        // #zh_CN 熔炉 | 合金炉
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.machine_type"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.controller
+            // # Controller block for the Hephaestus' Atelier
+            // #zh_CN 赫菲斯托斯的工坊的控制器方块
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.controller"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.01
+            // # {\DARK_RED}{\ITALIC}“And first Hephaestus makes a great and massive shield ...
+            // #zh_CN {\DARK_RED}{\ITALIC}“最先，火神赫菲斯托斯做了一个超级厉害的巨大盾牌 ...
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.01"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.02
+            // # {\DARK_RED}{\ITALIC}{\SPACE}{\SPACE}{\SPACE}{\SPACE}... And he forged on the shield two noble cities.”
+            // #zh_CN {\DARK_RED}{\ITALIC}{\SPACE}{\SPACE}{\SPACE}{\SPACE}... 他在盾牌上锻造了两座宏伟城市。”
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.02"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.03
+            // # Even in the future, the most primitive means of smelting will be needed.
+            // #zh_CN 即使是在未来, 这最原始的冶炼手段也是有需要的.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.03"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.04
+            // # Parallelism across recipes is possible, even using Crafting Input hatches.
+            // #zh_CN 可以跨配方并行, 即便使用样板输入仓室.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.04"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.05
+            // # The machine will adjust its operation according to the installed coil level.
+            // #zh_CN 机器将根据线圈等级调整自身运行状态.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.05"))
+            .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.06
+            // # {\GOLD} ----- T1 Coil : Molecular Coil -----
+            // #zh_CN {\GOLD} ----- T1 线圈 : 分子线圈 -----
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.06"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.07
+            // # Like other normal machine, use energy from energy hatches and do overclock.
+            // #zh_CN 和其他普通机器一样, 使用能源仓获取能源, 进行超频.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.07"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.08
+            // # {\AQUA}2.1G{\GRAY} parallel. Furnace mode every item smelting consume {\GOLD}7 EU/t{\GRAY} and {\GOLD}25.6s{\GRAY}.
+            // #zh_CN {\AQUA}2.1G{\GRAY} 并行. 熔炉模式每冶炼一个物品消耗 {\GOLD}7 EU/t{\GRAY} 和耗时 {\GOLD}25.6s{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.08"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.09
+            // # {\GOLD} ----- T2 Coil : Ultimate Containment Field Generator -----
+            // #zh_CN {\GOLD} ----- T2 线圈 : 终极遏制场发生器 -----
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.09"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.10
+            // # Directly consume energy from wireless EU net.
+            // #zh_CN 直接从无线EU网络获取能量.(无线模式).
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.10"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.11
+            // # {\AQUA}Infinite parallel{\GRAY}. Furnace mode every item smelting consume 2048 EU.
+            // #zh_CN 无限并行. 熔炉模式每冶炼一个物品消耗 {\GOLD}2048 EU{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.11"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.12
+            // # Processing time is fixed at {\GOLD}12.8s{\GRAY}.
+            // #zh_CN 每次运行时间固定为 {\GOLD}12.8s{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.12"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.13
+            // # {\GOLD} ----- T3 Coil : Teleportation Casing -----
+            // #zh_CN {\GOLD} ----- T3 线圈 : 传输机械方块 -----
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.13"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.14
+            // # Processing time {\GOLD}1s{\GRAY}.
+            // #zh_CN 每次运行时间固定为 {\GOLD}1s{\GRAY}.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.14"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.15
+            // # Otherwise same as T2.
+            // #zh_CN 其他方面与 T2 相同.
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.15"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.structure.01
+            // # Must install energy hatch when in T1.
+            // #zh_CN T1等级线圈(普通模式)时必须安装能源仓.
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.structure.01"))
+            .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
+            .beginStructureBlock(33, 11, 33, false)
+            .addController(TSTSharedLocalization.Structure.textFrontCenter)
+            .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addOutputBus(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .addEnergyHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
+            .toolTipFinisher();
+        // spotless:on
+        return tt;
+    }
+
+    // endregion
+
 }

@@ -48,7 +48,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
 
     @Override
     public String getDisplayName() {
-        return translateToLocal("EcoSphereSimulator.modeMsg.0");
+        return translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.mode.0");
     }
 
     @Override
@@ -154,7 +154,7 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
         for (SaplingProducts sapling : saplings) saplingNames.add(
             sapling.sapling()
                 .getDisplayName());
-        // #tr EcoSphereSimulator.gui.runningSaplings
+        // #tr tst.ecosphere.machine.EcoSphereSimulator.gui.running_saplings
         // # Saplings
         // #zh_CN 树苗
         return EcoSphereModeResult.standard(
@@ -163,8 +163,9 @@ public final class TreeGrowthSimulatorMode implements IEcoSphereMode {
             // #zh_CN {\GREEN}树木生长中
             SimpleResultWithText.ofSuccessText(
                 translateToLocal("GT5U.gui.text.recipe_result.tst_ess_growing_trees") + "\n"
-                    + EcoSphereModeSupport
-                        .formatRunningInputs(translateToLocal("EcoSphereSimulator.gui.runningSaplings"), saplingNames)),
+                    + EcoSphereModeSupport.formatRunningInputs(
+                        translateToLocal("tst.ecosphere.machine.EcoSphereSimulator.gui.running_saplings"),
+                        saplingNames)),
             outputs,
             parallelResult.tier());
     }

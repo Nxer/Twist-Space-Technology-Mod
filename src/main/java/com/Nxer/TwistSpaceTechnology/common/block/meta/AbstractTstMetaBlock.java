@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.Unmodifiable;
 import com.Nxer.TwistSpaceTechnology.client.TstCreativeTabs;
 import com.Nxer.TwistSpaceTechnology.common.api.IHasVariantAndTooltips;
 import com.Nxer.TwistSpaceTechnology.common.item.blockItem.TstMetaBlockItem;
-import com.Nxer.TwistSpaceTechnology.util.TstUtils;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -43,6 +44,8 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasVariantA
 
     protected Map<Integer, IIcon> iconMap = new HashMap<>();
 
+    private final String localizationName;
+
     public AbstractTstMetaBlock(String unlocalizedName) {
         this(Material.iron, unlocalizedName);
     }
@@ -51,6 +54,16 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasVariantA
         super(material);
         this.setBlockName(unlocalizedName);
         this.setCreativeTab(TstCreativeTabs.TabMetaBlocks);
+        this.localizationName = unlocalizedName.startsWith("MetaBlock") ? unlocalizedName
+            : unlocalizedName.replaceAll("([A-Z])([A-Z][a-z])", "$1_$2")
+                .replaceAll("([a-z])([A-Z])", "$1_$2")
+                .replaceAll("([A-Za-z])([0-9])", "$1_$2")
+                .toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return "tile.tst.common." + localizationName;
     }
 
     @Override
@@ -126,7 +139,7 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasVariantA
     protected static ItemStack checkAndGetVariant(Block self, int meta, Collection<Integer> allowMetaValues)
         throws IllegalArgumentException {
         if (allowMetaValues.contains(meta)) {
-            return TstUtils.newItemWithMeta(self, meta);
+            return TSTUtils.newItemWithMeta(self, meta);
         } else {
             throw new IllegalArgumentException("Invalid meta value: " + meta);
         }
@@ -157,7 +170,7 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasVariantA
                     + ")");
         } else {
             allowMetaValues.add(meta);
-            return TstUtils.newItemWithMeta(self, meta);
+            return TSTUtils.newItemWithMeta(self, meta);
         }
     }
 
@@ -173,7 +186,7 @@ public abstract class AbstractTstMetaBlock extends Block implements IHasVariantA
     @ApiStatus.Internal
     protected static ItemStack[] getAllVariants(Block self, Collection<Integer> allowMetaValues) {
         return allowMetaValues.stream()
-            .map(m -> TstUtils.newItemWithMeta(self, m))
+            .map(m -> TSTUtils.newItemWithMeta(self, m))
             .toArray(ItemStack[]::new);
     }
 }

@@ -18,7 +18,7 @@ public class CokingFactoryRecipePool {
 
     public static void loadRecipes() {
 
-        final IRecipeMap coke = GTCMRecipe.CokingFactoryRecipes;
+        final IRecipeMap coke = GTCMRecipe.CokingFactoryRecipeMap;
 
         // Raw Radox
         GTValues.RA.stdBuilder()

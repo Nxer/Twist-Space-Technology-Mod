@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.ModularizedMachineLogic.ModularHatchTypes;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.modularHatches.ModularHatchBase;
-import com.Nxer.TwistSpaceTechnology.util.TextEnums;
+import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -51,10 +51,11 @@ public abstract class SpeedControllerBase extends ModularHatchBase {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         currentTip.add(
-            // #tr Waila.SpeedControllerBase.1
+            // #tr tst.modular.machine.SpeedControllerBase.waila.speed_controller_base.1
             // # Speed Multiplier
             // #zh_CN 速度倍率
-            EnumChatFormatting.AQUA + TextEnums.tr("Waila.SpeedControllerBase.1")
+            EnumChatFormatting.AQUA
+                + TSTUtils.tr("tst.modular.machine.SpeedControllerBase.waila.speed_controller_base.1")
                 + EnumChatFormatting.RESET
                 + ": "
                 + EnumChatFormatting.GOLD
