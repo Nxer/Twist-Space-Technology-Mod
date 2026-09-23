@@ -310,6 +310,34 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     }
 
     /**
+     * Gets the voltage tier of the energy hatch that provides the most available EU/t. This includes normal and exotic
+     * energy hatches. If multiple hatches provide the same EU/t, the hatch with the higher input voltage is selected.
+     *
+     * @return The dominant energy hatch voltage tier, or 0 when no valid energy hatch is installed.
+     */
+    public int getDominantInputVoltageTier() {
+        long dominantInputPower = 0;
+        long dominantInputVoltage = 0;
+        int dominantInputTier = 0;
+        for (MTEHatch energyHatch : validMTEList(getExoticAndNormalEnergyHatchList())) {
+            long inputVoltage = energyHatch.getBaseMetaTileEntity()
+                .getInputVoltage();
+            long inputAmperage = energyHatch.maxWorkingAmperesIn();
+            if (inputVoltage <= 0 || inputAmperage <= 0) continue;
+
+            long inputPower = inputVoltage > Long.MAX_VALUE / inputAmperage ? Long.MAX_VALUE
+                : inputVoltage * inputAmperage;
+            if (inputPower > dominantInputPower
+                || (inputPower == dominantInputPower && inputVoltage > dominantInputVoltage)) {
+                dominantInputPower = inputPower;
+                dominantInputVoltage = inputVoltage;
+                dominantInputTier = (int) energyHatch.getInputTier();
+            }
+        }
+        return dominantInputTier;
+    }
+
+    /**
      * Remove machine efficiency.
      *
      * @return Eu consumption per tick.

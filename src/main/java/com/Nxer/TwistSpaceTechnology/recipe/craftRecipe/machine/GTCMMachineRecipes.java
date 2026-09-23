@@ -3263,8 +3263,8 @@ public class GTCMMachineRecipes {
 
                     ItemList.Electric_Pump_UV.get(8),
                     ItemList.Conveyor_Module_UV.get(16),
-                    new Object[] { OrePrefixes.circuit.get(Materials.UV), 32},
-                    new Object[] { OrePrefixes.circuit.get(Materials.ZPM), 64},
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 32},
+                    new Object[] { OrePrefixes.circuit.get(Materials.UV), 64},
 
                     HighEnergyFlowCircuit.get(64),
                     ItemList.Circuit_Chip_QPIC.get(32),
@@ -3289,7 +3289,7 @@ public class GTCMMachineRecipes {
                 4,
                 new Object[]{
                     ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
-                    ItemList.ZPM2.get(1),
+                    ItemList.ZPM3.get(1),
                     Materials.Silver.getNanite(2),
                     ItemRefer.Fluid_Storage_Core_T5.get(2),
 
@@ -3298,8 +3298,8 @@ public class GTCMMachineRecipes {
                     ItemList.Circuit_Chip_QPIC.get(64),
                     ItemList.Circuit_Chip_QPIC.get(64),
 
-                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 16},
-                    new Object[] { OrePrefixes.circuit.get(Materials.UV), 32},
+                    new Object[] { OrePrefixes.circuit.get(Materials.UEV), 16},
+                    new Object[] { OrePrefixes.circuit.get(Materials.UHV), 32},
                     MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN.getBolt(48),
                     MaterialsElements.STANDALONE.CHRONOMATIC_GLASS.getFoil(64),
                 },

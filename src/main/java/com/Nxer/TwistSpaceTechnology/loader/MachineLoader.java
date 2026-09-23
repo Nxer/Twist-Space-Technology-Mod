@@ -75,6 +75,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnaceLegacy;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
@@ -582,6 +583,12 @@ public final class MachineLoader {
                 new TST_SwelegfyrBlastFurnace(
                     19068,
                     "NameSwelegfyrBlastFurnace",
+                    TextEnums.tr("NameSwelegfyrBlastFurnace")));
+            // TODO: Remove the transitional controller (19502) in the next version.
+            GTCMItemList.SwelegfyrBlastFurnaceLegacy.set(
+                new TST_SwelegfyrBlastFurnaceLegacy(
+                    19502,
+                    "NameSwelegfyrBlastFurnaceLegacy",
                     TextEnums.tr("NameSwelegfyrBlastFurnace")));
         }
 

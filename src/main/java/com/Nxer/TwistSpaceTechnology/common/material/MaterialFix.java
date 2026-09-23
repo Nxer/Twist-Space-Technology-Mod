@@ -67,8 +67,8 @@ public class MaterialFix {
                         Materials.DarkIron.getDust(1))
                     .fluidInputs(Materials.Hydrogen.getGas(1000 * 14))
                     .fluidOutputs(MaterialsTST.NeutroniumAlloy.getMolten(16 * 144))
-                    .eut(TierEU.RECIPE_UIV)
-                    .duration(660 * 20)
+                    .eut(TierEU.RECIPE_UEV)
+                    .duration(600 * 20)
                     .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
 
                 // Axonis Alloy

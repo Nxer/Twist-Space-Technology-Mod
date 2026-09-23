@@ -309,6 +309,7 @@ public enum GTCMItemList {
     ProcessingArray,
     AdvCircuitAssemblyLine,
     SwelegfyrBlastFurnace,
+    SwelegfyrBlastFurnaceLegacy,
     HyperThermalConvector,
     MeteorMiner,
     UniversalGenerator,
