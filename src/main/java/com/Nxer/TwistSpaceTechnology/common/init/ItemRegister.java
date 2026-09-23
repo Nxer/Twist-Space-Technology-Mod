@@ -1,6 +1,9 @@
 package com.Nxer.TwistSpaceTechnology.common.init;
 
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.ActualPattern;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereExecutionProtocol;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.EcoSphereUpgrade;
+import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.InfinityDistilledWaterStorageCell;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItem01;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemFlask;
 import static com.Nxer.TwistSpaceTechnology.common.init.TstItems.MetaItemIzumik;
@@ -25,8 +28,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemRegister {
 
     public static void registryItems() {
-        Item[] itemsToReg = { MetaItem01, ProofOfHeroes, ProofOfGods, MultiStructuresLinkTool, MetaItemRune,
-            MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit, MetaItemFlask };
+        // Keep the protocol and upgrade registry entries adjacent; saved worlds may still remap numeric IDs.
+        Item[] itemsToReg = { MetaItem01, EcoSphereExecutionProtocol, EcoSphereUpgrade, ProofOfHeroes, ProofOfGods,
+            MultiStructuresLinkTool, MetaItemRune, MetaItemIzumik, Yamato, ActualPattern, MetaItemNamedCircuit,
+            MetaItemFlask, InfinityDistilledWaterStorageCell, };
 
         for (Item item : itemsToReg) {
             GameRegistry.registerItem(item, item.unlocalizedName);
@@ -988,47 +993,52 @@ public class ItemRegister {
         /*    ---Meta Item Izumik---    */
 
         // #tr item.MetaItemIzumik.0.name
-        // # {\BLUE}{\BOLD}Fount Of Ecology
+        // # {\BLUE}{\BOLD}Fount of Ecology
         // #zh_CN {\BLUE}{\BOLD}生态泉源
-
-        // #tr FountOfEcology.tooltips.01
-        // # {\AQUA}A unique looking jellyfish
-        // #zh_CN {\AQUA}一只长相奇特的水母
-
-        // #tr FountOfEcology.tooltips.02
-        // # {\AQUA}Well......
-        // #zh_CN {\AQUA}等下......
-
-        // #tr FountOfEcology.tooltips.03
-        // # {\GOLD}A perfect creature close to the singularity of evolution, The counselor and lear of The Many.
-        // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
-
-        // #tr FountOfEcology.tooltips.04
-        // # {\GOLD}"The Afterborn Firstborn", Seaborn
-        // #zh_CN {\GOLD}"后生的出初生" 海嗣
-        GTCMItemList.FountOfEcology.set(MetaItemIzumik.registerVariantWithTooltips(0, new String[]{tr("FountOfEcology.tooltips.01"), tr("FountOfEcology.tooltips.02")}, new String[]{tr("FountOfEcology.tooltips.03"), tr("FountOfEcology.tooltips.04")}));
+        GTCMItemList.FountOfEcology.set(MetaItemIzumik.registerVariantWithTooltips(
+            0,
+            new String[] {
+                // #tr FountOfEcology.tooltips.01
+                // # {\AQUA}A unique looking jellyfish
+                // #zh_CN {\AQUA}一只长相奇特的水母
+                tr("FountOfEcology.tooltips.01"),
+                // #tr FountOfEcology.tooltips.02
+                // # {\AQUA}Well......
+                // #zh_CN {\AQUA}等下......
+                tr("FountOfEcology.tooltips.02") },
+            new String[] {
+                // #tr FountOfEcology.tooltips.03
+        // # {\GOLD}A perfect creature nearing the singularity of evolution, the counselor and guide of The Many.
+                // #zh_CN {\GOLD}临近进化奇点的完美生物 大群的建言者与引航者
+                tr("FountOfEcology.tooltips.03"),
+                // #tr FountOfEcology.tooltips.04
+                // # {\GOLD}"The Afterborn Firstborn", Seaborn
+                // #zh_CN {\GOLD}"后生的出初生" 海嗣
+            tr("FountOfEcology.tooltips.04") }));
 
         // #tr item.MetaItemIzumik.1.name
         // # {\DARK_AQUA}"Offspring"
         // #zh_CN {\DARK_AQUA}"子代"
-
-        // #tr Offspring.tooltips.01
-        // # {\AQUA}A weak little jellyfish
-        // #zh_CN {\AQUA}一只弱不禁风的小水母
-
-        // #tr Offspring.tooltips.02
-        // # {\AQUA}Seems to be containing additional information
-        // #zh_CN {\AQUA}似乎包含着额外的信息
-
-        // #tr Offspring.tooltips.03
-        // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
-        // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
-
-        // #tr Offspring.tooltips.04
-        // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
-        // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
-
-        GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(1, new String[]{tr("Offspring.tooltips.01"), tr("Offspring.tooltips.02")}, new String[]{tr("Offspring.tooltips.03"), tr("Offspring.tooltips.04")}));
+        GTCMItemList.OffSpring.set(MetaItemIzumik.registerVariantWithTooltips(
+            1,
+            new String[] {
+                // #tr Offspring.tooltips.01
+                // # {\AQUA}A weak little jellyfish
+                // #zh_CN {\AQUA}一只弱不禁风的小水母
+                tr("Offspring.tooltips.01"),
+                // #tr Offspring.tooltips.02
+                // # {\AQUA}Seems to be containing additional information
+                // #zh_CN {\AQUA}似乎包含着额外的信息
+                tr("Offspring.tooltips.02") },
+            new String[] {
+                // #tr Offspring.tooltips.03
+                // # {\LIGHT_PURPLE}The offspring derived from Izu'mik's evolutionary branches
+                // #zh_CN {\LIGHT_PURPLE}伊祖米克进化分支中衍生出的子代
+                tr("Offspring.tooltips.03"),
+                // #tr Offspring.tooltips.04
+                // # {\LIGHT_PURPLE}are returning to their parent with the genetic information collected from all of The Overworld
+                // #zh_CN {\LIGHT_PURPLE}正携带着从主世界各地收集到的遗传信息返回母体
+            tr("Offspring.tooltips.04") }));
 
         /*    ---Meta Item Named Circuit---    */
 
@@ -1104,6 +1114,150 @@ public class ItemRegister {
         GTCMItemList.HatchUpdateTool.set(new ItemStack(TstItems.HatchUpdateTool, 1));
         GTCMItemList.Yamato.set(new ItemStack(Yamato, 1));
         GTCMItemList.ActualPattern.set(new ItemStack(ActualPattern, 1));
+
+        // #tr item.EcoSphereExecutionProtocol.0.name
+        // # Eco-Sphere Execution Protocol: Arboreal Genesis
+        // #zh_CN 生态圈执行协议: 原木拟生
+        GTCMItemList.EcoSphereExecutionProtocol1.set(EcoSphereExecutionProtocol.registerVariant(0));
+
+        // #tr item.EcoSphereExecutionProtocol.1.name
+        // # Eco-Sphere Execution Protocol: Arboreal Genesis
+        // #zh_CN 生态圈执行协议: 原木拟生
+        GTCMItemList.EcoSphereExecutionProtocol2.set(EcoSphereExecutionProtocol.registerVariant(1));
+
+        // #tr item.EcoSphereExecutionProtocol.2.name
+        // # Eco-Sphere Execution Protocol: Aquatic Simulation
+        // #zh_CN 生态圈执行协议: 水域模拟
+        GTCMItemList.EcoSphereExecutionProtocol3.set(EcoSphereExecutionProtocol.registerVariant(2));
+
+        // #tr item.EcoSphereExecutionProtocol.3.name
+        // # Eco-Sphere Execution Protocol: Aquatic Simulation
+        // #zh_CN 生态圈执行协议: 水域模拟
+        GTCMItemList.EcoSphereExecutionProtocol4.set(EcoSphereExecutionProtocol.registerVariant(3));
+
+        // #tr item.EcoSphereExecutionProtocol.4.name
+        // # Eco-Sphere Execution Protocol: Artificial Greenhouse
+        // #zh_CN 生态圈执行协议: 人工温室
+        GTCMItemList.EcoSphereExecutionProtocol5.set(EcoSphereExecutionProtocol.registerVariant(4));
+
+        // #tr item.EcoSphereExecutionProtocol.5.name
+        // # Eco-Sphere Execution Protocol: Artificial Greenhouse
+        // #zh_CN 生态圈执行协议: 人工温室
+        GTCMItemList.EcoSphereExecutionProtocol6.set(EcoSphereExecutionProtocol.registerVariant(5));
+
+        // #tr item.EcoSphereExecutionProtocol.6.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereExecutionProtocol7.set(EcoSphereExecutionProtocol.registerVariant(6));
+
+        // #tr item.EcoSphereExecutionProtocol.7.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereExecutionProtocol8.set(EcoSphereExecutionProtocol.registerVariant(7));
+
+        // #tr item.EcoSphereExecutionProtocol.8.name
+        // # Eco-Sphere Execution Protocol: Directed Mob Cloning
+        // #zh_CN 生态圈执行协议: 定向克隆
+        GTCMItemList.EcoSphereExecutionProtocol9.set(EcoSphereExecutionProtocol.registerVariant(8));
+        EcoSphereExecutionProtocol.setTooltips(
+            8,
+            new String[] {
+                // #tr item.EcoSphereExecutionProtocol.8.tooltip.0
+                // # Fully Authorized
+                // #zh_CN 已完全授权
+                tr("item.EcoSphereExecutionProtocol.8.tooltip.0") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.0.name
+        // # Eco-Sphere Upgrade: Fluid Reduction
+        // #zh_CN 生态圈升级: 流体减免
+        GTCMItemList.EcoSphereUpgrade1.set(EcoSphereUpgrade.registerVariant(0));
+        EcoSphereUpgrade.setTooltips(
+            0,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.0.tooltip
+                // # Fluid Consumption x 0.5
+                // #zh_CN 流体消耗 x 0.5
+                tr("item.EcoSphereUpgrade.0.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.1.name
+        // # Eco-Sphere Upgrade: Capacity
+        // #zh_CN 生态圈升级: 扩容
+        GTCMItemList.EcoSphereUpgrade2.set(EcoSphereUpgrade.registerVariant(1));
+        EcoSphereUpgrade.setTooltips(
+            1,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.1.tooltip
+                // # Input Slots + 1, Stack Limit x 4
+                // #zh_CN 输入槽位 + 1, 堆叠上限 x 4
+                tr("item.EcoSphereUpgrade.1.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.2.name
+        // # Eco-Sphere Upgrade: Output
+        // #zh_CN 生态圈升级: 产量
+        GTCMItemList.EcoSphereUpgrade3.set(EcoSphereUpgrade.registerVariant(2));
+        EcoSphereUpgrade.setTooltips(
+            2,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.2.tooltip
+                // # Output x 1.5
+                // #zh_CN 产出 x 1.5
+                tr("item.EcoSphereUpgrade.2.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.3.name
+        // # Eco-Sphere Upgrade: Speed
+        // #zh_CN 生态圈升级: 速度
+        GTCMItemList.EcoSphereUpgrade4.set(EcoSphereUpgrade.registerVariant(3));
+        EcoSphereUpgrade.setTooltips(
+            3,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.3.tooltip
+                // # Cycle Time Set to 1 s
+                // #zh_CN 运行时间改为 1秒
+                tr("item.EcoSphereUpgrade.3.tooltip") + ", " + tr("item.EcoSphereUpgrade.0.tooltip")},
+            false);
+
+        // #tr item.EcoSphereUpgrade.4.name
+        // # Eco-Sphere Upgrade: Blood Orb
+        // #zh_CN 生态圈升级: 气血宝珠
+        GTCMItemList.EcoSphereUpgrade5.set(EcoSphereUpgrade.registerVariant(4));
+        EcoSphereUpgrade.setTooltips(
+            4,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.4.tooltip
+                // # LP Network Access
+                // #zh_CN LP 网络访问
+                tr("item.EcoSphereUpgrade.4.tooltip") + ", " + tr("item.EcoSphereUpgrade.1.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.5.name
+        // # Eco-Sphere Upgrade: Perfect Genetics
+        // #zh_CN 生态圈升级: 完美基因
+        GTCMItemList.EcoSphereUpgrade6.set(EcoSphereUpgrade.registerVariant(5));
+        EcoSphereUpgrade.setTooltips(
+            5,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.5.tooltip
+                // # Enhanced Genetic Attributes
+                // #zh_CN 基因属性强化
+                tr("item.EcoSphereUpgrade.5.tooltip") + ", " + tr("item.EcoSphereUpgrade.2.tooltip") },
+            false);
+
+        // #tr item.EcoSphereUpgrade.6.name
+        // # Eco-Sphere Upgrade: Output Pulverization
+        // #zh_CN 生态圈升级: 产物粉碎
+        GTCMItemList.EcoSphereUpgrade7.set(EcoSphereUpgrade.registerVariant(6));
+        EcoSphereUpgrade.setTooltips(
+            6,
+            new String[] {
+                // #tr item.EcoSphereUpgrade.6.tooltip
+                // # Pulverized Outputs
+                // #zh_CN 产物粉碎
+                tr("item.EcoSphereUpgrade.6.tooltip") + ", " + tr("item.EcoSphereUpgrade.2.tooltip") },
+            false);
 
         // endregion
     }

@@ -972,9 +972,6 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
             .addInputBus(TSTUtils.tr("Tooltip_SkypiercerTower_InputBusInfo"))
-            // #tr Tooltip_SkypiercerTower_EnergyHatch
-            // #en_US Replace any chemically inert machine casing
-            // #zh_CN 任何舱室替换化学惰性方块
             .addOutputBus(TSTUtils.tr("Tooltip_SkypiercerTower_InputBusInfo"))
             // #tr Tooltip_SkypiercerTower_EnergyHatch
             // #en_US Replace any chemically inert machine casing

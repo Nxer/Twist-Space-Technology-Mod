@@ -1,0 +1,190 @@
+package com.Nxer.TwistSpaceTechnology.common.machine.EcoSphere;
+
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.FluidStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase.ItemStackLong;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch.LongFluidInputs;
+import com.Nxer.TwistSpaceTechnology.common.misc.CheckRecipeResults.SimpleResultWithText;
+import com.github.bsideup.jabel.Desugar;
+
+import gregtech.api.recipe.check.CheckRecipeResult;
+import gregtech.api.recipe.check.CheckRecipeResultRegistry;
+import gregtech.api.util.GTUtility;
+
+public final class EcoSphereModeSupport {
+
+    private EcoSphereModeSupport() {}
+
+    private static int calculateTierOneParallel(int tier) {
+        // Special tier-1 parallel curve; perfect overclock overtakes it around UEV.
+        return (int) Math
+            .floor(2 * Math.pow(2, 0.1 * (tier - 1) * (8 + Math.log(25 + Math.exp(25 - tier)) / Math.log(5))));
+    }
+
+    private static long calculateTierTwoParallel(int tier) {
+        // Tier 1 (LV) is the one-parallel baseline: parallel = 4^(tier - 1).
+        int exponent = tier - 1;
+        // 4^n equals 2^(2n); cap large exponents at 2^62 to avoid overflowing a signed long.
+        if (exponent <= 0) return 1;
+        if (exponent >= 31) return 1L << 62;
+        return 1L << (exponent * 2);
+    }
+
+    public static long calculateEut(int tier) {
+        // The machine numbers LV as tier 1, so n in 2 * 4^n * 15 / 16 is tier + 1.
+        return (long) (2d * Math.pow(4, tier + 1) * 15 / 16);
+    }
+
+    public static long getParallelFromEUt(int euTier, boolean structureTier) {
+        // LV is the one-parallel baseline for both structure tiers.
+        if (euTier <= 1) return 1;
+        if (structureTier) return calculateTierTwoParallel(euTier);
+        return calculateTierOneParallel(euTier);
+    }
+
+    public static CheckRecipeResult missingFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {
+        if (requiredFluid == null) return CheckRecipeResultRegistry.INTERNAL_ERROR;
+        if (getAvailableFluid(machine, requiredFluid) <= 0) return CheckRecipeResultRegistry.NO_RECIPE;
+        return SimpleResultWithText
+            .outOfFluid(new FluidStack(requiredFluid, (int) Math.min(Integer.MAX_VALUE, amount)));
+    }
+
+    public static EcoSphereModeResult processModeRecipeWithTier(TST_EcoSphereSimulator machine, Fluid requiredFluid,
+        long baseFluidPerParallel, int powerTier, Function<ParallelResult, EcoSphereModeResult> processor) {
+        return processModeRecipeWithTierAndFluidCost(
+            machine,
+            requiredFluid,
+            machine.applyFluidDiscount(baseFluidPerParallel),
+            1,
+            powerTier,
+            processor);
+    }
+
+    /**
+     * Processes a mode whose final fluid cost per EU-limited parallel has already been calculated.
+     */
+    public static EcoSphereModeResult processModeRecipeWithTierAndFluidCost(TST_EcoSphereSimulator machine,
+        Fluid requiredFluid, long fluidPerParallel, int inputParallelMultiplier, int powerTier,
+        Function<ParallelResult, EcoSphereModeResult> processor) {
+        long parallelFromEUt = getParallelFromEUt(powerTier, machine.isTierTwo());
+        return processRecipeWithParallelLimit(
+            machine,
+            requiredFluid,
+            fluidPerParallel,
+            inputParallelMultiplier,
+            powerTier,
+            parallelFromEUt,
+            processor);
+    }
+
+    private static EcoSphereModeResult processRecipeWithParallelLimit(TST_EcoSphereSimulator machine,
+        Fluid requiredFluid, long fluidPerOperation, int inputParallelMultiplier, int powerTier, long parallelFromEUt,
+        Function<ParallelResult, EcoSphereModeResult> processor) {
+        long parallel = getParallelFromFluid(machine, requiredFluid, fluidPerOperation, parallelFromEUt);
+        if (parallel <= 0) return EcoSphereModeResult.failure(missingFluid(machine, requiredFluid, fluidPerOperation));
+        long fluidCost;
+        try {
+            // Reject an unrepresentable total instead of letting long multiplication wrap.
+            fluidCost = Math.multiplyExact(fluidPerOperation, parallel);
+        } catch (ArithmeticException ignored) {
+            return EcoSphereModeResult.failure(CheckRecipeResultRegistry.INTERNAL_ERROR);
+        }
+        EcoSphereModeResult result = processor.apply(new ParallelResult(powerTier, parallel));
+        if (result.result()
+            .wasSuccessful()) {
+            // Delay consumption until output protection accepts the generated result.
+            machine.setPendingRecipeConsumption(() -> drainFluid(machine, requiredFluid, fluidCost));
+            machine.setCurrentParallel(multiplyParallel(parallel, inputParallelMultiplier));
+        }
+        return result;
+    }
+
+    public static long multiplyParallel(long parallel, int inputCount) {
+        if (parallel <= 0 || inputCount <= 0) return 0;
+        return parallel > Long.MAX_VALUE / inputCount ? Long.MAX_VALUE : parallel * inputCount;
+    }
+
+    private static long getParallelFromFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid,
+        long fluidPerOperation, long parallelFromEUt) {
+        if (requiredFluid == null || fluidPerOperation <= 0 || parallelFromEUt < 1) return 0;
+        long availableFluid = getAvailableFluid(machine, requiredFluid);
+        if (availableFluid <= 0 || !machine.prepareFluidAreaForConsumption(requiredFluid)) return 0;
+        long parallelFromFluid = availableFluid / fluidPerOperation;
+        if (parallelFromFluid < 1) return 0;
+        return Math.min(parallelFromEUt, parallelFromFluid);
+    }
+
+    public static void addItemOutput(List<ItemStackLong> outputs, ItemStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < outputs.size(); i++) {
+            ItemStackLong output = outputs.get(i);
+            if (GTUtility.areStacksEqual(output.itemStack(), stack)) {
+                outputs.set(i, new ItemStackLong(output.itemStack(), addSaturated(output.stackSize(), amount)));
+                return;
+            }
+        }
+        outputs.add(new ItemStackLong(GTUtility.copyAmountUnsafe(1, stack), amount));
+    }
+
+    public static void addFluidOutput(List<FluidStackLong> outputs, FluidStack stack, long amount) {
+        if (stack == null || amount <= 0) return;
+        for (int i = 0; i < outputs.size(); i++) {
+            FluidStackLong output = outputs.get(i);
+            if (output.fluidStack()
+                .isFluidEqual(stack)) {
+                outputs.set(i, new FluidStackLong(output.fluidStack(), addSaturated(output.amount(), amount)));
+                return;
+            }
+        }
+        FluidStack template = stack.copy();
+        template.amount = 1;
+        outputs.add(new FluidStackLong(template, amount));
+    }
+
+    public static long addSaturated(long first, long second) {
+        return first > Long.MAX_VALUE - second ? Long.MAX_VALUE : first + second;
+    }
+
+    public static long getAvailableFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid) {
+        return LongFluidInputs.of(machine)
+            .getAmount(requiredFluid);
+    }
+
+    public static boolean drainFluid(TST_EcoSphereSimulator machine, Fluid requiredFluid, long amount) {
+        if (amount <= 0) return true;
+        if (requiredFluid == null) return false;
+        return LongFluidInputs.of(machine)
+            .extract(requiredFluid, amount) == amount;
+    }
+
+    public static String formatRunningInputs(String label, List<String> names) {
+        String text = names.stream()
+            .map(EnumChatFormatting::getTextWithoutFormattingCodes)
+            .collect(Collectors.joining(", "))
+            .replace('\n', ' ')
+            .replace('\r', ' ');
+        int limit = Math.max(
+            0,
+            24 - EnumChatFormatting.getTextWithoutFormattingCodes(label)
+                .length() - 3);
+        if (text.length() > limit) text = text.substring(0, Math.max(0, limit - 3)) + "...";
+        return EnumChatFormatting.WHITE + label + " : " + EnumChatFormatting.GOLD + text + EnumChatFormatting.RESET;
+    }
+
+    public static String getItemStackString(ItemStack stack) {
+        return Item.itemRegistry.getNameForObject(stack.getItem()) + ":" + stack.getItemDamage();
+    }
+
+    @Desugar
+    public record ParallelResult(int tier, long parallel) {}
+}

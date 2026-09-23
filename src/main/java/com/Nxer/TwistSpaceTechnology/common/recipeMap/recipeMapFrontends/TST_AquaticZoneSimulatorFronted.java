@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.gtnewhorizons.modularui.api.math.Pos2d;
 
+import codechicken.nei.NEIClientUtils;
+import codechicken.nei.recipe.GuiRecipe;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
@@ -41,6 +43,14 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
     }
 
     @Override
+    public void drawDescription(RecipeDisplayInfo recipeInfo) {
+        drawDurationInfo(recipeInfo);
+        drawMetadataInfo(recipeInfo);
+        drawSpecialInfo(recipeInfo);
+        drawRecipeOwnerInfo(recipeInfo);
+    }
+
+    @Override
     protected void drawEnergyInfo(RecipeDisplayInfo recipeInfo) {
         // null
     }
@@ -52,7 +62,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
     @Override
     public @NotNull List<Pos2d> getItemOutputPositions(int itemOutputCount) {
-        return UIHelper.getGridPositions(1, OUTPUTS_X, OUTPUTS_Y, 1);
+        return UIHelper.getGridPositions(itemOutputCount, OUTPUTS_X, OUTPUTS_Y, 3);
     }
 
     @Override
@@ -63,32 +73,32 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
     @Override
     public @NotNull List<String> handleNEIItemTooltip(ItemStack stack, List<String> currentTip,
         GTNEIDefaultHandler.CachedDefaultRecipe neiCachedRecipe) {
-        // Fluid Stack
-        if (stack == neiCachedRecipe.mInputs.get(neiCachedRecipe.mInputs.size() - 1).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.AquaticZoneSimulator.nei.tooltip.0"));
-            // #tr ESS.AquaticZoneSimulator.nei.tooltip.0
-            // # Input fluid to simulate waters
-            // #zh_CN 输入流体以模拟水域
-            super.handleNEIItemTooltip(stack, currentTip, neiCachedRecipe);
+        if (!(NEIClientUtils.getGuiContainer() instanceof GuiRecipe<?>guiRecipe)) return currentTip;
+
+        for (var input : neiCachedRecipe.mInputs) {
+            if (!(input instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
+                || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
+            if (positionedStack.isFluid()) {
+                currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("EcoSphereSimulator.nei.aquatic.medium"));
+                // #tr EcoSphereSimulator.nei.aquatic.medium
+                // # Operating medium for aquatic simulation
+                // #zh_CN 水域模拟所需运行介质
+            } else {
+                currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("EcoSphereSimulator.nei.aquatic.focus"));
+                // #tr EcoSphereSimulator.nei.aquatic.focus
+                // # Register in the input interface to focus this output
+                // #zh_CN 在输入接口中登记以定向此产物
+            }
             return currentTip;
         }
 
-        // Input Stack
-        if (stack == neiCachedRecipe.mInputs.get(0).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.AquaticZoneSimulator.nei.tooltip.1")
-            // #tr ESS.AquaticZoneSimulator.nei.tooltip.1
-            // # Place in machine controller slot to target aquaculture
-            // #zh_CN 放入控制器插槽以定向产物
-            );
-            return currentTip;
-        }
-
-        // Output Stack
-        if (stack == neiCachedRecipe.mOutputs.get(0).item) {
-            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("ESS.AquaticZoneSimulator.nei.tooltip.2")
-            // #tr ESS.AquaticZoneSimulator.nei.tooltip.2
-            // # Recipe size determines output chance.
-            // #zh_CN 配方数值决定输出权重
+        for (var output : neiCachedRecipe.mOutputs) {
+            if (!(output instanceof GTNEIDefaultHandler.FixedPositionedStack positionedStack)
+                || !guiRecipe.isMouseOver(positionedStack, 0)) continue;
+            currentTip.add(EnumChatFormatting.YELLOW + TSTUtils.tr("EcoSphereSimulator.nei.aquatic.weight")
+            // #tr EcoSphereSimulator.nei.aquatic.weight
+            // # Displayed stack size represents base output weight
+            // #zh_CN 显示堆叠数代表基础产出权重
             );
             return currentTip;
         }
@@ -101,9 +111,7 @@ public class TST_AquaticZoneSimulatorFronted extends RecipeMapFrontend {
 
         @Override
         public List<String> format(RecipeDisplayInfo recipeInfo) {
-            return Arrays.asList(
-                TSTUtils.tr("ESS.TreeGrowthSimulator.nei.info.1"),
-                TSTUtils.tr("ESS.TreeGrowthSimulator.nei.info.2"));
+            return Arrays.asList(TSTUtils.tr("EcoSphereSimulator.nei.parallel"));
         }
     }
 }

@@ -85,6 +85,11 @@ public class TSTSharedLocalization {
         // #zh_CN 耗电倍率
         public static final String EuModifier = TSTUtils.tr("MachineInfoData.EuModifier");
 
+        // #tr MachineInfoData.HighCapacityOutput
+        // # High-Capacity Output
+        // #zh_CN 超大容量输出
+        public static final String HighCapacityOutput = TSTUtils.tr("MachineInfoData.HighCapacityOutput");
+
         // #tr MachineInfoData.GlassTier
         // # {\AQUA}Glass Tier
         // #zh_CN {\AQUA}玻璃等级
@@ -299,6 +304,20 @@ public class TSTSharedLocalization {
 
         public static String tooComplex() {
             return TSTUtils.tr("GT5U.MBTT.Structure.Complex");
+        }
+
+        public static String temporaryController() {
+            // #tr tst.shared.machineTooltip.temporaryController
+            // # {\RED}Temporary controller; will be removed in the next update!
+            // #zh_CN {\RED}临时控制器, 将在下个版本移除!
+            return TSTUtils.tr("tst.shared.machineTooltip.temporaryController");
+        }
+
+        public static String replacementController() {
+            // #tr tst.shared.machineTooltip.replacementController
+            // # {\RED}See NEI for the replacement controller and conversion recipes.
+            // #zh_CN {\RED}请在NEI查看替代控制器及转换配方.
+            return TSTUtils.tr("tst.shared.machineTooltip.replacementController");
         }
 
     }

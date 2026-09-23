@@ -150,10 +150,10 @@ public interface TSTTooltipCredit {
     // #zh_CN 结构：%s
 
     // #tr Tooltip_Art
-    // # Artist: %s
-    // #zh_CN 美术: %s
+    // # Artist %s
+    // #zh_CN 美术 %s
 
     // #tr Tooltip_Arts
-    // # Artists: %s
-    // #zh_CN 美术: %s
+    // # Artists %s
+    // #zh_CN 美术 %s
 }

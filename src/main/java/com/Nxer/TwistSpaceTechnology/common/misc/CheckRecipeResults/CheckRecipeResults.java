@@ -52,15 +52,33 @@ public final class CheckRecipeResults {
         .ofSuccess("CheckRecipeResult.RapidHeatFinish");
 
     // #tr CheckRecipeResult.NoSeedInController
-    // # There is no valid seed in controller block slot.
-    // #zh_CN 没有在主机内识别到可用的种子
+    // # No valid seed input detected
+    // #zh_CN 未检测到有效种子输入
     public static final CheckRecipeResult NoSeedInController = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NoSeedInController");
 
     // #tr CheckRecipeResult.NotEnoughWater
-    // # Not enough water has been input.
-    // #zh_CN 没有输入足够的水
+    // # Insufficient water supply
+    // #zh_CN 供水量不足
     public static final CheckRecipeResult NotEnoughWater = SimpleResultWithText
         .ofFailure("CheckRecipeResult.NotEnoughWater");
+
+    // #tr CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection
+    // # No arboreal output category selected
+    // #zh_CN 未指定林木输出类别
+    public static final CheckRecipeResult MissingTreeOutputSelection = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingTreeOutputSelection");
+
+    // #tr CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput
+    // # No valid sapling input detected
+    // #zh_CN 未检测到有效树苗输入
+    public static final CheckRecipeResult MissingSaplingInput = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.MissingSaplingInput");
+
+    // #tr CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch
+    // # Authorization level insufficient
+    // #zh_CN 授权等级不足
+    public static final CheckRecipeResult ExecutionProtocolInputMismatch = SimpleResultWithText
+        .ofFailure("CheckRecipeResult.EcoSphereSimulator.ExecutionProtocolInputMismatch");
 
 }

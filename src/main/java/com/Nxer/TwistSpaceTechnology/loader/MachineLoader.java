@@ -43,6 +43,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_CleanRoom;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_Computer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_CoreDeviceOfHumanPowerGenerationFacility;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_DeployedNanoCore;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_EcoSphereSimulator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_EyeOfWood;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_GiantVacuumDryingFurnace;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_HephaestusAtelier;
@@ -63,7 +64,6 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaCraftingCenter;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaMacerator;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaSolarPanelFactory;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaStoneBreaker;
-import com.Nxer.TwistSpaceTechnology.common.machine.TST_MegaTreeFarm;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MicroSpaceTimeFabricatorio;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_MiracleDoor;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_NetherInterface;
@@ -75,6 +75,7 @@ import com.Nxer.TwistSpaceTechnology.common.machine.TST_SpaceApiary;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_StarcoreMiner;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SuperWaterPurifier;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnace;
+import com.Nxer.TwistSpaceTechnology.common.machine.TST_SwelegfyrBlastFurnaceLegacy;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_ThermalEnergyDevourer;
 import com.Nxer.TwistSpaceTechnology.common.machine.TST_VacuumFilterExtractor;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.GT_Hatch_BufferedEnergyHatch;
@@ -93,6 +94,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStor
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellInputHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_BloodOrbHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_CircuitImprintHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereInputInterfaceHatch;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_EcoSphereUpgradeInterfaceHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_ManaHatch;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_PatternAccessHatch;
 import com.Nxer.TwistSpaceTechnology.common.modularizedMachine.MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2;
@@ -156,7 +159,7 @@ public final class MachineLoader {
         // # Miracle Top
         // #zh_CN 奇迹顶点
         GTCMItemList.MiracleTop
-            .set(new GT_TileEntity_MiracleTop(19003, TSTUtils.tr("NameMiracleTop"), TSTUtils.tr("NameMiracleTop")));
+            .set(new GT_TileEntity_MiracleTop(19003, "NameMiracleTop", TSTUtils.tr("NameMiracleTop")));
 
         // #tr NameMagneticDrivePressureFormer
         // # Magnetic Drive Pressure Former
@@ -268,12 +271,12 @@ public final class MachineLoader {
                 new TST_MegaUniversalSpaceStation(
                     19018,
                     "NameMegaUniversalSpaceStation",
-                    TstUtils.tr("NameMegaUniversalSpaceStation")));
+                    TSTUtils.tr("NameMegaUniversalSpaceStation")));
             GTCMItemList.StellarMaterialSiphon.set(
                 new GT_TileEntity_StellarMaterialSiphon(
                     19019,
                     "NameStellarMaterialSiphon",
-                    TstUtils.tr("NameStellarMaterialSiphon")));
+                    TSTUtils.tr("NameStellarMaterialSiphon")));
         }
          */
         // spotless:on
@@ -505,15 +508,35 @@ public final class MachineLoader {
                     TSTUtils.tr("NameIndustrialMagnetarSeparator")));
         }
 
-        if (Config.Enable_MegaTreeFarm) {
-            GTCMItemList.MegaTreeFarm.set(
-                new TST_MegaTreeFarm(
+        if (Config.Enable_EcoSphereSimulator) {
+            GTCMItemList.EcoSphereSimulator.set(
+                new TST_EcoSphereSimulator(
                     19051,
-                    "NameMegaTreeFarm",
-                    // #tr NameMegaTreeFarm
-                    // # Eco-Sphere Growth Simulator
+                    "NameEcoSphereSimulator",
+                    // #tr NameEcoSphereSimulator
+                    // # Eco-Sphere Simulator
                     // #zh_CN 拟似生态圈
-                    TSTUtils.tr("NameMegaTreeFarm")));
+                    TSTUtils.tr("NameEcoSphereSimulator")));
+
+            // #tr NameEcoSphereInputInterface
+            // # Eco-Sphere Input Interface
+            // #zh_CN 生态圈输入接口
+            GTCMItemList.EcoSphereInputInterface.set(
+                new TST_EcoSphereInputInterfaceHatch(
+                    18849,
+                    "NameEcoSphereInputInterface",
+                    TSTUtils.tr("NameEcoSphereInputInterface"),
+                    10));
+
+            // #tr NameEcoSphereUpgradeInterface
+            // # Eco-Sphere Upgrade Interface
+            // #zh_CN 生态圈升级接口
+            GTCMItemList.EcoSphereUpgradeInterface.set(
+                new TST_EcoSphereUpgradeInterfaceHatch(
+                    18850,
+                    "NameEcoSphereUpgradeInterface",
+                    TSTUtils.tr("NameEcoSphereUpgradeInterface"),
+                    10));
         }
 
         // #tr NameExtremeCraftCenter
@@ -692,6 +715,12 @@ public final class MachineLoader {
                 new TST_SwelegfyrBlastFurnace(
                     19068,
                     "NameSwelegfyrBlastFurnace",
+                    TSTUtils.tr("NameSwelegfyrBlastFurnace")));
+            // TODO: Remove the transitional controller (19502) in the next version.
+            GTCMItemList.SwelegfyrBlastFurnaceLegacy.set(
+                new TST_SwelegfyrBlastFurnaceLegacy(
+                    19502,
+                    "NameSwelegfyrBlastFurnaceLegacy",
                     TSTUtils.tr("NameSwelegfyrBlastFurnace")));
         }
 

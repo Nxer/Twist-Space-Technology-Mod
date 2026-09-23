@@ -685,19 +685,12 @@ public class TST_IndustrialAlchemyTower extends GTCM_MultiMachineBase<TST_Indust
             .addOtherStructurePart(
                 TSTUtils.tr("Tooltip_IndustrialAlchemyTower_15"),
                 TSTUtils.tr("Tooltip_IndustrialAlchemyTower_16"))
-            // #tr Tooltip_IndustrialAlchemyTower_16
-            // # §bAny magic mechanical block
-            // #zh_CN §b任意魔法机械方块
             .addInputBus(TSTUtils.tr("Tooltip_IndustrialAlchemyTower_16"))
             .addOutputBus(TSTUtils.tr("Tooltip_IndustrialAlchemyTower_16"))
             .addEnergyHatch(TSTUtils.tr("Tooltip_IndustrialAlchemyTower_16"))
             // #tr Tooltip_IndustrialAlchemyTower_17
             // # Travel anchor
             // #zh_CN 旅行锚
-
-            // #tr Tooltip_IndustrialAlchemyTower_16
-            // # §bAny magic mechanical block
-            // #zh_CN §b任意魔法机械方块
             .addOtherStructurePart(
                 TSTUtils.tr("Tooltip_IndustrialAlchemyTower_17"),
                 TSTUtils.tr("Tooltip_IndustrialAlchemyTower_16"))

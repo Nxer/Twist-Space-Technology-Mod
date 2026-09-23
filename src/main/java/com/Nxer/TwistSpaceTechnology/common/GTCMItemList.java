@@ -167,6 +167,22 @@ public enum GTCMItemList {
     WirelessUpdateItem,
     FountOfEcology,
     OffSpring,
+    EcoSphereExecutionProtocol1,
+    EcoSphereExecutionProtocol2,
+    EcoSphereExecutionProtocol3,
+    EcoSphereExecutionProtocol4,
+    EcoSphereExecutionProtocol5,
+    EcoSphereExecutionProtocol6,
+    EcoSphereExecutionProtocol7,
+    EcoSphereExecutionProtocol8,
+    EcoSphereExecutionProtocol9,
+    EcoSphereUpgrade1,
+    EcoSphereUpgrade2,
+    EcoSphereUpgrade3,
+    EcoSphereUpgrade4,
+    EcoSphereUpgrade5,
+    EcoSphereUpgrade6,
+    EcoSphereUpgrade7,
 
     LvFlask,
     MvFlask,
@@ -226,6 +242,7 @@ public enum GTCMItemList {
     BoropheneBasedNanowireCompositeThermalConductiveCasing,
     NeutroniumPipeCasing,
     MechanicallyEnhancedObsidian,
+    EnvironmentalIsolationCasing,
     Laser_Beacon,
     // endregion
 
@@ -278,7 +295,7 @@ public enum GTCMItemList {
     LargeCanner,
     BigBroArray,
     IndustrialMagnetarSeparator,
-    MegaTreeFarm,
+    EcoSphereSimulator,
     LightningSpire,
     ExtremeCraftCenter,
     MassFabricatorGenesis,
@@ -292,6 +309,7 @@ public enum GTCMItemList {
     ProcessingArray,
     AdvCircuitAssemblyLine,
     SwelegfyrBlastFurnace,
+    SwelegfyrBlastFurnaceLegacy,
     HyperThermalConvector,
     MeteorMiner,
     UniversalGenerator,
@@ -494,6 +512,8 @@ public enum GTCMItemList {
     SolidifyHatch_UHV,
     CircuitImprintHatchT1,
     CircuitImprintHatchT2,
+    EcoSphereInputInterface,
+    EcoSphereUpgradeInterface,
 
     // endregion
 
