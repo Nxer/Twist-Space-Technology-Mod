@@ -13,8 +13,12 @@ public final class Style {
     public static final Style MODULARIZED = new Style(Style::modularized);
     public static final Style DYSON_SPHERE = new Style(Style::dysonSphere);
     public static final Style INFUSION = new Style(Style::infusion);
+    public static final Style RAINBOW = new Style(Style::rainbow);
 
     private static final char[] INFUSION_GLYPHS = "@#$%&?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    private static final EnumChatFormatting[] RAINBOW_COLORS = { EnumChatFormatting.RED, EnumChatFormatting.GOLD,
+        EnumChatFormatting.YELLOW, EnumChatFormatting.GREEN, EnumChatFormatting.AQUA, EnumChatFormatting.BLUE,
+        EnumChatFormatting.LIGHT_PURPLE };
 
     private final TextRenderer textRenderer;
 
@@ -149,17 +153,13 @@ public final class Style {
 
                 int distanceBehindPoint = pointIndex - visibleIndex;
                 if (colorWholeText) {
-                    result.append(wholeTextColor)
-                        .append(EnumChatFormatting.ITALIC);
+                    result.append(wholeTextColor);
                 } else if (distanceBehindPoint == 0) {
-                    result.append(pointColor)
-                        .append(EnumChatFormatting.ITALIC);
+                    result.append(pointColor);
                 } else if (distanceBehindPoint == 1) {
-                    result.append(nearTrailColor)
-                        .append(EnumChatFormatting.ITALIC);
+                    result.append(nearTrailColor);
                 } else if (distanceBehindPoint == 2) {
-                    result.append(farTrailColor)
-                        .append(EnumChatFormatting.ITALIC);
+                    result.append(farTrailColor);
                 } else {
                     result.append(baseColor);
                 }
@@ -208,6 +208,29 @@ public final class Style {
                 result.append(character);
             }
             return result.toString();
+        };
+    }
+
+    /** Shifts a per-character rainbow every 200 ms, leaving whitespace uncolored. */
+    private static Supplier<String> rainbow(String text) {
+        return () -> {
+            if (text.isEmpty()) return text;
+
+            int colorOffset = (int) ((System.currentTimeMillis() / 200L) % RAINBOW_COLORS.length);
+            StringBuilder result = new StringBuilder(text.length() * 3);
+            int coloredCharacterIndex = 0;
+            for (int index = 0; index < text.length(); index++) {
+                char character = text.charAt(index);
+                if (Character.isWhitespace(character)) {
+                    result.append(character);
+                    continue;
+                }
+                result.append(RAINBOW_COLORS[(colorOffset + coloredCharacterIndex) % RAINBOW_COLORS.length])
+                    .append(character);
+                coloredCharacterIndex++;
+            }
+            return result.append(EnumChatFormatting.RESET)
+                .toString();
         };
     }
 

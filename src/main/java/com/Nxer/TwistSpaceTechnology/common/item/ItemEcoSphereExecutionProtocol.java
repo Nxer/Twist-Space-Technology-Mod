@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
-import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
+import com.Nxer.TwistSpaceTechnology.util.text.Style;
 
 public final class ItemEcoSphereExecutionProtocol extends AbstractTstMetaItem {
 
@@ -23,13 +23,14 @@ public final class ItemEcoSphereExecutionProtocol extends AbstractTstMetaItem {
         // Odd metas keep the original rainbow rule; cloning tier 3 is the explicit even-meta exception.
         if ((meta & 1) == 0 && meta != 8) return displayName;
 
-        int separatorIndex = Math.max(displayName.lastIndexOf(':'), displayName.lastIndexOf('\uFF1A'));
-        int rainbowStartIndex = separatorIndex < 0 ? 0 : separatorIndex + 1;
-        while (rainbowStartIndex < displayName.length()
-            && Character.isWhitespace(displayName.charAt(rainbowStartIndex))) {
-            rainbowStartIndex++;
-        }
-        return TSTUtils.animatedRainbowText(displayName, rainbowStartIndex);
+        int separatorIndex = displayName.indexOf(": ");
+        if (separatorIndex < 0) return Style.RAINBOW.apply(displayName)
+            .get();
+
+        String prefix = displayName.substring(0, separatorIndex + 2);
+        String name = displayName.substring(separatorIndex + 2);
+        return prefix + Style.RAINBOW.apply(name)
+            .get();
     }
 
     @Override
