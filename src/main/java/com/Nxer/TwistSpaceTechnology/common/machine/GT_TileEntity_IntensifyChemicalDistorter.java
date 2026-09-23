@@ -84,10 +84,6 @@ public class GT_TileEntity_IntensifyChemicalDistorter
         super(aName);
     }
 
-    /**
-     * @param aTileEntity is just because the internal Variable "mBaseMetaTileEntity" is set after this Call.
-     * @return a newly created and ready MetaTileEntity
-     */
     @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new GT_TileEntity_IntensifyChemicalDistorter(this.mName);
