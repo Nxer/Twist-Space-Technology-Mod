@@ -49,6 +49,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
 import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.ModBlocksHandler;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.GTCM_MultiMachineBase;
@@ -184,6 +185,9 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
                         }
                     }
                 } catch (ConcurrentModificationException ignored) {
+                    TwistSpaceTechnology.LOG.warn(
+                        "Industrial Magic Matrix logic catch a CME in recipe of {}",
+                        recipe.mOutputs[0].getDisplayName());
                     return CheckRecipeResultRegistry.NO_RECIPE;
                 }
                 if (aspects.getAspects().length == 0) {
