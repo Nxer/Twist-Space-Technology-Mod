@@ -47,18 +47,18 @@ public class GT_Hatch_InfiniteWirelessMulti extends MTEHatchWirelessMulti implem
     @Override
     public String[] getDescription() {
         return new String[] {
-            // #tr ToolTip_InfiniteWirelessMulti.1
+            // #tr tst.common.machine.InfiniteWirelessMulti.tooltip.info.01
             // # {\GRAY}Stores energy globally in a network, up to 2^(2^31) EU.
             // #zh_CN {\GRAY}将能量存储于全局网络中，上限为2^(2^31)EU.
-            TSTUtils.tr("ToolTip_InfiniteWirelessMulti.1"),
-            // #tr ToolTip_InfiniteWirelessMulti.2
+            TSTUtils.tr("tst.common.machine.InfiniteWirelessMulti.tooltip.info.01"),
+            // #tr tst.common.machine.InfiniteWirelessMulti.tooltip.info.02
             // # {\GRAY}Does not connect to wires. This block withdraws EU from the network.
             // #zh_CN {\GRAY}不连接导线，此方块可以从网络中抽取EU.
-            TSTUtils.tr("ToolTip_InfiniteWirelessMulti.2"),
-            // #tr ToolTip_InfiniteWirelessMulti.3
+            TSTUtils.tr("tst.common.machine.InfiniteWirelessMulti.tooltip.info.02"),
+            // #tr tst.common.machine.InfiniteWirelessMulti.tooltip.info.03
             // # {\GRAY}Be careful of energy overflow.
             // #zh_CN {\GRAY}小心能量溢出.
-            TSTUtils.tr("ToolTip_InfiniteWirelessMulti.3"),
+            TSTUtils.tr("tst.common.machine.InfiniteWirelessMulti.tooltip.info.03"),
             GTUtility.translate("gt.tileentity.amperage", TooltipHelper.ampText(Amperes)) };
     }
 

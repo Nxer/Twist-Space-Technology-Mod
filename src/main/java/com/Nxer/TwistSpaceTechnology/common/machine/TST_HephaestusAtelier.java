@@ -410,14 +410,14 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
 
     @Override
     public String getMachineModeName() {
-        // #tr HephaestusAtelier.modeMsg.0
+        // #tr tst.common.machine.HephaestusAtelier.mode.0
         // # Mode : Furnace
         // #zh_CN 模式: 熔炉
 
-        // #tr HephaestusAtelier.modeMsg.1
+        // #tr tst.common.machine.HephaestusAtelier.mode.1
         // # Mode : Alloy Smelter
         // #zh_CN 模式: 合金冶炼炉
-        return StatCollector.translateToLocal("HephaestusAtelier.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.HephaestusAtelier.mode." + machineMode);
     }
 
     @Override
@@ -798,79 +798,79 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_HephaestusAtelier_MachineType
+        // #tr tst.common.machine.HephaestusAtelier.tooltip.machine_type
         // # Furnace | Alloy Smelter
         // #zh_CN 熔炉 | 合金炉
-        tt.addMachineType(TSTUtils.tr("Tooltip_HephaestusAtelier_MachineType"))
-            // #tr Tooltip_HephaestusAtelier_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.machine_type"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.controller
             // # Controller block for the Hephaestus' Atelier
             // #zh_CN 赫菲斯托斯的工坊的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_Controller"))
-            // #tr Tooltip_HephaestusAtelier_01
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.controller"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.01
             // # {\DARK_RED}{\ITALIC}“And first Hephaestus makes a great and massive shield ...
             // #zh_CN {\DARK_RED}{\ITALIC}“最先，火神赫菲斯托斯做了一个超级厉害的巨大盾牌 ...
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_01"))
-            // #tr Tooltip_HephaestusAtelier_02
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.01"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.02
             // # {\DARK_RED}{\ITALIC}{\SPACE}{\SPACE}{\SPACE}{\SPACE}... And he forged on the shield two noble cities.”
             // #zh_CN {\DARK_RED}{\ITALIC}{\SPACE}{\SPACE}{\SPACE}{\SPACE}... 他在盾牌上锻造了两座宏伟城市。”
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_02"))
-            // #tr Tooltip_HephaestusAtelier_03
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.02"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.03
             // # Even in the future, the most primitive means of smelting will be needed.
             // #zh_CN 即使是在未来, 这最原始的冶炼手段也是有需要的.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_03"))
-            // #tr Tooltip_HephaestusAtelier_04
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.03"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.04
             // # Parallelism across recipes is possible, even using Crafting Input hatches.
             // #zh_CN 可以跨配方并行, 即便使用样板输入仓室.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_04"))
-            // #tr Tooltip_HephaestusAtelier_05
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.04"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.05
             // # The machine will adjust its operation according to the installed coil level.
             // #zh_CN 机器将根据线圈等级调整自身运行状态.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.05"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
-            // #tr Tooltip_HephaestusAtelier_06
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.06
             // # {\GOLD} ----- T1 Coil : Molecular Coil -----
             // #zh_CN {\GOLD} ----- T1 线圈 : 分子线圈 -----
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_06"))
-            // #tr Tooltip_HephaestusAtelier_07
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.06"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.07
             // # Like other normal machine, use energy from energy hatches and do overclock.
             // #zh_CN 和其他普通机器一样, 使用能源仓获取能源, 进行超频.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_07"))
-            // #tr Tooltip_HephaestusAtelier_08
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.07"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.08
             // # {\AQUA}2.1G{\GRAY} parallel. Furnace mode every item smelting consume {\GOLD}7 EU/t{\GRAY} and {\GOLD}25.6s{\GRAY}.
             // #zh_CN {\AQUA}2.1G{\GRAY} 并行. 熔炉模式每冶炼一个物品消耗 {\GOLD}7 EU/t{\GRAY} 和耗时 {\GOLD}25.6s{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_08"))
-            // #tr Tooltip_HephaestusAtelier_09
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.08"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.09
             // # {\GOLD} ----- T2 Coil : Ultimate Containment Field Generator -----
             // #zh_CN {\GOLD} ----- T2 线圈 : 终极遏制场发生器 -----
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_09"))
-            // #tr Tooltip_HephaestusAtelier_10
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.09"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.10
             // # Directly consume energy from wireless EU net.
             // #zh_CN 直接从无线EU网络获取能量.(无线模式).
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_10"))
-            // #tr Tooltip_HephaestusAtelier_11
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.10"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.11
             // # {\AQUA}Infinite parallel{\GRAY}. Furnace mode every item smelting consume 2048 EU.
             // #zh_CN 无限并行. 熔炉模式每冶炼一个物品消耗 {\GOLD}2048 EU{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_11"))
-            // #tr Tooltip_HephaestusAtelier_12
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.11"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.12
             // # Processing time is fixed at {\GOLD}12.8s{\GRAY}.
             // #zh_CN 每次运行时间固定为 {\GOLD}12.8s{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_12"))
-            // #tr Tooltip_HephaestusAtelier_13
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.12"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.13
             // # {\GOLD} ----- T3 Coil : Teleportation Casing -----
             // #zh_CN {\GOLD} ----- T3 线圈 : 传输机械方块 -----
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_13"))
-            // #tr Tooltip_HephaestusAtelier_14
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.13"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.14
             // # Processing time {\GOLD}1s{\GRAY}.
             // #zh_CN 每次运行时间固定为 {\GOLD}1s{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_14"))
-            // #tr Tooltip_HephaestusAtelier_15
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.14"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.info.15
             // # Otherwise same as T2.
             // #zh_CN 其他方面与 T2 相同.
-            .addInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_15"))
-            // #tr Tooltip_HephaestusAtelier_2_01
+            .addInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.info.15"))
+            // #tr tst.common.machine.HephaestusAtelier.tooltip.structure.01
             // # Must install energy hatch when in T1.
             // #zh_CN T1等级线圈(普通模式)时必须安装能源仓.
-            .addStructureInfo(TSTUtils.tr("Tooltip_HephaestusAtelier_2_01"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.HephaestusAtelier.tooltip.structure.01"))
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(33, 11, 33, false)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)

@@ -53,22 +53,22 @@ public class TST_PatternAccessHatch extends MTEHatch
     private TST_MegaCraftingCenter controller;
     private AENetworkProxy gridProxy;
     private static final String[] DESC = new String[] {
-        // #tr Tooltip_PatternAccessHatch_1
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.01
         // # Access Hatch for Extreme Crafting Center
         // #zh_CN 梦魇工业合成中心的访问仓
-        TSTUtils.tr("Tooltip_PatternAccessHatch_1"),
-        // #tr Tooltip_PatternAccessHatch_2
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.01"),
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.02
         // # Connect to ME net to access patterns stored in Extreme Crafting Center.
         // #zh_CN 连接ME网络以访问梦魇工业合成中心存储的样板
-        TSTUtils.tr("Tooltip_PatternAccessHatch_2"),
-        // #tr Tooltip_PatternAccessHatch_3
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.02"),
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.03
         // # Extreme Crafting Center can only accept 1 Pattern Access Hatch at maximum.
         // #zh_CN 梦魇工业合成中心最多接受一个样板访问仓
-        TSTUtils.tr("Tooltip_PatternAccessHatch_3"),
-        // #tr Tooltip_PatternAccessHatch_4
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.03"),
+        // #tr tst.common.machine.PatternAccessHatch.tooltip.info.04
         // # Invalid items or duplicated patterns will be rejected.
         // #zh_CN 错误或重复的样板不会由此输入
-        TSTUtils.tr("Tooltip_PatternAccessHatch_4") };
+        TSTUtils.tr("tst.common.machine.PatternAccessHatch.tooltip.info.04") };
 
     public TST_PatternAccessHatch(int aID, String aName, String aNameRegional, int aTier) {
         super(aID, aName, aNameRegional, aTier, 0, "");

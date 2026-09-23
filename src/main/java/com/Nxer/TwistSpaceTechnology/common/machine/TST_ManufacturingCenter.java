@@ -408,46 +408,46 @@ public class TST_ManufacturingCenter extends GTPPMultiBlockBase<TST_Manufacturin
         TSTSharedFormat.setDefaultColor(EnumChatFormatting.GRAY);
 
         // spotless:off
-        // #tr ManufacturingCenter_Tooltips_MachineType
+        // #tr tst.common.machine.ManufacturingCenter.tooltip.machine_type
         // # Manufacturing Center | Nine in One
         // #zh_CN 加工中心 | 九合一
-        tt.addMachineType(TSTUtils.tr("ManufacturingCenter_Tooltips_MachineType"))
-            // #tr ManufacturingCenter_Tooltips_1
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.machine_type"))
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.01
             // # A Combination of Machines.
             // #zh_CN 一些机器的组合。
-            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_1"))
-            // #tr ManufacturingCenter_Tooltips_2
+            .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.01"))
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.02
             // # Recipe voltages are limited by the §aMultiUse Core§7.
             // #zh_CN §a多功能核心§7限制配方电压等级。
-            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_2"))
-            // #tr ManufacturingCenter_Tooltips_3
+            .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.02"))
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.03
             // # Manufacturing Center cannot handle recipes over %s.
             // #zh_CN 加工中心不能制作%s及以上的配方。
-            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_3", TSTSharedFormat.getTierName(VoltageIndex.UHV)))
-            // #tr ManufacturingCenter_Tooltips_4
+            .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.03", TSTSharedFormat.getTierName(VoltageIndex.UHV)))
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.04
             // # §b20%§7 faster than single blocks.
             // #zh_CN 比单方块机器快§b20%§7。
-            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_4"))
-            // #tr ManufacturingCenter_Tooltips_5
+            .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.04"))
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.05
             // # Each Core Tier over %s gains §b%s§7 Speed Bonus comparing to single block machines.
             // #zh_CN 每级超过%s的核心等级获得§b%s§7的速度提升。
             .addInfo(
                 TSTUtils.tr(
-                    "ManufacturingCenter_Tooltips_5",
+                    "tst.common.machine.ManufacturingCenter.tooltip.info.05",
                     TSTSharedFormat.getTierName(LOWEST_CORE_TIER),
                     TSTSharedFormat.percentage(SPEED_BONUS_FOR_CORE_TIER * 100)))
-            // #tr ManufacturingCenter_Tooltips_6
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.06
             // # Each Core Tier over %s gains §b%s§7 EU/t Reduction.
             // #zh_CN 每级超过%s的核心等级获得§b%s§7的能量减免。
             .addInfo(
                 TSTUtils.tr(
-                    "ManufacturingCenter_Tooltips_6",
+                    "tst.common.machine.ManufacturingCenter.tooltip.info.06",
                     TSTSharedFormat.getTierName(LOWEST_CORE_TIER),
                     TSTSharedFormat.percentage(EU_REDUCTION_FOR_CORE_TIER * 100)))
-            // #tr ManufacturingCenter_Tooltips_7
+            // #tr tst.common.machine.ManufacturingCenter.tooltip.info.07
             // # Max parallel is §b%sx§7 max voltage tier.
             // #zh_CN 最大并行为§b%sx§7最大电压等级。
-            .addInfo(TSTUtils.tr("ManufacturingCenter_Tooltips_7", MAX_PARALLEL_MODIFIER))
+            .addInfo(TSTUtils.tr("tst.common.machine.ManufacturingCenter.tooltip.info.07", MAX_PARALLEL_MODIFIER))
             .addPollutionAmount(getPollutionPerSecond(null))
             .beginStructureBlock(3, 3, 3, false)
             .addController("Front Center")

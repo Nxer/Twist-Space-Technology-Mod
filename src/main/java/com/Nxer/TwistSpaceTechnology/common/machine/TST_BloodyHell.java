@@ -621,13 +621,13 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.BloodyHellRecipes;
+        return GTCMRecipe.BloodyHellRecipeMap;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.BloodyHellRecipes);
+        return Arrays.asList(GTCMRecipe.BloodyHellRecipeMap);
     }
 
     @Override
@@ -898,7 +898,7 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
             })
             .attachSyncer(new FakeSyncWidget.BooleanSyncer(() -> isBloodClear, val -> isBloodClear = val), builder)
 
-            .addTooltip(StatCollector.translateToLocal("BloodyHell_setOrClearBlood"))
+            .addTooltip(StatCollector.translateToLocal("tst.common.machine.BloodyHell.gui.set_or_clear_blood"))
             .setTooltipShowUpDelay(TOOLTIP_DELAY)
             .setPos(80, 91)
             .setSize(16, 16);
@@ -1130,27 +1130,27 @@ public class TST_BloodyHell extends GTCM_MultiMachineBase<TST_BloodyHell> implem
         var tt = new TSTMultiblockTooltipBuilder();
 
         // spotless:off
-        // #tr Tooltip_BloodyHell_MachineType
+        // #tr tst.common.machine.BloodyHell.tooltip.machine_type
         // # Altar of Blood | Alchemic Chemistry Set | Ritual of Binding
         // #zh_CN 血之祭坛 | 炼金术台 | 绑定仪式
-        tt.addMachineType(TSTUtils.tr("Tooltip_BloodyHell_MachineType"))
-            // #tr Tooltip_BloodyHell_0
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.BloodyHell.tooltip.machine_type"))
+            // #tr tst.common.machine.BloodyHell.tooltip.info.01
             // # After years of researching, you finally find the last piece to mass-produce the Blood Magic things!
             // #zh_CN 经过多年的研究，你终于找到了量产血魔法物品的最后一块拼图！
-            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_0"))
+            .addInfo(TSTUtils.tr("tst.common.machine.BloodyHell.tooltip.info.01"))
             .addSeparator()
-            // #tr Tooltip_BloodyHell_1
+            // #tr tst.common.machine.BloodyHell.tooltip.info.02
             // # Researches show that the speed of soaking ritual is highly related to the greatness of the altar and the runes it used.
             // #zh_CN 研究表明浸血仪式的速度与祭坛的精致度和它使用的符文高度相关。
-            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_1"))
-            // #tr Tooltip_BloodyHell_2
+            .addInfo(TSTUtils.tr("tst.common.machine.BloodyHell.tooltip.info.02"))
+            // #tr tst.common.machine.BloodyHell.tooltip.info.03
             // # And there is a small text on the corner said, "Speed Runes can be the key."
             // #zh_CN 在角落里有一行小字写道，“速度符文也许是关键。”
-            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_2"))
-            // #tr Tooltip_BloodyHell_3
+            .addInfo(TSTUtils.tr("tst.common.machine.BloodyHell.tooltip.info.03"))
+            // #tr tst.common.machine.BloodyHell.tooltip.info.04
             // # Also a weird stranger told you that Armok splashes Blood everywhere in the machine.
             // #zh_CN 还有，一个奇怪的陌生人曾对你说过，阿蒙克在机器里会把血溅得到处都是。
-            .addInfo(TSTUtils.tr("Tooltip_BloodyHell_3"))
+            .addInfo(TSTUtils.tr("tst.common.machine.BloodyHell.tooltip.info.04"))
             .addController(textUseBlueprint)
             .addInputBus(textAroundController+" "+getBlueprintWithDot(1))
             .addOutputBus(textAroundController+" "+getBlueprintWithDot(1))

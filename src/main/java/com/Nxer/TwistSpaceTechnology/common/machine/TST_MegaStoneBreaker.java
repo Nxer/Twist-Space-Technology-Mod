@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipes;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.util.TSTUtils.calculateVoltageTier;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance;
@@ -189,7 +189,7 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return MegaStoneBreakerRecipes;
+        return MegaStoneBreakerRecipeMap;
     }
 
     @Override
@@ -306,38 +306,38 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MegaStoneBreaker_MachineType
+        // #tr tst.common.machine.MegaStoneBreaker.tooltip.machine_type
         // # Stone Breaker
         // #zh_CN 碎石机
-        tt.addMachineType(TSTUtils.tr("Tooltip_MegaStoneBreaker_MachineType"))
-            // #tr Tooltip_MegaStoneBreaker_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.machine_type"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.controller
             // # Controller block for the Silicon Rock Synthesizer
             // #zh_CN 硅岩制造机的控制方块
-            .addInfo(TSTUtils.tr("Tooltip_MegaStoneBreaker_Controller"))
-            // #tr Tooltip_MegaStoneBreaker.1
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.controller"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.01
             // # {\WHITE}Hey, I heard you come from a sky island?
             // #zh_CN {\WHITE}嘿,听说你来自一片空岛?
-            .addInfo(TSTUtils.tr("Tooltip_MegaStoneBreaker.1"))
-            // #tr Tooltip_MegaStoneBreaker.2
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.01"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.02
             // # Basic parallel is 4, and the multiplier is equivalent to imperfect overclock
             // #zh_CN 基础并行为4, 拥有等同于有损超频的并行加成
-            .addInfo(TSTUtils.tr("Tooltip_MegaStoneBreaker.2"))
-            // #tr Tooltip_MegaStoneBreaker.3
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.02"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.info.03
             // # Basic increase in output by 4x, When water and lava are input from the side input hatch, Increase to 1024x of output
             // #zh_CN 基础增产4倍, 当侧面输入仓输入水和岩浆时增产1024倍
-            .addInfo(TSTUtils.tr("Tooltip_MegaStoneBreaker.3"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.info.03"))
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 1)
             .addOutputBus(textUseBlueprint, 1)
             .addEnergyHatch(textUseBlueprint, 1)
-            // #tr Tooltip_MegaStoneBreaker_Hatch_0
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.01
             // # {\WHITE}Lava Hatch:{GREEN\} Left{\GRAY} side of Structure
             // #zh_CN {\WHITE}岩浆输入仓:{\GRAY}结构的{\GREEN}左{\GRAY}侧
-            .addStructureInfo(TSTUtils.tr("Tooltip_MegaStoneBreaker_Hatch_0"))
-            // #tr Tooltip_MegaStoneBreaker_Hatch_1
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.01"))
+            // #tr tst.common.machine.MegaStoneBreaker.tooltip.structure.02
             // # {\WHITE}Water Hatch:{GREEN\} Right{\GRAY} side of Structure
             // #zh_CN {\WHITE}水输入仓:{\GRAY}结构的{\GREEN}右{\GRAY}侧
-            .addStructureInfo(TSTUtils.tr("Tooltip_MegaStoneBreaker_Hatch_1"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaStoneBreaker.tooltip.structure.02"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Text_SeparatingLine)
             .toolTipFinisher();

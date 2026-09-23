@@ -35,11 +35,18 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
 
     protected Map<Integer, IIcon> iconMap = new HashMap<>();
 
+    private final String localizationName;
+
     public AbstractTstMetaItem(String unlocalizedName) {
+        this(unlocalizedName, "common." + unlocalizedName);
+    }
+
+    protected AbstractTstMetaItem(String unlocalizedName, String localizationName) {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
         this.setCreativeTab(TstCreativeTabs.TabMetaItems);
         this.setUnlocalizedName(unlocalizedName);
+        this.localizationName = localizationName;
     }
 
     @Override
@@ -50,18 +57,18 @@ public abstract class AbstractTstMetaItem extends Item implements IHasVariantAnd
     /**
      * Returns the unlocalized name of this item.
      * <p>
-     * The item damage is used as a part of key. eg: {@code item.{ITEM_NAME}.{ITEM_DAMAGE}}.
+     * The item damage is used as a part of the display key, e.g. {@code item.tst.{ITEM_NAME}.{ITEM_DAMAGE}}.
      * <p>
      * NOTE: "final", because we don't want subclasses to modify this
      */
     @Override
     public final String getUnlocalizedName(ItemStack aItemStack) {
-        return super.getUnlocalizedName() + "." + aItemStack.getItemDamage();
+        return getUnlocalizedName() + "." + aItemStack.getItemDamage();
     }
 
     @Override
     public final String getUnlocalizedName() {
-        return super.getUnlocalizedName();
+        return "item.tst." + localizationName;
     }
 
     @Override

@@ -221,7 +221,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                 }
                 ra.eut(recipe.mEUt)
                     .duration(recipe.mDuration)
-                    .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+                    .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipeMap);
 
             } else {
                 TwistSpaceTechnology.LOG.info("Wildcard recipe generating.");
@@ -251,7 +251,7 @@ public class AssemblyLineWithoutResearchRecipePool {
                     }
                     ra.eut(recipe.mEUt)
                         .duration(recipe.mDuration)
-                        .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+                        .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipeMap);
                 }
             }
         }
@@ -265,7 +265,7 @@ public class AssemblyLineWithoutResearchRecipePool {
     }
 
     public static void loadSpecialRecipes() {
-        final RecipeMap<?> MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+        final RecipeMap<?> MASL = GTCMRecipe.AssemblyLineWithoutResearchRecipeMap;
         final Fluid solderUEV = FluidRegistry.getFluid("molten.mutatedlivingsolder") != null
             ? FluidRegistry.getFluid("molten.mutatedlivingsolder")
             : FluidRegistry.getFluid("molten.solderingalloy");

@@ -37,15 +37,15 @@ public class GT_MetaTileEntity_Hatch_UncertaintyDebug extends MTEHatchUncertaint
     @Override
     public String[] getDescription() {
         return new String[] { CommonValues.TEC_MARK_EM,
-            // #tr DebugUncertaintyHatch.getDescription.02
+            // #tr tst.common.machine.DebugUncertaintyHatch.tooltip.info.02
             // # Solve the impossible.
             // #zh_CN 解决不可能解决的问题.
-            TSTUtils.tr("DebugUncertaintyHatch.getDescription.02"),
+            TSTUtils.tr("tst.common.machine.DebugUncertaintyHatch.tooltip.info.02"),
             "" + EnumChatFormatting.AQUA + EnumChatFormatting.BOLD
-            // #tr DebugUncertaintyHatch.getDescription.01
+            // #tr tst.common.machine.DebugUncertaintyHatch.tooltip.info.01
             // # The quantum world collapses.
             // #zh_CN 量子世界坍塌.
-                + TSTUtils.tr("DebugUncertaintyHatch.getDescription.01") };
+                + TSTUtils.tr("tst.common.machine.DebugUncertaintyHatch.tooltip.info.01") };
     }
 
     @Override

@@ -116,26 +116,28 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     private static String[] createDescription() {
         return new String[] {
             TSTSharedLocalization.General.HatchTier + " " + TSTSharedFormat.getTierName(VoltageIndex.UIV),
-            // #tr Tooltip_AEStorageCellInputBus.0
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.01
             // # Advanced stocking input bus upgrade for multiblock item input
             // #zh_CN 进阶存储输入总线的升级版，为多方块机器输入物品
-            TSTUtils.tr("Tooltip_AEStorageCellInputBus.0"),
-            // #tr Tooltip_AEStorageCellInputBus.1
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.01"),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.02
             // # Retrieves up to 16 marked item types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记物品
-            TSTUtils.tr("Tooltip_AEStorageCellInputBus.1"),
-            // #tr Tooltip_AEStorageCellInputBus.2
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.02"),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.03
             // # An inserted ME storage cell supplies items instead and disconnects the ME network
             // #zh_CN 放入ME存储元件后改从元件中拉取，且无法连接ME网络
-            TSTUtils.tr("Tooltip_AEStorageCellInputBus.2"),
-            // #tr Tooltip_AEStorageCellInputBus.3
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.03"),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.04
             // # Per recipe, TST machines handle %s x 2147483647 items in total
             // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647件物品
-            TSTUtils.tr("Tooltip_AEStorageCellInputBus.3", Config.MaxTotalIntSegments_AEStorageCellInput),
-            // #tr Tooltip_AEStorageCellInputBus.4
+            TSTUtils.tr(
+                "tst.common.machine.AEStorageCellInputBus.tooltip.info.04",
+                Config.MaxTotalIntSegments_AEStorageCellInput),
+            // #tr tst.common.machine.AEStorageCellInputBus.tooltip.info.05
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TSTUtils.tr("Tooltip_AEStorageCellInputBus.4") };
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.tooltip.info.05") };
     }
 
     @Override

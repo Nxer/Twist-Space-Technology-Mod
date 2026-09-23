@@ -21,7 +21,7 @@ public class ItemAdderRune extends AbstractTstMetaItem implements IItemHasCooldo
      * Create the basic item MetaItemRune.
      */
     public ItemAdderRune() {
-        // #tr item.MetaItemRune.name
+        // #tr item.tst.common.MetaItemRune.name
         // # Meta Item Rune
         // #zh_CN Meta Item Rune
         super("MetaItemRune");

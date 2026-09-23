@@ -152,16 +152,16 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
     public RecipeMap<?> getRecipeMap() {
         switch (machineMode) {
             case 1:
-                return GTCMRecipe.ElvenWorkshopRecipes;
+                return GTCMRecipe.ElvenWorkshopRecipeMap;
             default:
-                return GTCMRecipe.RuneEngraverRecipes;
+                return GTCMRecipe.RuneEngraverRecipeMap;
         }
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.ElvenWorkshopRecipes, GTCMRecipe.RuneEngraverRecipes);
+        return Arrays.asList(GTCMRecipe.ElvenWorkshopRecipeMap, GTCMRecipe.RuneEngraverRecipeMap);
     }
 
     @Override
@@ -180,14 +180,14 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
 
     @Override
     public String getMachineModeName() {
-        // #tr ElvenWorkshop.modeMsg.0
+        // #tr tst.common.machine.ElvenWorkshop.mode.0
         // # Mode: Rune Engraver
         // #zh_CN 符文雕刻模式
 
-        // #tr ElvenWorkshop.modeMsg.1
+        // #tr tst.common.machine.ElvenWorkshop.mode.1
         // # Mode: Mana Infuser
         // #zh_CN 魔力灌注模式
-        return StatCollector.translateToLocal("ElvenWorkshop.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.ElvenWorkshop.mode." + machineMode);
     }
 
     // endregion
@@ -234,16 +234,16 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_ElvenWorkshop_MachineType
+        // #tr tst.common.machine.ElvenWorkshop.tooltip.machine_type
         // # Mana Infuser/Rune Engraver
         // #zh_CN 魔力灌注/符文雕刻
-        tt.addMachineType(TSTUtils.tr("Tooltip_ElvenWorkshop_MachineType"))
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.ElvenWorkshop.tooltip.machine_type"))
             .addSeparator()
             .addInfo(
-                // #tr ElvenWorkshopStructureNote
+                // #tr tst.common.machine.ElvenWorkshop.tooltip.info.01
                 // # For its unique structure, you may need to use Blueprint to build the machine.
                 // #zh_CN 由于该机器独特的结构，你可能需要在建成之后重新摆放主机以通过结构检测。
-                TSTUtils.tr("ElvenWorkshopStructureNote"))
+                TSTUtils.tr("tst.common.machine.ElvenWorkshop.tooltip.info.01"))
             .beginStructureBlock(5, 3, 5, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

@@ -241,7 +241,7 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (machineMode == 1) {
-            return GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+            return GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap;
         }
         return RecipeMaps.laserEngraverRecipes;
     }
@@ -249,7 +249,8 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes, RecipeMaps.laserEngraverRecipes);
+        return Arrays
+            .asList(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap, RecipeMaps.laserEngraverRecipes);
     }
 
     @Override
@@ -268,14 +269,15 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
 
     @Override
     public String getMachineModeName() {
-        // #tr PreciseHighEnergyPhotonicQuantumMaster.mode.0
+        // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.mode.0
         // # Mode: Laser Engraver
         // #zh_CN 激光蚀刻机模式
 
-        // #tr PreciseHighEnergyPhotonicQuantumMaster.mode.1
+        // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.mode.1
         // # Mode: Photon Manipulator
         // #zh_CN 光子掌控者模式
-        return StatCollector.translateToLocal("PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
+        return StatCollector
+            .translateToLocal("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.mode." + machineMode);
     }
 
     @Override
@@ -364,66 +366,66 @@ public class GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_PhC_MachineType
+        // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.machine_type
         // # Photon Controller/Laser Engraver
         // #zh_CN 光子掌控者/激光蚀刻机
-        tt.addMachineType(TSTUtils.tr("Tooltip_PhC_MachineType"))
-            // #tr Tooltip_PhC_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.machine_type"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.01
             // # Controller block for the Precise High-Energy Photonic Quantum Master
             // #zh_CN 精密高能光量子掌控者的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_PhC_00"))
-            // #tr Tooltip_PhC_01
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.01"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.02
             // # {\BLUE}Prism tank in order, sir.
             // #zh_CN {\BLUE}Prism tank in order, sir.
-            .addInfo(TSTUtils.tr("Tooltip_PhC_01"))
-            // #tr Tooltip_PhC_02
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.02"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.03
             // # Control Photons on the scale of 10⁻² meters.
             // #zh_CN 在10¯¹² m 尺度上掌控光子.
-            .addInfo(TSTUtils.tr("Tooltip_PhC_02"))
-            // #tr Tooltip_PhC_03
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.03"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.04
             // # Install Photonic Intensifier on the back side of the structure to dramatically increase production speeds.
             // #zh_CN 可以在机器背面对应位置安装光量子增幅器,大幅提高处理速度.
-            .addInfo(TSTUtils.tr("Tooltip_PhC_03"))
-            // #tr Tooltip_PhC_04
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.04"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.05
             // # Multi upgrade modules can be stacked. Also can be uninstalled. Replace using normal Casing.
             // #zh_CN 多个光量子增幅器效果可以叠加,当然也可以不安装,使用强化镀铱机械方块占位.
-            .addInfo(TSTUtils.tr("Tooltip_PhC_04"))
-            // #tr Tooltip_PhC_05
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.05"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.06
             // # Use screwdriver to change mode.
             // #zh_CN 使用螺丝刀切换模式.
-            .addInfo(TSTUtils.tr("Tooltip_PhC_05"))
-            // #tr Tooltip_PhC_06
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.06"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.07
             // # {\GOLD}Photon Controller mode:
             // #zh_CN {\GOLD}光子掌控者模式:
-            .addInfo(TSTUtils.tr("Tooltip_PhC_06"))
-            // #tr Tooltip_PhC_07
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.07"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.08
             // # {\AQUA}16x{\GRAY} Parallel
             // #zh_CN {\AQUA}16x{\GRAY} 并行
-            .addInfo(TSTUtils.tr("Tooltip_PhC_07"))
-            // #tr Tooltip_PhC_08
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.08"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.09
             // # {\GOLD}Laser Engraver mode:
             // #zh_CN {\GOLD}激光蚀刻机模式:
-            .addInfo(TSTUtils.tr("Tooltip_PhC_08"))
-            // #tr Tooltip_PhC_09
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.09"))
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.10
             // # {\AQUA}256x{\GRAY} Parallel | Extra reduce {\RED}50%{\GRAY} recipe time spent
             // #zh_CN {\AQUA}256x{\GRAY} 并行 | 额外降低{\RED}50%{\GRAY}耗时
-            .addInfo(TSTUtils.tr("Tooltip_PhC_09"))
+            .addInfo(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.info.10"))
             .beginStructureBlock(15, 7, 9, false)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasingAdvIrPlated, 296, 347, false)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasingTT_0, 0, 78, false)
-            // #tr textUpgradeCasingAndLocation
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.structure.01
             // # Upgrade module casing at backside area wrapped by AdvIrPlated Casing
             // #zh_CN Upgrade module casing at backside area wrapped by AdvIrPlated Casing
-            .addCasingInfoRange(TSTUtils.tr("textUpgradeCasingAndLocation"), 0, 25, false)
+            .addCasingInfoRange(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.structure.01"), 0, 25, false)
             .addInputHatch(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
             .addOutputHatch(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
             .addInputBus(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
             .addOutputBus(TSTSharedLocalization.Structure.textCenterOfLRSides, 2)
-            // #tr textHighPowerCasingUDSides
+            // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.structure.02
             // # High Power Casing area of up and down side
             // #zh_CN 上下两侧的超能机械方块区域
-            .addEnergyHatch(TSTUtils.tr("textHighPowerCasingUDSides"), 3)
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.tooltip.structure.02"), 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

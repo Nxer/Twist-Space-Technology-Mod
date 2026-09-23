@@ -390,15 +390,15 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
         // spotless:off
-        // #tr DTMPFP.getInfoData.01
+        // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.01
         // # Running time (tick)
         // #zh_CN 已运行时间(tick)
-        ret[origin.length] = TSTUtils.tr("DTMPFP.getInfoData.01") + ": " + EnumChatFormatting.YELLOW + runningTime;
+        ret[origin.length] = TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.01") + ": " + EnumChatFormatting.YELLOW + runningTime;
 
-        // #tr DTMPFP.getInfoData.02
+        // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.02
         // # Fuel discount
         // #zh_CN 维度催化剂消耗率
-        ret[origin.length + 1] = TSTUtils.tr("DTMPFP.getInfoData.02") + ": " + EnumChatFormatting.YELLOW + fuelCostMultiplier;
+        ret[origin.length + 1] = TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.info.02") + ": " + EnumChatFormatting.YELLOW + fuelCostMultiplier;
 
         // spotless:on
         return ret;
@@ -459,36 +459,36 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType
+            // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.machine_type
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Plasma Forge
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}等离子锻炉
             tooltip
                 .addMachineType(
-                    TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_MachineType"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01
+                    TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.machine_type"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.01
                 // # {\BLUE}{\ITALIC}If the facts don't fit the theory, change the facts.
                 // #zh_CN {\BLUE}{\ITALIC}如果事实与理论不符， 那就修改事实。
-                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_01"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.01"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.02
                 // # The Prototype of Dimensionally Transcendent Plasma Forge
                 // #zh_CN 超维度等离子锻炉的原型机.
-                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_02"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.02"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.03
                 // # Better at continuous long-term operation and mass production.
                 // #zh_CN 更擅长连续长时间运行和大批量生产.
-                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_03"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.03"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04
                 // # But it is not good enough in miniaturization.
                 // #zh_CN 但在小型化方面不够好.
-                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_04"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.04"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05
                 // # Reach the best operating state after {\RED}24 {\GRAY} hours of continuous operation, reducing {\AQUA}75%%{\GRAY} fuel consumption.
                 // #zh_CN 连续运行 {\RED}24 {\GRAY}小时后达到最佳运行状态, 降低 {\AQUA}75%%{\GRAY} 燃料消耗.
-                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_05"))
-                // #tr Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.05"))
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06
                 // # After stopping operation, the fuel consumption reduction rate will quickly decrease to {\AQUA}0%%{\GRAY} within {\RED}1{\GRAY} hours.
                 // #zh_CN 停止运行后燃料消耗减免率会在 {\RED}1{\GRAY} 小时内快速降低至 {\AQUA}0%%{\GRAY}.
-                .addInfo(TSTUtils.tr("Tooltip_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2_06"))
+                .addInfo(TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.tooltip.info.06"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipes;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.MegaStoneBreakerRecipeMap;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -48,70 +48,70 @@ public class MegaStoneBreakerRecipePool {
             .itemOutputs(CobbleStone)
             .eut(6)
             .duration(20)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(2))
             .itemOutputs(CobbleStone1)
             .eut(6 * 4)
             .duration(20 * 2)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(3))
             .itemOutputs(CobbleStone2)
             .eut(6 * 16)
             .duration(20 * 3)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(4))
             .itemOutputs(CobbleStone3)
             .eut(6 * 64)
             .duration(20 * 4)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(5))
             .itemOutputs(CobbleStone4)
             .eut(6 * 256)
             .duration(20 * 5)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(6))
             .itemOutputs(CobbleStone5)
             .eut(6 * 1024)
             .duration(20 * 6)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(7))
             .itemOutputs(CobbleStone6)
             .eut(6 * 2048)
             .duration(20 * 7)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(8))
             .itemOutputs(CobbleStone7)
             .eut(6 * 4096)
             .duration(20 * 8)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(9))
             .itemOutputs(CobbleStone8)
             .eut(6 * 16384)
             .duration(20 * 9)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(GTUtility.getIntegratedCircuit(20))
             .itemOutputs(new ItemStack(Blocks.stone))
             .eut(6)
             .duration(20)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -120,7 +120,7 @@ public class MegaStoneBreakerRecipePool {
             .itemOutputs(new ItemStack(Blocks.obsidian))
             .eut(6)
             .duration(20)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         TST_RecipeBuilder.builder()
             .itemInputs(
@@ -129,7 +129,7 @@ public class MegaStoneBreakerRecipePool {
             .itemOutputs(new ItemStack(Blocks.netherrack))
             .eut(6)
             .duration(20)
-            .addTo(MegaStoneBreakerRecipes);
+            .addTo(MegaStoneBreakerRecipeMap);
 
         if (Mods.EtFuturumRequiem.isModLoaded()) {
             TST_RecipeBuilder.builder()
@@ -140,7 +140,7 @@ public class MegaStoneBreakerRecipePool {
                 .itemOutputs(GTOreDictUnificator.get(OrePrefixes.stone, Materials.Basalt, 1L))
                 .eut(6)
                 .duration(20)
-                .addTo(MegaStoneBreakerRecipes);
+                .addTo(MegaStoneBreakerRecipeMap);
 
             TST_RecipeBuilder.builder()
                 .itemInputs(
@@ -150,7 +150,7 @@ public class MegaStoneBreakerRecipePool {
                 .itemOutputs(GTModHandler.getModItem(Mods.EtFuturumRequiem.ID, "cobbled_deepslate", 1, 0))
                 .eut(6)
                 .duration(20)
-                .addTo(MegaStoneBreakerRecipes);
+                .addTo(MegaStoneBreakerRecipeMap);
         }
     }
 }

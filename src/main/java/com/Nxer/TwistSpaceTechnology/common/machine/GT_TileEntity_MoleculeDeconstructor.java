@@ -340,14 +340,14 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
 
     @Override
     public String getMachineModeName() {
-        // #tr MoleculeDeconstructor.modeMsg.0
+        // #tr tst.common.machine.MoleculeDeconstructor.mode.0
         // # Mode: Electrolyzer
         // #zh_CN 电解机模式
 
-        // #tr MoleculeDeconstructor.modeMsg.1
+        // #tr tst.common.machine.MoleculeDeconstructor.mode.1
         // # Mode: Centrifuge
         // #zh_CN 离心机模式
-        return StatCollector.translateToLocal("MoleculeDeconstructor.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.MoleculeDeconstructor.mode." + machineMode);
     }
 
     public int getMaxParallelRecipes() {
@@ -436,34 +436,34 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MoleculeDeconstructor_MachineType
+        // #tr tst.common.machine.MoleculeDeconstructor.tooltip.machine_type
         // # Electrolyzer | Centrifuge
         // #zh_CN 电解机 | 离心机
-        tt.addMachineType(TSTUtils.tr("Tooltip_MoleculeDeconstructor_MachineType"))
-            // #tr Tooltip_MoleculeDeconstructor_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.machine_type"))
+            // #tr tst.common.machine.MoleculeDeconstructor.tooltip.info.01
             // # Controller block for the Molecule Deconstructor
             // #zh_CN 分子解构器的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_00"))
-            // #tr Tooltip_MoleculeDeconstructor_01
+            .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.01"))
+            // #tr tst.common.machine.MoleculeDeconstructor.tooltip.info.02
             // # {\AQUA}The lightning seemed to roll down a ladder.
             // #zh_CN {\AQUA}雷电好像从一架梯子上滚下来.
-            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_01"))
-            // #tr Tooltip_MoleculeDeconstructor_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.02"))
+            // #tr tst.common.machine.MoleculeDeconstructor.tooltip.info.03
             // # Separate the molecules one by one with tweezers.
             // #zh_CN 用镊子将分子一个一个一个分开.
-            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_02"))
-            // #tr Tooltip_MoleculeDeconstructor_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.03"))
+            // #tr tst.common.machine.MoleculeDeconstructor.tooltip.info.04
             // # Extra {\AQUA}24x{\GRAY} Parallel per Piece. {\GOLD}16{\GRAY} Piece enable Perfect Overclock.
             // #zh_CN 每层提供{\AQUA}24x{\GRAY}并行. {\GOLD}16{\GRAY}层启用无损超频.
-            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_03"))
-            // #tr Tooltip_MoleculeDeconstructor_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.04"))
+            // #tr tst.common.machine.MoleculeDeconstructor.tooltip.info.05
             // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_04"))
-            // #tr Tooltip_MoleculeDeconstructor_05
+            .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.05"))
+            // #tr tst.common.machine.MoleculeDeconstructor.tooltip.info.06
             // # The Glass Tier limit the Energy hatch voltage Tier.
             // #zh_CN 玻璃等级限制能源仓等级.
-            .addInfo(TSTUtils.tr("Tooltip_MoleculeDeconstructor_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.tooltip.info.06"))
             .addInfo(textScrewdriverChangeMode)
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 4)

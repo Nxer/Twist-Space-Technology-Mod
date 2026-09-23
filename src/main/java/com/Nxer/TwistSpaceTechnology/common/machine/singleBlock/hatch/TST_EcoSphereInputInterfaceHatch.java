@@ -48,7 +48,6 @@ import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
 import gregtech.common.tileentities.machines.multi.MTETreeFarm.Mode;
-import lombok.Getter;
 
 @SkipGenerateDescription
 public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
@@ -74,7 +73,6 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
     private final boolean[] selectedTreeOutputs = new boolean[Mode.values().length];
     private int machineMode = -1;
     private int capacityUpgrades = 0;
-    @Getter
     private int cloningRecipeId = 0;
 
     public TST_EcoSphereInputInterfaceHatch(int id, String name, String nameRegional, int tier) {
@@ -84,6 +82,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private TST_EcoSphereInputInterfaceHatch(String name, int tier, String[] description, ITexture[][][] textures) {
         super(name, tier, MAX_INPUT_SLOTS, description, textures);
+    }
+
+    public int getCloningRecipeId() {
+        return cloningRecipeId;
     }
 
     @Override
@@ -324,10 +326,12 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
                     (clickData, widget) -> { if (clickData.mouseButton == 0) dropInventoryRange(0, MAX_INPUT_SLOTS); })
                     .setPlayClickSound(true)
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_EXPORT)
-                    // #tr EcoSphereInputInterface.gui.dropAllItems
+                    // #tr tst.ecosphere.machine.EcoSphereInputInterface.gui.drop_all_items
                     // # Drop all stored items
                     // #zh_CN 清空所有物品
-                    .addTooltip(StatCollector.translateToLocal("EcoSphereInputInterface.gui.dropAllItems"))
+                    .addTooltip(
+                        StatCollector
+                            .translateToLocal("tst.ecosphere.machine.EcoSphereInputInterface.gui.drop_all_items"))
                     .setPos(7, 63)
                     .setSize(16, 16));
 
@@ -453,10 +457,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private void addCloningRecipeInput(ModularWindow.Builder builder) {
         builder.widget(
-            // #tr EcoSphereInputInterface.gui.biologicalAddress
+            // #tr tst.ecosphere.machine.EcoSphereInputInterface.gui.biological_address
             // # Biological Address
             // #zh_CN 生物地址
-            TextWidget.localised("EcoSphereInputInterface.gui.biologicalAddress")
+            TextWidget.localised("tst.ecosphere.machine.EcoSphereInputInterface.gui.biological_address")
                 .setTextAlignment(Alignment.Center)
                 .setPos(8, 21)
                 .setSize(80, 14)
@@ -496,10 +500,10 @@ public final class TST_EcoSphereInputInterfaceHatch extends MTEHatch implements 
 
     private void addCloningAuxiliaryInputSlots(ModularWindow.Builder builder) {
         builder.widget(
-            // #tr EcoSphereInputInterface.gui.auxiliaryInputs
+            // #tr tst.ecosphere.machine.EcoSphereInputInterface.gui.auxiliary_inputs
             // # Auxiliary Inputs
             // #zh_CN 辅助输入
-            TextWidget.localised("EcoSphereInputInterface.gui.auxiliaryInputs")
+            TextWidget.localised("tst.ecosphere.machine.EcoSphereInputInterface.gui.auxiliary_inputs")
                 .setTextAlignment(Alignment.Center)
                 .setPos(88, 14)
                 .setSize(80, 14)

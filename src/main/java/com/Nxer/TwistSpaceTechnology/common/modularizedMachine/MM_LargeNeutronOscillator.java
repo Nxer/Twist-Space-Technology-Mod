@@ -198,7 +198,7 @@ public class MM_LargeNeutronOscillator
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.NeutronActivatorRecipesWithEU;
+        return GTCMRecipe.NeutronActivatorWithEURecipeMap;
     }
 
     @Override
@@ -251,26 +251,26 @@ public class MM_LargeNeutronOscillator
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            // #tr Tooltip_LargeNeutronOscillator_MachineType
+            // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.machine_type
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Neutron Activator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}中子活化器
             tooltip
                 .addMachineType(
-                    TSTUtils.tr("Tooltip_LargeNeutronOscillator_MachineType"))
-                // #tr Tooltip_LargeNeutronOscillator_01
+                    TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.machine_type"))
+                // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.info.01
                 // # {\AQUA}{\UNDERLINE}The more physics you know the less engineering you need.
                 // #zh_CN {\AQUA}{\UNDERLINE}掌握的物理学越多， 需要的工程学越少。
-                .addInfo(TSTUtils.tr("Tooltip_LargeNeutronOscillator_01"))
+                .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.01"))
 
-                // #tr Tooltip_LargeNeutronOscillator_02
+                // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.info.02
                 // # It consumes a lot of electricity to produce large quantities quickly.
                 // #zh_CN 通过消耗大量电力来进行快速大批量生产.
-                .addInfo(TSTUtils.tr("Tooltip_LargeNeutronOscillator_02"))
+                .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.02"))
 
-                // #tr Tooltip_LargeNeutronOscillator_03
+                // #tr tst.modular.machine.LargeNeutronOscillator.tooltip.info.03
                 // # Installing module hatches near the controller block can significantly improve machine performance.
                 // #zh_CN 在主机附近安装模块仓室可以显著提升机器性能.
-                .addInfo(TSTUtils.tr("Tooltip_LargeNeutronOscillator_03"))
+                .addInfo(TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.tooltip.info.03"))
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.OverclockControllerDescription)

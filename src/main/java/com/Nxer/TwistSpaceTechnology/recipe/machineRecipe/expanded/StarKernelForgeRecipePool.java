@@ -32,7 +32,7 @@ public class StarKernelForgeRecipePool {
             .specialValue(13500)
             .eut(eut)
             .duration(duration)
-            .addTo(GTCMRecipe.BallLightningRecipes);
+            .addTo(GTCMRecipe.StarKernelGeneratorRecipeMap);
     }
 
     private static void addRecipe(FluidStack[] fluidInputs, FluidStack[] fluidOutputs, int eut, int duration) {

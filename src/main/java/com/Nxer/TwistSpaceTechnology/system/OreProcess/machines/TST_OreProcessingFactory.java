@@ -228,7 +228,7 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.OreProcessingVisualRecipes;
+        return GTCMRecipe.OreProcessingVisualRecipeMap;
     }
 
     @Override
@@ -298,17 +298,20 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
         if (tag.getBoolean("isWirelessMode")) {
-            // #tr Waila.TST_OreProcessingFactory.1
+            // #tr tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.1
             // # In Wireless mode
             // #zh_CN 无线EU电网模式
-            currentTip.add(EnumChatFormatting.AQUA + TSTUtils.tr("Waila.TST_OreProcessingFactory.1"));
+            currentTip.add(
+                EnumChatFormatting.AQUA
+                    + TSTUtils.tr("tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.1"));
         }
         if (tag.getBoolean("isActive") && tag.getBoolean("isWirelessMode")) {
             currentTip.add(
-                // #tr Waila.TST_OreProcessingFactory.2
+                // #tr tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.2
                 // # Current Using EU:
                 // #zh_CN 当前消耗EU:
-                EnumChatFormatting.AQUA + TSTUtils.tr("Waila.TST_OreProcessingFactory.2")
+                EnumChatFormatting.AQUA
+                    + TSTUtils.tr("tst.common.machine.OreProcessingFactory.waila.tst_ore_processing_factory.2")
                     + EnumChatFormatting.GOLD
                     + formatNumber(tag.getLong("usingEU"))
                     + EnumChatFormatting.RESET
@@ -552,39 +555,39 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_OreProcessingFactory_MachineType
+        // #tr tst.common.machine.OreProcessingFactory.tooltip.machine_type
         // # Ore Processor
         // #zh_CN 矿石处理厂
-        tt.addMachineType(TSTUtils.tr("Tooltip_OreProcessingFactory_MachineType"))
-            // #tr Tooltip_OreProcessingFactory_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.machine_type"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.controller
             // # Controller block for the General Ore Processing Factory TST
             // #zh_CN 通用矿物处理厂TST的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_Controller"))
-            // #tr Tooltip_OreProcessingFactory_01
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.controller"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.01
             // # {\WHITE}Engineering is the art of directing the great sources of power in nature for the use and convenience of man.
             // #zh_CN {\WHITE}所谓工程, 就是一门将大自然中绝佳的能量源用于惠世济民的艺术.
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_01"))
-            // #tr Tooltip_OreProcessingFactory_02
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.01"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.02
             // # The ores will line up and go in through the entrance and out through the exit.
             // #zh_CN 矿石们将排好队从入口进去, 再从出口出来.
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_02"))
-            // #tr Tooltip_OreProcessingFactory_03
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.02"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.03
             // # This machine will not do overclock. Progress time is always {\GOLD}6.4s{\GRAY} (default).
             // #zh_CN 机器不会进行超频. 处理时间固定为 {\GOLD}6.4s{\GRAY} (默认) .
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_03"))
-            // #tr Tooltip_OreProcessingFactory_04
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.03"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.04
             // # It will process as many inputs as possible at once, if power allow.
             // #zh_CN 将尽可能一次处理全部输入的原料, 供电允许的话.
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_04"))
-            // #tr Tooltip_OreProcessingFactory_05
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.04"))
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.05
             // # Consume {\GOLD}3200L{\GRAY} Lubricant every {\GOLD}12.8s{\GRAY} (default).
             // #zh_CN 每{\GOLD}12.8s{\GRAY} 消耗 {\GOLD}3200L{\GRAY} 润滑油(默认) .
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.05"))
             .addInfo(Tooltips_JoinWirelessNetWithoutEnergyHatch)
-            // #tr Tooltip_OreProcessingFactory_06
+            // #tr tst.common.machine.OreProcessingFactory.tooltip.info.06
             // # Non-ore inputs will be transferred to the output bus.
             // #zh_CN 非矿石输入物将被转移到输出总线.
-            .addInfo(TSTUtils.tr("Tooltip_OreProcessingFactory_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.OreProcessingFactory.tooltip.info.06"))
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)

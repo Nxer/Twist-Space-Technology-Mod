@@ -31,7 +31,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
 public class MiracleTopRecipePool {
 
-    private static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipes;
+    private static final RecipeMap<?> MT = GTCMRecipe.MiracleTopRecipeMap;
 
     public static void loadRecipes() {
         TwistSpaceTechnology.LOG.info("MiracleTopRecipePool loading recipes.");

@@ -220,14 +220,14 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     @Override
     public String getMachineModeName() {
-        // #tr PhysicalFormSwitcher.modeMsg.0
+        // #tr tst.common.machine.PhysicalFormSwitcher.mode.0
         // # Mode: Fluid Solidifier
         // #zh_CN 流体固化机模式
 
-        // #tr PhysicalFormSwitcher.modeMsg.1
+        // #tr tst.common.machine.PhysicalFormSwitcher.mode.1
         // # Mode: Fluid Extractor
         // #zh_CN 流体提取机模式
-        return StatCollector.translateToLocal("PhysicalFormSwitcher.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.PhysicalFormSwitcher.mode." + machineMode);
     }
 
     public int getMaxParallelRecipes() {
@@ -367,34 +367,34 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_PhysicalFormSwitcher_MachineType
+        // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.machine_type
         // # Fluid Solidifier | Fluid Extractor
         // #zh_CN 流体固化器 | 流体提取机
-        tt.addMachineType(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_MachineType"))
-            // #tr Tooltip_PhysicalFormSwitcher_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.machine_type"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.01
             // # Controller block for the Physical Form Switcher
             // #zh_CN 物质形态转换器的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_00"))
-            // #tr Tooltip_PhysicalFormSwitcher_01
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.01"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.02
             // # {\YELLOW}Forming Master !
             // #zh_CN {\YELLOW}体态多端！
-            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_01"))
-            // #tr Tooltip_PhysicalFormSwitcher_02
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.02"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.03
             // # The ultimate method of melt operation.
             // #zh_CN 熔体操作的最终手段.
-            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_02"))
-            // #tr Tooltip_PhysicalFormSwitcher_03
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.03"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.04
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_03"))
-            // #tr Tooltip_PhysicalFormSwitcher_04
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.04"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.05
             // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_04"))
-            // #tr Tooltip_PhysicalFormSwitcher_05
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.05"))
+            // #tr tst.common.machine.PhysicalFormSwitcher.tooltip.info.06
             // # The Glass Tier limit the recipe voltage tier.
             // #zh_CN 玻璃等级限制可执行配方等级.
-            .addInfo(TSTUtils.tr("Tooltip_PhysicalFormSwitcher_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.tooltip.info.06"))
             .beginStructureBlock(15, 20, 15, false)
             .addInputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textAnyCasing, 1)

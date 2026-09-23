@@ -94,25 +94,25 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
             if (maxProgressingTime > 0) {
                 // spotless:off
                 currentTip.add(
-                    // #tr Waila.PerfectExecutionCore.1
+                    // #tr tst.modular.machine.PerfectExecutionCore.waila.perfect_execution_core.1
                     // # Total progressing time
                     // #zh_CN 总耗时
-                    TSTUtils.tr("Waila.PerfectExecutionCore.1") + " : "
+                    TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.waila.perfect_execution_core.1") + " : "
                         + maxProgressingTime + " tick ("
                         + (maxProgressingTime / 20) + "s)");
                 int progressedTime = tag.getInteger("progressedTime");
                 currentTip.add(
-                    // #tr Waila.ExecutionCore.2
+                    // #tr tst.modular.machine.ExecutionCore.waila.execution_core.2
                     // # Progressed time
                     // #zh_CN 已执行时间
-                    TSTUtils.tr("Waila.ExecutionCore.2") + " : "
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.2") + " : "
                         + progressedTime + " tick ("
                         + (progressedTime / 20) + "s)"
                 );
                 String costEU = tag.getString("costEU");
                 if (costEU != null && !costEU.isEmpty()) {
                     currentTip.add(
-                        EnumChatFormatting.AQUA + TSTUtils.tr("Waila.TST_MiracleDoor.1")
+                        EnumChatFormatting.AQUA + TSTUtils.tr("tst.common.machine.BallLightning.waila.tst_miracle_door.1")
                             + EnumChatFormatting.RESET
                             + ": "
                             + EnumChatFormatting.GOLD
@@ -122,16 +122,16 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
                 }
                 // spotless:on
             } else {
-                // #tr Waila.ExecutionCore.IsIdle
+                // #tr tst.modular.machine.ExecutionCore.waila.execution_core.is_idle
                 // # This §fExecution Core§7 is idle.
                 // #zh_CN 此§f执行核心§7处于空闲状态
-                currentTip.add(TSTUtils.tr("Waila.ExecutionCore.IsIdle"));
+                currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.is_idle"));
             }
         } else {
-            // #tr Waila.ExecutionCore.HasNotBeenSetup
+            // #tr tst.modular.machine.ExecutionCore.waila.execution_core.has_not_been_setup
             // # This execution core has not been setup.
             // #zh_CN 此执行核心未初始化
-            currentTip.add(TSTUtils.tr("Waila.ExecutionCore.HasNotBeenSetup"));
+            currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.has_not_been_setup"));
         }
 
     }
@@ -173,22 +173,22 @@ public class PerfectExecutionCore extends ExecutionCoreBase {
         if (description == null || description.length == 0) {
             description =
                 new String[]{
-                    // #tr Tooltips.PerfectExecutionCore.01
+                    // #tr tst.modular.machine.PerfectExecutionCore.tooltip.info.01
                     // # Add a second self to your modularized machine, but more powerful.
                     // #zh_CN 为你的模块化机器添加第二个自我, 但更加强大.
-                    TSTUtils.tr("Tooltips.PerfectExecutionCore.01"),
-                    // #tr Tooltips.PerfectExecutionCore.02
+                    TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.tooltip.info.01"),
+                    // #tr tst.modular.machine.PerfectExecutionCore.tooltip.info.02
                     // # Use the logic parameters of the machine, but without energy constraints, and parallel infinity.
                     // #zh_CN 使用机器的逻辑参数, 但不受能源限制, 并且并行无限.
-                    TSTUtils.tr("Tooltips.PerfectExecutionCore.02"),
-                    // #tr Tooltips.PerfectExecutionCore.03
+                    TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.tooltip.info.02"),
+                    // #tr tst.modular.machine.PerfectExecutionCore.tooltip.info.03
                     // # Directly use wireless EU energy.
                     // #zh_CN 直接使用无线EU能源.
-                    TSTUtils.tr("Tooltips.PerfectExecutionCore.03"),
-                    // #tr Tooltips.PerfectExecutionCore.04
+                    TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.tooltip.info.03"),
+                    // #tr tst.modular.machine.PerfectExecutionCore.tooltip.info.04
                     // # Any task is completed within 1 second.
                     // #zh_CN 任何任务都在 1 秒内完成.
-                    TSTUtils.tr("Tooltips.PerfectExecutionCore.04"),
+                    TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.tooltip.info.04"),
                 };
         }
         return description;

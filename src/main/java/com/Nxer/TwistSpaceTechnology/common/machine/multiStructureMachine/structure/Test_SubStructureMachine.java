@@ -132,8 +132,9 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.mode = (this.mode + 1) % 2;
-            GTUtility
-                .sendChatTrans(aPlayer, StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + this.mode));
+            GTUtility.sendChatTrans(
+                aPlayer,
+                StatCollector.translateToLocal("tst.common.machine.IntensifyChemicalDistorter.mode." + this.mode));
         }
     }
 
@@ -184,7 +185,7 @@ public class Test_SubStructureMachine extends GT_TileEntity_MultiStructureMachin
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TSTUtils.tr("Tooltip_ICD_MachineType"))
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type"))
             .beginStructureBlock(11, 13, 11, false)
             .addController(textFrontBottom)
             .addCasingInfoRange(textCasing, 8, 26, false)

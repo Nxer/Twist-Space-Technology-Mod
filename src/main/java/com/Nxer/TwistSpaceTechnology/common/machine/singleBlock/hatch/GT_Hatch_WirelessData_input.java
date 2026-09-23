@@ -116,11 +116,11 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
 
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
-        // #tr tst.wirelessInputData.config.text
+        // #tr tst.common.machine.WirelessDataInputHatch.gui.config_weight
         // # configure the weight of your slave
         // #zh_CN 设置光学输入的权重
         builder.widget(
-            TextWidget.localised("tst.wirelessInputData.config.text")
+            TextWidget.localised("tst.common.machine.WirelessDataInputHatch.gui.config_weight")
                 .setPos(49, 18)
                 .setSize(81, 14))
             .widget(
@@ -141,10 +141,10 @@ public class GT_Hatch_WirelessData_input extends MTEHatchDataInput
     public String[] getDescription() {
         if (tooltips == null) {
             tooltips = new String[] { Mark_TwistSpaceTechnology_TecTech,
-                // #tr WirelessDataInput.tooltips.01
+                // #tr tst.common.machine.WirelessDataInputHatch.tooltip.info.01
                 // # Wireless Quantum Data Input for Multiblocks
                 // #zh_CN 多方块机器无线数据输入
-                TSTUtils.tr("WirelessDataInput.tooltips.01") };
+                TSTUtils.tr("tst.common.machine.WirelessDataInputHatch.tooltip.info.01") };
         }
         return tooltips;
     }

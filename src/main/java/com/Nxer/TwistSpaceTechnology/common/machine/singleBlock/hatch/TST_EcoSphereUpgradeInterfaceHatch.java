@@ -217,10 +217,12 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
                         })
                     .setPlayClickSound(true)
                     .setBackground(GTUITextures.BUTTON_STANDARD, GTUITextures.OVERLAY_BUTTON_EXPORT)
-                    // #tr EcoSphereUpgradeInterface.gui.dropAllItems
+                    // #tr tst.ecosphere.machine.EcoSphereUpgradeInterface.gui.drop_all_items
                     // # Drop all stored items
                     // #zh_CN 清空所有物品
-                    .addTooltip(StatCollector.translateToLocal("EcoSphereUpgradeInterface.gui.dropAllItems"))
+                    .addTooltip(
+                        StatCollector
+                            .translateToLocal("tst.ecosphere.machine.EcoSphereUpgradeInterface.gui.drop_all_items"))
                     .setPos(7, 63)
                     .setSize(16, 16))
             .widget(

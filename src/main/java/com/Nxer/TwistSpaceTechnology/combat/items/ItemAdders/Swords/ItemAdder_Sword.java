@@ -35,6 +35,11 @@ public abstract class ItemAdder_Sword extends ItemSword implements ICombatGear {
         this.setUnlocalizedName(unlocalizedname);
     }
 
+    @Override
+    public String getUnlocalizedName() {
+        return "item.tst." + unlocalizedName;
+    }
+
     public ItemStack initiItemStack(String Name, Item item) {
         return new ItemStack(item, 1, 0);
     }

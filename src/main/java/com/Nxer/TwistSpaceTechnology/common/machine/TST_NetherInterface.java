@@ -321,22 +321,22 @@ public class TST_NetherInterface extends GTCM_MultiMachineBase<TST_NetherInterfa
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_NetherInterface_MachineType
+        // #tr tst.common.machine.NetherInterface.tooltip.machine_type
         // # Otherworld Teleporter
         // #zh_CN 异界传送器
-        tt.addMachineType(TSTUtils.tr("Tooltip_NetherInterface_MachineType"))
-          // #tr Tooltip_NetherInterface_01
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.NetherInterface.tooltip.machine_type"))
+          // #tr tst.common.machine.NetherInterface.tooltip.info.01
           // # {\BOLD}The imprisoned souls of an ancient civilization now serve you.
           // #zh_CN {\BOLD}古老文明被囚禁的灵魂现在为你效命.
-          .addInfo(TSTUtils.tr("Tooltip_NetherInterface_01"))
-          // #tr Tooltip_NetherInterface_02
+          .addInfo(TSTUtils.tr("tst.common.machine.NetherInterface.tooltip.info.01"))
+          // #tr tst.common.machine.NetherInterface.tooltip.info.02
           // # Build portals and transport the dirty but useful resources of Hell back to you.
           // #zh_CN 构建传送门, 并将地狱那些肮脏但有用的资源传送回来.
-          .addInfo(TSTUtils.tr("Tooltip_NetherInterface_02"))
-          // #tr Tooltip_NetherInterface_03
+          .addInfo(TSTUtils.tr("tst.common.machine.NetherInterface.tooltip.info.02"))
+          // #tr tst.common.machine.NetherInterface.tooltip.info.03
           // # Machine takes 2A IV to maintain the teleporter, and 1A IV per parallel.
           // #zh_CN 需要消耗 2A IV 维持传送器, 并且每个并行消耗1A IV.
-          .addInfo(TSTUtils.tr("Tooltip_NetherInterface_03"))
+          .addInfo(TSTUtils.tr("tst.common.machine.NetherInterface.tooltip.info.03"))
           .beginStructureBlock(15, 16, 3, false)
           .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
           .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

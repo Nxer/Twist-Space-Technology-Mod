@@ -235,18 +235,18 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
     // GT_MetaTileEntity_EM_computer
     private static boolean localWirelessTag = false;
 
-    // #tr tst.computer.hint.0
+    // #tr tst.common.machine.Computer.hint.01
     // # Hatches: input hatch, maintain hatch, data output hatch, rack controller hatch and any energy hatch.
     // #zh_CN 仓室: 输入仓, 维护仓, 机箱控制器, 主光学接口, 能源仓
 
-    // #tr tst.computer.hint.1
+    // #tr tst.common.machine.Computer.hint.02
     // # Only one rack controller will be accepted. Multiple racks will only be accepted once.
     // #zh_CN 仅有一个机箱控制器会被识别, 如果放多个, 会识别其中的任意一个.
     private static final String[] description = new String[] {
         EnumChatFormatting.AQUA + translateToLocal("tt.keyphrase.Hint_Details") + ":",
-        translateToLocal("tst.computer.hint.0"), // 1 - Classic/Data Hatches or
+        translateToLocal("tst.common.machine.Computer.hint.01"), // 1 - Classic/Data Hatches or
         // Computer casing
-        translateToLocal("tst.computer.hint.1"), // 2 - Rack Hatches or Advanced
+        translateToLocal("tst.common.machine.Computer.hint.02"), // 2 - Rack Hatches or Advanced
         // computer casing
     };
 
@@ -583,58 +583,58 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
             // computation (and heat)
             .addSeparator()
             // .addInfo("what the fuck")
-            // #tr tst.computer.desc.0
+            // #tr tst.common.machine.Computer.tooltip.info.01
             // # Astral Computing Array, Let the star calculate the universe
             // #zh_CN 星规阵列 籍星辰以规万物
-            .addInfo(translateToLocal("tst.computer.desc.0"))
-            // #tr tst.computer.desc.1
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.01"))
+            // #tr tst.common.machine.Computer.tooltip.info.02
             // # Conventional heat will be effectively cooled by super coolant/coolant/extremely cold ice, as follows:
             // #zh_CN 常规热量将会得到超级冷却液/冷却液/极寒之凛冰的有效冷却, 具体如下:
-            .addInfo(translateToLocal("tst.computer.desc.1"))
-            // #tr tst.computer.desc.2
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.02"))
+            // #tr tst.common.machine.Computer.tooltip.info.03
             // # Coolant liquid: §60.001§7, super coolant liquid: §60.01§7
             // #zh_CN 冷却液: §60.001§7, 超级冷却液: §60.01§7, 极寒之凛冰: §60.1§7
-            .addInfo(translateToLocal("tst.computer.desc.2"))
-            // #tr tst.computer.desc.3
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.03"))
+            // #tr tst.common.machine.Computer.tooltip.info.04
             // # if astralsocery activated, starlight liquid will support an extra §610§7 multiplier.
             // #zh_CN 如果安装了星辉魔法, 则星能液提供额外的10倍率.
-            .addInfo(translateToLocal("tst.computer.desc.3"))
-            // #tr tst.computer.desc.4
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.04"))
+            // #tr tst.common.machine.Computer.tooltip.info.05
             // # Each operation will consume all the liquid input in the current input hatch. If multiple coolants are inputted, a random one will take effect.
             // #zh_CN 每次运算将会消耗掉当前输入仓中所有输入的液体. 如果输入多种冷却液会生效随机一种.
-            .addInfo(translateToLocal("tst.computer.desc.4"))
-            // #tr tst.computer.desc.5
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.05"))
+            // #tr tst.common.machine.Computer.tooltip.info.06
             // # Overfrequency formula multiplier=§61+LOG (1.0+fluid quantity * multiplier * current heat)§7
             // #zh_CN 超频公式 倍率=§61+LOG(1.0 + 流体数量*倍率*当前热量)§7
-            .addInfo(translateToLocal("tst.computer.desc.5"))
-            // #tr tst.computer.desc.6
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.06"))
+            // #tr tst.common.machine.Computer.tooltip.info.07
             // # Place a wireless quantum upgrade chip in the controller slot to enable wireless mode!
             // #zh_CN 在控制器中摆放一个无线算力网络升级芯片来开启无线模式!
-            .addInfo(translateToLocal("tst.computer.desc.6"))
-            // #tr tst.computer.desc.7
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.07"))
+            // #tr tst.common.machine.Computer.tooltip.info.08
             // # Warning: Enabling wireless mode on multiple Astral Computing Array can cause quantum decoherence and disrupt wireless networks. Please don't do this
             // #zh_CN 警告: 多个星规阵列同时开启无线模式会导致量子退相干使得无线网络紊乱. 请不要这么做
-            .addInfo(translateToLocal("tst.computer.desc.7"))
-            // #tr tst.computer.desc.8
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.08"))
+            // #tr tst.common.machine.Computer.tooltip.info.09
             // # no need to color the wireless optical master Connector and Wireless Optical Slave Connector
             // #zh_CN 无需给无线光学主接口与副接口涂色
-            .addInfo(translateToLocal("tst.computer.desc.8"))
-            // #tr tst.computer.desc.9
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.09"))
+            // #tr tst.common.machine.Computer.tooltip.info.10
             // # If the computing power in the color channel is insufficient, it will be allocated in proportion to the set requirements in the network.
             // #zh_CN 如果颜色频道内算力不足, 会按照设置的需求在网络中的比例进行分配.
-            .addInfo(translateToLocal("tst.computer.desc.9"))
-            // #tr tst.computer.desc.10
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.10"))
+            // #tr tst.common.machine.Computer.tooltip.info.11
             // # Four times power consumption!
             // #zh_CN §o 四倍耗电!
-            .addInfo(translateToLocal("tst.computer.desc.10"))
-            // #tr tst.computer.desc.11
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.11"))
+            // #tr tst.common.machine.Computer.tooltip.info.12
             // # right-click to set the computing power requirements for the wireless optical secondary interface.
             // #zh_CN 右键给无线光学副接口设置算力需求.
-            .addInfo(translateToLocal("tst.computer.desc.11"))
-            // #tr tst.computer.desc.12
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.12"))
+            // #tr tst.common.machine.Computer.tooltip.info.13
             // # join TST Dyson Sphere Team to share your computation in the same channel!
             // #zh_CN 加入同一个tst戴森球团队以共享无线算力频道!
-            .addInfo(translateToLocal("tst.computer.desc.12"))
+            .addInfo(translateToLocal("tst.common.machine.Computer.tooltip.info.13"))
             // .beginVariableStructureBlock(2, 2, 4, 4, 5, 16, false)
             .addOtherStructurePart(
                 translateToLocal("gt.blockmachines.hatch.certain.tier.07.name"),

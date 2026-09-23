@@ -23,10 +23,15 @@ public class ItemPowerChair extends Item {
     public ItemPowerChair(CreativeTabs aCreativeTabs) {
         super();
         this.setCreativeTab(aCreativeTabs);
-        // #tr item.PowerChair.name
+        // #tr item.tst.common.power_chair.name
         // # Power Chair
         // #zh_CN 抛瓦椅
         this.setUnlocalizedName("PowerChair");
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return "item.tst.common.power_chair";
     }
 
     @Override
@@ -40,15 +45,15 @@ public class ItemPowerChair extends Item {
     public void addInformation(final ItemStack itemStack, final EntityPlayer player, final List toolTip,
         final boolean advancedToolTips) {
         if (isShiftKeyDown()) {
-            // #tr tooltips.PowerChair.page2.line1
+            // #tr item.tst.common.power_chair.tooltip.02
             // # {\LIGHT_PURPLE}If you want it, then you'll have to take it.
             // #zh_CN {\LIGHT_PURPLE}If you want it, then you'll have to take it.
-            toolTip.add(TSTUtils.tr("tooltips.PowerChair.page2.line1"));
+            toolTip.add(TSTUtils.tr("item.tst.common.power_chair.tooltip.02"));
         } else {
-            // #tr tooltips.PowerChair.page1.line1
+            // #tr item.tst.common.power_chair.tooltip.01
             // # Your portal opening day's over.
             // #zh_CN Your portal opening day's over.
-            toolTip.add(TSTUtils.tr("tooltips.PowerChair.page1.line1"));
+            toolTip.add(TSTUtils.tr("item.tst.common.power_chair.tooltip.01"));
         }
     }
 }

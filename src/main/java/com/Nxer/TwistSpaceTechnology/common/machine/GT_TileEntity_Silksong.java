@@ -414,43 +414,43 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_Silksong_MachineType
+        // #tr tst.common.machine.Silksong.tooltip.machine_type
         // # Wiremill
         // #zh_CN 线材轧机
-        tt.addMachineType(TSTUtils.tr("Tooltip_Silksong_MachineType"))
-            // #tr Tooltip_Silksong_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.Silksong.tooltip.machine_type"))
+            // #tr tst.common.machine.Silksong.tooltip.info.01
             // # Controller block for the Silksong
             // #zh_CN 丝之歌的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_Silksong_00"))
-            // #tr Tooltip_Silksong_01
+            .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.01"))
+            // #tr tst.common.machine.Silksong.tooltip.info.02
             // # {\WHITE}Maybe dreams aren't such a good thing ......
             // #zh_CN {\WHITE}也许梦想并不是那么好的东西 ......
-            .addInfo(TSTUtils.tr("Tooltip_Silksong_01"))
-            // #tr Tooltip_Silksong_02
+            .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.02"))
+            // #tr tst.common.machine.Silksong.tooltip.info.03
             // # Endless cables spew from this machine.
             // #zh_CN 无穷无尽的导线从这里喷薄而出.
-            .addInfo(TSTUtils.tr("Tooltip_Silksong_02"))
-            // #tr Tooltip_Silksong_03
+            .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.03"))
+            // #tr tst.common.machine.Silksong.tooltip.info.04
             // # Parallel = {\AQUA}32 × piece × coil tier{\GRAY}.
             // #zh_CN 每16个线圈为1层. 并行数 = 层数 × 线圈等级
-            .addInfo(TSTUtils.tr("Tooltip_Silksong_03"))
-            // #tr Tooltip_Silksong_04
+            .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.04"))
+            // #tr tst.common.machine.Silksong.tooltip.info.05
             // # Each level of coil increases the speed by {\RED}100%{\GRAY}.
             // #zh_CN 线圈每提高1级额外加速{\RED}100%{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_Silksong_04"))
-            // #tr Tooltip_Silksong_05
+            .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.05"))
+            // #tr tst.common.machine.Silksong.tooltip.info.06
             // # Additional {\RED}15%{\GRAY} reduction in time per Coil Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}15%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_Silksong_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.info.06"))
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 3)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .addEnergyHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
-            // #tr Tooltip_Silksong_SilksongReleaseDate
+            // #tr tst.common.machine.Silksong.tooltip.structure.01
             // # {\BLACK}Something special when piece reaches 94.
             // #zh_CN {\BLACK}层数达到94层后有一些特别的东西.
-            .addStructureInfo(TSTUtils.tr("Tooltip_Silksong_SilksongReleaseDate"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.Silksong.tooltip.structure.01"))
             .toolTipFinisher();
         // spotless:on
         return tt;

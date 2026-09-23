@@ -237,30 +237,30 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_Scavenger_MachineType
+        // #tr tst.common.machine.Scavenger.tooltip.machine_type
         // # Sifter
         // #zh_CN 筛选机
-        tt.addMachineType(TSTUtils.tr("Tooltip_Scavenger_MachineType"))
-            // #tr Tooltip_Scavenger_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.machine_type"))
+            // #tr tst.common.machine.Scavenger.tooltip.controller
             // # Controller block for the Scavenger
             // #zh_CN 拾荒者的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_Scavenger_Controller"))
-            // #tr Tooltip_Scavenger_01
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.controller"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.01
             // # {\BOLD}I like pigs. Dogs look up to us. Cats look down on us. Pigs treat us as equals.
             // #zh_CN {\BOLD}我喜欢猪. 狗崇拜人类. 猫鄙视人类. 猪对我们一视同仁.
-            .addInfo(TSTUtils.tr("Tooltip_Scavenger_01"))
-            // #tr Tooltip_Scavenger_02
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.01"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.02
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TSTUtils.tr("Tooltip_Scavenger_02"))
-            // #tr Tooltip_Scavenger_03
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.02"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.03
             // # Only uses {\RED}60%{\GRAY} of the EU/t normally required.
             // #zh_CN 只需要使用配方要求功率的{\RED}60%{\GRAY} .
-            .addInfo(TSTUtils.tr("Tooltip_Scavenger_03"))
-            // #tr Tooltip_Scavenger_04
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.03"))
+            // #tr tst.common.machine.Scavenger.tooltip.info.04
             // # Additional {\RED}20%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}20%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_Scavenger_04"))
+            .addInfo(TSTUtils.tr("tst.common.machine.Scavenger.tooltip.info.04"))
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 2)

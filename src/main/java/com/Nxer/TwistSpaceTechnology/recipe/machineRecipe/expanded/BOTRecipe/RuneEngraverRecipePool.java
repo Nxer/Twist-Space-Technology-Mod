@@ -19,7 +19,7 @@ public class RuneEngraverRecipePool  {
 
     public static void loadRecipes() {
 
-        final IRecipeMap RE=GTCMRecipe.RuneEngraverRecipes;
+        final IRecipeMap RE=GTCMRecipe.RuneEngraverRecipeMap;
 
         //region basic rune
 

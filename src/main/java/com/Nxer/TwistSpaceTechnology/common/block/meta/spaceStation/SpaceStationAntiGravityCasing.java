@@ -5,7 +5,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.TstMetaBlockMachine;
 public class SpaceStationAntiGravityCasing extends TstMetaBlockMachine {
 
     public SpaceStationAntiGravityCasing() {
-        // #tr tile.SpaceStationAntiGravityBlock.name
+        // #tr tile.tst.common.space_station_anti_gravity_block.name
         // # Space Station Anti Gravity Block
         // #zh_CN 空间站反重力方块
         super("SpaceStationAntiGravityBlock");

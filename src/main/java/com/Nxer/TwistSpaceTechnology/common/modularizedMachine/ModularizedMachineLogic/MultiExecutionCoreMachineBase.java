@@ -356,10 +356,10 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
 
         if (tag.getBoolean("isActive")) {
             currentTip.add(EnumChatFormatting.AQUA +
-            // #tr Waila.ExecutionCore.5
+            // #tr tst.modular.machine.ExecutionCore.waila.execution_core.5
             // # Power for boosting
             // #zh_CN 已用于加速的功率
-                TSTUtils.tr("Waila.ExecutionCore.5")
+                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.5")
                 + EnumChatFormatting.GRAY
                 + " : "
                 + tag.getLong("eutForBoostLastTick")
@@ -370,42 +370,42 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         if (maxProgressingTime > 0) {
             // spotless:off
             currentTip.add(
-                // #tr Waila.ExecutionCore.1
+                // #tr tst.modular.machine.ExecutionCore.waila.execution_core.1
                 // # Total basic max progressing time
                 // #zh_CN 配方总基础耗时
-                TSTUtils.tr("Waila.ExecutionCore.1") + " : "
+                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.1") + " : "
                     + maxProgressingTime + " tick ("
                     + (maxProgressingTime / 20) + "s)");
             int progressedTime = tag.getInteger("progressedTime");
             currentTip.add(
-                // #tr Waila.ExecutionCore.2
+                // #tr tst.modular.machine.ExecutionCore.waila.execution_core.2
                 // # Progressed time
                 // #zh_CN 已执行时间
-                TSTUtils.tr("Waila.ExecutionCore.2") + " : "
+                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.2") + " : "
                     + progressedTime + " tick ("
                     + (progressedTime / 20) + "s)"
             );
             int boostedTime = tag.getInteger("boostedTime");
             currentTip.add(
-                // #tr Waila.ExecutionCore.4
+                // #tr tst.modular.machine.ExecutionCore.waila.execution_core.4
                 // # Boosted time
                 // #zh_CN 已加速时间
-                TSTUtils.tr("Waila.ExecutionCore.4") + " : "
+                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.4") + " : "
                     + boostedTime + " tick ("
                     + (boostedTime / 20) + "s)"
             );
             currentTip.add(
-                // #tr Waila.ExecutionCore.3
+                // #tr tst.modular.machine.ExecutionCore.waila.execution_core.3
                 // # Basic power consumption
                 // #zh_CN 基础功率
-                TSTUtils.tr("Waila.ExecutionCore.3") + " : "
+                TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.3") + " : "
                     + tag.getLong("usingEut") + " EU/t"
             );
         } else {
-            // #tr Waila.ExecutionCore.IsIdle
+            // #tr tst.modular.machine.ExecutionCore.waila.execution_core.is_idle
             // # This {\WHITE}Execution Core{\GRAY} is idle.
             // #zh_CN 此{\WHITE}执行核心{\GRAY}处于空闲状态
-            currentTip.add(TSTUtils.tr("Waila.ExecutionCore.IsIdle"));
+            currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.is_idle"));
         }
         // spotless:on
     }
@@ -561,12 +561,13 @@ public abstract class MultiExecutionCoreMachineBase<T extends MultiExecutionCore
         float aX, float aY, float aZ, ItemStack aTool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             this.progressingTickIndex = (byte) ((this.progressingTickIndex + 1) % 10);
-            // #tr MultiExecutionCoreMachineBase.progressingTickIndex
+            // #tr tst.modular.machine.MultiExecutionCoreMachineBase.message.progressing_tick_index
             // # The base run cycle time is set to{\SPACE}
             // #zh_CN 基础运行循环时间设置为{\SPACE}
             GTUtility.sendChatTrans(
                 aPlayer,
-                StatCollector.translateToLocal("MultiExecutionCoreMachineBase.progressingTickIndex")
+                StatCollector.translateToLocal(
+                    "tst.modular.machine.MultiExecutionCoreMachineBase.message.progressing_tick_index")
                     + getBaseProgressingTick()
                     + " tick");
 

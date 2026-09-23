@@ -599,10 +599,10 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         if (allRecipes == null) {
             allRecipes = new HashSet<>();
             allRecipes.addAll(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
-            allRecipes.addAll(GTCMRecipe.MiracleTopRecipes.getAllRecipes());
+            allRecipes.addAll(GTCMRecipe.MiracleTopRecipeMap.getAllRecipes());
             allRecipes.addAll(RecipeMaps.assemblylineVisualRecipes.getAllRecipes());
             allRecipes.addAll(RecipeMaps.assemblerRecipes.getAllRecipes());
-            allRecipes.addAll(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes.getAllRecipes());
+            allRecipes.addAll(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap.getAllRecipes());
         }
         return allRecipes;
     }
@@ -615,10 +615,11 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr MachineInfoData.ComponentBlockTier
+        // #tr tst.common.machine.TSTDisassembler.info.component_block_tier
         // # Component Assembly Line Casing Tier
         // #zh_CN 部件结构方块等级
-        ret[origin.length] = EnumChatFormatting.AQUA + TSTUtils.tr("MachineInfoData.ComponentBlockTier")
+        ret[origin.length] = EnumChatFormatting.AQUA
+            + TSTUtils.tr("tst.common.machine.TSTDisassembler.info.component_block_tier")
             + ": "
             + EnumChatFormatting.GOLD
             + getRealTierComponentCasing();
@@ -795,59 +796,59 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            // #tr Tooltip_TSTDisassembler_MachineType
+            // #tr tst.common.machine.TSTDisassembler.tooltip.machine_type
             // # Disassembler
             // #zh_CN 拆解机
-            tooltip.addMachineType(TSTUtils.tr("Tooltip_TSTDisassembler_MachineType"))
-                // #tr Tooltip_TSTDisassembler_Controller
+            tooltip.addMachineType(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.machine_type"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.controller
                 // # Controller block for the TST Disassembler
                 // #zh_CN TST大型拆解机的控制器方块
-                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_Controller"))
-                // #tr Tooltip_TSTDisassembler_01
+                .addInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.controller"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.info.01
                 // # {\BLUE}The incomplete becomes complete; the crooked becomes straight; the empty becomes full; the worn out becomes new.
                 // #zh_CN {\BLUE}曲则全，枉则直，洼则盈，敝则新。
-                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_01"))
-                // #tr Tooltip_TSTDisassembler_02
+                .addInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.info.01"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.info.02
                 // # How your other machine assembles the item, this one disassembles it back.
                 // #zh_CN 你的其他机器怎样组装物品, 这个机器就怎样把它拆回去.
-                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_02"))
-                // #tr Tooltip_TSTDisassembler_03
+                .addInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.info.02"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.info.03
                 // # Note: The component assembly line casing level limit recipe the machine can perform.
                 // #zh_CN 注意: 结构中的部件装配线外壳等级限制可拆卸的配方等级.
-                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_03"))
-                // #tr Tooltip_TSTDisassembler_04
+                .addInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.info.03"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.info.04
                 // # No energy consumption.
                 // #zh_CN 不消耗能源.
-                .addInfo(TSTUtils.tr("Tooltip_TSTDisassembler_04"))
+                .addInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.info.04"))
                 .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_Details)
-                // #tr Tooltip_TSTDisassembler_2_01
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.01
                 // # Supported:
                 // #zh_CN 支持:
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_01"))
-                // #tr Tooltip_TSTDisassembler_2_02
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.01"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.02
                 // # {\SPACE}- {\AQUA}Component Assembly Line Recipes
                 // #zh_CN {\SPACE}- {\AQUA}部件装配线配方
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_02"))
-                // #tr Tooltip_TSTDisassembler_2_03
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.02"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.03
                 // # {\SPACE}- {\AQUA}Miracle Top Recipes
                 // #zh_CN {\SPACE}- {\AQUA}奇迹顶点配方
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_03"))
-                // #tr Tooltip_TSTDisassembler_2_04
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.03"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.04
                 // # {\SPACE}- {\AQUA}Assembly Line Recipes
                 // #zh_CN {\SPACE}- {\AQUA}装配线配方
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_04"))
-                // #tr Tooltip_TSTDisassembler_2_05
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.04"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.05
                 // # {\SPACE}- {\AQUA}Assembler Recipes
                 // #zh_CN {\SPACE}- {\AQUA}组装机配方
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_05"))
-                // #tr Tooltip_TSTDisassembler_2_06
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.05"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.06
                 // # {\SPACE}- {\AQUA}Photon Controller Recipes
                 // #zh_CN {\SPACE}- {\AQUA}光子掌控者配方
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_06"))
-                // #tr Tooltip_TSTDisassembler_2_07
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.06"))
+                // #tr tst.common.machine.TSTDisassembler.tooltip.structure.07
                 // # {\RED}NOT SUPPORTED CRAFTING TABLE RECIPES !
                 // #zh_CN {\RED}不兼容工作台配方!
-                .addStructureInfo(TSTUtils.tr("Tooltip_TSTDisassembler_2_07"))
+                .addStructureInfo(TSTUtils.tr("tst.common.machine.TSTDisassembler.tooltip.structure.07"))
                 .beginStructureBlock(27, 23, 28, false)
                 .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
                 .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

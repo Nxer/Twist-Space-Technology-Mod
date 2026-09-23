@@ -353,30 +353,30 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_SuperwaterPurifier_MachineType
+        // #tr tst.common.machine.SuperWaterPurifier.tooltip.machine_type
         // # Perfect Water Creator
         // #zh_CN 完美水体制造器
-        tt.addMachineType(TSTUtils.tr("Tooltip_SuperwaterPurifier_MachineType"))
-            // #tr Tooltip_SuperWaterPurifier_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.machine_type"))
+            // #tr tst.common.machine.SuperWaterPurifier.tooltip.info.01
             // # Per cycle, it produces§4 3§7 or§4 6 (Concentrated UU) §7randomly selected liquids from the list,{\SPACE}
             // #zh_CN 每次运行从产出列表中抽§4 3 或 6(浓缩UU) §7份产物输出
-            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_00"))
-            // #tr Tooltip_SuperWaterPurifier_01
+            .addInfo(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.info.01"))
+            // #tr tst.common.machine.SuperWaterPurifier.tooltip.info.02
             // # Water Grade has a§4 12% §7chance each
             // #zh_CN 每级水有 12% 概率
-            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_01"))
-            // #tr Tooltip_SuperWaterPurifier_02
+            .addInfo(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.info.02"))
+            // #tr tst.common.machine.SuperWaterPurifier.tooltip.info.03
             // # Stable Baryonic Matter has a§4 4% §7chance
             // #zh_CN 稳定重子物质有 4% 概率
-            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_02"))
-            // #tr Tooltip_SuperWaterPurifier_03
+            .addInfo(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.info.03"))
+            // #tr tst.common.machine.SuperWaterPurifier.tooltip.info.04
             // # Maximum of§b 2,000,000 §7parallels
             // #zh_CN 最大 2,000,000 并行
-            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_03"))
-            // #tr Tooltip_SuperWaterPurifier_04
+            .addInfo(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.info.04"))
+            // #tr tst.common.machine.SuperWaterPurifier.tooltip.info.05
             // # Each parallel requires 1 UMV amp
             // #zh_CN 每并行耗电 1A UMV
-            .addInfo(TSTUtils.tr("Tooltip_SuperWaterPurifier_04"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SuperWaterPurifier.tooltip.info.05"))
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();

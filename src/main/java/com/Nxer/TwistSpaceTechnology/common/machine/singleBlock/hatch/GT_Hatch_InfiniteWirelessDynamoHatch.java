@@ -68,11 +68,11 @@ public class GT_Hatch_InfiniteWirelessDynamoHatch extends MTEHatchWirelessDynamo
     public String[] getDescription() {
         String[] gtDescription = super.getDescription();
         String[] description = Arrays.copyOf(gtDescription, gtDescription.length + 1);
-        // #tr Description.InfiniteWirelessDynamoHatch.1
+        // #tr tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01
         // # Infinite output voltage limit.
         // #zh_CN 无限输出电压限制.
         description[gtDescription.length] = EnumChatFormatting.WHITE
-            + TSTUtils.tr("Description.InfiniteWirelessDynamoHatch.1");
+            + TSTUtils.tr("tst.common.machine.InfiniteWirelessDynamoHatch.tooltip.info.01");
         return description;
     }
 

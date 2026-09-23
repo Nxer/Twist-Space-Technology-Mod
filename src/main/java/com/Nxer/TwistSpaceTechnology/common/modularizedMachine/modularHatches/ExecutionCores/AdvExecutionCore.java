@@ -84,26 +84,26 @@ public class AdvExecutionCore extends ExecutionCoreBase {
         if (description == null || description.length == 0) {
             description =
                 new String[]{
-                    // #tr Tooltips.AdvancedExecutionCore.01
+                    // #tr tst.modular.machine.AdvancedExecutionCore.tooltip.info.01
                     // # Add an execution core to your modularized machine that uses direct wireless EU energy.
                     // #zh_CN 为你的模块化机器添加一颗直接使用无线EU能源的执行核心.
-                    TSTUtils.tr("Tooltips.AdvancedExecutionCore.01"),
-                    // #tr Tooltips.AdvancedExecutionCore.02
+                    TSTUtils.tr("tst.modular.machine.AdvancedExecutionCore.tooltip.info.01"),
+                    // #tr tst.modular.machine.AdvancedExecutionCore.tooltip.info.02
                     // # This execution core uses the machine's mechanical and energy parameters for recipe matching and execution.
                     // #zh_CN 此执行核心使用机器的机制和能源参数进行配方匹配和执行.
-                    TSTUtils.tr("Tooltips.AdvancedExecutionCore.02"),
-                    // #tr Tooltips.AdvancedExecutionCore.03
+                    TSTUtils.tr("tst.modular.machine.AdvancedExecutionCore.tooltip.info.02"),
+                    // #tr tst.modular.machine.AdvancedExecutionCore.tooltip.info.03
                     // # Use the machine's voltage parameters to perform overclocking and timing calculations. Similar to normal machines.
                     // #zh_CN 使用机器的电压参数进行超频和耗时计算. 与一般机器类似.
-                    TSTUtils.tr("Tooltips.AdvancedExecutionCore.03"),
-                    // #tr Tooltips.AdvancedExecutionCore.04
+                    TSTUtils.tr("tst.modular.machine.AdvancedExecutionCore.tooltip.info.03"),
+                    // #tr tst.modular.machine.AdvancedExecutionCore.tooltip.info.04
                     // # But it does not consume the energy of the machine, but directly uses the wireless EU energy.
                     // #zh_CN 但不消耗机器的能源, 而是直接使用无线EU能源.
-                    TSTUtils.tr("Tooltips.AdvancedExecutionCore.04"),
-                    // #tr Tooltips.AdvancedExecutionCore.05
+                    TSTUtils.tr("tst.modular.machine.AdvancedExecutionCore.tooltip.info.04"),
+                    // #tr tst.modular.machine.AdvancedExecutionCore.tooltip.info.05
                     // # It also accepts boost from machine to speed up the process.
                     // #zh_CN 同时也接受机器的速度增幅用以加快进程.
-                    TSTUtils.tr("Tooltips.AdvancedExecutionCore.05"),
+                    TSTUtils.tr("tst.modular.machine.AdvancedExecutionCore.tooltip.info.05"),
                 };
         }
         return description;

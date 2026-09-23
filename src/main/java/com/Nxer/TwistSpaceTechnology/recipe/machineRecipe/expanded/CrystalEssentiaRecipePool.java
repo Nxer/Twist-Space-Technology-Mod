@@ -16,7 +16,7 @@ import thaumcraft.api.aspects.Aspect;
 public class CrystalEssentiaRecipePool {
 
     public static void loadRecipes() {
-        final IRecipeMap tower = GTCMRecipe.SkypiercerTower;
+        final IRecipeMap tower = GTCMRecipe.SkypiercerTowerRecipeMap;
 
         for (Aspect aspect : Aspect.aspects.values()) {
             Aspect[] comps = aspect.getComponents();

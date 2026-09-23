@@ -52,14 +52,14 @@ public class StaticPowerConsumptionController extends StaticPowerConsumptionCont
             String value = (int) (getPowerConsumptionMultiplier() * 100) + "%";
             description =
                 new String[] {
-                    // #tr Tooltips.StaticPowerConsumptionController.01
+                    // #tr tst.modular.machine.StaticPowerConsumptionController.tooltip.info.01
                     // # Parallel controller module with a fixed parameter.
                     // #zh_CN 固定参数的耗能控制器模块.
-                    TSTUtils.tr("Tooltips.StaticPowerConsumptionController.01"),
-                    // #tr Tooltips.StaticPowerConsumptionController.02
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tooltip.info.01"),
+                    // #tr tst.modular.machine.StaticPowerConsumptionController.tooltip.info.02
                     // # The actual power consumption is multiplied by
                     // #zh_CN 机器实际耗电量乘以
-                    TSTUtils.tr("Tooltips.StaticPowerConsumptionController.02") + value,
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tooltip.info.02") + value,
                 };
         }
         return description;

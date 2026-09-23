@@ -271,30 +271,30 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MagneticMixer_MachineType
+        // #tr tst.common.machine.MagneticMixer.tooltip.machine_type
         // # Mixer
         // #zh_CN 搅拌机
-        tt.addMachineType(TSTUtils.tr("Tooltip_MagneticMixer_MachineType"))
-            // #tr Tooltip_MagneticMixer_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MagneticMixer.tooltip.machine_type"))
+            // #tr tst.common.machine.MagneticMixer.tooltip.info.01
             // # Controller block for the "Mini" Magnetic Mixer
             // #zh_CN "小型"磁力搅拌机的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_00"))
-            // #tr Tooltip_MagneticMixer_01
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticMixer.tooltip.info.01"))
+            // #tr tst.common.machine.MagneticMixer.tooltip.info.02
             // # {\RED}Watch out for the Bumps !
             // #zh_CN {\RED}我叫磁力棒！
-            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_01"))
-            // #tr Tooltip_MagneticMixer_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticMixer.tooltip.info.02"))
+            // #tr tst.common.machine.MagneticMixer.tooltip.info.03
             // # Looks more like a tumble washing machine.
             // #zh_CN 看起来更像一个滚筒洗衣机.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_02"))
-            // #tr Tooltip_MagneticMixer_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticMixer.tooltip.info.03"))
+            // #tr tst.common.machine.MagneticMixer.tooltip.info.04
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_03"))
-            // #tr Tooltip_MagneticMixer_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticMixer.tooltip.info.04"))
+            // #tr tst.common.machine.MagneticMixer.tooltip.info.05
             // # Additional {\RED}20%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}20%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticMixer_04"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticMixer.tooltip.info.05"))
             .beginStructureBlock(19, 19, 21, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

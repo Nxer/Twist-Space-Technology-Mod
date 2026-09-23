@@ -679,63 +679,63 @@ public class TST_PrimordialDisjunctus extends GTCM_MultiMachineBase<TST_Primordi
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_PrimordialDisjunctus_MachineType
+        // #tr tst.common.machine.PrimordialDisjunctus.tooltip.machine_type
         // # Essentia Extractor
         // #zh_CN 初始源质提取者
-        tt.addMachineType(TSTUtils.tr("Tooltip_PrimordialDisjunctus_MachineType"))
-            // #tr Tooltip_PrimordialDisjunctus_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.machine_type"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.01
             // # Controller block for the Primordial Disjunctus
             // #zh_CN 初源解离机的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_00"))
-            // #tr Tooltip_PrimordialDisjunctus_01
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.01"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.02
             // # §9Still sweating over bubbling crucibles?Huff-puff... Let the Primordial Disjunctus coax primal essentia forth with but a whisper of electric power
             // #zh_CN §9还在哼哧哼哧守着沸腾的坩埚？嘘——初源解离仪只需一丝电力，便能诱出本源灵质。
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_01"))
-            // #tr Tooltip_PrimordialDisjunctus_02
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.02"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.03
             // # Draw raw auram essence into the arcane containment vessel and initiate centrifugal separation.However,due to the cascade reaction of quintessential dissociation, the process will inevitably degrade the complex aura into its primal form, leaving only rudimentary Essentia as residue.
             // #zh_CN 将灵气吸引进罐子内然后离心,不幸的是灵气的相互扰动使得相互降解最后仅剩下初等源质
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_02"))
-            // #tr Tooltip_PrimordialDisjunctus_03
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.03"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.04
             // # parallel = The sum of diffusion cell values (Novice = 1, Adept = 2, Master = 4, Grandmaster = 8)
             // #zh_CN 并行 = 扩散单元等级的总和 ( 新手=1，学徒=2，大师=4，宗师=8 )
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_03"))
-            // #tr Tooltip_PrimordialDisjunctus_04
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.04"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.05
             // # Min voltage 1A EV, standard overclocks
             // #zh_CN 最低使用1A EV, 使用标准超频 ( 即每提升一级电压加工时间减半 )
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_04"))
-            // #tr Tooltip_PrimordialDisjunctus_05
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.05"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.06
             // # With the power of technology, this process only requires energy to produce a base amount of 16 primal aspects per parallel every 20 seconds at 1 amp EV
             // #zh_CN 借助科技的力量, 此过程仅需能量, 在1A EV电压下每20秒每个并行产出16单位基础源质.
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_05"))
-            // #tr Tooltip_PrimordialDisjunctus_06
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.06"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.07
             // # Providing Ordo vis(at least 50) will reduce the flux produced to nothing, flux produced is not affected by muffler tier.
             // #zh_CN 提供秩序vis(至少50)可将咒波污染降为零(与消声仓等级无关),
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_06"))
-            // #tr Tooltip_PrimordialDisjunctus_06_01
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.07"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.08
             // # while providing Perditio vis will boost primal aspect production.Every 10 increase the output by 100%. The maximum increase is 16 times.
             // #zh_CN 提供混沌vis可提升源质产量,每40点增加100%产量,最高16倍.
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_06_01"))
-            // #tr Tooltip_PrimordialDisjunctus_06_02
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.08"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.09
             // # It should be noted that the supply of VIS is specifically provided through Vis Relay located near the host.
             // #zh_CN 注意VIS的供应,具体来说是通过在主机附近的源质中继器来提供的
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_06_02"))
-            // #tr Tooltip_PrimordialDisjunctus_07
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.09"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.10
             // # This machine maxes out at 1 UMV amp anything more will just void power.
             // #zh_CN 本机最高支持1A UMV,超出的电力将被直接浪费.
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_07"))
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.10"))
             .addSeparator()
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
-            // #tr Tooltip_PrimordialDisjunctus_EssentiaProvider
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.info.11
             // # Since EssentiaHatch has been removed and is now replaced by EssentiaProvider, it is still just a decoration and does not require input.
             // #zh_CN 由于EssentiaHatch被删除现在由EssentiaProvide替代,但仍然只是装饰无需输入.
-            .addInfo(TSTUtils.tr("Tooltip_PrimordialDisjunctus_EssentiaProvider"))
-            // #tr Tooltip_PrimordialDisjunctus_HatchBusInfo
+            .addInfo(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.info.11"))
+            // #tr tst.common.machine.PrimordialDisjunctus.tooltip.structure.01
             // # Replace Magic mechanical blocks in any cabin
             // #zh_CN 任何舱室替换魔法机械方块
-            .addOutputHatch(TSTUtils.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            .addEnergyHatch(TSTUtils.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
-            .addOtherStructurePart(TSTUtils.tr("Tooltip.EssentiaOutputHatch"), TSTUtils.tr("Tooltip_PrimordialDisjunctus_HatchBusInfo"))
+            .addOutputHatch(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.structure.01"))
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.structure.01"))
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.structure.02"), TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.tooltip.structure.01"))
             .toolTipFinisher();
         // spotless:on
         return tt;

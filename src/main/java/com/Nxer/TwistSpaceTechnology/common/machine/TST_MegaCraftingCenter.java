@@ -1,8 +1,8 @@
 package com.Nxer.TwistSpaceTechnology.common.machine;
 
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.special_hatch_amount_wrong;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.VisualExtremeCraftRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.extremeCraftRecipesMap;
-import static com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler.visualExtremeCraftRecipes;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTSharedLocalization.General.Text_SeparatingLine;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
@@ -249,7 +249,7 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return visualExtremeCraftRecipes;
+        return VisualExtremeCraftRecipeMap;
     }
 
     @Override
@@ -559,17 +559,19 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         IWailaConfigHandler config) {
         super.getWailaBody(itemStack, currentTip, accessor, config);
         final NBTTagCompound tag = accessor.getNBTData();
-        // #tr MegaCraftingCenter.waila.ForceRunningMagnification
+        // #tr tst.common.machine.ExtremeCraftCenter.waila.force_running_magnification
         // # Force running magnification
         // #zh_CN 强制运行倍率
         currentTip.add(
-            TSTUtils.tr("MegaCraftingCenter.waila.ForceRunningMagnification") + " : "
+            TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.waila.force_running_magnification") + " : "
                 + tag.getInteger("magnification"));
 
-        // #tr MegaCraftingCenter.waila.PatternAmount
+        // #tr tst.common.machine.ExtremeCraftCenter.waila.pattern_amount
         // # Internal Pattern Amount
         // #zh_CN 已载入样板数量
-        currentTip.add(TSTUtils.tr("MegaCraftingCenter.waila.PatternAmount") + " : " + tag.getInteger("patternAmount"));
+        currentTip.add(
+            TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.waila.pattern_amount") + " : "
+                + tag.getInteger("patternAmount"));
     }
 
     @Override
@@ -592,10 +594,10 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         String[] ret = new String[origin.length + rows + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
 
-        // #tr MegaCraftingCenter.info.InternalPatterns
+        // #tr tst.common.machine.ExtremeCraftCenter.info.internal_patterns
         // # Internal patterns
         // #zh_CN 已载入样板
-        ret[origin.length] = TSTUtils.tr("MegaCraftingCenter.info.InternalPatterns");
+        ret[origin.length] = TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.info.internal_patterns");
         StringBuilder t = new StringBuilder();
         int signal = 0;
         int row = origin.length + 1;
@@ -680,24 +682,26 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         ItemStack tool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             if (mMaxProgresstime > 0) {
-                // #tr MegaCraftingCenter.onScrewdriverRightClick.failed
+                // #tr tst.common.machine.ExtremeCraftCenter.message.return_patterns.failed
                 // # The encoded patterns can only be returned when there is no recipe running.
                 // #zh_CN 仅可在未运行配方状态下退回样板.
                 GTUtility.sendChatTrans(
                     aPlayer,
-                    StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.failed"));
+                    StatCollector
+                        .translateToLocal("tst.common.machine.ExtremeCraftCenter.message.return_patterns.failed"));
                 return;
             }
 
             // return encoded patterns
             toReturnPatterns = true;
 
-            // #tr MegaCraftingCenter.onScrewdriverRightClick.success
+            // #tr tst.common.machine.ExtremeCraftCenter.message.return_patterns.success
             // # Preparing to returning encoded patterns.
             // #zh_CN 正在准备退回样板.
             GTUtility.sendChatTrans(
                 aPlayer,
-                StatCollector.translateToLocal("MegaCraftingCenter.onScrewdriverRightClick.success"));
+                StatCollector
+                    .translateToLocal("tst.common.machine.ExtremeCraftCenter.message.return_patterns.success"));
 
         }
     }
@@ -825,7 +829,8 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
                     return ret.toArray(new IDrawable[0]);
                 })
 
-                .addTooltip(TSTUtils.tr("MegaCraftingCenter.UI.MagnificationInfoMenuButton.name"))
+                .addTooltip(
+                    TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.gui.magnification_info_menu_button.name"))
                 .setPos(174, 97));
     }
 
@@ -836,7 +841,8 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
 
         builder.widget(
 
-            TextWidget.localised("MegaCraftingCenter.UI.Magnification.ConfigurationDescription.text")
+            TextWidget
+                .localised("tst.common.machine.ExtremeCraftCenter.gui.magnification.configuration_description.text")
                 .setPos(20, 10)
                 .setSize(200, 14))
             .widget(new TextFieldWidget().setSetterInt(val -> {
@@ -948,50 +954,50 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr tst.megacraftingcenter.machinetype
+        // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.01
         // # molecularAssembler | extremeCraftTable
         // #zh_CN 工作台 | 梦魇合成台
-        tt.addMachineType(TSTUtils.tr("tst.megacraftingcenter.machinetype"))
-            // #tr tst.megacraftingcenter.desc.firstWords
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.01"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.02
             // # {\AQUA}{\ITALIC}{\BOLD}Goodbye, all crafting lags.{\RESET}{\GRAY}
             // #zh_CN {\AQUA}{\ITALIC}{\BOLD}再见了, 所有的合成卡顿.{\RESET}{\GRAY}
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.firstWords"))
-            // #tr tst.megacraftingcenter.desc.0
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.02"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.03
             // # Do not use power. Need to connect the controller to ME net.
             // #zh_CN 不需要耗电. 需要将主机连接至ME网络.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.0"))
-            // #tr tst.megacraftingcenter.desc.1
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.03"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.04
             // # Time consumption is fixed at 1 second, output items in output buses.
             // #zh_CN 固定耗时 1 秒, 在输出总线产出产物.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.1"))
-            // #tr tst.megacraftingcenter.desc.2
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.04"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.05
             // # Input encoded patterns into input bus, the valid will be moved to internal, the invalid will be moved to output bus.
             // #zh_CN 在输入总线内放入编码样板, 正确的样板将被转移到内部, 错误的样板将被转移到输出总线.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.2"))
-            // #tr tst.megacraftingcenter.desc.3
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.05"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.06
             // # Support crafting table pattern and Dire Crafting process pattern.
             // #zh_CN 支持工作台样板和梦魇工作台处理样板.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.3"))
-            // #tr tst.megacraftingcenter.desc.4
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.06"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.07
             // # Allow to double the pattern.
             // #zh_CN 允许倍增样板.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.4"))
-            // #tr tst.megacraftingcenter.desc.5
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.07"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.08
             // # Set the pattern Magnification parameters in the controller GUI.
             // #zh_CN 在主方块GUI内设置样板倍率参数.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.5"))
-            // #tr tst.megacraftingcenter.desc.6
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.08"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.09
             // # The internal pattern input and output quantity will be multiplied by the magnification parameter as the actual pattern information in running.
             // #zh_CN 内部样板输入输出数量将乘以倍率参数作为运行时的实际样板信息.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.6"))
-            // #tr tst.megacraftingcenter.desc.7
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.09"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.10
             // # Include crafting pattern (crafting table recipes).
             // #zh_CN 包括合成样板 (工作台配方).
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.7"))
-            // #tr tst.megacraftingcenter.desc.onScrewDriverRightClick
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.10"))
+            // #tr tst.common.machine.ExtremeCraftCenter.tooltip.info.11
             // # Use a screwdriver right click controller to move internal patterns to output bus.
             // #zh_CN 使用螺丝刀右键主机将内部样板转移至输出总线.
-            .addInfo(TSTUtils.tr("tst.megacraftingcenter.desc.onScrewDriverRightClick"))
+            .addInfo(TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.tooltip.info.11"))
             .addInfo(Text_SeparatingLine)
             .addInfo(TSTSharedLocalization.MachineTooltip.MoreInfoCheckingInScanner)
             .toolTipFinisher();

@@ -14,7 +14,7 @@ public class ItemRegister {
     }
 
     private static void registryItems() {
-        // #tr item.combatrework.swordWooden.name
+        // #tr item.tst.combatrework.swordWooden.name
         // # Wooden Sword
         // #zh_CN 木剑
         GameRegistry.registerItem(

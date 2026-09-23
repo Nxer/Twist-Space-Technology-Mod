@@ -355,14 +355,14 @@ public class GT_TileEntity_MagneticDomainConstructor
 
     @Override
     public String getMachineModeName() {
-        // #tr MagneticDomainConstructor.modeMsg.0
+        // #tr tst.common.machine.MagneticDomainConstructor.mode.0
         // # Mode: Electromagnetic Separator
         // #zh_CN 电磁离析机模式
 
-        // #tr MagneticDomainConstructor.modeMsg.1
+        // #tr tst.common.machine.MagneticDomainConstructor.mode.1
         // # Mode: Electromagnetic Polarizer
         // #zh_CN 磁化机模式
-        return StatCollector.translateToLocal("MagneticDomainConstructor.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.MagneticDomainConstructor.mode." + machineMode);
     }
 
     @Override
@@ -456,30 +456,30 @@ public class GT_TileEntity_MagneticDomainConstructor
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MagneticDomainConstructor_MachineType
+        // #tr tst.common.machine.MagneticDomainConstructor.tooltip.machine_type
         // # Electromagnetic Separator | Electromagnetic Polarizer
         // #zh_CN 电磁离析机 | 磁化机
-        tt.addMachineType(TSTUtils.tr("Tooltip_MagneticDomainConstructor_MachineType"))
-            // #tr Tooltip_MagneticDomainConstructor_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.tooltip.machine_type"))
+            // #tr tst.common.machine.MagneticDomainConstructor.tooltip.info.01
             // # Controller block for the Magnetic Domain Constructor
             // #zh_CN 磁畴构建器的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_00"))
-            // #tr Tooltip_MagneticDomainConstructor_01
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.tooltip.info.01"))
+            // #tr tst.common.machine.MagneticDomainConstructor.tooltip.info.02
             // # {\DARK_GRAY}Don't give up your imagination.
             // #zh_CN {\DARK_GRAY}不要放弃你的幻想.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_01"))
-            // #tr Tooltip_MagneticDomainConstructor_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.tooltip.info.02"))
+            // #tr tst.common.machine.MagneticDomainConstructor.tooltip.info.03
             // # Controlling the magnetic domains inside the crystal, yes that's it.
             // #zh_CN 操控晶体内部的磁畴子, 就是这样.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_02"))
-            // #tr Tooltip_MagneticDomainConstructor_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.tooltip.info.03"))
+            // #tr tst.common.machine.MagneticDomainConstructor.tooltip.info.04
             // # {\AQUA}64x{\GRAY} Parallel per Ring.(Don't use a lot of blueprints when first scanning.)
             // #zh_CN 每环增加{\AQUA}64x{\GRAY}并行.(不要一开始就用很多{\BLUE}蓝{\AQUA}图{\GRAY}去扫描.)
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_03"))
-            // #tr Tooltip_MagneticDomainConstructor_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.tooltip.info.04"))
+            // #tr tst.common.machine.MagneticDomainConstructor.tooltip.info.05
             // # Additional {\RED}25%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}25%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDomainConstructor_04"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.tooltip.info.05"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 3)

@@ -1274,10 +1274,10 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         }
         if (tag.hasKey("modeTST")) {
             currentTip.add(EnumChatFormatting.YELLOW +
-            // #tr TST.machines.running_mode
+            // #tr tst.common.shared.machine_info.running_mode
             // # Running Mode :
             // #zh_CN 运行模式 :
-                StatCollector.translateToLocal("TST.machines.running_mode")
+                StatCollector.translateToLocal("tst.common.shared.machine_info.running_mode")
                 + " "
                 + EnumChatFormatting.WHITE
                 + getMachineModeName()

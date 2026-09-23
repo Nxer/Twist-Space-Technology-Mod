@@ -54,30 +54,30 @@ public class ExecutionCore extends ExecutionCoreBase {
         if (description == null || description.length == 0) {
             description =
                 new String[]{
-                    // #tr Tooltips.ExecutionCore.01
+                    // #tr tst.modular.machine.ExecutionCore.tooltip.info.01
                     // # Add an actual execution core to your modularized machine.
                     // #zh_CN 为你的模块化机器添加一颗实际执行核心.
-                    TSTUtils.tr("Tooltips.ExecutionCore.01"),
-                    // #tr Tooltips.ExecutionCore.02
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.tooltip.info.01"),
+                    // #tr tst.modular.machine.ExecutionCore.tooltip.info.02
                     // # Machines that support multiple execution cores distribute actual production tasks to these execution cores.
                     // #zh_CN 支持多执行核心的机器将实际生产任务分配到这些执行核心上.
-                    TSTUtils.tr("Tooltips.ExecutionCore.02"),
-                    // #tr Tooltips.ExecutionCore.03
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.tooltip.info.02"),
+                    // #tr tst.modular.machine.ExecutionCore.tooltip.info.03
                     // # Of course, a machine that supports multiple execution cores is also an execution core.
                     // #zh_CN 当然, 支持多执行核心的机器本身也是一颗执行核心.
-                    TSTUtils.tr("Tooltips.ExecutionCore.03"),
-                    // #tr Tooltips.ExecutionCore.04
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.tooltip.info.03"),
+                    // #tr tst.modular.machine.ExecutionCore.tooltip.info.04
                     // # Multiple execution cores share the machine's input/output and energy and logics.
                     // #zh_CN 多个执行核心共同使用机器的输入输出和能源和逻辑.
-                    TSTUtils.tr("Tooltips.ExecutionCore.04"),
-                    // #tr Tooltips.ExecutionCore.05
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.tooltip.info.04"),
+                    // #tr tst.modular.machine.ExecutionCore.tooltip.info.05
                     // # The machine will use idle power to accelerate the execution cores. Same effect as overclocking.
                     // #zh_CN 机器会用闲置的功率为执行核心加速. 与超频效果相同.
-                    TSTUtils.tr("Tooltips.ExecutionCore.05"),
-                    // #tr Tooltips.ExecutionCore.06
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.tooltip.info.05"),
+                    // #tr tst.modular.machine.ExecutionCore.tooltip.info.06
                     // # Finally, the execution cores dynamically share the energy input of the machine.
                     // #zh_CN 最终实现执行核心动态均分机器的能源输入.
-                    TSTUtils.tr("Tooltips.ExecutionCore.06"),
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.tooltip.info.06"),
                 };
         }
         return description;

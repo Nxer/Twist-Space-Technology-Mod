@@ -331,7 +331,7 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.SkypiercerTower;
+        return GTCMRecipe.SkypiercerTowerRecipeMap;
     }
 
     @Override
@@ -346,17 +346,17 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
 
     @Override
     public String getMachineModeName() {
-        return TSTUtils.tr("SkypiercerTower.mode." + machineMode);
+        return TSTUtils.tr("tst.common.machine.SkypiercerTower.mode." + machineMode);
         // spotless:off
-        // #tr SkypiercerTower.mode.0
+        // #tr tst.common.machine.SkypiercerTower.mode.0
         // #en_US Passive Mode
         // #zh_CN 被动模式
 
-        // #tr SkypiercerTower.mode.1
+        // #tr tst.common.machine.SkypiercerTower.mode.1
         // #en_US Crystal Essence Mode
         // #zh_CN 晶化源质模式
 
-        // #tr SkypiercerTower.mode.2
+        // #tr tst.common.machine.SkypiercerTower.mode.2
         // #en_US Essentia Mode
         // #zh_CN 源质模式
         // spotless:on
@@ -925,74 +925,74 @@ public class TST_SkypiercerTower extends GTCM_MultiMachineBase<TST_SkypiercerTow
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_SkypiercerTwoer_MachineType
+        // #tr tst.common.machine.SkypiercerTower.tooltip.machine_type
         // #en_US Essentia Synthesizer
         // #zh_CN 源质合成者
-        tt.addMachineType(TSTUtils.tr("Tooltip_SkypiercerTwoer_MachineType"))
-            // #tr Tooltip_SkypiercerTower_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.machine_type"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.01
             // #en_US Controller block for the SkypiercerTower
             // #zh_CN 穿云尖塔的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_00"))
-            // #tr Tooltip_SkypiercerTower_01
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.01"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.02
             // #en_US §9Wir müssen wissen. Wir werden wissen.
             // #zh_CN §9我们必须知道，我们必将知道.
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_01"))
-            // #tr Tooltip_SkypiercerTower_02
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.02"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.03
             // # Thaumaturgical research confirms: Essentia degradation occurs spontaneously. while recombination demands human intervention to overcome inherent resistance.
             // #zh_CN 神秘学研究表明:源质天然倾向于分解,而重组需要人为干预以克服内阻.
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_02"))
-            // #tr Tooltip_SkypiercerTower_03
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.03"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.04
             // #en_US Synthesizes compound aspects. Requires at least 1A EV. Processing time depends on aspect tier: primal aspects are tier 0; a compound aspect's tier is the max tier of its components plus 1.
             // #zh_CN 合成复合要素,至少1A EV ,其时间取决于要素的等级有关,初等要素为0级,父要素等级为子要素等级较大者+1
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_03"))
-            // #tr Tooltip_SkypiercerTower_05
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.04"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.05
             // #en_US A tier 1 aspect takes 2 seconds. Each additional tier multiplies the time by 3/2, rounded down.
             // #zh_CN 初等要素合成的要素需要2s,每增加一级时间变为原先的3/2倍,向下取整.
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_05"))
-            // #tr Tooltip_SkypiercerTower_06
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.05"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.06
             // #en_US Essentia Mode: Supply essentia via Infusion Provider. Automatically matches two combinable aspects from the network, outputs through Essentia Output Hatch. Each ring adds 16 parallels and enables perfect overclocking.
             // #zh_CN 源质模式:由注魔供应器提供源质,自动匹配可合成的两种源质,源质输出仓输出,每个环部将增加16并行,并开启无损超频.
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_06"))
-            // #tr Tooltip_SkypiercerTower_07
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.06"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.07
             // #en_US Passive Mode: Select aspects manually for continuous synthesis. Each ring adds 6 parallels and divides time by 1.2^rings (≈1/10 time at 13 rings).
             // #zh_CN 被动模式:自行选择要素,将一直合成,每个环部增加6并行,且时间÷环数^1.2(约13环即可将时间降为原先的1/10).
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_07"))
-            // #tr Tooltip_SkypiercerTower_08
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.07"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.08
             // #en_US Crystal Essence Mode: Input crystals via Input Bus, output through Output Bus. Bonuses same as Passive Mode.
             // #zh_CN 晶化源质模式:由输入总线输入,输出总线输出,各加成等与被动模式一致,此模式已不太推荐使用.
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_08"))
-            // #tr Tooltip_SkypiercerTower_09
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.08"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.09
             // #en_US Note: Non‑passive modes require blocking to ensure only one type of aspect is synthesized at a time; otherwise it may interfere or even jam (also does not support color input).
             // #zh_CN 注意,非被动模式下均需要阻挡,保证一次只合成一种要素,否则会相互干扰,甚至会卡住(另外不支持染色仓).
-            .addInfo(TSTUtils.tr("Tooltip_SkypiercerTower_09"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.09"))
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
 
-            // #tr Tooltip_SkypiercerTower_InputBusInfo
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.10
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            .addInputBus(TSTUtils.tr("Tooltip_SkypiercerTower_InputBusInfo"))
-            .addOutputBus(TSTUtils.tr("Tooltip_SkypiercerTower_InputBusInfo"))
-            // #tr Tooltip_SkypiercerTower_EnergyHatch
+            .addInputBus(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.10"))
+            .addOutputBus(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.10"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.11
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
-            .addEnergyHatch(TSTUtils.tr("Tooltip_SkypiercerTower_EnergyHatch"))
-            // #tr Tooltip_SkypiercerTower_InfusionProvider
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.11"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.12
             // #en_US Replace any chemically inert machine casing.Only one is allowed.
             // #zh_CN 任何舱室替换化学惰性方块,只允许有一个.
 
-            // #tr Tooltip.InfusionProvider
+            // #tr tst.common.machine.SkypiercerTower.tooltip.structure.01
             // # Infusion Provider
             // #zh_CN 注魔供应器
-            .addOtherStructurePart(TSTUtils.tr("Tooltip.InfusionProvider"), TSTUtils.tr("Tooltip_SkypiercerTower_InfusionProvider"))
-            // #tr Tooltip_SkypiercerTower_EssentiaOutputHatch
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.structure.01"), TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.12"))
+            // #tr tst.common.machine.SkypiercerTower.tooltip.info.13
             // #en_US Replace any chemically inert machine casing
             // #zh_CN 任何舱室替换化学惰性方块
 
-            // #tr Tooltip.EssentiaOutputHatch
+            // #tr tst.common.machine.SkypiercerTower.tooltip.structure.02
             // # Essentia Output Hatch
             // #zh_CN 源质输出仓
-            .addOtherStructurePart(TSTUtils.tr("Tooltip.EssentiaOutputHatch"), TSTUtils.tr("Tooltip_SkypiercerTower_EssentiaOutputHatch"))
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.structure.02"), TSTUtils.tr("tst.common.machine.SkypiercerTower.tooltip.info.13"))
             .toolTipFinisher();
         // spotless:on
         return tt;

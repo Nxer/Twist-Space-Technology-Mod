@@ -88,7 +88,7 @@ public class TST_TombOfTheDragon extends GTCM_MultiMachineBase<TST_TombOfTheDrag
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.TombOfTheDragonRecipe;
+        return GTCMRecipe.TombOfTheDragonRecipeMap;
     }
 
     @Override

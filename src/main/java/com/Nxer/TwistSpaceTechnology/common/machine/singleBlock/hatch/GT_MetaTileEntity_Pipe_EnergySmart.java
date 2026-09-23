@@ -94,26 +94,26 @@ public class GT_MetaTileEntity_Pipe_EnergySmart extends MTETieredMachineBlock
     public String[] getDescription() {
         // spotless:off
         return new String[] { CommonValues.TEC_MARK_EM,
-            // #tr LaserSmartNode.getDescription.01
+            // #tr tst.common.machine.LaserSmartNode.tooltip.info.01
             // # Reflect after precise calculation.
             // #zh_CN 精密计算, 然后, 反射！
-            TSTUtils.tr("LaserSmartNode.getDescription.01"),
-            // #tr LaserSmartNode.getDescription.02
+            TSTUtils.tr("tst.common.machine.LaserSmartNode.tooltip.info.01"),
+            // #tr tst.common.machine.LaserSmartNode.tooltip.info.02
             // # {\AQUA}Connects devices in different directions.
             // #zh_CN {\AQUA}连接不同方向的设备.
-            TSTUtils.tr("LaserSmartNode.getDescription.02"),
-            // #tr LaserSmartNode.getDescription.03
+            TSTUtils.tr("tst.common.machine.LaserSmartNode.tooltip.info.02"),
+            // #tr tst.common.machine.LaserSmartNode.tooltip.info.03
             // # {\AQUA}Input energy from the front and output from other sides.
             // #zh_CN {\AQUA}从正面输入能量, 从其他面输出.
-            TSTUtils.tr("LaserSmartNode.getDescription.03"),
-            // #tr LaserFocusedSmartNode.description.04
+            TSTUtils.tr("tst.common.machine.LaserSmartNode.tooltip.info.03"),
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.04
             // # {\AQUA}Please note that if the source voltage is greater than the receiving voltage, it will explode; if it is less, it will not work. Please ensure that the voltages are consistent.
             // #zh_CN {\AQUA}请注意,如果源电压大于接受电压会爆炸,小于则不工作,请尽量保持电压一致
-            TSTUtils.tr("LaserFocusedSmartNode.description.04"),
-            // #tr LaserFocusedSmartNode.description.05
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.04"),
+            // #tr tst.common.machine.LaserFocusedSmartNode.tooltip.info.05
             // # {\AQUA}Try not to mix the two types of intelligent nodes. In general, it is allowed, but if a loop occurs in the laser network (that is, the output passes through several nodes and then becomes the input), there may be unpredictable consequences.
             // #zh_CN {\AQUA}尽量不要将两种智能节点混用,在一般情况下是允许的,但是如果激光网络中出现环状(即输出经过若干节点后变成输入)则可能会有不可预测的后果.
-            TSTUtils.tr("LaserFocusedSmartNode.description.05") };
+            TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.tooltip.info.05") };
         // spotless:on
     }
 

@@ -1,6 +1,6 @@
 package com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.expanded;
 
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.BloodyHellRecipes;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.BloodyHellRecipeMap;
 
 import net.minecraft.item.ItemStack;
 
@@ -40,7 +40,7 @@ public class BloodyHellRecipePool {
                 .eut(0)
                 .duration(recipe.liquidRequired / soakingSpeed)
                 .metadata(BloodyHellTierKey.INSTANCE, recipe.minTier)
-                .addTo(BloodyHellRecipes);
+                .addTo(BloodyHellRecipeMap);
         }
 
         for (AlchemyRecipe recipe : AlchemyRecipeRegistry.recipes) {
@@ -52,7 +52,7 @@ public class BloodyHellRecipePool {
                 .eut(0)
                 .duration(recipe.getAmountNeeded() * 100 / soakingSpeed)
                 .metadata(BloodyHellAlchemicTierKey.INSTANCE, recipe.getOrbLevel())
-                .addTo(BloodyHellRecipes);
+                .addTo(BloodyHellRecipeMap);
         }
 
         for (BindingRecipe recipe : BindingRegistry.bindingRecipes) {
@@ -66,7 +66,7 @@ public class BloodyHellRecipePool {
                 .eut(0)
                 .duration(bindingRecipeLECost / soakingSpeed)
                 .metadata(BloodyHellTierKey.INSTANCE, 1)
-                .addTo(BloodyHellRecipes);
+                .addTo(BloodyHellRecipeMap);
         }
     }
 }

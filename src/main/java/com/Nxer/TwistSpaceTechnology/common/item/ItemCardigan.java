@@ -86,23 +86,23 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
         // this item will be registered in the super class constructor, so don't register twice!
         super(Cardigan, Cardigan, 1, TIERED_MAX_CHARGE[0], TIERED_TRANSFER_LIMIT[0], 0);
 
-        // #tr item.chestplateCardigan.name
+        // #tr item.tst.common.Cardigan.name
         // # Cardigan
         // #zh_CN 羊毛衫
 
-        // #tr item.chestplateCardigan.0.name
+        // #tr item.tst.common.Cardigan.0.name
         // # Cardigan
         // #zh_CN 羊毛衫
 
-        // #tr item.chestplateCardigan.1.name
+        // #tr item.tst.common.Cardigan.1.name
         // # Advanced Cardigan
         // #zh_CN 高级羊毛衫
 
-        // #tr item.chestplateCardigan.2.name
+        // #tr item.tst.common.Cardigan.2.name
         // # Flawless Cardigan
         // #zh_CN 无暇羊毛衫
 
-        // #tr item.chestplateCardigan.3.name
+        // #tr item.tst.common.Cardigan.3.name
         // # Exquisite Cardigan
         // #zh_CN 精致羊毛衫
         setUnlocalizedName("chestplateCardigan");
@@ -195,47 +195,49 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
             var current = chargeOptional.get()[0];
             var max = chargeOptional.get()[1];
 
-            // #tr tst.cardigan.tooltip.power
+            // #tr item.tst.common.Cardigan.tooltip.01
             // # {\GRAY}Charged: {\GREEN}%s{\GRAY}/{\GREEN}%s
             // #zh_CN {\GRAY}充能: {\GREEN}%s{\GRAY}/{\GREEN}%s
-            String s = StatCollector
-                .translateToLocalFormatted("tst.cardigan.tooltip.power", formatNumber(current), formatNumber(max));
+            String s = StatCollector.translateToLocalFormatted(
+                "item.tst.common.Cardigan.tooltip.01",
+                formatNumber(current),
+                formatNumber(max));
             tooltips.add(s);
         } else {
-            // #tr tst.cardigan.tooltip.error
+            // #tr item.tst.common.Cardigan.tooltip.02
             // # {\RED}Something is missing!
             // #zh_CN {\RED}不对劲！
-            tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.error"));
+            tooltips.add(StatCollector.translateToLocal("item.tst.common.Cardigan.tooltip.02"));
         }
 
         if (tier == VoltageIndex.ULV) {
-            // #tr tst.cardigan.tooltip.ulv
+            // #tr item.tst.common.Cardigan.tooltip.03
             // # {\RED}Useless Bullshit!
             // #zh_CN {\RED}没用的废物！
-            tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.ulv"));
+            tooltips.add(StatCollector.translateToLocal("item.tst.common.Cardigan.tooltip.03"));
         }
 
         // spotless:off
 
-        // #tr tst.cardigan.tooltip.1
+        // #tr item.tst.common.Cardigan.tooltip.04
         // # {\GRAY}Cardigan will be slowly charged by moving around, rubbing certain blocks and animals, and other ways.
         // #zh_CN {\GRAY}羊毛衫会随着移动，摸方块，撸生物和其他方法缓慢充电。
-        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.1"));
+        tooltips.add(StatCollector.translateToLocal("item.tst.common.Cardigan.tooltip.04"));
 
-        // #tr tst.cardigan.tooltip.2
+        // #tr item.tst.common.Cardigan.tooltip.05
         // # {\GRAY}You can take it off and use it as a battery by inserting it to a machine.
         // #zh_CN {\GRAY}你可以脱下，放进机器里作为电池使用。
-        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.2"));
+        tooltips.add(StatCollector.translateToLocal("item.tst.common.Cardigan.tooltip.05"));
 
-        // #tr tst.cardigan.tooltip.3
+        // #tr item.tst.common.Cardigan.tooltip.06
         // # {\RED}When wearing Cardigan, there is a very small chance to EXPLODE your Machines with LOWER Voltage!
         // #zh_CN {\RED}穿着羊毛衫时，有非常小的概率引爆更低电压等级的机器！
-        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.3"));
+        tooltips.add(StatCollector.translateToLocal("item.tst.common.Cardigan.tooltip.06"));
 
-        // #tr tst.cardigan.tooltip.4
+        // #tr item.tst.common.Cardigan.tooltip.07
         // # {\RED}Multiblock Machines are more robust that they don't explode but still need repair.
         // #zh_CN {\RED}多方块机器更加结实，它们不会爆炸，但是还是需要维修。
-        tooltips.add(StatCollector.translateToLocal("tst.cardigan.tooltip.4"));
+        tooltips.add(StatCollector.translateToLocal("item.tst.common.Cardigan.tooltip.07"));
 
         // spotless:on
 
@@ -249,12 +251,12 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
 
     @Override // to override IC2 special logic
     public String getUnlocalizedName() {
-        return "item." + unlocalizedName;
+        return "item.tst.common.Cardigan";
     }
 
     @Override
     public String getUnlocalizedName(ItemStack itemStack) {
-        return "item." + unlocalizedName + "." + getCardiganTier(itemStack);
+        return getUnlocalizedName() + "." + getCardiganTier(itemStack);
     }
 
     @Override // to override IC2 special logic
@@ -401,10 +403,11 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                         // have 10% chance to shock the wearer
                         if (CARDIGAN_DEBUG_MODE || world.rand.nextInt(10) > 8) {
                             applyElectricDamage(player, Math.min(player.getHealth() - 1, 4));
-                            // #tr tst.cardigan.ouch
+                            // #tr item.tst.common.Cardigan.message.ouch
                             // # Ouch!
                             // #zh_CN 啊！
-                            player.addChatComponentMessage(new ChatComponentTranslation("tst.cardigan.ouch"));
+                            player.addChatComponentMessage(
+                                new ChatComponentTranslation("item.tst.common.Cardigan.message.ouch"));
                         }
                     }
                 }
@@ -413,10 +416,11 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                 if (target == TstBlocks.BlockPowerChair) {
                     tryCharge(player, armorStack, Integer.MAX_VALUE);
 
-                    // #tr tst.cardigan.powah
+                    // #tr item.tst.common.Cardigan.message.powah
                     // # Oh, I feel power going through my whole body!
                     // #zh_CN 哇，我感觉能量流经我的身体！
-                    player.addChatComponentMessage(new ChatComponentTranslation("tst.cardigan.powah"));
+                    player.addChatComponentMessage(
+                        new ChatComponentTranslation("item.tst.common.Cardigan.message.powah"));
                 }
 
                 // harming the machines
@@ -445,11 +449,12 @@ public class ItemCardigan extends ItemArmorElectric implements IElectricItem {
                                 if (CARDIGAN_DEBUG_MODE || world.rand.nextInt(100) == 99) {
                                     multiBlockBase.causeMaintenanceIssue();
 
-                                    // #tr tst.cardigan.damageMachine
+                                    // #tr item.tst.common.Cardigan.message.damage_machine
                                     // # {\GRAY}{\ITALIC}The machine is making strange noises
                                     // #zh_CN {\GRAY}{\ITALIC}机器正在发出奇怪的声音
                                     player.addChatComponentMessage(
-                                        new ChatComponentTranslation("tst.cardigan.damageMachine"));
+                                        new ChatComponentTranslation(
+                                            "item.tst.common.Cardigan.message.damage_machine"));
                                 }
                             }
                         }

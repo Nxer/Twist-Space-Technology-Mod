@@ -272,7 +272,7 @@ public class ModularHatchesRecipes {
                 .itemOutputs(GTCMItemList.SingularityPerfectOverclockController.get(1))
                 .eut(RECIPE_MAX)
                 .duration(20 * 3600 * 24 * 64)
-                .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipe);
+                .addTo(GTCMRecipe.AssemblyLineWithoutResearchRecipeMap);
         }
         // endregion
 

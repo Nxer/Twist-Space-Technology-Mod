@@ -13,7 +13,7 @@ public final class ItemEcoSphereExecutionProtocol extends AbstractTstMetaItem {
     private IIcon frameIcon;
 
     public ItemEcoSphereExecutionProtocol() {
-        super("EcoSphereExecutionProtocol");
+        super("EcoSphereExecutionProtocol", "ecosphere.execution_protocol");
     }
 
     @Override

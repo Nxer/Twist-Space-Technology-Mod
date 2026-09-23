@@ -346,22 +346,22 @@ public class TST_CoreDeviceOfHumanPowerGenerationFacility
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType
+        // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.machine_type
         // # Fluid Heater
         // #zh_CN 流体加热器
-        tt.addMachineType(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_MachineType"))
-            // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.machine_type"))
+            // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.controller
             // # Controller block for the Core Device of Human Power Generation Facility
             // #zh_CN 人类能源设施的核心装置的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_Controller"))
-            // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01
+            .addInfo(TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.controller"))
+            // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.info.01
             // # {\RED}The use of "The Fast-Heater" is prohibited in the dormitories.
             // #zh_CN {\RED}禁止在宿舍使用 "热得快"。
-            .addInfo(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_01"))
-            // #tr Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02
+            .addInfo(TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.info.01"))
+            // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.info.02
             // # Upgrade coils for faster speeds.
             // #zh_CN 升级线圈以获得更快的速度.
-            .addInfo(TSTUtils.tr("Tooltip_CoreDeviceOfHumanPowerGenerationFacility_02"))
+            .addInfo(TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.tooltip.info.02"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
             .beginStructureBlock(15, 20, 15, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

@@ -7,7 +7,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.TstMetaBlockMachine;
 public class PhotonControllerUpgradeCasing extends TstMetaBlockMachine {
 
     public PhotonControllerUpgradeCasing() {
-        // #tr tile.PhotonControllerUpgrades.name
+        // #tr tile.tst.common.photon_controller_upgrades.name
         // # Photon Controller Upgrade
         // #zh_CN 光子掌控者升级
         super("PhotonControllerUpgrades");

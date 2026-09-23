@@ -46,10 +46,10 @@ public class TST_DisassemblerRecipeHandler {
         public void initDisassemblerRecipes() {
             processSpecialDisassemblyRecipes();
             generateDisassemblyRecipes(GoodGeneratorRecipeMaps.componentAssemblyLineRecipes.getAllRecipes());
-            generateDisassemblyRecipes(GTCMRecipe.MiracleTopRecipes.getAllRecipes());
-            generateDisassemblyRecipes(GTCMRecipe.AssemblyLineWithoutResearchRecipe.getAllRecipes());
+            generateDisassemblyRecipes(GTCMRecipe.MiracleTopRecipeMap.getAllRecipes());
+            generateDisassemblyRecipes(GTCMRecipe.AssemblyLineWithoutResearchRecipeMap.getAllRecipes());
             generateDisassemblyRecipes(RecipeMaps.assemblerRecipes.getAllRecipes());
-            generateDisassemblyRecipes(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes.getAllRecipes());
+            generateDisassemblyRecipes(GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap.getAllRecipes());
         }
 
         private void processSpecialDisassemblyRecipes() {

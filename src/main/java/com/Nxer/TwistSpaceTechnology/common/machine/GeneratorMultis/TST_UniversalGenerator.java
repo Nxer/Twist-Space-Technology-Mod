@@ -339,30 +339,30 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
             new TextWidget().setStringSupplier(
                 () -> EnumChatFormatting.WHITE
                     // spotless:off
-                    // #tr TST_UniversalGenerator.gui.01
+                    // #tr tst.common.machine.UniversalGenerator.gui.01
                     // # Mode:
                     // #zh_CN 模式 :
-                    + TSTUtils.tr("TST_UniversalGenerator.gui.01")
+                    + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.01")
                     + " "
                     + EnumChatFormatting.GOLD
-                    // #tr TST_UniversalGenerator.gui.02
+                    // #tr tst.common.machine.UniversalGenerator.gui.02
                     // # Gas:
                     // #zh_CN 燃气 :
 
-                    // #tr TST_UniversalGenerator.gui.03
+                    // #tr tst.common.machine.UniversalGenerator.gui.03
                     // # Fuel:
                     // #zh_CN 燃油 :
-                    + (mSetTier == 2 ? TSTUtils.tr("TST_UniversalGenerator.gui.03")
-                        : TSTUtils.tr("TST_UniversalGenerator.gui.02"))
+                    + (mSetTier == 2 ? TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.03")
+                        : TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.02"))
                     + EnumChatFormatting.RESET)
                 .setEnabled(mSetTier != 0))
             .widget(
                 new TextWidget().setStringSupplier(
                     () -> EnumChatFormatting.WHITE
-                        // #tr TST_UniversalGenerator.gui.04
+                        // #tr tst.common.machine.UniversalGenerator.gui.04
                         // # Current fluid:
                         // #zh_CN 当前使用:
-                        + TSTUtils.tr("TST_UniversalGenerator.gui.04")
+                        + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.04")
                         + " "
                         + EnumChatFormatting.GOLD
                         + fuelName
@@ -371,10 +371,10 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
             .widget(
                 new TextWidget().setStringSupplier(
                     () -> EnumChatFormatting.WHITE
-                        // #tr TST_UniversalGenerator.gui.05
+                        // #tr tst.common.machine.UniversalGenerator.gui.05
                         // # Eu per tick:
                         // #zh_CN 发电量 EU/t :
-                        + TSTUtils.tr("TST_UniversalGenerator.gui.05")
+                        + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.05")
                         + " "
                         + EnumChatFormatting.GOLD
                         + numberFormat.format(euPerTick)
@@ -383,18 +383,18 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
             .widget(
                 new TextWidget().setStringSupplier(
                     () -> EnumChatFormatting.WHITE
-                        // #tr TST_UniversalGenerator.gui.06
+                        // #tr tst.common.machine.UniversalGenerator.gui.06
                         // # Fuel burning:
                         // #zh_CN 燃料消耗速度 :
-                        + TSTUtils.tr("TST_UniversalGenerator.gui.06")
+                        + TSTUtils.tr("tst.common.machine.UniversalGenerator.gui.06")
                         + " "
                         + EnumChatFormatting.GOLD
                         + numberFormat.format(1000.0 / fuelBurning)
                         + EnumChatFormatting.WHITE
-                        // #tr TST_SteamBasicGenerator.gui.02
+                        // #tr tst.common.machine.SteamBasicGenerator.gui.02
                         // # /s
                         // #zh_CN /s
-                        + TSTUtils.tr("TST_SteamBasicGenerator.gui.02")
+                        + TSTUtils.tr("tst.common.machine.SteamBasicGenerator.gui.02")
                         + EnumChatFormatting.RESET)
                     .setEnabled(fuelBurning != 0))
             .widget(new FakeSyncWidget.LongSyncer(() -> euPerTick, val -> euPerTick = val))
@@ -465,26 +465,26 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_UniversalGenerator_MachineType
+        // #tr tst.common.machine.UniversalGenerator.tooltip.machine_type
         // # Universal Generator
         // #zh_CN 通用发电机
-        tt.addMachineType(TSTUtils.tr("Tooltip_UniversalGenerator_MachineType"))
-            // #tr Tooltip_UniversalGenerator_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.machine_type"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.01
             // # Has 2 modes: Gas | Fuel
             // #zh_CN 拥有两种模式: 燃气 | 燃油
-            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_00"))
-            // #tr Tooltip_UniversalGenerator_01
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.01"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.02
             // # Maximum 2 dynamo hatches
             // #zh_CN 最多2个动力仓
-            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_01"))
-            // #tr Tooltip_UniversalGenerator_02
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.02"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.03
             // # Dynamo hatches Lv-Hv tier
             // #zh_CN 动力仓等级 LV-HV
-            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_02"))
-            // #tr Tooltip_UniversalGenerator_03
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.03"))
+            // #tr tst.common.machine.UniversalGenerator.tooltip.info.04
             // # Fuel Efficiency: 100%
             // #zh_CN 燃料效率: 100%
-            .addInfo(TSTUtils.tr("Tooltip_UniversalGenerator_03"))
+            .addInfo(TSTUtils.tr("tst.common.machine.UniversalGenerator.tooltip.info.04"))
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addDynamoHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .toolTipFinisher();

@@ -409,18 +409,18 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             GTUtility.sendChatTrans(
                 aPlayer,
                 // spotless:off
-                // #tr LightningSpire.ModeMsg.0
+                // #tr tst.common.machine.LightningSpire.mode.0
                 // # Lightning Spire is in Operate Mode
                 // #zh_CN 闪电尖塔设置为发电模式
 
-                // #tr LightningSpire.ModeMsg.1
+                // #tr tst.common.machine.LightningSpire.mode.1
                 // # Lightning Spire is in Input Mode
                 // #zh_CN 闪电尖塔设置为输入模式
 
-                // #tr LightningSpire.ModeMsg.2
+                // #tr tst.common.machine.LightningSpire.mode.2
                 // # Lightning Spire is in Output Mode
                 // #zh_CN 闪电尖塔设置为输出模式
-                StatCollector.translateToLocal(tr("LightningSpire.ModeMsg." + OperatingMode)));
+                StatCollector.translateToLocal(tr("tst.common.machine.LightningSpire.mode." + OperatingMode)));
                 // spotless:on
         }
     }
@@ -430,14 +430,16 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
         float aX, float aY, float aZ, ItemStack aTool) {
         if (getBaseMetaTileEntity().isServerSide()) {
             enable_lightning = !enable_lightning;
-            // #tr LightningSpire.enable_lightning.true
+            // #tr tst.common.machine.LightningSpire.message.enable_lightning.true
             // # Enable lightning animation
             // #zh_CN 启用闪电特效
 
-            // #tr LightningSpire.enable_lightning.false
+            // #tr tst.common.machine.LightningSpire.message.enable_lightning.false
             // # Disable lightning animation
             // #zh_CN 禁用闪电特效
-            GTUtility.sendChatTrans(aPlayer, tr("LightningSpire.enable_lightning." + enable_lightning));
+            GTUtility.sendChatTrans(
+                aPlayer,
+                tr("tst.common.machine.LightningSpire.message.enable_lightning." + enable_lightning));
             return true;
         }
         return false;
@@ -528,60 +530,60 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr GTCM_LightningSpire_MachineType
+        // #tr tst.common.machine.LightningSpire.tooltip.machine_type
         // # Multi Lightning Rod
         // #zh_CN 多方块避雷针
-        tt.addMachineType(tr("GTCM_LightningSpire_MachineType"))
-            // #tr GTCM_LightningSpire_01
+        tt.addMachineType(tr("tst.common.machine.LightningSpire.tooltip.machine_type"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.01
             // # {\BLUE}"Thunder is God's cannon."
             // #zh_CN {\BLUE}“雷霆是上帝的大炮”
-            .addInfo(tr("GTCM_LightningSpire_01"))
-            // #tr GTCM_LightningSpire_02
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.01"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.02
             // # {\DARK_BLUE}"But now we will control the thunder."
             // #zh_CN {\DARK_BLUE}“但现在我们将掌控雷霆”
-            .addInfo(tr("GTCM_LightningSpire_02"))
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.02"))
             .addSeparator()
-            // #tr GTCM_LightningSpire_03
+            // #tr tst.common.machine.LightningSpire.tooltip.info.03
             // # {\AQUA}Maximum storage capacity of 512 lightning rods(I).
             // #zh_CN {\AQUA}最大存储512个避雷针（I）
-            .addInfo(tr("GTCM_LightningSpire_03"))
-            // #tr GTCM_LightningSpire_04
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.03"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.04
             // # {\AQUA}Each lightning rod produces 28 MEU per lightning strike and stores 280 MEU.
             // #zh_CN {\AQUA}每个避雷针每次雷击生产28MEU，并且存储280MEU
-            .addInfo(tr("GTCM_LightningSpire_04"))
-            // #tr GTCM_LightningSpire_05
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.04"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.05
             // # {\AQUA}Ignoring thunderstorm weather for power generation.
             // #zh_CN {\AQUA}无视雷雨天气发电
-            .addInfo(tr("GTCM_LightningSpire_05"))
-            // #tr GTCM_LightningSpire_06
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.05"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.06
             // # {\AQUA}Consume 128mb cruotheum and 72mb*the number of lightning rods of molten iron ever lightning
             // #zh_CN {\AQUA}每次雷击均会消耗128mb的极寒之凛冰以及72mb*避雷针数量的熔融铁
-            .addInfo(tr("GTCM_LightningSpire_06"))
-            // #tr GTCM_LightningSpire_07
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.06"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.07
             // # {\AQUA}Quantitative input is required, too much or too little can lead to power generation failure
             // #zh_CN {\AQUA}需要定量输入,过多过少均会导致发电失败
-            .addInfo(tr("GTCM_LightningSpire_07"))
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.07"))
             .addSeparator()
-            // #tr GTCM_LightningSpire_08
+            // #tr tst.common.machine.LightningSpire.tooltip.info.08
             // # {\UNDERLINE}Use a screwdriver to switch input, output, and power generation modes.
             // #zh_CN {\UNDERLINE}使用螺丝刀切换输入，输出，发电模式
-            .addInfo(tr("GTCM_LightningSpire_08"))
-            // #tr GTCM_LightningSpire_09
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.08"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.09
             // # {\UNDERLINE}Please clear the internal cache power before outputting the machine
             // #zh_CN {\UNDERLINE}输出机器前请先输出完内部电力缓存
-            .addInfo(tr("GTCM_LightningSpire_09"))
-            // #tr GTCM_LightningSpire_10
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.09"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.10
             // # {\UNDERLINE}Before dismantling the machine, please output the lightning rod first!
             // #zh_CN {\UNDERLINE}拆除机器前请先输出避雷针
-            .addInfo(tr("GTCM_LightningSpire_10"))
-            // #tr GTCM_LightningSpire_11
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.10"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.11
             // # {\UNDERLINE}Otherwise all internal lightning rods will be lost!
             // #zh_CN {\UNDERLINE}否则会丢失所有内部避雷针！
-            .addInfo(tr("GTCM_LightningSpire_11"))
-            // #tr GTCM_LightningSpire_12
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.11"))
+            // #tr tst.common.machine.LightningSpire.tooltip.info.12
             // # Use a wire cutter to enable/disable lightning animation.
             // #zh_CN 使用剪线钳开启/关闭闪电特效
-            .addInfo(tr("GTCM_LightningSpire_12"))
+            .addInfo(tr("tst.common.machine.LightningSpire.tooltip.info.12"))
             .beginStructureBlock(11, 23, 11, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)

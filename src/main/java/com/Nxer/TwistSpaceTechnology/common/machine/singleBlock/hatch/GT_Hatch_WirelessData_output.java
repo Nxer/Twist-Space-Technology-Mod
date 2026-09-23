@@ -69,10 +69,10 @@ public class GT_Hatch_WirelessData_output extends MTEHatchDataOutput implements 
     public String[] getDescription() {
         if (tooltips == null) {
             tooltips = new String[] { Mark_TwistSpaceTechnology_TecTech,
-                // #tr WirelessDataOutput.tooltips.01
+                // #tr tst.common.machine.WirelessDataOutputHatch.tooltip.info.01
                 // # Wireless Quantum Data Output for Multiblocks
                 // #zh_CN 多方块机器无线数据输出
-                TSTUtils.tr("WirelessDataOutput.tooltips.01") };
+                TSTUtils.tr("tst.common.machine.WirelessDataOutputHatch.tooltip.info.01") };
         }
         return tooltips;
     }

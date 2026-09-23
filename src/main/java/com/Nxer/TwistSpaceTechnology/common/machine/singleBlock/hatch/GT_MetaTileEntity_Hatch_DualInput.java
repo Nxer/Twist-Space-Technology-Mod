@@ -110,31 +110,31 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus
             aNameRegional,
             aTier,
             ITEM_SLOT_AMOUNT,
-            // #tr ToolTip_DualInputHatch_1
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.01
             // # Advanced input for Multiblocks
             // #zh_CN 多方块的进阶输入
 
-            // #tr ToolTip_DualInputHatch_2
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.02
             // # Can hold
             // #zh_CN 能容纳
 
-            // #tr ToolTip_DualInputHatch_3
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.03
             // # types of item and
             // #zh_CN 种物品与
 
-            // #tr ToolTip_DualInputHatch_4
+            // #tr tst.common.machine.HatchDualInput.tooltip.info.04
             // # types of fluid
             // #zh_CN 种流体
-            new String[] { TSTUtils.tr("ToolTip_DualInputHatch_1"),
+            new String[] { TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.01"),
                 FluidCapacity + " " + getCapacityPerTank(aTier) + " L",
-                TSTUtils.tr("ToolTip_DualInputHatch_2") + " "
+                TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.02") + " "
                     + getSlots(aTier)
                     + " "
-                    + TSTUtils.tr("ToolTip_DualInputHatch_3")
+                    + TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.03")
                     + " "
                     + getFluidSlotsAmount(aTier)
                     + " "
-                    + TSTUtils.tr("ToolTip_DualInputHatch_4"),
+                    + TSTUtils.tr("tst.common.machine.HatchDualInput.tooltip.info.04"),
                 AutoSeparation });
         registerTooltipCredits(ID.HOLEFISH);
         mStoredFluid = new FluidStack[getFluidSlotsAmount(aTier)];

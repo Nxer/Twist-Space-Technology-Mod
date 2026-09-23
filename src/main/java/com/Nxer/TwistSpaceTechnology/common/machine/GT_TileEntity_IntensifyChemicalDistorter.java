@@ -233,14 +233,15 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipes;
+        if (machineMode == 0) return GTCMRecipe.IntensifyChemicalDistorterRecipeMap;
         return RecipeMaps.multiblockChemicalReactorRecipes;
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.IntensifyChemicalDistorterRecipes, RecipeMaps.multiblockChemicalReactorRecipes);
+        return Arrays
+            .asList(GTCMRecipe.IntensifyChemicalDistorterRecipeMap, RecipeMaps.multiblockChemicalReactorRecipes);
     }
 
     @Override
@@ -259,14 +260,14 @@ public class GT_TileEntity_IntensifyChemicalDistorter
 
     @Override
     public String getMachineModeName() {
-        // #tr IntensifyChemicalDistorter.mode.0
+        // #tr tst.common.machine.IntensifyChemicalDistorter.mode.0
         // # Mode: Intense Chemical Distorter
         // #zh_CN 深度化学扭曲模式
 
-        // #tr IntensifyChemicalDistorter.mode.1
+        // #tr tst.common.machine.IntensifyChemicalDistorter.mode.1
         // # Mode: Chemical Reactor
         // #zh_CN 化学反应釜模式
-        return StatCollector.translateToLocal("IntensifyChemicalDistorter.mode." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.IntensifyChemicalDistorter.mode." + machineMode);
     }
 
     @Override
@@ -400,42 +401,42 @@ public class GT_TileEntity_IntensifyChemicalDistorter
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_ICD_MachineType
+        // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type
         // # Intensify Chemical Distorter/Chemical Reactor
         // #zh_CN 深度化学扭曲仪/化学反应釜
-        tt.addMachineType(TSTUtils.tr("Tooltip_ICD_MachineType"))
-            // #tr Tooltip_ICD_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.01
             // # Controller block for the Intensify Chemical Distorter
             // #zh_CN 深度化学扭曲仪的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_ICD_00"))
-            // #tr Tooltip_ICD_01
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.01"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.02
             // # {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
             // #zh_CN {\AQUA}I! {\BLUE}AM! {\AQUA}THE! {\BLUE}CHEM! {\AQUA}THAT! {\BLUE}IS! {\AQUA}APPROOOOOACHING !!
-            .addInfo(TSTUtils.tr("Tooltip_ICD_01"))
-            // #tr Tooltip_ICD_02
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.02"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.03
             // # The most advanced base chemical reactor.
             // #zh_CN 最先进的基础化学反应设备
-            .addInfo(TSTUtils.tr("Tooltip_ICD_02"))
-            // #tr Tooltip_ICD_03
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.03"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.04
             // # Use screwdriver to change mode.
             // #zh_CN 使用螺丝刀切换模式.
-            .addInfo(TSTUtils.tr("Tooltip_ICD_03"))
-            // #tr Tooltip_ICD_04
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.04"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.05
             // # {\GOLD}Intensify Chemical Distorter mode:
             // #zh_CN {\GOLD}深度化学扭曲模式:
-            .addInfo(TSTUtils.tr("Tooltip_ICD_04"))
-            // #tr Tooltip_ICD_05
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.05"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.06
             // # Focus on processing the most complex chemical reaction - {\AQUA}16x {\GRAY}Parallel.
             // #zh_CN 专注于处理更复杂的化学反应 - {\AQUA}16x {\GRAY}并行
-            .addInfo(TSTUtils.tr("Tooltip_ICD_05"))
-            // #tr Tooltip_ICD_06
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.06"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.07
             // # {\GOLD}Chemical Reactor mode:
             // #zh_CN {\GOLD}化学反应釜模式:
-            .addInfo(TSTUtils.tr("Tooltip_ICD_06"))
-            // #tr Tooltip_ICD_07
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.07"))
+            // #tr tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08
             // # {\AQUA}1024x {\GRAY}Parallel and {\RED}900% {\GRAY}faster than using LCR of the same voltage.
             // #zh_CN 拥有 {\AQUA}1024x{\GRAY} 并行并且比相同电压的大型化学反应釜快 {\RED}900%{\GRAY}
-            .addInfo(TSTUtils.tr("Tooltip_ICD_07"))
+            .addInfo(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.info.08"))
             .beginStructureBlock(11, 13, 11, false)
             .addController(TSTSharedLocalization.Structure.textFrontBottom)
             .addCasingInfoRange(TSTSharedLocalization.Structure.textCasing, 8, 26, false)

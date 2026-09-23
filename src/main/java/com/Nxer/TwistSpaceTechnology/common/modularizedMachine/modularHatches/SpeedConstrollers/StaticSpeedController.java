@@ -50,14 +50,14 @@ public class StaticSpeedController extends StaticSpeedControllerBase {
         if (description == null || description.length == 0) {
             description =
                 new String[] {
-                    // #tr Tooltips.StaticSpeedController.01
+                    // #tr tst.modular.machine.StaticSpeedController.tooltip.info.01
                     // # Speed controller module with fixed parameters.
                     // #zh_CN 固定参数的速度控制器模块.
-                    TSTUtils.tr("Tooltips.StaticSpeedController.01"),
-                    // #tr Tooltips.StaticSpeedController.02
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tooltip.info.01"),
+                    // #tr tst.modular.machine.StaticSpeedController.tooltip.info.02
                     // # Provides speed x
                     // #zh_CN 提供速度增幅
-                    TSTUtils.tr("Tooltips.StaticSpeedController.02") + " " + getSpeedMultiplier() + "00%",
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tooltip.info.02") + " " + getSpeedMultiplier() + "00%",
                 };
         }
         return description;

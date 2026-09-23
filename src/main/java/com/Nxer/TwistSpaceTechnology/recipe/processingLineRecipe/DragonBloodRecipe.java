@@ -89,7 +89,7 @@ public class DragonBloodRecipe {
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 12) },
                 (int) RECIPE_UIV,
                 20 * 10,
-                GTCMRecipe.StellarForgeRecipes);
+                GTCMRecipe.StellarForgeRecipeMap);
 
             addToMiracleDoorRecipes(
                 new ItemStack[] {
@@ -102,7 +102,7 @@ public class DragonBloodRecipe {
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 3) },
                 (int) RECIPE_UIV,
                 20 * 20,
-                GTCMRecipe.StellarForgeRecipes);
+                GTCMRecipe.StellarForgeRecipeMap);
 
             addToMiracleDoorRecipes(
                 new ItemStack[] { new ItemStack(Blocks.dragon_egg, 1), GTUtility.getIntegratedCircuit(1) },
@@ -111,7 +111,7 @@ public class DragonBloodRecipe {
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 8) },
                 (int) RECIPE_UIV,
                 20 * 60,
-                GTCMRecipe.StellarForgeRecipes);
+                GTCMRecipe.StellarForgeRecipeMap);
 
             addToMiracleDoorRecipes(
                 new ItemStack[] {
@@ -124,7 +124,7 @@ public class DragonBloodRecipe {
                 new FluidStack[] { DRAGON_METAL.getFluidStack(144 * 2) },
                 (int) RECIPE_UIV,
                 20 * 40,
-                GTCMRecipe.StellarForgeRecipes);
+                GTCMRecipe.StellarForgeRecipeMap);
 
             // Star Kernel
             GTValues.RA.stdBuilder()
@@ -133,7 +133,7 @@ public class DragonBloodRecipe {
                 .specialValue(13500)
                 .eut(RECIPE_MAX)
                 .duration(20 * 10)
-                .addTo(GTCMRecipe.BallLightningRecipes);
+                .addTo(GTCMRecipe.StarKernelGeneratorRecipeMap);
 
             GTValues.RA.stdBuilder()
                 .itemInputs(
@@ -145,7 +145,7 @@ public class DragonBloodRecipe {
                 .specialValue(13500)
                 .eut(RECIPE_MAX)
                 .duration(20 * 10)
-                .addTo(GTCMRecipe.BallLightningRecipes);
+                .addTo(GTCMRecipe.StarKernelGeneratorRecipeMap);
         }
     }
 

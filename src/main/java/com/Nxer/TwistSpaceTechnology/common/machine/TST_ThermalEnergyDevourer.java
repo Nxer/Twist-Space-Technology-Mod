@@ -336,14 +336,14 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         if (wirelessMode) {
             return TSTSharedLocalization.Waila.Waila_WirelessMode;
         }
-        // #tr ThermalEnergyDevourer.modeMsg.0
+        // #tr tst.common.machine.ThermalEnergyDevourer.mode.0
         // # High speed mode
         // #zh_CN 高速模式
 
-        // #tr ThermalEnergyDevourer.modeMsg.1
+        // #tr tst.common.machine.ThermalEnergyDevourer.mode.1
         // # Devourer mode
         // #zh_CN 饕餮模式
-        return StatCollector.translateToLocal("ThermalEnergyDevourer.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.ThermalEnergyDevourer.mode." + machineMode);
     }
 
     @Override
@@ -393,11 +393,11 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 1];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        // #tr tst.thermalEnergyDevourer.machineInfo.coefficientMultiplier
+        // #tr tst.common.machine.ThermalEnergyDevourer.info.coefficient_multiplier
         // # {\AQUA}Coefficient Multiplier: {\GOLD}%s
         // #zh_CN {\AQUA}效率倍率: {\GOLD}%s
         ret[origin.length] = TSTUtils
-            .tr("tst.thermalEnergyDevourer.machineInfo.coefficientMultiplier", this.coefficientMultiplier);
+            .tr("tst.common.machine.ThermalEnergyDevourer.info.coefficient_multiplier", this.coefficientMultiplier);
         return ret;
     }
 
@@ -478,75 +478,75 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_ThermalEnergyDevourer_MachineType
+        // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.machine_type
         // # Vacuum Freezer
         // #zh_CN 真空冷冻机
-        tt.addMachineType(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_MachineType"))
-            // #tr Tooltip_ThermalEnergyDevourer_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.machine_type"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.controller
             // # Controller block for the Thermal Energy Devourer
             // #zh_CN 热能饕餮的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_Controller"))
-            // #tr Tooltip_ThermalEnergyDevourer_01
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.controller"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.01
             // # {\WHITE}{\BOLD}{\ITALIC} It's White Album season again.
             // #zh_CN {\WHITE}{\BOLD}{\ITALIC} 又到了白色相簿的季节.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_01"))
-            // #tr Tooltip_ThermalEnergyDevourer_02
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.01"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.02
             // # The thermal energy it greedily devours.
             // #zh_CN 它贪婪地吞噬着热量.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_02"))
-            // #tr Tooltip_ThermalEnergyDevourer_03
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.02"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.03
             // # But overall it's still a Freezer, and works well.
             // #zh_CN 但总的来说仍是一台冷冻机, 而且工作得不错.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_03"))
-            // #tr Tooltip_ThermalEnergyDevourer_04
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.03"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.04
             // # Increasing the input power will also increase the operating efficiency.
             // #zh_CN 提高输入功率的同时会提高运行效率.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_04"))
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.04"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
-            // #tr Tooltip_ThermalEnergyDevourer_05
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.05
             // # {\GOLD} ----- High Speed Mode -----
             // #zh_CN {\GOLD} ----- 高速模式 -----
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_05"))
-            // #tr Tooltip_ThermalEnergyDevourer_06
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.05"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.06
             // # Operating efficiency decrease the progress time directly.
             // #zh_CN 运行效率直接降低处理耗时.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_06"))
-            // #tr Tooltip_ThermalEnergyDevourer_07
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.06"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.07
             // # {\AQUA}1024x{\GRAY} parallel.
             // #zh_CN {\AQUA}1024x{\GRAY} 并行.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_07"))
-            // #tr Tooltip_ThermalEnergyDevourer_08
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.07"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.08
             // # {\GOLD} ----- High Parallel Mode -----
             // #zh_CN {\GOLD} ----- 饕餮模式 -----
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_08"))
-            // #tr Tooltip_ThermalEnergyDevourer_09
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.08"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.09
             // # Operating efficiency decrease the EU cost.
             // #zh_CN 运行效率降低EU消耗.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_09"))
-            // #tr Tooltip_ThermalEnergyDevourer_10
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.09"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.10
             // # Almost {\AQUA}infinite parallel{\GRAY}.
             // #zh_CN 几乎无限的并行.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_10"))
-            // #tr Tooltip_ThermalEnergyDevourer_11
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.10"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.11
             // # {\GOLD} ----- Wireless Mode -----
             // #zh_CN {\GOLD} ----- 无线模式 -----
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_11"))
-            // #tr Tooltip_ThermalEnergyDevourer_12
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.11"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.12
             // # Put {\AQUA}Energised Tesseract{\GRAY} into controller slot to turn into Wireless mode.
             // #zh_CN 在控制器内放入{\AQUA}充能超立方体{\GRAY}以切换至无线模式.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_12"))
-            // #tr Tooltip_ThermalEnergyDevourer_13
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.12"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.13
             // # Directly consume required EU from wireless EU network.
             // #zh_CN 直接在无线EU网络中消耗所需的能量.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_13"))
-            // #tr Tooltip_ThermalEnergyDevourer_14
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.13"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.info.14
             // # Progress time is fixed at {\GOLD}6.4s{\GRAY}.
             // #zh_CN 处理时间固定为{\GOLD}6.4s{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_14"))
-            // #tr Tooltip_ThermalEnergyDevourer_2_01
+            .addInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.info.14"))
+            // #tr tst.common.machine.ThermalEnergyDevourer.tooltip.structure.01
             // # Check whether turn into Wireless mode when checking structure.
             // #zh_CN 检查结构时检测是否进入无线模式.
-            .addStructureInfo(TSTUtils.tr("Tooltip_ThermalEnergyDevourer_2_01"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.tooltip.structure.01"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(15, 37, 15, false)
             .addController(TSTSharedLocalization.Structure.textFrontBottom)

@@ -213,32 +213,32 @@ public class TST_IndustrialMagnetarSeparator extends GTCM_MultiMachineBase<TST_I
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_IndustrialMagnetarSeparator_MachineType
+        // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.machine_type
         // # Electromagnetic Separator
         // #zh_CN 电磁离析机
-        tt.addMachineType(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator_MachineType"))
-            // #tr Tooltip_IndustrialMagnetarSeparator_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.machine_type"))
+            // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.controller
             // # Controller block for the Industrial Magnetar Separator
             // #zh_CN 工业电磁离析机的控制方块
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator_Controller"))
-            // #tr Tooltip_IndustrialMagnetarSeparator.01
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.controller"))
+            // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.01
             // # 300%% faster than using single block machines of the same voltage
             // #zh_CN 比相同电压的单方块机器快300%%
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.01"))
-            // #tr Tooltip_IndustrialMagnetarSeparator.02
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.01"))
+            // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.02
             // # Only uses 80%% of the EU/t normally required
             // #zh_CN 只需要使用配方要求功率的80%%
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.02"))
-            // #tr Tooltip_IndustrialMagnetarSeparator.03
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.02"))
+            // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.03
             // # Processes 4 items per voltage tier
             // #zh_CN 每提升一个电压等级，每次运行可以多处理4个物品
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.03"))
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.info.03"))
             .addPollutionAmount(300)
             .addController(textFrontCenter)
-            // #tr Tooltip_IndustrialMagnetarSeparator.casingAmount
+            // #tr tst.common.machine.IndustrialMagnetarSeparator.tooltip.structure.01
             // # §69x §7Anti-Magnetic Casing (minimum)
             // #zh_CN 剩余方块为§7抗磁机械方块§r(至少§69§r个！)
-            .addStructureInfo(TSTUtils.tr("Tooltip_IndustrialMagnetarSeparator.casingAmount"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.tooltip.structure.01"))
             .addInputBus(textAnyCasing, 1)
             .addOutputBus(textAnyCasing, 1)
             .addEnergyHatch(textAnyCasing, 1)

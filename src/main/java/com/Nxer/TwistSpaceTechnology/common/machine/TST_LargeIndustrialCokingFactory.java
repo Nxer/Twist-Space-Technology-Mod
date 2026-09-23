@@ -172,7 +172,7 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.CokingFactoryRecipes;
+        return GTCMRecipe.CokingFactoryRecipeMap;
     }
 
     @Override
@@ -231,26 +231,26 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_LargeIndustrialCokingFactory_MachineType
+        // #tr tst.common.machine.LargeIndustrialCokingFactory.tooltip.machine_type
         // # Coke Oven
         // #zh_CN 焦炉
-        tt.addMachineType(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_MachineType"))
-            // #tr Tooltip_LargeIndustrialCokingFactory_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.tooltip.machine_type"))
+            // #tr tst.common.machine.LargeIndustrialCokingFactory.tooltip.controller
             // # Controller block for the Large Industrial Coking Factory
             // #zh_CN 大型工业炼焦厂的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_Controller"))
-            // #tr Tooltip_LargeIndustrialCokingFactory_01
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.tooltip.controller"))
+            // #tr tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.01
             // # {\DARK_AQUA}{\BOLD}Seizing like a ravenous beast, lavishing like a breezing east.
             // #zh_CN {\DARK_AQUA}{\BOLD}取之尽锱铢, 用之如泥沙.
-            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_01"))
-            // #tr Tooltip_LargeIndustrialCokingFactory_02
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.01"))
+            // #tr tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.02
             // # Process endless inputs in one time.
             // #zh_CN 无尽的原料一次加工完成.
-            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_02"))
-            // #tr Tooltip_LargeIndustrialCokingFactory_03
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.02"))
+            // #tr tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.03
             // # Higher tier of coil make machine more faster.
             // #zh_CN 更高级的线圈可以让机器更快.
-            .addInfo(TSTUtils.tr("Tooltip_LargeIndustrialCokingFactory_03"))
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.tooltip.info.03"))
             .addController(textFrontBottom)
             .addInputHatch(textUseBlueprint, 1)
             .addOutputHatch(textUseBlueprint, 1)

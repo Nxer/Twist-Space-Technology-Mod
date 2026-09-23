@@ -290,14 +290,14 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
 
     @Override
     public String getMachineModeName() {
-        // #tr HolySeparator.modeMsg.0
+        // #tr tst.common.machine.HolySeparator.mode.0
         // # Mode: Cutting
         // #zh_CN 切割机模式
 
-        // #tr HolySeparator.modeMsg.1
+        // #tr tst.common.machine.HolySeparator.mode.1
         // # Mode: Lathe
         // #zh_CN 车床模式
-        return StatCollector.translateToLocal("HolySeparator.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.HolySeparator.mode." + machineMode);
     }
 
     @Override
@@ -395,34 +395,34 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_HolySeparator_MachineType
+        // #tr tst.common.machine.HolySeparator.tooltip.machine_type
         // # Cutter | Slicer | Lathe
         // #zh_CN 切割机 | 切片机 | 车床
-        tt.addMachineType(TSTUtils.tr("Tooltip_HolySeparator_MachineType"))
-            // #tr Tooltip_HolySeparator_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.machine_type"))
+            // #tr tst.common.machine.HolySeparator.tooltip.info.01
             // # Controller block for the Holy Separator
             // #zh_CN 神圣分离者的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_00"))
-            // #tr Tooltip_HolySeparator_01
+            .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.01"))
+            // #tr tst.common.machine.HolySeparator.tooltip.info.02
             // # {\YELLOW}Precision {\GRAY}and {\AQUA}Grace.
             // #zh_CN {\YELLOW}精准{\GRAY}而{\AQUA}优雅.
-            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_01"))
-            // #tr Tooltip_HolySeparator_02
+            .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.02"))
+            // #tr tst.common.machine.HolySeparator.tooltip.info.03
             // # Another form of laser engraving.
             // #zh_CN 激光蚀刻的另一个形式.
-            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_02"))
-            // #tr Tooltip_HolySeparator_03
+            .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.03"))
+            // #tr tst.common.machine.HolySeparator.tooltip.info.04
             // # You can even slice potato chips with this.
             // #zh_CN 你甚至可以用这机器切薯片.
-            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_03"))
-            // #tr Tooltip_HolySeparator_04
+            .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.04"))
+            // #tr tst.common.machine.HolySeparator.tooltip.info.05
             // # Extra {\AQUA}8x{\GRAY} Parallel per Piece. {\GOLD}16{\GRAY} Piece enable Perfect Overclock.
             // #zh_CN 每层提供{\AQUA}8x{\GRAY}并行. {\GOLD}16{\GRAY}层启用无损超频.
-            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_04"))
-            // #tr Tooltip_HolySeparator_05
+            .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.05"))
+            // #tr tst.common.machine.HolySeparator.tooltip.info.06
             // # Additional {\RED}10%{\GRAY} reduction in time per Voltage Tier, multiplication calculus.
             // #zh_CN 电压每提高1级, 额外降低{\RED}10%{\GRAY}配方耗时, 叠乘计算.
-            .addInfo(TSTUtils.tr("Tooltip_HolySeparator_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.HolySeparator.tooltip.info.06"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

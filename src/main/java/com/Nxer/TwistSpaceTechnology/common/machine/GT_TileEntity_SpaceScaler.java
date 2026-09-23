@@ -282,26 +282,26 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
 
     @Override
     public String getMachineModeName() {
-        // #tr SpaceScaler.modeMsg.0
+        // #tr tst.common.machine.SpaceScaler.mode.0
         // # Mode: Compressor
         // #zh_CN 压缩机模式
 
-        // #tr SpaceScaler.modeMsg.1
+        // #tr tst.common.machine.SpaceScaler.mode.1
         // # Mode: Extractor
         // #zh_CN 提取机模式
 
-        // #tr SpaceScaler.modeMsg.2
+        // #tr tst.common.machine.SpaceScaler.mode.2
         // # Mode: Particle Collider
         // #zh_CN 粒子对撞机模式
 
-        // #tr SpaceScaler.modeMsg.3
+        // #tr tst.common.machine.SpaceScaler.mode.3
         // # Mode: Electric Implosion Compressor
         // #zh_CN 电动聚爆压缩机模式
 
-        // #tr SpaceScaler.modeMsg.4
+        // #tr tst.common.machine.SpaceScaler.mode.4
         // # Mode: Neutronium Compressor
         // #zh_CN 中子压缩机模式
-        return StatCollector.translateToLocal("SpaceScaler.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.SpaceScaler.mode." + machineMode);
     }
 
     public int getMaxParallelRecipes() {
@@ -522,50 +522,50 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_SpaceScaler_MachineType
+        // #tr tst.common.machine.SpaceScaler.tooltip.machine_type
         // # Compressor | Extractor | Particle Collider | Electric Implosion Compressor | Neutronium Compressor
         // #zh_CN 压缩机 | 提取机 | 粒子对撞机 | 电动聚爆压缩机 | 中子态素压缩机
-        tt.addMachineType(TSTUtils.tr("Tooltip_SpaceScaler_MachineType"))
-            // #tr Tooltip_SpaceScaler_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.machine_type"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.01
             // # Controller block for the Space Scaler
             // #zh_CN 空间缩放仪的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_00"))
-            // #tr Tooltip_SpaceScaler_01
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.01"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.02
             // # {\AQUA} First Look Space Technology.
             // #zh_CN {\AQUA}初见空间科技.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_01"))
-            // #tr Tooltip_SpaceScaler_02
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.02"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.03
             // # Another method to operate matter.
             // #zh_CN 操作物质的另一种方式.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_02"))
-            // #tr Tooltip_SpaceScaler_03
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.03"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.04
             // # Only if the space is manageable...
             // #zh_CN 前提是空间是可控的 ...
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_03"))
-            // #tr Tooltip_SpaceScaler_04
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.04"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.05
             // # Has parallel equivalent to Perfect Overclock.
             // #zh_CN 拥有与无损超频等效的并行(但有损超频).
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_04"))
-            // #tr Tooltip_SpaceScaler_05
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.05"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.06
             // # If use Ultimate Containment Field Generator, enable {\RED}10x{\GRAY} speed multiplier.
             // #zh_CN 如果换装终极遏制场发生器, 获得{\RED}10x{\GRAY}倍速.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_05"))
-            // #tr Tooltip_SpaceScaler_06
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.06"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.07
             // # Crude Stabilisation Field Generator block+ allowed machine Particle Collider Mode.
             // #zh_CN 粗制稳定力场发生器等级+允许使用粒子对撞机模式.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_06"))
-            // #tr Tooltip_SpaceScaler_07
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.07"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.08
             // # Gallifreyan Stabilisation Field Generator block enables Electric Implosion Compressor & Neutronium Compressor mode.
             // #zh_CN 鸿蒙稳定力场发生器等级允许使用电动聚爆压缩机模式和中子态素压缩机模式.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_07"))
-            // #tr Tooltip_SpaceScaler_08
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.08"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.09
             // # In Particle Collider mode, higher tier has more output.
             // #zh_CN 粒子对撞机模式下, 高级方块带来额外产出.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_08"))
-            // #tr Tooltip_SpaceScaler_09
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.09"))
+            // #tr tst.common.machine.SpaceScaler.tooltip.info.10
             // # T2 block unlock HIP Unit limitation, T3 block unlock Stabilized Black Hole limitation.
             // #zh_CN 2级方块解锁HIP单元限制, 3级解锁稳定黑洞限制.
-            .addInfo(TSTUtils.tr("Tooltip_SpaceScaler_09"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SpaceScaler.tooltip.info.10"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(31, 31, 32, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)

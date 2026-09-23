@@ -382,38 +382,38 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MegaMacerator_MachineType
+        // #tr tst.common.machine.MegaMacerator.tooltip.machine_type
         // # Macerator
         // #zh_CN Macerator
-        tt.addMachineType(TSTUtils.tr("Tooltip_MegaMacerator_MachineType"))
-            // #tr Tooltip_MegaMacerator_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.machine_type"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.controller
             // # Controller block for the "Mini" Household Cell Fragmentizer
             // #zh_CN "小型"家用破壁机的控制方块
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_Controller"))
-            // #tr Tooltip_MegaMacerator_01
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.controller"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.info.01
             // # Squeezed Collision of Material.
             // #zh_CN {\GOLD}物质的挤压碰撞
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_01"))
-            // #tr Tooltip_MegaMacerator_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.01"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.info.02
             // # This is way better than a forge hammer.
             // #zh_CN 这玩意可比锻造锤好用多了
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_02"))
-            // #tr Tooltip_MegaMacerator_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.02"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.info.03
             // # Can parallel up to {\AQUA}2 ^ (2 ^ (Tier + 2) - 1){\GRAY}.
             // #zh_CN 最大并行：{\AQUA}2 ^ (2 ^ (等级 + 2) - 1){\GRAY}
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_03"))
-            // #tr Tooltip_MegaMacerator_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.03"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.info.04
             // # Tier is determined by cotainment block: Damascus Steel, Neutronium, Universium.
             // #zh_CN 取决于可选方块:大马士革钢、中子、宇宙素
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_04"))
-            // #tr Tooltip_MegaMacerator_05
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.04"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.info.05
             // # The max voltage tier is limited by the glass tier.
             // #zh_CN 玻璃等级限制可执行配方等级
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_05"))
-            // #tr Tooltip_MegaMacerator_06
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.05"))
+            // #tr tst.common.machine.MegaMacerator.tooltip.info.06
             // # Enable {\RED}8x{\GRAY} speed multiplier when glass tier > recipe tier.
             // #zh_CN 当玻璃等级高于配方等级时获得{\RED}8x{\GRAY}倍速
-            .addInfo(TSTUtils.tr("Tooltip_MegaMacerator_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaMacerator.tooltip.info.06"))
             .addController(textFrontBottom)
             .addInputBus(textUseBlueprint, 2)
             .addOutputBus(textUseBlueprint, 2)

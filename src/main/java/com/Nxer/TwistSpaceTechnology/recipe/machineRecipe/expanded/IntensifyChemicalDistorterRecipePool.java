@@ -35,7 +35,7 @@ import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 
 public class IntensifyChemicalDistorterRecipePool {
 
-    private static final RecipeMap<?> ICD = GTCMRecipe.IntensifyChemicalDistorterRecipes;
+    private static final RecipeMap<?> ICD = GTCMRecipe.IntensifyChemicalDistorterRecipeMap;
 
     // spotless:off
     public static void loadRecipes() {

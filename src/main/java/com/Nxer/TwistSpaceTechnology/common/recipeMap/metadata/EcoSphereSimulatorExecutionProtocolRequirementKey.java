@@ -17,10 +17,12 @@ public final class EcoSphereSimulatorExecutionProtocolRequirementKey extends Rec
 
     @Override
     public void drawInfo(RecipeDisplayInfo recipeInfo, @Nullable Object value) {
-        // #tr EcoSphereSimulator.nei.executionProtocolTier
+        // #tr tst.ecosphere.shared.recipe.EcoSphereSimulator.execution_protocol_tier
         // # Required Execution Protocol Tier: %s
         // #zh_CN 所需执行协议等级: %s
         recipeInfo.drawText(
-            StatCollector.translateToLocalFormatted("EcoSphereSimulator.nei.executionProtocolTier", cast(value, 1)));
+            StatCollector.translateToLocalFormatted(
+                "tst.ecosphere.shared.recipe.EcoSphereSimulator.execution_protocol_tier",
+                cast(value, 1)));
     }
 }

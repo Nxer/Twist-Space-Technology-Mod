@@ -57,14 +57,14 @@ public class GT_MetaTileEntity_Hatch_Air extends MTEHatchFluidGenerator implemen
     @Override
     public String[] getCustomTooltip() {
         String[] aTooltip = new String[3];
-        // #tr GT_MetaTileEntity_Hatch_Air.Tooltip0
+        // #tr tst.common.machine.AirHatch.tooltip.info.01
         // # Infinite air supply hatch
         // #zh_CN 无限进气仓
-        aTooltip[0] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Air.Tooltip0");
-        // #tr GT_MetaTileEntity_Hatch_Air.Tooltip1
+        aTooltip[0] = TSTUtils.tr("tst.common.machine.AirHatch.tooltip.info.01");
+        // #tr tst.common.machine.AirHatch.tooltip.info.02
         // # Fills to max capacity every second
         // #zh_CN 每5秒填满内部空间
-        aTooltip[1] = TSTUtils.tr("GT_MetaTileEntity_Hatch_Air.Tooltip1");
+        aTooltip[1] = TSTUtils.tr("tst.common.machine.AirHatch.tooltip.info.02");
         return aTooltip;
     }
 

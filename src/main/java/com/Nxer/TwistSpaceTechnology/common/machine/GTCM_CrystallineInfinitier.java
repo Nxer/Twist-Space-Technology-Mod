@@ -264,7 +264,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     @Override
     public RecipeMap<?> getRecipeMap() {
         return switch (machineMode) {
-            case 1 -> GTCMRecipe.CrystallineInfinitierRecipes;
+            case 1 -> GTCMRecipe.CrystallineInfinitierRecipeMap;
             case 2 -> RecipeMaps.chemicalBathRecipes;
             default -> RecipeMaps.autoclaveRecipes;
         };
@@ -276,7 +276,7 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         return Arrays.asList(
             RecipeMaps.autoclaveRecipes,
             RecipeMaps.chemicalBathRecipes,
-            GTCMRecipe.CrystallineInfinitierRecipes);
+            GTCMRecipe.CrystallineInfinitierRecipeMap);
     }
 
     @Override
@@ -306,18 +306,18 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
 
     @Override
     public String getMachineModeName() {
-        // #tr CrystallineInfinitier.modeMsg.0
+        // #tr tst.common.machine.CrystallineInfinitier.mode.0
         // # Mode: Autoclave
         // #zh_CN 高压釜模式
 
-        // #tr CrystallineInfinitier.modeMsg.1
+        // #tr tst.common.machine.CrystallineInfinitier.mode.1
         // # Mode: Crystalline Forge
         // #zh_CN 晶胞铸造器模式
 
-        // #tr CrystallineInfinitier.modeMsg.2
+        // #tr tst.common.machine.CrystallineInfinitier.mode.2
         // # Mode: Chemical Bath
         // #zh_CN 化学浸洗机模式
-        return StatCollector.translateToLocal("CrystallineInfinitier.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.CrystallineInfinitier.mode." + machineMode);
     }
 
     @Override
@@ -428,38 +428,38 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_CrystallineInfinitier_MachineType
+        // #tr tst.common.machine.CrystallineInfinitier.tooltip.machine_type
         // # Autoclave | Crystalline Infinitier | Chemical Bath
         // #zh_CN 高压釜 | 晶胞铸造器 | 化学浸洗机
-        tt.addMachineType(TSTUtils.tr("Tooltip_CrystallineInfinitier_MachineType"))
-            // #tr Tooltip_CrystallineInfinitier_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.machine_type"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.01
             // # Controller block for the Crystalline Infinitier
             // #zh_CN 无限晶胞的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_00"))
-            // #tr Tooltip_CrystallineInfinitier_01
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.01"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.02
             // # {\GREEN}They're here. Grow and multiply without end.
             // #zh_CN {\GREEN}它在这里. 生生不息.
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_01"))
-            // #tr Tooltip_CrystallineInfinitier_02
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.02"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.03
             // # With Gravitation Tech as a medium, we can control growth of crystalline cells more conveniently.
             // #zh_CN 有了引力科技作为媒介, 我们可以更方便的控制晶胞的生长.
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_02"))
-            // #tr Tooltip_CrystallineInfinitier_03
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.03"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.04
             // # Higher glass tier, higher field generator tier, higher voltage tier means higher value of parallel.
             // #zh_CN 更高的玻璃等级, 力场发生器等级, 电压等级意味着更多的并行数.
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_03"))
-            // #tr Tooltip_CrystallineInfinitier_04
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.04"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.05
             // # And higher field generator tier means lower Energy cost.
             // #zh_CN 同时更高的力场发生器等级让耗电变得更低.
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_04"))
-            // #tr Tooltip_CrystallineInfinitier_05
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.05"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.06
             // # Crude Stabilisation Field Generator enable Perfect Overclock.
             // #zh_CN 粗制稳定力场发生器等级+启用无损超频.
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_05"))
-            // #tr Tooltip_CrystallineInfinitier_06
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.06"))
+            // #tr tst.common.machine.CrystallineInfinitier.tooltip.info.07
             // # Extra {\RED}+300%{\GRAY} speed in Autoclave mode. Extra {\RED}+1500%{\GRAY} speed in Chemical Bath mode.
             // #zh_CN 高压釜模式额外加速{\RED}300%{\GRAY}. 化学浸洗机模式额外加速{\RED}1500%{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_CrystallineInfinitier_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.CrystallineInfinitier.tooltip.info.07"))
             .addInfo(TSTSharedLocalization.MachineTooltip.Tooltip_GlassTierLimitEnergyHatchTier)
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(31, 36, 32, false)

@@ -108,7 +108,7 @@ public interface TSTTooltipCredit {
         return () -> "" + EnumChatFormatting.RESET
             + EnumChatFormatting.GRAY
             + StatCollector.translateToLocalFormatted(
-                "ModNameDesc",
+                "tst.common.shared.credit.mod_name",
                 styledModName.get() + EnumChatFormatting.RESET + EnumChatFormatting.GRAY)
             + EnumChatFormatting.RESET;
     }
@@ -118,8 +118,9 @@ public interface TSTTooltipCredit {
         if (role == Role.AUTHOR) {
             creditLine = GTAuthors.buildAuthorsWithFormatSupplier(ids);
         } else {
-            String translationKey = (role == Role.MAINTAINER ? "Tooltip_Maintainer"
-                : role == Role.STRUCTURE ? "Tooltip_Structure" : "Tooltip_Art") + (ids.length == 1 ? "" : "s");
+            String translationKey = (role == Role.MAINTAINER ? "tst.common.shared.credit.maintainer"
+                : role == Role.STRUCTURE ? "tst.common.shared.credit.structure" : "tst.common.shared.credit.art")
+                + (ids.length == 1 ? "" : "s");
             creditLine = () -> StatCollector.translateToLocalFormatted(
                 translationKey,
                 GTAuthors.formatAuthors(
@@ -133,27 +134,27 @@ public interface TSTTooltipCredit {
             + EnumChatFormatting.RESET;
     }
 
-    // #tr Tooltip_Maintainer
+    // #tr tst.common.shared.credit.maintainer
     // # Maintainer: %s
     // #zh_CN 维护：%s
 
-    // #tr Tooltip_Maintainers
+    // #tr tst.common.shared.credit.maintainers
     // # Maintainers: %s
     // #zh_CN 维护：%s
 
-    // #tr Tooltip_Structure
+    // #tr tst.common.shared.credit.structure
     // # Structure: %s
     // #zh_CN 结构：%s
 
-    // #tr Tooltip_Structures
+    // #tr tst.common.shared.credit.structures
     // # Structures: %s
     // #zh_CN 结构：%s
 
-    // #tr Tooltip_Art
+    // #tr tst.common.shared.credit.art
     // # Artist %s
     // #zh_CN 美术 %s
 
-    // #tr Tooltip_Arts
+    // #tr tst.common.shared.credit.arts
     // # Artists %s
     // #zh_CN 美术 %s
 }

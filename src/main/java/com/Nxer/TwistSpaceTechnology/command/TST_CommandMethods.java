@@ -316,10 +316,8 @@ public class TST_CommandMethods implements IDSP_IO {
     }
 
     public void printHelp(ICommandSender sender) {
-        // #tr TST_Command.printHelp.00
-        // # {\GOLD} --- Twist Space Technology Mod : Dyson Sphere System Controller ---
-        // #zh_CN {\GOLD} --- Twist Space Technology Mod : 戴森球系统控制 ---
-        sender.addChatMessage(new ChatComponentTranslation("TST_Command.printHelp.00"));
+        sender.addChatMessage(
+            new ChatComponentTranslation(EnumChatFormatting.GOLD + "--- Twist Space Technology Mod ---"));
         sender.addChatMessage(
             new ChatComponentText(
                 "↓ Use this to join " + EnumChatFormatting.AQUA

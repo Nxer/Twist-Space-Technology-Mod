@@ -33,6 +33,7 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.common.blocks.BlockMetal;
 
+// spotless:off
 public class BlockRegister {
 
     public static void registryBlocks() {
@@ -99,254 +100,254 @@ public class BlockRegister {
 
     public static void registryBlockContainers() {
 
-        // #tr tile.MetaBlock01.0.name
+        // #tr tile.tst.common.MetaBlock01.0.name
         // # Test Block
         // #zh_CN 测试方块
         GTCMItemList.TestMetaBlock01_0.set(MetaBlock01.registerVariant(0));
 
-        // #tr tile.MetaBlockCasing01.0.name
+        // #tr tile.tst.common.MetaBlockCasing01.0.name
         // # Test Casing
         // #zh_CN Test Casing
         GTCMItemList.TestCasing.set(MetaBlockCasing01.registerVariant(0));
 
-        // #tr tile.MetaBlockCasing01.1.name
+        // #tr tile.tst.common.MetaBlockCasing01.1.name
         // # High Power Radiation Proof Casing
         // #zh_CN 高能防辐射机械方块
         GTCMItemList.HighPowerRadiationProofCasing.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 1,
-                // #tr Tooltips_HighPowerRadiationProofCasing.01
+                // #tr tile.tst.common.MetaBlockCasing01.1.tooltip.01
                 // # Constrained the overflowing energy
                 // #zh_CN {\GREEN}约束住了外溢的能量{\GRAY}.
-                new String[] { TSTUtils.tr("Tooltips_HighPowerRadiationProofCasing.01"),
-                    // #tr Tooltips_HighPowerRadiationProofCasing.02
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.1.tooltip.01"),
+                    // #tr tile.tst.common.MetaBlockCasing01.1.tooltip.02
                     // # The power levels are still rising!!!
                     // #zh_CN {\BOLD}{\AQUA}能量仍在上升!!!
-                    TSTUtils.tr("Tooltips_HighPowerRadiationProofCasing.02") }));
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.1.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.2.name
+        // #tr tile.tst.common.MetaBlockCasing01.2.name
         // # Advanced High Power Coil Block
         // #zh_CN 进阶高能线圈
         GTCMItemList.AdvancedHighPowerCoilBlock.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 2,
-                // #tr Tooltips_AdvancedHighPowerCoil.01
+                // #tr tile.tst.common.MetaBlockCasing01.2.tooltip.01
                 // # Constrained the overflowing energy
                 // #zh_CN {\BLUE}电流涌动于其中.
-                new String[] { TSTUtils.tr("Tooltips_AdvancedHighPowerCoil.01"),
-                    // #tr Tooltips_AdvancedHighPowerCoil.02
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.2.tooltip.01"),
+                    // #tr tile.tst.common.MetaBlockCasing01.2.tooltip.02
                     // # The power levels are still rising!!!
                     // #zh_CN {\AQUA}目中闪烁雷霆.
-                    TSTUtils.tr("Tooltips_AdvancedHighPowerCoil.02") }));
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.2.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.3.name
+        // #tr tile.tst.common.MetaBlockCasing01.3.name
         // # Parallelism Casing Mark 0
         // #zh_CN 初等处理阵列并行机械方块
 
-        // #tr Tooltip_MetaBlockCasing01.3.name_0
+        // #tr tile.tst.common.MetaBlockCasing01.3.tooltip.01
         // # Well, look, it's multiprocessing!
         // #zh_CN 哦, 你看, 这个东西可以多线程
 
-        // #tr Tooltip_MetaBlockCasing01.3.name_1
+        // #tr tile.tst.common.MetaBlockCasing01.3.tooltip.02
         // # 2 in 1
         // #zh_CN 使用该方块组成附加结构后每个小机器提供2并行
         GTCMItemList.ParallelismCasing0.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 3,
-                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.3.name_0"),
-                    TSTUtils.tr("Tooltip_MetaBlockCasing01.3.name_1") }));
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.3.tooltip.01"),
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.3.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.4.name
+        // #tr tile.tst.common.MetaBlockCasing01.4.name
         // # Parallelism Casing Mark 1
         // #zh_CN 进阶处理阵列并行机械方块
 
-        // #tr Tooltip_MetaBlockCasing01.4.name_0
+        // #tr tile.tst.common.MetaBlockCasing01.4.tooltip.01
         // # More processors!
         // #zh_CN 更多的处理器!
 
-        // #tr Tooltip_MetaBlockCasing01.4.name_1
+        // #tr tile.tst.common.MetaBlockCasing01.4.tooltip.02
         // # 4 in 1
         // #zh_CN 使用该方块组成附加结构后每个小机器提供4并行
         GTCMItemList.ParallelismCasing1.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 4,
-                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.4.name_0"),
-                    TSTUtils.tr("Tooltip_MetaBlockCasing01.4.name_1") }));
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.4.tooltip.01"),
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.4.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.5.name
+        // #tr tile.tst.common.MetaBlockCasing01.5.name
         // # Parallelism Casing Mark 2
         // #zh_CN 高能处理阵列并行机械方块
 
-        // #tr Tooltip_MetaBlockCasing01.5.name_0
+        // #tr tile.tst.common.MetaBlockCasing01.5.tooltip.01
         // # C10K!
         // #zh_CN C10K!
 
-        // #tr Tooltip_MetaBlockCasing01.5.name_1
+        // #tr tile.tst.common.MetaBlockCasing01.5.tooltip.02
         // # 8 in 1
         // #zh_CN 使用该方块组成附加结构后每个小机器提供8并行
         GTCMItemList.ParallelismCasing2.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 5,
-                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.5.name_0"),
-                    TSTUtils.tr("Tooltip_MetaBlockCasing01.5.name_1") }));
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.5.tooltip.01"),
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.5.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.6.name
+        // #tr tile.tst.common.MetaBlockCasing01.6.name
         // # Parallelism Casing Mark 3
         // #zh_CN 超能处理阵列并行机械方块
 
-        // #tr Tooltip_MetaBlockCasing01.6.name_0
+        // #tr tile.tst.common.MetaBlockCasing01.6.tooltip.01
         // # The whole base relies on you!
         // #zh_CN 整个基地都靠你了! 前方狗屎警告.
 
-        // #tr Tooltip_MetaBlockCasing01.6.name_1
+        // #tr tile.tst.common.MetaBlockCasing01.6.tooltip.02
         // # 1024 in 1
         // #zh_CN 使用该方块组成附加结构后每个小机器提供1024并行
         GTCMItemList.ParallelismCasing3.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 6,
-                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.6.name_0"),
-                    TSTUtils.tr("Tooltip_MetaBlockCasing01.6.name_1") }));
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.6.tooltip.01"),
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.6.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.7.name
+        // #tr tile.tst.common.MetaBlockCasing01.7.name
         // # Parallelism Casing Mark 4
         // #zh_CN 寰宇处理阵列并行机械方块
 
-        // #tr Tooltip_MetaBlockCasing01.7.name_0
+        // #tr tile.tst.common.MetaBlockCasing01.7.tooltip.01
         // # Power of MAX.
         // #zh_CN MAX之力, 宇宙的尽头不过如此.
 
-        // #tr Tooltip_MetaBlockCasing01.7.name_1
+        // #tr tile.tst.common.MetaBlockCasing01.7.tooltip.02
         // # 2048 in 1
         // #zh_CN 一台能顶2048台撒! 肥料就用金坷垃!
         GTCMItemList.ParallelismCasing4.set(
             MetaBlockCasing01.registerVariantWithTooltips(
                 7,
-                new String[] { TSTUtils.tr("Tooltip_MetaBlockCasing01.7.name_0"),
-                    TSTUtils.tr("Tooltip_MetaBlockCasing01.7.name_1") }));
+                new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.7.tooltip.01"),
+                    TSTUtils.tr("tile.tst.common.MetaBlockCasing01.7.tooltip.02") }));
 
-        // #tr tile.MetaBlockCasing01.8.name
+        // #tr tile.tst.common.MetaBlockCasing01.8.name
         // # Anti-Magnetic Casing
         // #zh_CN 抗磁机械方块
         GTCMItemList.AntiMagneticCasing.set(MetaBlockCasing01.registerVariant(8));
 
-        // #tr tile.MetaBlockCasing01.9.name
+        // #tr tile.tst.common.MetaBlockCasing01.9.name
         // # Reinforced Stone Brick Casing
         // #zh_CN 强化石砖机械方块
 
-        // #tr Tooltip_ReinforcedStoneBrickCasing
+        // #tr tile.tst.common.MetaBlockCasing01.9.tooltip
         // # Just a stone?
         // #zh_CN 只是块石头?
         GTCMItemList.ReinforcedStoneBrickCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(9, new String[] { TSTUtils.tr("Tooltip_ReinforcedStoneBrickCasing") }));
+                .registerVariantWithTooltips(9, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.9.tooltip") }));
 
-        // #tr tile.MetaBlockCasing01.10.name
+        // #tr tile.tst.common.MetaBlockCasing01.10.name
         // # Composite Farm Casing
         // #zh_CN 复合农场机械方块
 
-        // #tr Tooltip_CompositeFarmCasing
+        // #tr tile.tst.common.MetaBlockCasing01.10.tooltip
         // # A force stronger than four combined.
         // #zh_CN 一个更比四个强
         GTCMItemList.CompositeFarmCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(10, new String[] { TSTUtils.tr("Tooltip_CompositeFarmCasing") }));
+                .registerVariantWithTooltips(10, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.10.tooltip") }));
 
-        // #tr tile.MetaBlockCasing01.11.name
+        // #tr tile.tst.common.MetaBlockCasing01.11.name
         // # Dense Particle Constraint Casing
         // #zh_CN 致密粒子约束机械方块
         GTCMItemList.DenseCyclotronOuterCasing.set(MetaBlockCasing01.registerVariant(11));
 
-        // #tr tile.MetaBlockCasing01.12.name
+        // #tr tile.tst.common.MetaBlockCasing01.12.name
         // # Compact Particle Acceleration Coil
         // #zh_CN 压缩粒子加速线圈
         GTCMItemList.CompactCyclotronCoil.set(MetaBlockCasing01.registerVariant(12));
 
-        // #tr tile.MetaBlockCasing01.13.name
+        // #tr tile.tst.common.MetaBlockCasing01.13.name
         // # Aseptic Greenhouse Casing
         // #zh_CN 无菌温室机械方块
 
-        // #tr Tooltip_AsepticGreenhouseCasing
+        // #tr tile.tst.common.MetaBlockCasing01.13.tooltip
         // # Absolutely Clean!
         // #zh_CN 一尘不染!
         GTCMItemList.AsepticGreenhouseCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(13, new String[] { TSTUtils.tr("Tooltip_AsepticGreenhouseCasing") }));
+                .registerVariantWithTooltips(13, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.13.tooltip") }));
 
-        // #tr tile.MetaBlockCasing01.14.name
+        // #tr tile.tst.common.MetaBlockCasing01.14.name
         // # Reinforced Bedrock Casing
         // #zh_CN 强化基岩机械方块
 
-        // #tr Tooltip_ReinforcedBedrockCasing
+        // #tr tile.tst.common.MetaBlockCasing01.14.tooltip
         // # Stronger than bedrock!
         // #zh_CN 比磐石更坚！
         GTCMItemList.ReinforcedBedrockCasing.set(
             MetaBlockCasing01
-                .registerVariantWithTooltips(14, new String[] { TSTUtils.tr("Tooltip_ReinforcedBedrockCasing") }));
+                .registerVariantWithTooltips(14, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.14.tooltip") }));
 
-        // #tr tile.MetaBlockCasing01.15.name
+        // #tr tile.tst.common.MetaBlockCasing01.15.name
         // # Swelegfyr Casing
         // #zh_CN 熯焱机械方块
 
-        // #tr Tooltip_SwelegfyrCasing
+        // #tr tile.tst.common.MetaBlockCasing01.15.tooltip
         // # {\GOLD}Withstands the inferno!
         // #zh_CN {\GOLD}御火而生!
         GTCMItemList.SwelegfyrCasing.set(
-            MetaBlockCasing01.registerVariantWithTooltips(15, new String[] { TSTUtils.tr("Tooltip_SwelegfyrCasing") }));
+            MetaBlockCasing01.registerVariantWithTooltips(15, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing01.15.tooltip") }));
 
-        // #tr tile.MetaBlockCasing02.0.name
+        // #tr tile.tst.common.MetaBlockCasing02.0.name
         // # Gore Casing
         // #zh_CN 凝血机械方块
         GTCMItemList.BloodyCasing1.set(MetaBlockCasing02.registerVariant(0));
 
-        // #tr tile.MetaBlockCasing02.1.name
+        // #tr tile.tst.common.MetaBlockCasing02.1.name
         // # Ichor Draconic Block
         // #zh_CN 血腥龙块
         GTCMItemList.BloodyCasing2.set(MetaBlockCasing02.registerVariant(1));
 
-        // #tr tile.MetaBlockCasing02.2.name
+        // #tr tile.tst.common.MetaBlockCasing02.2.name
         // # Iridium-Reinforced Neutronium Casing
         // #zh_CN 铱强化中子机械方块
         GTCMItemList.ReinforcedIridiumAlloyCasing.set(MetaBlockCasing02.registerVariant(2));
 
-        // #tr tile.MetaBlockCasing02.3.name
+        // #tr tile.tst.common.MetaBlockCasing02.3.name
         // # Borophene-Based Nanowire Composite Thermal Conductive Casing
         // #zh_CN 硼烯基纳米线复合导热外壳
         GTCMItemList.BoropheneBasedNanowireCompositeThermalConductiveCasing.set(MetaBlockCasing02.registerVariant(3));
 
-        // #tr tile.MetaBlockCasing02.4.name
+        // #tr tile.tst.common.MetaBlockCasing02.4.name
         // # Neutronium Pipe Casing
         // #zh_CN 中子管道方块
         GTCMItemList.NeutroniumPipeCasing.set(MetaBlockCasing02.registerVariant(4));
 
-        // #tr tile.MetaBlockCasing02.5.name
+        // #tr tile.tst.common.MetaBlockCasing02.5.name
         // # Mechanically Enhanced Obsidian
         // #zh_CN 机械强化黑曜石
         GTCMItemList.MechanicallyEnhancedObsidian.set(MetaBlockCasing02.registerVariant(5));
 
-        // #tr tile.MetaBlockCasing02.6.name
+        // #tr tile.tst.common.MetaBlockCasing02.6.name
         // # Environmental Isolation Casing
         // #zh_CN 环境隔离机械方块
 
-        // #tr Tooltip_EnvironmentalIsolationCasing
+        // #tr tile.tst.common.MetaBlockCasing02.6.tooltip
         // # Isolates external influences to maintain stable internal conditions.
         // #zh_CN 隔绝外界影响, 维持稳定的内部环境.
         GTCMItemList.EnvironmentalIsolationCasing.set(
             MetaBlockCasing02
-                .registerVariantWithTooltips(6, new String[] { TSTUtils.tr("Tooltip_EnvironmentalIsolationCasing") }));
+                .registerVariantWithTooltips(6, new String[] { TSTUtils.tr("tile.tst.common.MetaBlockCasing02.6.tooltip") }));
 
         // region SpaceTimeOscillator
 
-        // #tr tile.SpaceTimeOscillator.0.name
+        // #tr tile.tst.common.space_time_oscillator.0.name
         // # SpaceTime Oscillator T1
         // #zh_CN 时空振荡器T1
         GTCMItemList.SpaceTimeOscillatorT1.set(TstBlocks.SpaceTimeOscillator.registerVariant(0));
 
-        // #tr tile.SpaceTimeOscillator.1.name
+        // #tr tile.tst.common.space_time_oscillator.1.name
         // # SpaceTime Oscillator T2
         // #zh_CN 时空振荡器T2
         GTCMItemList.SpaceTimeOscillatorT2.set(TstBlocks.SpaceTimeOscillator.registerVariant(1));
 
-        // #tr tile.SpaceTimeOscillator.2.name
+        // #tr tile.tst.common.space_time_oscillator.2.name
         // # SpaceTime Oscillator T3
         // #zh_CN 时空振荡器T3
         GTCMItemList.SpaceTimeOscillatorT3.set(TstBlocks.SpaceTimeOscillator.registerVariant(2));
@@ -355,17 +356,17 @@ public class BlockRegister {
 
         // region SpaceTimeConstraintor
 
-        // #tr tile.SpaceTimeConstraintor.0.name
+        // #tr tile.tst.common.space_time_constraintor.0.name
         // # SpaceTime Constraintor T1
         // #zh_CN 时空约束器T1
         GTCMItemList.SpaceTimeConstraintorT1.set(TstBlocks.SpaceTimeConstraintor.registerVariant(0));
 
-        // #tr tile.SpaceTimeConstraintor.1.name
+        // #tr tile.tst.common.space_time_constraintor.1.name
         // # SpaceTime Constraintor T2
         // #zh_CN 时空约束器T2
         GTCMItemList.SpaceTimeConstraintorT2.set(TstBlocks.SpaceTimeConstraintor.registerVariant(1));
 
-        // #tr tile.SpaceTimeConstraintor.2.name
+        // #tr tile.tst.common.space_time_constraintor.2.name
         // # SpaceTime Constraintor T3
         // #zh_CN 时空约束器T3
         GTCMItemList.SpaceTimeConstraintorT3.set(TstBlocks.SpaceTimeConstraintor.registerVariant(2));
@@ -374,17 +375,17 @@ public class BlockRegister {
 
         // region SpaceTimeMerger
 
-        // #tr tile.SpaceTimeMerger.0.name
+        // #tr tile.tst.common.space_time_merger.0.name
         // # SpaceTime Merger T1
         // #zh_CN 时空归并器T1
         GTCMItemList.SpaceTimeMergerT1.set(TstBlocks.SpaceTimeMerger.registerVariant(0));
 
-        // #tr tile.SpaceTimeMerger.1.name
+        // #tr tile.tst.common.space_time_merger.1.name
         // # SpaceTime Merger T2
         // #zh_CN 时空归并器T2
         GTCMItemList.SpaceTimeMergerT2.set(TstBlocks.SpaceTimeMerger.registerVariant(1));
 
-        // #tr tile.SpaceTimeMerger.2.name
+        // #tr tile.tst.common.space_time_merger.2.name
         // # SpaceTime Merger T3
         // #zh_CN 时空归并器T3
         GTCMItemList.SpaceTimeMergerT3.set(TstBlocks.SpaceTimeMerger.registerVariant(2));
@@ -393,137 +394,137 @@ public class BlockRegister {
 
         // Stabilisation Field Generator
 
-        // #tr tile.StabilisationFieldGenerator.0.name
+        // #tr tile.tst.common.stabilisation_field_generator.0.name
         // # Stabilisation Field Generator Framework
         // #zh_CN 稳定力场发生器框架
 
-        // #tr Tooltip_StabilisationFieldGenerator.0
+        // #tr tile.tst.common.stabilisation_field_generator.0.tooltip
         // # The Beginning?
         // #zh_CN 开始了?
         GTCMItemList.StabilisationFieldGeneratorFramework.set(
             TstBlocks.StabilisationFieldGenerator
-                .registerVariantWithTooltips(0, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.0") }));
+                .registerVariantWithTooltips(0, new String[] { TSTUtils.tr("tile.tst.common.stabilisation_field_generator.0.tooltip") }));
 
-        // #tr tile.StabilisationFieldGenerator.1.name
+        // #tr tile.tst.common.stabilisation_field_generator.1.name
         // # Stabilisation Field Generator UEV Tier
         // #zh_CN 稳定力场发生器(UEV)
 
-        // #tr Tooltip_StabilisationFieldGenerator.1
+        // #tr tile.tst.common.stabilisation_field_generator.1.tooltip
         // # The Beginning
         // #zh_CN 开始了
         GTCMItemList.StabilisationFieldGeneratorUEV.set(
             TstBlocks.StabilisationFieldGenerator
-                .registerVariantWithTooltips(1, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.1") }));
+                .registerVariantWithTooltips(1, new String[] { TSTUtils.tr("tile.tst.common.stabilisation_field_generator.1.tooltip") }));
 
-        // #tr tile.StabilisationFieldGenerator.2.name
+        // #tr tile.tst.common.stabilisation_field_generator.2.name
         // # Stabilisation Field Generator UIV Tier
         // #zh_CN 稳定力场发生器(UIV)
 
-        // #tr Tooltip_StabilisationFieldGenerator.2
+        // #tr tile.tst.common.stabilisation_field_generator.2.tooltip
         // # How Did We Get Here?
         // #zh_CN 为什么会变成这样呢？
         GTCMItemList.StabilisationFieldGeneratorUIV.set(
             TstBlocks.StabilisationFieldGenerator
-                .registerVariantWithTooltips(2, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.2") }));
+                .registerVariantWithTooltips(2, new String[] { TSTUtils.tr("tile.tst.common.stabilisation_field_generator.2.tooltip") }));
 
-        // #tr tile.StabilisationFieldGenerator.3.name
+        // #tr tile.tst.common.stabilisation_field_generator.3.name
         // # Stabilisation Field Generator UMV Tier
         // #zh_CN 稳定力场发生器(UMV)
 
-        // #tr Tooltip_StabilisationFieldGenerator.3
+        // #tr tile.tst.common.stabilisation_field_generator.3.tooltip
         // # We Need to Go Deeper
         // #zh_CN 我们需要再深入些
         GTCMItemList.StabilisationFieldGeneratorUMV.set(
             TstBlocks.StabilisationFieldGenerator
-                .registerVariantWithTooltips(3, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.3") }));
+                .registerVariantWithTooltips(3, new String[] { TSTUtils.tr("tile.tst.common.stabilisation_field_generator.3.tooltip") }));
 
-        // #tr tile.StabilisationFieldGenerator.4.name
+        // #tr tile.tst.common.stabilisation_field_generator.4.name
         // # Stabilisation Field Generator UXV Tier
         // #zh_CN 稳定力场发生器(UXV)
 
-        // #tr Tooltip_StabilisationFieldGenerator.4
+        // #tr tile.tst.common.stabilisation_field_generator.4.tooltip
         // # The End?
         // #zh_CN 结束了?
         GTCMItemList.StabilisationFieldGeneratorUXV.set(
             TstBlocks.StabilisationFieldGenerator
-                .registerVariantWithTooltips(4, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.4") }));
+                .registerVariantWithTooltips(4, new String[] { TSTUtils.tr("tile.tst.common.stabilisation_field_generator.4.tooltip") }));
 
-        // #tr tile.StabilisationFieldGenerator.5.name
+        // #tr tile.tst.common.stabilisation_field_generator.5.name
         // # Stabilisation Field Generator MAX Tier
         // #zh_CN 稳定力场发生器(MAX)
 
-        // #tr Tooltip_StabilisationFieldGenerator.5
+        // #tr tile.tst.common.stabilisation_field_generator.5.tooltip
         // # The End
         // #zh_CN 结束了
         GTCMItemList.StabilisationFieldGeneratorMAX.set(
             TstBlocks.StabilisationFieldGenerator
-                .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("Tooltip_StabilisationFieldGenerator.5") }));
+                .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("tile.tst.common.stabilisation_field_generator.5.tooltip") }));
 
-        // #tr tile.EnergySustainmentMatrix.0.name
+        // #tr tile.tst.common.energy_sustainment_matrix.0.name
         // # Energy Sustainment Matrix Framework
         // #zh_CN 能量维持矩阵框架
 
-        // #tr Tooltip_EnergySustainmentMatrix.0
+        // #tr tile.tst.common.energy_sustainment_matrix.0.tooltip
         // # With Our Powers Combined
         // #zh_CN 小心轻放
         GTCMItemList.EnergySustainmentMatrixFramework.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(0, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.0") }));
+                .registerVariantWithTooltips(0, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.0.tooltip") }));
 
-        // #tr tile.EnergySustainmentMatrix.1.name
+        // #tr tile.tst.common.energy_sustainment_matrix.1.name
         // # Energy Sustainment Matrix UEV Tier
         // #zh_CN 能量维持矩阵(UEV)
 
-        // #tr Tooltip_EnergySustainmentMatrix.1
+        // #tr tile.tst.common.energy_sustainment_matrix.1.tooltip
         // # Infinator
         // #zh_CN 无尽工程师
         GTCMItemList.EnergySustainmentMatrixUEV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(1, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.1") }));
+                .registerVariantWithTooltips(1, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.1.tooltip") }));
 
-        // #tr tile.EnergySustainmentMatrix.2.name
+        // #tr tile.tst.common.energy_sustainment_matrix.2.name
         // # Energy Sustainment Matrix UIV Tier
         // #zh_CN 能量维持矩阵(UIV)
 
-        // #tr Tooltip_EnergySustainmentMatrix.2
+        // #tr tile.tst.common.energy_sustainment_matrix.2.tooltip
         // # Subspace Cube
         // #zh_CN 亚空间立方体
         GTCMItemList.EnergySustainmentMatrixUIV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(2, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.2") }));
+                .registerVariantWithTooltips(2, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.2.tooltip") }));
 
-        // #tr tile.EnergySustainmentMatrix.3.name
+        // #tr tile.tst.common.energy_sustainment_matrix.3.name
         // # Energy Sustainment Matrix UMV Tier
         // #zh_CN 能量维持矩阵(UMV)
 
-        // #tr Tooltip_EnergySustainmentMatrix.3
+        // #tr tile.tst.common.energy_sustainment_matrix.3.tooltip
         // # Paradox
         // #zh_CN 悖论
         GTCMItemList.EnergySustainmentMatrixUMV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(3, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.3") }));
+                .registerVariantWithTooltips(3, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.3.tooltip") }));
 
-        // #tr tile.EnergySustainmentMatrix.4.name
+        // #tr tile.tst.common.energy_sustainment_matrix.4.name
         // # Energy Sustainment Matrix UXV Tier
         // #zh_CN 能量维持矩阵(UXV)
 
-        // #tr Tooltip_EnergySustainmentMatrix.4
+        // #tr tile.tst.common.energy_sustainment_matrix.4.tooltip
         // # Lava Topic
         // #zh_CN 热门话题
         GTCMItemList.EnergySustainmentMatrixUXV.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(4, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.4") }));
+                .registerVariantWithTooltips(4, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.4.tooltip") }));
 
-        // #tr tile.EnergySustainmentMatrix.5.name
+        // #tr tile.tst.common.energy_sustainment_matrix.5.name
         // # Energy Sustainment Matrix MAX Tier
         // #zh_CN 能量维持矩阵(MAX)
 
-        // #tr Tooltip_EnergySustainmentMatrix.5
+        // #tr tile.tst.common.energy_sustainment_matrix.5.tooltip
         // # Great Horizons From Up Here
         // #zh_CN 这上面的视野不错
         GTCMItemList.EnergySustainmentMatrixMAX.set(
             TstBlocks.EnergySustainmentMatrix
-                .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("Tooltip_EnergySustainmentMatrix.5") }));
+                .registerVariantWithTooltips(5, new String[] { TSTUtils.tr("tile.tst.common.energy_sustainment_matrix.5.tooltip") }));
 
         // end region
 
@@ -540,315 +541,315 @@ public class BlockRegister {
         // spotless:on
         // region PhotonControllerUpgrade
 
-        // #tr tile.PhotonControllerUpgrades.0.name
+        // #tr tile.tst.common.photon_controller_upgrades.0.name
         // # Photonic Intensifier LV Tier
         // #zh_CN 光量子增幅器LV Tier
         GTCMItemList.PhotonControllerUpgradeLV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 0,
-                // #tr PhotonControllerUpgradeLV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.0.tooltip
                 // # Extra {\RED}1%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}1%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeLV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.0.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.1.name
+        // #tr tile.tst.common.photon_controller_upgrades.1.name
         // # Photonic Intensifier MV Tier
         // #zh_CN 光量子增幅器MV Tier
         GTCMItemList.PhotonControllerUpgradeMV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 1,
-                // #tr PhotonControllerUpgradeMV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.1.tooltip
                 // # Extra {\RED}2%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}2%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeMV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.1.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.2.name
+        // #tr tile.tst.common.photon_controller_upgrades.2.name
         // # Photonic Intensifier HV Tier
         // #zh_CN 光量子增幅器HV Tier
         GTCMItemList.PhotonControllerUpgradeHV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 2,
-                // #tr PhotonControllerUpgradeHV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.2.tooltip
                 // # Extra {\RED}3%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}3%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeHV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.2.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.3.name
+        // #tr tile.tst.common.photon_controller_upgrades.3.name
         // # Photonic Intensifier EV Tier
         // #zh_CN 光量子增幅器EV Tier
         GTCMItemList.PhotonControllerUpgradeEV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 3,
-                // #tr PhotonControllerUpgradeEV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.3.tooltip
                 // # Extra {\RED}4%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}4%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeEV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.3.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.4.name
+        // #tr tile.tst.common.photon_controller_upgrades.4.name
         // # Photonic Intensifier IV Tier
         // #zh_CN 光量子增幅器IV Tier
         GTCMItemList.PhotonControllerUpgradeIV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 4,
-                // #tr PhotonControllerUpgradeIV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.4.tooltip
                 // # Extra {\RED}5%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}5%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeIV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.4.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.5.name
+        // #tr tile.tst.common.photon_controller_upgrades.5.name
         // # Photonic Intensifier LuV Tier
         // #zh_CN 光量子增幅器LuV Tier
         GTCMItemList.PhotonControllerUpgradeLuV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 5,
-                // #tr PhotonControllerUpgradeLuV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.5.tooltip
                 // # Extra {\RED}10%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}10%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeLuV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.5.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.6.name
+        // #tr tile.tst.common.photon_controller_upgrades.6.name
         // # Photonic Intensifier ZPM Tier
         // #zh_CN 光量子增幅器ZPM Tier
         GTCMItemList.PhotonControllerUpgradeZPM.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 6,
-                // #tr PhotonControllerUpgradeZPM.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.6.tooltip
                 // # Extra {\RED}20%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}20%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeZPM.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.6.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.7.name
+        // #tr tile.tst.common.photon_controller_upgrades.7.name
         // # Photonic Intensifier UV Tier
         // #zh_CN 光量子增幅器UV Tier
         GTCMItemList.PhotonControllerUpgradeUV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 7,
-                // #tr PhotonControllerUpgradeUV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.7.tooltip
                 // # Extra {\RED}40%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}40%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeUV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.7.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.8.name
+        // #tr tile.tst.common.photon_controller_upgrades.8.name
         // # Photonic Intensifier UHV Tier
         // #zh_CN 光量子增幅器UHV Tier
         GTCMItemList.PhotonControllerUpgradeUHV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 8,
-                // #tr PhotonControllerUpgradeUHV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.8.tooltip
                 // # Extra {\RED}70%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}70%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeUHV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.8.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.9.name
+        // #tr tile.tst.common.photon_controller_upgrades.9.name
         // # Photonic Intensifier UEV Tier
         // #zh_CN 光量子增幅器UEV Tier
         GTCMItemList.PhotonControllerUpgradeUEV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 9,
-                // #tr PhotonControllerUpgradeUEV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.9.tooltip
                 // # Extra {\RED}100%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}100%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeUEV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.9.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.10.name
+        // #tr tile.tst.common.photon_controller_upgrades.10.name
         // # Photonic Intensifier UIV Tier
         // #zh_CN 光量子增幅器UIV Tier
         GTCMItemList.PhotonControllerUpgradeUIV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 10,
-                // #tr PhotonControllerUpgradeUIV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.10.tooltip
                 // # Extra 140%% Speed Up !
                 // #zh_CN 额外140%%的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeUIV.tooltips.01") }));
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.10.tooltip") }));
 
-        // #tr tile.PhotonControllerUpgrades.11.name
+        // #tr tile.tst.common.photon_controller_upgrades.11.name
         // # Photonic Intensifier UMV Tier
         // #zh_CN 光量子增幅器UMV Tier
         GTCMItemList.PhotonControllerUpgradeUMV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 11,
-                // #tr PhotonControllerUpgradeUMV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.11.tooltip.01
                 // # Extra {\RED}190%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}190%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeUMV.tooltips.01"),
-                    // #tr PhotonControllerUpgradeUMV.tooltips.02
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.11.tooltip.01"),
+                    // #tr tile.tst.common.photon_controller_upgrades.11.tooltip.02
                     // # Enable perfect overclocks!
                     // #zh_CN 启用无损超频！
-                    TSTUtils.tr("PhotonControllerUpgradeUMV.tooltips.02") }));
+                    TSTUtils.tr("tile.tst.common.photon_controller_upgrades.11.tooltip.02") }));
 
-        // #tr tile.PhotonControllerUpgrades.12.name
+        // #tr tile.tst.common.photon_controller_upgrades.12.name
         // # Photonic Intensifier UXV Tier
         // #zh_CN 光量子增幅器UXV Tier
         GTCMItemList.PhotonControllerUpgradeUXV.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 12,
-                // #tr PhotonControllerUpgradeUXV.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.12.tooltip.01
                 // # Extra {\RED}250%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}250%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeUXV.tooltips.01"),
-                    // #tr PhotonControllerUpgradeUXV.tooltips.02
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.12.tooltip.01"),
+                    // #tr tile.tst.common.photon_controller_upgrades.12.tooltip.02
                     // # Enable perfect overclocks!
                     // #zh_CN 启用无损超频！
-                    TSTUtils.tr("PhotonControllerUpgradeUXV.tooltips.02") }));
+                    TSTUtils.tr("tile.tst.common.photon_controller_upgrades.12.tooltip.02") }));
 
-        // #tr tile.PhotonControllerUpgrades.13.name
+        // #tr tile.tst.common.photon_controller_upgrades.13.name
         // # Photonic Intensifier MAX Tier
         // #zh_CN 光量子增幅器MAX Tier
         GTCMItemList.PhotonControllerUpgradeMAX.set(
             PhotonControllerUpgrade.registerVariantWithTooltips(
                 13,
-                // #tr PhotonControllerUpgradeMAX.tooltips.01
+                // #tr tile.tst.common.photon_controller_upgrades.13.tooltip.01
                 // # Extra {\RED}320%{\GRAY} Speed Up !
                 // #zh_CN 额外{\RED}320%{\GRAY}的速度提升！
-                new String[] { TSTUtils.tr("PhotonControllerUpgradeMAX.tooltips.01"),
-                    // #tr PhotonControllerUpgradeMAX.tooltips.02
+                new String[] { TSTUtils.tr("tile.tst.common.photon_controller_upgrades.13.tooltip.01"),
+                    // #tr tile.tst.common.photon_controller_upgrades.13.tooltip.02
                     // # Enable perfect overclocks!
                     // #zh_CN 启用无损超频！
-                    TSTUtils.tr("PhotonControllerUpgradeMAX.tooltips.02") }));
+                    TSTUtils.tr("tile.tst.common.photon_controller_upgrades.13.tooltip.02") }));
 
         // endregion
         // ---------------------------------------------------------------------------------------------------------------------------//
         // region MegaSpaceStation
         if (Config.activateMegaSpaceStation) {
 
-            // #tr tile.SpaceStationStructureBlock.0.name
+            // #tr tile.tst.common.space_station_structure_block.0.name
             // # SpaceStationStructureBlock LV Tier
             // #zh_CN 空间站结构方块 LV Tier
             GTCMItemList.spaceStationStructureBlockLV.set(SpaceStationStructureBlock.registerVariant(0));
 
-            // #tr tile.SpaceStationStructureBlock.1.name
+            // #tr tile.tst.common.space_station_structure_block.1.name
             // # SpaceStationStructureBlock MV Tier
             // #zh_CN 空间站结构方块 MV Tier
             GTCMItemList.spaceStationStructureBlockMV.set(SpaceStationStructureBlock.registerVariant(1));
 
-            // #tr tile.SpaceStationStructureBlock.2.name
+            // #tr tile.tst.common.space_station_structure_block.2.name
             // # SpaceStationStructureBlock HV Tier
             // #zh_CN 空间站结构方块 HV Tier
             GTCMItemList.spaceStationStructureBlockHV.set(SpaceStationStructureBlock.registerVariant(2));
 
-            // #tr tile.SpaceStationStructureBlock.3.name
+            // #tr tile.tst.common.space_station_structure_block.3.name
             // # SpaceStationStructureBlock EV Tier
             // #zh_CN 空间站结构方块 EV Tier
             GTCMItemList.spaceStationStructureBlockEV.set(SpaceStationStructureBlock.registerVariant(3));
 
-            // #tr tile.SpaceStationStructureBlock.4.name
+            // #tr tile.tst.common.space_station_structure_block.4.name
             // # SpaceStationStructureBlock IV Tier
             // #zh_CN 空间站结构方块 IV Tier
             GTCMItemList.spaceStationStructureBlockIV.set(SpaceStationStructureBlock.registerVariant(4));
 
-            // #tr tile.SpaceStationStructureBlock.5.name
+            // #tr tile.tst.common.space_station_structure_block.5.name
             // # SpaceStationStructureBlock LuV Tier
             // #zh_CN 空间站结构方块 LuV Tier
             GTCMItemList.spaceStationStructureBlockLuV.set(SpaceStationStructureBlock.registerVariant(5));
 
-            // #tr tile.SpaceStationStructureBlock.6.name
+            // #tr tile.tst.common.space_station_structure_block.6.name
             // # SpaceStationStructureBlock ZPM Tier
             // #zh_CN 空间站结构方块 ZPM Tier
             GTCMItemList.spaceStationStructureBlockZPM.set(SpaceStationStructureBlock.registerVariant(6));
 
-            // #tr tile.SpaceStationStructureBlock.7.name
+            // #tr tile.tst.common.space_station_structure_block.7.name
             // # SpaceStationStructureBlock UV Tier
             // #zh_CN 空间站结构方块 UV Tier
             GTCMItemList.spaceStationStructureBlockUV.set(SpaceStationStructureBlock.registerVariant(7));
 
-            // #tr tile.SpaceStationStructureBlock.8.name
+            // #tr tile.tst.common.space_station_structure_block.8.name
             // # SpaceStationStructureBlock UHV Tier
             // #zh_CN 空间站结构方块 UHV Tier
             GTCMItemList.spaceStationStructureBlockUHV.set(SpaceStationStructureBlock.registerVariant(8));
 
-            // #tr tile.SpaceStationStructureBlock.9.name
+            // #tr tile.tst.common.space_station_structure_block.9.name
             // # SpaceStationStructureBlock UEV Tier
             // #zh_CN 空间站结构方块 UEV Tier
             GTCMItemList.spaceStationStructureBlockUEV.set(SpaceStationStructureBlock.registerVariant(9));
 
-            // #tr tile.SpaceStationStructureBlock.10.name
+            // #tr tile.tst.common.space_station_structure_block.10.name
             // # SpaceStationStructureBlock UIV Tier
             // #zh_CN 空间站结构方块 UIV Tier
             GTCMItemList.spaceStationStructureBlockUIV.set(SpaceStationStructureBlock.registerVariant(10));
 
-            // #tr tile.SpaceStationStructureBlock.11.name
+            // #tr tile.tst.common.space_station_structure_block.11.name
             // # SpaceStationStructureBlock UMV Tier
             // #zh_CN 空间站结构方块 UMV Tier
             GTCMItemList.spaceStationStructureBlockUMV.set(SpaceStationStructureBlock.registerVariant(11));
 
-            // #tr tile.SpaceStationStructureBlock.12.name
+            // #tr tile.tst.common.space_station_structure_block.12.name
             // # SpaceStationStructureBlock UXV Tier
             // #zh_CN 空间站结构方块 UXV Tier
             GTCMItemList.spaceStationStructureBlockUXV.set(SpaceStationStructureBlock.registerVariant(12));
 
-            // #tr tile.SpaceStationStructureBlock.13.name
+            // #tr tile.tst.common.space_station_structure_block.13.name
             // # SpaceStationStructureBlock MAX Tier
             // #zh_CN 空间站结构方块 MAX Tier
             GTCMItemList.spaceStationStructureBlockMAX.set(SpaceStationStructureBlock.registerVariant(13));
 
             // ----------------------------------------
 
-            // #tr tile.SpaceStationAntiGravityBlock.0.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.0.name
             // # SpaceStationAntiGravityBlock LV Tier
             // #zh_CN 空间站反重力方块 Low Tier
             GTCMItemList.SpaceStationAntiGravityBlockLV.set(SpaceStationAntiGravityBlock.registerVariant(0));
 
-            // #tr tile.SpaceStationAntiGravityBlock.1.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.1.name
             // # SpaceStationAntiGravityBlock MV Tier
             // #zh_CN 空间站反重力方块 Middle Tier
             GTCMItemList.SpaceStationAntiGravityBlockMV.set(SpaceStationAntiGravityBlock.registerVariant(1));
 
-            // #tr tile.SpaceStationAntiGravityBlock.2.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.2.name
             // # SpaceStationAntiGravityBlock HV Tier
             // #zh_CN 空间站反重力方块 HV Tier
             GTCMItemList.SpaceStationAntiGravityBlockHV.set(SpaceStationAntiGravityBlock.registerVariant(2));
 
-            // #tr tile.SpaceStationAntiGravityBlock.3.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.3.name
             // # SpaceStationAntiGravityBlock EV Tier
             // #zh_CN 空间站反重力方块 EV Tier
             GTCMItemList.SpaceStationAntiGravityBlockEV.set(SpaceStationAntiGravityBlock.registerVariant(3));
 
-            // #tr tile.SpaceStationAntiGravityBlock.4.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.4.name
             // # SpaceStationAntiGravityBlock IV Tier
             // #zh_CN 空间站反重力方块 IV Tier
             GTCMItemList.SpaceStationAntiGravityBlockIV.set(SpaceStationAntiGravityBlock.registerVariant(4));
 
-            // #tr tile.SpaceStationAntiGravityBlock.5.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.5.name
             // # SpaceStationAntiGravityBlock LuV Tier
             // #zh_CN 空间站反重力方块 LuV Tier
             GTCMItemList.SpaceStationAntiGravityBlockLuV.set(SpaceStationAntiGravityBlock.registerVariant(5));
 
-            // #tr tile.SpaceStationAntiGravityBlock.6.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.6.name
             // # SpaceStationAntiGravityBlock ZPM Tier
             // #zh_CN 空间站反重力方块 ZPM Tier
             GTCMItemList.SpaceStationAntiGravityBlockZPM.set(SpaceStationAntiGravityBlock.registerVariant(6));
 
-            // #tr tile.SpaceStationAntiGravityBlock.7.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.7.name
             // # SpaceStationAntiGravityBlock UV Tier
             // #zh_CN 空间站反重力方块 UV Tier
             GTCMItemList.SpaceStationAntiGravityBlockUV.set(SpaceStationAntiGravityBlock.registerVariant(7));
 
-            // #tr tile.SpaceStationAntiGravityBlock.8.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.8.name
             // # SpaceStationAntiGravityBlock UHV Tier
             // #zh_CN 空间站反重力方块 UHV Tier
             GTCMItemList.SpaceStationAntiGravityBlockUHV.set(SpaceStationAntiGravityBlock.registerVariant(8));
 
-            // #tr tile.SpaceStationAntiGravityBlock.9.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.9.name
             // # SpaceStationAntiGravityBlock UEV Tier
             // #zh_CN 空间站反重力方块 UEV Tier
             GTCMItemList.SpaceStationAntiGravityBlockUEV.set(SpaceStationAntiGravityBlock.registerVariant(9));
 
-            // #tr tile.SpaceStationAntiGravityBlock.10.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.10.name
             // # SpaceStationAntiGravityBlock UIV Tier
             // #zh_CN 空间站反重力方块 UIV Tier
             GTCMItemList.SpaceStationAntiGravityBlockUIV.set(SpaceStationAntiGravityBlock.registerVariant(10));
 
-            // #tr tile.SpaceStationAntiGravityBlock.11.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.11.name
             // # SpaceStationAntiGravityBlock UMV Tier
             // #zh_CN 空间站反重力方块 UMV Tier
             GTCMItemList.SpaceStationAntiGravityBlockUMV.set(SpaceStationAntiGravityBlock.registerVariant(11));
 
-            // #tr tile.SpaceStationAntiGravityBlock.12.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.12.name
             // # SpaceStationAntiGravityBlock UXV Tier
             // #zh_CN 空间站反重力方块 UXV Tier
             GTCMItemList.SpaceStationAntiGravityBlockUXV.set(SpaceStationAntiGravityBlock.registerVariant(12));
 
-            // #tr tile.SpaceStationAntiGravityBlock.13.name
+            // #tr tile.tst.common.space_station_anti_gravity_block.13.name
             // # SpaceStationAntiGravityBlock MAX Tier
             // #zh_CN 空间站反重力方块 MAX Tier
             GTCMItemList.SpaceStationAntiGravityBlockMAX.set(SpaceStationAntiGravityBlock.registerVariant(13));
@@ -870,3 +871,4 @@ public class BlockRegister {
         registryBlockContainers();
     }
 }
+// spotless:on

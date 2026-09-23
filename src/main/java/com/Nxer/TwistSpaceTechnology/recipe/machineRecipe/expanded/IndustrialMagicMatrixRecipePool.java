@@ -99,7 +99,7 @@ public class IndustrialMagicMatrixRecipePool {
         TCRecipeTools.getInfusionCraftingRecipe();
         prepare();
 
-        final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipe;
+        final IRecipeMap IIM = GTCMRecipe.IndustrialMagicMatrixRecipeMap;
         ArrayList<TCRecipeTools.InfusionCraftingRecipe> icr = TCRecipeTools.ICR;
         for (int i = 0; i < icr.size(); i++) {
             TCRecipeTools.InfusionCraftingRecipe Recipe = icr.get(i);
@@ -110,10 +110,10 @@ public class IndustrialMagicMatrixRecipePool {
 
             ItemStack Essence = new ItemStack(itemEssence);
             Essence.setItemDamage(1);
-            // #tr IndustrialMagicMatrixRecipeInputAspects
+            // #tr tst.common.recipe.IndustrialMagicMatrixRecipeMap.input_aspects
             // # Recipe required Essentia
             // #zh_CN 配方所需源质
-            Essence.setStackDisplayName(TSTUtils.tr("IndustrialMagicMatrixRecipeInputAspects"));
+            Essence.setStackDisplayName(TSTUtils.tr("tst.common.recipe.IndustrialMagicMatrixRecipeMap.input_aspects"));
             setAspects(Essence, Recipe.getInputAspects());
 
             GTValues.RA.stdBuilder()

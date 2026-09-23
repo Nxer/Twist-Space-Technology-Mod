@@ -222,10 +222,10 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
         // Main checks
         if (!checkAllPieces(errors)) return;
         if (!checkInfinityEgg()) {
-            // #tr TST.MegaEggGeneratorStructureErrors.InfinityEgg
+            // #tr tst.common.machine.MegaEggGenerator.structure_error.infinity_egg
             // # The number of infinite eggs exceeds the number of pieces.
             // #zh_CN 无限之蛋数量超过了层数
-            errors.add(StructureErrors.of("TST.MegaEggGeneratorStructureErrors.InfinityEgg"));
+            errors.add(StructureErrors.of("tst.common.machine.MegaEggGenerator.structure_error.infinity_egg"));
         }
         int dynamoCount = mDynamoHatches.size() + mExoticDynamoHatches.size();
         if (dynamoCount == 0) {
@@ -234,10 +234,10 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
             errors.add(StructureErrors.hatchCount(ErrorType.TOO_MANY, Dynamo, dynamoCount, Config.MEG_Dynamo_Limit));
         }
         if (!checkLaser()) {
-            // #tr TST.MegaEggGeneratorStructureErrors.Laser
+            // #tr tst.common.machine.MegaEggGenerator.structure_error.laser
             // # The number of pieces does not meet the requirement for using the laser hatches.
             // #zh_CN 未达到允许使用激光仓的层数要求
-            errors.add(StructureErrors.of("TST.MegaEggGeneratorStructureErrors.Laser"));
+            errors.add(StructureErrors.of("tst.common.machine.MegaEggGenerator.structure_error.laser"));
         }
 
         initValues();
@@ -516,72 +516,72 @@ public class GT_TileEntity_MegaEggGenerator extends TST_GeneratorBase<GT_TileEnt
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MegaEggGenerator_MachineType
+        // #tr tst.common.machine.MegaEggGenerator.tooltip.machine_type
         // # Magical Energy Absorber
         // #zh_CN 魔法能源吸收者
-        tt.addMachineType(TSTUtils.tr("Tooltip_MegaEggGenerator_MachineType"))
-            // #tr Tooltip_MegaEggGenerator_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.machine_type"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.controller
             // # Controller block for the Tower of Abstraction
             // #zh_CN 抽象之塔的控制器
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_Controller"))
-            // #tr Tooltip_MegaEggGenerator_00
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.controller"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.01
             // # This is where the {\RED}ulti{\AQUA}mate{\GOLD} des{\BLUE}tiny{\GRAY} of the Dragon's Children lies.
             // #zh_CN 这是龙之子嗣的{\RED}终{\AQUA}极{\GOLD}宿{\BLUE}命{\GRAY}所在.
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_00"))
-            // #tr Tooltip_MegaEggGenerator_01
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.01"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.02
             // # With the help of the Magic Egg, it draws in endless magical power as effortlessly as a soul-sucking sorcerer.
             // #zh_CN 借助魔法之卵，汲取无尽魔力，如同{\GOLD}{\ITALIC}{\BOLD}吸魂巫师{\GRAY}般不费吹灰之力。
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_01"))
-            // #tr Tooltip_MegaEggGenerator_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.02"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.03
             // # Every dragon egg generates {\GOLD}1A EV{\GRAY} & every creeper's generates {\GOLD}1A HV{\GRAY}.
             // #zh_CN 每个龙蛋将产生{\GOLD}1A EV{\GRAY},而爬行者蛋产生{\GOLD}1A HV{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_02"))
-            // #tr Tooltip_MegaEggGenerator_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.03"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.04
             // # Infinity egg generates {\GOLD}2A IV{\GRAY}, but you can put only one for one each piece you add.
             // #zh_CN 每个无限之蛋产生{\GOLD}2A IV{\GRAY},但无限之蛋的总数不得多于层数.
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_03"))
-            // #tr Tooltip_MegaEggGenerator_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.04"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.05
             // # But quantitative change leads to qualitative change,
             // #zh_CN 数量积累至一定阶段，便能引发{\BOLD}{\ITALIC}{\GOLD}质的飞跃,
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_04"))
-            // #tr Tooltip_MegaEggGenerator_05
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.05"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.06
             // # Every 2^n pieces give {\RED}2%{\GRAY} max efficiency bonus, and every infinity egg gives {\RED}1%{\GRAY}.
             // #zh_CN 每2^n层提供{\RED}2%{\GRAY}的最大效率加成,而每个无限之蛋提高{\RED}1%{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_05"))
-            // #tr Tooltip_MegaEggGenerator_06
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.06"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.07
             // # You can also put nothing on the egg pos, but every empty pos decreases {\RED}5%{\GRAY} max efficiency.
             // #zh_CN 在这能量的殿堂里，每一个未被诸蛋之力占据的空缺，都将令整体的效率减损{\RED}5%{\GRAY}。
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_06"))
-            // #tr Tooltip_MegaEggGenerator_07
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.07"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.08
             // # Warm-up process for 0.01%% per second as base, each pair of Dragon Eggs add 0.01%% but limit for 50 pairs, each Infinity Egg add {\RED}1%{\GRAY} with no limits.
             // #zh_CN 基础预热速度0.01%%每秒，一对龙蛋增加0.01%%但最多只计算50对，无限之蛋增加{\RED}1%{\GRAY}且无加速上限.
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_07"))
-            // #tr Tooltip_MegaEggGenerator_08
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.08"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.09
             // # The process will take about {\GOLD}3{\GRAY} hours if put Creeper Eggs only, but who really care about?
             // #zh_CN 如果仅有爬行者蛋，预热将需要大约三小时，只是谁会真的在乎这个?
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_08"))
-            // #tr Tooltip_MegaEggGenerator_09
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.09"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.info.10
             // # Whether it is the {\DARK_PURPLE} Dragon Egg, {\DARK_GREEN} Creeper Egg, or the {\GOLD}Egg of Infinity, {\GRAY}only their presence can drive the full circulation of power.
             // #zh_CN 无论是{\DARK_PURPLE}龙蛋{\RESET}、{\GREEN}爬行者蛋{\GRAY}，抑或是{\ITALIC}{\GOLD}无尽之蛋{\GRAY}，唯有它们的存在，方能驱动力量的完满流转。
-            .addInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_09"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.10"))
             .addOtherStructurePart(
-                // #tr Tooltip_MegaEggGenerator_D
+                // #tr tst.common.machine.MegaEggGenerator.tooltip.info.11
                 // # Dynamo or TT Dynamo, one only
                 // #zh_CN 动力仓或TecTech动力仓,1个
-                TSTUtils.tr("Tooltip_MegaEggGenerator_D"),
-                // #tr Tooltip_MegaEggGenerator_C
+                TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.11"),
+                // #tr tst.common.machine.MegaEggGenerator.tooltip.info.12
                 // # Any Magical Casing.
                 // #zh_CN 任何魔法机械外壳
-                TSTUtils.tr("Tooltip_MegaEggGenerator_C"),
+                TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.info.12"),
                 1)
-            // #tr Tooltip_MegaEggGenerator_L
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.structure.01
             // # Lasers unlock at >=16 pieces.
             // #zh_CN 激光在16层及以上解锁.
-            .addStructureInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_L"))
-            // #tr Tooltip_MegaEggGenerator_M
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.structure.01"))
+            // #tr tst.common.machine.MegaEggGenerator.tooltip.structure.02
             // # No need for maintenance hatch.
             // #zh_CN 不需要维护仓.
-            .addStructureInfo(TSTUtils.tr("Tooltip_MegaEggGenerator_M"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.MegaEggGenerator.tooltip.structure.02"))
             .toolTipFinisher();
         // spotless:on
         return tt;

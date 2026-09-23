@@ -31,7 +31,7 @@ public class PreciseHighEnergyPhotonicQuantumMasterRecipePool {
 
         TwistSpaceTechnology.LOG.info("PreciseHighEnergyPhotonicQuantumMasterRecipePool loading recipes.");
 
-        final IRecipeMap PhC = GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipes;
+        final IRecipeMap PhC = GTCMRecipe.PreciseHighEnergyPhotonicQuantumMasterRecipeMap;
 
         final Fluid solderPlasma = FluidRegistry.getFluid("molten.mutatedlivingsolder");
         final ItemStack eternalSingularity = GTModHandler.getModItem("eternalsingularity", "eternal_singularity", 1);

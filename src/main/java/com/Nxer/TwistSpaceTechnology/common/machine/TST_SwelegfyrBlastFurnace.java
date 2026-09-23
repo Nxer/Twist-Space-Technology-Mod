@@ -456,21 +456,24 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
     private String getMachineModeName(boolean isActive, boolean isPassiveMode, boolean inPassiveMode,
         boolean inRapidHeating, boolean isHoldingHeat) {
-        // #tr Swelegfyr.modeMsg.0
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.mode.0
         // # Normal Mode
         // #zh_CN 普通模式
 
-        // #tr Swelegfyr.modeMsg.1
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.mode.1
         // # Passive Mode
         // #zh_CN 被动模式
         boolean passive = isActive ? inPassiveMode : isPassiveMode;
         String suffixKey = null;
         if (passive) {
-            if (isActive && inRapidHeating) suffixKey = "SBF.Msg.enableRapidHeating";
-            else if (!isActive && isHoldingHeat) suffixKey = "SBF.Msg.enableHoldingHeat";
+            if (isActive && inRapidHeating)
+                suffixKey = "tst.common.machine.SwelegfyrBlastFurnace.message.enable_rapid_heating";
+            else if (!isActive && isHoldingHeat)
+                suffixKey = "tst.common.machine.SwelegfyrBlastFurnace.message.enable_holding_heat";
         }
 
-        String base = StatCollector.translateToLocal("Swelegfyr.modeMsg." + (passive ? 1 : 0));
+        String base = StatCollector
+            .translateToLocal("tst.common.machine.SwelegfyrBlastFurnace.mode." + (passive ? 1 : 0));
         if (suffixKey != null) {
             return base + "-" + StatCollector.translateToLocal(suffixKey);
         }
@@ -984,7 +987,7 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             rapidHeatingStep);
 
         // The inherited mode line uses unsynchronized client-side fields, replace it with server Waila data.
-        String runningModeLabel = StatCollector.translateToLocal("TST.machines.running_mode");
+        String runningModeLabel = StatCollector.translateToLocal("tst.common.shared.machine_info.running_mode");
         currentTip.removeIf(s -> s.contains(runningModeLabel));
         currentTip.add(
             runningModeLabel + " "
@@ -994,18 +997,18 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
 
         currentTip.add(
             // spotless:off
-            // #tr Waila.SBF.0
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.0
             // # Recipe Heat
             // #zh_CN 配方炉温限制
-            (EnumChatFormatting.YELLOW + TSTUtils.tr("Waila.SBF.0")
+            (EnumChatFormatting.YELLOW + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.0")
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("recipeHeatLimitation")) + Kelvin);
         currentTip.add(
-            // #tr Waila.SBF.1
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.1
             // # Current Heat
             // #zh_CN 当前炉温
-            (EnumChatFormatting.YELLOW + TSTUtils.tr("Waila.SBF.1")
+            (EnumChatFormatting.YELLOW + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.1")
                 + textColon
                 + EnumChatFormatting.WHITE
                 + tag.getInteger("mHeatingCapacity")
@@ -1013,26 +1016,26 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
                 + heatChangeSuffix));
         if ((IsActive && InPassiveMode) || (!IsActive && IsPassiveMode)) {
             currentTip.add(
-                // #tr Waila.SBF.2
+                // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.2
                 // # Max Heat
                 // #zh_CN 最高炉温
-                (EnumChatFormatting.YELLOW + TSTUtils.tr("Waila.SBF.2")
+                (EnumChatFormatting.YELLOW + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.2")
                     + textColon
                     + EnumChatFormatting.WHITE
                     + tag.getInteger("maxHeatingCapacity")) + Kelvin);
         }
         currentTip.add(
-            // #tr Waila.SBF.3
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.3
             // # Current Blazing Pyrotheum Cost
             // #zh_CN 当前炽焰消耗
             (EnumChatFormatting.YELLOW + TSTUtils.tr(
-                "Waila.SBF.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
+                "tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.3") + textColon + EnumChatFormatting.WHITE + tag.getInteger("correctBlazeCost") + " L/s"));
 
         if (updated) {
-            // #tr Waila.SBF.4
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.4
             // # {\GOLD}Machine Updated
             // #zh_CN {\GOLD}已升级至二级
-            currentTip.add(TSTUtils.tr("Waila.SBF.4"));
+            currentTip.add(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.4"));
             // spotless:on
         }
 
@@ -1079,9 +1082,14 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
         String[] origin = super.getInfoData();
         String[] ret = new String[origin.length + 2];
         System.arraycopy(origin, 0, ret, 0, origin.length);
-        ret[origin.length] = EnumChatFormatting.AQUA + TSTUtils
-            .tr("Waila.SBF.0") + textColon + EnumChatFormatting.GOLD + recipeHeatLimitation + Kelvin;
-        ret[origin.length + 1] = EnumChatFormatting.AQUA + TSTUtils.tr("Waila.SBF.1")
+        ret[origin.length] = EnumChatFormatting.AQUA
+            + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.0")
+            + textColon
+            + EnumChatFormatting.GOLD
+            + recipeHeatLimitation
+            + Kelvin;
+        ret[origin.length + 1] = EnumChatFormatting.AQUA
+            + TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.waila.sbf.1")
             + textColon
             + EnumChatFormatting.GOLD
             + mHeatingCapacity
@@ -1189,115 +1197,115 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_SwelegfyrBlastFurnace_MachineType
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.machine_type
         // # Blast Furnace
         // #zh_CN 工业高炉
-        tt.addMachineType(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace_MachineType"))
-            // #tr Tooltip_SwelegfyrBlastFurnace_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.machine_type"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.controller
             // # Controller block for the Swelegfyr Blast Furnace
             // #zh_CN 熯焱高炉的控制方块
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace_Controller"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.01
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.controller"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.01
             // # {\ITALIC}{\GOLD}Blaze Pyrotheum feeds celestial forges. Soulsteel wrought, flame-bound cosmic rite.
             // #zh_CN {\ITALIC}{\GOLD}炽焱为薪, 焚天作工. 铸形炼魄, 器道同烽.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.01"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.02
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.01"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.02
             // # Excels at continuous processing, but also handles conventional recipes.
             // #zh_CN 专精持续加工, 也可处理常规配方.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.02"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.03
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.02"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.03
             // # Blast furnace temp gradually increases in Passive Mode.
             // #zh_CN 当处于被动模式时炉温会缓慢升高.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.03"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.04
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.03"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.04
             // # Recipe changes recalculate extra heat based on structure tier.
             // #zh_CN 切换配方会按结构等级重算额外炉温.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.04"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.05
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.04"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.05
             // # Power consumption decreases by 10% per 900K above recipe temperature threshold.
             // #zh_CN 炉温每高出配方900K, 耗电减少10%.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.05"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.06
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.05"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.06
             // # Max parallels: 4096x in Normal Mode; 256x in Passive Mode.
             // #zh_CN 最大并行: 普通模式4096x, 被动模式256x.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.06"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.07
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.06"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.07
             // # Processes recipes at 390% speed; Glass tier restricts Energy Hatch tier.
             // #zh_CN 配方处理速度为390%, 玻璃等级限制能源仓等级.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.07"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.08
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.07"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.08
             // # Upgrade machine and build additional structure to unlock additional functions.
             // #zh_CN 升级机器并搭建附加结构以解锁更多功能.
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.08"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.08"))
             .addInfo(textSpace)
-            // #tr Tooltip_SwelegfyrBlastFurnace.09
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.09
             // # {\YELLOW}Do not open the cabin door while the machine is running!
             // #zh_CN {\YELLOW}禁止在机器运行时打开舱门!
-            .addInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.09"))
+            .addInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.info.09"))
             .addSeparator()
             .addInfo(MoreInfoCheckingInScanner)
             .addStructureInfo(Text_SeparatingLine)
-            // #tr Tooltip_SwelegfyrBlastFurnace.11
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.01
             // # {\GOLD}Heat {\WHITE}Upper Limit:
             // #zh_CN {\GOLD}炉温{\WHITE}上限:
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.11"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.12
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.01"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.02
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\AQUA}Coil Heat
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\AQUA}线圈炉温
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.12"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.13
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.02"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.03
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Coil Heat {\WHITE}^ {\GOLD}1.08
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}线圈炉温 {\WHITE}^ {\GOLD}1.08
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.13"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.14
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.03"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.04
             // # {\GOLD}Blaze Pyrotheum {\WHITE}Consumption:
             // #zh_CN {\GOLD}炽焱{\WHITE}消耗:
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.14"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.15
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.04"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.05
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: {\GOLD}1000 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: {\GOLD}1000 {\WHITE}L/s
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.15"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.16
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.05"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.06
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}5 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}5 {\WHITE}L/s
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.16"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.17
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.06"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.07
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating: {\GOLD}10x {\WHITE}passive cost + dynamic surcharge per 1 s cycle (heat, voltage, remaining gap)
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: 每1秒循环消耗{\GOLD}10倍{\WHITE}被动基础量, 另加随炉温, 电压和剩余温差变化的附加量
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.17"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.18
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.07"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.08
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Thermal Retention Mode: {\AQUA}Current Heat {\WHITE}/ {\GOLD}20 {\WHITE}L/s
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}保温模式: {\AQUA}当前炉温 {\WHITE}/ {\GOLD}20 {\WHITE}L/s
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.18"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.21
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.08"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.09
             // # {\GOLD}Heat Capacity {\WHITE}Change:
             // #zh_CN {\GOLD}炉温{\WHITE}改变:
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.21"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.22
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.09"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.10
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Passive Mode: {\GOLD}5 {\WHITE}K/s [{\RED}Increasing{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}被动模式: {\GOLD}5 {\WHITE}K/s [{\RED}升温{\WHITE}]
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.22"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.23
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.10"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.11
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Rapid Heating Mode: ({\AQUA}Max Heat {\WHITE}- {\AQUA}Current Heat{\WHITE}) x {\GOLD}10%-45% {\WHITE}per 1 s cycle (200 K floor, capped at max) [{\RED}Increasing{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}升温模式: 每1秒补足({\AQUA}最高炉温 {\WHITE}- {\AQUA}当前炉温{\WHITE}) x {\GOLD}10%-45% {\WHITE}(下限200K, 以最高炉温封顶) [{\RED}升温{\WHITE}]
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.23"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.24
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.11"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.12
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Normal Mode: gap to {\AQUA}Coil Heat {\WHITE}x {\GOLD}10% {\WHITE}per 10 s (min. 1 K) [{\BLUE}Approaching{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}普通模式: 与{\AQUA}线圈炉温{\WHITE}的温差 x {\GOLD}10% {\WHITE}/ 10秒 (至少1K) [{\BLUE}趋近{\WHITE}]
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.24"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.25
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.12"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.13
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Shutdown (no retention): gap to {\AQUA}Coil Heat {\WHITE}x {\GOLD}20% {\WHITE}per 10 s (min. 1 K) [{\BLUE}Approaching{\WHITE}]
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}关机未保温: 与{\AQUA}线圈炉温{\WHITE}的温差 x {\GOLD}20% {\WHITE}/ 10秒 (至少1K) [{\BLUE}趋近{\WHITE}]
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.25"))
-            // #tr Tooltip_SwelegfyrBlastFurnace.26
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.13"))
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.14
             // # {\SPACE}{\SPACE}{\SPACE}{\WHITE}Recipe Change: Tier I resets excess heat; Tier II retains {\GOLD}25%-75% {\WHITE}(by voltage tier difference)
             // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\WHITE}切换配方: 一级结构清除额外炉温; 二级结构保留{\GOLD}25%-75% {\WHITE}(按新旧配方电压等级差计算)
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.26"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.14"))
             .addStructureInfo(Text_SeparatingLine)
-            // #tr Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.15
             // # Attention: Pyrotheum's dedicated input hatch location will be changed when upgrade machine.
             // #zh_CN 注意: 升级结构后炽焱专用的输入仓位置会发生变化.
-            .addStructureInfo(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.tooltips.structureWarn"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.15"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addController(textFrontBottom)
             .addInputHatch(getBlueprintWithDot(1), 1)
@@ -1305,10 +1313,10 @@ public class TST_SwelegfyrBlastFurnace extends GTCM_MultiMachineBase<TST_Swelegf
             .addInputBus(getBlueprintWithDot(1), 1)
             .addOutputBus(getBlueprintWithDot(1), 1)
             .addEnergyHatch(getBlueprintWithDot(2), 2)
-            // #tr Tooltip_SwelegfyrBlastFurnace.31
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.16
             // # Pyrotheum's dedicated input hatch
             // #zh_CN 炽焱专用的输入仓
-            .addOtherStructurePart(TSTUtils.tr("Tooltip_SwelegfyrBlastFurnace.31"), getBlueprintWithDot(3), 3)
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.tooltip.structure.16"), getBlueprintWithDot(3), 3)
             .toolTipFinisher();
         // spotless:on
         return tt;

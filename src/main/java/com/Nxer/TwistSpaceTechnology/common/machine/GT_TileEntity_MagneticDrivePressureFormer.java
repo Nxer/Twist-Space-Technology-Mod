@@ -259,22 +259,22 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     @Override
     public String getMachineModeName() {
-        // #tr MagneticDrivePressureFormer.modeMsg.0
+        // #tr tst.common.machine.MagneticDrivePressureFormer.mode.0
         // # Mode: Extruder
         // #zh_CN 压模机模式
 
-        // #tr MagneticDrivePressureFormer.modeMsg.1
+        // #tr tst.common.machine.MagneticDrivePressureFormer.mode.1
         // # Mode: Bending Machine
         // #zh_CN 卷板机模式
 
-        // #tr MagneticDrivePressureFormer.modeMsg.2
+        // #tr tst.common.machine.MagneticDrivePressureFormer.mode.2
         // # Mode: Forming Press
         // #zh_CN 冲压机床模式
 
-        // #tr MagneticDrivePressureFormer.modeMsg.3
+        // #tr tst.common.machine.MagneticDrivePressureFormer.mode.3
         // # Mode: Forge Hammer
         // #zh_CN 锻造锤模式
-        return StatCollector.translateToLocal("MagneticDrivePressureFormer.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.MagneticDrivePressureFormer.mode." + machineMode);
     }
 
     @Override
@@ -381,64 +381,64 @@ public class GT_TileEntity_MagneticDrivePressureFormer
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_MagneticDrivePressureFormer_MachineType
+        // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.machine_type
         // # Extruder | Bending Machine | Forming Press | Forge Hammer
         // #zh_CN 压模机 | 卷板机 | 冲压机床 | 锻造锤
-        tt.addMachineType(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_MachineType"))
-            // #tr Tooltip_MagneticDrivePressureFormer_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.machine_type"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.01
             // # Controller block for the Magnetic Drive Pressure Former.
             // #zh_CN 磁驱压力成型机的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_00"))
-            // #tr Tooltip_MagneticDrivePressureFormer_01
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.01"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.02
             // # {\AQUA}Simple applications of Maxwell's equations.
             // #zh_CN {\AQUA}麦克斯韦方程的简单应用.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_01"))
-            // #tr Tooltip_MagneticDrivePressureFormer_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.02"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.03
             // # No difficulty ! No hurry !
             // #zh_CN 轻而易举, 从容不迫！
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_02"))
-            // #tr Tooltip_MagneticDrivePressureFormer_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.03"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.04
             // # {\GOLD}Extruder Mode:
             // #zh_CN {\GOLD}压模机模式:
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_03"))
-            // #tr Tooltip_MagneticDrivePressureFormer_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.04"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.05
             // # {\RED}700%{\GRAY} faster than normal | Infinity Coil+ enable Perfect Overclock
             // #zh_CN 8倍速 | 无尽线圈解锁无损超频
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_04"))
-            // #tr Tooltip_MagneticDrivePressureFormer_05
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.05"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.06
             // # {\GOLD}Bending and Forming Press and Forge Hammer Mode:
             // #zh_CN {\GOLD}卷板机|冲压机床|锻造锤模式:
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_05"))
-            // #tr Tooltip_MagneticDrivePressureFormer_06
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.06"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.07
             // # {\RED}1500%{\GRAY} faster than normal | Enable Perfect Overclock
             // #zh_CN 16倍速 | 无损超频
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.07"))
             .addSeparator()
-            // #tr Tooltip_MagneticDrivePressureFormer_09
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.08
             // # {\AQUA}1024x{\GRAY} Parallel.
             // #zh_CN {\AQUA}1024x{\GRAY} 并行.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_09"))
-            // #tr Tooltip_MagneticDrivePressureFormer_07
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.08"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.09
             // # Extra {\RED}+100%{\GRAY} speed multiplier per Coil Level.
             // #zh_CN 线圈等级每提高1级, 额外加速{\RED}100%{\GRAY}, 线圈加速部分独立计算.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_07"))
-            // #tr Tooltip_MagneticDrivePressureFormer_08
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.09"))
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.10
             // # Need Infinity Glass to use Laser energy hatch.
             // #zh_CN 无尽强化硼玻璃解锁激光仓.
-            .addInfo(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_08"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.10"))
             .beginStructureBlock(15, 25, 15, false)
             .addController(TSTSharedLocalization.Structure.textTopCenter)
-            // #tr Tooltip_MagneticDrivePressureFormer_Hatches
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.structure.01
             // # Frame location, Osmiridium Casing.
             // #zh_CN 框架位置, 铱锇机械方块.
-            .addInputHatch(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            .addOutputHatch(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            .addInputBus(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            .addOutputBus(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_Hatches"), 1)
-            // #tr Tooltip_MagneticDrivePressureFormer_EnergyHatch
+            .addInputHatch(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.structure.01"), 1)
+            .addOutputHatch(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.structure.01"), 1)
+            .addInputBus(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.structure.01"), 1)
+            .addOutputBus(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.structure.01"), 1)
+            // #tr tst.common.machine.MagneticDrivePressureFormer.tooltip.info.11
             // # The white, Iridium Casing, and the bottom center.
             // #zh_CN 铱强化机械方块, 和机器底层中心.
-            .addEnergyHatch(TSTUtils.tr("Tooltip_MagneticDrivePressureFormer_EnergyHatch"), 2)
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.tooltip.info.11"), 2)
             .toolTipFinisher();
         // spotless:on
         return tt;

@@ -66,49 +66,49 @@ public abstract class ExecutionCoreBase extends ModularHatchBase implements IExe
             if (maxProgressingTime > 0) {
                 // spotless:off
                 currentTip.add(
-                    // #tr Waila.ExecutionCore.1
+                    // #tr tst.modular.machine.ExecutionCore.waila.execution_core.1
                     // # Total basic max progressing time
                     // #zh_CN 配方总基础耗时
-                    TSTUtils.tr("Waila.ExecutionCore.1") + " : "
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.1") + " : "
                         + maxProgressingTime + " tick ("
                         + (maxProgressingTime / 20) + "s)");
                 int progressedTime = tag.getInteger("progressedTime");
                 currentTip.add(
-                    // #tr Waila.ExecutionCore.2
+                    // #tr tst.modular.machine.ExecutionCore.waila.execution_core.2
                     // # Progressed time
                     // #zh_CN 已执行时间
-                    TSTUtils.tr("Waila.ExecutionCore.2") + " : "
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.2") + " : "
                         + progressedTime + " tick ("
                         + (progressedTime / 20) + "s)"
                 );
                 int boostedTime = tag.getInteger("boostedTime");
                 currentTip.add(
-                    // #tr Waila.ExecutionCore.4
+                    // #tr tst.modular.machine.ExecutionCore.waila.execution_core.4
                     // # Boosted time
                     // #zh_CN 已加速时间
-                    TSTUtils.tr("Waila.ExecutionCore.4") + " : "
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.4") + " : "
                         + boostedTime + " tick ("
                         + (boostedTime / 20) + "s)"
                 );
                 currentTip.add(
-                    // #tr Waila.ExecutionCore.3
+                    // #tr tst.modular.machine.ExecutionCore.waila.execution_core.3
                     // # Basic power consumption
                     // #zh_CN 基础功率
-                    TSTUtils.tr("Waila.ExecutionCore.3") + " : "
+                    TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.3") + " : "
                         + tag.getLong("usingEut") + " EU/t"
                 );
                 // spotless:on
             } else {
-                // #tr Waila.ExecutionCore.IsIdle
+                // #tr tst.modular.machine.ExecutionCore.waila.execution_core.is_idle
                 // # This {\WHITE}Execution Core{\GRAY} is idle.
                 // #zh_CN 此{\WHITE}执行核心{\GRAY}处于空闲状态
-                currentTip.add(TSTUtils.tr("Waila.ExecutionCore.IsIdle"));
+                currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.is_idle"));
             }
         } else {
-            // #tr Waila.ExecutionCore.HasNotBeenSetup
+            // #tr tst.modular.machine.ExecutionCore.waila.execution_core.has_not_been_setup
             // # This execution core has not been setup.
             // #zh_CN 此执行核心未初始化
-            currentTip.add(TSTUtils.tr("Waila.ExecutionCore.HasNotBeenSetup"));
+            currentTip.add(TSTUtils.tr("tst.modular.machine.ExecutionCore.waila.execution_core.has_not_been_setup"));
         }
     }
 

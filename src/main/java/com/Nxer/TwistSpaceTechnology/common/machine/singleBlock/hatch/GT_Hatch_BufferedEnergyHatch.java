@@ -47,11 +47,11 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTT
 
     public GT_Hatch_BufferedEnergyHatch(int aID, String aName, String aNameRegional, int aTier, int aInvSlotCount,
         String[] aDescription) {
-        // #tr BufferedEnergyHatch.Tooltips.01
+        // #tr tst.common.machine.BufferedEnergyHatch.tooltip.info.01
         // # Buffered Energy Injector for Multiblocks
         // #zh_CN 为多方块机器提供更高缓存的能源输入
 
-        // #tr BufferedEnergyHatch.Tooltips.02
+        // #tr tst.common.machine.BufferedEnergyHatch.tooltip.info.02
         // # Accepts up to 2 Amps
         // #zh_CN 最大输入2安
         super(
@@ -60,8 +60,8 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTT
             aNameRegional,
             aTier,
             aInvSlotCount,
-            new String[] { TSTUtils.tr("BufferedEnergyHatch.Tooltips.01"),
-                TSTUtils.tr("BufferedEnergyHatch.Tooltips.02") });
+            new String[] { TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tooltip.info.01"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tooltip.info.02") });
         registerTooltipCredits(ID.SHORDINGER);
     }
 
@@ -74,10 +74,11 @@ public class GT_Hatch_BufferedEnergyHatch extends MTEHatchEnergy implements TSTT
     public String[] getDescription() {
         String[] desc = new String[mDescriptionArray.length + 1];
         System.arraycopy(mDescriptionArray, 0, desc, 0, mDescriptionArray.length);
-        // #tr Slots
+        // #tr tst.common.shared.machine_tooltip.slots
         // #en_US Slots
         // #zh_CN 格
-        desc[mDescriptionArray.length] = mInventory.length + " " + TSTUtils.tr("Slots");
+        desc[mDescriptionArray.length] = mInventory.length + " "
+            + TSTUtils.tr("tst.common.shared.machine_tooltip.slots");
         return desc;
     }
 

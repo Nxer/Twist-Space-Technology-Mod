@@ -241,22 +241,22 @@ public class TST_CircuitConverter extends GTCM_MultiMachineBase<TST_CircuitConve
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_CircuitConverter_MachineType
+        // #tr tst.common.machine.CircuitConverter.tooltip.machine_type
         // # Circuit Converter
         // #zh_CN 电路板转换器
-        tt.addMachineType(TSTUtils.tr("Tooltip_CircuitConverter_MachineType"))
-            // #tr Tooltip_CircuitConverter_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.CircuitConverter.tooltip.machine_type"))
+            // #tr tst.common.machine.CircuitConverter.tooltip.controller
             // # Controller block for the General Circuit Converter
             // #zh_CN 通用电路板转换器的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_CircuitConverter_Controller"))
-            // #tr Tooltip_CircuitConverter_01
+            .addInfo(TSTUtils.tr("tst.common.machine.CircuitConverter.tooltip.controller"))
+            // #tr tst.common.machine.CircuitConverter.tooltip.info.01
             // # Transform input circuits to Any Circuit.
             // #zh_CN 将输入的电路板转换成通用电路板.
-            .addInfo(TSTUtils.tr("Tooltip_CircuitConverter_01"))
-            // #tr Tooltip_CircuitConverter_2_01
+            .addInfo(TSTUtils.tr("tst.common.machine.CircuitConverter.tooltip.info.01"))
+            // #tr tst.common.machine.CircuitConverter.tooltip.structure.01
             // # Maximum 8 In/Output Buses.
             // #zh_CN 最多 8 个输入总线或输出总线.
-            .addStructureInfo(TSTUtils.tr("Tooltip_CircuitConverter_2_01"))
+            .addStructureInfo(TSTUtils.tr("tst.common.machine.CircuitConverter.tooltip.structure.01"))
             .addStructureInfo(Tooltip_DoNotNeedMaintenance)
             .addStructureInfo(Tooltip_DoNotNeedEnergyHatch)
             .addInputBus(textAnyCasing, 1)

@@ -416,7 +416,7 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.IndustrialMagicMatrixRecipe;
+        return GTCMRecipe.IndustrialMagicMatrixRecipeMap;
     }
 
     @Override
@@ -826,132 +826,132 @@ public class GT_TileEntity_IndustrialMagicMatrix extends GTCM_MultiMachineBase<G
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
         tt.addMachineType(
-            // #tr Tooltip_IndustrialMagicMatrix_MachineType
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.machine_type
             // # Magic Matrix
             // #zh_CN §0工业注魔矩阵
-            TSTUtils.tr("Tooltip_IndustrialMagicMatrix_MachineType"))
-            // #tr Tooltip_IndustrialMagicMatrix_Controller
+            TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.machine_type"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.controller
             // # Controller block for the Industrial Magic Matrix
             // #zh_CN 工业注魔矩阵的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_Controller"))
-            // #tr Tooltip_IndustrialMagicMatrix_00
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.controller"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.01
             // # Please use the Infusion Supplier to supply Essence!
             // #zh_CN 请使用注魔供应器供给源质！
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_00"))
-            // #tr Tooltip_IndustrialMagicMatrix_01
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.01"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.02
             // # When you stare into the void, the void stares at you.
             // #zh_CN §c§n当你凝视虚空时，虚空也在凝视你。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_01"))
-            // #tr Tooltip_IndustrialMagicMatrix_02
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.02"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.03
             // # Some say it's a miracle of a mystical envoy,
             // #zh_CN 有人说这是神秘使的神迹，
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_02"))
-            // #tr Tooltip_IndustrialMagicMatrix_03
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.03"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.04
             // # Others say that it is a cult creature of a sorcerer.
             // #zh_CN 也有人说这是邪术使的§c§0邪祟造物。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_03"))
-            // #tr Tooltip_IndustrialMagicMatrix_04
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.04"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.05
             // # But who cares?!
             // #zh_CN 不过谁在意呢？！
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_04"))
-            // #tr Tooltip_IndustrialMagicMatrix_05
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.05"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.06
             // # Needless to say, its incredible principle is fascinating...
             // #zh_CN §k毋庸置疑的是它那不可思议的原理令人十分入迷...
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_05"))
-            // #tr Tooltip_IndustrialMagicMatrix_06
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.06"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.07
             // # Because of the pollution of technology,
             // #zh_CN 由于被科技所污染，
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_06"))
-            // #tr Tooltip_IndustrialMagicMatrix_07
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.07"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.08
             // # It is unable to perform active infusions.
             // #zh_CN 它无法进行具有活性的注魔。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_07"))
-            // #tr Tooltip_IndustrialMagicMatrix_08
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.08"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.09
             // # Parallelism depends on the level of the structure block.
             // #zh_CN 并行取决于结构方块的等级。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_08"))
-            // #tr Tooltip_IndustrialMagicMatrix_09
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.09"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.10
             // # Do an 4/2 overclock.Turn on lossless overclocking after reaching the maximum acceleration rate.
             // #zh_CN 进行4/2超频。达到最高加速倍率后开启无损超频.
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_09"))
-            // #tr Tooltip_IndustrialMagicMatrix_10
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.10"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.11
             // # Use Charged Nodes to get acceleration rewards,
             // #zh_CN §b使用充能节点以获得加速奖励§7，
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_10"))
-            // #tr Tooltip_IndustrialMagicMatrix_11
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.11"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.12
             // # However, when the number of nodes is less than six,
             // #zh_CN 但节点数量不足六个时,
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_11"))
-            // #tr Tooltip_IndustrialMagicMatrix_12
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.12"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.13
             // # the processing time will be carried out (recipe time * number of missing nodes * 1.75).
             // #zh_CN 将会额外计算(配方时间*节点缺失数量*1.75)的加工时长，
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_12"))
-            // #tr Tooltip_IndustrialMagicMatrix_13
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.13"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.14
             // # The matrix will take the largest element of each of the six nodes and calculate the average.
             // #zh_CN 矩阵将会取这六个节点中每个最大的要素并计算平均值，
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_13"))
-            // #tr Tooltip_IndustrialMagicMatrix_14
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.14"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.15
             // # The closer the quantities between the six primitive elements are, the higher the multiplication factor will be.
             // #zh_CN 六种原始要素之间的数量越接近倍率系数就会越高。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_14"))
-            // #tr Tooltip_IndustrialMagicMatrix_15
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.15"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.16
             // # The actual acceleration magnification is (0.4+0.45exp(-0.05Variance)+
             // #zh_CN 实际加速倍率为{\SPACE}{\AQUA}(0.4+0.45exp(-0.05Variance) +
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_15"))
-            // #tr Tooltip_IndustrialMagicMatrix_16
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.16"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.17
             // # 0.15(ln(1+exp(-Variance))/ln2)) * (Mean / 500).
             // #zh_CN {\SPACE}{\SPACE}{\AQUA}0.15(ln(1+exp(-Variance))/ln2)) * (Mean / 500)
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_16"))
-            // #tr Tooltip_IndustrialMagicMatrix_17
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.17"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.18
             // # Variance is the variance of the largest element in the six nodes,
             // #zh_CN Variance为六个节点里最大要素的方差，
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_17"))
-            // #tr Tooltip_IndustrialMagicMatrix_18
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.18"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.19
             // # Mean is the average.
             // #zh_CN Mean则为平均数。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_18"))
-            // #tr Tooltip_IndustrialMagicMatrix_19
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.19"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.20
             // # When the type of the six elements is not the six original elements,
             // #zh_CN 当六个要素的种类不为六种原始要素时,
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_19"))
-            // #tr Tooltip_IndustrialMagicMatrix_20
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.20"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.21
             // # Each missing one adds a fixed 1 second to the time.
             // #zh_CN 每缺少一种就固定增加1秒耗时。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_20"))
-            // #tr Tooltip_IndustrialMagicMatrix_21
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.21"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.22
             // # Gain up to 1145.14%% acceleration multiplier.
             // #zh_CN 最高获得 1145.14%% 的加速倍数。
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_21"))
-            // #tr Tooltip_IndustrialMagicMatrix_22
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.22"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.23
             // # Putting EssentiaCell_Creative in the controller GUI doesn't cost essentia, but if it's a hero's proof,maybe a little bit of an incredible change...
             // #zh_CN 在控制器GUI放入魔导源质元件则无需消耗源质，但如果是某位英雄的证明或许会发生一点不可思议的变化...
-            .addInfo(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_22"))
-            // #tr Tooltip_IndustrialMagicMatrix_23
+            .addInfo(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.23"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.24
             // # Infusion Provider
             // #zh_CN 注魔供应器
 
-            // #tr Tooltip_IndustrialMagicMatrix_23.1
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.structure.01
             // # §bAny magic mechanical block
             // #zh_CN §b任意魔法机械方块
             .addOtherStructurePart(
-                TSTUtils.tr("Tooltip_IndustrialMagicMatrix_23"),
-                TSTUtils.tr("Tooltip_IndustrialMagicMatrix_23.1"))
-            // #tr Tooltip_IndustrialMagicMatrix_24
+                TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.24"),
+                TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.structure.01"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.25
             // # §bAny magic mechanical block
             // #zh_CN §b任意魔法机械方块
-            .addInputBus(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_24"))
-            .addOutputBus(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_24"))
-            .addEnergyHatch(TSTUtils.tr("Tooltip_IndustrialMagicMatrix_24"))
-            // #tr Tooltip_IndustrialMagicMatrix_25
+            .addInputBus(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.25"))
+            .addOutputBus(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.25"))
+            .addEnergyHatch(TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.25"))
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.info.26
             // # Essentia diffusion unit
             // #zh_CN 源质扩散单元
 
-            // #tr Tooltip_IndustrialMagicMatrix_25.1
+            // #tr tst.common.machine.IndustrialMagicMatrix.tooltip.structure.02
             // # Each level provides 4^tier parallel
             // #zh_CN §b每级提供4^tier的并行
             .addOtherStructurePart(
-                TSTUtils.tr("Tooltip_IndustrialMagicMatrix_25"),
-                TSTUtils.tr("Tooltip_IndustrialMagicMatrix_25.1"))
+                TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.info.26"),
+                TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.tooltip.structure.02"))
             .toolTipFinisher();
         // spotless:on
         return tt;

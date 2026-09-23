@@ -40,23 +40,23 @@ public class TST_CircuitImprintHatch extends MTEHatch implements IAddUIWidgets, 
             aTier,
             aTier > 5 ? 16 : 4,
             // spotless:off
-            // #tr Tooltips.CircuitImprintHatch.01
+            // #tr tst.common.machine.CircuitImprintHatch.tooltip.info.01
             // # Extra imprint circuit input for TST Advanced Circuit Assembly Line
             // #zh_CN TST进阶电路装配线的额外压印电路输入
 
-            // #tr Tooltips.CircuitImprintHatch.02
+            // #tr tst.common.machine.CircuitImprintHatch.tooltip.info.02
             // # Adds
             // #zh_CN 为压印电路增加
 
-            // #tr Tooltips.CircuitImprintHatch.03
+            // #tr tst.common.machine.CircuitImprintHatch.tooltip.info.03
             // # extra slots for imprint circuits
             // #zh_CN 个额外插槽
             // spotless:on
-            new String[] { TSTUtils.tr("Tooltips.CircuitImprintHatch.01"),
-                TSTUtils.tr("Tooltips.CircuitImprintHatch.02") + " "
+            new String[] { TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tooltip.info.01"),
+                TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tooltip.info.02") + " "
                     + (aTier > 5 ? 16 : 4)
                     + " "
-                    + TSTUtils.tr("Tooltips.CircuitImprintHatch.03") });
+                    + TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tooltip.info.03") });
         registerTooltipCredits(ID.GODERIUM);
     }
 

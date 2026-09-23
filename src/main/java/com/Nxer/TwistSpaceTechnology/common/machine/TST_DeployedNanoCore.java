@@ -362,7 +362,7 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.DeployedNanoCoreRecipes;
+        return GTCMRecipe.DeployedNanoCoreRecipeMap;
     }
 
     @Override
@@ -467,30 +467,30 @@ public class TST_DeployedNanoCore extends WirelessEnergyMultiMachineBase<TST_Dep
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_DeployedNanoCore_MachineType
+        // #tr tst.common.machine.DeployedNanoCore.tooltip.machine_type
         // # Nano Forge
         // #zh_CN 纳米锻炉
-        tt.addMachineType(TSTUtils.tr("Tooltip_DeployedNanoCore_MachineType"))
-            // #tr Tooltip_DeployedNanoCore_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.DeployedNanoCore.tooltip.machine_type"))
+            // #tr tst.common.machine.DeployedNanoCore.tooltip.controller
             // # Controller block for the Deployed Nano Core
             // #zh_CN 展开的纳米核心的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_Controller"))
-            // #tr Tooltip_DeployedNanoCore_01
+            .addInfo(TSTUtils.tr("tst.common.machine.DeployedNanoCore.tooltip.controller"))
+            // #tr tst.common.machine.DeployedNanoCore.tooltip.info.01
             // # {\WHITE}{\ITALIC}If you shed tears when you miss the sun, you also miss the stars.
             // #zh_CN {\WHITE}{\ITALIC}如果你因错过太阳而流泪, 你也会错过繁星.
-            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_01"))
-            // #tr Tooltip_DeployedNanoCore_02
+            .addInfo(TSTUtils.tr("tst.common.machine.DeployedNanoCore.tooltip.info.01"))
+            // #tr tst.common.machine.DeployedNanoCore.tooltip.info.02
             // # It'll take care of itself.
             // #zh_CN 它们会打理好的.
-            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_02"))
-            // #tr Tooltip_DeployedNanoCore_03
+            .addInfo(TSTUtils.tr("tst.common.machine.DeployedNanoCore.tooltip.info.02"))
+            // #tr tst.common.machine.DeployedNanoCore.tooltip.info.03
             // # With perfect overclock and {\AQUA}infinite parallel{\GRAY}.
             // #zh_CN 以无损超频和无限并行.
-            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_03"))
-            // #tr Tooltip_DeployedNanoCore_04
+            .addInfo(TSTUtils.tr("tst.common.machine.DeployedNanoCore.tooltip.info.03"))
+            // #tr tst.common.machine.DeployedNanoCore.tooltip.info.04
             // # What are you worried about?
             // #zh_CN 你在担心什么?
-            .addInfo(TSTUtils.tr("Tooltip_DeployedNanoCore_04"))
+            .addInfo(TSTUtils.tr("tst.common.machine.DeployedNanoCore.tooltip.info.04"))
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltips_JoinWirelessNetWithoutEnergyHatch)
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(81, 167, 81, false)

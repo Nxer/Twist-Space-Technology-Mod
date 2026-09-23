@@ -261,7 +261,7 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.MicroSpaceTimeFabricatorioRecipes;
+        return GTCMRecipe.MicroSpaceTimeFabricatorioRecipeMap;
     }
 
     @Override
@@ -465,39 +465,39 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
 
         tooltip
             // spotless:off
-            // #tr Tooltip_MicroSpaceTimeFabricatorio_MachineType
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.machine_type
             // # Artificial SpaceTime Fabricator
             // #zh_CN 人造时空发生器
-            .addMachineType(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio_MachineType"))
-            // #tr Tooltip_MicroSpaceTimeFabricatorio_01
+            .addMachineType(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.machine_type"))
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.01
             // # {\DARK_PURPLE}{\BOLD}A little start of Genesis.
             // #zh_CN {\DARK_PURPLE}{\BOLD}创生之始
-            .addInfo(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio_01"))
-            // #tr Tooltip_MicroSpaceTimeFabricatorio_02
+            .addInfo(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.01"))
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.02
             // # Activate the primordial singularity to begin the creation process of the universe, of course, within controllable limits.
             // #zh_CN 激活原始奇点以开始宇宙的创建过程, 当然, 在可控范围内.
-            .addInfo(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio_02"))
-            // #tr Tooltip_MicroSpaceTimeFabricatorio_03
+            .addInfo(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.02"))
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.03
             // # Upgrading the T2 Field blocks enables perfect overclock, and further upgrades can significantly increase the running speed.
             // #zh_CN 升级2级力场方块启用无损超频, 继续升级可大幅提升运行速度.
-            .addInfo(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio_03"))
-            // #tr Tooltip_MicroSpaceTimeFabricatorio_04
+            .addInfo(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.03"))
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.04
             // # But the use of advanced Field blocks requires the use of advanced structure casing block at the same time. Otherwise, it will cause {\RED}{\BOLD}calamity{\RESET}{\GRAY}.
             // #zh_CN 但使用高级力场方块的需要同时使用高级结构外壳. 否则将引起{\RED}{\BOLD}灾难{\RESET}{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio_04"))
-            // #tr Tooltip_MicroSpaceTimeFabricatorio_05
+            .addInfo(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.04"))
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.05
             // # Can provide space-time seeds in dedicated input bus, consuming 1 space-time seed per run and doubling the output.
             // #zh_CN 可以在专用输入总线内提供时空之种, 每次运行消耗1个时空之种, 并将产物翻倍.
-            .addInfo(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.info.05"))
             .beginStructureBlock(19, 22, 22, false)
-            // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.structure.01
             // # Input Bus of The Seed of Space and Time
             // #zh_CN 时空之种输入总线
 
-            // #tr Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location
+            // #tr tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.structure.02
             // # Replace the casing at the front of controller block
             // #zh_CN 替换主方块正前方结构方块
-            .addOtherStructurePart(TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.name"), TSTUtils.tr("Tooltip_MicroSpaceTimeFabricatorio.structure.SpecialInputBus.location"), 2)
+            .addOtherStructurePart(TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.structure.01"), TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.tooltip.structure.02"), 2)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)

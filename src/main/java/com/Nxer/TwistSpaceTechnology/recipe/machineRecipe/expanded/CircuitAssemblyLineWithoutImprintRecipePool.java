@@ -17,7 +17,7 @@ public class CircuitAssemblyLineWithoutImprintRecipePool {
                 .itemOutputs(originalRecipe.mOutputs)
                 .eut(originalRecipe.mEUt)
                 .duration(originalRecipe.mDuration)
-                .addTo(GTCMRecipe.advCircuitAssemblyLineRecipes);
+                .addTo(GTCMRecipe.AdvCircuitAssemblyLineRecipeMap);
         }
     }
 }

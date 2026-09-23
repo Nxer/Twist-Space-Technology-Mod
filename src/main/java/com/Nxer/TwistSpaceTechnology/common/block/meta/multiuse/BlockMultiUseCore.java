@@ -58,15 +58,20 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
             super(par1);
         }
 
+        @Override
+        public String getUnlocalizedName(ItemStack aStack) {
+            return "tile.tst.common.multi_use_core." + getDamage(aStack);
+        }
+
         @SuppressWarnings("unchecked")
         @Override
         public void addInformation(ItemStack aStack, EntityPlayer aPlayer, List aList, boolean aF3_H) {
             aList.add(GTValues.TIER_COLORS[aStack.getItemDamage()] + GTValues.VN[aStack.getItemDamage()]);
 
-            // #tr tst.blockcasings.multi.tooltip
+            // #tr tile.tst.common.multi_use_core.tooltip
             // # Break with Wrench to retrieve the machines
             // #zh_CN 使用扳手破坏返还机器
-            aList.add(EnumChatFormatting.GREEN + TSTUtils.tr("tst.blockcasings.multi.tooltip"));
+            aList.add(EnumChatFormatting.GREEN + TSTUtils.tr("tile.tst.common.multi_use_core.tooltip"));
         }
     }
 
@@ -74,19 +79,19 @@ public class BlockMultiUseCore extends GregtechMetaCasingBlocksAbstract {
         super(BlockItemMultiUseCore.class, "tst.blockcasings.multi", MaterialCasings.INSTANCE);
         setCreativeTab(TstCreativeTabs.TabMetaBlocks);
 
-        // #tr tst.blockcasings.multi.5.name
+        // #tr tile.tst.common.multi_use_core.5.name
         // # Advanced MultiUse Core IV
         // #zh_CN 高级多功能核心 IV
         GTCMItemList.MultiUseCore_IV.set(setup(5));
-        // #tr tst.blockcasings.multi.6.name
+        // #tr tile.tst.common.multi_use_core.6.name
         // # Advanced MultiUse Core LuV
         // #zh_CN 高级多功能核心 LuV
         GTCMItemList.MultiUseCore_LuV.set(setup(6));
-        // #tr tst.blockcasings.multi.7.name
+        // #tr tile.tst.common.multi_use_core.7.name
         // # Advanced MultiUse Core ZPM
         // #zh_CN 高级多功能核心 ZPM
         GTCMItemList.MultiUseCore_ZPM.set(setup(7));
-        // #tr tst.blockcasings.multi.8.name
+        // #tr tile.tst.common.multi_use_core.8.name
         // # Advanced MultiUse Core UV
         // #zh_CN 高级多功能核心 UV
         GTCMItemList.MultiUseCore_UV.set(setup(8));

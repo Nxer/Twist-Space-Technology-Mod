@@ -749,7 +749,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.StrangeMatterAggregatorRecipes;
+        return GTCMRecipe.StrangeMatterAggregatorRecipeMap;
     }
 
     @Override
@@ -1388,7 +1388,7 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             currentTip.add(
                 "" + EnumChatFormatting.WHITE
                     + EnumChatFormatting.BOLD
-                    + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.consecutivePoint")
+                    + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.consecutive_point")
                     + EnumChatFormatting.GRAY
                     + " : "
                     + EnumChatFormatting.YELLOW
@@ -1424,73 +1424,73 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         System.arraycopy(origin, 0, ret, 0, origin.length);
         ret[origin.length] = EnumChatFormatting.AQUA
             // spotless:off
-            // #tr StrangeMatterAggregator.MachineInfoData.oscillatorTier
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.oscillator_tier
             // # SpaceTime Oscillator {\RED}Tier
             // #zh_CN 时空振荡器{\RED}等级
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.oscillatorTier")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.oscillator_tier")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + oscillatorTier;
         ret[origin.length + 1] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.oscillatorPiece
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.oscillator_piece
             // # SpaceTime Oscillator {\BLUE}Rings
             // #zh_CN 时空振荡器{\BLUE}环数
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.oscillatorPiece")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.oscillator_piece")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + oscillatorPiece;
         ret[origin.length + 2] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.constraintorTier
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.constraintor_tier
             // # SpaceTime Constraintor {\RED}Tier
             // #zh_CN 时空约束器{\RED}等级
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.constraintorTier")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.constraintor_tier")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + constraintorTier;
         ret[origin.length + 3] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.constraintorPiece
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.constraintor_piece
             // # SpaceTIme Constraintor {\BLUE}Rings
             // #zh_CN 时空约束器{\BLUE}环数
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.constraintorPiece")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.constraintor_piece")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + constraintorPiece;
         ret[origin.length + 4] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.mergerTier
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.merger_tier
             // # SpaceTime Merger {\RED}Tier
             // #zh_CN 时空归并器{\RED}等级
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.mergerTier")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.merger_tier")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + mergerTier;
         ret[origin.length + 5] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.mergerPiece
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.merger_piece
             // # SpaceTime Merger {\BLUE}Rings
             // #zh_CN 时空归并器{\BLUE}环数
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.mergerPiece")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.merger_piece")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + mergerPiece;
         ret[origin.length + 6] = EnumChatFormatting.AQUA
-            // #tr StrangeMatterAggregator.MachineInfoData.totalRings
+            // #tr tst.dyson.machine.StrangeMatterAggregator.info.total_rings
             // # {\BLUE}Total Rings
             // #zh_CN {\BLUE}总环数
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.totalRings")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.total_rings")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
             + rings;
         ret[origin.length + 7] = "" + EnumChatFormatting.YELLOW + EnumChatFormatting.BOLD
-        // #tr StrangeMatterAggregator.MachineInfoData.consecutivePoint
+        // #tr tst.dyson.machine.StrangeMatterAggregator.info.consecutive_point
         // # Continuous Running Points
         // #zh_CN 连续运行点数
-            + TSTUtils.tr("StrangeMatterAggregator.MachineInfoData.consecutivePoint")
+            + TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.info.consecutive_point")
             + EnumChatFormatting.WHITE
             + ": "
             + EnumChatFormatting.GOLD
@@ -1609,10 +1609,12 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 }
                 return true;
             })
-            // #tr StrangeMatterAggregator.UI.BuildingInfoMenuButton.name
+            // #tr tst.dyson.machine.StrangeMatterAggregator.gui.building_info_menu_button.name
             // # Auto Building Configuration Menu
             // #zh_CN 自动搭建配置菜单
-            .tooltipBuilder(t -> t.addLine(IKey.lang("StrangeMatterAggregator.UI.BuildingInfoMenuButton.name")))
+            .tooltipBuilder(
+                t -> t
+                    .addLine(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.building_info_menu_button.name")))
             .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 
@@ -1641,21 +1643,21 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             .size(240, 80);
 
         // spotless:off
-        // #tr StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.structure.configuration_description.text
         // # The machine will build the oscillator ring, constraintor ring, and merger ring in a set number of cycles.
         // #zh_CN 机器将按照设定数量的振荡器环, 约束器环, 归并器环依次循环搭建.
         panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Structure.ConfigurationDescription.text"))
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.structure.configuration_description.text"))
                 .textAlign(Alignment.Center)
                 .left(20)
                 .top(10)
                 .size(200, 14));
 
-        // #tr StrangeMatterAggregator.UI.OscillatorPieceNeed.text
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.oscillator_piece_need.text
         // # Oscillator
         // #zh_CN 时空振荡器
         panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.OscillatorPieceNeed.text"))
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.oscillator_piece_need.text"))
                 .textAlign(Alignment.Center)
                 .left(0)
                 .top(36)
@@ -1668,11 +1670,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .top(52)
                 .size(40, 18));
 
-        // #tr StrangeMatterAggregator.UI.ConstraintorPieceNeed.text
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.constraintor_piece_need.text
         // # Constraintor
         // #zh_CN 时空约束器
         panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.ConstraintorPieceNeed.text"))
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.constraintor_piece_need.text"))
                 .textAlign(Alignment.Center)
                 .left(70)
                 .top(36)
@@ -1685,11 +1687,11 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .top(52)
                 .size(40, 18));
 
-        // #tr StrangeMatterAggregator.UI.MergerPieceNeed.text
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.merger_piece_need.text
         // # Merger
         // #zh_CN 时空归并器
         panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.MergerPieceNeed.text")).textAlign(Alignment.Center)
+            new TextWidget<>(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.merger_piece_need.text")).textAlign(Alignment.Center)
                 .left(140)
                 .top(36)
                 .size(100, 14));
@@ -1721,10 +1723,12 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 }
                 return true;
             })
-            // #tr StrangeMatterAggregator.UI.RunningInfoMenuButton.name
+            // #tr tst.dyson.machine.StrangeMatterAggregator.gui.running_info_menu_button.name
             // # Running Configuration Menu
             // #zh_CN 运行配置菜单
-            .tooltipBuilder(t -> t.addLine(IKey.lang("StrangeMatterAggregator.UI.RunningInfoMenuButton.name")))
+            .tooltipBuilder(
+                t -> t
+                    .addLine(IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.running_info_menu_button.name")))
             .tooltipShowUpTimer(TOOLTIP_DELAY);
     }
 
@@ -1741,16 +1745,17 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
             .size(240, 80);
 
         // spotless:off
-        // #tr StrangeMatterAggregator.UI.Running.ConfigurationDescription.text
+        // #tr tst.dyson.machine.StrangeMatterAggregator.gui.running.configuration_description.text
         // # Set SpaceTime Maintenance Fluid Tier: 1-Molten SpaceTime, 2-Molten Universium, 3-MagnetoConstrainedStarMatter
         // #zh_CN 设置时空维护流体等级: 1-熔融时空, 2-熔融宇宙素, 3-磁流体约束恒星物质
         // spotless:on
         panel.child(
-            new TextWidget<>(IKey.lang("StrangeMatterAggregator.UI.Running.ConfigurationDescription.text"))
-                .textAlign(Alignment.Center)
-                .left(20)
-                .top(10)
-                .size(200, 14));
+            new TextWidget<>(
+                IKey.lang("tst.dyson.machine.StrangeMatterAggregator.gui.running.configuration_description.text"))
+                    .textAlign(Alignment.Center)
+                    .left(20)
+                    .top(10)
+                    .size(200, 14));
 
         // Fluid tier input
         panel.child(
@@ -1857,129 +1862,129 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         if (tooltip == null) {
             tooltip = new TSTMultiblockTooltipBuilder();
             // spotless:off
-            // #tr Tooltip_StrangeMatterAggregator_MachineType
+            // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.machine_type
             // # {\WHITE}Modularized Machine {\GRAY}- {\YELLOW}Strange Matter Aggregator
             // #zh_CN {\WHITE}模块化机械 {\GRAY}- {\YELLOW}奇异物质聚合器
             tooltip
                 .addMachineType(
-                    TSTUtils.tr("Tooltip_StrangeMatterAggregator_MachineType"))
-                // #tr Tooltip_StrangeMatterAggregator_01
+                    TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.machine_type"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.01
                 // # {\ITALIC}{\DARK_BLUE}Life is like Ephemera in the world, a drop in the sea.
                 // #zh_CN {\ITALIC}{\DARK_BLUE}寄蜉蝣于天地，渺沧海之一粟。
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_01"))
-                // #tr Tooltip_StrangeMatterAggregator_02
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.01"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.02
                 // # Creation of specialized space-time, efficient manipulation of strange matter.
                 // #zh_CN 创建专用的时空, 高效地操作奇异物质.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_02"))
-                // #tr Tooltip_StrangeMatterAggregator_03
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.02"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.03
                 // # The machines are stacked, and each layer can be fitted with one type of Space-Time Operator Cube.
                 // #zh_CN 机器是叠层结构, 每层可以安装一种时空操作器方块.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_03"))
-                // #tr Tooltip_StrangeMatterAggregator_04
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.03"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.04
                 // # Higher tier, more rings, more benefits, but also costs.
                 // #zh_CN 更高等级, 更多层数, 更多收益, 同时也有代价.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_04"))
-                // #tr Tooltip_StrangeMatterAggregator_05
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.04"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.05
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Oscillator {\BLUE}----------------
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空振荡器 {\BLUE}----------------
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_05"))
-                // #tr Tooltip_StrangeMatterAggregator_06
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.05"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.06
                 // # Base run time: the higher the tier the shorter the run time
                 // #zh_CN 基础运行耗时：等级越高, 耗时越短
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_06"))
-                // #tr Tooltip_StrangeMatterAggregator_07
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.06"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.07
                 // # Basic materials consumption: the higher the number of rings, the lower the amount consumed
                 // #zh_CN 基础原料消耗：层数越多, 消耗量越少
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_07"))
-                // #tr Tooltip_StrangeMatterAggregator_08
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.07"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.08
                 // # SpaceTime maintenance fluid consumption: more rings more consumed
                 // #zh_CN 时空维护流体消耗：层数越多, 消耗量越多
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_08"))
-                // #tr Tooltip_StrangeMatterAggregator_09
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.08"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.09
                 // # Core element and annihilation constrainer consumption: higher tier, more rings, lower consumption rate
                 // #zh_CN 核心素和湮灭约束器消耗：等级越高, 层数越多, 消耗率越低
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_09"))
-                // #tr Tooltip_StrangeMatterAggregator_10
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.09"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.10
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Constraintor {\BLUE}----------------
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空约束器 {\BLUE}----------------
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_10"))
-                // #tr Tooltip_StrangeMatterAggregator_11
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.10"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.11
                 // # Consumption rate of auxiliary materials: the higher the level, the lower the consumption rate
                 // #zh_CN 辅助材料消耗率：等级越高, 消耗率越低
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_11"))
-                // #tr Tooltip_StrangeMatterAggregator_12
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.11"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.12
                 // # Actual running time: the higher the tier the longer the actual running time is
                 // #zh_CN 实际运行耗时：等级越高, 实际运行耗时越长
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_12"))
-                // #tr Tooltip_StrangeMatterAggregator_13
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.12"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.13
                 // # SpaceTime maintenance fluid consumption: the more rings you have the less you consume
                 // #zh_CN 时空维护流体消耗：层数越多, 消耗量越少
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_13"))
-                // #tr Tooltip_StrangeMatterAggregator_14
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.13"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.14
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}SpaceTime Merger {\BLUE}----------------
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\GOLD}时空归并器 {\BLUE}----------------
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_14"))
-                // #tr Tooltip_StrangeMatterAggregator_15
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.14"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.15
                 // # Maximum Continuous Running Points: The higher the tier, the higher the Continuous Running Points limit!
                 // #zh_CN 最大连续运行点数：等级越高, 连续运行点数上限越高
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_15"))
-                // #tr Tooltip_StrangeMatterAggregator_16
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.15"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.16
                 // # Byproduct outputs: the more rings the more outputs
                 // #zh_CN 副产物产出：层数越多, 产量越大
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_16"))
-                // #tr Tooltip_StrangeMatterAggregator_17
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.16"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.17
                 // # Power Consumption: higher tier, more rings, the higher the power consumption
                 // #zh_CN 耗电：等级越高层数越多耗电越高
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_17"))
-                // #tr Tooltip_StrangeMatterAggregator_18
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.17"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.18
                 // # {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}SpaceTime Maintenance Fluid {\RESET}{\BLUE}----------------
                 // #zh_CN {\SPACE}{\SPACE}{\SPACE}{\SPACE}{\BLUE}---------------- {\AQUA}{\BOLD}时空维护流体 {\RESET}{\BLUE}----------------
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_18"))
-                // #tr Tooltip_StrangeMatterAggregator_19
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.18"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.19
                 // # Setting the used SpaceTime maintenance fluid tier within the machine UI:
                 // #zh_CN 在主机UI内设置使用的时空维护流体:
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_19"))
-                // #tr Tooltip_StrangeMatterAggregator_20
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.19"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.20
                 // # {\SPACE}T1 = 576L Molten SpaceTime | T2 = 96L Molten Universium | T3 = 16L Molten Magnetohydrodynamically Constrained Star Matter
                 // #zh_CN {\SPACE}T1 = 576L 熔融时空 | T2 = 96L 熔融宇宙素 | T3 = 16L 熔融磁流体约束恒星物质
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_20"))
-                // #tr Tooltip_StrangeMatterAggregator_21
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.20"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.21
                 // # Using Advanced SpaceTime Maintenance Fluid increases num of fuel rods can be crafted per Annihilation Constrainer and Core Element,
                 // #zh_CN 使用高级时空维护流体可以提高每个湮灭约束器和核心素可以制作的燃料棒数量,
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_21"))
-                // #tr Tooltip_StrangeMatterAggregator_22
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.21"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.22
                 // # {\SPACE} and reduce the consumption of fluid materials and auxiliary materials. The type of byproducts depends on the SpaceTime maintenance fluid used.
                 // #zh_CN {\SPACE}并降低辅助材料和流体原料的消耗量. 副产物类型取决于使用的时空维护流体.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_22"))
-                // #tr Tooltip_StrangeMatterAggregator_23
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.22"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.23
                 // # T1: Molten Infinity and Molten Hypogen; T2: Molten SpaceTime and Molten Shirabon; T3: Molten Universium;
                 // #zh_CN T1: 熔融无尽和熔融海珀珍; T2: 熔融时空和熔融调律源金; T3: 熔融宇宙素;
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_23"))
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.23"))
                 .addInfo(EnumChatFormatting.GOLD + TSTSharedLocalization.General.Text_SeparatingLine)
-                // #tr Tooltip_StrangeMatterAggregator_24
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.24
                 // # {\WHITE}{\BOLD}Continuous Operation{\RESET}{\WHITE} will produce by-products and more of the main product.
                 // #zh_CN {\WHITE}{\BOLD}连续运行{\RESET}{\WHITE}时将产出副产物和更多的主产物.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_24"))
-                // #tr Tooltip_StrangeMatterAggregator_25
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.24"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.25
                 // # For each successful run, {\WHITE}Continuous Running Points{\GRAY} is increased by one.
                 // #zh_CN 每次成功运行时, {\WHITE}连续运行点数{\GRAY}加一.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_25"))
-                // #tr Tooltip_StrangeMatterAggregator_26
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.25"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.26
                 // # Continuous provision of sufficient space-time maintenance fluid to maintain continuous operation. Otherwise, operation is interrupted.
                 // #zh_CN 持续提供充足的时空维护流体可保持连续运行状态. 否则中断运行.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_26"))
-                // #tr Tooltip_StrangeMatterAggregator_27
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.26"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.27
                 // # {\WHITE}Provide {\YELLOW}{\BOLD}Core Elements {\WHITE}to obtain t2 products
                 // #zh_CN {\WHITE}提供{\YELLOW}{\BOLD}核心素{\WHITE}获得二级产物
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_27"))
-                // #tr Tooltip_StrangeMatterAggregator_28
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.27"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.28
                 // # If input Core Element, machine will consume Core Element and output a portion of T2 product instead part primary product.
                 // #zh_CN 如果有核心素输入则会消耗核心素并将一部分主产物替换为二级产物.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_28"))
-                // #tr Tooltip_StrangeMatterAggregator_29
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.28"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.info.29
                 // # At the same time, byproduct yields are doubled.
                 // #zh_CN 同时副产物产量翻倍.
-                .addInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator_29"))
+                .addInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.info.29"))
                 .addInfo(TSTSharedLocalization.ModularizedMachine.InstallingModuleNearControllerImproveMachine)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription01)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.ModularizedMachineSystemDescription02)
@@ -1987,26 +1992,26 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.SpeedControllerDescription)
                 .addStructureInfo(TSTSharedLocalization.ModularizedMachine.NotMultiplyInstallSameTypeModuleAll)
                 .addStructureInfo(TSTSharedLocalization.General.Text_SeparatingLine)
-                // #tr Tooltip_StrangeMatterAggregator.structure.UI_Description.01
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.01
                 // # {\WHITE}{\BOLD}Setting up auto-build rules for multi-rings structures within the controller UI.
                 // #zh_CN {\WHITE}{\BOLD}在主机UI内设置多环结构的自动搭建规则.
-                .addStructureInfo(TSTUtils.tr("Tooltip_StrangeMatterAggregator.structure.UI_Description.01"))
-                // #tr Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch
+                .addStructureInfo(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.01"))
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.02
                 // # Input Hatch of SpaceTime Maintenance Fluid
                 // #zh_CN 时空维护流体输入仓
 
-                // #tr Tooltip_StrangeMatterAggregator.structure.Left
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.03
                 // # Left area beside the controller block
                 // #zh_CN 主方块左侧区域
-                .addOtherStructurePart(TSTUtils.tr("Tooltip_StrangeMatterAggregator.structure.SpaceTimeMaintenanceFluidInputHatch"), TSTUtils.tr("Tooltip_StrangeMatterAggregator.structure.Left"), 3)
-                // #tr Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus
+                .addOtherStructurePart(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.02"), TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.03"), 3)
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.04
                 // # Input Bus of Core Element and Annihilation Constrainer
                 // #zh_CN 核心素和湮灭约束器输入总线
 
-                // #tr Tooltip_StrangeMatterAggregator.structure.Right
+                // #tr tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.05
                 // # Right area beside the controller block
                 // #zh_CN 主方块右侧区域
-                .addOtherStructurePart(TSTUtils.tr("Tooltip_StrangeMatterAggregator.structure.CoreElementAndAnnihilationConstrainerInputBus"), TSTUtils.tr("Tooltip_StrangeMatterAggregator.structure.Right"), 4)
+                .addOtherStructurePart(TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.04"), TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.tooltip.structure.05"), 4)
                 .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)
                 .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 2)
                 .addOtherStructurePart(TSTSharedLocalization.ModularizedMachine.ModularHatch, TSTSharedLocalization.Structure.textUseBlueprint, 1)

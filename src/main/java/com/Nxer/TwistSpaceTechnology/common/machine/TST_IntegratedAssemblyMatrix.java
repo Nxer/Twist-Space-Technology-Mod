@@ -200,7 +200,7 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return GTCMRecipe.AssemblyLineWithoutResearchRecipe;
+        return GTCMRecipe.AssemblyLineWithoutResearchRecipeMap;
     }
 
     @Override
@@ -397,50 +397,50 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tttt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_IntegratedAssemblyMatrix_MachineType
+        // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.machine_type
         // # Assembly Line
         // #zh_CN 装配线
-        tttt.addMachineType(tr("Tooltip_IntegratedAssemblyMatrix_MachineType"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_00
+        tttt.addMachineType(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.machine_type"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.01
             // # {\GOLD}{\BOLD}Imagination can take you anywhere
             // #zh_CN {\GOLD}{\BOLD}想象力能带你去任何地方
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_00"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_01
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.01"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.02
             // # The built-in integrated logistics system allows you to no longer worry about external logistics design.
             // #zh_CN 内置集成物流系统允许你不再为外部物流设计发愁.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_01"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_02
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.02"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.03
             // # Spatial isolation technology brings higher batch production capabilities.
             // #zh_CN 空间隔离技术则带来更高的批量生产能力.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_02"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_03
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.03"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.04
             // # The cost is {\RED}{\BOLD}1.5{\RESET}{\GRAY} times the base time.
             // #zh_CN 代价是{\RED}{\BOLD}1.5{\RESET}{\GRAY}倍基础耗时.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_03"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_04
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.04"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.05
             // # Still need to use the data access hatch to provide data stick.
             // #zh_CN 仍然需要使用数据访问仓提供闪存.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_04"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_05
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.05"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.06
             // # The energy hatch tier limits the voltage tier at which recipes can be executed.
             // #zh_CN 能源仓等级限制了可执行配方电压等级.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_05"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_06
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.06"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.07
             // # Nanite Containment Bus can be installed and provided with silver nanites or gold nanites to increase the running speed.
             // #zh_CN 可以安装纳米蜂群收容总线并提供银纳米蜂群或金纳米蜂群提高运行速度.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_06"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_07
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.07"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.08
             // # Up to {\WHITE}256 Silver Nanites{\GRAY} will increase the running speed to 100% of normal speed.
             // #zh_CN 最多{\WHITE}256银纳米蜂群{\GRAY}将运行速度提高到正常{\WHITE}100%{\GRAY}速度.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_07"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_08
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.08"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.09
             // # Or up to {\YELLOW}1024 Gold Nanites{\GRAY} will increase the running speed to 200% of normal speed,
             // #zh_CN 或最多{\YELLOW}1024金纳米蜂群{\GRAY}将运行速度提高到正常的{\YELLOW}200%{\GRAY}速度,
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_08"))
-            // #tr Tooltip_IntegratedAssemblyMatrix_1_09
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.09"))
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.10
             // # And {\YELLOW}double{\GRAY} the parallelism.
             // #zh_CN 并{\YELLOW}翻倍{\GRAY}并行数量.
-            .addInfo(tr("Tooltip_IntegratedAssemblyMatrix_1_09"))
+            .addInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.info.10"))
             .beginStructureBlock(9, 9, 52, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 1)
@@ -451,10 +451,10 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
                 StatCollector.translateToLocal("GT5U.tooltip.structure.data_access_hatch"),
                 TSTSharedLocalization.Structure.textUseBlueprint,
                 1)
-            // #tr Tooltips_IntegratedAssemblyMatrix_DataHatchLimit
+            // #tr tst.common.machine.IntegratedAssemblyMatrix.tooltip.structure.01
             // # Only allow and must place {\GOLD}1{\GRAY} Data Access Hatch and {\GOLD}1{\GRAY} Nanites Bus
             // #zh_CN 只允许且必须安装{\GOLD}1{\GRAY}个数据访问仓和{\GOLD}1{\GRAY}个纳米蜂群仓
-            .addStructureInfo(tr("Tooltips_IntegratedAssemblyMatrix_DataHatchLimit"))
+            .addStructureInfo(tr("tst.common.machine.IntegratedAssemblyMatrix.tooltip.structure.01"))
             .toolTipFinisher();
         // spotless:on
         return tttt;

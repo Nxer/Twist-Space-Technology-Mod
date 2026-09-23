@@ -529,49 +529,49 @@ public class TST_InfusionMaterialDispenser extends GTCM_MultiMachineBase<TST_Inf
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_InfusionMaterialDispenser_MachineType
+        // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.machine_type
         // # Infusion Material Dispenser
         // #zh_CN 注魔原料分配器
-        tt.addMachineType(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_MachineType"))
-            // #tr Tooltip_InfusionMaterialDispenser_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.machine_type"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.01
             // # automatically dispense? What? This is impossible!
             // #zh_CN 自动分配?什么?这不可能!
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_00"))
-            // #tr Tooltip_InfusionMaterialDispenser_01
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.01"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.02
             // # A paper with player's name should be in controller to enable the fakeplayer to obtain research. Otherwise, the machine will crash.
             // #zh_CN 需要在控制器内放入一张写有玩家名称的纸,使得假人获取研究进度,否则机器会崩溃.
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_01"))
-            // #tr Tooltip_InfusionMaterialDispenser_02
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.02"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.03
             // # By right-clicking controller with a screwdriver, refresh the research progress and check the number of pedestals again.
             // #zh_CN 螺丝刀右键主机可以主动刷新研究进度并重新检查基座数量.
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_02"))
-            // #tr Tooltip_InfusionMaterialDispenser_03
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.03"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.04
             // # For research, no management. If materials are directly recycled, it indicates that the research has not been unlocked and the infusion cannot be activated.
             // #zh_CN 对于研究不做管理,若材料被直接回收说明研究未解锁,无法开启注魔.
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_03"))
-            // #tr Tooltip_InfusionMaterialDispenser_04
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.04"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.05
             // # For essence, no management. If essences are insufficient, and the world accelerator is used...
             // #zh_CN 对于源质不做管理,若源质不足,并使用世界加速器的话...
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_04"))
-            // #tr Tooltip_InfusionMaterialDispenser_05
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.05"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.06
             // # The controller is located in the upper square of the infusion matrix. Also,remember to open InterfaceBlockingMode for the input bus.
             // #zh_CN 控制器在注魔矩阵的上面,另外输入总线记得开阻挡模式.
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_05"))
-            // #tr Tooltip_InfusionMaterialDispenser_06
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.06"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.07
             // # You can use it together with the Essentia Terminal for more precise automation. The specific method is left to the reader as a challenge to their understanding of AE.
             // #zh_CN 可以搭配源质终端进行更加精细的自动化,具体的方法作为对AE理解的一种挑战留给读者.
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_06"))
-            // #tr Tooltip_InfusionMaterialDispenser_07
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.07"))
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.08
             // # Of course, if you are unsure, you can refer to the manual, which contains some hints.However, there is no diagram this time..
             // #zh_CN 当然如果实在不清楚可以翻看手册,里面留有一些提示.不过这次没有示意图.
-            .addInfo(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_07"))
+            .addInfo(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.08"))
             .beginStructureBlock(11, 10, 23, true)
             .addController(textFrontCenter)
-            // #tr Tooltip_InfusionMaterialDispenser_HatchBusInfo
+            // #tr tst.common.machine.InfusionMaterialDispenser.tooltip.info.09
             // # Replace Magic mechanical blocks in any cabin
             // #zh_CN 任何舱室替换魔法机械方块
-            .addInputBus(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
-            .addOutputBus(TSTUtils.tr("Tooltip_InfusionMaterialDispenser_HatchBusInfo"))
+            .addInputBus(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.09"))
+            .addOutputBus(TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.tooltip.info.09"))
             .toolTipFinisher();
         // spotless:on
         return tt;

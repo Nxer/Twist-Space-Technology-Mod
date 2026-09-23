@@ -61,9 +61,9 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 }
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(TSTUtils.tr("SkypiercerTower.UI.AspectSelection.name")))
+            .tooltipBuilder(t -> t.addLine(TSTUtils.tr("tst.common.machine.SkypiercerTower.gui.aspect_selection.name")))
             // spotless:off
-            // #tr SkypiercerTower.UI.AspectSelection.name
+            // #tr tst.common.machine.SkypiercerTower.gui.aspect_selection.name
             // #en_US Aspect Selection
             // #zh_CN 源质选择
             // spotless:on
@@ -148,9 +148,10 @@ public class TST_Gui_SkypiercerTower extends TST_Gui<TST_SkypiercerTower> {
                 syncer.setValue(!syncer.getValue());
                 return true;
             })
-            .tooltipBuilder(t -> t.addLine(TSTUtils.tr("SkypiercerTower.UI.AspectSelection.SelectAll")))
+            .tooltipBuilder(
+                t -> t.addLine(TSTUtils.tr("tst.common.machine.SkypiercerTower.gui.aspect_selection.select_all")))
             // spotless:off
-            // #tr SkypiercerTower.UI.AspectSelection.SelectAll
+            // #tr tst.common.machine.SkypiercerTower.gui.aspect_selection.select_all
             // #en_US Select All / Deselect All
             // #zh_CN 全选/取消全选
             // spotless:on

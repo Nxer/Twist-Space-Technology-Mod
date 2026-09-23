@@ -219,26 +219,26 @@ public class TST_LargeCanner extends GTCM_MultiMachineBase<TST_LargeCanner> {
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_LargeCanner_MachineType
+        // #tr tst.common.machine.LargeCanner.tooltip.machine_type
         // # Fluid/Solid Canner
         // #zh_CN 流体/固体装罐机
-        tt.addMachineType(TSTUtils.tr("Tooltip_LargeCanner_MachineType"))
-            // #tr Tooltip_LargeCanner_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.machine_type"))
+            // #tr tst.common.machine.LargeCanner.tooltip.controller
             // # Controller block for the Large Canner
             // #zh_CN 大型灌装机的控制方块
-            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_Controller"))
-            // #tr Tooltip_LargeCanner_01
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.controller"))
+            // #tr tst.common.machine.LargeCanner.tooltip.info.01
             // # "Use unimaginable force to press items into containers!"
             // #zh_CN "使用超乎想象的力量把物品压入容器中！”
-            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_01"))
-            // #tr Tooltip_LargeCanner_02
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.01"))
+            // #tr tst.common.machine.LargeCanner.tooltip.info.02
             // # Having almost infinite parallelism!
             // #zh_CN 拥有近乎无限的并行！
-            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_02"))
-            // #tr Tooltip_LargeCanner_03
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.02"))
+            // #tr tst.common.machine.LargeCanner.tooltip.info.03
             // # Please use a screwdriver to switch modes.
             // #zh_CN 请使用螺丝刀来切换模式。
-            .addInfo(TSTUtils.tr("Tooltip_LargeCanner_03"))
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeCanner.tooltip.info.03"))
             .beginStructureBlock(13, 17, 13, false)
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint)

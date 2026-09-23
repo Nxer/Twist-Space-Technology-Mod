@@ -281,7 +281,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     public RecipeMap<?> getRecipeMap() {
         switch (machineMode) {
             case 1:
-                return GTCMRecipe.HyperSpacetimeTransformerRecipe;
+                return GTCMRecipe.HyperSpacetimeTransformerRecipeMap;
             default:
                 return GTPPRecipeMaps.molecularTransformerRecipes;
         }
@@ -290,7 +290,7 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTCMRecipe.HyperSpacetimeTransformerRecipe, GTPPRecipeMaps.molecularTransformerRecipes);
+        return Arrays.asList(GTCMRecipe.HyperSpacetimeTransformerRecipeMap, GTPPRecipeMaps.molecularTransformerRecipes);
     }
 
     @Override
@@ -309,14 +309,14 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
 
     @Override
     public String getMachineModeName() {
-        // #tr HyperSpacetimeTransformer.modeMsg.0
+        // #tr tst.common.machine.HyperSpacetimeTransformer.mode.0
         // # Mode: Molecular Transformer
         // #zh_CN 分子重组仪模式
 
-        // #tr HyperSpacetimeTransformer.modeMsg.1
+        // #tr tst.common.machine.HyperSpacetimeTransformer.mode.1
         // # Mode: Spacetime Transformer
         // #zh_CN 时空转换仪模式
-        return StatCollector.translateToLocal("HyperSpacetimeTransformer.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.HyperSpacetimeTransformer.mode." + machineMode);
     }
 
     public int getMaxParallelRecipes() {
@@ -430,38 +430,38 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_HyperSpacetimeTransformer_MachineType
+        // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.machine_type
         // # HyperSpacetimeTransformer
         // #zh_CN 分子重组仪/{\DARK_BLUE}时空转换仪
-        tt.addMachineType(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_MachineType"))
-            // #tr Tooltip_HyperSpacetimeTransformer_00
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.machine_type"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.01
             // # To change the material itself in a higher dimension.
             // #zh_CN 于更高维度改变物质本身。
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_00"))
-            // #tr Tooltip_HyperSpacetimeTransformer_01
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.01"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.02
             // # Molecular Transformer Mode
             // #zh_CN {\YELLOW}分子重组仪模式
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_01"))
-            // #tr Tooltip_HyperSpacetimeTransformer_02
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.02"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.03
             // # Parallel:Product of three types of field generators.
             // #zh_CN 并行：时空场发生器等级的乘积，最多512并行。
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_02"))
-            // #tr Tooltip_HyperSpacetimeTransformer_03
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.03"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.04
             // # Tier 9 field generator will decrease energy use by {\RED}25%{\GRAY}, max {\RED}75%{\GRAY}.
             // #zh_CN 9级时空场会带来额外的能耗降低，最多降低{\RED}75%{\GRAY}。
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_03"))
-            // #tr Tooltip_HyperSpacetimeTransformer_04
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.04"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.05
             // # {\DARK_BLUE}Spacetime Transformer Mode
             // #zh_CN {\DARK_BLUE}时空转换仪模式
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_04"))
-            // #tr Tooltip_HyperSpacetimeTransformer_05
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.05"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.06
             // # Pulse Manipulator and Shielding Core tier determine the number parallel of the machine, with a maximum of 16 parallels.
             // #zh_CN 屏蔽核心等级与脉冲控制等级决定了该机器并行，最高16并行。
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_05"))
-            // #tr Tooltip_HyperSpacetimeTransformer_06
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.06"))
+            // #tr tst.common.machine.HyperSpacetimeTransformer.tooltip.info.07
             // # Upgrade the Spacetime Field Generator to reduce energy consumption, with a maximum reduction of 87.5%% in EU consumption.
             // #zh_CN 升级时空场以降低能耗，最多降低87.5%%EU消耗。
-            .addInfo(TSTUtils.tr("Tooltip_HyperSpacetimeTransformer_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.tooltip.info.07"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
             .beginStructureBlock(45, 11, 45, false)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)

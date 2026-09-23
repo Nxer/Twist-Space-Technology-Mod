@@ -1,7 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.OreProcess.logic;
 
 import static com.Nxer.TwistSpaceTechnology.common.api.ModItemHandler.ModItem.getModItem;
-import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.OreProcessingVisualRecipes;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.OreProcessingVisualRecipeMap;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeDuration;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.OreProcessRecipeEUt;
 import static com.Nxer.TwistSpaceTechnology.system.OreProcess.logic.OP_Values.SpecialProcessingLineMaterialInstead;
@@ -486,7 +486,7 @@ public class OP_Logic {
     // endregion
 
     public void addToVisualRecipeMap(ItemStack[] output, ItemStack... input) {
-        OreProcessingVisualRecipes.add(
+        OreProcessingVisualRecipeMap.add(
             new GTRecipe.GTRecipe_WithAlt(
                 false,
                 null,

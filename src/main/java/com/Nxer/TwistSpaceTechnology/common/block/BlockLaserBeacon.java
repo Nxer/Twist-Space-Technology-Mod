@@ -33,12 +33,17 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
         super(Material.iron);
         setBlockName("LaserBeacon");
         this.setCreativeTab(GregTechAPI.TAB_GREGTECH);
-        // #tr tile.LaserBeacon.name
+        // #tr tile.tst.common.laser_beacon.name
         // # Laser Inducing Beacon
         // #zh_CN 激光激发信标
         GregTechAPI.registerMachineBlock(this, -1);
-        GameRegistry.registerBlock(this, ItemBlockLaserBeacon.class, getUnlocalizedName());
+        GameRegistry.registerBlock(this, ItemBlockLaserBeacon.class, "tile.LaserBeacon");
         GTCMItemList.Laser_Beacon.set(new ItemStack(this, 1));
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return "tile.tst.common.laser_beacon";
     }
 
     @Override
@@ -115,10 +120,10 @@ public class BlockLaserBeacon extends Block implements ITileEntityProvider {
 
         @Override
         public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean f3_h) {
-            // #tr laserbeacontooltip
+            // #tr tile.tst.common.laser_beacon.tooltip
             // # Produces a high precision laser from a powerful current.
             // #zh_CN 用高电流产生高精度激光.
-            tooltip.add(tr("laserbeacontooltip"));
+            tooltip.add(tr("tile.tst.common.laser_beacon.tooltip"));
         }
     }
 }

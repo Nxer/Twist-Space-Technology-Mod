@@ -5,7 +5,7 @@ import com.Nxer.TwistSpaceTechnology.common.block.meta.TstMetaBlockMachine;
 public class SpaceStationStructureCasing extends TstMetaBlockMachine {
 
     public SpaceStationStructureCasing() {
-        // #tr tile.SpaceStationStructureBlock.name
+        // #tr tile.tst.common.space_station_structure_block.name
         // # Space Station Structure Block
         // #zh_CN 空间站结构方块
         super("SpaceStationStructureBlock");

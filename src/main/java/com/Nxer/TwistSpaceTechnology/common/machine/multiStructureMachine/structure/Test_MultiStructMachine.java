@@ -182,7 +182,7 @@ public class Test_MultiStructMachine extends GT_TileEntity_MultiStructureMachine
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
-        tt.addMachineType(TSTUtils.tr("Tooltip_ICD_MachineType"))
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.tooltip.machine_type"))
             .beginStructureBlock(11, 13, 11, false)
             .addController(textFrontBottom)
             .addCasingInfoRange(textCasing, 8, 26, false)

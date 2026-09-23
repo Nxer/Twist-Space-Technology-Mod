@@ -65,13 +65,15 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
                 tooltip -> tooltip.addLine(
                     IKey.dynamic(
                         () -> StatCollector.translateToLocal(
-                            blazeStatusButtonSyncer.getValue() ? "SBF.Msg.clearBlaze" : "SBF.Msg.fillBlaze"))));
+                            blazeStatusButtonSyncer.getValue()
+                                ? "tst.common.machine.SwelegfyrBlastFurnace.message.clear_blaze"
+                                : "tst.common.machine.SwelegfyrBlastFurnace.message.fill_blaze"))));
 
-        // #tr SBF.Msg.fillBlaze
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.message.fill_blaze
         // # Fill Pyrotheum
         // #zh_CN 填充炽焱
 
-        // #tr SBF.Msg.clearBlaze
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.message.clear_blaze
         // # Clear Pyrotheum
         // #zh_CN 清除炽焱
     }
@@ -83,9 +85,9 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
             SBF_RapidHeating_Off,
             SBF_RapidHeating_On,
             SBF_RapidHeating_Forbidden,
-            "SBF.Msg.enableRapidHeating");
+            "tst.common.machine.SwelegfyrBlastFurnace.message.enable_rapid_heating");
 
-        // #tr SBF.Msg.enableRapidHeating
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.message.enable_rapid_heating
         // # Rapid Thermal Boost
         // #zh_CN 快速热增强模式
     }
@@ -97,9 +99,9 @@ public class TST_Gui_SwelegfyrBlastFurnace extends TST_Gui<TST_SwelegfyrBlastFur
             SBF_HoldingHeat_Off,
             SBF_HoldingHeat_On,
             SBF_HoldingHeat_Forbidden,
-            "SBF.Msg.enableHoldingHeat");
+            "tst.common.machine.SwelegfyrBlastFurnace.message.enable_holding_heat");
 
-        // #tr SBF.Msg.enableHoldingHeat
+        // #tr tst.common.machine.SwelegfyrBlastFurnace.message.enable_holding_heat
         // # Thermal Retention Standby
         // #zh_CN 热保持待机模式
     }

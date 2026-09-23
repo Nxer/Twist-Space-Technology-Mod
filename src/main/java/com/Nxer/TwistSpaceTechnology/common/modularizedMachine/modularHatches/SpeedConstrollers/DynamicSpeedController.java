@@ -84,10 +84,10 @@ public class DynamicSpeedController extends DynamicSpeedControllerBase {
     @Override
     public void addUIWidgets(ModularWindow.Builder builder, UIBuildContext buildContext) {
         builder.widget(
-            // #tr tst.DynamicSpeedController.UI.text.01
+            // #tr tst.modular.machine.DynamicSpeedController.gui.text.01
             // # Speed Multiplier
             // #zh_CN 速度倍率
-            TextWidget.localised("tst.DynamicSpeedController.UI.text.01")
+            TextWidget.localised("tst.modular.machine.DynamicSpeedController.gui.text.01")
                 .setPos(49, 18)
                 .setSize(81, 14))
             .widget(
@@ -112,14 +112,14 @@ public class DynamicSpeedController extends DynamicSpeedControllerBase {
         if (description == null || description.length == 0) {
             description =
                 new String[] {
-                    // #tr Tooltips.DynamicSpeedController.01
+                    // #tr tst.modular.machine.DynamicSpeedController.tooltip.info.01
                     // # Speed controller module with adjustable parameters.
                     // #zh_CN 可调参数的速度控制器模块.
-                    TSTUtils.tr("Tooltips.DynamicSpeedController.01"),
-                    // #tr Tooltips.DynamicSpeedController.02
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tooltip.info.01"),
+                    // #tr tst.modular.machine.DynamicSpeedController.tooltip.info.02
                     // # Provides up to speed x
                     // #zh_CN 最高提供速度增幅
-                    TSTUtils.tr("Tooltips.DynamicSpeedController.02") + " " + getMaxSpeedMultiplier() + "00%",
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tooltip.info.02") + " " + getMaxSpeedMultiplier() + "00%",
                 };
         }
         return description;

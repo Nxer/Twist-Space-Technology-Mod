@@ -109,26 +109,28 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private static String[] createDescription() {
         return new String[] {
             TSTSharedLocalization.General.HatchTier + " " + TSTSharedFormat.getTierName(VoltageIndex.UIV),
-            // #tr Tooltip_AEStorageCellInputHatch.0
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.01
             // # Advanced stocking input hatch upgrade for multiblock fluid input
             // #zh_CN 进阶存储输入仓的升级版，为多方块机器输入流体
-            TSTUtils.tr("Tooltip_AEStorageCellInputHatch.0"),
-            // #tr Tooltip_AEStorageCellInputHatch.1
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.01"),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.02
             // # Retrieves up to 16 marked fluid types directly from the ME network
             // #zh_CN 直接从ME网络拉取至多16种已标记流体
-            TSTUtils.tr("Tooltip_AEStorageCellInputHatch.1"),
-            // #tr Tooltip_AEStorageCellInputHatch.2
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.02"),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.03
             // # An inserted ME fluid storage cell supplies fluids instead and disconnects the ME network
             // #zh_CN 放入ME流体存储元件后改从元件中拉取，且无法连接ME网络
-            TSTUtils.tr("Tooltip_AEStorageCellInputHatch.2"),
-            // #tr Tooltip_AEStorageCellInputHatch.3
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.03"),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.04
             // # Per recipe, TST machines handle %s x 2147483647 L in total
             // #zh_CN 单次配方TST机器合计最多处理%s x 2147483647 L流体
-            TSTUtils.tr("Tooltip_AEStorageCellInputHatch.3", Config.MaxTotalIntSegments_AEStorageCellInput),
-            // #tr Tooltip_AEStorageCellInputHatch.4
+            TSTUtils.tr(
+                "tst.common.machine.AEStorageCellInputHatch.tooltip.info.04",
+                Config.MaxTotalIntSegments_AEStorageCellInput),
+            // #tr tst.common.machine.AEStorageCellInputHatch.tooltip.info.05
             // # Supported special processing can use the full stored amount
             // #zh_CN 支持的特殊处理可使用完整库存数量
-            TSTUtils.tr("Tooltip_AEStorageCellInputHatch.4") };
+            TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.tooltip.info.05") };
     }
 
     @Override

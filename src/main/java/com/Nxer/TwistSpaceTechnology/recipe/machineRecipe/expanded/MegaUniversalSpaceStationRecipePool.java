@@ -25,8 +25,8 @@ import gregtech.api.util.GTUtility;
 
 public class MegaUniversalSpaceStationRecipePool {
 
-    final IRecipeMap stationRecipe = GTCMRecipe.megaUniversalSpaceStationRecipePool;
-    static final IRecipeMap MT = GTCMRecipe.MiracleTopRecipes;
+    final IRecipeMap stationRecipe = GTCMRecipe.megaUniversalSpaceStationRecipeMap;
+    static final IRecipeMap MT = GTCMRecipe.MiracleTopRecipeMap;
     // region item
 
     static ItemStack[] spaceStationStructureBlock;
@@ -609,7 +609,7 @@ public class MegaUniversalSpaceStationRecipePool {
 
             .eut(1024 * RECIPE_MAX)
             .duration(20 * 1000)
-            .addTo(GTCMRecipe.MiracleTopRecipes);
+            .addTo(GTCMRecipe.MiracleTopRecipeMap);
 
         for (int i = 0; i < 10; i++) {
             GTValues.RA.stdBuilder()
@@ -649,7 +649,7 @@ public class MegaUniversalSpaceStationRecipePool {
 
                 .eut((long) (Math.pow(16, i)))
                 .duration(200 * 10 * i)
-                .addTo(GTCMRecipe.MiracleTopRecipes);
+                .addTo(GTCMRecipe.MiracleTopRecipeMap);
             GTValues.RA.stdBuilder()
                 .itemInputs(
                     spaceStationStructureBlock[i],

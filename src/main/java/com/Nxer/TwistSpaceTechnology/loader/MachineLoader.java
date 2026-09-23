@@ -122,6 +122,7 @@ import com.Nxer.TwistSpaceTechnology.system.DysonSphereProgram.machines.TST_Stra
 import com.Nxer.TwistSpaceTechnology.system.OreProcess.machines.TST_OreProcessingFactory;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 
+// spotless:off
 public final class MachineLoader {
 
     // meta id 19029 has been assigned for AstralComputingArray
@@ -137,307 +138,305 @@ public final class MachineLoader {
 
         // region multi Machine controller
 
-        // #tr NameIntensifyChemicalDistorter
+        // #tr tst.common.machine.IntensifyChemicalDistorter.name
         // # Intensify Chemical Distorter
         // #zh_CN 深度化学扭曲仪
         GTCMItemList.IntensifyChemicalDistorter.set(
             new GT_TileEntity_IntensifyChemicalDistorter(
                 19001,
                 "NameIntensifyChemicalDistorter",
-                TSTUtils.tr("NameIntensifyChemicalDistorter")));
+                TSTUtils.tr("tst.common.machine.IntensifyChemicalDistorter.name")));
 
-        // #tr NamePreciseHighEnergyPhotonicQuantumMaster
+        // #tr tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.name
         // # Precise High-Energy Photonic Quantum Master
         // #zh_CN 精密高能光量子掌控者
         GTCMItemList.PreciseHighEnergyPhotonicQuantumMaster.set(
             new GT_TileEntity_PreciseHighEnergyPhotonicQuantumMaster(
                 19002,
                 "NamePreciseHighEnergyPhotonicQuantumMaster",
-                TSTUtils.tr("NamePreciseHighEnergyPhotonicQuantumMaster")));
+                TSTUtils.tr("tst.common.machine.PreciseHighEnergyPhotonicQuantumMaster.name")));
 
-        // #tr NameMiracleTop
+        // #tr tst.common.machine.MiracleTop.name
         // # Miracle Top
         // #zh_CN 奇迹顶点
         GTCMItemList.MiracleTop
-            .set(new GT_TileEntity_MiracleTop(19003, "NameMiracleTop", TSTUtils.tr("NameMiracleTop")));
+            .set(new GT_TileEntity_MiracleTop(19003, "NameMiracleTop", TSTUtils.tr("tst.common.machine.MiracleTop.name")));
 
-        // #tr NameMagneticDrivePressureFormer
+        // #tr tst.common.machine.MagneticDrivePressureFormer.name
         // # Magnetic Drive Pressure Former
         // #zh_CN 磁驱压力成型机
         GTCMItemList.MagneticDrivePressureFormer.set(
             new GT_TileEntity_MagneticDrivePressureFormer(
                 19004,
                 "NameMagneticDrivePressureFormer",
-                TSTUtils.tr("NameMagneticDrivePressureFormer")));
+                TSTUtils.tr("tst.common.machine.MagneticDrivePressureFormer.name")));
 
-        // #tr NamePhysicalFormSwitcher
+        // #tr tst.common.machine.PhysicalFormSwitcher.name
         // # Physical Form Switcher
         // #zh_CN 物质形态转换器
         GTCMItemList.PhysicalFormSwitcher.set(
             new GT_TileEntity_PhysicalFormSwitcher(
                 19005,
                 "NamePhysicalFormSwitcher",
-                TSTUtils.tr("NamePhysicalFormSwitcher")));
+                TSTUtils.tr("tst.common.machine.PhysicalFormSwitcher.name")));
 
-        // #tr NameMagneticMixer
+        // #tr tst.common.machine.MagneticMixer.name
         // # "Mini" Magnetic Mixer
         // #zh_CN "小型"磁力搅拌机
         GTCMItemList.MagneticMixer
-            .set(new GT_TileEntity_MagneticMixer(19006, "NameMagneticMixer", TSTUtils.tr("NameMagneticMixer")));
+            .set(new GT_TileEntity_MagneticMixer(19006, "NameMagneticMixer", TSTUtils.tr("tst.common.machine.MagneticMixer.name")));
 
-        // #tr NameMagneticDomainConstructor
+        // #tr tst.common.machine.MagneticDomainConstructor.name
         // # Magnetic Domain Constructor
         // #zh_CN 磁畴构建器
         GTCMItemList.MagneticDomainConstructor.set(
             new GT_TileEntity_MagneticDomainConstructor(
                 19007,
                 "NameMagneticDomainConstructor",
-                TSTUtils.tr("NameMagneticDomainConstructor")));
+                TSTUtils.tr("tst.common.machine.MagneticDomainConstructor.name")));
 
-        // #tr NameSilksong
+        // #tr tst.common.machine.Silksong.name
         // # Silksong
         // #zh_CN 丝之歌
-        GTCMItemList.Silksong.set(new GT_TileEntity_Silksong(19008, "NameSilksong", TSTUtils.tr("NameSilksong")));
+        GTCMItemList.Silksong.set(new GT_TileEntity_Silksong(19008, "NameSilksong", TSTUtils.tr("tst.common.machine.Silksong.name")));
 
-        // #tr NameHolySeparator
+        // #tr tst.common.machine.HolySeparator.name
         // # Holy Separator
         // #zh_CN 神圣分离者
         GTCMItemList.HolySeparator
-            .set(new GT_TileEntity_HolySeparator(19009, "NameHolySeparator", TSTUtils.tr("NameHolySeparator")));
+            .set(new GT_TileEntity_HolySeparator(19009, "NameHolySeparator", TSTUtils.tr("tst.common.machine.HolySeparator.name")));
 
-        // #tr NameSpaceScaler
+        // #tr tst.common.machine.SpaceScaler.name
         // # Space Scaler
         // #zh_CN 空间缩放仪
         GTCMItemList.SpaceScaler
-            .set(new GT_TileEntity_SpaceScaler(19010, "NameSpaceScaler", TSTUtils.tr("NameSpaceScaler")));
+            .set(new GT_TileEntity_SpaceScaler(19010, "NameSpaceScaler", TSTUtils.tr("tst.common.machine.SpaceScaler.name")));
 
-        // #tr NameMoleculeDeconstructor
+        // #tr tst.common.machine.MoleculeDeconstructor.name
         // # Molecule Deconstructor
         // #zh_CN 分子解构器
         GTCMItemList.MoleculeDeconstructor.set(
             new GT_TileEntity_MoleculeDeconstructor(
                 19011,
                 "NameMoleculeDeconstructor",
-                TSTUtils.tr("NameMoleculeDeconstructor")));
+                TSTUtils.tr("tst.common.machine.MoleculeDeconstructor.name")));
 
-        // #tr NameCrystallineInfinitier
+        // #tr tst.common.machine.CrystallineInfinitier.name
         // # Crystalline Infinitier
         // #zh_CN 无限晶胞
         GTCMItemList.CrystallineInfinitier.set(
             new GTCM_CrystallineInfinitier(
                 19012,
                 "NameCrystallineInfinitier",
-                TSTUtils.tr("NameCrystallineInfinitier")));
+                TSTUtils.tr("tst.common.machine.CrystallineInfinitier.name")));
 
-        // #tr NameDSPLauncher
+        // #tr tst.dyson.machine.DSPLauncher.name
         // # Dyson Sphere Module Launch Site
         // #zh_CN 戴森球模块发射场
-        GTCMItemList.DSPLauncher.set(new TST_DSPLauncher(19013, "NameDSPLauncher", TSTUtils.tr("NameDSPLauncher")));
+        GTCMItemList.DSPLauncher.set(new TST_DSPLauncher(19013, "NameDSPLauncher", TSTUtils.tr("tst.dyson.machine.DSPLauncher.name")));
 
-        // #tr NameDSPReceiver
+        // #tr tst.dyson.machine.DSPReceiver.name
         // # Dyson Sphere Ray Receiving Station
         // #zh_CN 戴森球射线接收站
-        GTCMItemList.DSPReceiver.set(new TST_DSPReceiver(19014, "NameDSPReceiver", TSTUtils.tr("NameDSPReceiver")));
+        GTCMItemList.DSPReceiver.set(new TST_DSPReceiver(19014, "NameDSPReceiver", TSTUtils.tr("tst.dyson.machine.DSPReceiver.name")));
 
-        // #tr NameArtificialStar
+        // #tr tst.dyson.machine.ArtificialStar.name
         // # Artificial Star
         // #zh_CN 人造恒星
         GTCMItemList.ArtificialStar
-            .set(new TST_ArtificialStar(19015, "NameArtificialStar", TSTUtils.tr("NameArtificialStar")));
+            .set(new TST_ArtificialStar(19015, "NameArtificialStar", TSTUtils.tr("tst.dyson.machine.ArtificialStar.name")));
 
-        // #tr NameMiracleDoor
+        // #tr tst.common.machine.MiracleDoor.name
         // # Miracle Door
         // #zh_CN 奇迹之门
-        GTCMItemList.MiracleDoor.set(new TST_MiracleDoor(19016, "NameMiracleDoor", TSTUtils.tr("NameMiracleDoor")));
+        GTCMItemList.MiracleDoor.set(new TST_MiracleDoor(19016, "NameMiracleDoor", TSTUtils.tr("tst.common.machine.MiracleDoor.name")));
 
-        // #tr NameOreProcessingFactory
+        // #tr tst.common.machine.OreProcessingFactory.name
         // # General Ore Processing Factory TST
         // #zh_CN 通用矿物处理厂TST
         GTCMItemList.OreProcessingFactory.set(
-            new TST_OreProcessingFactory(19017, "NameOreProcessingFactory", TSTUtils.tr("NameOreProcessingFactory")));
+            new TST_OreProcessingFactory(19017, "NameOreProcessingFactory", TSTUtils.tr("tst.common.machine.OreProcessingFactory.name")));
 
         // Space Station Systems
-        // #tr NameMegaUniversalSpaceStation
+        // #tr tst.common.machine.MegaUniversalSpaceStation.name
         // # Mega Universal Space Station
         // #zh_CN {\RED}寰 {\AQUA}宇 {\GOLD}空 {\BLUE}间 {\DARK_GRAY}站
 
-        // #tr NameStellarMaterialSiphon
+        // #tr tst.common.machine.StellarMaterialSiphon.name
         // # Stellar Material Siphon
         // #zh_CN Stellar Material Siphon
-        // spotless:off
         /*
         if (Config.activateMegaSpaceStation) {
             GTCMItemList.megaUniversalSpaceStation.set(
                 new TST_MegaUniversalSpaceStation(
                     19018,
                     "NameMegaUniversalSpaceStation",
-                    TSTUtils.tr("NameMegaUniversalSpaceStation")));
+                    TSTUtils.tr("tst.common.machine.MegaUniversalSpaceStation.name")));
             GTCMItemList.StellarMaterialSiphon.set(
                 new GT_TileEntity_StellarMaterialSiphon(
                     19019,
                     "NameStellarMaterialSiphon",
-                    TSTUtils.tr("NameStellarMaterialSiphon")));
+                    TSTUtils.tr("tst.common.machine.StellarMaterialSiphon.name")));
         }
          */
-        // spotless:on
 
-        // #tr NameCircuitConverter
+        // #tr tst.common.machine.CircuitConverter.name
         // # General Circuit Converter
         // #zh_CN 通用电路板转换器
         GTCMItemList.CircuitConverter
-            .set(new TST_CircuitConverter(19020, "NameCircuitConverter", TSTUtils.tr("NameCircuitConverter")));
+            .set(new TST_CircuitConverter(19020, "NameCircuitConverter", TSTUtils.tr("tst.common.machine.CircuitConverter.name")));
 
-        // #tr NameLargeIndustrialCokingFactory
+        // #tr tst.common.machine.LargeIndustrialCokingFactory.name
         // # Large Industrial Coking Factory
         // #zh_CN 大型工业炼焦厂
         GTCMItemList.LargeIndustrialCokingFactory.set(
             new TST_LargeIndustrialCokingFactory(
                 19021,
                 "NameLargeIndustrialCokingFactory",
-                TSTUtils.tr("NameLargeIndustrialCokingFactory")));
+                TSTUtils.tr("tst.common.machine.LargeIndustrialCokingFactory.name")));
 
-        // #tr NameElvenWorkshop
+        // #tr tst.common.machine.ElvenWorkshop.name
         // # ElvenWorkshop
         // #zh_CN 精灵工坊
         GTCMItemList.ElvenWorkshop
-            .set(new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", TSTUtils.tr("NameElvenWorkshop")));
+            .set(new GTCM_ElvenWorkshop(19500, "NameElvenWorkshop", TSTUtils.tr("tst.common.machine.ElvenWorkshop.name")));
 
-        // #tr NameHyperSpacetimeTransformer
+        // #tr tst.common.machine.HyperSpacetimeTransformer.name
         // # HyperSpacetimeTransformer
         // #zh_CN 极限时空转换仪
         GTCMItemList.HyperSpacetimeTransformer.set(
             new GTCM_HyperSpacetimeTransformer(
                 19501,
                 "NameHyperSpacetimeTransformer",
-                TSTUtils.tr("NameHyperSpacetimeTransformer")));
+                TSTUtils.tr("tst.common.machine.HyperSpacetimeTransformer.name")));
 
-        // #tr NameMegaBrickedBlastFurnace
+        // #tr tst.common.machine.MegaBrickedBlastFurnace.name
         // # Mega Bricked Blast Furnace
         // #zh_CN 巨型砖高炉
         GTCMItemList.MegaBrickedBlastFurnace.set(
             new GT_TileEntity_MegaBrickedBlastFurnace(
                 19022,
                 "NameMegaBrickedBlastFurnace",
-                TSTUtils.tr("NameMegaBrickedBlastFurnace")));
+                TSTUtils.tr("tst.common.machine.MegaBrickedBlastFurnace.name")));
 
-        // #tr NameScavenger
+        // #tr tst.common.machine.Scavenger.name
         // # Scavenger
         // #zh_CN 拾荒者
-        GTCMItemList.Scavenger.set(new TST_Scavenger(19023, "NameScavenger", TSTUtils.tr("NameScavenger")));
+        GTCMItemList.Scavenger.set(new TST_Scavenger(19023, "NameScavenger", TSTUtils.tr("tst.common.machine.Scavenger.name")));
 
-        // #tr NamesuperCleanRoom
+        // #tr tst.common.machine.TSTcleanroom.name
         // # CleanRoom
         // #zh_CN TST超净间
         GTCMItemList.superCleanRoom
-            .set(new TST_CleanRoom(19024, "NameTSTcleanroom", TSTUtils.tr("NamesuperCleanRoom")));
+            .set(new TST_CleanRoom(19024, "NameTSTcleanroom", TSTUtils.tr("tst.common.machine.TSTcleanroom.name")));
 
-        // #tr NameBiosphereIII
+        // #tr tst.common.machine.BiosphereIII.name
         // # Biosphere III
         // #zh_CN 生物圈III号
-        GTCMItemList.BiosphereIII.set(new TST_BiosphereIII(19025, "nameBiosphereIII", TSTUtils.tr("NameBiosphereIII")));
+        GTCMItemList.BiosphereIII.set(new TST_BiosphereIII(19025, "nameBiosphereIII", TSTUtils.tr("tst.common.machine.BiosphereIII.name")));
 
-        // #tr NameMegaEggGenerator
+        // #tr tst.common.machine.MegaEggGenerator.name
         // # Tower of Abstraction
         // #zh_CN 抽象之塔
         GTCMItemList.MegaEggGenerator.set(
-            new GT_TileEntity_MegaEggGenerator(19026, "NameMegaEggGenerator", TSTUtils.tr("NameMegaEggGenerator")));
+            new GT_TileEntity_MegaEggGenerator(19026, "NameMegaEggGenerator", TSTUtils.tr("tst.common.machine.MegaEggGenerator.name")));
 
-        // #tr NameAdvancedMegaOilCracker
+        // #tr tst.common.machine.AdvancedMegaOilCracker.name
         // # Advanced Mega Oil Cracker
         // #zh_CN 进阶巨型石油裂化机
         GTCMItemList.AdvancedMegaOilCracker.set(
             new TST_AdvancedMegaOilCracker(
                 19027,
                 "NameAdvancedMegaOilCracker",
-                TSTUtils.tr("NameAdvancedMegaOilCracker")));
+                TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.name")));
 
-        // #tr NameIndistinctTentacle
+        // #tr tst.common.machine.IndistinctTentacle.name
         // # {\BOLD}{\DARK_GRAY}Indistinct Tentacle
         // #zh_CN {\DARK_GRAY}{\BOLD}不可视之触{\RESET}
         GTCMItemList.IndistinctTentacle
-            .set(new TST_IndistinctTentacle(19028, "NameIndistinctTentacle", TSTUtils.tr("NameIndistinctTentacle")));
+            .set(new TST_IndistinctTentacle(19028, "NameIndistinctTentacle", TSTUtils.tr("tst.common.machine.IndistinctTentacle.name")));
 
-        // #tr NameAstralComputingArray
+        // #tr tst.common.machine.AstralComputingArray.name
         // # Astral Computing Array
         // #zh_CN 星规阵列
         GTCMItemList.AstralComputingArray
-            .set(new TST_Computer(19029, "NameAstralComputingArray", TSTUtils.tr("NameAstralComputingArray")));
+            .set(new TST_Computer(19029, "NameAstralComputingArray", TSTUtils.tr("tst.common.machine.AstralComputingArray.name")));
 
-        // #tr NameThermalEnergyDevourer
+        // #tr tst.common.machine.ThermalEnergyDevourer.name
         // # Thermal Energy Devourer
         // #zh_CN 热能饕餮
         GTCMItemList.ThermalEnergyDevourer.set(
             new TST_ThermalEnergyDevourer(
                 19030,
                 "NameThermalEnergyDevourer",
-                TSTUtils.tr("NameThermalEnergyDevourer")));
+                TSTUtils.tr("tst.common.machine.ThermalEnergyDevourer.name")));
 
-        // #tr NameVacuumFilterExtractor
+        // #tr tst.common.machine.VacuumFilterExtractor.name
         // # Vacuum Filter Extractor
         // #zh_CN 真空抽滤器
         GTCMItemList.VacuumFilterExtractor.set(
             new TST_VacuumFilterExtractor(
                 19031,
                 "NameVacuumFilterExtractor",
-                TSTUtils.tr("NameVacuumFilterExtractor")));
+                TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.name")));
 
-        // #tr NameLargeSteamForgeHammer
+        // #tr tst.common.machine.LargeSteamForgeHammer.name
         // # Large Steam Forge Hammer
         // #zh_CN 大型蒸汽锻造锤
         GTCMItemList.LargeSteamForgeHammer.set(
             new TST_LargeSteamForgeHammer(
                 19032,
                 "NameLargeSteamForgeHammer",
-                TSTUtils.tr("NameLargeSteamForgeHammer")));
+                TSTUtils.tr("tst.common.machine.LargeSteamForgeHammer.name")));
 
-        // #tr NameLargeSteamAlloySmelter
+        // #tr tst.common.machine.LargeSteamAlloySmelter.name
         // # Large Steam Alloy Smelter
         // #zh_CN 大型蒸汽合金炉
         GTCMItemList.LargeSteamAlloySmelter.set(
             new TST_LargeSteamAlloySmelter(
                 19033,
                 "NameLargeSteamAlloySmelter",
-                TSTUtils.tr("NameLargeSteamAlloySmelter")));
+                TSTUtils.tr("tst.common.machine.LargeSteamAlloySmelter.name")));
 
-        // #tr NameEyeOfWood
+        // #tr tst.common.machine.EyeOfWood.name
         // # Eye of Wood
         // #zh_CN 武德之眼
-        GTCMItemList.EyeOfWood.set(new TST_EyeOfWood(19034, "NameEyeOfWood", TSTUtils.tr("NameEyeOfWood")));
+        GTCMItemList.EyeOfWood.set(new TST_EyeOfWood(19034, "NameEyeOfWood", TSTUtils.tr("tst.common.machine.EyeOfWood.name")));
 
-        // #tr NameBeeEngineer
+        // #tr tst.common.machine.BeeEngineer.name
         // # Bee Engineer (Prototype)
         // #zh_CN 蜜蜂操纵者 (Prototype)
-        GTCMItemList.BeeEngineer.set(new TST_BeeEngineer(19035, "NameBeeEngineer", TSTUtils.tr("NameBeeEngineer")));
+        GTCMItemList.BeeEngineer.set(new TST_BeeEngineer(19035, "NameBeeEngineer", TSTUtils.tr("tst.common.machine.BeeEngineer.name")));
 
-        // #tr NameMegaMacerator
+        // #tr tst.common.machine.MegaMacerator.name
         // # "Mini" Household Cell Fragmentizer
         // #zh_CN "小型"家用破壁机
         GTCMItemList.MegaMacerator
-            .set(new TST_MegaMacerator(19036, "NameMegaMacerator", TSTUtils.tr("NameMegaMacerator")));
+            .set(new TST_MegaMacerator(19036, "NameMegaMacerator", TSTUtils.tr("tst.common.machine.MegaMacerator.name")));
 
-        // #tr NameHephaestusAtelier
+        // #tr tst.common.machine.HephaestusAtelier.name
         // # Hephaestus' Atelier
         // #zh_CN 赫菲斯托斯的工坊
         GTCMItemList.HephaestusAtelier
-            .set(new TST_HephaestusAtelier(19037, "NameHephaestusAtelier", TSTUtils.tr("NameHephaestusAtelier")));
+            .set(new TST_HephaestusAtelier(19037, "NameHephaestusAtelier", TSTUtils.tr("tst.common.machine.HephaestusAtelier.name")));
 
         if (Config.Enable_DeployedNanoCore) {
-            // #tr NameDeployedNanoCore
+            // #tr tst.common.machine.DeployedNanoCore.name
             // # Deployed Nano Core
             // #zh_CN 展开的纳米核心
             GTCMItemList.DeployedNanoCore
-                .set(new TST_DeployedNanoCore(19038, "NameDeployedNanoCore", TSTUtils.tr("NameDeployedNanoCore")));
+                .set(new TST_DeployedNanoCore(19038, "NameDeployedNanoCore", TSTUtils.tr("tst.common.machine.DeployedNanoCore.name")));
         }
 
         if (Config.Enable_CoreDeviceOfHumanPowerGenerationFacility) {
-            // #tr NameCoreDeviceOfHumanPowerGenerationFacility
+            // #tr tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.name
             // # Core Device of Human Power Generation Facility
             // #zh_CN 人类能源设施的核心装置
             GTCMItemList.CoreDeviceOfHumanPowerGenerationFacility.set(
                 new TST_CoreDeviceOfHumanPowerGenerationFacility(
                     19039,
                     "NameCoreDeviceOfHumanPowerGenerationFacility",
-                    TSTUtils.tr("NameCoreDeviceOfHumanPowerGenerationFacility")));
+                    TSTUtils.tr("tst.common.machine.CoreDeviceOfHumanPowerGenerationFacility.name")));
         }
 
         if (Config.Enable_StarcoreMiner) {
@@ -445,29 +444,29 @@ public final class MachineLoader {
                 new TST_StarcoreMiner(
                     19040,
                     "NameStarcoreMiner",
-                    // #tr NameStarcoreMiner
+                    // #tr tst.common.machine.StarcoreMiner.name
                     // # Starcore Miner
                     // #zh_CN 星核钻机
-                    TSTUtils.tr("NameStarcoreMiner")));
+                    TSTUtils.tr("tst.common.machine.StarcoreMiner.name")));
         }
 
         if (Config.Enable_Disassembler) {
             GTCMItemList.Disassembler.set(
                 new TST_Disassembler(
                     19041,
-                    // #tr NameTSTDisassembler
+                    // #tr tst.common.machine.TSTDisassembler.name
                     // # TST Large Disassembler
                     // #zh_CN TST大型拆解机
                     "NameTSTDisassembler",
-                    TSTUtils.tr("NameTSTDisassembler")));
+                    TSTUtils.tr("tst.common.machine.TSTDisassembler.name")));
         }
 
         if (Config.Enable_BallLightning) {
-            // #tr NameBallLightning
+            // #tr tst.common.machine.BallLightning.name
             // # BallLightning
             // #zh_CN 球状闪电
             GTCMItemList.BallLightning
-                .set(new TST_BallLightning(19046, "NameBallLightning", TSTUtils.tr("NameBallLightning")));
+                .set(new TST_BallLightning(19046, "NameBallLightning", TSTUtils.tr("tst.common.machine.BallLightning.name")));
         }
 
         if (Config.Enable_IndustrialMagicMatrix) {
@@ -475,10 +474,10 @@ public final class MachineLoader {
                 new GT_TileEntity_IndustrialMagicMatrix(
                     19047,
                     "IndustrialMagicMatrix",
-                    // #tr NameIndustrialMagicMatrix
+                    // #tr tst.common.machine.IndustrialMagicMatrix.name
                     // # Industrial Magic Matrix
                     // #zh_CN §0工业注魔矩阵
-                    TSTUtils.tr("NameIndustrialMagicMatrix")));
+                    TSTUtils.tr("tst.common.machine.IndustrialMagicMatrix.name")));
         }
 
         if (Config.Enable_LargeCanner) {
@@ -486,26 +485,26 @@ public final class MachineLoader {
                 new TST_LargeCanner(
                     19048,
                     "NameLargeCanner",
-                    // #tr NameLargeCanner
+                    // #tr tst.common.machine.LargeCanner.name
                     // # Large Canner
                     // #zh_CN 大型装罐机
-                    TSTUtils.tr("NameLargeCanner")));
+                    TSTUtils.tr("tst.common.machine.LargeCanner.name")));
         }
 
-        // #tr BigBroArray.name
+        // #tr tst.common.machine.BigBroArray.name
         // # MegaArray
         // #zh_CN 大哥阵列
-        GTCMItemList.BigBroArray.set(new TST_BigBroArray(19049, "BigBroArray.name", TSTUtils.tr("BigBroArray.name")));
+        GTCMItemList.BigBroArray.set(new TST_BigBroArray(19049, "BigBroArray.name", TSTUtils.tr("tst.common.machine.BigBroArray.name")));
 
         if (Config.Enable_IndustrialMagnetarSeparator) {
             GTCMItemList.IndustrialMagnetarSeparator.set(
                 new TST_IndustrialMagnetarSeparator(
                     19050,
                     "NameIndustrialMagnetarSeparator",
-                    // #tr NameIndustrialMagnetarSeparator
+                    // #tr tst.common.machine.IndustrialMagnetarSeparator.name
                     // # Industrial Magnetar Separator
                     // #zh_CN 工业电磁离析机
-                    TSTUtils.tr("NameIndustrialMagnetarSeparator")));
+                    TSTUtils.tr("tst.common.machine.IndustrialMagnetarSeparator.name")));
         }
 
         if (Config.Enable_EcoSphereSimulator) {
@@ -513,171 +512,171 @@ public final class MachineLoader {
                 new TST_EcoSphereSimulator(
                     19051,
                     "NameEcoSphereSimulator",
-                    // #tr NameEcoSphereSimulator
+                    // #tr tst.ecosphere.machine.EcoSphereSimulator.name
                     // # Eco-Sphere Simulator
                     // #zh_CN 拟似生态圈
-                    TSTUtils.tr("NameEcoSphereSimulator")));
+                    TSTUtils.tr("tst.ecosphere.machine.EcoSphereSimulator.name")));
 
-            // #tr NameEcoSphereInputInterface
+            // #tr tst.ecosphere.machine.EcoSphereInputInterface.name
             // # Eco-Sphere Input Interface
             // #zh_CN 生态圈输入接口
             GTCMItemList.EcoSphereInputInterface.set(
                 new TST_EcoSphereInputInterfaceHatch(
                     18849,
                     "NameEcoSphereInputInterface",
-                    TSTUtils.tr("NameEcoSphereInputInterface"),
+                    TSTUtils.tr("tst.ecosphere.machine.EcoSphereInputInterface.name"),
                     10));
 
-            // #tr NameEcoSphereUpgradeInterface
+            // #tr tst.ecosphere.machine.EcoSphereUpgradeInterface.name
             // # Eco-Sphere Upgrade Interface
             // #zh_CN 生态圈升级接口
             GTCMItemList.EcoSphereUpgradeInterface.set(
                 new TST_EcoSphereUpgradeInterfaceHatch(
                     18850,
                     "NameEcoSphereUpgradeInterface",
-                    TSTUtils.tr("NameEcoSphereUpgradeInterface"),
+                    TSTUtils.tr("tst.ecosphere.machine.EcoSphereUpgradeInterface.name"),
                     10));
         }
 
-        // #tr NameExtremeCraftCenter
+        // #tr tst.common.machine.ExtremeCraftCenter.name
         // # Extreme Crafting Center
         // #zh_CN 梦魇工业合成中心
         GTCMItemList.ExtremeCraftCenter
-            .set(new TST_MegaCraftingCenter(19052, "NameExtremeCraftCenter", TSTUtils.tr("NameExtremeCraftCenter")));
+            .set(new TST_MegaCraftingCenter(19052, "NameExtremeCraftCenter", TSTUtils.tr("tst.common.machine.ExtremeCraftCenter.name")));
 
-        // #tr NamePatternAccessHatch
+        // #tr tst.common.machine.PatternAccessHatch.name
         // # Pattern Access Hatch
         // #zh_CN 样板访问仓
         GTCMItemList.PatternAccessHatch
-            .set(new TST_PatternAccessHatch(18847, "NamePatternAccessHatch", TSTUtils.tr("NamePatternAccessHatch"), 9));
+            .set(new TST_PatternAccessHatch(18847, "NamePatternAccessHatch", TSTUtils.tr("tst.common.machine.PatternAccessHatch.name"), 9));
 
         if (Config.Enable_LightningSpire) {
             GTCMItemList.LightningSpire.set(
                 new GTCM_LightningSpire(
                     19053,
                     "NameLightningSpire",
-                    // #tr NameLightningSpire
+                    // #tr tst.common.machine.LightningSpire.name
                     // # Lightning Spire
                     // #zh_CN 闪电尖塔
-                    TSTUtils.tr("NameLightningSpire")));
+                    TSTUtils.tr("tst.common.machine.LightningSpire.name")));
         }
 
         if (Config.EnableModularizedMachineSystem) {
             if (Config.EnableDimensionallyTranscendentMatterPlasmaForgePrototypeMK2) {
-                // #tr NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2
+                // #tr tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.name
                 // # Dimensionally Transcendent Matter Plasma Forge Prototype MK-II
                 // #zh_CN 超维度物质等离子锻炉原型机MK-II
                 GTCMItemList.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.set(
                     new MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2(
                         19054,
                         "NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2",
-                        TSTUtils.tr("NameDimensionallyTranscendentMatterPlasmaForgePrototypeMK2")));
+                        TSTUtils.tr("tst.modular.machine.DimensionallyTranscendentMatterPlasmaForgePrototypeMK2.name")));
             }
 
             if (Config.EnableLargeNeutronOscillator) {
-                // #tr NameLargeNeutronOscillator
+                // #tr tst.modular.machine.LargeNeutronOscillator.name
                 // # Large Neutron Oscillator
                 // #zh_CN 大型中子振荡器
                 GTCMItemList.LargeNeutronOscillator.set(
                     new MM_LargeNeutronOscillator(
                         19055,
                         "NameLargeNeutronOscillator",
-                        TSTUtils.tr("NameLargeNeutronOscillator")));
+                        TSTUtils.tr("tst.modular.machine.LargeNeutronOscillator.name")));
             }
 
             if (Config.EnableRecipeRegistry_IndistinctTentacle) {
-                // #tr NameIndistinctTentaclePrototypeMK2
+                // #tr tst.modular.machine.IndistinctTentaclePrototypeMK2.name
                 // # {\DARK_GRAY}{\BOLD}Indistinct Tentacle {\RESET}Prototype MK-II
                 // #zh_CN {\DARK_GRAY}{\BOLD}不可视之触{\RESET}原型机MK-II
                 GTCMItemList.IndistinctTentaclePrototypeMK2.set(
                     new MM_IndistinctTentaclePrototypeMK2(
                         19056,
                         "NameIndistinctTentaclePrototypeMK2",
-                        TSTUtils.tr("NameIndistinctTentaclePrototypeMK2")));
+                        TSTUtils.tr("tst.modular.machine.IndistinctTentaclePrototypeMK2.name")));
             }
 
-            // #tr NameMassFabricatorGenesis
+            // #tr tst.modular.machine.MassFabricatorGenesis.name
             // # Mass Fabricator : Genesis
             // #zh_CN 质量发生器 : 创世纪
             GTCMItemList.MassFabricatorGenesis.set(
                 new MM_MassFabricatorGenesis(
                     19057,
                     "NameMassFabricatorGenesis",
-                    TSTUtils.tr("NameMassFabricatorGenesis")));
+                    TSTUtils.tr("tst.modular.machine.MassFabricatorGenesis.name")));
 
         }
 
         if (Config.Enable_IncompactCyclotron) {
-            // #tr NameIncompactCyclotron
+            // #tr tst.common.machine.IncompactCyclotron.name
             // # PULSAR - Incompact Cyclotron
             // #zh_CN PULSAR - 非紧凑式回旋加速器
             GTCMItemList.IncompactCyclotron.set(
-                new TST_IncompactCyclotron(19058, "NameIncompactCyclotron", TSTUtils.tr("NameIncompactCyclotron")));
+                new TST_IncompactCyclotron(19058, "NameIncompactCyclotron", TSTUtils.tr("tst.common.machine.IncompactCyclotron.name")));
         }
 
         if (Config.EnableModularizedMachineSystem) {
-            // #tr NameStrangeMatterAggregator
+            // #tr tst.dyson.machine.StrangeMatterAggregator.name
             // # Strange Matter Aggregator
             // #zh_CN 奇异物质聚合器
             GTCMItemList.StrangeMatterAggregator.set(
                 new TST_StrangeMatterAggregator(
                     19059,
                     "NameStrangeMatterAggregator",
-                    TSTUtils.tr("NameStrangeMatterAggregator")));
+                    TSTUtils.tr("tst.dyson.machine.StrangeMatterAggregator.name")));
 
         }
 
-        // #tr NameMicroSpaceTimeFabricatorio
+        // #tr tst.common.machine.MicroSpaceTimeFabricatorio.name
         // # Micro SpaceTime Fabricatorio
         // #zh_CN 微型时空发生器
         GTCMItemList.MicroSpaceTimeFabricatorio.set(
             new TST_MicroSpaceTimeFabricatorio(
                 19060,
                 "NameMicroSpaceTimeFabricatorio",
-                TSTUtils.tr("NameMicroSpaceTimeFabricatorio")));
+                TSTUtils.tr("tst.common.machine.MicroSpaceTimeFabricatorio.name")));
 
         if (Config.Enable_BloodHell) {
-            // #tr NameBloodyHell
+            // #tr tst.common.machine.BloodyHell.name
             // # Bloody Hell
             // #zh_CN 血狱
-            GTCMItemList.BloodyHell.set(new TST_BloodyHell(19061, "NameBloodyHell", TSTUtils.tr("NameBloodyHell")));
+            GTCMItemList.BloodyHell.set(new TST_BloodyHell(19061, "NameBloodyHell", TSTUtils.tr("tst.common.machine.BloodyHell.name")));
 
             if (Config.Enable_BloodHatch) {
-                // #tr NameBloodOrbHatch
+                // #tr tst.common.machine.BloodOrbHatch.name
                 // # Blood Hatch
                 // #zh_CN 血液仓
                 GTCMItemList.BloodOrbHatch
-                    .set(new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TSTUtils.tr("NameBloodOrbHatch"), 4));
+                    .set(new TST_BloodOrbHatch(18846, "NameBloodOrbHatch", TSTUtils.tr("tst.common.machine.BloodOrbHatch.name"), 4));
 
             }
         }
 
         if (Enable_MegaStoneBreaker) {
-            // #tr NameMegaStoneBreaker
+            // #tr tst.common.machine.MegaStoneBreaker.name
             // # Silicon Rock Synthesizer
             // #zh_CN 硅岩制造机
             GTCMItemList.MegaStoneBreaker
-                .set(new TST_MegaStoneBreaker(19062, "NameMegaStoneBreaker", TSTUtils.tr("NameMegaStoneBreaker")));
+                .set(new TST_MegaStoneBreaker(19062, "NameMegaStoneBreaker", TSTUtils.tr("tst.common.machine.MegaStoneBreaker.name")));
         }
 
-        // #tr NameManufacturingCenter
+        // #tr tst.common.machine.ManufacturingCenter.name
         // # Manufacturing Center
         // #zh_CN 加工中心
         GTCMItemList.ManufacturingCenter
-            .set(new TST_ManufacturingCenter(19063, "NameManufacturingCenter", TSTUtils.tr("NameManufacturingCenter")));
+            .set(new TST_ManufacturingCenter(19063, "NameManufacturingCenter", TSTUtils.tr("tst.common.machine.ManufacturingCenter.name")));
 
         if (Enable_IndustrialAlchemyTower) {
             GTCMItemList.IndustrialAlchemyTower.set(
                 new TST_IndustrialAlchemyTower(
-                    // #tr NameIndustrialAlchemyTower
+                    // #tr tst.common.machine.IndustrialAlchemyTower.name
                     // # Industrial Alchemy Tower
                     // #zh_CN 工业炼金塔
                     19064,
                     "IndustrialAlchemyTower",
-                    TSTUtils.tr("NameIndustrialAlchemyTower")));
+                    TSTUtils.tr("tst.common.machine.IndustrialAlchemyTower.name")));
         }
 
-        // #tr NameGiantVacuumDryingFurnace
+        // #tr tst.common.machine.GiantVacuumDryingFurnace.name
         // # Giant Vacuum Drying Furnace
         // #zh_CN 巨型真空干燥炉
         if (Enable_GiantVacuumDryingFurnace) {
@@ -685,293 +684,293 @@ public final class MachineLoader {
                 new TST_GiantVacuumDryingFurnace(
                     19065,
                     "GiantVacuumDryingFurnace",
-                    TSTUtils.tr("NameGiantVacuumDryingFurnace")));
+                    TSTUtils.tr("tst.common.machine.GiantVacuumDryingFurnace.name")));
         }
 
         if (Config.Enable_ProcessingArray) {
-            // #tr NameProcessingArray
+            // #tr tst.common.machine.ProcessingArray.name
             // # TST Processing Array
             // #zh_CN TST处理阵列
             GTCMItemList.ProcessingArray
-                .set(new TST_ProcessingArray(19066, "NameProcessingArray", TSTUtils.tr("NameProcessingArray")));
+                .set(new TST_ProcessingArray(19066, "NameProcessingArray", TSTUtils.tr("tst.common.machine.ProcessingArray.name")));
         }
 
         if (Config.Enable_AdvCircuitAssemblyLine) {
-            // #tr NameAdvCircuitAssemblyLine
+            // #tr tst.common.machine.AdvCircuitAssemblyLine.name
             // # Advanced Circuit Assembly Line
             // #zh_CN 进阶电路装配线
             GTCMItemList.AdvCircuitAssemblyLine.set(
                 new TST_AdvCircuitAssemblyLine(
                     19067,
                     "NameAdvCircuitAssemblyLine",
-                    TSTUtils.tr("NameAdvCircuitAssemblyLine")));
+                    TSTUtils.tr("tst.common.machine.AdvCircuitAssemblyLine.name")));
         }
 
         if (Config.Enable_SwelegfyrBlastFurnace) {
-            // #tr NameSwelegfyrBlastFurnace
+            // #tr tst.common.machine.SwelegfyrBlastFurnace.name
             // # Swelegfyr Blast Furnace
             // #zh_CN 熯焱高炉
             GTCMItemList.SwelegfyrBlastFurnace.set(
                 new TST_SwelegfyrBlastFurnace(
                     19068,
                     "NameSwelegfyrBlastFurnace",
-                    TSTUtils.tr("NameSwelegfyrBlastFurnace")));
+                    TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.name")));
             // TODO: Remove the transitional controller (19502) in the next version.
             GTCMItemList.SwelegfyrBlastFurnaceLegacy.set(
                 new TST_SwelegfyrBlastFurnaceLegacy(
                     19502,
                     "NameSwelegfyrBlastFurnaceLegacy",
-                    TSTUtils.tr("NameSwelegfyrBlastFurnace")));
+                    TSTUtils.tr("tst.common.machine.SwelegfyrBlastFurnace.name")));
         }
 
         if (Config.Enable_HyperThermalConvector) {
-            // #tr NameHyperThermalConvector
+            // #tr tst.common.machine.HyperThermalConvector.name
             // # Hyper Thermal Convector
             // #zh_CN 高能态热对流器
             GTCMItemList.HyperThermalConvector.set(
                 new TST_HyperThermalConvector(
                     19069,
                     "NameHyperThermalConvector",
-                    TSTUtils.tr("NameHyperThermalConvector")));
+                    TSTUtils.tr("tst.common.machine.HyperThermalConvector.name")));
         }
 
         if (Config.Enable_PrimordialDisjunctus) {
-            // #tr NamePrimordialDisjunctus
+            // #tr tst.common.machine.PrimordialDisjunctus.name
             // # Primordial Disjunctus
             // #zh_CN 初源解离机
             GTCMItemList.PrimordialDisjunctus.set(
-                new TST_PrimordialDisjunctus(19070, "PrimordialDisjunctus", TSTUtils.tr("NamePrimordialDisjunctus")));
+                new TST_PrimordialDisjunctus(19070, "PrimordialDisjunctus", TSTUtils.tr("tst.common.machine.PrimordialDisjunctus.name")));
         }
 
         if (Config.Enable_SkypiercerTower) {
-            // #tr NameSkypiercerTower
+            // #tr tst.common.machine.SkypiercerTower.name
             // # Skypiercer Tower
             // #zh_CN 穿云尖塔
             GTCMItemList.SkypiercerTower
-                .set(new TST_SkypiercerTower(19071, "NameSkypiercerTower", TSTUtils.tr("NameSkypiercerTower")));
+                .set(new TST_SkypiercerTower(19071, "NameSkypiercerTower", TSTUtils.tr("tst.common.machine.SkypiercerTower.name")));
         }
 
         if (Config.Enable_LaserMeteorMiner) {
-            // #tr NameMeteorMiner
+            // #tr tst.common.machine.MeteorMiner.name
             // # Laser Meteor Miner
             // #zh_CN 激光陨星采矿场
             GTCMItemList.MeteorMiner
-                .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TSTUtils.tr("NameMeteorMiner")));
+                .set(new TST_LaserMeteorMiner(19072, "NameMeteorMiner", TSTUtils.tr("tst.common.machine.MeteorMiner.name")));
         }
 
-        // #tr NameSteamBasicGenerator
+        // #tr tst.common.machine.SteamBasicGenerator.name
         // # Basic Steam Generator
         // #zh_CN 基础蒸汽发电机
         GTCMItemList.SteamBasicGenerator
-            .set(new TST_SteamBasicGenerator(19073, "NameSteamBasicGenerator", TSTUtils.tr("NameSteamBasicGenerator")));
+            .set(new TST_SteamBasicGenerator(19073, "NameSteamBasicGenerator", TSTUtils.tr("tst.common.machine.SteamBasicGenerator.name")));
 
-        // #tr NameUniversalGenerator
+        // #tr tst.common.machine.UniversalGenerator.name
         // # Universal Generator
         // #zh_CN 通用发电机
         GTCMItemList.UniversalGenerator
-            .set(new TST_UniversalGenerator(19074, "NameUniversalGenerator", TSTUtils.tr("NameUniversalGenerator")));
+            .set(new TST_UniversalGenerator(19074, "NameUniversalGenerator", TSTUtils.tr("tst.common.machine.UniversalGenerator.name")));
 
         if (Config.Enable_InfusionMaterialDispenser) {
-            // #tr NameInfusionMaterialDispenser
+            // #tr tst.common.machine.InfusionMaterialDispenser.name
             // # Infusion Material Dispenser
             // #zh_CN 注魔分配器
             GTCMItemList.InfusionMaterialDispenser.set(
                 new TST_InfusionMaterialDispenser(
                     19075,
                     "NameInfusionMaterialDispenser",
-                    TSTUtils.tr("NameInfusionMaterialDispenser")));
+                    TSTUtils.tr("tst.common.machine.InfusionMaterialDispenser.name")));
         }
 
-        // #tr NameLargeSolarBoiler
+        // #tr tst.common.machine.LargeSolarBoiler.name
         // # Large Solar Boiler
         // #zh_CN 大型太阳能锅炉
         GTCMItemList.LargeSolarBoiler
-            .set(new TST_LargeSolarBoiler(19076, "NameLargeSolarBoiler", TSTUtils.tr("NameLargeSolarBoiler")));
+            .set(new TST_LargeSolarBoiler(19076, "NameLargeSolarBoiler", TSTUtils.tr("tst.common.machine.LargeSolarBoiler.name")));
 
-        // #tr NameNetherInterface
+        // #tr tst.common.machine.NetherInterface.name
         // # Nether Interface
         // #zh_CN 地狱接口
         GTCMItemList.NetherInterface
-            .set(new TST_NetherInterface(19077, "NameNetherInterface", TSTUtils.tr("NameNetherInterface")));
+            .set(new TST_NetherInterface(19077, "NameNetherInterface", TSTUtils.tr("tst.common.machine.NetherInterface.name")));
 
-        // #tr NameSuperWaterPurifier
+        // #tr tst.common.machine.SuperWaterPurifier.name
         // # Super Water Purifier
         // #zh_CN 超净水生成器
         GTCMItemList.SuperWaterPurifier
-            .set(new TST_SuperWaterPurifier(19078, "NameSuperWaterPurifier", TSTUtils.tr("NameSuperWaterPurifier")));
+            .set(new TST_SuperWaterPurifier(19078, "NameSuperWaterPurifier", TSTUtils.tr("tst.common.machine.SuperWaterPurifier.name")));
 
-        // #tr NameIntegratedAssemblyMatrix
+        // #tr tst.common.machine.IntegratedAssemblyMatrix.name
         // # Integrated Assembly Matrix
         // #zh_CN 集成装配矩阵
         GTCMItemList.IntegratedAssemblyMatrix.set(
             new TST_IntegratedAssemblyMatrix(
                 19079,
                 "NameIntegratedAssemblyMatrix",
-                TSTUtils.tr("NameIntegratedAssemblyMatrix")));
+                TSTUtils.tr("tst.common.machine.IntegratedAssemblyMatrix.name")));
 
-        // #tr NameMegaSolarPanelFactory
+        // #tr tst.common.machine.MegaSolarPanelFactory.name
         // # Mega Solar Panel Factory
         // #zh_CN 巨型太阳能板工厂
         GTCMItemList.MegaSolarPanelFactory.set(
             new TST_MegaSolarPanelFactory(
                 19080,
                 "NameMegaSolarPanelFactory",
-                TSTUtils.tr("NameMegaSolarPanelFactory")));
+                TSTUtils.tr("tst.common.machine.MegaSolarPanelFactory.name")));
 
-        // #tr NameMegaNqReactor
+        // #tr tst.common.machine.MegaNqReactor.name
         // # Mega Naquadah Reactor
         // #zh_CN 巨型硅岩反应堆
         GTCMItemList.MegaNqReactor
-            .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TSTUtils.tr("NameMegaNqReactor")));
+            .set(new TST_MegaNqReactor(19081, "NameMegaNqReactor", TSTUtils.tr("tst.common.machine.MegaNqReactor.name")));
 
         // endregion
 
         // region Single block Machine
 
-        // #tr NameInfiniteAirHatch
+        // #tr tst.common.machine.InfiniteAirHatch.name
         // # Infinite Air Hatch
         // #zh_CN 无限进气仓
         GTCMItemList.InfiniteAirHatch.set(
-            new GT_MetaTileEntity_Hatch_Air(18999, "NameInfiniteAirHatch", TSTUtils.tr("NameInfiniteAirHatch"), 9));
+            new GT_MetaTileEntity_Hatch_Air(18999, "NameInfiniteAirHatch", TSTUtils.tr("tst.common.machine.InfiniteAirHatch.name"), 9));
 
-        // #tr NameInfiniteWirelessDynamoHatch
+        // #tr tst.common.machine.InfiniteWirelessDynamoHatch.name
         // # Infinite Wireless Dynamo Hatch
         // #zh_CN 无限无线动力仓
         GTCMItemList.InfiniteWirelessDynamoHatch.set(
             new GT_Hatch_InfiniteWirelessDynamoHatch(
                 18998,
                 "NameInfiniteWirelessDynamoHatch",
-                TSTUtils.tr("NameInfiniteWirelessDynamoHatch"),
+                TSTUtils.tr("tst.common.machine.InfiniteWirelessDynamoHatch.name"),
                 14));
 
-        // #tr NameManaHatch
+        // #tr tst.common.machine.ManaHatch.name
         // # Mana Hatch
         // #zh_CN Mana Hatch
-        GTCMItemList.ManaHatch.set(new TST_ManaHatch(18979, "NameManaHatch", TSTUtils.tr("NameManaHatch"), 9));
+        GTCMItemList.ManaHatch.set(new TST_ManaHatch(18979, "NameManaHatch", TSTUtils.tr("tst.common.machine.ManaHatch.name"), 9));
 
-        // #tr NameAEStorageCellInputBus
+        // #tr tst.common.machine.AEStorageCellInputBus.name
         // # Super Stocking Input Bus (ME)
         // #zh_CN 超级存储输入总线(ME)
         GTCMItemList.AEStorageCellInputBus.set(
             new TST_AEStorageCellInputBus(
                 18851,
                 "NameAEStorageCellInputBus",
-                TSTUtils.tr("NameAEStorageCellInputBus"),
+                TSTUtils.tr("tst.common.machine.AEStorageCellInputBus.name"),
                 9));
 
-        // #tr NameAEStorageCellInputHatch
+        // #tr tst.common.machine.AEStorageCellInputHatch.name
         // # Super Stocking Input Hatch (ME)
         // #zh_CN 超级存储输入仓(ME)
         GTCMItemList.AEStorageCellInputHatch.set(
             new TST_AEStorageCellInputHatch(
                 18852,
                 "NameAEStorageCellInputHatch",
-                TSTUtils.tr("NameAEStorageCellInputHatch"),
+                TSTUtils.tr("tst.common.machine.AEStorageCellInputHatch.name"),
                 9));
 
         // region Dual Input Buffer
-        // #tr NameDualInputBuffer_IV
+        // #tr tst.common.machine.DualInputBuffer.tier.iv.name
         // # Dual Input Buffer (IV)
         // #zh_CN 输入总成 (IV)
         GTCMItemList.DualInputBuffer_IV.set(
             new GT_MetaTileEntity_Hatch_DualInput(
                 18980,
                 "NameDualInputBuffer_IV",
-                TSTUtils.tr("NameDualInputBuffer_IV"),
+                TSTUtils.tr("tst.common.machine.DualInputBuffer.tier.iv.name"),
                 5));
 
-        // #tr NameDualInputBuffer_LuV
+        // #tr tst.common.machine.DualInputBuffer.tier.luv.name
         // # Dual Input Buffer (LuV)
         // #zh_CN 输入总成 (LuV)
         GTCMItemList.DualInputBuffer_LuV.set(
             new GT_MetaTileEntity_Hatch_DualInput(
                 18981,
                 "NameDualInputBuffer_LuV",
-                TSTUtils.tr("NameDualInputBuffer_LuV"),
+                TSTUtils.tr("tst.common.machine.DualInputBuffer.tier.luv.name"),
                 6));
 
-        // #tr NameDualInputBuffer_ZPM
+        // #tr tst.common.machine.DualInputBuffer.tier.zpm.name
         // # Dual Input Buffer (ZPM)
         // #zh_CN 输入总成 (ZPM)
         GTCMItemList.DualInputBuffer_ZPM.set(
             new GT_MetaTileEntity_Hatch_DualInput(
                 18982,
                 "NameDualInputBuffer_ZPM",
-                TSTUtils.tr("NameDualInputBuffer_ZPM"),
+                TSTUtils.tr("tst.common.machine.DualInputBuffer.tier.zpm.name"),
                 7));
 
-        // #tr NameDualInputBuffer_UV
+        // #tr tst.common.machine.DualInputBuffer.tier.uv.name
         // # Dual Input Buffer (UV)
         // #zh_CN 输入总成 (UV)
         GTCMItemList.DualInputBuffer_UV.set(
             new GT_MetaTileEntity_Hatch_DualInput(
                 18983,
                 "NameDualInputBuffer_UV",
-                TSTUtils.tr("NameDualInputBuffer_UV"),
+                TSTUtils.tr("tst.common.machine.DualInputBuffer.tier.uv.name"),
                 8));
 
         // region buffered energy hatch
 
-        // #tr NameBufferedEnergyHatchLV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.lv.name
         // # Buffered Energy Hatch LV
         // #zh_CN 缓存能源仓LV
 
-        // #tr NameBufferedEnergyHatchMV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.mv.name
         // # Buffered Energy Hatch MV
         // #zh_CN 缓存能源仓MV
 
-        // #tr NameBufferedEnergyHatchHV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.hv.name
         // # Buffered Energy Hatch HV
         // #zh_CN 缓存能源仓HV
 
-        // #tr NameBufferedEnergyHatchEV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.ev.name
         // # Buffered Energy Hatch EV
         // #zh_CN 缓存能源仓EV
 
-        // #tr NameBufferedEnergyHatchIV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.iv.name
         // # Buffered Energy Hatch IV
         // #zh_CN 缓存能源仓IV
 
-        // #tr NameBufferedEnergyHatchLuV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.luv.name
         // # Buffered Energy Hatch LuV
         // #zh_CN 缓存能源仓LuV
 
-        // #tr NameBufferedEnergyHatchZPM
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.zpm.name
         // # Buffered Energy Hatch ZPM
         // #zh_CN 缓存能源仓ZPM
 
-        // #tr NameBufferedEnergyHatchUV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.uv.name
         // # Buffered Energy Hatch UV
         // #zh_CN 缓存能源仓UV
 
-        // #tr NameBufferedEnergyHatchUHV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.uhv.name
         // # Buffered Energy Hatch UHV
         // #zh_CN 缓存能源仓UHV
 
-        // #tr NameBufferedEnergyHatchUEV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.uev.name
         // # Buffered Energy Hatch UEV
         // #zh_CN 缓存能源仓UEV
 
-        // #tr NameBufferedEnergyHatchUIV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.uiv.name
         // # Buffered Energy Hatch UIV
         // #zh_CN 缓存能源仓UIV
 
-        // #tr NameBufferedEnergyHatchUMV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.umv.name
         // # Buffered Energy Hatch UMV
         // #zh_CN 缓存能源仓UMV
 
-        // #tr NameBufferedEnergyHatchUXV
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.uxv.name
         // # Buffered Energy Hatch UXV
         // #zh_CN 缓存能源仓UXV
 
-        // #tr NameBufferedEnergyHatchMAX
+        // #tr tst.common.machine.BufferedEnergyHatch.tier.max.name
         // # Buffered Energy Hatch MAX
         // #zh_CN 缓存能源仓MAX
         GTCMItemList.BufferedEnergyHatchLV.set(
             new GT_Hatch_BufferedEnergyHatch(
                 18984,
                 "NameBufferedEnergyHatchLV",
-                TSTUtils.tr("NameBufferedEnergyHatchLV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.lv.name"),
                 1,
                 16,
                 null));
@@ -979,7 +978,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18985,
                 "NameBufferedEnergyHatchMV",
-                TSTUtils.tr("NameBufferedEnergyHatchMV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.mv.name"),
                 2,
                 16,
                 null));
@@ -987,7 +986,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18986,
                 "NameBufferedEnergyHatchHV",
-                TSTUtils.tr("NameBufferedEnergyHatchHV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.hv.name"),
                 3,
                 16,
                 null));
@@ -995,7 +994,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18987,
                 "NameBufferedEnergyHatchEV",
-                TSTUtils.tr("NameBufferedEnergyHatchEV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.ev.name"),
                 4,
                 16,
                 null));
@@ -1003,7 +1002,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18988,
                 "NameBufferedEnergyHatchIV",
-                TSTUtils.tr("NameBufferedEnergyHatchIV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.iv.name"),
                 5,
                 16,
                 null));
@@ -1011,7 +1010,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18989,
                 "NameBufferedEnergyHatchLuV",
-                TSTUtils.tr("NameBufferedEnergyHatchLuV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.luv.name"),
                 6,
                 16,
                 null));
@@ -1019,7 +1018,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18990,
                 "NameBufferedEnergyHatchZPM",
-                TSTUtils.tr("NameBufferedEnergyHatchZPM"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.zpm.name"),
                 7,
                 16,
                 null));
@@ -1027,7 +1026,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18991,
                 "NameBufferedEnergyHatchUV",
-                TSTUtils.tr("NameBufferedEnergyHatchUV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.uv.name"),
                 8,
                 16,
                 null));
@@ -1035,7 +1034,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18992,
                 "NameBufferedEnergyHatchUHV",
-                TSTUtils.tr("NameBufferedEnergyHatchUHV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.uhv.name"),
                 9,
                 16,
                 null));
@@ -1043,7 +1042,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18993,
                 "NameBufferedEnergyHatchUEV",
-                TSTUtils.tr("NameBufferedEnergyHatchUEV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.uev.name"),
                 10,
                 16,
                 null));
@@ -1051,7 +1050,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18994,
                 "NameBufferedEnergyHatchUIV",
-                TSTUtils.tr("NameBufferedEnergyHatchUIV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.uiv.name"),
                 11,
                 16,
                 null));
@@ -1059,7 +1058,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18995,
                 "NameBufferedEnergyHatchUMV",
-                TSTUtils.tr("NameBufferedEnergyHatchUMV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.umv.name"),
                 12,
                 16,
                 null));
@@ -1067,7 +1066,7 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18996,
                 "NameBufferedEnergyHatchUXV",
-                TSTUtils.tr("NameBufferedEnergyHatchUXV"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.uxv.name"),
                 13,
                 16,
                 null));
@@ -1075,639 +1074,639 @@ public final class MachineLoader {
             new GT_Hatch_BufferedEnergyHatch(
                 18997,
                 "NameBufferedEnergyHatchMAX",
-                TSTUtils.tr("NameBufferedEnergyHatchMAX"),
+                TSTUtils.tr("tst.common.machine.BufferedEnergyHatch.tier.max.name"),
                 14,
                 16,
                 null));
 
-        // #tr NameDebugUncertaintyHatch
+        // #tr tst.common.machine.DebugUncertaintyHatch.name
         // # Debug Uncertainty Hatch
         // #zh_CN Debug未定元解析器
         GTCMItemList.DebugUncertaintyHatch.set(
             new GT_MetaTileEntity_Hatch_UncertaintyDebug(
                 18978,
                 "NameDebugUncertaintyHatch",
-                TSTUtils.tr("NameDebugUncertaintyHatch"),
+                TSTUtils.tr("tst.common.machine.DebugUncertaintyHatch.name"),
                 12));
 
-        // #tr NameLaserSmartNode
+        // #tr tst.common.machine.LaserSmartNode.name
         // # Laser Smart Node
         // #zh_CN 激光智能节点
         GTCMItemList.LaserSmartNode.set(
-            new GT_MetaTileEntity_Pipe_EnergySmart(18960, "NameLaserSmartNode", TSTUtils.tr("NameLaserSmartNode")));
+            new GT_MetaTileEntity_Pipe_EnergySmart(18960, "NameLaserSmartNode", TSTUtils.tr("tst.common.machine.LaserSmartNode.name")));
 
-        // #tr NameLaserFocusedSmartNode
+        // #tr tst.common.machine.LaserFocusedSmartNode.name
         // # Laser-Focused Smart Node
         // #zh_CN 激光聚焦智能节点
         GTCMItemList.LaserFocusedSmartNode.set(
             new GT_MetaTileEntity_Pipe_EnergySmart_Focusing(
                 18961,
                 "NameLaserFocusedSmartNode",
-                TSTUtils.tr("NameLaserFocusedSmartNode")));
+                TSTUtils.tr("tst.common.machine.LaserFocusedSmartNode.name")));
         // endregion
 
-        // #tr NameFackRackHatch
+        // #tr tst.common.machine.FackRackHatch.name
         // # rack simulation hack
         // #zh_CN 机箱模拟器
         GTCMItemList.FackRackHatch.set(
             new GT_Hatch_RackComputationMonitor(
                 18959,
                 "NameFackRackHatch",
-                TSTUtils.tr("NameFackRackHatch"),
+                TSTUtils.tr("tst.common.machine.FackRackHatch.name"),
                 12,
                 false));
 
-        // #tr NameRealRackHatch
+        // #tr tst.common.machine.RealRackHatch.name
         // # rack simulation controller hack
         // #zh_CN 机箱控制器
         GTCMItemList.RealRackHatch.set(
             new GT_Hatch_RackComputationMonitor(
                 18958,
                 "NameRealRackHatch",
-                TSTUtils.tr("NameRealRackHatch"),
+                TSTUtils.tr("tst.common.machine.RealRackHatch.name"),
                 12,
                 true));
 
-        // #tr NameWirelessDataInputHatch
+        // #tr tst.common.machine.WirelessDataInputHatch.name
         // # Wireless Optical Slave Connector
         // #zh_CN 无线副光学接口
         GTCMItemList.WirelessDataInputHatch.set(
             new GT_Hatch_WirelessData_input(
                 18957,
                 "NameWirelessDataInputHatch",
-                TSTUtils.tr("NameWirelessDataInputHatch"),
+                TSTUtils.tr("tst.common.machine.WirelessDataInputHatch.name"),
                 12));
 
-        // #tr NameWirelessDataOutputHatch
+        // #tr tst.common.machine.WirelessDataOutputHatch.name
         // # Wireless Optical Master Connector
         // #zh_CN 无线主光学接口
         GTCMItemList.WirelessDataOutputHatch.set(
             new GT_Hatch_WirelessData_output(
                 18956,
                 "NameWirelessDataOutputHatch",
-                TSTUtils.tr("NameWirelessDataOutputHatch"),
+                TSTUtils.tr("tst.common.machine.WirelessDataOutputHatch.name"),
                 12));
 
-        // #tr NameLegendaryWirelessEnergyHatch
+        // #tr tst.common.machine.LegendaryWirelessEnergyHatch.name
         // # Legendary Wireless Energy Hatch
         // #zh_CN 传奇无线能源仓
         GTCMItemList.LegendaryWirelessEnergyHatch.set(
             new GT_Hatch_InfiniteWirelessMulti(
                 18798,
                 "NameLegendaryWirelessEnergyHatch",
-                TSTUtils.tr("NameLegendaryWirelessEnergyHatch"),
+                TSTUtils.tr("tst.common.machine.LegendaryWirelessEnergyHatch.name"),
                 13,
                 536870912));
 
-        // #tr NameHarmoniousWirelessEnergyHatch
+        // #tr tst.common.machine.HarmoniousWirelessEnergyHatch.name
         // # Harmonious Wireless Energy Hatch
         // #zh_CN 鸿蒙无线能源仓
         GTCMItemList.HarmoniousWirelessEnergyHatch.set(
             new GT_Hatch_InfiniteWirelessMulti(
                 18799,
                 "NameHarmoniousWirelessEnergyHatch",
-                TSTUtils.tr("NameHarmoniousWirelessEnergyHatch"),
+                TSTUtils.tr("tst.common.machine.HarmoniousWirelessEnergyHatch.name"),
                 14,
                 2147483647));
 
-        // #tr NameSolidifyHatchUHV
+        // #tr tst.common.machine.SolidifyHatch.tier.uhv.name
         // # Solidifier Hatch(UHV)
         // #zh_CN 固化仓(UHV)
         GTCMItemList.SolidifyHatch_UHV.set(
             new GT_MetaTileEntity_Hatch_Solidify(
                 18797,
                 "NameSolidifyHatchUHV",
-                TSTUtils.tr("NameSolidifyHatchUHV"),
+                TSTUtils.tr("tst.common.machine.SolidifyHatch.tier.uhv.name"),
                 9));
 
-        // #tr NameSolidifyHatchUV
+        // #tr tst.common.machine.SolidifyHatch.tier.uv.name
         // # Solidifier Hatch(UV)
         // #zh_CN 固化仓(UV)
         GTCMItemList.SolidifyHatch_UV.set(
-            new GT_MetaTileEntity_Hatch_Solidify(18796, "NameSolidifyHatchUV", TSTUtils.tr("NameSolidifyHatchUV"), 8));
+            new GT_MetaTileEntity_Hatch_Solidify(18796, "NameSolidifyHatchUV", TSTUtils.tr("tst.common.machine.SolidifyHatch.tier.uv.name"), 8));
 
-        // #tr NameSolidifyHatchZPM
+        // #tr tst.common.machine.SolidifyHatch.tier.zpm.name
         // # Solidifier Hatch(ZPM)
         // #zh_CN 固化仓(ZPM)
         GTCMItemList.SolidifyHatch_ZPM.set(
             new GT_MetaTileEntity_Hatch_Solidify(
                 18795,
                 "NameSolidifyHatchZPM",
-                TSTUtils.tr("NameSolidifyHatchZPM"),
+                TSTUtils.tr("tst.common.machine.SolidifyHatch.tier.zpm.name"),
                 7));
 
-        // #tr NameSolidifyHatchLuV
+        // #tr tst.common.machine.SolidifyHatch.tier.luv.name
         // # Solidifier Hatch(LuV)
         // #zh_CN 固化仓(LuV)
         GTCMItemList.SolidifyHatch_LuV.set(
             new GT_MetaTileEntity_Hatch_Solidify(
                 18794,
                 "NameSolidifyHatchLuV",
-                TSTUtils.tr("NameSolidifyHatchLuV"),
+                TSTUtils.tr("tst.common.machine.SolidifyHatch.tier.luv.name"),
                 6));
 
-        // #tr NameSolidifyHatchIV
+        // #tr tst.common.machine.SolidifyHatch.tier.iv.name
         // # Solidifier Hatch(IV)
         // #zh_CN 固化仓(IV)
         GTCMItemList.SolidifyHatch_IV.set(
-            new GT_MetaTileEntity_Hatch_Solidify(18793, "NameSolidifyHatchIV", TSTUtils.tr("NameSolidifyHatchIV"), 5));
+            new GT_MetaTileEntity_Hatch_Solidify(18793, "NameSolidifyHatchIV", TSTUtils.tr("tst.common.machine.SolidifyHatch.tier.iv.name"), 5));
 
-        // #tr NameCircuitImprintHatchT2
+        // #tr tst.common.machine.CircuitImprintHatch.tier.2.name
         // # Imprint Circuit Hatch T2
         // #zh_CN 压印电路仓T2
         GTCMItemList.CircuitImprintHatchT2.set(
             new TST_CircuitImprintHatch(
                 18792,
                 "NameCircuitImprintHatchT2",
-                TSTUtils.tr("NameCircuitImprintHatchT2"),
+                TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tier.2.name"),
                 8));
 
-        // #tr NameCircuitImprintHatchT1
+        // #tr tst.common.machine.CircuitImprintHatch.tier.1.name
         // # Imprint Circuit Hatch T1
         // #zh_CN 压印电路仓T1
         GTCMItemList.CircuitImprintHatchT1.set(
             new TST_CircuitImprintHatch(
                 18791,
                 "NameCircuitImprintHatchT1",
-                TSTUtils.tr("NameCircuitImprintHatchT1"),
+                TSTUtils.tr("tst.common.machine.CircuitImprintHatch.tier.1.name"),
                 5));
 
         // region Modularized Stuff
 
         if (Config.EnableModularizedMachineSystem) {
 
-            // #tr NameDynamicParallelControllerT1
+            // #tr tst.modular.machine.DynamicParallelController.tier.1.name
             // # Dynamic Parallel Controller Module T1
             // #zh_CN 动态并行控制器模块T1
             GTCMItemList.DynamicParallelControllerT1.set(
                 new DynamicParallelController(
                     18800,
                     "NameDynamicParallelControllerT1",
-                    TSTUtils.tr("NameDynamicParallelControllerT1"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.1.name"),
                     7,
                     ParallelOfParallelController[0]));
 
-            // #tr NameDynamicParallelControllerT2
+            // #tr tst.modular.machine.DynamicParallelController.tier.2.name
             // # Dynamic Parallel Controller Module T2
             // #zh_CN 动态并行控制器模块T2
             GTCMItemList.DynamicParallelControllerT2.set(
                 new DynamicParallelController(
                     18801,
                     "NameDynamicParallelControllerT2",
-                    TSTUtils.tr("NameDynamicParallelControllerT2"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.2.name"),
                     8,
                     ParallelOfParallelController[1]));
 
-            // #tr NameDynamicParallelControllerT3
+            // #tr tst.modular.machine.DynamicParallelController.tier.3.name
             // # Dynamic Parallel Controller Module T3
             // #zh_CN 动态并行控制器模块T3
             GTCMItemList.DynamicParallelControllerT3.set(
                 new DynamicParallelController(
                     18802,
                     "NameDynamicParallelControllerT3",
-                    TSTUtils.tr("NameDynamicParallelControllerT3"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.3.name"),
                     9,
                     ParallelOfParallelController[2]));
 
-            // #tr NameDynamicParallelControllerT4
+            // #tr tst.modular.machine.DynamicParallelController.tier.4.name
             // # Dynamic Parallel Controller Module T4
             // #zh_CN 动态并行控制器模块T4
             GTCMItemList.DynamicParallelControllerT4.set(
                 new DynamicParallelController(
                     18803,
                     "NameDynamicParallelControllerT4",
-                    TSTUtils.tr("NameDynamicParallelControllerT4"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.4.name"),
                     10,
                     ParallelOfParallelController[3]));
 
-            // #tr NameDynamicParallelControllerT5
+            // #tr tst.modular.machine.DynamicParallelController.tier.5.name
             // # Dynamic Parallel Controller Module T5
             // #zh_CN 动态并行控制器模块T5
             GTCMItemList.DynamicParallelControllerT5.set(
                 new DynamicParallelController(
                     18804,
                     "NameDynamicParallelControllerT5",
-                    TSTUtils.tr("NameDynamicParallelControllerT5"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.5.name"),
                     11,
                     ParallelOfParallelController[4]));
 
-            // #tr NameDynamicParallelControllerT6
+            // #tr tst.modular.machine.DynamicParallelController.tier.6.name
             // # Dynamic Parallel Controller Module T6
             // #zh_CN 动态并行控制器模块T6
             GTCMItemList.DynamicParallelControllerT6.set(
                 new DynamicParallelController(
                     18805,
                     "NameDynamicParallelControllerT6",
-                    TSTUtils.tr("NameDynamicParallelControllerT6"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.6.name"),
                     12,
                     ParallelOfParallelController[5]));
 
-            // #tr NameDynamicParallelControllerT7
+            // #tr tst.modular.machine.DynamicParallelController.tier.7.name
             // # Dynamic Parallel Controller Module T7
             // #zh_CN 动态并行控制器模块T7
             GTCMItemList.DynamicParallelControllerT7.set(
                 new DynamicParallelController(
                     18806,
                     "NameDynamicParallelControllerT7",
-                    TSTUtils.tr("NameDynamicParallelControllerT7"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.7.name"),
                     13,
                     ParallelOfParallelController[6]));
 
-            // #tr NameDynamicParallelControllerT8
+            // #tr tst.modular.machine.DynamicParallelController.tier.8.name
             // # Dynamic Parallel Controller Module T8
             // #zh_CN 动态并行控制器模块T8
             GTCMItemList.DynamicParallelControllerT8.set(
                 new DynamicParallelController(
                     18807,
                     "NameDynamicParallelControllerT8",
-                    TSTUtils.tr("NameDynamicParallelControllerT8"),
+                    TSTUtils.tr("tst.modular.machine.DynamicParallelController.tier.8.name"),
                     14,
                     ParallelOfParallelController[7]));
 
-            // #tr NameStaticParallelControllerT1
+            // #tr tst.modular.machine.StaticParallelController.tier.1.name
             // # Static Parallel Controller Module T1
             // #zh_CN 静态并行控制器模块T1
             GTCMItemList.StaticParallelControllerT1.set(
                 new StaticParallelController(
                     18808,
                     "NameStaticParallelControllerT1",
-                    TSTUtils.tr("NameStaticParallelControllerT1"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.1.name"),
                     7,
                     ParallelOfParallelController[0]));
 
-            // #tr NameStaticParallelControllerT2
+            // #tr tst.modular.machine.StaticParallelController.tier.2.name
             // # Static Parallel Controller Module T2
             // #zh_CN 静态并行控制器模块T2
             GTCMItemList.StaticParallelControllerT2.set(
                 new StaticParallelController(
                     18809,
                     "NameStaticParallelControllerT2",
-                    TSTUtils.tr("NameStaticParallelControllerT2"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.2.name"),
                     8,
                     ParallelOfParallelController[1]));
 
-            // #tr NameStaticParallelControllerT3
+            // #tr tst.modular.machine.StaticParallelController.tier.3.name
             // # Static Parallel Controller Module T3
             // #zh_CN 静态并行控制器模块T3
             GTCMItemList.StaticParallelControllerT3.set(
                 new StaticParallelController(
                     18810,
                     "NameStaticParallelControllerT3",
-                    TSTUtils.tr("NameStaticParallelControllerT3"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.3.name"),
                     9,
                     ParallelOfParallelController[2]));
 
-            // #tr NameStaticParallelControllerT4
+            // #tr tst.modular.machine.StaticParallelController.tier.4.name
             // # Static Parallel Controller Module T4
             // #zh_CN 静态并行控制器模块T4
             GTCMItemList.StaticParallelControllerT4.set(
                 new StaticParallelController(
                     18811,
                     "NameStaticParallelControllerT4",
-                    TSTUtils.tr("NameStaticParallelControllerT4"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.4.name"),
                     10,
                     ParallelOfParallelController[3]));
 
-            // #tr NameStaticParallelControllerT5
+            // #tr tst.modular.machine.StaticParallelController.tier.5.name
             // # Static Parallel Controller Module T5
             // #zh_CN 静态并行控制器模块T5
             GTCMItemList.StaticParallelControllerT5.set(
                 new StaticParallelController(
                     18812,
                     "NameStaticParallelControllerT5",
-                    TSTUtils.tr("NameStaticParallelControllerT5"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.5.name"),
                     11,
                     ParallelOfParallelController[4]));
 
-            // #tr NameStaticParallelControllerT6
+            // #tr tst.modular.machine.StaticParallelController.tier.6.name
             // # Static Parallel Controller Module T6
             // #zh_CN 静态并行控制器模块T6
             GTCMItemList.StaticParallelControllerT6.set(
                 new StaticParallelController(
                     18813,
                     "NameStaticParallelControllerT6",
-                    TSTUtils.tr("NameStaticParallelControllerT6"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.6.name"),
                     12,
                     ParallelOfParallelController[5]));
 
-            // #tr NameStaticParallelControllerT7
+            // #tr tst.modular.machine.StaticParallelController.tier.7.name
             // # Static Parallel Controller Module T7
             // #zh_CN 静态并行控制器模块T7
             GTCMItemList.StaticParallelControllerT7.set(
                 new StaticParallelController(
                     18814,
                     "NameStaticParallelControllerT7",
-                    TSTUtils.tr("NameStaticParallelControllerT7"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.7.name"),
                     13,
                     ParallelOfParallelController[6]));
 
-            // #tr NameStaticParallelControllerT8
+            // #tr tst.modular.machine.StaticParallelController.tier.8.name
             // # Static Parallel Controller Module T8
             // #zh_CN 静态并行控制器模块T8
             GTCMItemList.StaticParallelControllerT8.set(
                 new StaticParallelController(
                     18815,
                     "NameStaticParallelControllerT8",
-                    TSTUtils.tr("NameStaticParallelControllerT8"),
+                    TSTUtils.tr("tst.modular.machine.StaticParallelController.tier.8.name"),
                     14,
                     ParallelOfParallelController[7]));
 
-            // #tr NameDynamicSpeedControllerT1
+            // #tr tst.modular.machine.DynamicSpeedController.tier.1.name
             // # Dynamic Speed Controller Module T1
             // #zh_CN 动态速度控制器模块T1
             GTCMItemList.DynamicSpeedControllerT1.set(
                 new DynamicSpeedController(
                     18816,
                     "NameDynamicSpeedControllerT1",
-                    TSTUtils.tr("NameDynamicSpeedControllerT1"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.1.name"),
                     7,
                     SpeedMultiplierOfSpeedController[0]));
 
-            // #tr NameDynamicSpeedControllerT2
+            // #tr tst.modular.machine.DynamicSpeedController.tier.2.name
             // # Dynamic Speed Controller Module T2
             // #zh_CN 动态速度控制器模块T2
             GTCMItemList.DynamicSpeedControllerT2.set(
                 new DynamicSpeedController(
                     18817,
                     "NameDynamicSpeedControllerT2",
-                    TSTUtils.tr("NameDynamicSpeedControllerT2"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.2.name"),
                     8,
                     SpeedMultiplierOfSpeedController[1]));
 
-            // #tr NameDynamicSpeedControllerT3
+            // #tr tst.modular.machine.DynamicSpeedController.tier.3.name
             // # Dynamic Speed Controller Module T3
             // #zh_CN 动态速度控制器模块T3
             GTCMItemList.DynamicSpeedControllerT3.set(
                 new DynamicSpeedController(
                     18818,
                     "NameDynamicSpeedControllerT3",
-                    TSTUtils.tr("NameDynamicSpeedControllerT3"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.3.name"),
                     9,
                     SpeedMultiplierOfSpeedController[2]));
 
-            // #tr NameDynamicSpeedControllerT4
+            // #tr tst.modular.machine.DynamicSpeedController.tier.4.name
             // # Dynamic Speed Controller Module T4
             // #zh_CN 动态速度控制器模块T4
             GTCMItemList.DynamicSpeedControllerT4.set(
                 new DynamicSpeedController(
                     18819,
                     "NameDynamicSpeedControllerT4",
-                    TSTUtils.tr("NameDynamicSpeedControllerT4"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.4.name"),
                     10,
                     SpeedMultiplierOfSpeedController[3]));
 
-            // #tr NameDynamicSpeedControllerT5
+            // #tr tst.modular.machine.DynamicSpeedController.tier.5.name
             // # Dynamic Speed Controller Module T5
             // #zh_CN 动态速度控制器模块T5
             GTCMItemList.DynamicSpeedControllerT5.set(
                 new DynamicSpeedController(
                     18820,
                     "NameDynamicSpeedControllerT5",
-                    TSTUtils.tr("NameDynamicSpeedControllerT5"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.5.name"),
                     11,
                     SpeedMultiplierOfSpeedController[4]));
 
-            // #tr NameDynamicSpeedControllerT6
+            // #tr tst.modular.machine.DynamicSpeedController.tier.6.name
             // # Dynamic Speed Controller Module T6
             // #zh_CN 动态速度控制器模块T6
             GTCMItemList.DynamicSpeedControllerT6.set(
                 new DynamicSpeedController(
                     18821,
                     "NameDynamicSpeedControllerT6",
-                    TSTUtils.tr("NameDynamicSpeedControllerT6"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.6.name"),
                     12,
                     SpeedMultiplierOfSpeedController[5]));
 
-            // #tr NameDynamicSpeedControllerT7
+            // #tr tst.modular.machine.DynamicSpeedController.tier.7.name
             // # Dynamic Speed Controller Module T7
             // #zh_CN 动态速度控制器模块T7
             GTCMItemList.DynamicSpeedControllerT7.set(
                 new DynamicSpeedController(
                     18822,
                     "NameDynamicSpeedControllerT7",
-                    TSTUtils.tr("NameDynamicSpeedControllerT7"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.7.name"),
                     13,
                     SpeedMultiplierOfSpeedController[6]));
 
-            // #tr NameDynamicSpeedControllerT8
+            // #tr tst.modular.machine.DynamicSpeedController.tier.8.name
             // # Dynamic Speed Controller Module T8
             // #zh_CN 动态速度控制器模块T8
             GTCMItemList.DynamicSpeedControllerT8.set(
                 new DynamicSpeedController(
                     18823,
                     "NameDynamicSpeedControllerT8",
-                    TSTUtils.tr("NameDynamicSpeedControllerT8"),
+                    TSTUtils.tr("tst.modular.machine.DynamicSpeedController.tier.8.name"),
                     14,
                     SpeedMultiplierOfSpeedController[7]));
 
-            // #tr NameStaticSpeedControllerT1
+            // #tr tst.modular.machine.StaticSpeedController.tier.1.name
             // # Static Speed Controller Module T1
             // #zh_CN 静态速度控制器模块T1
             GTCMItemList.StaticSpeedControllerT1.set(
                 new StaticSpeedController(
                     18824,
                     "NameStaticSpeedControllerT1",
-                    TSTUtils.tr("NameStaticSpeedControllerT1"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.1.name"),
                     7,
                     SpeedMultiplierOfSpeedController[0]));
 
-            // #tr NameStaticSpeedControllerT2
+            // #tr tst.modular.machine.StaticSpeedController.tier.2.name
             // # Static Speed Controller Module T2
             // #zh_CN 静态速度控制器模块T2
             GTCMItemList.StaticSpeedControllerT2.set(
                 new StaticSpeedController(
                     18825,
                     "NameStaticSpeedControllerT2",
-                    TSTUtils.tr("NameStaticSpeedControllerT2"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.2.name"),
                     8,
                     SpeedMultiplierOfSpeedController[1]));
 
-            // #tr NameStaticSpeedControllerT3
+            // #tr tst.modular.machine.StaticSpeedController.tier.3.name
             // # Static Speed Controller Module T3
             // #zh_CN 静态速度控制器模块T3
             GTCMItemList.StaticSpeedControllerT3.set(
                 new StaticSpeedController(
                     18826,
                     "NameStaticSpeedControllerT3",
-                    TSTUtils.tr("NameStaticSpeedControllerT3"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.3.name"),
                     9,
                     SpeedMultiplierOfSpeedController[2]));
 
-            // #tr NameStaticSpeedControllerT4
+            // #tr tst.modular.machine.StaticSpeedController.tier.4.name
             // # Static Speed Controller Module T4
             // #zh_CN 静态速度控制器模块T4
             GTCMItemList.StaticSpeedControllerT4.set(
                 new StaticSpeedController(
                     18827,
                     "NameStaticSpeedControllerT4",
-                    TSTUtils.tr("NameStaticSpeedControllerT4"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.4.name"),
                     10,
                     SpeedMultiplierOfSpeedController[3]));
 
-            // #tr NameStaticSpeedControllerT5
+            // #tr tst.modular.machine.StaticSpeedController.tier.5.name
             // # Static Speed Controller Module T5
             // #zh_CN 静态速度控制器模块T5
             GTCMItemList.StaticSpeedControllerT5.set(
                 new StaticSpeedController(
                     18828,
                     "NameStaticSpeedControllerT5",
-                    TSTUtils.tr("NameStaticSpeedControllerT5"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.5.name"),
                     11,
                     SpeedMultiplierOfSpeedController[4]));
 
-            // #tr NameStaticSpeedControllerT6
+            // #tr tst.modular.machine.StaticSpeedController.tier.6.name
             // # Static Speed Controller Module T6
             // #zh_CN 静态速度控制器模块T6
             GTCMItemList.StaticSpeedControllerT6.set(
                 new StaticSpeedController(
                     18829,
                     "NameStaticSpeedControllerT6",
-                    TSTUtils.tr("NameStaticSpeedControllerT6"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.6.name"),
                     12,
                     SpeedMultiplierOfSpeedController[5]));
 
-            // #tr NameStaticSpeedControllerT7
+            // #tr tst.modular.machine.StaticSpeedController.tier.7.name
             // # Static Speed Controller Module T7
             // #zh_CN 静态速度控制器模块T7
             GTCMItemList.StaticSpeedControllerT7.set(
                 new StaticSpeedController(
                     18830,
                     "NameStaticSpeedControllerT7",
-                    TSTUtils.tr("NameStaticSpeedControllerT7"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.7.name"),
                     13,
                     SpeedMultiplierOfSpeedController[6]));
 
-            // #tr NameStaticSpeedControllerT8
+            // #tr tst.modular.machine.StaticSpeedController.tier.8.name
             // # Static Speed Controller Module T8
             // #zh_CN 静态速度控制器模块T8
             GTCMItemList.StaticSpeedControllerT8.set(
                 new StaticSpeedController(
                     18831,
                     "NameStaticSpeedControllerT8",
-                    TSTUtils.tr("NameStaticSpeedControllerT8"),
+                    TSTUtils.tr("tst.modular.machine.StaticSpeedController.tier.8.name"),
                     14,
                     SpeedMultiplierOfSpeedController[7]));
 
-            // #tr NameStaticPowerConsumptionControllerT1
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.1.name
             // # Static Power Consumption Controller Module T1
             // #zh_CN 静态耗能控制器模块T1
             GTCMItemList.StaticPowerConsumptionControllerT1.set(
                 new StaticPowerConsumptionController(
                     18832,
                     "NameStaticPowerConsumptionControllerT1",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT1"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.1.name"),
                     7,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[0]));
 
-            // #tr NameStaticPowerConsumptionControllerT2
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.2.name
             // # Static Power Consumption Controller Module T2
             // #zh_CN 静态耗能控制器模块T2
             GTCMItemList.StaticPowerConsumptionControllerT2.set(
                 new StaticPowerConsumptionController(
                     18833,
                     "NameStaticPowerConsumptionControllerT2",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT2"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.2.name"),
                     8,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[1]));
 
-            // #tr NameStaticPowerConsumptionControllerT3
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.3.name
             // # Static Power Consumption Controller Module T3
             // #zh_CN 静态耗能控制器模块T3
             GTCMItemList.StaticPowerConsumptionControllerT3.set(
                 new StaticPowerConsumptionController(
                     18834,
                     "NameStaticPowerConsumptionControllerT3",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT3"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.3.name"),
                     9,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[2]));
 
-            // #tr NameStaticPowerConsumptionControllerT4
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.4.name
             // # Static Power Consumption Controller Module T4
             // #zh_CN 静态耗能控制器模块T4
             GTCMItemList.StaticPowerConsumptionControllerT4.set(
                 new StaticPowerConsumptionController(
                     18835,
                     "NameStaticPowerConsumptionControllerT4",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT4"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.4.name"),
                     10,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[3]));
 
-            // #tr NameStaticPowerConsumptionControllerT5
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.5.name
             // # Static Power Consumption Controller Module T5
             // #zh_CN 静态耗能控制器模块T5
             GTCMItemList.StaticPowerConsumptionControllerT5.set(
                 new StaticPowerConsumptionController(
                     18836,
                     "NameStaticPowerConsumptionControllerT5",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT5"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.5.name"),
                     11,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[4]));
 
-            // #tr NameStaticPowerConsumptionControllerT6
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.6.name
             // # Static Power Consumption Controller Module T6
             // #zh_CN 静态耗能控制器模块T6
             GTCMItemList.StaticPowerConsumptionControllerT6.set(
                 new StaticPowerConsumptionController(
                     18837,
                     "NameStaticPowerConsumptionControllerT6",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT6"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.6.name"),
                     12,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[5]));
 
-            // #tr NameStaticPowerConsumptionControllerT7
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.7.name
             // # Static Power Consumption Controller Module T7
             // #zh_CN 静态耗能控制器模块T7
             GTCMItemList.StaticPowerConsumptionControllerT7.set(
                 new StaticPowerConsumptionController(
                     18838,
                     "NameStaticPowerConsumptionControllerT7",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT7"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.7.name"),
                     13,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[6]));
 
-            // #tr NameStaticPowerConsumptionControllerT8
+            // #tr tst.modular.machine.StaticPowerConsumptionController.tier.8.name
             // # Static Power Consumption Controller Module T8
             // #zh_CN 静态耗能控制器模块T8
             GTCMItemList.StaticPowerConsumptionControllerT8.set(
                 new StaticPowerConsumptionController(
                     18839,
                     "NameStaticPowerConsumptionControllerT8",
-                    TSTUtils.tr("NameStaticPowerConsumptionControllerT8"),
+                    TSTUtils.tr("tst.modular.machine.StaticPowerConsumptionController.tier.8.name"),
                     14,
                     (float) PowerConsumptionMultiplierOfPowerConsumptionController[7]));
 
-            // #tr NameLowSpeedPerfectOverclockController
+            // #tr tst.modular.machine.LowSpeedPerfectOverclockController.name
             // # Low Speed Perfect Overclock Controller Module
             // #zh_CN 低速无损超频控制器模块
             GTCMItemList.LowSpeedPerfectOverclockController.set(
                 new StaticOverclockController(
                     18840,
                     "NameLowSpeedPerfectOverclockController",
-                    TSTUtils.tr("NameLowSpeedPerfectOverclockController"),
+                    TSTUtils.tr("tst.modular.machine.LowSpeedPerfectOverclockController.name"),
                     12,
                     2,
                     2));
 
-            // #tr NamePerfectOverclockController
+            // #tr tst.modular.machine.PerfectOverclockController.name
             // # Perfect Overclock Controller Module
             // #zh_CN 无损超频控制器模块
             GTCMItemList.PerfectOverclockController.set(
                 new StaticOverclockController(
                     18841,
                     "NamePerfectOverclockController",
-                    TSTUtils.tr("NamePerfectOverclockController"),
+                    TSTUtils.tr("tst.modular.machine.PerfectOverclockController.name"),
                     13,
                     4,
                     4));
 
-            // #tr NameSingularityPerfectOverclockController
+            // #tr tst.modular.machine.SingularityPerfectOverclockController.name
             // # Singularity Perfect Overclock Controller Module
             // #zh_CN 奇点无损超频控制器模块
             GTCMItemList.SingularityPerfectOverclockController.set(
                 new StaticOverclockController(
                     18842,
                     "NameSingularityPerfectOverclockController",
-                    TSTUtils.tr("NameSingularityPerfectOverclockController"),
+                    TSTUtils.tr("tst.modular.machine.SingularityPerfectOverclockController.name"),
                     14,
                     8,
                     4));
@@ -1729,40 +1728,40 @@ public final class MachineLoader {
              * MAX=14 2,147,483,648
              */
 
-            // #tr NameExecutionCore
+            // #tr tst.modular.machine.ExecutionCore.name
             // # Execution Core Module
             // #zh_CN 执行核心模块
             GTCMItemList.ExecutionCore
-                .set(new ExecutionCore(18843, "NameExecutionCore", TSTUtils.tr("NameExecutionCore"), 12));
+                .set(new ExecutionCore(18843, "NameExecutionCore", TSTUtils.tr("tst.modular.machine.ExecutionCore.name"), 12));
 
-            // #tr NameAdvancedExecutionCore
+            // #tr tst.modular.machine.AdvancedExecutionCore.name
             // # Advanced Execution Core Module
             // #zh_CN 高级执行核心模块
             GTCMItemList.AdvancedExecutionCore.set(
-                new AdvExecutionCore(18844, "NameAdvancedExecutionCore", TSTUtils.tr("NameAdvancedExecutionCore"), 13));
+                new AdvExecutionCore(18844, "NameAdvancedExecutionCore", TSTUtils.tr("tst.modular.machine.AdvancedExecutionCore.name"), 13));
 
-            // #tr NamePerfectExecutionCore
+            // #tr tst.modular.machine.PerfectExecutionCore.name
             // # Perfect Execution Core Module
             // #zh_CN 完美执行核心模块
             GTCMItemList.PerfectExecutionCore.set(
                 new PerfectExecutionCore(
                     18845,
                     "NamePerfectExecutionCore",
-                    TSTUtils.tr("NamePerfectExecutionCore"),
+                    TSTUtils.tr("tst.modular.machine.PerfectExecutionCore.name"),
                     14));
         }
 
         // endregion
 
         if (Config.Enable_BloodHell && Config.Enable_BloodHatch) {
-            // #tr NameBloodOrbHatchDebug
+            // #tr tst.common.machine.BloodOrbHatchDebug.name
             // # Debug Blood Hatch
             // #zh_CN Debug血液仓
             GTCMItemList.BloodOrbHatchDebug.set(
                 new TST_BloodOrbHatch.TST_Debug_BloodHatch(
                     18848,
                     "NameBloodOrbHatchDebug",
-                    TSTUtils.tr("NameBloodOrbHatchDebug"),
+                    TSTUtils.tr("tst.common.machine.BloodOrbHatchDebug.name"),
                     4));
 
         }
@@ -1771,30 +1770,31 @@ public final class MachineLoader {
 
     public static void loadMachinePostInit() {
         if (Config.EnableSpaceApiaryModule) {
-            // #tr NameSpaceApiaryT1
+            // #tr tst.common.machine.SpaceApiary.tier.1.name
             // # Space Apiray Module MK-I
             // #zh_CN 太空蜂箱模块 MK-I
             GTCMItemList.SpaceApiaryT1.set(
-                new TST_SpaceApiary.TST_SpaceApiaryT1(19042, "NameSpaceApiaryT1", TSTUtils.tr("NameSpaceApiaryT1")));
+                new TST_SpaceApiary.TST_SpaceApiaryT1(19042, "NameSpaceApiaryT1", TSTUtils.tr("tst.common.machine.SpaceApiary.tier.1.name")));
 
-            // #tr NameSpaceApiaryT2
+            // #tr tst.common.machine.SpaceApiary.tier.2.name
             // # Space Apiray Module MK-II
             // #zh_CN 太空蜂箱模块 MK-II
             GTCMItemList.SpaceApiaryT2.set(
-                new TST_SpaceApiary.TST_SpaceApiaryT2(19043, "NameSpaceApiaryT2", TSTUtils.tr("NameSpaceApiaryT2")));
+                new TST_SpaceApiary.TST_SpaceApiaryT2(19043, "NameSpaceApiaryT2", TSTUtils.tr("tst.common.machine.SpaceApiary.tier.2.name")));
 
-            // #tr NameSpaceApiaryT3
+            // #tr tst.common.machine.SpaceApiary.tier.3.name
             // # Space Apiray Module MK-III
             // #zh_CN 太空蜂箱模块 MK-III
             GTCMItemList.SpaceApiaryT3.set(
-                new TST_SpaceApiary.TST_SpaceApiaryT3(19044, "NameSpaceApiaryT3", TSTUtils.tr("NameSpaceApiaryT3")));
+                new TST_SpaceApiary.TST_SpaceApiaryT3(19044, "NameSpaceApiaryT3", TSTUtils.tr("tst.common.machine.SpaceApiary.tier.3.name")));
 
-            // #tr NameSpaceApiaryT4
+            // #tr tst.common.machine.SpaceApiary.tier.4.name
             // # Space Apiray Module MK-IV
             // #zh_CN 太空蜂箱模块 MK-IV
             GTCMItemList.SpaceApiaryT4.set(
-                new TST_SpaceApiary.TST_SpaceApiaryT4(19045, "NameSpaceApiaryT4", TSTUtils.tr("NameSpaceApiaryT4")));
+                new TST_SpaceApiary.TST_SpaceApiaryT4(19045, "NameSpaceApiaryT4", TSTUtils.tr("tst.common.machine.SpaceApiary.tier.4.name")));
         }
 
     }
 }
+// spotless:on

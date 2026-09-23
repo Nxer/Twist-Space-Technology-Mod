@@ -28,7 +28,7 @@ public class BlockArcaneHole extends BlockContainer {
 
     private IIcon placedIcon;
 
-    // #tr tile.ArcaneHole.name
+    // #tr tile.tst.common.arcane_hole.name
     // # {\BOLD}{\LIGHT_PURPLE}Arcane Empty Space
     // #zh_CN {\BOLD}{\LIGHT_PURPLE}奥术裂隙
     public BlockArcaneHole() {
@@ -40,6 +40,11 @@ public class BlockArcaneHole extends BlockContainer {
         this.setStepSound(Block.soundTypeGlass);
         this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         this.setCreativeTab(TstCreativeTabs.TabGeneral);
+    }
+
+    @Override
+    public String getUnlocalizedName() {
+        return "tile.tst.common.arcane_hole";
     }
 
     @Override

@@ -245,18 +245,18 @@ public class TST_LargeSteamForgeHammer extends TST_SteamMultiMachineBase<TST_Lar
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_LargeSteamForgeHammer_MachineType
+        // #tr tst.common.machine.LargeSteamForgeHammer.tooltip.machine_type
         // # Forge Hammer
         // #zh_CN 锻造锤
-        tt.addMachineType(TSTUtils.tr("Tooltip_LargeSteamForgeHammer_MachineType"))
-            // #tr Tooltip_LargeSteamForgeHammer_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.LargeSteamForgeHammer.tooltip.machine_type"))
+            // #tr tst.common.machine.LargeSteamForgeHammer.tooltip.controller
             // # Controller block for the Large Steam Forge Hammer
             // #zh_CN 大型蒸汽锻造锤的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_LargeSteamForgeHammer_Controller"))
-            // #tr Tooltip_LargeSteamForgeHammer_01
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamForgeHammer.tooltip.controller"))
+            // #tr tst.common.machine.LargeSteamForgeHammer.tooltip.info.01
             // # He has a hammer. Who has the Sickle?
             // #zh_CN 他有一柄锤子. 谁有镰刀?
-            .addInfo(TSTUtils.tr("Tooltip_LargeSteamForgeHammer_01"))
+            .addInfo(TSTUtils.tr("tst.common.machine.LargeSteamForgeHammer.tooltip.info.01"))
             .beginStructureBlock(3, 3, 3, true)
             .addController(TSTSharedLocalization.Structure.textFrontCenter)
             .addInputBus(TSTSharedLocalization.Structure.textAnyCasing, 2)

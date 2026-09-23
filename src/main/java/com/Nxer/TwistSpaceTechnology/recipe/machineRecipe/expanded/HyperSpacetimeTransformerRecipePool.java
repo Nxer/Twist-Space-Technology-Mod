@@ -15,7 +15,7 @@ public class HyperSpacetimeTransformerRecipePool  {
 
     public static void loadRecipes() {
 
-        final IRecipeMap HST = GTCMRecipe.HyperSpacetimeTransformerRecipe;
+        final IRecipeMap HST = GTCMRecipe.HyperSpacetimeTransformerRecipeMap;
         //terrastrial recipe
         GTValues.RA.stdBuilder()
             .itemInputs(new ItemStack(Items.wheat,1))

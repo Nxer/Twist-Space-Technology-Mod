@@ -247,7 +247,7 @@ public class StellarForgeRecipePool {
 
             int duration = Math.max(1, recipe.mDuration / 3);
             if (integrateNum != 0) {
-                for (GTRecipe recipeCheck : GTCMRecipe.StellarForgeRecipes.getAllRecipes()) {
+                for (GTRecipe recipeCheck : GTCMRecipe.StellarForgeRecipeMap.getAllRecipes()) {
                     if (!itemStackArrayEqualFuzzy(recipeCheck.mInputs, inputItemsArray)) continue;
                     if (!fluidStackEqualFuzzy(recipeCheck.mFluidOutputs, outputFluidsArray)) continue;
                     canAddNewRecipe = false;
@@ -280,7 +280,7 @@ public class StellarForgeRecipePool {
                     outputFluidsArray,
                     recipe.mEUt,
                     Math.max(1, recipe.mDuration / 3),
-                    GTCMRecipe.StellarForgeRecipes);
+                    GTCMRecipe.StellarForgeRecipeMap);
             }
 
         }
@@ -371,7 +371,7 @@ public class StellarForgeRecipePool {
                 outputFluidList.toArray(new FluidStack[0]),
                 recipe.mEUt,
                 recipe.mDuration,
-                GTCMRecipe.StellarForgeAlloySmelterRecipes);
+                GTCMRecipe.StellarForgeAlloySmelterRecipeMap);
         }
 
     }
@@ -426,7 +426,7 @@ public class StellarForgeRecipePool {
             new FluidStack[] { Materials.MeteoricIron.getMolten(144) },
             (int) RECIPE_MV,
             20 * 25,
-            GTCMRecipe.StellarForgeRecipes);
+            GTCMRecipe.StellarForgeRecipeMap);
 
         // Meteoric Steel
         addToMiracleDoorRecipes(
@@ -436,7 +436,7 @@ public class StellarForgeRecipePool {
             new FluidStack[] { Materials.MeteoricSteel.getMolten(144) },
             (int) RECIPE_MV,
             20 * 10,
-            GTCMRecipe.StellarForgeRecipes);
+            GTCMRecipe.StellarForgeRecipeMap);
 
         // Neutronium
         addToMiracleDoorRecipes(
@@ -446,7 +446,7 @@ public class StellarForgeRecipePool {
             new FluidStack[] { Materials.Neutronium.getMolten(144) },
             (int) RECIPE_UV,
             20 * 112,
-            GTCMRecipe.StellarForgeRecipes);
+            GTCMRecipe.StellarForgeRecipeMap);
 
         // Mellion and Creon
         addToMiracleDoorRecipes(
@@ -456,7 +456,7 @@ public class StellarForgeRecipePool {
             new FluidStack[] { Materials.Mellion.getMolten(144), Materials.Creon.getMolten(144) },
             (int) RECIPE_UMV,
             20 * 10,
-            GTCMRecipe.StellarForgeRecipes);
+            GTCMRecipe.StellarForgeRecipeMap);
 
         // Single Mellion
         addToMiracleDoorRecipes(
@@ -466,19 +466,19 @@ public class StellarForgeRecipePool {
             new FluidStack[] { Materials.Mellion.getMolten(144) },
             (int) RECIPE_UMV,
             20 * 5,
-            GTCMRecipe.StellarForgeRecipes);
+            GTCMRecipe.StellarForgeRecipeMap);
 
     }
 
     public static Collection<GTRecipe> stellarForgeRecipeListCache;
 
     private void cacheRecipeList() {
-        stellarForgeRecipeListCache = new HashSet<>(GTCMRecipe.StellarForgeRecipes.getAllRecipes());
+        stellarForgeRecipeListCache = new HashSet<>(GTCMRecipe.StellarForgeRecipeMap.getAllRecipes());
     }
 
     private void loadRecipeListCache() {
         for (GTRecipe recipe : stellarForgeRecipeListCache) {
-            GTCMRecipe.StellarForgeRecipes.addRecipe(recipe);
+            GTCMRecipe.StellarForgeRecipeMap.addRecipe(recipe);
         }
     }
 

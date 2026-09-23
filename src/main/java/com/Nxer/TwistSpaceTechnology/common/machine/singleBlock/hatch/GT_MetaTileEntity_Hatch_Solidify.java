@@ -137,10 +137,10 @@ public class GT_MetaTileEntity_Hatch_Solidify extends MTEHatchInputBus
             aNameRegional,
             aTier,
             ITEM_SLOT_AMOUNT,
-            // #tr ToolTip_SolidifyHatch_1
+            // #tr tst.common.machine.HatchSolidify.tooltip.info.01
             // # {\RESET}Fluid Input with Mold for {\GOLD}Fluid Solidifier{\RESET}
             // #zh_CN {\RESET}为{\GOLD}流体固化机{\RESET}带模具输入流体
-            new String[] { TSTUtils.tr("ToolTip_SolidifyHatch_1"),
+            new String[] { TSTUtils.tr("tst.common.machine.HatchSolidify.tooltip.info.01"),
                 FluidCapacity + " " + getCapacityPerTank(aTier) + " L x " + getFluidSlotsAmount(aTier),
                 AutoSeparation });
         registerTooltipCredits(ID.GODERIUM);

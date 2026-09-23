@@ -272,38 +272,38 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltips_AdvancedMegaOilCracker_MachineType
+        // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.machine_type
         // # Cracker
         // #zh_CN 石油裂化机
-        tt.addMachineType(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_MachineType"))
-            // #tr Tooltips_AdvancedMegaOilCracker_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.machine_type"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.controller
             // # Controller block for the Advanced Mega Oil Cracker
             // #zh_CN 进阶巨型石油裂化机的控制器方块
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_Controller"))
-            // #tr Tooltips_AdvancedMegaOilCracker_01
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.controller"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.01
             // # {\ITALIC}Freedom as a basis for self-government.
             // #zh_CN {\ITALIC}自由是自治之基础.
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_01"))
-            // #tr Tooltips_AdvancedMegaOilCracker_02
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.01"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.02
             // # As the Mega Oil Cracker do.
             // #zh_CN 就像巨型石油裂化机那样.
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_02"))
-            // #tr Tooltips_AdvancedMegaOilCracker_03
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.02"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.03
             // # Chamber placement no longer has restrictions.
             // #zh_CN 仓室位置不再受限.
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_03"))
-            // #tr Tooltips_AdvancedMegaOilCracker_04
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.03"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.04
             // # Operates {\AQUA}100%{\GRAY} faster than the Mega Oil Cracker.
             // #zh_CN 运行速度比巨型石油裂化机快{\AQUA}100%.
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_04"))
-            // #tr Tooltips_AdvancedMegaOilCracker_05
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.04"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.05
             // # Power Loss Reduction = {\AQUA}100%{\GRAY} / {\WHITE}Coil Tier{\GRAY}.
             // #zh_CN 能耗减免 = {\AQUA}100%{\GRAY} / {\WHITE}线圈等级{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_05"))
-            // #tr Tooltips_AdvancedMegaOilCracker_06
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.05"))
+            // #tr tst.common.machine.AdvancedMegaOilCracker.tooltip.info.06
             // # Hypogen coil (or better) enable {\LIGHT_PURPLE}Perfect Overclocking{\GRAY}.
             // #zh_CN 海珀珍及以上等级线圈解锁{\LIGHT_PURPLE}无损超频{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltips_AdvancedMegaOilCracker_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.AdvancedMegaOilCracker.tooltip.info.06"))
             .addInputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addOutputBus(TSTSharedLocalization.Structure.textUseBlueprint, 1)
             .addInputHatch(TSTSharedLocalization.Structure.textUseBlueprint, 2)

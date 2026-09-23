@@ -1,6 +1,7 @@
 package com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting;
 
 import static com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology.LOG;
+import static com.Nxer.TwistSpaceTechnology.common.recipeMap.GTCMRecipe.VisualExtremeCraftRecipeMap;
 import static fox.spiteful.avaritia.items.LudicrousItems.cosmic_meatballs;
 import static fox.spiteful.avaritia.items.LudicrousItems.ultimate_stew;
 import static gregtech.api.util.GTModHandler.getModItem;
@@ -21,9 +22,7 @@ import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import com.Nxer.TwistSpaceTechnology.common.GTCMItemList;
 import com.Nxer.TwistSpaceTechnology.common.api.OreDictItem;
-import com.Nxer.TwistSpaceTechnology.common.recipeMap.recipeMapFrontends.TST_GeneralFrontend;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.rewrites.TST_ItemID;
@@ -33,29 +32,12 @@ import fox.spiteful.avaritia.crafting.ExtremeCraftingManager;
 import fox.spiteful.avaritia.crafting.ExtremeShapedOreRecipe;
 import fox.spiteful.avaritia.crafting.ExtremeShapedRecipe;
 import gregtech.api.enums.GTValues;
-import gregtech.api.gui.modularui.GTUITextures;
-import gregtech.api.recipe.RecipeMap;
-import gregtech.api.recipe.RecipeMapBackend;
-import gregtech.api.recipe.RecipeMapBuilder;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
 
 public class ExtremeCraftRecipeHandler {
-
-    // #tr gtcm.recipe.visualExtremeCraftRecipes
-    // # Extreme Craft Recipe Transform
-    // #zh_CN 梦魇工作台配方转换
-    public static final RecipeMap<RecipeMapBackend> visualExtremeCraftRecipes = RecipeMapBuilder
-        .of("gtcm.recipe.visualExtremeCraftRecipes")
-        .maxIO(16, 1, 0, 0)
-        .progressBar(GTUITextures.PROGRESSBAR_ARROW_MULTIPLE)
-        .frontend(TST_GeneralFrontend::new)
-        .neiHandlerInfo(
-            builder -> builder.setDisplayStack(GTCMItemList.ExtremeCraftCenter.get(1))
-                .setMaxRecipesPerPage(1))
-        .build();
 
     public static final Collection<ExtremeCraftRecipe> extremeCraftRecipes = new ArrayList<>();
 
@@ -212,11 +194,11 @@ public class ExtremeCraftRecipeHandler {
                 Optional<GTRecipe.GTRecipe_WithAlt> oRecipe = builder.buildWithAlt();
                 if (oRecipe.isPresent()) {
                     LOG.info("oRecipe is present");
-                    visualExtremeCraftRecipes.add(oRecipe.get());
+                    VisualExtremeCraftRecipeMap.add(oRecipe.get());
                     LOG.info("visual recipe adding finish : {}", output.getDisplayName());
                 } else {
                     LOG.info("oRecipe is not present");
-                    builder.addTo(visualExtremeCraftRecipes);
+                    builder.addTo(VisualExtremeCraftRecipeMap);
                 }
 
                 LOG.info("Creating ExtremeCraftRecipe");

@@ -219,14 +219,14 @@ G -> ofFrame...(Materials.Neutronium);
 
     @Override
     public String getMachineModeName() {
-        // #tr VacuumFilterExtractor.modeMsg.0
+        // #tr tst.common.machine.VacuumFilterExtractor.mode.0
         // # Mode: Distillation Tower
         // #zh_CN 蒸馏塔模式
 
-        // #tr VacuumFilterExtractor.modeMsg.1
+        // #tr tst.common.machine.VacuumFilterExtractor.mode.1
         // # Mode: Distillery
         // #zh_CN 蒸馏室模式
-        return StatCollector.translateToLocal("VacuumFilterExtractor.modeMsg." + machineMode);
+        return StatCollector.translateToLocal("tst.common.machine.VacuumFilterExtractor.mode." + machineMode);
     }
 
     @Override
@@ -312,39 +312,39 @@ G -> ofFrame...(Materials.Neutronium);
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
         // spotless:off
-        // #tr Tooltip_VacuumFilterExtractor_MachineType
+        // #tr tst.common.machine.VacuumFilterExtractor.tooltip.machine_type
         // # Distillation Tower | Distillery
         // #zh_CN 蒸馏塔 | 蒸馏室
-        tt.addMachineType(TSTUtils.tr("Tooltip_VacuumFilterExtractor_MachineType"))
-            // #tr Tooltip_VacuumFilterExtractor_Controller
+        tt.addMachineType(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.machine_type"))
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.controller
             // # Controller block for the Vacuum Filter Extractor
             // #zh_CN 真空抽滤器的控制器方块
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_Controller"))
-            // #tr Tooltip_VacuumFilterExtractor_01
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.controller"))
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.info.01
             // # {\ITALIC}Engineers think something isn't broken because it has too few features.
             // #zh_CN {\ITALIC}工程师认为东西没坏是它功能太少.
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_01"))
-            // #tr Tooltip_VacuumFilterExtractor_02
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.01"))
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.info.02
             // # By manipulating space in order to achieve separation of matter
             // #zh_CN 通过操控空间以实现分离物质,
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_02"))
-            // #tr Tooltip_VacuumFilterExtractor_03
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.02"))
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.info.03
             // # rather than direct manipulation of matter.
             // #zh_CN 而非直接操控物质.
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_03"))
-            // #tr Tooltip_VacuumFilterExtractor_04
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.03"))
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.info.04
             // # Recipe voltage is only {\RED}50%{\GRAY} of normal.
             // #zh_CN 只需要正常配方电压的{\RED}50%{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_04"))
-            // #tr Tooltip_VacuumFilterExtractor_05
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.04"))
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.info.05
             // # Increasing the energy input will result in more speed boosts.
             // #zh_CN 提高能量输入将提供更多的速度提升.
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_05"))
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.05"))
             .addInfo(TSTSharedLocalization.MachineTooltip.textScrewdriverChangeMode)
-            // #tr Tooltip_VacuumFilterExtractor_06
+            // #tr tst.common.machine.VacuumFilterExtractor.tooltip.info.06
             // # In distillery mode, machine will enable {\AQUA}Perfect Overclock{\GRAY}.
             // #zh_CN 蒸馏室模式将启用{\AQUA}无损超频{\GRAY}.
-            .addInfo(TSTUtils.tr("Tooltip_VacuumFilterExtractor_06"))
+            .addInfo(TSTUtils.tr("tst.common.machine.VacuumFilterExtractor.tooltip.info.06"))
             .addStructureInfo(TSTSharedLocalization.MachineTooltip.Tooltip_DoNotNeedMaintenance)
             .beginStructureBlock(13, 22, 14, false)
             .addController(TSTSharedLocalization.Structure.textUseBlueprint)
