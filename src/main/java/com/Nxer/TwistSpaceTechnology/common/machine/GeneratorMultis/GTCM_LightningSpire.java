@@ -512,9 +512,11 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
                 // #tr LightningSpire.ModeMsg.0
                 // # Lightning Spire is in Operate Mode
                 // #zh_CN 闪电尖塔设置为发电模式
+
                 // #tr LightningSpire.ModeMsg.1
                 // # Lightning Spire is in Input Mode
                 // #zh_CN 闪电尖塔设置为输入模式
+
                 // #tr LightningSpire.ModeMsg.2
                 // # Lightning Spire is in Output Mode
                 // #zh_CN 闪电尖塔设置为输出模式
@@ -535,6 +537,7 @@ public class GTCM_LightningSpire extends TST_GeneratorBase<GTCM_LightningSpire>
             // #tr LightningSpire.enable_lightning.true
             // # Enable lightning animation
             // #zh_CN 启用闪电特效
+
             // #tr LightningSpire.enable_lightning.false
             // # Disable lightning animation
             // #zh_CN 禁用闪电特效

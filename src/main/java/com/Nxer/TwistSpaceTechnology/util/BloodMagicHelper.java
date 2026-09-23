@@ -16,6 +16,10 @@ import fox.spiteful.avaritia.items.LudicrousItems;
 
 public class BloodMagicHelper {
 
+    public static boolean isBloodOrb(@Nullable ItemStack stack) {
+        return stack != null && stack.getItem() instanceof IBloodOrb;
+    }
+
     public static boolean isCreativeOrb(@Nullable ItemStack stack) {
         return stack != null && stack.getItem() == LudicrousItems.armok_orb
             && Config.Enable_BloodHatch_Armok_InfiniteDrain;
@@ -71,6 +75,27 @@ public class BloodMagicHelper {
         }
     }
 
+    public static int getOrbOwnerRemainingLpCapacity(@Nullable ItemStack stack) {
+        var ownerName = getOrbOwnerName(stack);
+        if (ownerName == null) return 0;
+        long remaining = (long) SoulNetworkHandler.getMaxEssence(ownerName)
+            - Math.max(0, SoulNetworkHandler.getCurrentEssence(ownerName));
+        return (int) Math.max(0, Math.min(Integer.MAX_VALUE, remaining));
+    }
+
+    /**
+     * Pays LP from the blood orb owner's network.
+     *
+     * @return the amount paid; a configured creative orb reports payment without changing the network
+     */
+    public static int drainBloodFromNetwork(@Nullable ItemStack orbStack, int lpAmount) {
+        if (lpAmount <= 0 || !isBloodOrb(orbStack)) return 0;
+        if (isCreativeOrb(orbStack)) return lpAmount;
+        if (getOrbOwnerName(orbStack) == null) return 0;
+        int amountToDrain = Math.min(lpAmount, Math.max(0, getOrbOwnerLpAmount(orbStack)));
+        return amountToDrain <= 0 ? 0 : SoulNetworkHandler.syphonFromNetwork(orbStack, amountToDrain);
+    }
+
     /**
      * @param stack the shard stack
      * @return the tier of the shard (weak: 1; demon: 2)
@@ -112,8 +137,8 @@ public class BloodMagicHelper {
      * @return the amount of blood added to the network
      */
     public static int addBloodToNetwork(String ownerName, int lpAmount) {
-        var maxOrb = SoulNetworkHandler.getMaximumForOrbTier(SoulNetworkHandler.getCurrentMaxOrb(ownerName));
-        return SoulNetworkHandler.addCurrentEssenceToMaximum(ownerName, lpAmount, maxOrb);
+        return SoulNetworkHandler
+            .addCurrentEssenceToMaximum(ownerName, lpAmount, SoulNetworkHandler.getMaxEssence(ownerName));
     }
 
     /**

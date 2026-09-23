@@ -109,12 +109,15 @@ public class GT_MetaTileEntity_Hatch_DualInput extends MTEHatchInputBus implemen
             // #tr ToolTip_DualInputHatch_1
             // # Advanced input for Multiblocks
             // #zh_CN 多方块的进阶输入
+
             // #tr ToolTip_DualInputHatch_2
             // # Can hold
             // #zh_CN 能容纳
+
             // #tr ToolTip_DualInputHatch_3
             // # types of item and
             // #zh_CN 种物品与
+
             // #tr ToolTip_DualInputHatch_4
             // # types of fluid
             // #zh_CN 种流体
