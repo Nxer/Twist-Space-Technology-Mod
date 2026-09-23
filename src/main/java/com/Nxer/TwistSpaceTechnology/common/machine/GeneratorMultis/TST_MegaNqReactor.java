@@ -802,13 +802,33 @@ public class TST_MegaNqReactor extends TST_GeneratorBase<TST_MegaNqReactor>
     @Override
     protected MultiblockTooltipBuilder createTooltip() {
         final MultiblockTooltipBuilder tt = new TSTMultiblockTooltipBuilder();
+        // spotless:off
+        // #tr Tooltip_MegaNqReactor_MachineType
+        // # Naquadah Reactor,LNR
+        // #zh_CN 大型硅岩反应堆
         tt.addMachineType(tr("Tooltip_MegaNqReactor_MachineType"))
+            // #tr Tooltip_MegaNqReactor_01
+            // # §aHuman resource Friendly!
+            // #zh_CN §a人力友好型!
             .addInfo(tr("Tooltip_MegaNqReactor_01"))
+            // #tr Tooltip_MegaNqReactor_02
+            // # Similar to §5LNR§7, Maximum of§b 1,000 §7parallels
+            // #zh_CN 就像§5大型硅岩反应堆§7一样, 但是拥有1000并行
             .addInfo(tr("Tooltip_MegaNqReactor_02"))
+            // #tr Tooltip_MegaNqReactor_03
+            // # §aContinuous operation reduces coolant/excited liquid consumption
+            // #zh_CN §a持续运行可降低冷却剂/激发液体消耗!
             .addInfo(tr("Tooltip_MegaNqReactor_03"))
+            // #tr Tooltip_MegaNqReactor_04
+            // # Up to §550%§7. Max in 24h, decays when idle.
+            // #zh_CN 最多减免 §550%§7, 24小时达上限, 停机时衰减.
             .addInfo(tr("Tooltip_MegaNqReactor_04"))
+            // #tr Tooltip_MegaNqReactor_05
+            // # §cEnsure sufficient dynamo size, or the machine will shut down.§7
+            // #zh_CN §c请保持动力仓足够大, 否则机器会停机§7.
             .addInfo(tr("Tooltip_MegaNqReactor_05"))
             .toolTipFinisher();
+        // spotless:on
         return tt;
     }
 
