@@ -3,7 +3,8 @@ package com.Nxer.TwistSpaceTechnology.combat.items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import gregtech.api.util.GTLog;
+import com.Nxer.TwistSpaceTechnology.TwistSpaceTechnology;
+
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
 
@@ -31,8 +32,7 @@ public enum ItemGearList {
         sanityCheck();
         // if invalid, return a replacements
         if (GTUtility.isStackInvalid(mStack)) {
-            GTLog.out.println("Object in the ItemList is null at:");
-            new NullPointerException().printStackTrace(GTLog.out);
+            TwistSpaceTechnology.LOG.warn("Object in the ItemList is null at: {}", this.toString());
             return GTUtility.copyAmountUnsafe(aAmount, WoodenSword.get(1));
         }
         return GTUtility.copyAmountUnsafe(aAmount, GTOreDictUnificator.get(mStack));

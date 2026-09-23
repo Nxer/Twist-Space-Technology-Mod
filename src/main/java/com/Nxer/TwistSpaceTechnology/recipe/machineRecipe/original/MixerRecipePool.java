@@ -7,9 +7,9 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Mods;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class MixerRecipePool {
@@ -25,7 +25,7 @@ public class MixerRecipePool {
             .itemOutputs(GTModHandler.getModItem(Mods.BartWorks.ID, "gt.bwMetaGenerateddust", 10, 11502))
             .eut(RECIPE_EV)
             .duration(20 * 10)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+            .addTo(RecipeMaps.mixerNonCellRecipes);
 
         // endregion
 
@@ -42,7 +42,7 @@ public class MixerRecipePool {
             .itemOutputs(Materials.HSSS.getDust(27))
             .eut(RECIPE_LuV)
             .duration(20 * 30)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+            .addTo(RecipeMaps.mixerNonCellRecipes);
 
     }
 }

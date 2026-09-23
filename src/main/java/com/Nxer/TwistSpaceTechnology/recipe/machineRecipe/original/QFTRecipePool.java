@@ -8,14 +8,14 @@ import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.interfaces.IRecipeMap;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import gregtech.api.recipe.RecipeMaps;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class QFTRecipePool {
 
     public static void loadRecipes() {
-        final IRecipeMap QFT = GTPPRecipeMaps.quantumForceTransformerRecipes;
+        final IRecipeMap QFT = RecipeMaps.quantumForceTransformerRecipes;
 
         // Samarium
         GTValues.RA.stdBuilder()

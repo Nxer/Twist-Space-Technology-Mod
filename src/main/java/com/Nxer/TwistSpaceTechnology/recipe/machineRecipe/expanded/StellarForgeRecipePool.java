@@ -36,7 +36,6 @@ import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.GTRecipeBuilder;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class StellarForgeRecipePool {
 
@@ -288,7 +287,7 @@ public class StellarForgeRecipePool {
 
     public static void prepareABSRecipes() {
 
-        for (GTRecipe recipe : GTPPRecipeMaps.alloyBlastSmelterRecipes.getAllRecipes()) {
+        for (GTRecipe recipe : RecipeMaps.alloyBlastSmelterRecipes.getAllRecipes()) {
             int minOutputFluidAmount = 144;
             // if there is more than one output fluid, find the fewest
             for (FluidStack aOutputFluid : recipe.mFluidOutputs) {

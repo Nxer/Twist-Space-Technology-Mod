@@ -33,6 +33,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Math;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -48,6 +49,7 @@ import com.github.bsideup.jabel.Desugar;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 
+import appeng.api.storage.data.IAEFluidStack;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.logic.ProcessingLogic;
@@ -72,9 +74,11 @@ import gregtech.common.tileentities.machines.MTEHatchInputBusME;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
 import gregtech.common.tileentities.machines.outputme.MTEHatchOutputBusME;
 import gregtech.common.tileentities.machines.outputme.MTEHatchOutputME;
+import gregtech.common.tileentities.machines.outputme.base.MTEHatchOutputMEBase;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
+import scala.Byte;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable, TSTTooltipCredit {
@@ -487,11 +491,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
                 long room = getLongCacheRoom(provider.getCachedAmount(), reserved.getOrDefault(meBus, 0L));
                 if (room <= 0) continue;
                 long accepted = Math.min(remaining, room);
-                if (provider.shouldCheck()) {
+                if (provider.shouldCheckCell()) {
                     accepted = findLargestAcceptedAmount(
                         accepted,
                         value -> provider.canStore(output.itemStack(), value));
-                } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
+                } else if (!provider.hasAvailableSpace() || !provider.getFilter()
                     .isAllowed(output.itemStack())) {
                         continue;
                     }
@@ -513,11 +517,11 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             if (output.fluidStack() == null || output.amount() <= 0) continue;
             long remaining = output.amount();
             for (MTEHatchOutputME meHatch : meHatches) {
-                var provider = meHatch.getProvider();
+                MTEHatchOutputMEBase<IAEFluidStack> provider = meHatch.getProvider();
                 long room = getLongCacheRoom(provider.getCachedAmount(), reserved.getOrDefault(meHatch, 0L));
                 if (room <= 0) continue;
                 long accepted = Math.min(remaining, room);
-                if (provider.shouldCheck()) {
+                if (provider.shouldCheckCell()) {
                     accepted = findLargestAcceptedAmount(
                         accepted,
                         value -> provider.canStore(output.fluidStack(), value));

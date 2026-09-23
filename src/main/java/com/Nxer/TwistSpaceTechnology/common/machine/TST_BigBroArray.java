@@ -124,7 +124,6 @@ import gregtech.common.blocks.BlockCasingsAbstract;
 import gregtech.common.tileentities.machines.MTEHatchCraftingInputME;
 import gregtech.common.tileentities.machines.MTEHatchInputBusME;
 import gregtech.common.tileentities.machines.basic.MTEMassfabricator;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.MaterialsAlloy;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import io.netty.buffer.ByteBuf;
@@ -620,7 +619,7 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
                 put("Naquadah_3", RecipeMaps.class.getDeclaredField("hugeNaquadahReactorFuels"));
                 put("Naquadah_4", RecipeMaps.class.getDeclaredField("extremeNaquadahReactorFuels"));
                 put("Naquadah_5", RecipeMaps.class.getDeclaredField("ultraHugeNaquadahReactorFuels"));
-                put("Semi_Fluid", GTPPRecipeMaps.class.getDeclaredField("semiFluidFuels"));
+                put("Semi_Fluid", RecipeMaps.class.getDeclaredField("semiFluidFuels"));
                 // no recipe map for steam, 2MB steam for 1EU, and 1/80mb distilled water, 1 mb sc for 100EU, and 1mb
                 // steam
             } catch (Exception e) {

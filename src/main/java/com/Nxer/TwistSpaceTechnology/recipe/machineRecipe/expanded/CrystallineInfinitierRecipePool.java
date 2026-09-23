@@ -25,7 +25,6 @@ import gregtech.api.interfaces.IRecipeMap;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtnhlanth.common.register.WerkstoffMaterialPool;
 
 public class CrystallineInfinitierRecipePool {
@@ -131,7 +130,7 @@ public class CrystallineInfinitierRecipePool {
 
             .eut(RECIPE_UV)
             .duration(20 * 5)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+            .addTo(RecipeMaps.mixerNonCellRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -143,7 +142,7 @@ public class CrystallineInfinitierRecipePool {
 
             .eut(RECIPE_UV)
             .duration(20 * 5)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+            .addTo(RecipeMaps.mixerNonCellRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -159,7 +158,7 @@ public class CrystallineInfinitierRecipePool {
 
             .eut(RECIPE_UV)
             .duration(20 * 30)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+            .addTo(RecipeMaps.mixerNonCellRecipes);
 
         GTValues.RA.stdBuilder()
             .itemInputs(
@@ -177,7 +176,7 @@ public class CrystallineInfinitierRecipePool {
 
             .eut(RECIPE_UV)
             .duration(20 * 60)
-            .addTo(GTPPRecipeMaps.mixerNonCellRecipes);
+            .addTo(RecipeMaps.mixerNonCellRecipes);
 
         // region LuAG
         GTValues.RA.stdBuilder()

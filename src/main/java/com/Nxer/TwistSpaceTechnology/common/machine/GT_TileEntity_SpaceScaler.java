@@ -69,7 +69,6 @@ import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTRecipe;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import tectech.thing.block.BlockQuantumGlass;
 
 @SkipGenerateDescription
@@ -242,7 +241,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
             case 1:
                 return RecipeMaps.extractorRecipes;
             case 2:
-                return GTPPRecipeMaps.cyclotronRecipes;
+                return RecipeMaps.cyclotronRecipes;
             case 3:
                 return BartWorksRecipeMaps.electricImplosionCompressorRecipes;
             case 4:
@@ -257,7 +256,7 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
         return Arrays.asList(
             RecipeMaps.extractorRecipes,
-            GTPPRecipeMaps.cyclotronRecipes,
+            RecipeMaps.cyclotronRecipes,
             RecipeMaps.compressorRecipes,
             BartWorksRecipeMaps.electricImplosionCompressorRecipes,
             RecipeMaps.neutroniumCompressorRecipes);

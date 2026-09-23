@@ -5,13 +5,13 @@ import static com.Nxer.TwistSpaceTechnology.util.enums.TierEU.RECIPE_UV;
 import gregtech.api.enums.GTValues;
 import gregtech.api.enums.Materials;
 import gregtech.api.interfaces.IRecipeMap;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
+import gregtech.api.recipe.RecipeMaps;
 import gtPlusPlus.core.material.Particle;
 
 public class ParticleColliderRecipePool {
 
     public static void loadRecipes() {
-        final IRecipeMap PCRP = GTPPRecipeMaps.cyclotronRecipes;
+        final IRecipeMap PCRP = RecipeMaps.cyclotronRecipes;
         GTValues.RA.stdBuilder()
             .itemInputs(Particle.getBaseParticle(Particle.PROTON), Particle.getBaseParticle(Particle.ELECTRON))
             .fluidInputs(Materials.Hydrogen.getGas(1000))

@@ -58,11 +58,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.modularui2.GTGuiTextures;
 import gregtech.api.recipe.RecipeMap;
+import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.HatchElementBuilder;
 import gregtech.api.util.MultiblockTooltipBuilder;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 @SkipGenerateDescription
 public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<GT_TileEntity_MoleculeDeconstructor>
@@ -313,15 +313,15 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
     @Override
     public RecipeMap<?> getRecipeMap() {
         return switch (machineMode) {
-            case 1 -> GTPPRecipeMaps.centrifugeNonCellRecipes;
-            default -> GTPPRecipeMaps.electrolyzerNonCellRecipes;
+            case 1 -> RecipeMaps.centrifugeNonCellRecipes;
+            default -> RecipeMaps.electrolyzerNonCellRecipes;
         };
     }
 
     @NotNull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(GTPPRecipeMaps.centrifugeNonCellRecipes, GTPPRecipeMaps.electrolyzerNonCellRecipes);
+        return Arrays.asList(RecipeMaps.centrifugeNonCellRecipes, RecipeMaps.electrolyzerNonCellRecipes);
     }
 
     @Override

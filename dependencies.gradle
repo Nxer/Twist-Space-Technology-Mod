@@ -35,15 +35,15 @@
  */
 dependencies {
     elytraModpackVersion {
-        setGtnhVersion("2.9.0-beta-1")
+        setGtnhVersion("2.9.0-beta-3")
     }
 
     implementation(gtnh("GT5-Unofficial"))
 //    implementation("com.github.GTNewHorizons:GT5-Unofficial:5.09.52.612:dev")
     implementation(gtnh("GTNHLib"))
     implementation(gtnh("AE2FluidCraft-Rework"))
-//    implementation(gtnh("NewHorizonsCoreMod"))
-    implementation("com.github.GTNewHorizons:NewHorizonsCoreMod:2.8.284:dev")
+    implementation(gtnh("NewHorizonsCoreMod"))
+//    implementation("com.github.GTNewHorizons:NewHorizonsCoreMod:2.8.284:dev")
     implementation(gtnh("Avaritia"))
     implementation(gtnh("Avaritiaddons"))
     implementation(gtnh("Eternal-Singularity"))

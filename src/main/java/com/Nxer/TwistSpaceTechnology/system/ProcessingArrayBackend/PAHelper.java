@@ -23,7 +23,6 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEBasicMachineWithRecipe;
 import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.RecipeMaps;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 
 public class PAHelper {
 
@@ -31,9 +30,9 @@ public class PAHelper {
     public static final Map<MTEBasicMachineWithRecipe, SoundResource> SOUND_RESOURCE = new HashMap<>();
 
     public static void initStatics() {
-        CONVERT_TO_NO_CELL.put(RecipeMaps.mixerRecipes, GTPPRecipeMaps.mixerNonCellRecipes);
-        CONVERT_TO_NO_CELL.put(RecipeMaps.centrifugeRecipes, GTPPRecipeMaps.centrifugeNonCellRecipes);
-        CONVERT_TO_NO_CELL.put(RecipeMaps.electrolyzerRecipes, GTPPRecipeMaps.electrolyzerNonCellRecipes);
+        CONVERT_TO_NO_CELL.put(RecipeMaps.mixerRecipes, RecipeMaps.mixerNonCellRecipes);
+        CONVERT_TO_NO_CELL.put(RecipeMaps.centrifugeRecipes, RecipeMaps.centrifugeNonCellRecipes);
+        CONVERT_TO_NO_CELL.put(RecipeMaps.electrolyzerRecipes, RecipeMaps.electrolyzerNonCellRecipes);
 
         try {
             for (IMetaTileEntity im : METATILEENTITIES) {

@@ -18,7 +18,6 @@ import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.MaterialsElements;
 import tectech.recipe.TecTechRecipeMaps;
 
@@ -69,7 +68,7 @@ public class MaterialFix {
                     .fluidOutputs(MaterialsTST.NeutroniumAlloy.getMolten(16 * 144))
                     .eut(TierEU.RECIPE_UEV)
                     .duration(600 * 20)
-                    .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+                    .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
                 // Axonis Alloy
 
@@ -87,7 +86,7 @@ public class MaterialFix {
                     .fluidOutputs(MaterialsTST.AxonisAlloy.getMolten(144 * 12))
                     .eut(TierEU.RECIPE_UMV)
                     .duration(720 * 20)
-                    .addTo(GTPPRecipeMaps.alloyBlastSmelterRecipes);
+                    .addTo(RecipeMaps.alloyBlastSmelterRecipes);
 
                 // Axonium
 

@@ -76,7 +76,6 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
-import gtPlusPlus.api.recipe.GTPPRecipeMaps;
 import gtPlusPlus.core.material.Particle;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhintergalactic.recipe.IGRecipeMaps;
@@ -728,7 +727,7 @@ public class DSPRecipePool {
 
             .eut(RECIPE_UMV)
             .duration(20 * 1200)
-            .addTo(GTPPRecipeMaps.cyclotronRecipes);
+            .addTo(RecipeMaps.cyclotronRecipes);
 
         // region Strange Matter Aggregation
 
