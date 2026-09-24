@@ -21,7 +21,6 @@ import com.cleanroommc.modularui.value.sync.DynamicSyncHandler;
 import com.cleanroommc.modularui.value.sync.GenericListSyncHandler;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import com.cleanroommc.modularui.value.sync.StringSyncValue;
 import com.cleanroommc.modularui.widget.EmptyWidget;
 import com.cleanroommc.modularui.widgets.DynamicSyncedWidget;
 import com.cleanroommc.modularui.widgets.FluidDisplayWidget;
@@ -81,8 +80,6 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
             .getSyncHandlerFromMapKey("tstMEItemOutput:0");
         GenericListSyncHandler<FluidStackLong> fluidOutputSyncer = (GenericListSyncHandler<FluidStackLong>) syncManager
             .getSyncHandlerFromMapKey("tstMEFluidOutput:0");
-        StringSyncValue recipeInfoSyncer = (StringSyncValue) syncManager.getSyncHandlerFromMapKey("recipeInfo:0");
-        IntSyncValue maxProgressSyncer = (IntSyncValue) syncManager.getSyncHandlerFromMapKey("maxProgressTime:0");
 
         DynamicSyncHandler recipeHandler = new DynamicSyncHandler()
             .widgetProvider(
@@ -93,17 +90,6 @@ public class TST_Gui<T extends GTCM_MultiMachineBase<T>> extends MTEMultiBlockBa
         fluidOutputSyncer
             .setChangeListener(() -> notifyMERecipeHandler(recipeHandler, itemOutputSyncer, fluidOutputSyncer));
 
-        terminal.child(
-            IKey.dynamic(recipeInfoSyncer::getStringValue)
-                .asWidget()
-                .marginBottom(2)
-                .fullWidth()
-                .setEnabledIf(
-                    widget -> meOutputEnabledSyncer.getBoolValue() && (!itemOutputSyncer.getValue()
-                        .isEmpty()
-                        || !fluidOutputSyncer.getValue()
-                            .isEmpty()
-                        || maxProgressSyncer.getValue() > 0)));
         terminal.child(
             new DynamicSyncedWidget<>().widthRel(0.85f)
                 .coverChildrenHeight(0)
