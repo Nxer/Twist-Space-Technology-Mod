@@ -12,7 +12,9 @@ public final class Style {
     public static final Style STANDARD = Style.of(EnumChatFormatting.GREEN);
     public static final Style MODULARIZED = new Style(Style::modularized);
     public static final Style DYSON_SPHERE = new Style(Style::dysonSphere);
-    public static final Style INFUSION = new Style(Style::infusion);
+    public static final Style INFUSION = new Style(Style::searchableInfusion);
+    /** Preserves the former glyph-replacement effect; intentionally unused. */
+    public static final Style INFUSION_LEGACY = new Style(Style::legacyInfusion);
     public static final Style RAINBOW = new Style(Style::rainbow);
 
     private static final char[] INFUSION_GLYPHS = "@#$%&?0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
@@ -169,8 +171,17 @@ public final class Style {
         };
     }
 
-    /** Adds sparse, deterministic glyph corruption and dark flashes to the purple infusion style. */
-    private static Supplier<String> infusion(String text) {
+    /** Uses formatting-based obfuscation so tooltip search still sees the original text. */
+    private static Supplier<String> searchableInfusion(String text) {
+        return infusion(text, false);
+    }
+
+    /** Retains the previous deterministic glyph replacement for the unused legacy style. */
+    private static Supplier<String> legacyInfusion(String text) {
+        return infusion(text, true);
+    }
+
+    private static Supplier<String> infusion(String text, boolean replaceGlyphs) {
         return () -> {
             long frame = System.currentTimeMillis() / 220L;
             StringBuilder result = new StringBuilder(text.length() * 3);
@@ -187,7 +198,11 @@ public final class Style {
                 if (state <= 1) {
                     result.append(EnumChatFormatting.DARK_PURPLE)
                         .append(EnumChatFormatting.ITALIC);
-                    character = INFUSION_GLYPHS[(int) Math.floorMod(animationValue >>> 8, INFUSION_GLYPHS.length)];
+                    if (replaceGlyphs) {
+                        character = INFUSION_GLYPHS[(int) Math.floorMod(animationValue >>> 8, INFUSION_GLYPHS.length)];
+                    } else {
+                        result.append(EnumChatFormatting.OBFUSCATED);
+                    }
                 } else if (state == 2) {
                     result.append(EnumChatFormatting.BLACK);
                 } else if (state == 3) {
