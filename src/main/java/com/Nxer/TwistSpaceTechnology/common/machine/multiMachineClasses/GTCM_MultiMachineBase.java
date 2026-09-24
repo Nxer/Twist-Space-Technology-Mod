@@ -33,7 +33,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Math;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
@@ -78,7 +77,6 @@ import gregtech.common.tileentities.machines.outputme.base.MTEHatchOutputMEBase;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.overlay.tooltiprenderers.TTRenderStack;
-import scala.Byte;
 
 public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
     extends MTEExtendedPowerMultiBlockBase<T> implements IConstructable, ISurvivalConstructable, TSTTooltipCredit {
@@ -790,7 +788,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             var provider = meBus.getProvider();
             long transfer = Math.min(remaining, getLongCacheRoom(provider.getCachedAmount(), 0));
             if (transfer <= 0) continue;
-            if (provider.shouldCheck()) {
+            if (provider.shouldCheckCell()) {
                 transfer = findLargestAcceptedAmount(transfer, value -> provider.canStore(item, value));
             } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
                 .isAllowed(item)) {
@@ -815,7 +813,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             var provider = meHatch.getProvider();
             long transfer = Math.min(remaining, getLongCacheRoom(provider.getCachedAmount(), 0));
             if (transfer <= 0) continue;
-            if (provider.shouldCheck()) {
+            if (provider.shouldCheckCell()) {
                 transfer = findLargestAcceptedAmount(transfer, value -> provider.canStore(fluid, value));
             } else if (!provider.canAcceptAnyInput() || !provider.getFilter()
                 .isAllowed(fluid)) {

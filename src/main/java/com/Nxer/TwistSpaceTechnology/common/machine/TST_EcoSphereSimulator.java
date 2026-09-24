@@ -361,14 +361,14 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     @Override
-    protected void addFluidOutputs(FluidStack[] outputs) {
+    protected boolean addFluidOutputs(FluidStack[] outputs) {
         // Intercept GT's completion-time fluid ejection so interrupted recipes never credit LP.
         boolean routeLpOutput = activeRecipeZeroLpOutput;
         try {
             if (routeLpOutput) {
                 outputs = DirectedMobClonerMode.routeLifeEssenceLpOutputToNetwork(getCloningBloodOrb(), outputs);
             }
-            super.addFluidOutputs(outputs);
+            return super.addFluidOutputs(outputs);
         } finally {
             if (routeLpOutput) {
                 activeRecipeZeroLpOutput = false;

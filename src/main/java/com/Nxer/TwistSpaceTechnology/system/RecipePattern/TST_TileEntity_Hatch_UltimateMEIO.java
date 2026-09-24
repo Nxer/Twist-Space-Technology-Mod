@@ -71,7 +71,7 @@ import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.util.IWideReadableNumberConverter;
 import appeng.util.ReadableNumberConverter;
-import gregtech.GTMod;
+import gregtech.GTLoggers;
 import gregtech.api.enums.ItemList;
 import gregtech.api.gui.modularui.GTUITextures;
 import gregtech.api.interfaces.IConfigurationCircuitSupport;
@@ -467,7 +467,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
                     patternSlotNBT,
                     getBaseMetaTileEntity().getWorld());
             } else {
-                GTMod.GT_FML_LOGGER.warn(
+                GTLoggers.GT_FML_LOGGER.warn(
                     "An error occurred while loading contents of ME Crafting Input Bus. This pattern has been voided: "
                         + patternSlotNBT);
             }
@@ -747,7 +747,7 @@ public class TST_TileEntity_Hatch_UltimateMEIO extends MTEHatch
             if (slot == null) continue;
             ICraftingPatternDetails details = slot.getPatternDetails();
             if (details == null) {
-                GTMod.GT_FML_LOGGER.warn(
+                GTLoggers.GT_FML_LOGGER.warn(
                     "Found an invalid pattern at " + getBaseMetaTileEntity().getCoords()
                         + " in dim "
                         + getBaseMetaTileEntity().getWorld().provider.dimensionId);

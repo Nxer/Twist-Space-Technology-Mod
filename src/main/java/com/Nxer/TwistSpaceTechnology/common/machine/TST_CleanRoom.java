@@ -3,6 +3,7 @@ package com.Nxer.TwistSpaceTechnology.common.machine;
 import static com.Nxer.TwistSpaceTechnology.common.misc.StructureErrorDefs.SimpleStructureErrors.simple_structure_issue;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.AUTHOR;
 import static com.Nxer.TwistSpaceTechnology.util.text.TSTTooltipCredit.Role.MAINTAINER;
+import static gregtech.GTLoggers.GT_FML_LOGGER;
 import static gregtech.api.enums.GTValues.debugCleanroom;
 import static gregtech.api.enums.Textures.BlockIcons.BLOCK_PLASCRETE;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_TOP_CLEANROOM;
@@ -51,7 +52,6 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
-import gregtech.api.util.GTLog;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
 @SkipGenerateDescription
@@ -121,7 +121,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         otherCount = 0;
         isDoorOpen = false;
 
-        if (debugCleanroom) GTLog.out.println("Cleanroom: Starting structure check.");
+        if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Starting structure check.");
 
         // Step 1: Detect size & verify ceiling.
         // Optimization: try cached size first, only re-detect if ceiling check fails.
@@ -172,7 +172,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             }
         }
         if (dyMin < -(MAX_HEIGHT - 1)) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Too tall.");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Too tall.");
             errors.add(simple_structure_issue);
             errors.add(TOO_TALL);
 
@@ -180,18 +180,18 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
         }
         mHeight = -dyMin + 1;
 
-        // if (debugCleanroom) GTLog.out.println(
+        // if (debugCleanroom) GT_FML_LOGGER.info(
         // "Cleanroom: Structure complete. Found " + casingCount + " casings, " + otherCount + " other blocks.");
 
         // Step 3: Validate totals
         if (casingCount < 20) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Could not find 20 Plascrete.");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Could not find 20 Plascrete.");
             checkCasingMin(errors, casingCount, 20);
             return;
         }
         if (casingCount + otherCount > 0
             && (otherCount * 100) / (casingCount + otherCount) > maxReplacementPercentage) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Too many non-plascrete blocks.");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Too many non-plascrete blocks.");
             checkCasingMin(errors, casingCount, (casingCount + otherCount) * (100 - maxReplacementPercentage) / 100);
             return;
         }
@@ -225,7 +225,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             aBaseMetaTileEntity.setInternalOutputRedstoneSignal(tSide, t);
         }
 
-        if (debugCleanroom) GTLog.out.println("Cleanroom: Check successful.");
+        if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Check successful.");
     }
     // endregion
 
@@ -435,13 +435,13 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
                     return true;
                 }
                 if (debugCleanroom) {
-                    GTLog.out.println("Cleanroom: Incorrect GT block at offset (" + dx + ", " + dy + ", " + dz + ").");
+                    GT_FML_LOGGER.info("Cleanroom: Incorrect GT block at offset (" + dx + ", " + dy + ", " + dz + ").");
                 }
                 return false;
             case INVALID:
             default:
                 if (debugCleanroom) {
-                    GTLog.out.println("Cleanroom: Invalid block at offset (" + dx + ", " + dy + ", " + dz + ").");
+                    GT_FML_LOGGER.info("Cleanroom: Invalid block at offset (" + dx + ", " + dy + ", " + dz + ").");
                 }
                 return false;
         }
@@ -458,7 +458,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             if (getBlockType(base, dxMin, 0, 0, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
         }
         if (dxMin < -MAX_WIDTH / 2) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (x-axis).");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Too large (x-axis).");
             return false;
         }
         // Scan +X direction
@@ -466,12 +466,12 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             if (getBlockType(base, dxMax, 0, 0, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
         }
         if (dxMax > MAX_WIDTH / 2) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (x-axis).");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Too large (x-axis).");
             return false;
         }
         // Controller must be centered (or off by 1 for even widths)
         if (Math.abs(dxMin + dxMax) > 1) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Controller not centered (x-axis).");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Controller not centered (x-axis).");
             return false;
         }
 
@@ -480,7 +480,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             if (getBlockType(base, 0, 0, dzMin, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
         }
         if (dzMin < -MAX_WIDTH / 2) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (z-axis).");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Too large (z-axis).");
             return false;
         }
         // Scan +Z direction
@@ -488,16 +488,16 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             if (getBlockType(base, 0, 0, dzMax, MASK_CEILING_INTERNAL) == BlockType.INVALID) break;
         }
         if (dzMax > MAX_WIDTH / 2) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Too large (z-axis).");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Too large (z-axis).");
             return false;
         }
         if (Math.abs(dzMin + dzMax) > 1) {
-            if (debugCleanroom) GTLog.out.println("Cleanroom: Controller not centered (z-axis).");
+            if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Controller not centered (z-axis).");
             return false;
         }
 
-        if (debugCleanroom) GTLog.out
-            .println("Cleanroom: dxMin=" + dxMin + ", dxMax=" + dxMax + ", dzMin=" + dzMin + ", dzMax=" + dzMax);
+        if (debugCleanroom) GT_FML_LOGGER
+            .info("Cleanroom: dxMin=" + dxMin + ", dxMax=" + dxMax + ", dzMin=" + dzMin + ", dzMax=" + dzMax);
         return true;
     }
 
@@ -580,7 +580,7 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             if (!this.addToMachineList(te, CASING_INDEX)) {
                 IMetaTileEntity mte = te.getMetaTileEntity();
                 if (!(mte instanceof MTEBasicHull)) {
-                    if (debugCleanroom) GTLog.out.println("Cleanroom: Incorrect GT block on floor.");
+                    if (debugCleanroom) GT_FML_LOGGER.info("Cleanroom: Incorrect GT block on floor.");
                     return false;
                 }
             }
