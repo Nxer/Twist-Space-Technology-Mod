@@ -33,7 +33,10 @@ import static gregtech.api.enums.TierEU.RECIPE_UEV;
 import static gregtech.api.enums.TierEU.RECIPE_UIV;
 import static gregtech.api.enums.TierEU.RECIPE_UMV;
 import static gregtech.api.enums.TierEU.RECIPE_UXV;
+import static gregtech.api.recipe.RecipeMaps.BEAMCRAFTER_METADATA;
+import static gregtech.api.recipe.RecipeMaps.beamcrafterRecipes;
 import static gregtech.api.util.GTRecipeBuilder.HOURS;
+import static gregtech.api.util.GTRecipeBuilder.SECONDS;
 import static gregtech.api.util.GTRecipeConstants.AssemblyLine;
 import static gregtech.api.util.GTRecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GTRecipeConstants.SCANNING;
@@ -41,6 +44,7 @@ import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.ASTRAL_TITAN
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.CELESTIAL_TUNGSTEN;
 import static gtPlusPlus.core.material.MaterialsElements.STANDALONE.HYPOGEN;
 import static gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList.Laser_Lens_Special;
+import static gtnhlanth.common.beamline.Particle.GRAVITON;
 import static tectech.thing.CustomItemList.EOH_Infinite_Energy_Casing;
 import static tectech.thing.CustomItemList.eM_Coil;
 import static tectech.thing.CustomItemList.eM_Containment;
@@ -76,6 +80,7 @@ import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GTModHandler;
 import gregtech.api.util.GTOreDictUnificator;
 import gregtech.api.util.GTUtility;
+import gregtech.loaders.postload.recipes.beamcrafter.BeamCrafterMetadata;
 import gtPlusPlus.core.material.Particle;
 import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import gtnhintergalactic.recipe.IGRecipeMaps;
@@ -724,10 +729,26 @@ public class DSPRecipePool {
                 GravitationalLens.get(1),
                 GravitationalLens.get(1))
             .outputChances(10000, 9000, 8000, 7000, 6000)
-
             .eut(RECIPE_UMV)
             .duration(20 * 1200)
             .addTo(RecipeMaps.cyclotronRecipes);
+
+        GTValues.RA.stdBuilder()
+            .fluidInputs(Materials.MysteriousCrystal.getMolten(144 * 9 * 64 * 2))
+            .itemInputs(SpaceWarper.get(1), Laser_Lens_Special.get(4))
+            .itemOutputs(GravitationalLens.get(2), GravitationalLens.get(4))
+            .metadata(
+                BEAMCRAFTER_METADATA,
+                BeamCrafterMetadata.builder()
+                    .particleID_A(GRAVITON.getId())
+                    .particleID_B(GRAVITON.getId())
+                    .amount_A(80)
+                    .amount_B(80)
+                    .build())
+            .outputChances(10000, 5000)
+            .duration(SECONDS)
+            .eut(RECIPE_UIV)
+            .addTo(beamcrafterRecipes);
 
         // region Strange Matter Aggregation
 
