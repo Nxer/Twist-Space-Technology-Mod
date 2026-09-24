@@ -1155,6 +1155,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             || !(tileEntity.getMetaTileEntity() instanceof TST_EcoSphereInputInterfaceHatch hatch)) return false;
         hatch.updateTexture(casingIndex);
         ecoSphereInputInterface = hatch;
+        addIfSmartInput(hatch);
         return true;
     }
 
@@ -1163,6 +1164,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
             || !(tileEntity.getMetaTileEntity() instanceof TST_EcoSphereUpgradeInterfaceHatch hatch)) return false;
         hatch.updateTexture(casingIndex);
         ecoSphereUpgradeInterface = hatch;
+        addIfSmartInput(hatch);
         return true;
     }
 

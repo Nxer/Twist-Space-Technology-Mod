@@ -969,6 +969,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         if (aMetaTileEntity instanceof MTEHatchInput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             ((MTEHatchInput) aMetaTileEntity).mRecipeMap = getRecipeMap();
+            addIfSmartInput(aMetaTileEntity);
             return mInputHatches.add((MTEHatchInput) aMetaTileEntity);
         } else if (aMetaTileEntity instanceof MTEHatchMuffler) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);

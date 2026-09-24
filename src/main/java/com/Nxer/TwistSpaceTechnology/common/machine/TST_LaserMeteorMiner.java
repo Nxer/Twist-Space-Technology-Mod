@@ -988,6 +988,7 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
         if (aMetaTileEntity == null) return false;
         if (!(aMetaTileEntity instanceof MTEHatchInputBus bus)) return false;
         bus.updateTexture(aBaseCasingIndex);
+        addIfSmartInput(bus);
         return mInputBusses.add(bus);
     }
 

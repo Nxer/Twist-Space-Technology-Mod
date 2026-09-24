@@ -576,6 +576,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         if (aMetaTileEntity instanceof MTEHatchInput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             mHotFluidHatch = (MTEHatchInput) aMetaTileEntity;
+            addIfSmartInput(aMetaTileEntity);
             return true;
         }
         return false;
@@ -588,6 +589,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         if (aMetaTileEntity instanceof MTEHatchOutput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             mColdFluidHatch = (MTEHatchOutput) aMetaTileEntity;
+            addIfSmartInput(aMetaTileEntity);
             return true;
         }
         return false;
@@ -599,6 +601,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         if (aMetaTileEntity instanceof MTEHatchInput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             mDistilledWaterHatch = (MTEHatchInput) aMetaTileEntity;
+            addIfSmartInput(aMetaTileEntity);
             return true;
         }
         return false;
@@ -610,6 +613,7 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         if (aMetaTileEntity instanceof MTEHatchOutput) {
             ((MTEHatch) aMetaTileEntity).updateTexture(aBaseCasingIndex);
             mSteamHatch = (MTEHatchOutput) aMetaTileEntity;
+            addIfSmartInput(aMetaTileEntity);
             return true;
         }
         return false;

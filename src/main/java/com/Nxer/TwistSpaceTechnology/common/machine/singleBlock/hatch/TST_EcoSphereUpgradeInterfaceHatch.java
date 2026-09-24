@@ -38,9 +38,11 @@ import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.MetaTileEntity;
 import gregtech.api.metatileentity.implementations.MTEHatch;
 import gregtech.api.render.TextureFactory;
+import gregtech.common.tileentities.machines.ISmartInputHatch;
 
 @SkipGenerateDescription
-public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implements IAddUIWidgets, TSTTooltipCredit {
+public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch
+    implements IAddUIWidgets, ISmartInputHatch, TSTTooltipCredit {
 
     private static final int MAX_UPGRADE_SLOTS = 4;
 
@@ -54,6 +56,12 @@ public final class TST_EcoSphereUpgradeInterfaceHatch extends MTEHatch implement
 
     private TST_EcoSphereUpgradeInterfaceHatch(String name, int tier, String[] description, ITexture[][][] textures) {
         super(name, tier, MAX_UPGRADE_SLOTS, description, textures);
+    }
+
+    @Override
+    public void onPostTick(IGregTechTileEntity base, long tick) {
+        super.onPostTick(base, tick);
+        if (base.isServerSide()) detectInventoryChange();
     }
 
     @Override
