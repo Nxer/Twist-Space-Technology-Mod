@@ -15,7 +15,6 @@ import static gtPlusPlus.core.block.base.BlockBaseModular.getMaterialBlock;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,6 @@ import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
 import com.Nxer.TwistSpaceTechnology.util.text.TSTMultiblockTooltipBuilder;
 import com.cleanroommc.modularui.drawable.UITexture;
-import com.google.common.collect.Lists;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -49,8 +47,8 @@ import goodgenerator.loader.Loaders;
 import gregtech.api.GregTechAPI;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
+import gregtech.api.interfaces.IOutputHatch;
 import gregtech.api.interfaces.ITexture;
-import gregtech.api.interfaces.fluid.IFluidStore;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity.SkipGenerateDescription;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
@@ -65,6 +63,7 @@ import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
 import gregtech.api.util.GTUtility;
 import gregtech.api.util.MultiblockTooltipBuilder;
+import gregtech.api.util.OutputHatchWrapper;
 import gregtech.common.tileentities.machines.IRecipeProcessingAwareHatch;
 import gregtech.common.tileentities.machines.MTEHatchInputME;
 import gtPlusPlus.core.block.base.BasicBlock;
@@ -344,9 +343,15 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
     }
 
     @Override
-    public List<? extends IFluidStore> getFluidOutputSlots(FluidStack[] toOutput) {
-        // overriding this for calculating parallels correctly.
-        return GTUtility.filterValidMTEs(Lists.newArrayList(mColdFluidHatch, mSteamHatch));
+    public List<IOutputHatch> getOutputHatches() {
+        List<IOutputHatch> outputs = new ArrayList<>(2);
+        if (mColdFluidHatch != null && mColdFluidHatch.isValid()) {
+            outputs.add(new OutputHatchWrapper(mColdFluidHatch, fluid -> !isSteam(fluid.getFluidStack())));
+        }
+        if (mSteamHatch != null && mSteamHatch.isValid()) {
+            outputs.add(new OutputHatchWrapper(mSteamHatch, fluid -> isSteam(fluid.getFluidStack())));
+        }
+        return outputs;
     }
 
     private CheckRecipeResult processSingleBatch() {
@@ -457,21 +462,6 @@ public class TST_HyperThermalConvector extends GTCM_MultiMachineBase<TST_HyperTh
         }
 
         return rList;
-    }
-
-    @Override
-    public boolean addOutput(FluidStack aLiquid) {
-        if (aLiquid == null || aLiquid.amount == 0) return false;
-        FluidStack copiedFluidStack = aLiquid.copy();
-        List<MTEHatchOutput> targetHatches = Collections
-            .singletonList(isSteam(aLiquid) ? mSteamHatch : mColdFluidHatch);
-        if (!dumpFluid(targetHatches, copiedFluidStack, true)) {
-            dumpFluid(targetHatches, copiedFluidStack, false);
-        }
-        // FluidEjectionHelper ejectionHelper = new FluidEjectionHelper(targetHatches, protectsExcessFluid());
-        // ejectionHelper.ejectStack(copiedFluidStack);
-        // ejectionHelper.commit();
-        return false;
     }
 
     private boolean isSteam(FluidStack stack) {
