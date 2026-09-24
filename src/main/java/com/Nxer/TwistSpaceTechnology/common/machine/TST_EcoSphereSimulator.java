@@ -735,6 +735,17 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     }
 
     @Override
+    protected CheckRecipeResult checkMEOutputCapacityBeforeCompletion() {
+        // Added by Astra: the defensive completion check excludes Life Essence that the LP network can accept.
+        return checkMEOutputCapacity(
+            meOutputQueue,
+            activeRecipeZeroLpOutput
+                ? DirectedMobClonerMode
+                    .getRecipeZeroFluidOutputsForCapacityCheck(getCloningBloodOrb(), meFluidOutputQueue)
+                : meFluidOutputQueue);
+    }
+
+    @Override
     protected void outputMEFluidQueue(List<FluidStackLong> outputs) {
         // Recipe 0 routes Life Essence to the LP network. Items use the default ME path.
         boolean routeLpOutput = activeRecipeZeroLpOutput;
