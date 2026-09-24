@@ -79,6 +79,7 @@ import com.cleanroommc.modularui.drawable.UITexture;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.IAlignmentLimits;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
+import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
@@ -143,6 +144,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     private static final String STRUCTURE_PIECE_MAIN1 = "mainEcoSphereSimulator1";
     private static final String STRUCTURE_PIECE_FLUID_PREVIEW = "ecoSphereSimulatorFluidPreview";
     private static IStructureDefinition<TST_EcoSphereSimulator> STRUCTURE_DEFINITION = null;
+    private int glassTier = -1;
 
     private static final int STRUCTURE_OFFSET_X = 16;
     private static final int STRUCTURE_OFFSET_Y = 38;
@@ -257,6 +259,23 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     @Override
     public IStructureDefinition<TST_EcoSphereSimulator> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {
+            IStructureElement<TST_EcoSphereSimulator> glass = withChannel(
+                "EcoSphereGlass",
+                ofBlocksTiered((block, meta) -> {
+                    if (block != bw_realglas) return null;
+                    return switch (meta) {
+                        case 4 -> 1;
+                        case 6 -> 2;
+                        case 7 -> 3;
+                        default -> null;
+                    };
+                },
+                    IntStream.of(4, 6, 7)
+                        .mapToObj(meta -> Pair.of(bw_realglas, meta))
+                        .collect(toList()),
+                    -1,
+                    (machine, tier) -> machine.glassTier = tier,
+                    machine -> machine.glassTier));
             STRUCTURE_DEFINITION = StructureDefinition.<TST_EcoSphereSimulator>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
                 .addShape(STRUCTURE_PIECE_MAIN1, transpose(shape2))
@@ -265,8 +284,8 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
                     transpose(EcoSphereFluidAreaHandler.StructureFluidAreaWithMain))
                 .addElement('w', ofBlockHint(Blocks.air, 0, StructureLibAPI.getBlockHint(), 3))
                 .addElement('W', ofBlockHint(Blocks.air, 0, StructureLibAPI.getBlockHint(), 3))
-                .addElement('A', ofBlock(bw_realglas, 0))
-                .addElement('a', ofBlock(bw_realglas, 7))
+                .addElement('A', glass)
+                .addElement('a', glass)
                 .addElement('B', ofBlock(MetaBlockCasing01, 9))
                 .addElement('C', ofBlock(MetaBlockCasing01, 10))
                 .addElement('D', ofBlock(GregTechAPI.sBlockCasings1, 10))
@@ -419,6 +438,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();
+        glassTier = -1;
         // setDebugEnabled(true);
         checkPiece(
             "mainEcoSphereSimulator" + controllerTier,
@@ -642,10 +662,6 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         return (d, r, f) -> d.offsetY == 0 && r.isNotRotated() && !f.isVerticallyFliped();
     }
 
-    public void setParallelFromEUt(long parallelFromEUt) {
-        this.parallelFromEUt = parallelFromEUt;
-    }
-
     public void setCurrentParallel(long currentParallel) {
         this.currentParallel = currentParallel;
     }
@@ -796,7 +812,7 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
         if (executionProtocolPresent) interfaceMode = getModeFromExecutionProtocol(getControllerSlot());
         ItemStack[] upgrades = new ItemStack[0];
         if (ecoSphereUpgradeInterface != null) {
-            ecoSphereUpgradeInterface.setMachineState(interfaceMode, getStructureTier());
+            ecoSphereUpgradeInterface.setMachineState(interfaceMode, getStructureTier(), glassTier);
             upgrades = ecoSphereUpgradeInterface.getUpgrades();
         }
         installedUpgrades = new EcoSphereUpgradeResult(upgrades, interfaceMode);
