@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.MEInputFilter;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -264,11 +264,15 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         if (inventory == null) return;
 
         int index = 0;
+        boolean newInputs = false;
         for (IAEFluidStack available : inventory.getAvailableItems(new FluidList(), 0)) {
             if (index >= slots.length) break;
             if (available.getStackSize() < minAutoPullAmount) continue;
             FluidStack stack = available.getFluidStack();
             if (stack == null) continue;
+            Slot previous = slots[index];
+            if (previous == null || !GTUtility.areFluidsEqual(previous.config, stack)
+                || previous.extractedAmount < stack.amount) newInputs = true;
             setSlotConfig(index, GTUtility.copyAmount(1, stack));
             slots[index].extracted = stack;
             slots[index].extractedAmount = stack.amount;
@@ -276,6 +280,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         }
         Arrays.fill(slots, index, slots.length, null);
         Arrays.fill(selectedContents, index, selectedContents.length, null);
+        if (newInputs) notifyWatchers();
     }
 
     @Override
@@ -287,6 +292,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
             selectedContents[index] = null;
             showRecipeRemainder = false;
             lastGuiAmountRefreshTick = Long.MIN_VALUE;
+            markDirty();
         }
     }
 
@@ -438,51 +444,32 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
 
         private static void filterOverlappingMEInputs(List<FluidStack> fluids, List<MTEHatchInput> inputHatches,
             List<TST_AEStorageCellInputHatch> longHatches, Optional<Byte> color) {
-            Map<Fluid, FluidStack> otherMEFluids = new HashMap<>();
-            Set<FluidStack> overlappingStacks = Collections.newSetFromMap(new IdentityHashMap<>());
+            MEInputFilter<Fluid, FluidStack> filter = new MEInputFilter<>(FluidStack::getFluid);
             for (MTEHatchInput hatch : GTUtility.filterValidMTEs(inputHatches)) {
                 if (!(hatch instanceof MTEHatchInputME meHatch) || hatch instanceof TST_AEStorageCellInputHatch)
                     continue;
                 byte hatchColor = hatch.getColor();
                 if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+                IGrid network = TST_AEStorageCellHelper.getNetwork(meHatch.getProxy());
                 for (FluidStack fluid : meHatch.getStoredFluids()) {
                     if (fluid == null) continue;
-                    if (isSuppliedByLongInput(meHatch, fluid, longHatches)) overlappingStacks.add(fluid);
-                    else otherMEFluids.put(fluid.getFluid(), fluid);
+                    filter.add(fluid, isSuppliedByLongInput(network, fluid, longHatches));
                 }
             }
-            // Keep GT's selected ME stacks unless one shares the long input's network.
-            for (ListIterator<FluidStack> iterator = fluids.listIterator(); iterator.hasNext();) {
-                FluidStack fluid = iterator.next();
-                if (!overlappingStacks.contains(fluid)) continue;
-                FluidStack replacement = otherMEFluids.get(fluid.getFluid());
-                if (replacement == null) iterator.remove();
-                else iterator.set(replacement);
-            }
+            filter.applyTo(fluids);
         }
 
-        private static boolean isSuppliedByLongInput(MTEHatchInputME meHatch, FluidStack fluid,
+        private static boolean isSuppliedByLongInput(IGrid network, FluidStack fluid,
             List<TST_AEStorageCellInputHatch> longHatches) {
-            try {
-                IGrid network = meHatch.getProxy()
-                    .getGrid();
-                if (network == null) return false;
-                for (TST_AEStorageCellInputHatch hatch : longHatches) {
-                    if (networkOf(hatch) == network && simulateLong(hatch, fluid) > 0) return true;
-                }
-            } catch (GridAccessException ignored) {}
+            if (network == null) return false;
+            for (TST_AEStorageCellInputHatch hatch : longHatches) {
+                if (networkOf(hatch) == network && simulateLong(hatch, fluid) > 0) return true;
+            }
             return false;
         }
 
         private static IGrid networkOf(TST_AEStorageCellInputHatch hatch) {
-            if (hatch.hasStorageCell() || !hatch.getProxy()
-                .isActive()) return null;
-            try {
-                return hatch.getProxy()
-                    .getGrid();
-            } catch (GridAccessException ignored) {
-                return null;
-            }
+            return hatch.hasStorageCell() ? null : TST_AEStorageCellHelper.getNetwork(hatch.getProxy());
         }
 
         private static long simulateLong(TST_AEStorageCellInputHatch hatch, FluidStack fluid) {
@@ -518,9 +505,7 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
         private static long extractLong(TST_AEStorageCellInputHatch hatch, FluidStack fluid, long amount) {
             int index = findSlot(hatch, fluid);
             if (amount <= 0 || !canUse(hatch) || index < 0) return 0;
-            if (hatch.processingRecipe && !hatch.exposedInputsPrepared && !hatch.displayedThisRecipe[index]) {
-                simulateLong(hatch, fluid);
-            }
+            if (hatch.processingRecipe && !hatch.displayedThisRecipe[index]) simulateLong(hatch, fluid);
             boolean useCell = hatch.hasStorageCell();
             try {
                 IMEInventory<IAEFluidStack> inventory = hatch.getAvailableInventory(useCell);
@@ -712,6 +697,12 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     @Override
     public void setTSTSegmentedInputMode() {
         setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
+    }
+
+    @Override
+    public Object getTSTInputSource() {
+        IGrid network = LongFluidInputs.networkOf(this);
+        return network == null ? this : network;
     }
 
     @Override
@@ -1067,8 +1058,11 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
     private void prepareExposedFluids() {
         exposedFluids.clear();
         for (int i = 0; i < selectedContents.length; i++) {
-            if (selectedContents[i] != null)
-                selectedContents[i].prepareExposedFluids(segmentAllocations[i], exposedFluids);
+            if (selectedContents[i] != null) {
+                // A long view must never turn into an unbounded list of int stacks.
+                long exposedAmount = Math.min(pullableAmounts[i], (long) Integer.MAX_VALUE * segmentAllocations[i]);
+                selectedContents[i].prepareExposedFluids(exposedAmount, exposedFluids);
+            }
         }
     }
 
@@ -1118,8 +1112,8 @@ public class TST_AEStorageCellInputHatch extends MTEHatchInputME
             displayStack = available.getFluidStack();
         }
 
-        private void prepareExposedFluids(int allocatedSegments, List<FluidStack> destination) {
-            initialExposedAmount = Math.min(availableAmount, (long) Integer.MAX_VALUE * allocatedSegments);
+        private void prepareExposedFluids(long amount, List<FluidStack> destination) {
+            initialExposedAmount = amount;
             activeStackCount = initialExposedAmount == 0 ? 0
                 : (int) ((initialExposedAmount - 1) / Integer.MAX_VALUE + 1);
             // Reuse these stacks so their changed amounts show how much fluid was used.

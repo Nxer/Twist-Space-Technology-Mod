@@ -10,5 +10,8 @@ public interface ITSTSegmentedFluidInput {
     /** Use TST's shared int-segment limit for the current recipe check. */
     void setTSTSegmentedInputMode();
 
+    /** Shared ME network identity, or this hatch for an independent storage cell. */
+    Object getTSTInputSource();
+
     List<FluidStack> getTSTStoredFluidSegments();
 }

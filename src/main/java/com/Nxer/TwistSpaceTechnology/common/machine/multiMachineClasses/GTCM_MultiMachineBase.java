@@ -8,12 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.LongPredicate;
 
 import javax.annotation.Nonnull;
@@ -38,6 +36,8 @@ import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_Gui;
 import com.Nxer.TwistSpaceTechnology.common.machine.multiMachineClasses.processingLogics.GTCM_ProcessingLogic;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedFluidInput;
 import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.ITSTSegmentedItemInput;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.SegmentedInputs;
 import com.Nxer.TwistSpaceTechnology.common.misc.OverclockType;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
@@ -58,7 +58,6 @@ import gregtech.api.metatileentity.implementations.MTEHatchDynamo;
 import gregtech.api.metatileentity.implementations.MTEHatchInput;
 import gregtech.api.metatileentity.implementations.MTEHatchInputBus;
 import gregtech.api.metatileentity.implementations.MTEHatchMuffler;
-import gregtech.api.metatileentity.implementations.MTEHatchMultiInput;
 import gregtech.api.metatileentity.implementations.MTEHatchOutput;
 import gregtech.api.metatileentity.implementations.MTEHatchOutputBus;
 import gregtech.api.recipe.check.CheckRecipeResult;
@@ -636,32 +635,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
             }
         }
 
-        Map<GTUtility.ItemId, ItemStack> inputsFromME = new HashMap<>();
-        for (MTEHatchInputBus tHatch : GTUtility.filterValidMTEs(mInputBusses)) {
-            tHatch.mRecipeMap = getRecipeMap();
-            IGregTechTileEntity tileEntity = tHatch.getBaseMetaTileEntity();
-            boolean isMEBus = tHatch instanceof MTEHatchInputBusME;
-            for (int i = tileEntity.getSizeInventory() - 1; i >= 0; i--) {
-                ItemStack itemStack = tileEntity.getStackInSlot(i);
-                if (itemStack != null) {
-                    if (isMEBus) {
-                        // Prevent the same item from different ME buses from being recognized
-                        inputsFromME.put(GTUtility.ItemId.createNoCopy(itemStack), itemStack);
-                    } else {
-                        rList.add(itemStack);
-                    }
-                }
-            }
-        }
-
-        if (getStackInSlot(1) != null && getStackInSlot(1).getUnlocalizedName()
-            .startsWith("gt.integrated_circuit")) {
-            rList.add(getStackInSlot(1));
-        }
-        if (!inputsFromME.isEmpty()) {
-            rList.addAll(inputsFromME.values());
-        }
-        appendSegmentedItemInputs(rList, Optional.empty());
+        rList.addAll(getStoredInputsForColor(Optional.empty()));
         return rList;
     }
 
@@ -671,34 +645,7 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
      * @return ArrayList of all fluid stacks, contains fluid stacks in Crafting Input Hatch.
      */
     public ArrayList<FluidStack> getStoredFluidsWithDualInput() {
-        ArrayList<FluidStack> rList = new ArrayList<>();
-        Map<Fluid, FluidStack> inputsFromME = new HashMap<>();
-        for (MTEHatchInput tHatch : GTUtility.filterValidMTEs(mInputHatches)) {
-            setHatchRecipeMap(tHatch);
-            if (tHatch instanceof MTEHatchMultiInput multiInputHatch) {
-                for (FluidStack tFluid : multiInputHatch.getStoredFluid()) {
-                    if (tFluid != null) {
-                        rList.add(tFluid);
-                    }
-                }
-            } else if (tHatch instanceof MTEHatchInputME meHatch) {
-                for (FluidStack fluidStack : meHatch.getStoredFluids()) {
-                    if (fluidStack != null) {
-                        // Prevent the same fluid from different ME hatches from being recognized
-                        inputsFromME.put(fluidStack.getFluid(), fluidStack);
-                    }
-                }
-            } else {
-                if (tHatch.getFillableStack() != null) {
-                    rList.add(tHatch.getFillableStack());
-                }
-            }
-        }
-
-        if (!inputsFromME.isEmpty()) {
-            rList.addAll(inputsFromME.values());
-        }
-        appendSegmentedFluidInputs(rList, Optional.empty());
+        ArrayList<FluidStack> rList = getStoredFluidsForColor(Optional.empty());
 
         // get all fluids from Dual input
         if (supportsCraftingMEBuffer()) {
@@ -724,37 +671,50 @@ public abstract class GTCM_MultiMachineBase<T extends GTCM_MultiMachineBase<T>>
         return rList;
     }
 
-    // GT keeps one stack per ME type; TST machines add the remaining int-sized segments back.
+    // Restore TST segments once per source and type; separate storage cells remain independent.
     private void appendSegmentedItemInputs(List<ItemStack> inputs, Optional<Byte> color) {
-        Set<ItemStack> includedSegments = null;
+        SegmentedInputs<GTUtility.ItemId, ItemStack> segmentedInputs = null;
         for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
             if (!(bus instanceof ITSTSegmentedItemInput segmentedInput)) continue;
             byte busColor = bus.getColor();
             if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
-            if (includedSegments == null) {
-                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
-                includedSegments.addAll(inputs);
-            }
-            for (ItemStack segment : segmentedInput.getTSTStoredItemSegments()) {
-                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            if (segmentedInputs == null) segmentedInputs = new SegmentedInputs<>(GTUtility.ItemId::createNoCopy);
+            segmentedInputs.add(segmentedInput.getTSTInputSource(), segmentedInput.getTSTStoredItemSegments());
+        }
+        if (segmentedInputs == null || segmentedInputs.isEmpty()) return;
+        for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(mInputBusses)) {
+            if (!(bus instanceof MTEHatchInputBusME meBus) || bus instanceof ITSTSegmentedItemInput) continue;
+            byte busColor = bus.getColor();
+            if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+            Object network = TST_AEStorageCellHelper.getNetwork(meBus.getProxy());
+            // Only the virtual stocking slots share ME resources; circuit and manual slots are physical.
+            for (int i = 0; i < MTEHatchInputBusME.SLOT_COUNT; i++) {
+                segmentedInputs.removeOverlap(network, meBus.getStackInSlot(i));
             }
         }
+        segmentedInputs.appendTo(inputs);
     }
 
     private void appendSegmentedFluidInputs(List<FluidStack> inputs, Optional<Byte> color) {
-        Set<FluidStack> includedSegments = null;
+        SegmentedInputs<Fluid, FluidStack> segmentedInputs = null;
         for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
             if (!(hatch instanceof ITSTSegmentedFluidInput segmentedInput)) continue;
             byte hatchColor = hatch.getColor();
             if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
-            if (includedSegments == null) {
-                includedSegments = Collections.newSetFromMap(new IdentityHashMap<>());
-                includedSegments.addAll(inputs);
-            }
-            for (FluidStack segment : segmentedInput.getTSTStoredFluidSegments()) {
-                if (segment != null && !includedSegments.remove(segment)) inputs.add(segment);
+            if (segmentedInputs == null) segmentedInputs = new SegmentedInputs<>(FluidStack::getFluid);
+            segmentedInputs.add(segmentedInput.getTSTInputSource(), segmentedInput.getTSTStoredFluidSegments());
+        }
+        if (segmentedInputs == null || segmentedInputs.isEmpty()) return;
+        for (MTEHatchInput hatch : GTUtility.filterValidMTEs(mInputHatches)) {
+            if (!(hatch instanceof MTEHatchInputME meHatch) || hatch instanceof ITSTSegmentedFluidInput) continue;
+            byte hatchColor = hatch.getColor();
+            if (color.isPresent() && hatchColor != -1 && hatchColor != color.get()) continue;
+            Object network = TST_AEStorageCellHelper.getNetwork(meHatch.getProxy());
+            for (FluidStack fluid : meHatch.getStoredFluids()) {
+                segmentedInputs.removeOverlap(network, fluid);
             }
         }
+        segmentedInputs.appendTo(inputs);
     }
 
     // region Overrides

@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -25,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import com.Nxer.TwistSpaceTechnology.common.machine.UI.MUI2.TST_AEStorageCellHatchGui;
+import com.Nxer.TwistSpaceTechnology.common.machine.singleBlock.hatch.TST_AEStorageCellHelper.MEInputFilter;
 import com.Nxer.TwistSpaceTechnology.config.Config;
 import com.Nxer.TwistSpaceTechnology.util.TSTUtils;
 import com.Nxer.TwistSpaceTechnology.util.text.ID;
@@ -268,6 +268,7 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
             selectedContents[index] = null;
             showRecipeRemainder = false;
             lastGuiAmountRefreshTick = Long.MIN_VALUE;
+            markDirty();
         }
     }
 
@@ -452,51 +453,35 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
 
         private static void filterOverlappingMEInputs(List<ItemStack> items, List<MTEHatchInputBus> inputBusses,
             List<TST_AEStorageCellInputBus> longBusses, Optional<Byte> color) {
-            Map<GTUtility.ItemId, ItemStack> otherMEItems = new HashMap<>();
-            Set<ItemStack> overlappingStacks = Collections.newSetFromMap(new IdentityHashMap<>());
+            MEInputFilter<GTUtility.ItemId, ItemStack> filter = new MEInputFilter<>(GTUtility.ItemId::createNoCopy);
             for (MTEHatchInputBus bus : GTUtility.filterValidMTEs(inputBusses)) {
                 if (!(bus instanceof MTEHatchInputBusME meBus) || bus instanceof TST_AEStorageCellInputBus) continue;
                 byte busColor = bus.getColor();
                 if (color.isPresent() && busColor != -1 && busColor != color.get()) continue;
+                IGrid network = TST_AEStorageCellHelper.getNetwork(meBus.getProxy());
                 for (int i = meBus.getSizeInventory() - 1; i >= 0; i--) {
                     ItemStack item = meBus.getStackInSlot(i);
                     if (item == null) continue;
-                    if (isSuppliedByLongInput(meBus, item, longBusses)) overlappingStacks.add(item);
-                    else otherMEItems.put(GTUtility.ItemId.createNoCopy(item), item);
+                    // Only virtual stocking slots share ME resources; keep circuit and manual slots as inputs.
+                    filter.add(
+                        item,
+                        i < MTEHatchInputBusME.SLOT_COUNT && isSuppliedByLongInput(network, item, longBusses));
                 }
             }
-            // Keep GT's selected ME stack when another network still supplies the same item.
-            for (ListIterator<ItemStack> iterator = items.listIterator(); iterator.hasNext();) {
-                ItemStack item = iterator.next();
-                if (!overlappingStacks.contains(item)) continue;
-                ItemStack replacement = otherMEItems.get(GTUtility.ItemId.createNoCopy(item));
-                if (replacement == null) iterator.remove();
-                else iterator.set(replacement);
-            }
+            filter.applyTo(items);
         }
 
-        private static boolean isSuppliedByLongInput(MTEHatchInputBusME meBus, ItemStack item,
+        private static boolean isSuppliedByLongInput(IGrid network, ItemStack item,
             List<TST_AEStorageCellInputBus> longBusses) {
-            try {
-                IGrid network = meBus.getProxy()
-                    .getGrid();
-                if (network == null) return false;
-                for (TST_AEStorageCellInputBus bus : longBusses) {
-                    if (networkOf(bus) == network && simulateLong(bus, item) > 0) return true;
-                }
-            } catch (GridAccessException ignored) {}
+            if (network == null) return false;
+            for (TST_AEStorageCellInputBus bus : longBusses) {
+                if (networkOf(bus) == network && simulateLong(bus, item) > 0) return true;
+            }
             return false;
         }
 
         private static IGrid networkOf(TST_AEStorageCellInputBus bus) {
-            if (bus.hasStorageCell() || !bus.getProxy()
-                .isActive()) return null;
-            try {
-                return bus.getProxy()
-                    .getGrid();
-            } catch (GridAccessException ignored) {
-                return null;
-            }
+            return bus.hasStorageCell() ? null : TST_AEStorageCellHelper.getNetwork(bus.getProxy());
         }
 
         private static long simulateLong(TST_AEStorageCellInputBus bus, ItemStack item) {
@@ -634,6 +619,12 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     @Override
     public void setTSTSegmentedInputMode() {
         setPullMode(TST_AEStorageCellHelper.PullMode.TST_SEGMENTED);
+    }
+
+    @Override
+    public Object getTSTInputSource() {
+        IGrid network = LongItemInputs.networkOf(this);
+        return network == null ? this : network;
     }
 
     @Override
@@ -990,8 +981,11 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
     private void prepareExposedStacks() {
         exposedStacks.clear();
         for (int i = 0; i < selectedContents.length; i++) {
-            if (selectedContents[i] != null)
-                selectedContents[i].prepareExposedStacks(segmentAllocations[i], exposedStacks);
+            if (selectedContents[i] != null) {
+                // A long view must never turn into an unbounded list of int stacks.
+                long exposedAmount = Math.min(pullableAmounts[i], (long) Integer.MAX_VALUE * segmentAllocations[i]);
+                selectedContents[i].prepareExposedStacks(exposedAmount, exposedStacks);
+            }
         }
     }
 
@@ -1011,8 +1005,8 @@ public class TST_AEStorageCellInputBus extends MTEHatchInputBusME
             displayStack = available.getItemStack();
         }
 
-        private void prepareExposedStacks(int allocatedSegments, List<ItemStack> destination) {
-            initialExposedAmount = Math.min(availableAmount, (long) Integer.MAX_VALUE * allocatedSegments);
+        private void prepareExposedStacks(long amount, List<ItemStack> destination) {
+            initialExposedAmount = amount;
             activeStackCount = initialExposedAmount == 0 ? 0
                 : (int) ((initialExposedAmount - 1) / Integer.MAX_VALUE + 1);
             // Reuse these stacks so their changed sizes show how many items were used.
