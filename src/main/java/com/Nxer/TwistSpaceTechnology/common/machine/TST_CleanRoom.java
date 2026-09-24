@@ -52,6 +52,7 @@ import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.SimpleCheckRecipeResult;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.structure.error.StructureError;
+import gregtech.api.util.GTUtility.FluidId;
 import gregtech.api.util.MultiblockTooltipBuilder;
 
 @SkipGenerateDescription
@@ -300,7 +301,12 @@ public class TST_CleanRoom extends GTCM_MultiMachineBase<TST_CleanRoom>
             var c = filterValidMTEs(mInputBusses);
             var d = filterValidMTEs(mOutputBusses);
             boolean item_me = true;
-            boolean fluid_me = canDumpFluidToME();
+            List<FluidId> fluidOutputs = new ArrayList<>();
+            for (var hatch : a) {
+                var fluid = hatch.getFluid();
+                if (fluid != null) fluidOutputs.add(FluidId.create(fluid));
+            }
+            boolean fluid_me = canDumpFluidToME(fluidOutputs);
             if ((a.size() != b.size() && (!item_me)) || (c.size() != d.size() && (!fluid_me))) {
                 stopMachine();
             }
