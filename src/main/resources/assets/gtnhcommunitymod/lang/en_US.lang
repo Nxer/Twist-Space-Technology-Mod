@@ -1649,7 +1649,6 @@ tst.common.machine.SteamBasicGenerator.tooltip.info.02=Base rate:§6 1L of Steam
 tst.common.machine.SteamBasicGenerator.tooltip.info.03=Fuel Efficiency:§c 140%§7
 tst.common.machine.SteamBasicGenerator.tooltip.info.04=Accepts simple or buffered LV dynamo hatch
 tst.common.machine.SteamBasicGenerator.tooltip.machine_type=Steam generator
-tst.common.machine.StellarMaterialSiphon.name=Stellar Material Siphon
 tst.common.machine.SuperWaterPurifier.name=Super Water Purifier
 tst.common.machine.SuperWaterPurifier.tooltip.info.01=Per cycle, it produces§4 3§7 or§4 6 (Concentrated UU) §7randomly selected liquids from the list, 
 tst.common.machine.SuperWaterPurifier.tooltip.info.02=Water Grade has a§4 12% §7chance each

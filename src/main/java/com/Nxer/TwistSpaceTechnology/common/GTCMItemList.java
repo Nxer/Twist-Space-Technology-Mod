@@ -272,6 +272,7 @@ public enum GTCMItemList {
     IndustrialMagicMatrix,
     StellarMaterialSiphon,
     ElvenWorkshop,
+    ElvenWorkshopLegacy,
     HyperSpacetimeTransformer,
     superCleanRoom,
     BiosphereIII,

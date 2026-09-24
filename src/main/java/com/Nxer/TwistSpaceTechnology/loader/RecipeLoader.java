@@ -64,6 +64,7 @@ import com.Nxer.TwistSpaceTechnology.recipe.machineRecipe.original.SpaceAssemble
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.DragonBloodRecipe;
 import com.Nxer.TwistSpaceTechnology.recipe.processingLineRecipe.LanthanidesRecipePool;
 import com.Nxer.TwistSpaceTechnology.recipe.specialRecipes.CropsMutationRecipes;
+import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.ElvenWorkshopTransitionRecipes;
 import com.Nxer.TwistSpaceTechnology.recipe.tempRecipe.SwelegfyrTransitionRecipes;
 import com.Nxer.TwistSpaceTechnology.system.CircuitConverter.logic.StaticMiscs;
 import com.Nxer.TwistSpaceTechnology.system.ExtremeCrafting.ExtremeCraftRecipeHandler;
@@ -92,6 +93,7 @@ public class RecipeLoader {
         TSTSolidifierHatchRecipes.loadRecipes();
         GTCMMachineRecipes.loadRecipes();
         CardiganRecipes.loadRecipes();
+        ElvenWorkshopTransitionRecipes.loadRecipes();
         SwelegfyrTransitionRecipes.loadRecipes();
 
         // Original GTNH RecipeMap

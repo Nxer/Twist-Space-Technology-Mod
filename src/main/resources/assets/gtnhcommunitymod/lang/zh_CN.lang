@@ -1649,7 +1649,6 @@ tst.common.machine.SteamBasicGenerator.tooltip.info.02=基础比率:§6 1L 蒸�
 tst.common.machine.SteamBasicGenerator.tooltip.info.03=燃料效率:§c 140%§7
 tst.common.machine.SteamBasicGenerator.tooltip.info.04=兼容普通LV仓和缓冲LV动力仓
 tst.common.machine.SteamBasicGenerator.tooltip.machine_type=蒸汽发电机
-tst.common.machine.StellarMaterialSiphon.name=Stellar Material Siphon
 tst.common.machine.SuperWaterPurifier.name=超净水生成器
 tst.common.machine.SuperWaterPurifier.tooltip.info.01=每次运行从产出列表中抽§4 3 或 6(浓缩UU) §7份产物输出
 tst.common.machine.SuperWaterPurifier.tooltip.info.02=每级水有 12% 概率

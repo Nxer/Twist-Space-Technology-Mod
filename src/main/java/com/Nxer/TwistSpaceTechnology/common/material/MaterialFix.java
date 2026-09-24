@@ -90,7 +90,7 @@ public class MaterialFix {
 
                 // Axonium
 
-                makeWires(MaterialsTST.Axonium,20000,0L, 0L,1_000_000L, Integer.MAX_VALUE, false, true);
+                makeWires(MaterialsTST.Axonium,19300,0L, 0L,1_000_000L, Integer.MAX_VALUE, false, true);
 
                 GTValues.RA.stdBuilder()
                     .itemInputs(GTUtility.getIntegratedCircuit(20))
