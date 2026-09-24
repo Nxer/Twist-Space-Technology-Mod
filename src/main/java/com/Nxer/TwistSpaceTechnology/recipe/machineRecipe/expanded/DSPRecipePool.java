@@ -1089,7 +1089,7 @@ public class DSPRecipePool {
 
         // Merger T1
         GTValues.RA.stdBuilder()
-            .metadata(RESEARCH_ITEM, Particle.getBaseParticle(Particle.HIGGS_BOSON))
+            .metadata(RESEARCH_ITEM, Antimatter.get(1))
             .metadata(SCANNING, scanningLV(24 * HOURS))
             .itemInputs(
                 eM_Spacetime.get(4),
