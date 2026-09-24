@@ -66,6 +66,8 @@ dependencies {
     implementation(gtnh("twilightforest"))
     implementation(gtnh("Natura"))
     runtimeOnlyNonPublishable(rfg.deobf("curse.maven:BiomesOPlenty-220318:2499612"))
+    runtimeOnlyNonPublishable(gtnh("Railcraft"))
+    runtimeOnlyNonPublishable(gtnh("BetterBuildersWands"))
     compileOnly(gtnh("amunra"))
 
 //    implementation("com.github.GTNewHorizons:GT5-Unofficial:5.09.51.459:dev")
