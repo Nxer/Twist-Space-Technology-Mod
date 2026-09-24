@@ -112,16 +112,6 @@ public class GT_TileEntity_MagneticDrivePressureFormer
 
     private static IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> STRUCTURE_DEFINITION = null;
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 14, ...); // glass
-     * B -> ofBlock...(compactFusionCoil, 0, ...);
-     * C -> ofBlock...(gt.blockcasings2, 5, ...);
-     * D -> ofBlock...(gt.blockcasings4, 14, ...); // Hatches
-     * E -> ofBlock...(gt.blockcasings5, 13, ...); // Coil
-     * F -> ofBlock...(gt.blockcasings8, 7, ...); // Energy Hatch
-     */
-
     @Override
     public IStructureDefinition<GT_TileEntity_MagneticDrivePressureFormer> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {

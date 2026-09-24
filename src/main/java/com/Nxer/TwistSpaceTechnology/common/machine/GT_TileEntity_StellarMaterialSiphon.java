@@ -154,29 +154,17 @@ public class GT_TileEntity_StellarMaterialSiphon
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = StructureDefinition.<GT_TileEntity_StellarMaterialSiphon>builder()
                 .addShape(shapeName, transpose(shape))
-                .addElement('A', ofBlock(SpaceStationStructureBlock, 12)) // A ->
-                // ofBlock...(BW_GlasBlocks2, 0,
-                // ...);
-                .addElement('B', ofBlock(GregTechAPI.sBlockCasings5, 13))// B -> ofBlock...(gt.blockcasings5, 13, ...);
-                .addElement('C', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 12))// C ->
-                // ofBlock...(gt.blockcasingsBA0,
-                // 12,//
-                // ...);
-                .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// D -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// E -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                .addElement('F', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// F -> ofBlock...(gt.blockcasingsSE, 2, ...);
-                .addElement('G', ofBlock(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2))// G ->
-                // ofBlock...(gt.spacetime_compression_field_generator,
-                // 2, ...);
-                .addElement('H', ofBlock(ModBlocks.blockCasings5Misc, 7))// H -> ofBlock...(gtplusplus.blockcasings.5,
-                // 7, ...);
-                .addElement('I', ofBlock(ModBlocks.blockCasings5Misc, 11))// I -> ofBlock...(gtplusplus.blockcasings.5,
-                // 11,//
-                // ...);
-                .addElement('J', ofBlock(ModBlocks.blockCasings6Misc, 1))// J -> ofBlock...(gtplusplus.blockcasings.6,
-                // 1, ...);
-                .addElement('K', ofBlock(SpaceStationAntiGravityBlock, 13))// K -> ofBlock...(miscutils.blockcasings, 9,
-                // ...);
+                .addElement('A', ofBlock(SpaceStationStructureBlock, 12))
+                .addElement('B', ofBlock(GregTechAPI.sBlockCasings5, 13))
+                .addElement('C', ofBlock(TTCasingsContainer.sBlockCasingsBA0, 12))
+                .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+                .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+                .addElement('F', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
+                .addElement('G', ofBlock(TTCasingsContainer.SpacetimeCompressionFieldGenerators, 2))
+                .addElement('H', ofBlock(ModBlocks.blockCasings5Misc, 7))
+                .addElement('I', ofBlock(ModBlocks.blockCasings5Misc, 11))
+                .addElement('J', ofBlock(ModBlocks.blockCasings6Misc, 1))
+                .addElement('K', ofBlock(SpaceStationAntiGravityBlock, 13))
                 .addElement(
                     'L',
                     StructureUtility.ofChain(
@@ -196,8 +184,7 @@ public class GT_TileEntity_StellarMaterialSiphon
                             GT_TileEntity_StellarMaterialSiphon::addOutputToMachineList,
                             IGTextures.CASING_INDEX_SIPHON,
                             1),
-                        StructureUtility.ofBlock(GregTechAPI.sBlockCasingsSE, 0)))// L -> ofBlock...(tile.stone, 0,
-                // ...);
+                        StructureUtility.ofBlock(GregTechAPI.sBlockCasingsSE, 0)))
                 .addElement('M', ofBlock(SpaceStationAntiGravityBlock, 13))
                 .build();// IGBlocks.SpaceElevatorCasing
         }
@@ -562,32 +549,3 @@ public class GT_TileEntity_StellarMaterialSiphon
     // endregion
 
 }
-//
-// Structure:
-//
-// Blocks:
-// A -> ofBlock...(BW_GlasBlocks2, 0, ...);
-// B -> ofBlock...(gt.blockcasings5, 13, ...);
-// C -> ofBlock...(gt.blockcasingsBA0, 12, ...);
-// D -> ofBlock...(gt.blockcasingsSE, 0, ...);
-// E -> ofBlock...(gt.blockcasingsSE, 1, ...);
-// F -> ofBlock...(gt.blockcasingsSE, 2, ...);
-// G -> ofBlock...(gt.spacetime_compression_field_generator, 2, ...);
-// H -> ofBlock...(gtplusplus.blockcasings.5, 7, ...);
-// I -> ofBlock...(gtplusplus.blockcasings.5, 11, ...);
-// J -> ofBlock...(gtplusplus.blockcasings.6, 1, ...);
-// K -> ofBlock...(miscutils.blockcasings, 9, ...);
-// L -> ofBlock...(tile.stone, 0, ...);
-//
-// Tiles:
-//
-// Special Tiles:
-// M -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); // You will probably want to change it
-// to something else
-// N -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want to change it
-// to something else
-//
-// Offsets:
-// 7 21 0
-//
-// Normal Scan:

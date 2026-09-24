@@ -441,18 +441,6 @@ public class TST_Disassembler extends GTCM_MultiMachineBase<TST_Disassembler> {
                         .casingIndex(1028)
                         .buildAndChain(sBlockCasingsTT, 4))
                 .addElement('J', ofFrame(Materials.CosmicNeutronium))
-                /*
-                 * A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
-                 * B -> ofBlock...(componentAssemblyLineCasing, 13, ...); // tiered component casing
-                 * C -> ofBlock...(gt.blockcasings2, 5, ...);
-                 * D -> ofBlock...(gt.blockcasings2, 8, ...);
-                 * E -> ofBlock...(gt.blockcasings2, 9, ...);
-                 * F -> ofBlock...(gt.blockcasings9, 1, ...);
-                 * G -> ofBlock...(gt.blockcasingsTT, 4, ...);
-                 * H -> ofBlock...(gt.blockcasingsTT, 8, ...);
-                 * I -> ofBlock...(gt.blockcasingsTT, 4, ...); // hatches
-                 * J -> ofFrame...(Materials.CosmicNeutron);
-                 */
                 .build();
         }
         return STRUCTURE_DEFINITION;

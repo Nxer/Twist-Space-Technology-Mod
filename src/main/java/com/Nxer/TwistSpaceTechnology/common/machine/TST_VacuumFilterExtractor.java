@@ -108,16 +108,6 @@ public class TST_VacuumFilterExtractor extends GTCM_MultiMachineBase<TST_VacuumF
         {"     CCC     ","   CCCCCCC   ","  CCCCCCCCC  "," CCCCCCCCCCC ","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC","CCCCCCCCCCCCC"," CCCCCCCCCCC ","  CCCCCCCCC  ","   CCCCCCC   "}
     };
 
-    /*
-    Blocks:
-A -> ofBlock...(gt.blockcasings2, 8, ...);
-B -> ofBlock...(gt.blockcasings4, 10, ...); // IO hatch
-C -> ofBlock...(gt.blockcasings8, 3, ...);  // energy hatch
-D -> ofBlock...(gt.blockcasings9, 0, ...);
-E -> ofBlock...(gt.blockcasingsTT, 8, ...);
-F -> ofBlock...(tile.quantumGlass, 0, ...);
-G -> ofFrame...(Materials.Neutronium);
-     */
     // spotless:on
 
     @Override

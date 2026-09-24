@@ -141,19 +141,6 @@ public class TST_MegaStoneBreaker extends GTCM_MultiMachineBase<TST_MegaStoneBre
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings11, 7, ...);
-     * B -> ofBlock...(gt.blockcasings2, 15, ...);
-     * C -> ofBlock...(gt.blockcasings8, 7, ...);
-     * D -> ofBlock...(gt.blockcasings9, 1, ...);
-     * E -> ofBlock...(gt.blockframes, 302, ...);
-     * F -> ofBlock...(gtplusplus.blockcasings.2, 0, ...);
-     * G -> ofBlock...(gtplusplus.blockcasings.2, 11, ...);
-     * H -> ofBlock...(miscutils.blockcasings, 14, ...);
-     * I -> ofBlock...(pressureResistantWalls, 0, ...);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

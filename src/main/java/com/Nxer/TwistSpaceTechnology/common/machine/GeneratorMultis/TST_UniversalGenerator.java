@@ -103,16 +103,6 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
         {"   DAD   ","   AAA   ","   DAD   ","         ","         ","D   A   D"," AAAAAAA "," AAAAAAA "," AAAAAAA ","D   A   D"}
     };
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings, 11, ...);
-     * B -> ofBlock...(gt.blockcasings2, 3, ...);
-     * С -> ofBlock...(miscutils.blockcasings, 2, ...);
-     * D -> ofBlock...(gt.blockmetal1, 12, ...);
-     * E -> ofBlock...(gt.blocktintedglass, 0, ...);
-     * F -> ofBlock...(gt.blockframes, 305, ...);
-     */
-
     private final String[][] shapeFuel = new String[][]{
         {"     ","     ","     ","     ","     ","  D  "," AAA ","DAAAD"," AAA ","  D  "},
         {"     ","     ","     ","     ","     ","DAAAD","A   A","A CEA","A   A","DAAAD"},
@@ -152,16 +142,6 @@ public class TST_UniversalGenerator extends GTCM_MultiMachineBase<TST_UniversalG
         }
         return STRUCTURE_DEFINITION;
     }
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings, 11, ...);
-     * B -> ofBlock...(gt.blockcasings2, 3, ...);
-     * С -> ofBlock...(miscutils.blockcasings, 2, ...);
-     * D -> ofBlock...(gt.blockframes, 305, ...);
-     * E -> ofBlock...(gt.blockmetal1, 12, ...);
-     * F -> ofBlock...(gt.blocktintedglass, 0, ...);
-     */
 
     @Override
     public void construct(ItemStack itemStack, boolean b) {

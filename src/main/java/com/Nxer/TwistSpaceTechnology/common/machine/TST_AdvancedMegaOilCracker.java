@@ -92,16 +92,6 @@ public class TST_AdvancedMegaOilCracker extends GTCM_MultiMachineBase<TST_Advanc
 
     private static IStructureDefinition<TST_AdvancedMegaOilCracker> STRUCTURE_DEFINITION = null;
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks2, 0, ...); //glass
-     * B -> ofBlock...(gt.blockcasings4, 1, ...);
-     * C -> ofBlock...(gt.blockcasings5, 13, ...); //coil
-     * D -> ofBlock...(tile.stone, 0, ...); // bus, energy
-     * E -> ofBlock...(tile.stonebrick, 0, ...); // hatch
-     * F -> ofFrame...(Materials.Vanadium);
-     */
-
     @Override
     public IStructureDefinition<TST_AdvancedMegaOilCracker> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {

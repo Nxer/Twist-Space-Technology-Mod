@@ -225,23 +225,6 @@ public class TST_BallLightning extends GTCM_MultiMachineBase<TST_BallLightning> 
     };
     // spotless:on
 
-    /*
-     * A -> ofBlock...(BW_GlasBlocks, 0, ...);
-     * B -> ofBlock...(compactFusionCoil, 1, ...);
-     * C -> ofBlock...(gt.blockcasings, 14, ...);
-     * D -> ofBlock...(gt.blockcasings5, 12, ...);
-     * E -> ofBlock...(gt.blockcasings8, 5, ...);
-     * F -> ofBlock...(gt.stabilisation_field_generator, 8, ...);
-     * G -> ofBlock...(gtplusplus.blockcasings.4, 3, ...);
-     * H -> ofBlock...(gtplusplus.blocktieredcasings.1, 9, ...);
-     * I -> ofBlock...(tile.DysonSwarmPart, 1, ...);
-     * J -> ofBlock...(tile.DysonSwarmPart, 8, ...);
-     * K -> ofBlock...(tile.DysonSwarmPart, 0, ...);
-     * L -> ofBlock...(tile.DysonSwarmPart, 5, ...);
-     * M -> ofBlock...(gt.blockcasingsTT, 10, ...);
-     * N -> ofBlock...(tile.blockDiamond, 0, ...);
-     * O -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseOetaPipeEntity, ...);
-     */
     @Override
     public IStructureDefinition<TST_BallLightning> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {

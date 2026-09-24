@@ -91,14 +91,6 @@ public class TST_EyeOfWood extends GTCM_MultiMachineBase<TST_EyeOfWood> {
     private final int depthOffSet = 0;
     private static IStructureDefinition<TST_EyeOfWood> STRUCTURE_DEFINITION = null;
 
-    /*
-     * A -> ofBlock...(gt.blockcasings, 10, ...); // hatches
-     * B -> ofBlock...(tile.blockLapis, 0, ...);
-     * C -> ofBlock...(tile.bookshelf, 0, ...);
-     * D -> ofBlock...(tile.brick, 0, ...);
-     * E -> ofBlock...(tile.stonebricksmooth, 3, ...);
-     * F -> ofBlock...(tile.wood, 0, ...);
-     */
     @Override
     public IStructureDefinition<TST_EyeOfWood> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {

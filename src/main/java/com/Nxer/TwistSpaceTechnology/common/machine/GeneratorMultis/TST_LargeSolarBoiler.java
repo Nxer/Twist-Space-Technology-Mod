@@ -184,17 +184,6 @@ public class TST_LargeSolarBoiler extends GTCM_MultiMachineBase<TST_LargeSolarBo
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(blockAlloyGlass, 0, ...);
-     * C -> ofBlock...(gt.blockcasings, 10, ...);
-     * D -> ofBlock...(gt.blockcasings2, 2, ...);
-     * E -> ofBlock...(gt.blockcasings2, 12, ...);
-     * F -> ofBlock...(gt.blockcasings3, 13, ...);
-     * G -> ofBlock...(gt.blockframes, 300, ...);
-     * H -> ofBlock...(gt.blockmetal6, 10, ...);
-     */
-
     @Override
     public void construct(ItemStack itemStack, boolean b) {
         buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);

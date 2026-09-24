@@ -114,15 +114,6 @@ public class TST_SuperWaterPurifier extends GTCM_MultiMachineBase<TST_SuperWater
         {"     DAAAD     ","     AAAAA     ","     AAAAA     ","     AAAAA     ","     DAAAD     ","               ","               ","               ","   DDBBBBB     ","   BBBBBBBBB   ","  BBBBBBBBBBB  "," BBBBBBBBBBBBBD"," BBBBBBBBBBBBBD","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","BBBBBBBBBBBBBBB","DBBBBBBBBBBBBB ","DBBBBBBBBBBBBB ","  BBBBBBBBBBB  ","   BBBBBBBBB   ","     BBBBBDD   "}
     };
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings10, 9, ...);
-     * B -> ofBlock...(gt.blockcasings8, 14, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 10, ...);
-     * D -> ofBlock...(gt.blockframes, 147, ...);
-     * E -> ofBlock...(gt.godforgecasing, 3, ...);
-     * F -> ofBlock...(tile.spatiallyTranscendentGravitationalLens, 0, ...);
-     */
     // spotless:on
 
     @Override

@@ -159,23 +159,6 @@ public class TST_OreProcessingFactory extends GTCM_MultiMachineBase<TST_OreProce
             .build();
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(blockAlloyGlass, 0, ...);
-     * B -> ofBlock...(gt.blockcasings2, 4, ...);
-     * C -> ofBlock...(gt.blockcasings2, 6, ...);
-     * D -> ofBlock...(gt.blockcasings2, 15, ...);
-     * E -> ofBlock...(gt.blockcasings4, 0, ...);
-     * F -> ofBlock...(gt.blockcasings4, 1, ...);
-     * G -> ofBlock...(gt.blockcasings8, 7, ...);
-     * H -> ofBlock...(gt.blockcasingsTT, 0, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * J -> ofBlock...(gt.blockcasings4, 0, ...); // input hatches
-     * K -> ofBlock...(gt.blockcasingsTT, 0, ...); // energy hatches
-     * L -> ofBlock...(gt.blockcasings8, 7, ...); // input output buses
-     * M -> ofFrame...(Materials.TungstenSteel, 0, ...);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();

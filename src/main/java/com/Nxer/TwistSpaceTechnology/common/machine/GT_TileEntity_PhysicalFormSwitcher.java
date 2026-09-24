@@ -93,16 +93,6 @@ public class GT_TileEntity_PhysicalFormSwitcher extends GTCM_MultiMachineBase<GT
 
     private static IStructureDefinition<GT_TileEntity_PhysicalFormSwitcher> STRUCTURE_DEFINITION = null;
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 14, ...);
-     * B -> ofBlock...(MAR_Casing, 0, ...);
-     * C -> ofBlock...(gt.blockcasings2, 8, ...);
-     * D -> ofBlock...(gt.blockcasings2, 15, ...);
-     * E -> ofBlock...(gt.blockcasings8, 10, ...); // Hatches
-     * F -> ofFrame
-     */
-
     // spotless:off
 	protected static final String[][] shape = new String[][]{
 	    {"               ","      EEE      ","      EEE      ","      EEE      ","     EEEEE     ","    EEEEEEE    "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE "," EEEEEEEEEEEEE ","    EEEEEEE    ","     EEEEE     ","      EEE      ","      EEE      ","      EEE      ","               "},

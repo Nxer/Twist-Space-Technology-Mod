@@ -106,16 +106,6 @@ public class GTCM_ElvenWorkshop extends GTCM_MultiMachineBase<GTCM_ElvenWorkshop
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A: Hatches/Smooth Marble
-     * B: Dragonstone Block
-     * C: Prism
-     * D: Mana Pylon
-     * E: Glimmering Livingwood
-     * F: Managlass
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

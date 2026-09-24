@@ -117,14 +117,6 @@ public class TST_IntegratedAssemblyMatrix extends GTCM_MultiMachineBase<TST_Inte
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_IntegratedAssemblyMatrix>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                // A -> ofBlock...(BW_GlasBlocks, 14, ...);
-                // B -> ofBlock...(gt.blockcasings2, 5, ...);
-                // C -> ofBlock...(gt.blockcasings2, 9, ...);
-                // D -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                // E -> ofBlock...(gt.blockcasingsTT, 0, ...);
-                // F -> ofBlock...(gt.blockcasingsTT, 4, ...);
-                // G -> ofBlock...(gt.blockcasingsTT, 6, ...);
-                // H -> ofBlock...(tile.quantumGlass, 0, ...);
                 .addElement('A', chainAllGlasses())
                 .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 5))
                 .addElement('C', ofBlock(GregTechAPI.sBlockCasings2, 9))

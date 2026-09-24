@@ -178,24 +178,21 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
     public IStructureDefinition<TST_DSPReceiver> getStructureDefinition() {
         return IStructureDefinition.<TST_DSPReceiver>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-            .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 14)) // A -> ofBlock...(gt.blockcasings, 14, ...);
-            .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 8)) // B -> ofBlock...(gt.blockcasings2, 8, ...);
-            .addElement('C', ofBlock(GregTechAPI.sBlockCasings8, 2)) // C -> ofBlock...(gt.blockcasings8, 2, ...);
-            .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 10)) // D -> ofBlock...(gt.blockcasings8, 10, ...);
-            .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 0)) // E -> ofBlock...(gt.blockcasingsSE, 0, ...);
-            .addElement('F', ofBlock(GregTechAPI.sBlockCasingsSE, 1)) // F -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 2)) // G -> ofBlock...(gt.blockcasingsSE, 2, ...);
-            .addElement('H', ofBlock(sBlockCasingsTT, 0)) // H -> ofBlock...(gt.blockcasingsTT, 0, ...);
-            .addElement('I', ofBlock(sBlockCasingsTT, 6)) // I -> ofBlock...(gt.blockcasingsTT, 6, ...);
-            .addElement('J', ofBlock(sBlockCasingsTT, 7)) // J -> ofBlock...(gt.blockcasingsTT, 7, ...);
-            .addElement('K', ofBlock(sBlockCasingsTT, 9)) // K -> ofBlock...(gt.blockcasingsTT, 9, ...);
-            .addElement('L', ofBlock(ModBlocks.blockCasings4Misc, 4)) // L -> ofBlock...(gtplusplus.blockcasings.4, 4,
-                                                                      // ...);
-            .addElement('M', ofBlock(GregTechAPI.sBlockCasingsDyson, 1)) // M -> ofBlock...(tile.DysonSwarmPart, 1,
-                                                                         // ...);
-            .addElement('N', ofBlock(GregTechAPI.sBlockCasingsDyson, 9)) // N -> ofBlock...(tile.DysonSwarmPart, 9,
-                                                                         // ...);
-            .addElement('O', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // O -> ofBlock...(tile.quantumGlass, 0, ...);
+            .addElement('A', ofBlock(GregTechAPI.sBlockCasings1, 14))
+            .addElement('B', ofBlock(GregTechAPI.sBlockCasings2, 8))
+            .addElement('C', ofBlock(GregTechAPI.sBlockCasings8, 2))
+            .addElement('D', ofBlock(GregTechAPI.sBlockCasings8, 10))
+            .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+            .addElement('F', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+            .addElement('G', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
+            .addElement('H', ofBlock(sBlockCasingsTT, 0))
+            .addElement('I', ofBlock(sBlockCasingsTT, 6))
+            .addElement('J', ofBlock(sBlockCasingsTT, 7))
+            .addElement('K', ofBlock(sBlockCasingsTT, 9))
+            .addElement('L', ofBlock(ModBlocks.blockCasings4Misc, 4))
+            .addElement('M', ofBlock(GregTechAPI.sBlockCasingsDyson, 1))
+            .addElement('N', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
+            .addElement('O', ofBlock(BlockQuantumGlass.INSTANCE, 0))
             .addElement(
                 'P',
                 HatchElementBuilder.<TST_DSPReceiver>builder()
@@ -208,27 +205,6 @@ public class TST_DSPReceiver extends GTCM_MultiMachineBase<TST_DSPReceiver>
             .addElement('R', ofChain(ofBlock(sBlockCasingsTT, 0), ofBlock(GregTechAPI.sBlockCasings8, 10)))
             .build();
     }
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings, 13, ...);
-     * B -> ofBlock...(gt.blockcasings2, 8, ...);
-     * C -> ofBlock...(gt.blockcasings8, 2, ...);
-     * D -> ofBlock...(gt.blockcasings8, 10, ...);
-     * E -> ofBlock...(gt.blockcasingsSE, 0, ...);
-     * F -> ofBlock...(gt.blockcasingsSE, 1, ...);
-     * G -> ofBlock...(gt.blockcasingsSE, 2, ...);
-     * H -> ofBlock...(gt.blockcasingsTT, 0, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 6, ...);
-     * J -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * K -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * L -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * M -> ofBlock...(tile.DysonSwarmPart, 1, ...);
-     * N -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-     * O -> ofBlock...(tile.quantumGlass, 0, ...);
-     * P -> ofBlock...(gt.blockcasingsSE, 0, ...); // Hatches
-     * Q -> ofFrame...(NaquadahAlloy, ...);
-     */
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {

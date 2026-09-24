@@ -193,17 +193,6 @@ public class GTCM_CrystallineInfinitier extends GTCM_MultiMachineBase<GTCM_Cryst
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 0, ...); // glass
-     * B -> ofBlock...(gt.blockcasings8, 10, ...); // energy maintenance
-     * C -> ofBlock...(gt.blockcasingsTT, 4, ...); // hatches
-     * D -> ofBlock...(gt.blockcasingsTT, 6, ...); // tier generator
-     * E -> ofBlock...(gt.blockcasingsTT, 8, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * G -> ofFrame;
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

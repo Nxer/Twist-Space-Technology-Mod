@@ -171,13 +171,6 @@ public class MM_DimensionallyTranscendentMatterPlasmaForgePrototypeMK2
                         .buildAndChain(sBlockCasingsTT, 12))
                 .build();
 
-            // A -> ofBlock...(gt.blockcasings5, 13, ...); coil
-            // B -> ofBlock...(gt.blockcasingsBA0, 12, ...); hatches
-            // C -> ofBlock...(gt.blockcasingsTT, 10, ...);
-            // D -> ofBlock...(gt.blockcasingsTT, 12, ...);
-            // E -> ofBlock...(tile.quantumGlass, 0, ...);
-            // F -> ofBlock...(tile.wood, 0, ...); modules
-
         }
         return STRUCTURE_DEFINITION;
     }

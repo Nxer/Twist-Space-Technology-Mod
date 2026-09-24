@@ -106,23 +106,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "}
     };
 
-    /*
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-
     private final String[][] shapeMiddle = new String[][]{
         {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "},
         {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
@@ -146,15 +129,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
         {"         AAA         ","       AADDDAA       ","         AAA         ","                     ","                     ","                     ","                     ","                     "},
         {"                     ","         HHH         ","                     ","                     ","                     ","                     ","                     ","                     "}
     };
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
 
     private final String[][] shapeEnd = new String[][]{
         {"                     ","         HHH         ","                     "},
@@ -181,15 +155,6 @@ public class GT_TileEntity_MiracleTop extends GTCM_MultiMachineBase<GT_TileEntit
     };
     // spotless:on
 
-    /*
-     * A -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * B -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * D -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * E -> ofBlock...(tile.quantumGlass, 0, ...);
-     * H -> Hatches;
-     * M -> Maintenance Hatch;
-     */
     @Override
     public IStructureDefinition<GT_TileEntity_MiracleTop> getStructureDefinition() {
         if (STRUCTURE_DEFINITION == null) {

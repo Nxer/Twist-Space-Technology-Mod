@@ -72,45 +72,6 @@ public class TST_MegaUniversalSpaceStation extends GT_TileEntity_MultiStructureM
             for (int i = 0; i < StructureLoader.readStructure(mName).shape.size(); i++) {
                 builder.addShape(mName + i, StructureLoader.getShape(mName, mName + i));
             }
-            // region structure
-            // Structure:
-            //
-            // Blocks:
-            // A -> ofBlock...(BW_GlasBlocks2, 0, ...);
-            // B -> ofBlock...(EMT_GTBLOCK_CASEING, 11, ...);
-            // C -> ofBlock...(FRF_Casing, 0, ...);
-            // D -> ofBlock...(gt.blockcasings9, 1, ...);
-            // E -> ofBlock...(gt.blockcasingsBA0, 10, ...);
-            // F -> ofBlock...(gt.blockcasingsBA0, 12, ...);
-            // G -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            // H -> ofBlock...(gt.blockcasingsSE, 2, ...);
-            // I -> ofBlock...(gt.blockcasingsTT, 2, ...);
-            // J -> ofBlock...(gt.blockcasingsTT, 3, ...);
-            // K -> ofBlock...(gt.blockmetal9, 6, ...);
-            // L -> ofBlock...(gt.blockmetal9, 7, ...);
-            // M -> ofBlock...(gt.spacetime_compression_field_generator, 7, ...);
-            // N -> ofBlock...(gtplusplus.blockcasings.5, 10, ...);
-            // O -> ofBlock...(gtplusplus.blockcasings.5, 14, ...);
-            // P -> ofBlock...(gtplusplus.blockcasings.6, 0, ...);
-            // Q -> ofBlock...(gtplusplus.blockspecialcasings.1, 15, ...);
-            // R -> ofBlock...(miscutils.blockcasings, 9, ...);
-            // S -> ofBlock...(tile.chisel.laboratoryblock, 6, ...);
-            // T -> ofBlock...(tile.extrautils:angelBlock, 0, ...);
-            // U -> ofBlock...(tile.snow, 0, ...);
-            //
-            // Tiles:
-            //
-            // Special Tiles:
-            // V -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); // You will probably want
-            // to change it to something else
-            // W -> ofSpecialTileAdder(gcewing.sg.SGRingTE, ...); // You will probably want to change it to something
-            // else
-            // X -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want
-            // to change it to something else
-            //
-            // Offsets:
-            // 215 45 223
-            // endregion
             structureDefinition = builder.addElement('A', ofBlock(bw_realglas2, 0))
                 .addElement(
                     'R',

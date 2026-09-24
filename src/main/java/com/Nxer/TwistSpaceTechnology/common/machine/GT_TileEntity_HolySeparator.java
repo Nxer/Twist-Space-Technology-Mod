@@ -138,17 +138,6 @@ public class GT_TileEntity_HolySeparator extends GTCM_MultiMachineBase<GT_TileEn
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings8, 7, ...); // Hatches
-     * B -> ofBlock...(gt.blockcasings8, 10, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 0, ...);
-     * D -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * E -> ofBlock...(gt.blockcasingsTT, 6, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 8, ...);
-     * G -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

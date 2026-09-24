@@ -258,38 +258,6 @@ public class TST_MiracleDoor extends WirelessEnergyMultiMachineBase<TST_MiracleD
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * fix ver Blocks:
-     * A -> ofBlock...(gt.blockcasings8, 13, ...);
-     * B -> ofBlock...(gt.blockcasingsSE, 1, ...);
-     * C -> ofBlock...(gt.blockcasingsSE, 2, ...);
-     * D -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * E -> ofBlock...(gt.blockcasingsTT, 6, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * G -> ofBlock...(gt.blockcasingsTT, 10, ...);
-     * H -> ofBlock...(gt.blockcasingsTT, 12, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 14, ...);
-     * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-     * K -> ofBlock...(tile.quantumGlass, 0, ...);
-     * L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
-     */
-
-    /*
-     * no fix ver Blocks:
-     * A -> ofBlock...(gt.blockcasings8, 13, ...);
-     * B -> ofBlock...(gt.blockcasingsSE, 1, ...);
-     * C -> ofBlock...(gt.blockcasingsSE, 2, ...);
-     * D -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * E -> ofBlock...(gt.blockcasingsTT, 6, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 9, ...);
-     * G -> ofBlock...(gt.blockcasingsTT, 10, ...);
-     * H -> ofBlock...(gt.blockcasingsTT, 12, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 14, ...);
-     * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-     * K -> ofBlock...(tile.quantumGlass, 0, ...);
-     * L -> ofBlock...(gt.blockcasingsTT, 12, ...); // io
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();

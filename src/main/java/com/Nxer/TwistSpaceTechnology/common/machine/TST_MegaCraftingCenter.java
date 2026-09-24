@@ -163,13 +163,6 @@ public class TST_MegaCraftingCenter extends GTCM_MultiMachineBase<TST_MegaCrafti
         return STRUCTURE_DEFINITION;
     }
 
-    // Blocks:
-    // A -> ofBlock...(gt.blockcasings, 14, ...);
-    // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-    // C -> ofBlock...(gt.blockcasingsTT, 10, ...);
-    // D -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-    // E -> ofBlock...(tile.quantumGlass, 0, ...);
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece("MAIN", stackSize, hintsOnly, 3, 3, 0);

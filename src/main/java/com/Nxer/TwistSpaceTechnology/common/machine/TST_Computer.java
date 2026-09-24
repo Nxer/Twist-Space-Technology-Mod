@@ -140,19 +140,6 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         {"EEEEEEEEEEEEEEEEEEEEEEE~EEEEEEEEEEEEEEEEEEEEEEE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE","EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE","EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE","EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE","EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE","EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE","EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE","EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE","EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE","EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIGGGGGGGGGIIIIGGGGGGGGGGGGGGGIIIIGGGGGGGGGIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIGGGGGGGGGGGGGGGIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGIIIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIIIGGGFFE","EFFGGGIGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGIGGGFFE","EFFGGGIGIIIIIIIIGGGGGGGGGGGGGGGIIIIIIIIGIGGGFFE","EFFGGGIGIGGGGGGGIGIGIGIGIGIGIGIGGGGGGGIGIGGGFFE","EFFGGGIGIGIIIIIGIGIGIGIGIGIGIGIGIIIIIGIGIGGGFFE","EFFGGGIGIGIGGGIGIGIGIGIGIGIGIGIGIGGGIGIGIGGGFFE","EFFGGGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGIGGGFFE","EFFGGGIGIGIGGGIGIGIGIGGGGGIGIGIGIGGGIGIGIGGGFFE","EFFGGGGGGGIIIIIGIGIGGGGGGGGGIGIGIIIIIGGGGGGGFFE","EFFGGGGGGGGGGGGGIGIGGGGGGGGGIGIGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIGIGGGGGGGGGIGIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGIGGGGGGGGGIGGGGGGGGGGGGGGGFFE","EIIIGGGGGGGIIIIIIIIGGGGGGGGGIIIIIIIIGGGGGGGIIIE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGFFE","EFFGGGIGIGGGGGGGGGGGIGGGGGIGGGGGGGGGGGIGIGGGFFE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EFFFFFIFIFFFFFFFFFFFIFIFIFIFFFFFFFFFFFIFIFFFFFE","EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"}
     };
 
-    // Structure:
-    // Blocks:
-
-    // Tiles:
-    // Special Tiles:
-    // N -> ofSpecialTileAdder(thaumcraft.common.tiles.TileNode, ...); // You will probably want to change it to
-    // something else
-    // O -> ofSpecialTileAdder(vazkii.botania.common.block.tile.TilePylon, ...); // You will probably want to change it
-    // to something else
-    // P -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); // You will probably want to change
-    // it to something else
-    // Q -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaTileEntity, ...); // You will probably want to change
-    // it to something else
     // spotless:on
 
     private static IStructureDefinition<TST_Computer> STRUCTURE_DEFINITION = null;
@@ -162,22 +149,19 @@ public class TST_Computer extends TT_MultiMachineBase_EM implements ISurvivalCon
         if (STRUCTURE_DEFINITION == null) {
             STRUCTURE_DEFINITION = IStructureDefinition.<TST_Computer>builder()
                 .addShape(MAIN, transpose(shape))// FRF_Coil_1
-                .addElement('A', ofBlock(FRF_Coil_1, 0))// A -> ofBlock...(FRF_Coil_1, 0, ...);
-                .addElement('B', ofBlock(compactFusionCoil, 0))// B -> ofBlock...(compactFusionCoil, 2, ...);
-                .addElement('C', ofBlock(sBlockCasingsSE, 0))// C -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                .addElement('D', ofBlock(sBlockCasingsSE, 1))// D -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                // .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// E -> ofBlock...(gt.blockcasingsSE, 2,
-                // ...);
-                .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-                .addElement('G', ofBlock(sBlockCasingsTT, 1))// G -> ofBlock...(gt.blockcasingsTT, 1, ...);
-                .addElement('H', ofBlock(sBlockCasingsTT, 2))// H -> ofBlock...(gt.blockcasingsTT, 2, ...);
-                .addElement('I', ofBlock(sBlockCasingsTT, 3))// I -> ofBlock...(gt.blockcasingsTT, 3, ...);
-                .addElement('J', ofBlock(sBlockCasingsTT, 7))// J -> ofBlock...(gt.blockcasingsTT, 7, ...);
-                .addElement('L', ofBlock(radiationProtectionSteelFrame, 0)) // L ->
-                // ofBlock...(radiationProtectionSteelFrame, 0,
-                // ...);
-                .addElement('K', ofBlock(blockCasings3Misc, 15)) // K -> ofBlock...(gtplusplus.blockcasings.3, 15, ...);
-                .addElement('M', ofBlock(BlockQuantumGlass.INSTANCE, 0)) // M -> ofBlock...(tile.quantumGlass, 0, ...);
+                .addElement('A', ofBlock(FRF_Coil_1, 0))
+                .addElement('B', ofBlock(compactFusionCoil, 0))
+                .addElement('C', ofBlock(sBlockCasingsSE, 0))
+                .addElement('D', ofBlock(sBlockCasingsSE, 1))
+                // .addElement('E', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
+                .addElement('F', ofBlock(sBlockCasingsTT, 0))
+                .addElement('G', ofBlock(sBlockCasingsTT, 1))
+                .addElement('H', ofBlock(sBlockCasingsTT, 2))
+                .addElement('I', ofBlock(sBlockCasingsTT, 3))
+                .addElement('J', ofBlock(sBlockCasingsTT, 7))
+                .addElement('L', ofBlock(radiationProtectionSteelFrame, 0))
+                .addElement('K', ofBlock(blockCasings3Misc, 15))
+                .addElement('M', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement('O', ofBlock(pylon, 1))
                 // .addElement('N', ofBlock(Block.getBlockById(1), 0))
                 .addElement('P', ofBlock(sBlockCasingsTT, 2))

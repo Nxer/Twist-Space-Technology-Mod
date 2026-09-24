@@ -146,19 +146,6 @@ public class TST_LargeIndustrialCokingFactory extends GTCM_MultiMachineBase<TST_
             true);
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings2, 15, ...);
-     * B -> ofBlock...(gt.blockcasings3, 15, ...);
-     * C -> ofBlock...(gt.blockcasings4, 0, ...); // IOs
-     * D -> ofBlock...(gt.blockcasings5, 0, ...); // Coils
-     * E -> ofBlock...(gt.blockcasingsNH, 2, ...);
-     * F -> ofBlock...(miscutils.blockcasings, 1, ...);
-     * G -> ofBlock...(miscutils.blockcasings, 3, ...);
-     * H -> ofFrame...(Materials.BlackSteel, ...);
-     * I -> ofFrame...(Materials.Steel, ...);
-     */
-
     @Override
     public void checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack, List<StructureError> errors) {
         repairMachine();

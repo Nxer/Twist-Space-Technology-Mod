@@ -421,22 +421,6 @@ public class TST_StarcoreMiner extends GTCM_MultiMachineBase<TST_StarcoreMiner> 
                         .hint(1)
                         .casingIndex(SPACE_ELEVATOR_BASE_CASING_INDEX)
                         .buildAndChain(GregTechAPI.sBlockCasingsSE, 0))
-                /*
-                 * Blocks:
-                 * A -> ofBlock...(BW_GlasBlocks, 0, ...); // any glass
-                 * B -> ofBlock...(gt.blockcasings, 11, ...);
-                 * C -> ofBlock...(gt.blockcasings, 14, ...);
-                 * D -> ofBlock...(gt.blockcasings2, 15, ...);
-                 * E -> ofBlock...(gt.blockcasings8, 7, ...);
-                 * F -> ofBlock...(gt.blockcasings8, 10, ...); // Nq alloy casing
-                 * G -> ofBlock...(gt.blockcasingsSE, 0, ...);
-                 * H -> ofBlock...(gt.blockcasingsSE, 1, ...);
-                 * I -> ofBlock...(gt.blockcasingsTT, 8, ...); // holo casing
-                 * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-                 * K -> ofBlock...(tile.glass, 0, ...); // any glass or ofFrame(Materials.NaquadahAlloy) or
-                 * ofBlock(NaquadahAlloy casing)
-                 * L -> ofBlock...(gt.blockcasingsSE, 0); // hatches
-                 */
                 .addElement('Z', ofBlock(Blocks.bedrock, 0))
                 .build();
         }

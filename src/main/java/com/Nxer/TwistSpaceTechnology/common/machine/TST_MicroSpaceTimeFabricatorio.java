@@ -181,14 +181,6 @@ public class TST_MicroSpaceTimeFabricatorio extends GTCM_MultiMachineBase<TST_Mi
                         .casingIndex(1024)
                         .buildAndChain(inj))
                 .build();
-            /*
-             * A -> ofBlock...(gt.blockcasings, 12, ...); tra
-             * B -> ofBlock...(gt.blockcasings, 13, ...); inj
-             * C -> ofBlock...(gt.blockcasings, 14, ...); bri
-             * D -> ofBlock...(gt.blockcasingsTT, 14, ...); generator
-             * E -> ofBlock...(tile.stonebricksmooth, 0, ...); spaceTime seed input bus
-             * F -> ofBlock...(tile.wood, 0, ...); general hatches
-             */
         }
 
         return STRUCTURE_DEFINITION;

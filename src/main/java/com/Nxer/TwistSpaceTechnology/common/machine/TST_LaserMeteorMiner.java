@@ -111,24 +111,6 @@ public class TST_LaserMeteorMiner extends MTEEnhancedMultiBlockBase<TST_LaserMet
     private static IStructureDefinition<TST_LaserMeteorMiner> STRUCTURE_DEFINITION;
 
     // spotless:off
-    /*
-    A -> ofBlock...(blockAlloyGlass, 0, ...);
-    B -> ofBlock...(gt.blockcasings, 15, ...);
-    C -> ofBlock...(gt.blockcasings4, 7, ...);
-    D -> ofBlock...(gt.blockcasings8, 2, ...);
-    E -> ofBlock...(gt.blockcasings8, 3, ...);
-    F -> ofBlock...(gt.blockcasings9, 11, ...);
-    G -> ofBlock...(gt.blockframes, 129, ...);
-    H -> ofBlock...(gt.blockframes, 388, ...);
-    I -> ofBlock...(gt.blockcasings5, 5, ...);
-    J -> ofBlock...(gt.blockframes, 306, ...);
-    K -> ofBlock...(gtplusplus.blockspecialcasings.1, 6, ...); //
-    L -> ofBlock...(gtplusplus.blockspecialcasings.1, 8, ...);
-    W -> ofBlock...(tile.wood, 0, ...); // T1 hatches
-    X -> ofBlock...(tile.wood, 0, ...); // T2 hatches
-    Y -> ofBlock...(tile.stone, 0, ...); // special input bus
-    Z -> ofSpecialTileAdder(com.Nxer.TwistSpaceTechnology.common.entity.TileEntityLaserBeacon, ...);
-     */
     protected static final String[][] shape_T1 = new String[][]{
         {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},
         {"                   ","                   ","                   ","                   ","                   ","                   ","                   ","         J         ","        J J        ","       J   J       ","        J J        ","         J         ","                   ","                   ","                   ","                   ","                   ","                   ","                   "},

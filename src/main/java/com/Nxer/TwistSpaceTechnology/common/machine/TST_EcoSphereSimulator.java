@@ -762,31 +762,10 @@ public class TST_EcoSphereSimulator extends GTCM_MultiMachineBase<TST_EcoSphereS
     // spotless:off
 
     /*
-    A -> ofBlock...(BW_GlasBlocks, 0, ...); // T1 borosilicate glass
-    a -> ofBlock...(BW_GlasBlocks, 15, ...); // T2 borosilicate glass
-    B -> ofBlock...(MetaBlockCasing01, 9, ...);
-    C -> ofBlock...(MetaBlockCasing01, 10, ...);
-    D -> ofBlock...(gt.blockcasings, 10, ...);
-    E -> ofBlock...(gt.blockcasings8, 5, ...);
-    F -> ofBlock...(gt.blockcasings8, 10, ...);
-    G -> ofBlock...(gt.blockcasings9, 1, ...);
-    H -> ofBlock...(gtplusplus.blockcasings.2, 15, ...);
-    I -> ofBlock...(gtplusplus.blocktieredcasings.1, 8, ...);
-    J -> ofBlock...(tile.blockTranslucent, 0, ...); // T1 structure
-    j -> ofBlock...(Botania:seaLamp, 0, ...); // T2 structure
-    K -> ofBlock...(tile.crystalBlock, 0, ...);
-    L -> ofBlock...(tile.crystalBlock, 2, ...);
-    M -> ofBlock...(tile.crystalBlock, 3, ...);
-    N -> ofBlock...(tile.for.soil, 0, ...);
-    O -> withChannel...(ExtraUtilities:greenscreen, ...); // channel selects hint meta 0-15
-    Q/q -> oak plank positions: item and fluid input/output hatches
-    R/r -> birch plank positions: energy and exotic energy hatches
-    T/t -> spruce plank positions: Eco-Sphere input and upgrade interfaces
     The cleaning extension is removed only by the cleaning animation.
     Additional animated fluid positions are defined separately from the original main fluid area.
     The independent position is filled for every machine mode.
     All animated positions are treated as air by the structure check.
-    ~ -> controller
     */
 
     private final String[][] shape = new String[][]{

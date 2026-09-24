@@ -183,20 +183,20 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
     public IStructureDefinition<TST_DSPLauncher> getStructureDefinition() {
         return IStructureDefinition.<TST_DSPLauncher>builder()
             .addShape(STRUCTURE_PIECE_MAIN, transpose(shapeMain))
-            .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))// A -> ofBlock...(gt.blockcasings8, 7, ...);
-            .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 0))// B -> ofBlock...(gt.blockcasingsSE, 0, ...);
-            .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 1))// C -> ofBlock...(gt.blockcasingsSE, 1, ...);
-            .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 2))// D -> ofBlock...(gt.blockcasingsSE, 2, ...);
+            .addElement('A', ofBlock(GregTechAPI.sBlockCasings8, 7))
+            .addElement('B', ofBlock(GregTechAPI.sBlockCasingsSE, 0))
+            .addElement('C', ofBlock(GregTechAPI.sBlockCasingsSE, 1))
+            .addElement('D', ofBlock(GregTechAPI.sBlockCasingsSE, 2))
             .addElement(
-                'E', // E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...) tiered
+                'E',
                 ofBlocksTiered(
                     ElevatorUtil.motorTierConverter(),
                     ElevatorUtil.getMotorTiers(),
                     -1,
                     TST_DSPLauncher::setMotorTier,
                     TST_DSPLauncher::getMotorTier))
-            .addElement('F', ofBlock(sBlockCasingsTT, 0))// F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-            .addElement('G', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))// G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
+            .addElement('F', ofBlock(sBlockCasingsTT, 0))
+            .addElement('G', ofBlock(GregTechAPI.sBlockCasingsDyson, 9))
             .addElement(
                 'H',
                 HatchElementBuilder.<TST_DSPLauncher>builder()
@@ -208,19 +208,6 @@ public class TST_DSPLauncher extends GTCM_MultiMachineBase<TST_DSPLauncher>
             .addElement('I', ofFrame(Materials.CosmicNeutronium))
             .build();
     }
-
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings8, 7, ...);
-     * B -> ofBlock...(gt.blockcasingsSE, 0, ...);
-     * C -> ofBlock...(gt.blockcasingsSE, 1, ...);
-     * D -> ofBlock...(gt.blockcasingsSE, 2, ...);
-     * E -> ofBlock...(gt.blockcasingsSEMotor, 0, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 0, ...);
-     * G -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-     * H -> ofBlock...(tile.wood, 0, ...); // hatches
-     * I -> ofFrame...(NaquadahAlloy);
-     */
 
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {

@@ -183,16 +183,6 @@ public class GT_TileEntity_SpaceScaler extends GTCM_MultiMachineBase<GT_TileEnti
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsTT, 0, ...); // Energy
-     * B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator NORMAL
-     * D -> ofBlock...(tile.quantumGlass, 0, ...);
-     * E -> ofBlock...(gt.blockcasingsTT, 4, ...); // Hatches
-     * G -> ofBlock...(gt.blockcasingsTT, 6, ...); // Field generator can upgrade
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

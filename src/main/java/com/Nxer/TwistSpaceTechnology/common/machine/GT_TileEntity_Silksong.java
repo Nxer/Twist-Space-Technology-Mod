@@ -160,19 +160,6 @@ public class GT_TileEntity_Silksong extends WirelessEnergyMultiMachineBase<GT_Ti
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings, 11, ...);
-     * B -> ofBlock...(gt.blockcasings2, 15, ...);
-     * C -> ofBlock...(gt.blockcasings5, 0, ...); // coil
-     * D -> ofBlock...(gt.blockcasings8, 2, ...); // energy maintenance
-     * E -> ofBlock...(gt.blockcasings8, 7, ...);
-     * F -> ofBlock...(pressureResistantWalls, 0, ...);
-     * G -> ofBlock...(gt.blockcasings8, 7, ...); // output
-     * H -> ofFrame...();
-     * I -> ofBlock...(gt.blockcasings, 11, ...); // input
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int piece = stackSize.stackSize;

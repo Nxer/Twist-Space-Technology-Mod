@@ -162,20 +162,6 @@ public class TST_ArtificialStar extends GTCM_MultiMachineBase<TST_ArtificialStar
     };
     // spotless:on
 
-    /*
-     * A -> ofBlock...(gt.blockcasings, 14, ...); // tierDimensionField
-     * B -> ofBlock...(gt.blockcasingsSE, 2, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 4, ...);
-     * D -> ofBlock...(gt.blockcasingsTT, 14, ...); // tierTimeField
-     * E -> ofBlock...(gt.blockcasingsTT, 7, ...);
-     * F -> ofBlock...(gt.blockcasingsTT, 8, ...);
-     * G -> ofBlock...(gt.blockcasingsTT, 9, ...); // tierStabilisationField
-     * H -> ofBlock...(gt.blockcasingsTT, 12, ...);
-     * I -> ofBlock...(gt.blockcasingsTT, 13, ...);
-     * J -> ofBlock...(tile.DysonSwarmPart, 9, ...);
-     * K -> ofBlock...(tile.quantumGlass, 0, ...);
-     * L -> ofBlock...(gt.blockcasingsTT, 12, ...); // Hatch
-     */
     @Override
     public IStructureDefinition<TST_ArtificialStar> getStructureDefinition() {
         return IStructureDefinition.<TST_ArtificialStar>builder()

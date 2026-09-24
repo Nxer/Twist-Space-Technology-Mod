@@ -501,17 +501,6 @@ public class GT_TileEntity_MagneticDomainConstructor
             || addExoticEnergyInputToMachineList(aTileEntity, aBaseCasingIndex);
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(compactFusionCoil, 0, ...);
-     * B -> ofBlock...(gt.blockcasings2, 8, ...);
-     * C -> ofBlock...(gt.blockcasings8, 7, ...);
-     * D -> ofBlock...(gt.blockcasings8, 10, ...); // Energy Hatch, Maintenance
-     * E -> ofBlock...(gt.blockcasings8, 7, ...); // IO Hatch
-     * F -> ofFrame...(NaquadahAlloy);
-     * F -> ofFrame...(Tengam);
-     */
-
     // endregion
 
 }

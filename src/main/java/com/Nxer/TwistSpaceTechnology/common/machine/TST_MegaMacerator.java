@@ -205,19 +205,6 @@ public class TST_MegaMacerator extends GTCM_MultiMachineBase<TST_MegaMacerator> 
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks2, 0, ...);
-     * B -> ofBlock...(gt.blockcasings2, 0, ...);
-     * C -> ofBlock...(gt.blockcasings2, 8, ...);
-     * D -> ofBlock...(gt.blockcasings8, 3, ...);
-     * E -> ofBlock...(gt.blockcasings8, 7, ...);
-     * F -> ofBlock...(gt.blockcasings8, 10, ...);
-     * G -> ofBlock...(gt.blockmetal5, 2, ...);
-     * H -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
-     * I -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();

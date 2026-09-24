@@ -154,15 +154,6 @@ public class MM_LargeNeutronOscillator
                 .addElement('F', chainAllGlasses())
                 .addElement('G', ofFrame(Materials.NaquadahAlloy))
                 .build();
-            /*
-             * A -> ofBlock...(gt.blockcasings4, 1, ...); module hatch
-             * B -> ofBlock...(gt.blockcasings8, 7, ...); energy hatch
-             * C -> ofBlock...(gt.blockcasings8, 10, ...); io hatch
-             * D -> ofBlock...(gt.blockcasingsTT, 0, ...);
-             * E -> ofBlock...(speedingPipe, 0, ...);
-             * F -> ofBlock...(tile.glass, 0, ...);
-             * G -> ofFrame...(Materials.NaquadahAlloy);
-             */
         }
         return STRUCTURE_DEFINITION;
     }

@@ -183,19 +183,6 @@ public class GT_TileEntity_MoleculeDeconstructor extends GTCM_MultiMachineBase<G
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 14, ...); // glass
-     * B -> ofBlock...(gt.blockcasings2, 15, ...);
-     * C -> ofBlock...(gt.blockcasings4, 14, ...);
-     * D -> ofBlock...(gt.blockcasingsTT, 0, ...); // energy
-     * E -> ofBlock...(gt.blockcasingsTT, 8, ...);
-     * F -> ofBlock...(gt.blockcasings4, 14, ...); // output
-     * G -> ofBlock...(gt.blockcasings4, 14, ...); // maintenance
-     * H -> ofBlock...(gt.blockcasings4, 14, ...); // input
-     * I -> ofFrame...();
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

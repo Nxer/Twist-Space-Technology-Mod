@@ -116,13 +116,6 @@ public class TST_SteamBasicGenerator extends GTCM_MultiMachineBase<TST_SteamBasi
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings2, 0, ...);
-     * B -> ofBlock...(gt.blockcasings3, 14, ...);
-     * C -> ofBlock...(gt.blockframes, 300, ...);
-     */
-
     @Override
     public void construct(ItemStack itemStack, boolean b) {
         buildPiece(STRUCTURE_PIECE_MAIN, itemStack, b, horizontalOffSet, verticalOffSet, depthOffSet);

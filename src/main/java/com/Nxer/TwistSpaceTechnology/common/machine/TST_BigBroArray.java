@@ -650,30 +650,6 @@ public class TST_BigBroArray extends GTCM_MultiMachineBase<TST_BigBroArray> impl
 
     private static List<Pair<Block, Integer>> MACHINE_CASINGS;
 
-    /*
-     * core Structure:
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 5, ...); --channel that restricts energy hatch
-     * B -> ofBlock...(block.Pikyonium64B.frame, 0, ...); --channel that restricts machine level that array can accept
-     * C -> ofBlock...(gt.blockcasings, 6, ...); -- (Machine casing)casing that restricts dynamo hatch
-     * D -> ofBlock...(gt.blockcasings4, 0, ...); --robust tungstensteel
-     * E -> ofBlock...(gt.blockcasings4, 10, ...); --stainless steel, cheap
-     * Tiles:
-     * Special Tiles:
-     * F -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); Laser vacuum pipe casing
-     * Structure:
-     * Blocks:
-     * A -> ofBlock...(BW_GlasBlocks, 5, ...); --channel that restricts energy hatch
-     * B -> ofBlock...(MetaBlockCasing01, 3, ...); -- casing that gives additional parallelism
-     * C -> ofBlock...(block.Pikyonium64B.frame, 0, ...); --channel that restricts machine level that array can accept
-     * D -> ofBlock...(gt.blockcasings4, 10, ...); -- stainless steel, cheap
-     * E -> ofBlock...(gt.blockcasings5, 0, ...); --coil that gives bonus
-     * Tiles:
-     * Special Tiles:
-     * D -> ofSpecialTileAdder(gregtech.api.metatileentity.BaseMetaPipeEntity, ...); // You will probably want to change
-     * it to something else
-     */
-
     @Override
     public RecipeMap<?> getRecipeMap() {
         if (machines != null) {

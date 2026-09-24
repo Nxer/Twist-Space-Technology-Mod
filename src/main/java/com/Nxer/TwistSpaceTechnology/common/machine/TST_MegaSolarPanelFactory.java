@@ -115,13 +115,6 @@ public class TST_MegaSolarPanelFactory extends GTCM_MultiMachineBase<TST_MegaSol
         if (null == STRUCTURE_DEFINITION) {
             STRUCTURE_DEFINITION = StructureDefinition.<TST_MegaSolarPanelFactory>builder()
                 .addShape(STRUCTURE_PIECE_MAIN, transpose(shape))
-                // A -> ofBlock...(BW_GlasBlocks, 0, ...);
-                // B -> ofBlock...(componentAssemblyLineCasing, 0, ...);
-                // C -> ofBlock...(gt.blockcasings10, 11, ...);
-                // D -> ofBlock...(gt.blockcasingsTT, 9, ...);
-                // E -> ofBlock...(gt.godforgecasing, 0, ...);
-                // F -> ofBlock...(tile.MetaBlockCasing02, 2, ...);
-
                 .addElement('A', chainAllGlasses())
                 .addElement(
                     'B',

@@ -128,15 +128,6 @@ public class TST_Scavenger extends GTCM_MultiMachineBase<TST_Scavenger> {
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings8, 7, ...);
-     * B -> ofBlock...(gt.blockcasings8, 7, ...); // output IO, other hatches
-     * C -> ofBlock...(tile.stonebrick, 0, ...); // in
-     * D -> ofBlock...(gt.blockcasings4, 14, ...); // in , glass
-     * E -> ofFrame...(Materials.Osmiridium);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         repairMachine();

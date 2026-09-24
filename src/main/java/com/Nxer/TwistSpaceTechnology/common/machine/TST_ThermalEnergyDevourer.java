@@ -264,16 +264,6 @@ public class TST_ThermalEnergyDevourer extends WirelessEnergyMultiMachineBase<TS
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(MAR_Casing, 0, ...);
-     * B -> ofBlock...(gt.blockcasings, 11, ...);
-     * C -> ofBlock...(gt.blockcasings2, 1, ...); // io hatches
-     * D -> ofBlock...(gt.blockcasings2, 8, ...);
-     * E -> ofBlock...(gt.blockcasings8, 3, ...); // energy hatch
-     * F -> ofFrame...(Materials.NaquadahAlloy);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

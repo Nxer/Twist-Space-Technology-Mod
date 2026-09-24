@@ -321,12 +321,6 @@ public class TST_HephaestusAtelier extends GTCM_MultiMachineBase<TST_HephaestusA
                             (m, t) -> m.coilTier = t,
                             m -> m.coilTier)))
                 .build();
-            // Blocks:
-            // A -> ofBlock...(gt.blockcasings, 11, ...); // hatch
-            // B -> ofBlock...(gt.blockcasingsTT, 4, ...);
-            // C -> ofBlock...(gt.blockcasingsTT, 7, ...);
-            // D -> ofBlock...(tile.quantumGlass, 0, ...);
-            // E -> ofBlock...(tile.stonebricksmooth, 0, ...); // tiered coils
         }
         return STRUCTURE_DEFINITION;
     }

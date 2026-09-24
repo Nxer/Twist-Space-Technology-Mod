@@ -213,20 +213,6 @@ public class GTCM_HyperSpacetimeTransformer extends GTCM_MultiMachineBase<GTCM_H
         return STRUCTURE_DEFINITION;
     }
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasingsBA0, 11, ...);
-     * B -> ofBlock...(gt.blockcasingsBA0, 12, ...);
-     * C -> ofBlock...(gt.blockcasingsTT, 10, ...);
-     * D -> ofBlock...(gt.spacetime_compression_field_generator, 0, ...);
-     * E -> ofBlock...(gt.stabilisation_field_generator, 0, ...);
-     * F -> ofBlock...(gt.time_acceleration_field_generator, 0, ...);
-     * G -> ofBlock...(gtplusplus.blockcasings.4, 4, ...);
-     * H -> ofBlock...(gtplusplus.blockcasings.5, 7, ...);
-     * I -> ofBlock...(gtplusplus.blockcasings.5, 11, ...);
-     * J -> ofBlock...(tile.quantumGlass, 0, ...);
-     */
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         this.buildPiece(STRUCTURE_PIECE_MAIN, stackSize, hintsOnly, horizontalOffSet, verticalOffSet, depthOffSet);

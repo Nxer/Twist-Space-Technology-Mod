@@ -78,15 +78,6 @@ public class GT_TileEntity_MagneticMixer extends GTCM_MultiMachineBase<GT_TileEn
 
     private static IStructureDefinition<GT_TileEntity_MagneticMixer> STRUCTURE_DEFINITION = null;
 
-    /*
-     * Blocks:
-     * A -> ofBlock...(gt.blockcasings2, 8, ...);
-     * B -> ofBlock...(gt.blockcasings8, 2, ...); // IO Hatch
-     * C -> ofBlock...(gt.blockcasings8, 3, ...); // Energy Hatch
-     * D -> ofBlock...(gt.blockcasings8, 10, ...); // Maintenance Hatch
-     * E -> ofBlock...(gtplusplus.blockcasings.3, 11, ...);
-     */
-
     private static final String STRUCTURE_PIECE_MAIN = "main";
 
     // spotless:off

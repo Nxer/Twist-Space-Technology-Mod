@@ -140,20 +140,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
         STRUCTURE_PIECE_RING_M };
 
     // spotless:off
-    /*
-        A -> ofBlock...(gt.blockcasingsBA0, 10, ...);
-        B -> ofBlock...(gt.blockcasingsBA0, 11, ...);
-        C -> ofBlock...(gt.blockcasingsBA0, 12, ...);
-        D -> ofBlock...(gt.blockcasingsTT, 9, ...);
-        E -> ofBlock...(gt.blockcasingsTT, 10, ...);
-        F -> ofBlock...(gt.blockcasingsTT, 14, ...);
-        G -> ofBlock...(tile.quantumGlass, 0, ...);
-        H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
-        I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time holding consumables
-        J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
-        K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to set machine processing tier.
-        Z -> ofBlock...(SpaceTimeConstraintor, 0, ...); // tier block
-     */
     protected static final String[][] shapeMain = new String[][]{
         {"                 ","                 ","       CCC       ","                 "},
         {"                 ","       BBB       ","     CCAAACC     ","       BBB       "},
@@ -327,7 +313,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                 .addElement('G', ofBlock(BlockQuantumGlass.INSTANCE, 0))
                 .addElement(
                     'H',
-                    // H -> ofBlock...(gt.blockcasingsBA0, 12, ...); // modular hatches and output bus hatches
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(OutputBus, OutputHatch, SpeedController, PowerConsumptionController)
                         .adder(TST_StrangeMatterAggregator::addToMachineList)
@@ -336,8 +321,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
                     'I',
-                    // I -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input hatch at left which input space-time
-                    // holding consumables
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputHatch)
                         .adder(TST_StrangeMatterAggregator::addSpaceTimeMaintenanceConsumablesInputHatchToMachineList)
@@ -346,7 +329,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
                     'J',
-                    // J -> ofBlock...(gt.blockcasingsBA0, 12, ...); // normal input at up and down hatches and buses
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputBus, InputHatch)
                         .adder(TST_StrangeMatterAggregator::addToMachineList)
@@ -355,8 +337,6 @@ public class TST_StrangeMatterAggregator extends ModularizedMachineSupportAllMod
                         .buildAndChain(ofBlock(sBlockCasingsBA0, 12)))
                 .addElement(
                     'K',
-                    // K -> ofBlock...(gt.blockcasingsBA0, 12, ...); // input bus at right which input Core Element to
-                    // set machine processing tier.
                     HatchElementBuilder.<TST_StrangeMatterAggregator>builder()
                         .atLeast(InputBus)
                         .adder(TST_StrangeMatterAggregator::addCoreElementInputBusToMachineList)
